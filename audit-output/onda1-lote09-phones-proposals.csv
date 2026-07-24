@@ -1,0 +1,11 @@
+restaurant_id,name,city,country,site_url,proposed_phone,confidence,method,candidates
+10514,BOUILLABAISSE BEACH,Saint tropez,France,https://www.labouillabaisse-plage.com/,+334949754,MEDIUM,body-regex-unique,
+12104,CASA,Saint Barths,France,https://www.restaurante-casa.com/,+573115165663,HIGH,tel-href-unique,
+16881,M6M,Maldives,Maldives,https://theozencollection.com/ozenlife-maadhoo/,+9604002222,HIGH,tel-href-unique,
+19078,LES HAUTS,Lille,France,https://www.casinosbarriere.com/fr/lille/les-hauts-de-lille.html,+33328144777,HIGH,tel-href-unique,
+19535,LE MOKA,Bordeaux,France,https://www.hotelm-merignac.com/en/le-moka.html,+330557532122,HIGH,tel-href-unique,
+251656,ANDIA,Marseille,France,https://www.andia-restaurant.com/en/page/andia-paris.17610.html,+336676086,MEDIUM,body-regex-unique,
+254727,RIVIERA,Nice,France,https://www.maybourneriviera.com/restaurants-bars/riviera-restaurant/,+330493375000,HIGH,tel-href-unique,
+31801,CITYZEN,Mexico city,Mexico,https://www.sofitel-mexico-city.com/restaurants/cityzen-rooftop/,+525586600500,HIGH,tel-href-unique,
+87432,LA MIRANDE,Avignon,France,https://www.la-mirande.fr/fr/table-haute-avignon-provence.html,+330490142020,HIGH,tel-href-unique,
+92393,L'EQUERRE,Toulon,France,https://www.leautel-toulon.com/fr/hotel-4-etoiles-toulon,+33489519090,HIGH,tel-href-unique,

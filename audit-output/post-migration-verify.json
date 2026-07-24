@@ -1,0 +1,343 @@
+{
+  "row_count": [
+    {
+      "n": 2207
+    }
+  ],
+  "new_columns_present": [
+    {
+      "column_name": "about_en",
+      "data_type": "text"
+    },
+    {
+      "column_name": "about_fr",
+      "data_type": "text"
+    },
+    {
+      "column_name": "about_primary_locale",
+      "data_type": "character"
+    },
+    {
+      "column_name": "about_pt",
+      "data_type": "text"
+    },
+    {
+      "column_name": "accepts_walkins",
+      "data_type": "boolean"
+    },
+    {
+      "column_name": "ambience_tags",
+      "data_type": "ARRAY"
+    },
+    {
+      "column_name": "avg_meal_duration_minutes",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "booking_url",
+      "data_type": "text"
+    },
+    {
+      "column_name": "chef_bio",
+      "data_type": "text"
+    },
+    {
+      "column_name": "chef_name",
+      "data_type": "text"
+    },
+    {
+      "column_name": "confidence_level",
+      "data_type": "text"
+    },
+    {
+      "column_name": "country_code",
+      "data_type": "character"
+    },
+    {
+      "column_name": "dietary_tags",
+      "data_type": "ARRAY"
+    },
+    {
+      "column_name": "dress_code",
+      "data_type": "text"
+    },
+    {
+      "column_name": "enrichment_log",
+      "data_type": "jsonb"
+    },
+    {
+      "column_name": "good_for",
+      "data_type": "ARRAY"
+    },
+    {
+      "column_name": "last_verified_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "column_name": "operational_status",
+      "data_type": "text"
+    },
+    {
+      "column_name": "operational_status_reason",
+      "data_type": "text"
+    },
+    {
+      "column_name": "party_size_max",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "party_size_min",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "reservation_policy",
+      "data_type": "text"
+    },
+    {
+      "column_name": "tasting_menu_available",
+      "data_type": "boolean"
+    },
+    {
+      "column_name": "tasting_menu_currency",
+      "data_type": "character"
+    },
+    {
+      "column_name": "tasting_menu_price_min",
+      "data_type": "numeric"
+    },
+    {
+      "column_name": "timezone",
+      "data_type": "text"
+    },
+    {
+      "column_name": "verification_source",
+      "data_type": "text"
+    }
+  ],
+  "new_columns_missing": [],
+  "zombie_check": [],
+  "localization_present": [
+    {
+      "column_name": "localization",
+      "data_type": "text"
+    }
+  ],
+  "localization_check": [
+    {
+      "conname": "db_restaurants_localization_gmaps_chk"
+    }
+  ],
+  "partner_type": [
+    {
+      "data_type": "boolean"
+    }
+  ],
+  "partner_distribution": [
+    {
+      "partner": false,
+      "n": 2183
+    },
+    {
+      "partner": true,
+      "n": 24
+    }
+  ],
+  "negotiation_status_type": [
+    {
+      "data_type": "USER-DEFINED",
+      "udt_name": "negotiation_status_enum"
+    }
+  ],
+  "new_tables": [
+    {
+      "schema": "public",
+      "name": "award_types",
+      "approx_rows": "-1"
+    },
+    {
+      "schema": "public",
+      "name": "country_name_aliases",
+      "approx_rows": "-1"
+    },
+    {
+      "schema": "public",
+      "name": "restaurant_awards",
+      "approx_rows": "-1"
+    },
+    {
+      "schema": "public",
+      "name": "restaurant_field_verifications",
+      "approx_rows": "-1"
+    },
+    {
+      "schema": "public",
+      "name": "v_restaurant_latest_awards",
+      "approx_rows": "-1"
+    }
+  ],
+  "award_types_count": [
+    {
+      "n": 10
+    }
+  ],
+  "country_aliases_count": [
+    {
+      "n": 25
+    }
+  ],
+  "constraints_on_db_restaurants": [
+    {
+      "conname": "db_restaurants_about_primary_locale_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_booking_url_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_confidence_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_coords_range_chk",
+      "contype": "c",
+      "convalidated": false
+    },
+    {
+      "conname": "db_restaurants_country_code_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_dress_code_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_email_format_chk",
+      "contype": "c",
+      "convalidated": false
+    },
+    {
+      "conname": "db_restaurants_enrichment_log_is_array",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_localization_gmaps_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_meal_duration_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_operational_status_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_party_size_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_phone_e164ish_chk",
+      "contype": "c",
+      "convalidated": false
+    },
+    {
+      "conname": "db_restaurants_site_url_format_chk",
+      "contype": "c",
+      "convalidated": false
+    },
+    {
+      "conname": "db_restaurants_tasting_currency_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_timezone_format_chk",
+      "contype": "c",
+      "convalidated": true
+    },
+    {
+      "conname": "unique_restaurant_slug",
+      "contype": "u",
+      "convalidated": true
+    }
+  ],
+  "indexes_on_db_restaurants": [
+    {
+      "indexname": "db_restaurants_ambience_tags_gin"
+    },
+    {
+      "indexname": "db_restaurants_confidence_level_idx"
+    },
+    {
+      "indexname": "db_restaurants_country_code_idx"
+    },
+    {
+      "indexname": "db_restaurants_dietary_tags_gin"
+    },
+    {
+      "indexname": "db_restaurants_good_for_gin"
+    },
+    {
+      "indexname": "db_restaurants_last_verified_at_idx"
+    },
+    {
+      "indexname": "db_restaurants_operational_status_idx"
+    },
+    {
+      "indexname": "db_restaurants_pkey"
+    },
+    {
+      "indexname": "db_restaurants_timezone_idx"
+    },
+    {
+      "indexname": "idx_restaurants_business_hours_json"
+    },
+    {
+      "indexname": "idx_restaurants_city_id"
+    },
+    {
+      "indexname": "idx_restaurants_coordinates"
+    },
+    {
+      "indexname": "idx_restaurants_country_id"
+    },
+    {
+      "indexname": "idx_restaurants_email"
+    },
+    {
+      "indexname": "idx_restaurants_images_json"
+    },
+    {
+      "indexname": "idx_restaurants_michelin_id"
+    },
+    {
+      "indexname": "idx_restaurants_name"
+    },
+    {
+      "indexname": "idx_restaurants_price_range_id"
+    },
+    {
+      "indexname": "idx_restaurants_slug"
+    },
+    {
+      "indexname": "unique_restaurant_slug"
+    }
+  ],
+  "operational_status_distribution": [
+    {
+      "operational_status": "active",
+      "n": 2207
+    }
+  ]
+}

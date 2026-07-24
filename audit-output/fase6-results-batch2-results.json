@@ -1,0 +1,1147 @@
+{
+  "generated_at": "2026-06-11T13:32:41.773Z",
+  "total_candidates": 181,
+  "present_count": 17,
+  "absent_count": 164,
+  "absent": [
+    {
+      "name": "Le Grill — Hôtel de Paris",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "$$$"
+    },
+    {
+      "name": "Yoshi — Métropole Monte-Carlo",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "1_star"
+    },
+    {
+      "name": "Le Vistamar — Hôtel Hermitage",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "1_star"
+    },
+    {
+      "name": "Joël Robuchon Monte-Carlo",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "2_star"
+    },
+    {
+      "name": "Pavyllon Monte-Carlo",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "1_star"
+    },
+    {
+      "name": "Blue Bay — Monte-Carlo Bay",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "2_star"
+    },
+    {
+      "name": "L'Oustau de Baumanière",
+      "city": "Les Baux-de-Provence",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Côte d'Or — Bernard Loiseau",
+      "city": "Saulieu",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Pyramide — Patrick Henriroux",
+      "city": "Vienne",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "L'Auberge du Père Bise — Jean Sulpice",
+      "city": "Talloires",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "Le Chabichou — Stéphane Buron",
+      "city": "Courchevel",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Marine — Alexandre Couillon",
+      "city": "Noirmoutier",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Côte Saint-Jacques",
+      "city": "Joigny",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "L'Espérance",
+      "city": "Vézelay",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "La Bastide de Capelongue — Alain Llorca",
+      "city": "Bonnieux",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "L'Hostellerie de Plaisance",
+      "city": "Saint-Émilion",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Les Trois Couronnes — Philippe Chevrier",
+      "city": "Vevey",
+      "country": "Switzerland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Le Quartier Français",
+      "city": "Franschhoek",
+      "country": "South Africa",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Baratin",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le 6 Paul Bert",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Bouillon Chartier",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$"
+    },
+    {
+      "name": "Astier",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "La Régalade Conservatoire",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Aux Lyonnais",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Florimond",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Allard — Alain Ducasse",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Petit Sommelier",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Carré des Feuillants",
+      "city": "Paris",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "Le Restaurant — L'Hôtel",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Garance",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Akrame",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Solstice — Eric Trochon",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Tomy & Co",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Restaurant H — Hubert Duchenne",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Auberge Pyrénées-Cévennes",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Substance — Matthias Marc",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Etheliya — Etxeko Cyril Lignac",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Pages — Ryuji Teshima",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Quinsou",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "Restaurant ADAR",
+      "city": "Paris",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "La Petite Maison de Nicole",
+      "city": "Nice",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "La Merenda",
+      "city": "Nice",
+      "country": "France",
+      "tier": "$$"
+    },
+    {
+      "name": "Le Roof — Hôtel Aston La Scala",
+      "city": "Nice",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Flaveur",
+      "city": "Nice",
+      "country": "France",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Réserve de Ramatuelle",
+      "city": "Ramatuelle",
+      "country": "France",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Magnetic Café — Eden-Roc",
+      "city": "Antibes",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Cap — Grand-Hôtel du Cap-Ferrat",
+      "city": "Saint-Jean-Cap-Ferrat",
+      "country": "France",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Casa Perbellini",
+      "city": "Verona",
+      "country": "Italy",
+      "tier": "2_star"
+    },
+    {
+      "name": "12 Apostoli",
+      "city": "Verona",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Glam Enrico Bartolini",
+      "city": "Venice",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Quadri",
+      "city": "Venice",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Met — Hotel Metropole",
+      "city": "Venice",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Andrea Aprea",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "2_star"
+    },
+    {
+      "name": "Verso — Capitani",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Felix Lo Basso Home & Restaurant",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Berton",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Trippa",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "$$$"
+    },
+    {
+      "name": "Tokuyoshi",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Iyo",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Ristorante Berton al Lago — Il Sereno",
+      "city": "Torno",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Locanda Margon",
+      "city": "Trento",
+      "country": "Italy",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Madonnina del Pescatore — Cedroni",
+      "city": "Senigallia",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Casa Vissani",
+      "city": "Baschi",
+      "country": "Italy",
+      "tier": "$$$"
+    },
+    {
+      "name": "Mosaico — Nino di Costanzo",
+      "city": "Ischia",
+      "country": "Italy",
+      "tier": "2_star"
+    },
+    {
+      "name": "Pellegrino — Diego Vitagliano",
+      "city": "Naples",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Caruso — Hotel Caruso Belmond",
+      "city": "Ravello",
+      "country": "Italy",
+      "tier": "$$$"
+    },
+    {
+      "name": "Krëfto — Belmond Caruso",
+      "city": "Ravello",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Moments",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "Enigma — Albert Adrià",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Hofmann",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Hoja Santa",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Compartir Cadaqués",
+      "city": "Cadaqués",
+      "country": "Spain",
+      "tier": "$$$"
+    },
+    {
+      "name": "Bardal",
+      "city": "Ronda",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "La Cabra",
+      "city": "Madrid",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Ricard Camarena",
+      "city": "Valencia",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "El Poblet",
+      "city": "Valencia",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "BonAmb",
+      "city": "Xàbia",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "L'Escaleta",
+      "city": "Cocentaina",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "Skina",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "2_star"
+    },
+    {
+      "name": "Sollo — Diego Gallegos",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "LÚ Cocina y Alma",
+      "city": "Jerez de la Frontera",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Trinity — Adam Byatt",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "The Clove Club",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "A. Wong",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "2_star"
+    },
+    {
+      "name": "Bibendum — Claude Bosi",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "2_star"
+    },
+    {
+      "name": "Da Terra",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "2_star"
+    },
+    {
+      "name": "Endo at the Rotunda",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "Story — Tom Sellers",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "Murano — Angela Hartnett",
+      "city": "London",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "Restaurant Sat Bains",
+      "city": "Nottingham",
+      "country": "United Kingdom",
+      "tier": "2_star"
+    },
+    {
+      "name": "Gidleigh Park",
+      "city": "Chagford",
+      "country": "United Kingdom",
+      "tier": "2_star"
+    },
+    {
+      "name": "Le Champignon Sauvage",
+      "city": "Cheltenham",
+      "country": "United Kingdom",
+      "tier": "2_star"
+    },
+    {
+      "name": "Northcote",
+      "city": "Langho",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "Whatley Manor — Niall Keating",
+      "city": "Wiltshire",
+      "country": "United Kingdom",
+      "tier": "1_star"
+    },
+    {
+      "name": "Aend",
+      "city": "Vienna",
+      "country": "Austria",
+      "tier": "1_star"
+    },
+    {
+      "name": "Pramerl & The Wolf",
+      "city": "Vienna",
+      "country": "Austria",
+      "tier": "1_star"
+    },
+    {
+      "name": "Falco",
+      "city": "Leipzig",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Le Moissonnier",
+      "city": "Köln",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Speisemeisterei",
+      "city": "Stuttgart",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Olivo",
+      "city": "Stuttgart",
+      "country": "Germany",
+      "tier": "1_star"
+    },
+    {
+      "name": "Lafleur",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Tiger Gourmet",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Goldberg",
+      "city": "Fellbach",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Wolfshöhle",
+      "city": "Freiburg",
+      "country": "Germany",
+      "tier": "1_star"
+    },
+    {
+      "name": "Königshof",
+      "city": "München",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Esszimmer — BMW Welt",
+      "city": "München",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "Restaurant 181 — Olympiaturm",
+      "city": "München",
+      "country": "Germany",
+      "tier": "1_star"
+    },
+    {
+      "name": "Heinz Winkler",
+      "city": "Aschau im Chiemgau",
+      "country": "Germany",
+      "tier": "2_star"
+    },
+    {
+      "name": "IGNIV by Andreas Caminada — Bad Ragaz",
+      "city": "Bad Ragaz",
+      "country": "Switzerland",
+      "tier": "2_star"
+    },
+    {
+      "name": "IGNIV by Andreas Caminada — St. Moritz",
+      "city": "St. Moritz",
+      "country": "Switzerland",
+      "tier": "2_star"
+    },
+    {
+      "name": "Da Vittorio — Carlton St. Moritz",
+      "city": "St. Moritz",
+      "country": "Switzerland",
+      "tier": "2_star"
+    },
+    {
+      "name": "Ecco — Giardino Mountain",
+      "city": "St. Moritz",
+      "country": "Switzerland",
+      "tier": "2_star"
+    },
+    {
+      "name": "Park Hotel Vitznau",
+      "city": "Vitznau",
+      "country": "Switzerland",
+      "tier": "$$$"
+    },
+    {
+      "name": "Atelier",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "1_star"
+    },
+    {
+      "name": "Borkonyha",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "1_star"
+    },
+    {
+      "name": "Stand by Szulló & Széll",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "1_star"
+    },
+    {
+      "name": "Onyx",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "2_star"
+    },
+    {
+      "name": "Costes",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "1_star"
+    },
+    {
+      "name": "Babel",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "1_star"
+    },
+    {
+      "name": "Salt",
+      "city": "Budapest",
+      "country": "Hungary",
+      "tier": "1_star"
+    },
+    {
+      "name": "Field",
+      "city": "Prague",
+      "country": "Czechia",
+      "tier": "1_star"
+    },
+    {
+      "name": "La Degustation Bohême Bourgeoise",
+      "city": "Prague",
+      "country": "Czechia",
+      "tier": "1_star"
+    },
+    {
+      "name": "Eska",
+      "city": "Prague",
+      "country": "Czechia",
+      "tier": "$$$"
+    },
+    {
+      "name": "Atelier Amaro",
+      "city": "Warsaw",
+      "country": "Poland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Senses",
+      "city": "Warsaw",
+      "country": "Poland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Nolita",
+      "city": "Warsaw",
+      "country": "Poland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Bottiglieria 1881",
+      "city": "Krakow",
+      "country": "Poland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Botrini's",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "1_star"
+    },
+    {
+      "name": "Hytra",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "1_star"
+    },
+    {
+      "name": "Funky Gourmet",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Vezene",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Soul",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Matsuhisa — Belvedere Hotel",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Pelagos — One&Only Aesthesis",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Selene",
+      "city": "Santorini",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Neolokal",
+      "city": "Istanbul",
+      "country": "Türkiye",
+      "tier": "1_star"
+    },
+    {
+      "name": "Turk Fatih Tutak",
+      "city": "Istanbul",
+      "country": "Türkiye",
+      "tier": "2_star"
+    },
+    {
+      "name": "Araka",
+      "city": "Istanbul",
+      "country": "Türkiye",
+      "tier": "1_star"
+    },
+    {
+      "name": "Mürver",
+      "city": "Istanbul",
+      "country": "Türkiye",
+      "tier": "$$$"
+    },
+    {
+      "name": "360 — Restaurant",
+      "city": "Dubrovnik",
+      "country": "Croatia",
+      "tier": "1_star"
+    },
+    {
+      "name": "Pelegrini",
+      "city": "Šibenik",
+      "country": "Croatia",
+      "tier": "1_star"
+    },
+    {
+      "name": "LD Restaurant — Lešić Dimitri",
+      "city": "Korčula",
+      "country": "Croatia",
+      "tier": "1_star"
+    },
+    {
+      "name": "Boškinac",
+      "city": "Novalja",
+      "country": "Croatia",
+      "tier": "1_star"
+    },
+    {
+      "name": "Dubravkin Put",
+      "city": "Zagreb",
+      "country": "Croatia",
+      "tier": "$$$"
+    },
+    {
+      "name": "Restaurant Hiša Franko — Ana Roš",
+      "city": "Kobarid",
+      "country": "Slovenia",
+      "tier": "2_star"
+    },
+    {
+      "name": "Dill",
+      "city": "Reykjavik",
+      "country": "Iceland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Óx",
+      "city": "Reykjavik",
+      "country": "Iceland",
+      "tier": "1_star"
+    },
+    {
+      "name": "Hôtel-Restaurant Lameloise",
+      "city": "Chagny",
+      "country": "France",
+      "tier": "3_star"
+    },
+    {
+      "name": "Le Pavillon — Hôtel d'Angleterre",
+      "city": "Bristol",
+      "country": "United Kingdom",
+      "tier": "$$$"
+    },
+    {
+      "name": "Estiatorio Milos",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Apsendos",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Spilia Seaside",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Nammos",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Bord'eau",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "tier": "$$$"
+    },
+    {
+      "name": "Ron Gastrobar — Ron Blaauw",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "tier": "1_star"
+    },
+    {
+      "name": "Bord van Berlage",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "tier": "$$$"
+    },
+    {
+      "name": "Hostellerie Le Cerf",
+      "city": "Marlenheim",
+      "country": "France",
+      "tier": "1_star"
+    },
+    {
+      "name": "L'Auberge des Templiers",
+      "city": "Les Bezards",
+      "country": "France",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Le Cinq Mars — Hôtel Royal Évian",
+      "city": "Évian-les-Bains",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Domaine de Châteauvieux",
+      "city": "Satigny",
+      "country": "Switzerland",
+      "tier": "2_star"
+    },
+    {
+      "name": "Restaurant Lou Marquès — Hôtel Jules César",
+      "city": "Arles",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Chêne Liège",
+      "city": "Saint-Tropez",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Pirate Saint-Tropez",
+      "city": "Ramatuelle",
+      "country": "France",
+      "tier": "$$$"
+    },
+    {
+      "name": "L'Ane Rouge",
+      "city": "Nice",
+      "country": "France",
+      "tier": "1_star"
+    }
+  ],
+  "present": [
+    {
+      "name": "Louis XV — Alain Ducasse à l'Hôtel de Paris",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "tier": "3_star",
+      "match_id": "258041",
+      "match_name": "LE LOUIS XV",
+      "match_published": false
+    },
+    {
+      "name": "Le 110 de Taillevent",
+      "city": "Paris",
+      "country": "France",
+      "tier": "$$$",
+      "match_id": "14536",
+      "match_name": "LE TAILLEVENT",
+      "match_published": true
+    },
+    {
+      "name": "Les Agitateurs",
+      "city": "Nice",
+      "country": "France",
+      "tier": "1_star",
+      "match_id": "271818",
+      "match_name": "LES AGITATEURS",
+      "match_published": true
+    },
+    {
+      "name": "Club 55",
+      "city": "Ramatuelle",
+      "country": "France",
+      "tier": "$$$",
+      "match_id": "10513",
+      "match_name": "LE CLUB 55",
+      "match_published": false
+    },
+    {
+      "name": "Joia",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star",
+      "match_id": "17909",
+      "match_name": "Joia",
+      "match_published": true
+    },
+    {
+      "name": "Iyo Aalto",
+      "city": "Milan",
+      "country": "Italy",
+      "tier": "1_star",
+      "match_id": "18088",
+      "match_name": "AALTO",
+      "match_published": false
+    },
+    {
+      "name": "Lasarte",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "3_star",
+      "match_id": "258698",
+      "match_name": "LASARTE",
+      "match_published": true
+    },
+    {
+      "name": "Restaurant Tian",
+      "city": "Vienna",
+      "country": "Austria",
+      "tier": "1_star",
+      "match_id": "28139",
+      "match_name": "Tian",
+      "match_published": true
+    },
+    {
+      "name": "Mraz & Sohn",
+      "city": "Vienna",
+      "country": "Austria",
+      "tier": "2_star",
+      "match_id": "28203",
+      "match_name": "Mraz & Sohn",
+      "match_published": true
+    },
+    {
+      "name": "Edvard — Palais Hansen Kempinski",
+      "city": "Vienna",
+      "country": "Austria",
+      "tier": "1_star",
+      "match_id": "28091",
+      "match_name": "Edvard",
+      "match_published": true
+    },
+    {
+      "name": "Spondi",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "2_star",
+      "match_id": "57157",
+      "match_name": "SPONDI",
+      "match_published": true
+    },
+    {
+      "name": "Mikla",
+      "city": "Istanbul",
+      "country": "Türkiye",
+      "tier": "1_star",
+      "match_id": "16965",
+      "match_name": "Mikla",
+      "match_published": true
+    },
+    {
+      "name": "Scorpios Beach Club",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$",
+      "match_id": "259749",
+      "match_name": "SCORPIOS",
+      "match_published": true
+    },
+    {
+      "name": "Spectrum — Waldorf Astoria",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "tier": "2_star",
+      "match_id": "15097",
+      "match_name": "Spectrum",
+      "match_published": false
+    },
+    {
+      "name": "Vinkeles — The Dylan",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "tier": "1_star",
+      "match_id": "15091",
+      "match_name": "Vinkeles",
+      "match_published": true
+    },
+    {
+      "name": "Loulou — Saint-Tropez",
+      "city": "Ramatuelle",
+      "country": "France",
+      "tier": "$$$",
+      "match_id": "10512",
+      "match_name": "LOULOU",
+      "match_published": false
+    },
+    {
+      "name": "JAN by Jan Hendrik",
+      "city": "Nice",
+      "country": "France",
+      "tier": "1_star",
+      "match_id": "14720",
+      "match_name": "JAN",
+      "match_published": true
+    }
+  ]
+}

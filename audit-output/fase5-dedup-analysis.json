@@ -1,0 +1,454 @@
+[
+  {
+    "place_id": "ChIJ6-EpTOxv5kcRB_7hi3YYXTs",
+    "n": 2,
+    "keep": {
+      "id": "95341",
+      "name": "VICTORIA",
+      "city": "Paris",
+      "score": 101,
+      "pct": 82.1,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "292661",
+        "name": "VICTORIA PARIS",
+        "city": "Paris",
+        "score": 98,
+        "pct": 79.7,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [
+      {
+        "field": "negotiation_status",
+        "from": "292661",
+        "value": "Pending"
+      }
+    ],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "VICTORIA",
+        "loser_id": "292661",
+        "loser_value": "VICTORIA PARIS"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJ7SmIOSi5zhIRt0THYO7iowk",
+    "n": 2,
+    "keep": {
+      "id": "88971",
+      "name": "L'AMIRAL",
+      "city": "Grimaud",
+      "score": 85,
+      "pct": 69.1,
+      "published": false,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "91965",
+        "name": "L'AMIRAL",
+        "city": "Sainte maxime",
+        "score": 85,
+        "pct": 69.1,
+        "published": false,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "city",
+        "keep_value": "Grimaud",
+        "loser_id": "91965",
+        "loser_value": "Sainte maxime"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJ961s0QWZ4jARvvtf8tT2ZzQ",
+    "n": 2,
+    "keep": {
+      "id": "35087",
+      "name": "EAT SIGHT STORY DECK",
+      "city": "Bangkok",
+      "score": 102,
+      "pct": 82.9,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "35376",
+        "name": "BITTER DECK",
+        "city": "Bangkok",
+        "score": 102,
+        "pct": 82.9,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "EAT SIGHT STORY DECK",
+        "loser_id": "35376",
+        "loser_value": "BITTER DECK"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJBZtvrYDVwkcRPi8a2IX927w",
+    "n": 2,
+    "keep": {
+      "id": "19061",
+      "name": "LA TABLE DU CLARANCE",
+      "city": "Lille",
+      "score": 94,
+      "pct": 76.4,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "19070",
+        "name": "LA TABLE DE CLARENCE",
+        "city": "Lille",
+        "score": 91,
+        "pct": 74,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "LA TABLE DU CLARANCE",
+        "loser_id": "19070",
+        "loser_value": "LA TABLE DE CLARENCE"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJc2cHSxMsrhIReKnFA0a96Ps",
+    "n": 2,
+    "keep": {
+      "id": "72458",
+      "name": "BARBACANE",
+      "city": "Carcassonne",
+      "score": 104,
+      "pct": 84.6,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "21793",
+        "name": "LA BARBACANE",
+        "city": "Carcassonne",
+        "score": 86,
+        "pct": 69.9,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "BARBACANE",
+        "loser_id": "21793",
+        "loser_value": "LA BARBACANE"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJdQ8kHoajfDURQA2Hjac7y-A",
+    "n": 2,
+    "keep": {
+      "id": "76676",
+      "name": "WOO TENDER",
+      "city": "Seoul",
+      "score": 102,
+      "pct": 82.9,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "296066",
+        "name": "WOO TENDER",
+        "city": "Seongnam",
+        "score": 98,
+        "pct": 79.7,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "address_of_establishment",
+        "keep_value": "25-10 Apgujeong-ro 42-gil, Gangnam District, Seoul, Corée du Sud",
+        "loser_id": "296066",
+        "loser_value": "25-10 Apgujeong-ro 42-gil, Gangnam District, Seoul, South Korea"
+      },
+      {
+        "field": "city",
+        "keep_value": "Seoul",
+        "loser_id": "296066",
+        "loser_value": "Seongnam"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJdw0B4zv_0YURK8xSHYwyp2E",
+    "n": 2,
+    "keep": {
+      "id": "32142",
+      "name": "MÁXIMO",
+      "city": "Mexico city",
+      "score": 101,
+      "pct": 82.1,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "34146",
+        "name": "MAXIMO",
+        "city": "Mexico city",
+        "score": 101,
+        "pct": 82.1,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "MÁXIMO",
+        "loser_id": "34146",
+        "loser_value": "MAXIMO"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJF8IIwLcoRI4RKCdeMuiochQ",
+    "n": 2,
+    "keep": {
+      "id": "30463",
+      "name": "EI CIELO",
+      "city": "Medellin",
+      "score": 102,
+      "pct": 82.9,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "30570",
+        "name": "EL CIELO CLASSIC",
+        "city": "Medellin",
+        "score": 101,
+        "pct": 82.1,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "EI CIELO",
+        "loser_id": "30570",
+        "loser_value": "EL CIELO CLASSIC"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJfboVgUtT8DUR_jT_hhMVPQA",
+    "n": 2,
+    "keep": {
+      "id": "16558",
+      "name": "KING'S JOY",
+      "city": "Beijing",
+      "score": 102,
+      "pct": 82.9,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "19615",
+        "name": "King's Joy",
+        "city": "Beijing",
+        "score": 82,
+        "pct": 66.7,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [
+      {
+        "field": "michelin_id",
+        "from": "19615",
+        "value": 3
+      }
+    ],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "KING'S JOY",
+        "loser_id": "19615",
+        "loser_value": "King's Joy"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJhxshNqWf4jARgYxEW8hBGcE",
+    "n": 2,
+    "keep": {
+      "id": "32885",
+      "name": "OCTAVE",
+      "city": "Bangkok",
+      "score": 93,
+      "pct": 75.6,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "34434",
+        "name": "OCTAVE",
+        "city": "Bangkok",
+        "score": 83,
+        "pct": 67.5,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": []
+  },
+  {
+    "place_id": "ChIJiaw21ljurw0RX4We9hBkcrI",
+    "n": 2,
+    "keep": {
+      "id": "83502",
+      "name": "JAD MAHAL",
+      "city": "Marrakesh",
+      "score": 102,
+      "pct": 82.9,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "4034",
+        "name": "Palais Jad Mahal",
+        "city": "Marrakesh",
+        "score": 75,
+        "pct": 61,
+        "published": false,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "JAD MAHAL",
+        "loser_id": "4034",
+        "loser_value": "Palais Jad Mahal"
+      },
+      {
+        "field": "address_of_establishment",
+        "keep_value": "Palais Jad Mahal Restaurant Marrakech +212 5244-36984   https://g.co/kgs/SrRAxx1",
+        "loser_id": "4034",
+        "loser_value": "Rue Haroun Errachid, Marrakech 40000, Morocco"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJsyl4uRZrUQ0RjuVacxvJaYw",
+    "n": 2,
+    "keep": {
+      "id": "87398",
+      "name": "LA ROTONDE",
+      "city": "Bayonne",
+      "score": 93,
+      "pct": 75.6,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "22373",
+        "name": "LA ROTONDE",
+        "city": "Biarritz",
+        "score": 86,
+        "pct": 69.9,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [
+      {
+        "field": "michelin_id",
+        "from": "22373",
+        "value": 5
+      }
+    ],
+    "name_conflicts": [
+      {
+        "field": "city",
+        "keep_value": "Bayonne",
+        "loser_id": "22373",
+        "loser_value": "Biarritz"
+      }
+    ]
+  },
+  {
+    "place_id": "ChIJvUUfMh7Y2xIRYZdYYJ-bGyE",
+    "n": 2,
+    "keep": {
+      "id": "14297",
+      "name": "VM",
+      "city": "Bonifacio",
+      "score": 101,
+      "pct": 82.1,
+      "published": true,
+      "op_status": "active"
+    },
+    "losers": [
+      {
+        "id": "19668",
+        "name": "La Vista",
+        "city": "Bonifacio",
+        "score": 91,
+        "pct": 74,
+        "published": true,
+        "op_status": "active"
+      }
+    ],
+    "fields_to_copy": [],
+    "name_conflicts": [
+      {
+        "field": "name",
+        "keep_value": "VM",
+        "loser_id": "19668",
+        "loser_value": "La Vista"
+      }
+    ]
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "mode": "apply-dry",
+  "generated_at": "2026-06-09T18:37:36.113Z",
+  "ok": 2116,
+  "err": 12,
+  "err_sample": [
+    {
+      "id": "12086",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    },
+    {
+      "id": "14424",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_site_url_format_chk\""
+    },
+    {
+      "id": "14570",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    },
+    {
+      "id": "253049",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    },
+    {
+      "id": "255019",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    },
+    {
+      "id": "262192",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_site_url_format_chk\""
+    },
+    {
+      "id": "28719",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    },
+    {
+      "id": "34419",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    },
+    {
+      "id": "57214",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_site_url_format_chk\""
+    },
+    {
+      "id": "81583",
+      "err": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_phone_e164ish_chk\""
+    }
+  ]
+}

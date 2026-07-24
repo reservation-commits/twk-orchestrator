@@ -97,8 +97,31 @@ export default function DataEnricher() {
 
       try {
         let newValue: string | null = null;
+        const isEmailCol = selectedColumn === 'email_for_reservations' || selectedColumn === 'email';
 
-        if (source === 'claude') {
+        // E-mail tem estratégia dedicada — Email Finder via fetch do site oficial
+        if (isEmailCol) {
+          const idCol = schema[0]?.column_name ?? 'restaurant_id';
+          const findRes = await fetch('/api/audit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'find_email_for_restaurant',
+              id_value: row[idCol],
+            }),
+          });
+          const findData = await findRes.json();
+          if (findData.best && findData.best.score > 30) {
+            newValue = findData.best.email;
+            setJobs((prev) => prev.map((j, idx) => idx === i ? {
+              ...j, before: `${findData.candidates.length} candidatos`,
+            } : j));
+          } else {
+            setJobs((prev) => prev.map((j, idx) => idx === i ? {
+              ...j, error: findData.reason ?? 'Nenhum e-mail encontrado',
+            } : j));
+          }
+        } else if (source === 'claude') {
           const agentRes = await fetch('/api/agent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

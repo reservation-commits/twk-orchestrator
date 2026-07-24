@@ -1,0 +1,375 @@
+restaurant_id,name,site_url,reason
+100082,LA MÈRE POULARD,https://lamerepoulard.com/en/home2/,no_email_found
+10447,BISOUS BISOUS,https://www.instagram.com/bisousbisousclub/?hl=fr,no_email_found
+10455,L'ECRIN PLAGE,https://www.ecrinplage.com/,no_email_found
+10459,MADEMOISELLE GRAY,https://www.hotelsbarriere.com/fr/cannes/le-gray-d-albion/restaurants-et-bars/restaurant-de-la-plage-privee.html,no_email_found
+10503,LA PAILLOTE,https://fr-fr.facebook.com/people/La-Paillote/100057650511350/,no_email_found
+10513,LE CLUB 55,https://www.club55.fr/,no_email_found
+10522,PRAO PLAGE,https://www.praoplage.com,home_status: 404
+10528,L‘ALBA,https://www.alba-beach-cannes.com,no_email_found
+10529,BFIRE,https://www.hotelsbarriere.com/fr/cannes/le-gray-d-albion/restaurants-et-bars/bfire-by-mauro-colagreco.html,home_status: 404
+107669,LE BAR DU NORMANDY,https://www.hotelsbarriere.com/fr/deauville/le-normandy/restaurants-et-bars/le-bar-du-normandy.html,no_email_found
+107951,AUBERGE DE LA SOURCE,https://auberge-de-la-source.fr/pt/,no_email_found
+108100,LE 1903,https://www.perebise.com/restaurant-le-1903/,no_email_found
+108114,COTTAGE BISE,https://www.cottagebise.com/,no_email_found
+108148,L’ABBAYE,https://www.abbaye-annecy.com/,no_email_found
+109460,THE PEDDLER,https://peddlergatlinburg.com/,no_email_found
+11567,YOYO,"https://yoyo-paris.com/?utm_source=Yext&amp;utm_medium=GMB&amp;y_source=1_MjU3NjM3NjctNzE1LWxvY2F0aW9uLndlYnNpdGU%3D",home_fetch: CERT_HAS_EXPIRED
+11577,MADEMOISELLE MOUCHE,https://www.mademoisellemouche.paris/,no_email_found
+11894,Omni,http://www.omniclubdubai.com/,home_fetch: ENOTFOUND
+12108,Eden Rock / Sand Bar,https://www.oetkerhotels.com/hotels/eden-rock-st-barths/restaurants-bars/sand-bar-eden/?utm_source=google&utm_medium=organic&utm_campaign=google_local_sand_bar,home_status: 429
+12196,ROKWOOD,http://www.rokwooddallas.com/,no_email_found
+13085,LE CHAMOIS,http://www.chamois-megeve.com/,no_email_found
+13135,LE DAHU,https://www.dahumegeve.com/,home_fetch: ENOTFOUND
+13146,LA TABLE DE L'OURS,https://www.hotellesbarmes.com/fr/restaurants-and-bar/la-table-de-l-ours/,home_status: 404
+13166,LA PEAU DE VACHE,https://lapeaudevache73.wixsite.com/peaudevache,no_email_found
+13174,LE CLOSE-UP,https://www.leclose-up.com/,no_email_found
+13325,MARINE RESTÔ,https://fairmontrio.com/marine-resto/,no_email_found
+14129,SUPRA DI MAURO MAIA,https://supracucina.com.br,no_email_found
+14145,JUN SAKAMOTO,https://www.junsakamoto.com.br/,no_email_found
+14157,ROI MÉDITERRANÉE,https://www.facebook.com/RoiMediterranee/,no_email_found
+14408,3BK,https://www.clubbingdubai.com/3bk,no_email_found
+14488,LE PRÉ CATELAN,https://restaurant.leprecatelan.com/index.cfm/page/lid/2/rid/3896/,home_status: 404
+14496,LE BAUDELAIRE,https://www.lebaudelaire.com,home_fetch: CERT_HAS_EXPIRED
+14551,MON PARIS !,https://www.mon-paris.fr/,no_email_found
+14680,Deux Amis,http://deuxamisnyc.com/,no_email_found
+14761,PABLO,https://www.indiegroup.fr/pablo,no_email_found
+14830,Lago,https://lagorestaurante.negocio.site/,home_status: 404
+15417,BAR DO ZÉ,https://www.instagram.com/bardozebuzios/,no_email_found
+15427,ESTÂNCIA DON JUAN,https://www.instagram.com/don_juan_restobar/,no_email_found
+15505,BAR GEORGE,https://www.bargeorge.ca,no_email_found
+15593,CANOE,https://www.canoeatl.com/,home_status: 502
+15684,FRED'S,https://fredshouserestaurant.com/,no_email_found
+15707,HACIENDA EL MORTERO,http://www.restaurantehaciendaelmortero.com/,no_email_found
+15822,RL,https://www.ralphlauren.com/global-rl-chicago,home_status: 307
+15871,CARNIVALE,https://www.carnivalechicago.com/,no_email_found
+16046,Jiko,https://disneyworld.disney.go.com/dining/animal-kingdom-lodge/jiko-the-cooking-place/?CMP=OKC-90001778_GM_WDW_dining_jikothecookingplace_NA,no_email_found
+16054,DEN,http://www.jimbochoden.com/,no_email_found
+16058,TOFUYA UKAI,https://www.ukai.co.jp/shiba/,no_email_found
+16067,ISHIKAWA,https://restaurant-ishikawa.com/,no_email_found
+16070,SAITO,https://www.arkhills.com/gourmet_shops/0010.html,no_email_found
+16076,TEMPURA FUKAMACHI,https://www.facebook.com/pages/%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89-%E6%B7%B1%E7%94%BA/172228292806115,no_email_found
+16078,Omotesando Ukaitei,https://www.ukai.co.jp/omotesando/,no_email_found
+16082,Ningyocho Imahan Ginza,https://restaurant.imahan.com/honten/,no_email_found
+16100,QUINTESSENCE,http://www.quintessence.jp,no_email_found
+16105,JOËL ROBUCHON,https://www.robuchon.jp/shop-list/joelrobuchon,no_email_found
+16126,Tempura Kondo,https://tempura-kondo.com/,no_email_found
+16150,CABERNET,https://www.fuegoyvino.com/,no_email_found
+16169,Marcelo,http://www.marcelorestaurante.com.ar/,no_email_found
+16206,MARE By Fran,https://www.laparolaccia.com/,no_email_found
+16305,JAVIER'S,https://javiers.net/,no_email_found
+16311,THE HONOR BAR,https://www.honorbar.com/locations/dallas/,home_status: 403
+16346,Red Ash,http://redashgrill.com/,no_email_found
+16456,LE PULÊ,https://le-pule.business.site,home_status: 404
+16493,Parker's,https://www.indpt.com/c/parkers,home_fetch: ECONNABORTED
+16625,POSÌ MOZZA & MARE,https://www.facebook.com/posimozzaemare/?ref=py_c,no_email_found
+16693,Mai Tai Bar,https://www.maitaibarwaikiki.com/,no_email_found
+16716,MARIPOSA,https://www.instagram.com/mariposahawaii/,no_email_found
+17027,MUKELLEF,https://www.mukellefkarakoy.com/,no_email_found
+17175,EDDIE V'S PRIME,https://www.facebook.com/EddieVsChicago/,no_email_found
+17361,Q,http://www.q-auto.com/,no_email_found
+17406,JAMAVAR,https://jamavarrestaurants.com/indian-restaurant-doha/,home_fetch: ECONNABORTED
+17612,FLYING CARPET,https://www.thetorchdoha.com.qa/dining/flying-carpet,home_status: 404
+17624,Shisha Terrace,https://www.hilton.com/en/hotels/doharqq-aleph-doha-residences/dining/,home_status: 403
+17721,GAUDEA,https://www.hotelmuare.mx/gaudea-restaurant,home_fetch: ERR_TLS_CERT_ALTNAME_INVALID
+17793,LA SAL,http://www.casadelmar-langkawi.com/restaurant/la-sal-restaurant,no_email_found
+18679,TOP OF THE CARLTON,https://www.thefork.it/ristorante/top-of-the-carlton-r845231,home_status: 403
+19131,LE BRAQUE,https://www.le-braque.fr/,no_email_found
+19160,LE JARDIN DU CLOITRE,https://www.facebook.com/pages/Restaurant-Le-Jardin-Du-Clo%C3%AEtre/1155028637963062,no_email_found
+19162,L'EMULSION LAMBERSART,https://www.lemulsionrestaurant.fr/,home_fetch: CERT_HAS_EXPIRED
+19328,BLISSS,https://www.blisss.fr/,home_fetch: ENOTFOUND
+19334,LE CHICOULA,https://www.lechicoula.fr/,no_email_found
+19351,INFLUENCES,https://www.restaurant-influences.com/,no_email_found
+19491,LA VIE,https://www.facebook.com/LaViePenang/,no_email_found
+19498,LE COHÉ,https://www.le-cohe.fr/,no_email_found
+19518,POINT ROUGE,https://www.pointrouge-bdx.com/,no_email_found
+19554,LIL'HOME,https://www.lilhome-restaurant.fr/,no_email_found
+19671,CHEZ MARCO,https://www.chezmarco-tonnara.com/,home_fetch: DEPTH_ZERO_SELF_SIGNED_CERT
+20247,MAKINO,https://www.facebook.com/JapaneseRestaurantMakinoCairo/,no_email_found
+20255,CRIMSON,https://www.crimsoncairo.com/,no_email_found
+20314,LE SUPREME,https://lesupremelyon.fr/fr,no_email_found
+20340,LES TROIS DOMES,https://www.les-3-domes.com/fr/,no_email_found
+20365,EPONA,https://lyon.intercontinental.com/le-restaurant-epona/,home_status: 404
+20367,LES TERRASSES,https://www.villaflorentine.com/fr/restaurant.html,no_email_found
+20582,COUR DES LOGES,https://en.courdesloges.com/,home_fetch: EPROTO
+20591,L'ARTICHAUT,https://hotelabbayelyon.com/restaurant-artichaut/,no_email_found
+20608,Nano Vendôme,https://www.trattorianano.com/lyon-nano-trattoria/,no_email_found
+20738,LE CENACLE,https://www.cite-hotels.com/fr/etablissements/restaurant-la-cenacle.html,no_email_found
+20754,LES PLANEURS,https://lesplaneurs.com/,no_email_found
+20864,GION SHIRAKAWA NAMISATO,https://www.gion-namisato.jp/,no_email_found
+21014,AJI FUKUSHIMA,https://kccc000.gorp.jp/,no_email_found
+21184,AJIRO,http://www.ajiro-s.co.jp/,no_email_found
+21196,BORUTA,https://boruta.jp/,no_email_found
+21349,OWATARI,https://www.instagram.com/gionowatari/,no_email_found
+21617,BISTROT COCO,https://www.facebook.com/bistrotcocostrasbourg,no_email_found
+21635,LA RIVIERE,https://www.facebook.com/pages/Restaurant-La-Rivi%C3%A8re-Strasbourg-Petite-France/526741707484264,no_email_found
+21666,L'AMUSE BOUCHE,https://www.lamuse-bouche.fr/,no_email_found
+21714,MICHEL,https://www.facebook.com/pages/Restaurant-Michel/120413651346922,no_email_found
+21716,Bucado,https://www.bubo-restaurant.com/,home_fetch: CERT_HAS_EXPIRED
+21754,BAR LE CAPIAN,https://marseille.intercontinental.com/le-bar/,no_email_found
+21789,FRANCK PUTELAT,https://www.franck-putelat.com/,no_email_found
+21845,LA GRAPPE D'OR,https://la-grappe.ch/,no_email_found
+22066,LAI HEEN,https://www.ritzcarlton.com/en/hotels/china/macau/dining/lai-heen?scid=bb1a189a-fec3-4d19-a255-54ba596febe2,no_email_found
+22086,MEZZA9,https://www.cityofdreamsmacau.com/en/dine/international/mezza9-macau,no_email_found
+22090,LE CHINOIS,https://www.sofitelmacau.com/dining/le-chinois-cantonese-restaurant/,home_status: 403
+22116,AURORA,https://www.auroraadl.com.au/,home_status: 403
+22131,ALAIN DUCASSE AT MORPHEUS,"https://www.cityofdreamsmacau.com/en/dine/international/alain-ducasse-at-morpheus?utm_source=Google&amp;utm_medium=GMB",home_status: 400
+22242,AUBERGE PROVENÇALE,https://www.auberge-provencale.fr,no_email_found
+22250,Étude,https://www.sauvage-aix.fr/,home_fetch: ERR_TLS_CERT_ALTNAME_INVALID
+22256,COTE COUR,https://www.facebook.com/ronankernen2/,no_email_found
+22302,LES CAUDALIES,https://www.restaurant-lescaudalies.com/,no_email_found
+22305,LAMACCOTTE,https://www.lamaccotte-restaurant-nantes.com/,no_email_found
+22319,SONG SAVEURS ET SENS,https://www.song-saveurs-et-sens-restaurant-nantes.com/,no_email_found
+22327,LE 1,http://www.leun.fr/,no_email_found
+22340,IZAKAYA JOYI,https://www.izakayajoyi.fr/,no_email_found
+22346,L'ATELIER D'ALAIN,https://www.facebook.com/restaurant.atelier.alain/,no_email_found
+22350,DUC NGHIA,https://www.chezredluna.fr/,no_email_found
+22373,LA ROTONDE,https://www.latabledaurelienlargeau.com/,no_email_found
+22388,LA GRANGE,https://lagrange-bayonne.fr/,no_email_found
+22397,CARLOS VAGUES ET SUNSET,https://www.instagram.com/carlosbiarritz/,no_email_found
+22405,LA TABLE DES COMPAGNONS,https://www.rezto.net/reztomembers/la-table-des-compagnons/,no_email_found
+22419,MARIUS MERIBEL,https://www.restaurant-marius.com/,no_email_found
+22681,OLIVIA'S,http://www.oliviasibiza.com/en/home/,home_status: 404
+22816,Roberto,http://www.restaurantroberto.ch/,no_email_found
+22846,AUBERGE D'ONEX,https://www.facebook.com/pages/Auberge-dOnex/151359911570135,no_email_found
+23291,CHENGLONGHANG,https://www.facebook.com/pages/chenglonghang/421291385144280,no_email_found
+23487,Coda,https://www.royalalberthall.com/plan-your-visit-essential-safety-information/hospitality-private-boxes-and-events/meetings-and-events/coda/,no_email_found
+24445,DAPHNE'S,https://daphnes-restaurant.co.uk/?utm_source=LocalGoogle&utm_medium=Organic&utm_campaign=gmb,no_email_found
+25016,LOCANDA DI CASTELVECCHIO,http://www.ristorantecastelvecchio.com/,home_fetch: ECONNABORTED
+250860,LES ENFANTS ROUGES,https://les-enfants-rouges-paris.fr/fr,no_email_found
+25124,34 MAYFAIR,https://34-restaurant.co.uk/?utm_source=LocalGoogle&utm_medium=Organic,no_email_found
+252759,MARZO,https://www.marzo-paris.com/,no_email_found
+252785,AO IZAKAYA,https://aoizakaya.com/,home_fetch: ENOTFOUND
+252801,MARLOTTI,https://www.lemarlottiparis.fr/,no_email_found
+254346,INDIE MOUNTAIN,https://www.indiegroup.fr/indiemountain,home_status: 404
+254396,CAFE DE L'ORMEAU,https://www.indiegroup.fr/cafedelormeau,no_email_found
+255268,BLACK PEARL,https://www.blackpearlcannes.com/,home_fetch: ENOTFOUND
+255269,TAM-TAM,https://www.instagram.com/tamtamparis/,no_email_found
+258041,LE LOUIS XV,https://www.montecarlosbm.com/en/restaurant-monaco/le-louis-xv-alain-ducasse-hotel-de-paris,no_email_found
+259412,GITANO,https://www.gitano.com/miami,home_status: 404
+259425,LA CÔTE,https://www.therooftopguide.com/rooftop-bars-in-miami/la-cote.html,home_status: 403
+262211,COCO ROCCO,https://www.cocorocco.fr,no_email_found
+26592,LUMIA,https://www.instagram.com/lumiarestaurant/,no_email_found
+26919,ADEGA DO FUTURO,https://www.instagram.com/adegadofuturo/,no_email_found
+26931,NIKKO,https://www.instagram.com/nikkojapanesefusion/,no_email_found
+26935,CHICAMA,https://www.facebook.com/chicamarecife,no_email_found
+270101,DRAGON,https://restaurantdragon.com/,no_email_found
+270168,RACINES,https://racinesparis.com/en/,no_email_found
+270246,SEXY FISH,"https://sexyfishmiami.com/?utm_source=LocalGoogleExtNet&amp;utm_medium=Organic",no_email_found
+271865,AKABEKO,https://akabekorestaurant.com/,home_status: 403
+27482,Moquém,https://www.instagram.com/moquemdobanzeiro/,no_email_found
+27511,CAXIRI,https://www.instagram.com/caxiri_amazonia/?hl=en,no_email_found
+27792,LA TERRAZZA,https://www.ristorantelaterrazza.it/,no_email_found
+281917,L'AQUARIUM,https://aquariumleclub.com/,home_fetch: ECONNABORTED
+286586,CACHE,http://www.merca.to/,no_email_found
+28887,SANKT ANNÆ,https://restaurantsanktannae.dk/,no_email_found
+291546,OYA Fusion,https://www.oyafusion.fr/,no_email_found
+293727,Le Bar du Plaza Athenee,https://www.dorchestercollection.com/paris/hotel-plaza-athenee/dining/le-bar?utm_source=google&utm_medium=hpa_local_profile&utm_campaign=le_bar&utm_content=paris_dining,home_status: 403
+293749,La Cour Jardin,https://www.dorchestercollection.com/paris/hotel-plaza-athenee/dining/la-cour-jardin?utm_source=google&utm_medium=hpa_local_profile&utm_campaign=la_cour_jardin&utm_content=paris_dining,home_status: 403
+293815,L'ORANGERIE,https://www.musee-orangerie.fr/fr,no_email_found
+29497,THE LIBRARY,https://www.rittenhousehotel.com/dining/librarybar,no_email_found
+295784,BACARA,http://bacaraclub.com/,no_email_found
+29609,KATY'S,https://www.gojerusalem.com/items/508/Katys-Restaurant/,home_status: 403
+29820,LA COUPOLE,"https://www.lacoupole-paris.com//?utm_source=Google&amp;utm_medium=GMB&amp;utm_campaign=COU&amp;y_source=1_MTE2NjUxODQtNzE1LWxvY2F0aW9uLndlYnNpdGU%3D",no_email_found
+29832,BRASSERIE LIPP,https://www.brasserielipp.fr/,no_email_found
+30019,NYMPHENBURGER HOF,https://www.nymphenburgerhof.de/,no_email_found
+30128,HARRY SASSON,http://www.harrysasson.com/,no_email_found
+30223,Estancia Chica,https://www.estanciachicabogota.com/,no_email_found
+30257,PIETRA PICCINA,https://pietra-piccina.business.site/,home_status: 404
+30409,7•16,https://zonak.com.co/restaurantes/716-steakhouse/,no_email_found
+30477,MISTURA PROVENZA,https://mistura-1.cluvi.co/,no_email_found
+30488,CANALLA,"https://canallarestaurant.negocio.site/?utm_source=gmb&amp;utm_medium=referral",home_status: 404
+30508,TONY ROMA'S,https://tonyromas.com/,no_email_found
+31705,THE REMINGTON,https://www.marriott.com/default.mi?redirectFrom=www.starwoodhotels.com,home_status: 403
+31892,Hillstone,https://hillstonerestaurant.com/locations/nyc-parkavenuesouth/,home_status: 403
+32197,Central Central,https://www.instagram.com/centralcentralmx/,no_email_found
+32263,Hunan Artz,https://www.hunan.com.mx/,no_email_found
+32885,OCTAVE,https://marriott-sukhumvit.myshopify.com/blogs/menu/octave-a-la-carte-menu,no_email_found
+32886,MAHARANI,https://www.royalcliff.com/shop/maharani/,home_status: 403
+33000,LE PETIT CHEF AT RAY'S,https://www.hilton.com/en/hotels/auhetci-conrad-abu-dhabi-etihad-towers/,home_status: 403
+33052,RONIN,https://www.facebook.com/roninpattaya/,no_email_found
+34175,SAMOS,https://www.instagram.com/samos.mexicocity/?hl=en,no_email_found
+34411,ANTIGUA CONTEMPORANEA,https://www.facebook.com/antigua2013/,no_email_found
+34434,OCTAVE,https://marriott-sukhumvit.myshopify.com/blogs/menu/octave-a-la-carte-menu,no_email_found
+34569,BLUE ELEPHANT,https://blueelephant.com/restaurant/bangkok/,home_status: 403
+34718,NEIL'S TAVERN,https://neil.co.th/,no_email_found
+34730,WANG HINGHOI,https://www.wanghinghoi.com/,home_fetch: CERT_HAS_EXPIRED
+34794,FRANGIPAANI,https://www.theolivetreegroup.com/our-brands/frangipaani-bukit-damansara/,home_status: 403
+35379,UNICO 23,https://www.facebook.com/23Unico,no_email_found
+36673,VASO,"https://www.facebook.com/vasobangkok/?_rdc=1&amp;_rdr",no_email_found
+36952,AL AFIYA AL MAGHRIBI,https://al-afiya-al-maghribi.business.site/,home_status: 404
+37892,NGUYEN'S,https://bistronguyens.com.au/,no_email_found
+38546,PACHI PACHI,https://www.facebook.com/pachipachiperth/,no_email_found
+38655,PERUGINO,http://perugino.com.au/,no_email_found
+38859,SPANIARD,http://www.thespaniard.com.au/,home_fetch: ENOTFOUND
+39125,IWASE,https://iwase.juisyfood.com/,no_email_found
+39151,RÖMER PILS BRUNNEN,https://roemerpilsbrunnen.de/,no_email_found
+39499,SELERA,https://www.selera-malaysian-restaurant.de/,no_email_found
+39707,DA MARIETTO,"https://www.facebook.com/photo/?fbid=382970083836264&amp;set=a.382970047169601",no_email_found
+39712,EDELWEISS,http://www.edelweiss-ffm.de/,no_email_found
+39715,PASTA DAVINI,https://www.pasta-davini.de/,no_email_found
+39752,KONAMON,https://www.konamon.online/,home_fetch: ENOTFOUND
+40721,SAM'S,https://phuket.holidayinnresorts.com/dining/sams,home_status: 404
+40772,PLUM,https://www.capesienna.com/plum.html,home_status: 404
+40821,LA GAETANA,https://www.facebook.com/LaGaetanaPhuket/info?tab=overview,no_email_found
+40884,AZURA,https://www.instagram.com/Azuraphuket/?hl=fr,no_email_found
+42020,BELLAVISTA,https://www.ristorantebellavistafrankfurtammain.de/,home_fetch: ENOTFOUND
+42030,TAMARIND,https://www.reefcasino.com.au/dine/tamarind-restaurant,home_fetch: ECONNABORTED
+42252,THE CHAMBER ROOM,http://www.thechamberroom.com.au/,no_email_found
+42823,PAPANOVA,https://www.papanova-frankfurt.de/,no_email_found
+43184,WEISSE LILIE,http://www.weisse-lilie.de/,no_email_found
+44641,The Tropic,https://thetropic.com.au/,home_status: 403
+48153,SACHA,http://www.restaurantesacha.com/,no_email_found
+48246,Bakan,https://bakanmadrid.com/,home_status: 403
+51860,Hatraklin Bistro,http://www.hatraklin.co.il/,home_status: 403
+57208,L'ABREUVOIR,http://www.abreuvoir.gr/,no_email_found
+58649,CAFÉ POUCHKINE,https://cafe-pushkin.ru/,no_email_found
+62274,TAKAO,https://takaobrentwood.wixsite.com/website,no_email_found
+62295,NODAIWA AZABU IIKURA HONTE,http://www.nodaiwa.co.jp/index2.html,no_email_found
+62717,TENICHI GINZA HONTEN,https://tenichi.co.jp/,no_email_found
+62744,KISOJI SHINJUKU,https://www.kisoji.co.jp/kisoji/navi/shop_detail.asp?ShopNo=266,no_email_found
+62825,L'osier,https://losier.shiseido.co.jp/,no_email_found
+62862,BEN FIDDICH,https://www.facebook.com/BarBenfiddich/timeline,no_email_found
+63001,KYUBEY,http://www.kyubey.jp/,no_email_found
+63018,Yakiniku Happy Ningyocho,http://www.yakiniku-happy.jp/,no_email_found
+63021,Sukiyabashi Jiro Roppongi Hills,http://www.roppongihills.com/shops_restaurants/restaurants/00138.html,no_email_found
+68048,ZEST,https://zestcapetown.co.za/,home_fetch: ECONNABORTED
+68078,PHILKYUNGJAE,http://www.philkyungjae.co.kr/rain/,no_email_found
+68099,WALKING ON THE CLOUD,https://www.63restaurant.co.kr/r63en/introduction.r63?shop_idrest=31040,home_fetch: ECONNRESET
+68673,DUGAHUN,http://www.dugahun.com/sagan/,no_email_found
+68679,LA YEON,https://www.shilla.net/seoul/dining/viewDining.do?contId=KRN#ad-image-0,no_email_found
+68702,BAR 81,https://www.lottehotel.com/seoul-signiel/ko/dining/bar-81.html,no_email_found
+69359,GIRAFFE,https://www.giraffe.co.il/,no_email_found
+69382,KALAMARIS,https://gardenrest.co.il/,home_status: 403
+69945,O MEXILHÃO,https://www.facebook.com/profile.php?id=100067041040579,no_email_found
+69981,TANINOS,https://www.facebook.com/people/Taninos-Wine-Kitchen/100083687704596/,no_email_found
+70017,CHICO ZE,"https://www.facebook.com/profile.php?id=272601846084681&amp;ref=stream",no_email_found
+70043,PALACIO DA CHINA,https://www.facebook.com/pages/Pal%C3%A1cio%20da%20China/1636688849688118/,no_email_found
+70101,TABERNA DA MÓ,https://www.facebook.com/tabernadamo/,no_email_found
+70107,O CAMILO,http://www.camilorestaurante.com/,no_email_found
+70401,BRASAO,https://www.facebook.com/people/Brasao/100063516521938/,no_email_found
+70428,O ESCONDIDINHO,https://www.facebook.com/pages/Restaurante-Escondidinho-Lagos/125367994230245,no_email_found
+70549,SAL & COMPANHIA,https://www.facebook.com/SAL-companhia-Restaurante-807322579403747/,no_email_found
+70648,ARTESÃO,https://www.facebook.com/artesaolagos,no_email_found
+71006,MERENDA GHJULIA,https://www.instagram.com/merendaghjulia/?hl=en,no_email_found
+71143,NOVA,https://www.facebook.com/profile.php?id=100026605399424,no_email_found
+71165,A SCALETTA,https://www.whatiseat.com/fr/menu/a-scaletta/,no_email_found
+71169,LVP,https://www.facebook.com/lvp.bastia/,no_email_found
+71175,COLOMBA,https://www.facebook.com/Lecolomba2b/,no_email_found
+71177,L'EPICA,https://www.facebook.com/pages/Lepica/266239980775943?hc_ref=ARR20yjSg7Z3NTMS10is-OvCNmEP_Nr_2jlsi4Vi_UEvh9WTJcIMJKeG7W1KP-eN_qE,no_email_found
+71179,CORTO,https://www.facebook.com/CortoBastia/,no_email_found
+71239,LE SAÏGON,https://www.whatiseat.com/fr/menu/le-saigon/,no_email_found
+71252,L'IMPÉRIAL,https://www.brasserielimperial-bastia.fr/,no_email_found
+71310,GHISONI'S,https://www.ghisonis.com/,home_status: 404
+71316,A FUNTANA,https://www.facebook.com/profile.php?id=100049045137048,no_email_found
+71359,MONTMARTRE,https://www.facebook.com/profile.php?id=100057250277460,no_email_found
+71407,VG,"https://website--80866377809329630218-restaurant.business.site/?utm_source=gmb&amp;utm_medium=referral",home_status: 404
+71416,VOLONTIERS,https://www.pizzeriavolontiers.com/,home_fetch: ENOTFOUND
+71470,LE CAFE DU CENTRE,https://www.facebook.com/LeCafeDuCentreBastia/,no_email_found
+71507,LA RHUMERIE,https://www.facebook.com/La-Rhumerie-Bastia-893838927302669/,no_email_found
+71527,LE MAJESTIC,https://www.instagram.com/majestic_bastia/?hl=en,no_email_found
+71575,BAR DE LA CITADELLE,https://www.instagram.com/citadellebarbastia/,no_email_found
+71612,MARE E MONTI,https://labarcarolle.business.site/,home_status: 404
+71658,DES INTIMES,https://www.whatiseat.com/fr/menu/cafe-des-intimes/,no_email_found
+71814,LE TRIVALOU,https://www.facebook.com/people/Le-Trivalou/100054359388120/,no_email_found
+72323,TTEURAK,https://instagram.com/tteurak1998,no_email_found
+72339,YONGSUSAN,https://yongsusan.modoo.at/,no_email_found
+72342,LES PLANCHES,https://www.facebook.com/lesplanchescarcassonne,no_email_found
+72356,CHEZ FRED,https://www.restaurant-chezfred.fr/,no_email_found
+72369,LE SAINT JEAN,https://www.le-saint-jean.eu/,no_email_found
+72376,LA TAVERNE MODERNE,https://www.facebook.com/latavernemodernecarcassonne/,no_email_found
+72378,CHATEAU DE CAVANAC,https://www.chateau-de-cavanac.fr/,home_fetch: ERR_TLS_CERT_ALTNAME_INVALID
+72389,LA TABLE FERMIÈRE,https://la-table-fermiere.business.site/,home_status: 404
+72403,LE CRÉNEAU,https://le-creneau-carcassonne.fr/fr,no_email_found
+72412,SUSHI BOAT,https://www.sushiboat-france.com/carcassonne/,no_email_found
+72431,SAINT ROCH,https://www.facebook.com/lacantinedusaintroch/,no_email_found
+72437,L'ARTICHAUT,https://hotelabbayelyon.com/restaurant-artichaut/,no_email_found
+72440,AUBERGE DE CLAMOUX,https://clamoux.netlify.app/,no_email_found
+72450,Ô TROIS CINQ SEPT,"https://www.facebook.com/profile.php?id=100063547360328&amp;sk=photos",no_email_found
+72473,BASILIC & CO,https://basilic-and-co.com/restaurants/pizzeria-carcassonne-roosevelt/,no_email_found
+72901,ZITLA CEIBA,"https://www.facebook.com/profile.php?id=100064831760437&amp;sk=about",no_email_found
+72932,CASSA CEVICHE,https://cassaceviche.com/,no_email_found
+75150,LES GOURMANDS,https://www.lesgourmands.com/,home_fetch: ECONNABORTED
+75167,MAISON DE LA LOZÈRE,https://www.mamaison-restaurant.fr/menu,no_email_found
+75230,MAS DES FILLES,https://www.masdesfilles.com/,no_email_found
+75265,VERTIGO,https://www.vertigodoha.com,no_email_found
+75273,MARCELLE,https://www.domainedeverchant.com/fr/services.html,no_email_found
+75417,LA CANTINE,https://thebabelcommunity.com/montpellier/restaurant,no_email_found
+75790,L'ANGELUS,https://www.restaurant-angelus.fr/,no_email_found
+75853,L'ALCHIMISTE,https://www.alchimistemontpellier.fr/,no_email_found
+75898,L'ECAILLER,https://lecaillerdupalaisroyal.be/,no_email_found
+75930,LA PLACE,https://www.facebook.com/profile.php?id=100050354452252,no_email_found
+75948,SOUS LE FIGUIER,https://www.dimanchesouslefiguier.fr/,no_email_found
+76014,LA TERRASSE,http://www.pizzeria-laterrasse.com/,no_email_found
+76050,BAMBINO ROCCO,https://bambinorocco.com/,home_status: 403
+76597,ONJIUM,https://www.instagram.com/onjium_restaurant/,no_email_found
+76711,LE RÉFECTOIRE,https://www.facebook.com/lerefectoiremtp/,no_email_found
+76720,TRINQUE FOUGASSE,https://www.trinquefougasse.com/,no_email_found
+76745,LES BAINS,http://www.les-bains-de-montpellier.com/,home_fetch: ECONNABORTED
+76754,CHEZ VINCENT,https://www.chezvincent.com/,home_fetch: ERR_TLS_CERT_ALTNAME_INVALID
+76819,LA BARAQUETTE,https://instagram.com/labaraquettedeshalleslaissac?utm_medium=copy_link,no_email_found
+76821,A BELA SINTRA,http://abelasintra.com.br/,no_email_found
+76850,CAFÉ LEON,"https://www.facebook.com/profile.php?id=208128219219118&amp;paipv=0&amp;eav=AfaIaYHVAEDTBsOak7XHWnFoXFuQ0RzuHN2ZPV_ARptew2a96MDo_Euuhr1wjX5nBEI&amp;_rdr",no_email_found
+76869,ALTEREGO,https://www.restaurant-alterego.fr/,home_fetch: ENOTFOUND
+76960,LE RÉGENCY,https://www.facebook.com/leregency34/,no_email_found
+77110,PAPA,https://www.pizzapapa.fr/,no_email_found
+77294,CASE DU SALOUM,https://www.facebook.com/pages/La%20Case%20Du%20Saloum/1504196879877880/,no_email_found
+77405,PART DES ANGES,https://www.lapartdesangesmontpellier.com/,no_email_found
+77449,ROCCO ET SA MÈRE,https://roccoetsamere.com/,home_status: 403
+77466,BISTROT CITY,https://www.appartcity.com/fr/restaurant-bistrot-city-montpellier-ovalie.html,home_status: 404
+77491,MI BARRIO,https://www.facebook.com/profile.php?id=100063693754178,no_email_found
+77669,FRÈRES POULARDS,https://www.facebook.com/profile.php?id=100063502571687,no_email_found
+79138,LE TAJ MAHAL,https://www.instagram.com/taj_mahal_nice/?utm_medium=copy_link,no_email_found
+79645,ORIGINES,https://www.origines-restaurant.com/,no_email_found
+80851,KUBO ZUSHI,https://www.facebook.com/kubozushi/,no_email_found
+80945,IMAKAY,https://www.instagram.com/imakaysaopaulo/,no_email_found
+80976,LE BISTROT DE GILLOU,https://lebistrotdegillou.fr/fr,no_email_found
+81004,LE CURRY,https://www.lecurry-nice.com/,no_email_found
+81159,MAKOTO,https://makotookuwa.com.br/,home_status: 503
+81218,CITRUS,https://www.citrusnice.fr,no_email_found
+81244,SUSHI LUNE,https://www.sushilune.fr,home_fetch: ECONNABORTED
+83064,JULIETA DE SERPA,https://www.julietadeserpa.com.br/gastronomia/julieta-restaurante/,no_email_found
+84668,ARIGATO SUSHI,https://www.arigatosb.com/,home_status: 403
+84703,SANTO MEZCAL,https://www.santomezcalsb.com/,no_email_found
+86553,BUTLER,https://butler.rest/en/,no_email_found
+86614,AIST,http://aistcafe.ru/,home_status: 403
+86989,LE BINOME,https://www.facebook.com/lebinome.annecy/?eid=ARBW0Mv-kPJ8Z-xLIr16cOot6b5f9c_sYlY8hwTXYgPnkZVuoiDT-fYbEit5B1nmAwfb4z_h1xpprehM,no_email_found
+87073,LE LIBELLULE,https://www.bateaux-annecy.com/,no_email_found
+87140,LE CONFIDENTIEL,https://www.restaurant-leconfidentiel.com/,no_email_found
+87280,Dymzavod,http://www.dymzavod.ru/,no_email_found
+87315,INFLUENCES,https://www.restaurant-influences.com/,no_email_found
+87350,L’EMULSION,"https://www.facebook.com/profile.php?id=100063723782861&amp;ref=page_internal",no_email_found
+87393,L'ATELIER,https://latelier-alexandrebousquet.com/,home_fetch: ECONNABORTED
+87398,LA ROTONDE,https://www.latabledaurelienlargeau.com/,no_email_found
+87523,TEHNIKUM,https://tehnikumbistro.ru/rus/,no_email_found
+87716,LE RIAD,https://www.restaurant-leriad-reims.fr/Bienvenue,home_status: 404
+87922,LA MEDINA,http://www.lamedinareims.fr/,home_fetch: ENOTFOUND
+87945,CASA D'URSO,https://www.facebook.com/caprioloM/,no_email_found
+88086,LES COCOTTES DU CUL DE POULE,https://www.lescocottesduculdepoule.com/?utm_source=gmb,home_status: 404
+88120,L'ESPELETTE,https://lespelette-reims.fr/,no_email_found
+88148,BRIGTSEN'S,https://brigtsens.com/,no_email_found
+88912,LE PETIT BISTROT,https://www.grimaud-provence.com/offres/le-petit-bistrot-cogolin-fr-3416545/,no_email_found
+89740,THE HAMPTON  SOCIAL,https://www.thehamptonsocial.com/nashville,home_status: 403
+90013,LA TABLE DE LOUIS,https://www.restaurantlatabledelouis.fr/,home_fetch: CERT_HAS_EXPIRED
+90343,UMENO,https://www.restaurant-umeno.com/,no_email_found
+90470,LE TRAIN BLEU,https://www.montecarlosbm.com/fr/restaurant-monaco/le-train-bleu,no_email_found
+90513,COUNCIL OAK,https://www.seminolehardrockhollywood.com/dining/fine-dining/council-oak-steaks-and-seafood,no_email_found
+91044,BISTROT D'YVAN,https://le-bistrot-dyvan.eatbu.com/?lang=pt,home_status: 404
+91203,LE LISITA,https://www.lelisita.com/,no_email_found
+91224,GAMEL,https://www.instagram.com/gamelnimes/,no_email_found
+91864,MENNA,https://www.restaurant-menna.fr/,no_email_found
+94199,ACRE,https://acrememphis.com/,no_email_found
+96272,WHITE LIMOZEEN,https://www.hilton.com/en/hotels/bnagngu-graduate-nashville/dining/?y_source=1_MTA2Njc4ODcwNi03MTUtbG9jYXRpb24ud2Vic2l0ZQ%3D%3D,home_status: 403
+96493,HARRY & IZZY'S,https://www.harryandizzys.com/,no_email_found
+96531,THE EAGLE'S,https://www.eaglerestaurant.com/locations/?utm_source=GoogleBusinessProfile&utm_medium=Website&utm_campaign=MapLabs&utm_content=MassAve,no_email_found
+96957,KURO,https://www.hardrockhotelatlanticcity.com/restaurants/kuro,no_email_found
+96959,LINGUINI BY THE SEA,"https://www.theoceanac.com/restaurants/linguini-by-the-sea?utm_source=Google&amp;utm_medium=Listing&amp;utm_campaign=Linguini+By+The+Sea",home_status: 403
+97032,OCEAN STEAK,"https://www.theoceanac.com/restaurants/american-cut?utm_source=Google&amp;utm_medium=Listing&amp;utm_campaign=American+Cut",home_status: 403
+97388,BRASSERIE 7452,https://srdvdining.com/dining/brasserie7452,home_status: 404
+98225,EAST HAMPTON,http://www.easthamptongrill.com,home_status: 403
+98678,LES FLOTS,https://les-flots.com/,no_email_found
+98695,LES 4 SERGENTS,https://www.les4sergents.com/,no_email_found
+98700,ARCO,https://www.restaurantarco.com/,no_email_found
+98854,MOXIE,https://moxiego.site/,no_email_found
+99366,FRANCO'S,http://www.francosscottsdale.com/,no_email_found
+99579,ORANGE SKY,https://www.talkingstickresort.com/dining/orange-sky/,no_email_found

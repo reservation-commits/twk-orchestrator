@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-06-11T00:37:13.044Z",
+  "apply": {
+    "total": 19,
+    "ok": 19,
+    "skip": 0,
+    "err": 0
+  },
+  "unpublish": {
+    "total": 363,
+    "ok": 363,
+    "skip": 0,
+    "err": 0
+  }
+}

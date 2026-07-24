@@ -1,0 +1,862 @@
+{
+  "generated_at": "2026-06-11T16:25:52.741Z",
+  "total_candidates": 129,
+  "present_count": 26,
+  "absent_count": 103,
+  "absent": [
+    {
+      "name": "Sukiyabashi Jiro Ginza",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Kanda",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Ryugin",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Sézanne",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "ESqUISSE",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Sushi Ginza Onodera",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Sushi Saiko",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Mibu",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Cuisine[s] Michel Troisgros",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Restaurant Toyo",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Pierre Gagnaire Tokyo",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "1_star"
+    },
+    {
+      "name": "Inua",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Hashida Sushi",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Sushi Yoshitake",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Kyo Aji",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Hommura",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Kohaku",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Hyotei",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Kikunoi",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Kitcho Arashiyama",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Tankuma Kitamise",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Honke Owariya",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "$$$"
+    },
+    {
+      "name": "Mizai",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Ishibashi",
+      "city": "Kyoto",
+      "country": "Japan",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Hana Kitcho",
+      "city": "Osaka",
+      "country": "Japan",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Ajikitcho Daimaru",
+      "city": "Osaka",
+      "country": "Japan",
+      "tier": "1_star"
+    },
+    {
+      "name": "Hajime",
+      "city": "Osaka",
+      "country": "Japan",
+      "tier": "3_star"
+    },
+    {
+      "name": "Cra to Cra",
+      "city": "Osaka",
+      "country": "Japan",
+      "tier": "$$$$"
+    },
+    {
+      "name": "La Cime",
+      "city": "Osaka",
+      "country": "Japan",
+      "tier": "2_star"
+    },
+    {
+      "name": "Odette",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "3_star"
+    },
+    {
+      "name": "Zen",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "3_star"
+    },
+    {
+      "name": "Cure",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Cut by Wolfgang Puck",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Esora",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Iggy's",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Jaan by Kirk Westaway",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Labyrinth",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Meta",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Nouri",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Restaurant Andre",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Saint Pierre",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "2_star"
+    },
+    {
+      "name": "Shisen Hanten",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "2_star"
+    },
+    {
+      "name": "Sushi Kimura",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Thevar",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Whitegrass",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Restaurant Born",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "$$$"
+    },
+    {
+      "name": "Imperial Treasure Super Peking Duck",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "$$$"
+    },
+    {
+      "name": "Hill Street Tai Hwa Pork Noodle",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Liao Fan Hong Kong Soya Sauce Chicken",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star"
+    },
+    {
+      "name": "Bo Innovation",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "2_star"
+    },
+    {
+      "name": "Forum Restaurant",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "3_star"
+    },
+    {
+      "name": "T'ang Court",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "3_star"
+    },
+    {
+      "name": "Sushi Shikon",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "3_star"
+    },
+    {
+      "name": "L'Atelier de Joël Robuchon Hong Kong",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "3_star"
+    },
+    {
+      "name": "Tate Dining Room",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "2_star"
+    },
+    {
+      "name": "VEA",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "1_star"
+    },
+    {
+      "name": "Amber",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "2_star"
+    },
+    {
+      "name": "Belon",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "1_star"
+    },
+    {
+      "name": "Mono",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "1_star"
+    },
+    {
+      "name": "Ying Jee Club",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "2_star"
+    },
+    {
+      "name": "Pierre",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "2_star"
+    },
+    {
+      "name": "Sushi Saito Hong Kong",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "1_star"
+    },
+    {
+      "name": "Le Du",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Nahm",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Sühring",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "2_star"
+    },
+    {
+      "name": "Mezzaluna",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "2_star"
+    },
+    {
+      "name": "Bo.lan",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Methavalai Sorndaeng",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Sra Bua by Kiin Kiin",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Le Normandie",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "2_star"
+    },
+    {
+      "name": "Saawaan",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Paste",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Cadence by Dan Bark",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star"
+    },
+    {
+      "name": "Côte by Mauro Colagreco",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Mingles",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "3_star"
+    },
+    {
+      "name": "Mosu Seoul",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "3_star"
+    },
+    {
+      "name": "Kwon Sook Soo",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "2_star"
+    },
+    {
+      "name": "Soigné Seoul",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "1_star"
+    },
+    {
+      "name": "Gaon",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "3_star"
+    },
+    {
+      "name": "Jin Jin",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "1_star"
+    },
+    {
+      "name": "Ultraviolet by Paul Pairet",
+      "city": "Shanghai",
+      "country": "China",
+      "tier": "3_star"
+    },
+    {
+      "name": "T'ang Court Shanghai",
+      "city": "Shanghai",
+      "country": "China",
+      "tier": "3_star"
+    },
+    {
+      "name": "Yong Yi Ting",
+      "city": "Shanghai",
+      "country": "China",
+      "tier": "2_star"
+    },
+    {
+      "name": "Mr & Mrs Bund",
+      "city": "Shanghai",
+      "country": "China",
+      "tier": "$$$"
+    },
+    {
+      "name": "Hakkasan Shanghai",
+      "city": "Shanghai",
+      "country": "China",
+      "tier": "$$$"
+    },
+    {
+      "name": "Sir Elly's",
+      "city": "Shanghai",
+      "country": "China",
+      "tier": "$$$$"
+    },
+    {
+      "name": "TRESIND Studio",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "3_star"
+    },
+    {
+      "name": "Il Ristorante — Niko Romito",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "2_star"
+    },
+    {
+      "name": "Hakkasan Dubai",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "$$$"
+    },
+    {
+      "name": "Zuma Dubai",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "$$$$"
+    },
+    {
+      "name": "La Petite Maison Dubai",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Nobu Dubai",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Roberto's Dubai",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Cipriani Yas Island",
+      "city": "Abu Dhabi",
+      "country": "United Arab Emirates",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Hoseki",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "2_star"
+    },
+    {
+      "name": "Trèsind Studio",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "3_star"
+    },
+    {
+      "name": "Row on 45",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "1_star"
+    },
+    {
+      "name": "Bombay Brasserie",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "$$$"
+    },
+    {
+      "name": "Indian Accent",
+      "city": "New Delhi",
+      "country": "India",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Bukhara",
+      "city": "New Delhi",
+      "country": "India",
+      "tier": "$$$"
+    },
+    {
+      "name": "Avartana",
+      "city": "Chennai",
+      "country": "India",
+      "tier": "$$$"
+    },
+    {
+      "name": "Wasabi by Morimoto",
+      "city": "Mumbai",
+      "country": "India",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Masque",
+      "city": "Mumbai",
+      "country": "India",
+      "tier": "$$$$"
+    }
+  ],
+  "present": [
+    {
+      "name": "Sushi Saito",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star",
+      "match_id": "16070",
+      "match_name": "SAITO",
+      "match_published": false
+    },
+    {
+      "name": "Quintessence",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star",
+      "match_id": "16100",
+      "match_name": "QUINTESSENCE",
+      "match_published": false
+    },
+    {
+      "name": "L'Effervescence",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star",
+      "match_id": "16098",
+      "match_name": "L'Effervescence",
+      "match_published": true
+    },
+    {
+      "name": "Den",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star",
+      "match_id": "16054",
+      "match_name": "DEN",
+      "match_published": false
+    },
+    {
+      "name": "Florilège",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star",
+      "match_id": "16096",
+      "match_name": "FLORILEGE",
+      "match_published": true
+    },
+    {
+      "name": "Narisawa",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star",
+      "match_id": "16056",
+      "match_name": "NARISAWA",
+      "match_published": true
+    },
+    {
+      "name": "Tempura Kondo",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star",
+      "match_id": "16126",
+      "match_name": "Tempura Kondo",
+      "match_published": false
+    },
+    {
+      "name": "Joël Robuchon Ebisu",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star",
+      "match_id": "16105",
+      "match_name": "JOËL ROBUCHON",
+      "match_published": false
+    },
+    {
+      "name": "L'Atelier de Joël Robuchon Roppongi",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "2_star",
+      "match_id": "16105",
+      "match_name": "JOËL ROBUCHON",
+      "match_published": false
+    },
+    {
+      "name": "Beige Alain Ducasse Tokyo",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "1_star",
+      "match_id": "62212",
+      "match_name": "BEIGE ALAIN DUCASSE",
+      "match_published": true
+    },
+    {
+      "name": "Ishikawa",
+      "city": "Tokyo",
+      "country": "Japan",
+      "tier": "3_star",
+      "match_id": "16067",
+      "match_name": "ISHIKAWA",
+      "match_published": false
+    },
+    {
+      "name": "Les Amis",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "3_star",
+      "match_id": "20104",
+      "match_name": "LES AMIS",
+      "match_published": true
+    },
+    {
+      "name": "Burnt Ends",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "1_star",
+      "match_id": "20493",
+      "match_name": "BURNT ENDS",
+      "match_published": true
+    },
+    {
+      "name": "Cloudstreet",
+      "city": "Singapore",
+      "country": "Singapore",
+      "tier": "2_star",
+      "match_id": "20653",
+      "match_name": "CLOUDSTREET",
+      "match_published": true
+    },
+    {
+      "name": "8½ Otto e Mezzo Bombana",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "tier": "3_star",
+      "match_id": "16830",
+      "match_name": "8½ OTTO E MEZZO BOMBANA",
+      "match_published": true
+    },
+    {
+      "name": "Gaggan Anand",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "2_star",
+      "match_id": "35630",
+      "match_name": "GAGGAN ANAND",
+      "match_published": true
+    },
+    {
+      "name": "Sorn",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "2_star",
+      "match_id": "35700",
+      "match_name": "SORN",
+      "match_published": true
+    },
+    {
+      "name": "Chim by Siam Wisdom",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star",
+      "match_id": "34734",
+      "match_name": "CHIM BY SIAM",
+      "match_published": true
+    },
+    {
+      "name": "Haoma",
+      "city": "Bangkok",
+      "country": "Thailand",
+      "tier": "1_star",
+      "match_id": "34443",
+      "match_name": "HAOMA",
+      "match_published": true
+    },
+    {
+      "name": "Jungsik Seoul",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "2_star",
+      "match_id": "67025",
+      "match_name": "JUNGSIK",
+      "match_published": true
+    },
+    {
+      "name": "Pierre Gagnaire à Seoul",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "1_star",
+      "match_id": "67917",
+      "match_name": "PIERRE GAGNAIRE",
+      "match_published": true
+    },
+    {
+      "name": "L'Amant Secret",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "1_star",
+      "match_id": "73496",
+      "match_name": "L'AMANT SECRET",
+      "match_published": true
+    },
+    {
+      "name": "Onjium",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "1_star",
+      "match_id": "76597",
+      "match_name": "ONJIUM",
+      "match_published": false
+    },
+    {
+      "name": "La Yeon",
+      "city": "Seoul",
+      "country": "South Korea",
+      "tier": "3_star",
+      "match_id": "68679",
+      "match_name": "LA YEON",
+      "match_published": false
+    },
+    {
+      "name": "Ossiano",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "2_star",
+      "match_id": "14361",
+      "match_name": "OSSIANO",
+      "match_published": true
+    },
+    {
+      "name": "Stay by Yannick Alléno",
+      "city": "Dubai",
+      "country": "United Arab Emirates",
+      "tier": "1_star",
+      "match_id": "327881",
+      "match_name": "STAY by Yannick Alléno",
+      "match_published": true
+    }
+  ]
+}

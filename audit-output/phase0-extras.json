@@ -1,0 +1,918 @@
+{
+  "cities_top": [
+    {
+      "city": "Paris",
+      "country": "France",
+      "n": 152
+    },
+    {
+      "city": "Montpellier",
+      "country": "France",
+      "n": 97
+    },
+    {
+      "city": "Carcassonne",
+      "country": "France",
+      "n": 50
+    },
+    {
+      "city": "Lyon",
+      "country": "France",
+      "n": 48
+    },
+    {
+      "city": "Lagos",
+      "country": "Portugal",
+      "n": 47
+    },
+    {
+      "city": "Cannes",
+      "country": "France",
+      "n": 44
+    },
+    {
+      "city": "Nice",
+      "country": "France",
+      "n": 43
+    },
+    {
+      "city": "Rome",
+      "country": "Italy",
+      "n": 40
+    },
+    {
+      "city": "London",
+      "country": "England",
+      "n": 38
+    },
+    {
+      "city": "Frankfurt",
+      "country": "Germany",
+      "n": 37
+    },
+    {
+      "city": "Bastia",
+      "country": "France",
+      "n": 37
+    },
+    {
+      "city": "Bangkok",
+      "country": "Thailand",
+      "n": 37
+    },
+    {
+      "city": "Bordeaux",
+      "country": "France",
+      "n": 36
+    },
+    {
+      "city": "Saint tropez",
+      "country": "France",
+      "n": 35
+    },
+    {
+      "city": "Milan",
+      "country": "Italy",
+      "n": 32
+    },
+    {
+      "city": "Seoul",
+      "country": "South Korea",
+      "n": 31
+    },
+    {
+      "city": "Tokyo",
+      "country": "Japan",
+      "n": 30
+    },
+    {
+      "city": "Reims",
+      "country": "France",
+      "n": 29
+    },
+    {
+      "city": "Rio de janeiro",
+      "country": "Brazil",
+      "n": 29
+    },
+    {
+      "city": "Strasbourg",
+      "country": "France",
+      "n": 27
+    },
+    {
+      "city": "Marseille",
+      "country": "France",
+      "n": 27
+    },
+    {
+      "city": "Lille",
+      "country": "France",
+      "n": 26
+    },
+    {
+      "city": "São paulo",
+      "country": "Brazil",
+      "n": 25
+    },
+    {
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "n": 23
+    },
+    {
+      "city": "Vienna",
+      "country": "Austria",
+      "n": 22
+    }
+  ],
+  "countries_top": [
+    {
+      "country": "France",
+      "n": 916
+    },
+    {
+      "country": "USA",
+      "n": 165
+    },
+    {
+      "country": "Italy",
+      "n": 124
+    },
+    {
+      "country": "Brazil",
+      "n": 82
+    },
+    {
+      "country": "Germany",
+      "n": 71
+    },
+    {
+      "country": "Portugal",
+      "n": 61
+    },
+    {
+      "country": "Thailand",
+      "n": 54
+    },
+    {
+      "country": "Spain",
+      "n": 50
+    },
+    {
+      "country": "Australia",
+      "n": 50
+    },
+    {
+      "country": "England",
+      "n": 50
+    },
+    {
+      "country": "Malaysia",
+      "n": 43
+    },
+    {
+      "country": "Japan",
+      "n": 41
+    },
+    {
+      "country": "Mexico",
+      "n": 32
+    },
+    {
+      "country": "China",
+      "n": 32
+    },
+    {
+      "country": "South Korea",
+      "n": 32
+    },
+    {
+      "country": "UAE",
+      "n": 29
+    },
+    {
+      "country": "Greece",
+      "n": 26
+    },
+    {
+      "country": "Colombia",
+      "n": 26
+    },
+    {
+      "country": "Argentina",
+      "n": 23
+    },
+    {
+      "country": "Austria",
+      "n": 22
+    },
+    {
+      "country": "Turkey",
+      "n": 20
+    },
+    {
+      "country": "Morrocco",
+      "n": 20
+    },
+    {
+      "country": "Israel",
+      "n": 19
+    },
+    {
+      "country": "Canada",
+      "n": 19
+    },
+    {
+      "country": "Holland",
+      "n": 18
+    }
+  ],
+  "published_dist": [
+    {
+      "published": false,
+      "n": 185
+    },
+    {
+      "published": true,
+      "n": 2022
+    }
+  ],
+  "partner_dist": [
+    {
+      "partner": "false",
+      "n": 2183
+    },
+    {
+      "partner": "true",
+      "n": 24
+    }
+  ],
+  "estab_type_dist": [
+    {
+      "establishment_type": "Restaurant",
+      "n": 1922
+    },
+    {
+      "establishment_type": "Nightclub",
+      "n": 45
+    },
+    {
+      "establishment_type": "Bar|Restaurant",
+      "n": 44
+    },
+    {
+      "establishment_type": "Restaurant|Steakhouse",
+      "n": 34
+    },
+    {
+      "establishment_type": "Private beach",
+      "n": 25
+    },
+    {
+      "establishment_type": "Private beach|Restaurant",
+      "n": 23
+    },
+    {
+      "establishment_type": "Bar",
+      "n": 13
+    },
+    {
+      "establishment_type": null,
+      "n": 12
+    },
+    {
+      "establishment_type": "Coffee|Restaurant",
+      "n": 11
+    },
+    {
+      "establishment_type": "Restaurant|Rooftop",
+      "n": 10
+    },
+    {
+      "establishment_type": "Nightclub|Restaurant",
+      "n": 9
+    },
+    {
+      "establishment_type": "Rooftop",
+      "n": 5
+    },
+    {
+      "establishment_type": "Steakhouse",
+      "n": 5
+    },
+    {
+      "establishment_type": "Club",
+      "n": 3
+    },
+    {
+      "establishment_type": "Brasserie",
+      "n": 3
+    },
+    {
+      "establishment_type": "Beach club|Restaurant",
+      "n": 2
+    },
+    {
+      "establishment_type": "Jazz club",
+      "n": 2
+    },
+    {
+      "establishment_type": "Bar|Restaurant|Steakhouse",
+      "n": 2
+    },
+    {
+      "establishment_type": "Lounge",
+      "n": 2
+    },
+    {
+      "establishment_type": "Beach club|Private beach",
+      "n": 2
+    }
+  ],
+  "negotiation_status_dist": [
+    {
+      "negotiation_status": null,
+      "n": 1546
+    },
+    {
+      "negotiation_status": "Pending",
+      "n": 628
+    },
+    {
+      "negotiation_status": "Partner",
+      "n": 22
+    },
+    {
+      "negotiation_status": "Negotiation",
+      "n": 6
+    },
+    {
+      "negotiation_status": "Decline",
+      "n": 4
+    },
+    {
+      "negotiation_status": "Interested",
+      "n": 1
+    }
+  ],
+  "michelin_via_join": [
+    {
+      "id": 2,
+      "title": "1 Star",
+      "stars": 1,
+      "n": 123
+    },
+    {
+      "id": 3,
+      "title": "2 Stars",
+      "stars": 2,
+      "n": 49
+    },
+    {
+      "id": 4,
+      "title": "3 Stars",
+      "stars": 3,
+      "n": 31
+    },
+    {
+      "id": 5,
+      "title": "Michelin Guide",
+      "stars": 0,
+      "n": 227
+    }
+  ],
+  "price_range": [
+    {
+      "id": 1,
+      "label": "$",
+      "description": "Budget-friendly"
+    },
+    {
+      "id": 2,
+      "label": "$$",
+      "description": "Moderate pricing"
+    },
+    {
+      "id": 3,
+      "label": "$$$",
+      "description": "Expensive"
+    },
+    {
+      "id": 4,
+      "label": "$$$$",
+      "description": "Luxury / Fine dining"
+    }
+  ],
+  "restaurant_categories_count": [
+    {
+      "n": 149
+    }
+  ],
+  "restaurant_categories_sample": [
+    {
+      "id": 161,
+      "name": "French"
+    },
+    {
+      "id": 162,
+      "name": "Italian"
+    },
+    {
+      "id": 163,
+      "name": "American"
+    },
+    {
+      "id": 164,
+      "name": "Israeli"
+    },
+    {
+      "id": 165,
+      "name": "Arabic"
+    },
+    {
+      "id": 166,
+      "name": "Lebanese"
+    },
+    {
+      "id": 168,
+      "name": "Chinese"
+    },
+    {
+      "id": 169,
+      "name": "Steakhouse"
+    },
+    {
+      "id": 170,
+      "name": "European"
+    },
+    {
+      "id": 171,
+      "name": "Brazilian"
+    },
+    {
+      "id": 172,
+      "name": "Vegan options"
+    },
+    {
+      "id": 173,
+      "name": "Spanish"
+    },
+    {
+      "id": 174,
+      "name": "Sea food"
+    },
+    {
+      "id": 175,
+      "name": "Asian"
+    },
+    {
+      "id": 176,
+      "name": "Thai"
+    },
+    {
+      "id": 177,
+      "name": "Vegetarian friendly"
+    },
+    {
+      "id": 178,
+      "name": "Japanese"
+    },
+    {
+      "id": 179,
+      "name": "Sushi"
+    },
+    {
+      "id": 180,
+      "name": "Pizza"
+    },
+    {
+      "id": 181,
+      "name": "African"
+    },
+    {
+      "id": 182,
+      "name": "Moroccan"
+    },
+    {
+      "id": 183,
+      "name": "Tunisian"
+    },
+    {
+      "id": 184,
+      "name": "Catalan"
+    },
+    {
+      "id": 185,
+      "name": "Mediterranean"
+    },
+    {
+      "id": 187,
+      "name": "Modern Gastronomy"
+    },
+    {
+      "id": 189,
+      "name": "Brasserie"
+    },
+    {
+      "id": 190,
+      "name": "Mexican"
+    },
+    {
+      "id": 191,
+      "name": "Fondue"
+    },
+    {
+      "id": 192,
+      "name": "Greek"
+    },
+    {
+      "id": 193,
+      "name": "Dutch"
+    }
+  ],
+  "cities_table_size": [
+    {
+      "n": 268
+    }
+  ],
+  "cities_sample": [
+    {
+      "id": 74835,
+      "title": "Paris",
+      "slug": "paris",
+      "description": "<p>Paris, also known as the City of Light, is a popular tourist destination for its stunning architecture, rich history, and world-class cuisine. This city is one of the most visited cities in the world and for a good reason.</p>\n<p>The Eiffel Tower, the symbol of Paris, is the most famous landmark in the city. It offers stunning views of the city and is a popular spot for taking photographs. Other notable attractions include the Notre-Dame Cathedral, the Louvre Museum, and the Champs-Élysées.</p>\n<p>The Louvre Museum is one of the largest and most famous art museums in the world, housing some of the most famous works of art, such as the Mona Lisa and the Winged Victory of Samothrace. The Notre-Dame Cathedral is an iconic Gothic-style cathedral located in the heart of the city. Its beautiful stained glass windows and stunning architecture make it a must-see for any visitor to Paris.</p>\n<p>Paris is also famous for its delicious cuisine, from classic French dishes such as escargots to sweet treats like macarons. The city is home to some of the best restaurants in the world, including Michelin-starred establishments such as Le Jules Verne and Guy Savoy.</p>\n<p>For those looking to shop, Paris offers a plethora of high-end boutiques and luxury department stores. The famous Galeries Lafayette is a popular spot for luxury shopping and offers a stunning view of the city from its rooftop terrace.</p>\n<p>Paris also offers a variety of parks and green spaces, including the Luxembourg Gardens and the Tuileries Garden. These beautiful parks provide a relaxing escape from the hustle and bustle of the city.</p>\n<p>In summary, Paris offers a range of attractions for any traveler, from stunning architecture and world-renowned museums to delicious cuisine and luxury shopping. With its rich history and vibrant culture, Paris is a must-visit destination for anyone looking to experience the best of Europe.</p>\n",
+      "main_city_photo_url": "https://media.theworldkeys.com/Cities/74835/Paris_France_theworldkeys.webp",
+      "country_id": 74996,
+      "latitude": "48.85350",
+      "longitude": "2.34839",
+      "location_point": {
+        "x": 2.34839,
+        "y": 48.8535
+      }
+    },
+    {
+      "id": 74886,
+      "title": "Nice",
+      "slug": "nice",
+      "description": "NULL",
+      "main_city_photo_url": "https://media.theworldkeys.com/Cities/74886/Nice_France_theworldkeys.webp",
+      "country_id": 74996,
+      "latitude": "43.70094",
+      "longitude": "7.26839",
+      "location_point": {
+        "x": 7.26839,
+        "y": 43.70094
+      }
+    },
+    {
+      "id": 76345,
+      "title": "Los angeles",
+      "slug": "los-angeles",
+      "description": "<p>With its palm tree-lined streets, celebrity sightings, and beautiful beaches, it's no surprise that Los Angeles is a top travel destination.</p>\n<p>One of the most iconic attractions in LA is the Hollywood Sign, which overlooks the city from the Hollywood Hills. Visitors can hike up to the sign for breathtaking views of the city or take a guided tour. For those interested in the entertainment industry, a visit to Universal Studios Hollywood is a must. This theme park offers attractions based on popular movies and TV shows, as well as studio tours.</p>\n<p>LA is also known for its diverse and delicious food scene, with everything from street tacos to high-end restaurants. Visitors can explore the famous food trucks in Downtown LA or head to the beachside city of Santa Monica for seafood and ocean views. For a taste of LA's famous nightlife, head to Hollywood or West Hollywood, where there are plenty of bars, clubs, and music venues.</p>\n<p>Outdoor enthusiasts will find plenty to do in LA as well. The city offers miles of hiking and biking trails, with many of them located in the Santa Monica Mountains. The beaches in LA are also a major draw, with popular spots like Venice Beach and Malibu offering great waves for surfing and plenty of people-watching.</p>\n<p>When it comes to accommodations, LA has something for everyone. Visitors can choose from luxury hotels in Beverly Hills, trendy boutique hotels in West Hollywood, or beachfront resorts in Santa Monica.</p>\n<p>Overall, LA is a vibrant and exciting city that should be on every traveler's bucket list. Whether you're interested in entertainment, cuisine, or outdoor activities, there's something for everyone in the City of Angels.</p>\n",
+      "main_city_photo_url": "https://media.theworldkeys.com/Cities/76345/Los-Angeles_Usa_theworldkeys.webp",
+      "country_id": 78744,
+      "latitude": "34.05369",
+      "longitude": "-118.24277",
+      "location_point": {
+        "x": -118.24277,
+        "y": 34.05369
+      }
+    },
+    {
+      "id": 76352,
+      "title": "Cannes",
+      "slug": "cannes",
+      "description": "<p>Cannes, located in the French Riviera, is a destination that exudes luxury and sophistication. This iconic city is famous for its prestigious film festival and opulent lifestyle. As a popular vacation spot for the elite, Cannes offers a plethora of high-end experiences that cater to even the most discerning traveler.</p>\n<p>The picturesque city boasts stunning beaches, exclusive boutiques, world-class restaurants, and luxurious hotels. Cannes is a paradise for those seeking a lavish getaway. The Boulevard de la Croisette, lined with palm trees, is the most prominent promenade in Cannes, offering breathtaking views of the Mediterranean Sea. This elegant street is home to high-end designer boutiques such as Chanel, Gucci, and Louis Vuitton, making it the ideal location for luxury shopping.</p>\n<p>When it comes to dining, Cannes does not disappoint. The city is home to many Michelin-starred restaurants, where you can indulge in the finest French cuisine. La Palme d’Or, located at the luxurious Hotel Martinez, offers an unforgettable gastronomic experience, where the menu is meticulously crafted by chef Christian Sinicropi.</p>\n<p>Cannes is also known for its glamorous nightlife. The city is home to several upscale bars and nightclubs, including the iconic Club Costes by Albane, where you can enjoy cocktails and champagne in a chic atmosphere. If you’re looking for a more exclusive experience, Baoli is the place to be.</p>\n<p>Of course, a luxury vacation in Cannes wouldn't be complete without a stay at one of the city's luxurious hotels. The Majestic Barriere, located on the Boulevard de la Croisette, is a five-star hotel that exudes elegance and sophistication. The hotel features stunning rooms with sea views, a private beach, and a spa that offers a range of indulgent treatments.</p>\n<p>In summary, Cannes is a paradise for those who seek a luxurious escape. The city offers the best of the best, from designer shopping to Michelin-starred dining and exclusive nightlife. A vacation in Cannes promises to be unforgettable, leaving you with memories that will last a lifetime. Book your luxurious getaway to Cannes now on theworldkeys.com.</p>\n",
+      "main_city_photo_url": "https://media.theworldkeys.com/Cities/76352/Cannes_France_theworldkeys.webp",
+      "country_id": 74996,
+      "latitude": "43.55152",
+      "longitude": "7.01344",
+      "location_point": {
+        "x": 7.01344,
+        "y": 43.55152
+      }
+    },
+    {
+      "id": 76354,
+      "title": "Nyc",
+      "slug": "nyc-2",
+      "description": "<p>New York City (NYC) is one of the most vibrant and diverse cities in the world, offering visitors an incredible array of things to see and do. With world-famous attractions like the Statue of Liberty, the Empire State Building, and Central Park, NYC is a must-see destination for travelers from all over the world.</p>\n<p>If you're looking for some culture, be sure to visit the world-class museums like the Metropolitan Museum of Art, the Museum of Modern Art (MoMA), and the American Museum of Natural History. Broadway is also a must-see attraction for theater lovers, with world-class shows like Hamilton, The Lion King, and Wicked.</p>\n<p>For those who love to shop, NYC is a paradise. From high-end boutiques on Fifth Avenue to trendy vintage shops in Brooklyn, you'll find everything you're looking for and more. Be sure to check out the iconic department stores like Macy's and Bloomingdale's.</p>\n<p>Of course, no visit to NYC would be complete without a visit to Central Park, the city's largest green space. Take a stroll or rent a bike and explore the park's many trails and landmarks like the Central Park Zoo, the Bethesda Fountain, and the iconic Central Park Boathouse.</p>\n<p>Whether you're a first-time visitor or a seasoned traveler, NYC is a destination that always has something new and exciting to offer.</p>\n",
+      "main_city_photo_url": "https://media.theworldkeys.com/Cities/76354/NYC_Usa_theworldkeys.webp",
+      "country_id": 78744,
+      "latitude": "40.71273",
+      "longitude": "-74.00602",
+      "location_point": {
+        "x": -74.00602,
+        "y": 40.71273
+      }
+    }
+  ],
+  "countries_table_size": [
+    {
+      "n": 55
+    }
+  ],
+  "opening_hours_size": [
+    {
+      "n": 17595,
+      "distinct_restaurants": 2095
+    }
+  ],
+  "opening_hours_columns": [
+    {
+      "column_name": "id",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "restaurant_id",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "weekday",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "open_time",
+      "data_type": "time without time zone"
+    },
+    {
+      "column_name": "close_time",
+      "data_type": "time without time zone"
+    }
+  ],
+  "opening_hours_sample": [
+    {
+      "id": 26225,
+      "restaurant_id": "20318",
+      "weekday": 2,
+      "open_time": "19:30:00",
+      "close_time": "20:30:00"
+    },
+    {
+      "id": 26226,
+      "restaurant_id": "20318",
+      "weekday": 3,
+      "open_time": "19:30:00",
+      "close_time": "20:30:00"
+    },
+    {
+      "id": 26227,
+      "restaurant_id": "20318",
+      "weekday": 4,
+      "open_time": "19:30:00",
+      "close_time": "20:30:00"
+    }
+  ],
+  "restaurant_category_map_size": [
+    {
+      "n": 7241,
+      "distinct_restaurants": 2192
+    }
+  ],
+  "establishment_type_map_size": [
+    {
+      "n": 2374,
+      "distinct_restaurants": 2189
+    }
+  ],
+  "restaurants_published_with_no_coords": [
+    {
+      "n": 636
+    }
+  ],
+  "restaurants_published_with_no_hours": [
+    {
+      "n": 346
+    }
+  ],
+  "restaurants_published_with_no_phone": [
+    {
+      "n": 68
+    }
+  ],
+  "restaurants_published_with_no_email": [
+    {
+      "n": 533
+    }
+  ],
+  "restaurants_published_with_no_site": [
+    {
+      "n": 465
+    }
+  ],
+  "restaurants_published_with_no_place_id": [
+    {
+      "n": 0
+    }
+  ],
+  "restaurants_published_total": [
+    {
+      "n": 2022
+    }
+  ],
+  "backup_relationship": [
+    {
+      "backup_rows": 12176,
+      "current_rows": 2207,
+      "in_backup_not_in_current": 9971
+    }
+  ],
+  "duplicate_place_id_examples": [
+    {
+      "place_id": "ChIJ6-EpTOxv5kcRB_7hi3YYXTs",
+      "names": [
+        "VICTORIA",
+        "VICTORIA PARIS"
+      ],
+      "ids": [
+        "95341",
+        "292661"
+      ],
+      "cities": [
+        "Paris",
+        "Paris"
+      ]
+    },
+    {
+      "place_id": "ChIJ7SmIOSi5zhIRt0THYO7iowk",
+      "names": [
+        "L'AMIRAL",
+        "L'AMIRAL"
+      ],
+      "ids": [
+        "91965",
+        "88971"
+      ],
+      "cities": [
+        "Sainte maxime",
+        "Grimaud"
+      ]
+    },
+    {
+      "place_id": "ChIJ961s0QWZ4jARvvtf8tT2ZzQ",
+      "names": [
+        "EAT SIGHT STORY DECK",
+        "BITTER DECK"
+      ],
+      "ids": [
+        "35087",
+        "35376"
+      ],
+      "cities": [
+        "Bangkok",
+        "Bangkok"
+      ]
+    },
+    {
+      "place_id": "ChIJBZtvrYDVwkcRPi8a2IX927w",
+      "names": [
+        "LA TABLE DE CLARENCE",
+        "LA TABLE DU CLARANCE"
+      ],
+      "ids": [
+        "19070",
+        "19061"
+      ],
+      "cities": [
+        "Lille",
+        "Lille"
+      ]
+    },
+    {
+      "place_id": "ChIJc2cHSxMsrhIReKnFA0a96Ps",
+      "names": [
+        "BARBACANE",
+        "LA BARBACANE"
+      ],
+      "ids": [
+        "72458",
+        "21793"
+      ],
+      "cities": [
+        "Carcassonne",
+        "Carcassonne"
+      ]
+    },
+    {
+      "place_id": "ChIJdQ8kHoajfDURQA2Hjac7y-A",
+      "names": [
+        "WOO TENDER",
+        "WOO TENDER"
+      ],
+      "ids": [
+        "296066",
+        "76676"
+      ],
+      "cities": [
+        "Seongnam",
+        "Seoul"
+      ]
+    },
+    {
+      "place_id": "ChIJdw0B4zv_0YURK8xSHYwyp2E",
+      "names": [
+        "MAXIMO",
+        "MÁXIMO"
+      ],
+      "ids": [
+        "34146",
+        "32142"
+      ],
+      "cities": [
+        "Mexico city",
+        "Mexico city"
+      ]
+    },
+    {
+      "place_id": "ChIJF8IIwLcoRI4RKCdeMuiochQ",
+      "names": [
+        "EI CIELO",
+        "EL CIELO CLASSIC"
+      ],
+      "ids": [
+        "30463",
+        "30570"
+      ],
+      "cities": [
+        "Medellin",
+        "Medellin"
+      ]
+    },
+    {
+      "place_id": "ChIJfboVgUtT8DUR_jT_hhMVPQA",
+      "names": [
+        "KING'S JOY",
+        "King's Joy"
+      ],
+      "ids": [
+        "16558",
+        "19615"
+      ],
+      "cities": [
+        "Beijing",
+        "Beijing"
+      ]
+    },
+    {
+      "place_id": "ChIJhxshNqWf4jARgYxEW8hBGcE",
+      "names": [
+        "OCTAVE",
+        "OCTAVE"
+      ],
+      "ids": [
+        "34434",
+        "32885"
+      ],
+      "cities": [
+        "Bangkok",
+        "Bangkok"
+      ]
+    },
+    {
+      "place_id": "ChIJiaw21ljurw0RX4We9hBkcrI",
+      "names": [
+        "Palais Jad Mahal",
+        "JAD MAHAL"
+      ],
+      "ids": [
+        "4034",
+        "83502"
+      ],
+      "cities": [
+        "Marrakesh",
+        "Marrakesh"
+      ]
+    },
+    {
+      "place_id": "ChIJsyl4uRZrUQ0RjuVacxvJaYw",
+      "names": [
+        "LA ROTONDE",
+        "LA ROTONDE"
+      ],
+      "ids": [
+        "22373",
+        "87398"
+      ],
+      "cities": [
+        "Biarritz",
+        "Bayonne"
+      ]
+    },
+    {
+      "place_id": "ChIJvUUfMh7Y2xIRYZdYYJ-bGyE",
+      "names": [
+        "La Vista",
+        "VM"
+      ],
+      "ids": [
+        "19668",
+        "14297"
+      ],
+      "cities": [
+        "Bonifacio",
+        "Bonifacio"
+      ]
+    }
+  ]
+}

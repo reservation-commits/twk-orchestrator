@@ -1,4 +1,4 @@
-import { Pool, PoolClient, QueryResult } from 'pg';
+import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
 
 let pool: Pool | null = null;
 
@@ -6,7 +6,7 @@ function getPool(): Pool {
   if (!pool) {
     pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      ssl: { rejectUnauthorized: false },
       max: 10,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 10000,
@@ -25,6 +25,65 @@ export async function query<T = Record<string, unknown>>(
   const client = await getPool().connect();
   try {
     return await client.query<T>(sql, params);
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Run a SELECT under a genuinely read-only transaction.
+ * Postgres rejects any write inside `READ ONLY`, so this is a hard guarantee even
+ * if a clever statement slips past the keyword guard. A per-statement timeout caps
+ * runaway scans, and the row count is capped to protect the agent's context window.
+ */
+export interface ReadOnlyOptions {
+  params?: unknown[];
+  timeoutMs?: number;
+  maxRows?: number;
+}
+
+export interface ReadOnlyResult<T = Record<string, unknown>> {
+  rows: T[];
+  rowCount: number;
+  returned: number;
+  truncated: boolean;
+}
+
+const WRITE_KEYWORD = /\b(insert|update|delete|drop|alter|create|truncate|grant|revoke|comment|copy|vacuum|reindex|refresh|call|do|merge|lock|set|reset)\b/i;
+
+export async function queryReadOnly<T extends QueryResultRow = Record<string, unknown>>(
+  sql: string,
+  opts: ReadOnlyOptions = {}
+): Promise<ReadOnlyResult<T>> {
+  const { params, timeoutMs = 15000, maxRows = 500 } = opts;
+  const trimmed = sql.trim().replace(/;+\s*$/, '');
+  const head = trimmed.replace(/^\(+/, '').slice(0, 12).toLowerCase();
+  if (!head.startsWith('select') && !head.startsWith('with') && !head.startsWith('table') && !head.startsWith('explain')) {
+    throw new Error('execute_query aceita apenas SELECT/WITH/TABLE/EXPLAIN (somente leitura).');
+  }
+  if (/;/.test(trimmed)) {
+    throw new Error('Múltiplos statements não são permitidos em execute_query.');
+  }
+  if (WRITE_KEYWORD.test(trimmed)) {
+    throw new Error('execute_query bloqueou uma palavra-chave de escrita. Use execute_mutation para alterar dados.');
+  }
+
+  const client = await getPool().connect();
+  try {
+    await client.query('BEGIN TRANSACTION READ ONLY');
+    await client.query(`SET LOCAL statement_timeout = ${Math.max(1000, Math.min(timeoutMs, 60000))}`);
+    const result = await client.query<T>(trimmed, params);
+    await client.query('COMMIT');
+    const truncated = result.rows.length > maxRows;
+    return {
+      rows: truncated ? result.rows.slice(0, maxRows) : result.rows,
+      rowCount: result.rowCount ?? result.rows.length,
+      returned: truncated ? maxRows : result.rows.length,
+      truncated,
+    };
+  } catch (err) {
+    try { await client.query('ROLLBACK'); } catch { /* connection may be dead */ }
+    throw err;
   } finally {
     client.release();
   }

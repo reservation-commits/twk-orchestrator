@@ -1,0 +1,152 @@
+{
+  "executed_at": "2026-06-09T16:54:39.887Z",
+  "results": [
+    {
+      "file": "001_governance.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 599,
+      "notices": [
+        "constraint \"db_restaurants_confidence_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_enrichment_log_is_array\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_timezone_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_operational_status_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_party_size_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_meal_duration_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_dress_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_booking_url_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_tasting_currency_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_about_primary_locale_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_phone_e164ish_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_email_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_site_url_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "place_id tem 13 grupos duplicados — pulando UNIQUE INDEX. Rode dedup primeiro (Fase 5).",
+        "constraint \"db_restaurants_coords_range_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "002_timezone_and_status.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 386,
+      "notices": [
+        "constraint \"db_restaurants_timezone_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_operational_status_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_party_size_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_meal_duration_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_dress_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_booking_url_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_tasting_currency_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_about_primary_locale_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_phone_e164ish_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_email_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_site_url_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "place_id tem 13 grupos duplicados — pulando UNIQUE INDEX. Rode dedup primeiro (Fase 5).",
+        "constraint \"db_restaurants_coords_range_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "003_awards.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 403,
+      "notices": [
+        "constraint \"db_restaurants_party_size_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_meal_duration_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_dress_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_booking_url_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_tasting_currency_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_about_primary_locale_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_phone_e164ish_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_email_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_site_url_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "place_id tem 13 grupos duplicados — pulando UNIQUE INDEX. Rode dedup primeiro (Fase 5).",
+        "constraint \"db_restaurants_coords_range_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "004_premium_fields.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 413,
+      "notices": [
+        "constraint \"db_restaurants_party_size_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_meal_duration_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_dress_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_booking_url_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_tasting_currency_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_about_primary_locale_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_phone_e164ish_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_email_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_site_url_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "place_id tem 13 grupos duplicados — pulando UNIQUE INDEX. Rode dedup primeiro (Fase 5).",
+        "constraint \"db_restaurants_coords_range_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "005_i18n_about.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 468,
+      "notices": [
+        "constraint \"db_restaurants_about_primary_locale_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_phone_e164ish_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_email_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_site_url_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "place_id tem 13 grupos duplicados — pulando UNIQUE INDEX. Rode dedup primeiro (Fase 5).",
+        "constraint \"db_restaurants_coords_range_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "006_constraints_and_types.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 1540,
+      "notices": [
+        "constraint \"db_restaurants_phone_e164ish_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_email_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_site_url_format_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "place_id tem 13 grupos duplicados — pulando UNIQUE INDEX. Rode dedup primeiro (Fase 5).",
+        "constraint \"db_restaurants_coords_range_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "007_geo_standardization.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 333,
+      "notices": [
+        "constraint \"db_restaurants_country_code_chk\" of relation \"db_restaurants\" does not exist, skipping",
+        "constraint \"countries_iso_alpha_2_chk\" of relation \"countries\" does not exist, skipping",
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    },
+    {
+      "file": "008_zombie_columns_and_localization.sql",
+      "status": "ok",
+      "error": null,
+      "ms": 405,
+      "notices": [
+        "constraint \"db_restaurants_localization_gmaps_chk\" of relation \"db_restaurants\" does not exist, skipping"
+      ]
+    }
+  ]
+}

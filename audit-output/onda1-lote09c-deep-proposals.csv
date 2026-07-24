@@ -1,0 +1,45 @@
+restaurant_id,name,city,country,site_url,proposed_email,confidence,other_emails
+327546,Restaurant Le Cinq Mars,Paris,France,https://site-cinq-mars.webflow.io/,team@rosemarynyc.com,MEDIUM,team@rosemarynyc.com
+327548,Drouant,Paris,France,http://www.drouant.com/,restaurant@drouant.com,HIGH,restaurant@drouant.com
+327549,Le Grand Véfour,Paris,France,https://legrandvefour.com/,contact@legrandvefour.com,HIGH,contact@legrandvefour.com|privatisation@legrandvefour.com|clara@pascalevenot.fr|jessica@pascalevenot.fr|nom@adressemail.com
+327550,Senderens — Lucas Carton,Paris,France,http://www.lucascarton.com/,restaurant@lucascarton.fr,MEDIUM,restaurant@lucascarton.fr|abourny@lucascarton.fr|marie@exemple.com
+327552,David Toutain,Paris,France,https://www.davidtoutain.com/,reservations@davidtoutain.com,HIGH,reservations@davidtoutain.com|contact@davidtoutain.com|groupes@davidtoutain.com|sommelier@davidtoutain.com|carriere@davidtoutain.com
+327556,Le Servan,Paris,France,https://leservan.fr/,contact@restoreve.com,MEDIUM,contact@restoreve.com|utilisateur@domaine.com|maxime@restoreve.com|florian@restoreve.com|katia@restoreve.com
+327558,Clamato,Paris,France,http://clamato-charonne.fr/,presse@septime-charonne.fr,MEDIUM,presse@septime-charonne.fr|travailler@septime-charonne.fr
+327559,Verjus,Paris,France,http://www.verjusparis.com/,verjusparis@gmail.com,MEDIUM,verjusparis@gmail.com|user@domain.com
+327561,Le Comptoir du Relais,Paris,France,https://www.hotel-paris-relais-saint-germain.com/restaurant-le-comptoir,hotel@le-relais-saint-germain.com,MEDIUM,hotel@le-relais-saint-germain.com
+327563,Restaurant Le Coq Rico,Paris,France,https://lecoq-fils.com/,cyril.menard@lecoq-fils.com,HIGH,cyril.menard@lecoq-fils.com
+327564,Fouquet's,Paris,France,https://www.hotelsbarriere.com/collection-fouquet-s/paris/restaurants-et-bars/brasserie-fouquet-s-paris,contact@email.com,MEDIUM,contact@email.com
+327566,Le V — Four Seasons George V,Paris,France,https://www.hotelvernet-paris.com/restaurants-bar,reservation@hotelvernet.com,MEDIUM,reservation@hotelvernet.com
+327570,L'Atelier de Joël Robuchon Étoile,Paris,France,https://atelier-robuchon-etoile.com/,mhuynh@atelierjr.fr,MEDIUM,mhuynh@atelierjr.fr
+327573,Pavyllon — Alain Ducasse au Pavillon Ledoyen,Paris,France,https://www.yannick-alleno.com/les-etablissements-du-groupe/pavyllon-paris,presse@yannick-alleno.com,HIGH,presse@yannick-alleno.com|jack@greensock.com|exemple@email.com|pavyllon@ledoyen.com|labysse@ledoyen.com
+327575,Mirazur,Menton,France,http://www.mirazur.fr/,reservation@mirazur.fr,HIGH,reservation@mirazur.fr|presse@mirazur.fr
+327576,Maison Pic,Valence,France,https://anne-sophie-pic.com/,contact@pic-valence.com,MEDIUM,contact@pic-valence.com|contact@ladamedepic.fr|contact-rgpd@groupe-pic.com|presse@groupe-pic.com|conciergerie@pic-valence.com
+327580,Bras,Laguiole,France,http://www.bras.fr/,reser@bras.fr,HIGH,reser@bras.fr
+327583,L'Assiette Champenoise,Tinqueux,France,https://www.assiettechampenoise.com/,infos@assiettechampenoise.com,HIGH,infos@assiettechampenoise.com
+327584,Le Parc — Les Crayères,Reims,France,http://lescrayeres.com/en/restaurant-le-parc.html,contact@lescrayeres.com,HIGH,contact@lescrayeres.com
+327589,La Villa Madie,Cassis,France,http://lavillamadie.com/,contact@lavillamadie.com,HIGH,contact@lavillamadie.com|commerciale@lavillamadie.com|marie@agencemelchior.com|servations@blacklimoservices.fr|julien@agencemelchior.com
+327590,L'Estuaire,Bordeaux,France,https://www.hotel-de-lestuaire.fr/,contact@relais-estuaire.fr,MEDIUM,contact@relais-estuaire.fr
+327594,La Tupina,Bordeaux,France,http://www.latupina.com/,latupina@latupina.com,HIGH,latupina@latupina.com|franck@audu.com
+327599,Osteria Francescana,Modena,Italy,http://www.osteriafrancescana.it/,reserve@osteriafrancescana.it,HIGH,reserve@osteriafrancescana.it|events@francescana.it
+327606,Enoteca Pinchiorri,Florence,Italy,https://www.enotecapinchiorri.it/,ristorante@enotecapinchiorri.com,MEDIUM,ristorante@enotecapinchiorri.com
+327609,Glass Hostaria,Rome,Italy,https://www.glasshostaria.it/en/,infoglasshostaria@gmail.com,MEDIUM,infoglasshostaria@gmail.com|glass.press@yahoo.com|glasscurriculum@yahoo.it
+327612,Seta — Mandarin Oriental,Milan,Italy,https://www.mandarinoriental.com/en/milan/la-scala/dine/seta?src=loc.yext.momln.ggl,direct@mandarinoriental.com,HIGH,direct@mandarinoriental.com|momay-reservations@mohg.com|motpe-reservations@mohg.com|mozrh-reservations@mohg.com|moauh-reservations@mohg.com
+327613,Cracco,Milan,Italy,http://www.ristorantecracco.it/,cafe@ristorantecracco.it,HIGH,cafe@ristorantecracco.it|prenotazioni@ristorantecracco.it|eventi@ristorantecracco.it|curriculum@ristorantecracco.it
+327614,Don Alfonso 1890,Sant'Agata sui Due Golfi,Italy,https://www.donalfonso.com/,donalfonso@relaischateaux.com,MEDIUM,donalfonso@relaischateaux.com
+327617,El Celler de Can Roca,Girona,Spain,https://cellercanroca.com/,restaurant@cellercanroca.com,HIGH,restaurant@cellercanroca.com|required.restaurant@cellercanroca.com|shop@cellercanroca.com|use@www.cellercanroca.com
+327618,Aponiente,El Puerto de Santa María,Spain,https://www.aponiente.com/,reservas@aponiente.com,HIGH,reservas@aponiente.com
+327619,Akelarre,Donostia-San Sebastián,Spain,https://akelarre.net/,restaurante@akelarre.net,HIGH,restaurante@akelarre.net|oteiza@akelarre.net
+327620,Arzak,Donostia-San Sebastián,Spain,https://www.arzak.es/,reservas@arzak.es,HIGH,reservas@arzak.es|informacion@arzak.es|administracion@arzak.com
+327621,Martín Berasategui,Lasarte-Oria,Spain,https://www.martinberasategui.com/,eugenia@martinberasategui.com,HIGH,eugenia@martinberasategui.com
+327628,DSTAge,Madrid,Spain,http://www.dstageconcept.com/,reservas@dstageconcept.com,HIGH,reservas@dstageconcept.com|586reservas@dstageconcept.com|backdstage@dstageconcept.com|madridbackdstage@dstageconcept.com
+327631,Casa Marcial,Arriondas,Spain,http://www.casamarcial.com/,reservas@casamarcial.com,HIGH,reservas@casamarcial.com|personal@casamarcial.com|comunicacion@casamarcial.com|reservas@narbasu.com|catman@cateringmanzano.com
+327634,The Waterside Inn,Bray,United Kingdom,https://www.waterside-inn.co.uk/,reservations@waterside-inn.co.uk,HIGH,reservations@waterside-inn.co.uk|leewhitlock@waterside-inn.co.uk
+327635,Restaurant Gordon Ramsay,London,United Kingdom,https://www.gordonramsayrestaurants.com/restaurant-gordon-ramsay/?utm_source=gmb&utm_medium=uberall&utm_campaign=business_profile,restaurant1890@gordonramsay.com,MEDIUM,restaurant1890@gordonramsay.com|rgrhigh@gordonramsay.com|petrus@gordonramsay.com|luckycat@gordonramsay.com|barandgrill@gordonramsay.com
+327636,L'Enclume,Cartmel,United Kingdom,http://www.lenclume.co.uk/,il@simonrogan.co.uk,MEDIUM,il@simonrogan.co.uk
+327639,Hakkasan Hanway Place,London,United Kingdom,https://hakkasangroup.com/venues/hakkasan-mayfair-london/?utm_source=google&utm_medium=organic&utm_campaign=gbp_mayfair,contact@taogroup.com,MEDIUM,contact@taogroup.com
+327640,Yauatcha,London,United Kingdom,https://hakkasangroup.com/venues/yauatcha-soho-london/,contact@taogroup.com,MEDIUM,contact@taogroup.com
+327641,St. John,London,United Kingdom,https://www.stjohnrestaurant.com/,reservations@stjohnrestaurant.com,HIGH,reservations@stjohnrestaurant.com
+327642,The Ritz Restaurant,London,United Kingdom,https://www.theritzlondon.com/dine-with-us/the-ritz-restaurant/?utm_source=google&utm_medium=local&utm_campaign=Ritz_Restaurant,reservations@theritzlondon.com,HIGH,reservations@theritzlondon.com
+327644,Ikoyi,London,United Kingdom,http://ikoyilondon.com/?utm_campaign=SDM&utm_id=GMB&utm_medium=website+click&utm_source=GMB,reservations@ikoyilondon.com,HIGH,reservations@ikoyilondon.com|kitchen@ikoyilondon.com|foh@ikoyilondon.com|ikoyi@lotuslandagency.com
+327645,Vendôme — Schloss Bensberg,Bergisch Gladbach,Germany,https://www.althoffcollection.com/de/althoff-grandhotel-schloss-bensberg/restaurant-vendome,information@althoffhotels.com,MEDIUM,information@althoffhotels.com|servicelounge@althoffhotels.com

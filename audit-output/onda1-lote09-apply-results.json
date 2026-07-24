@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-10T12:21:40.154Z",
+  "phones": {
+    "applied": 7,
+    "errors": 0,
+    "total": 7
+  },
+  "sites_reverted": {
+    "ok": 2,
+    "errors": 0
+  },
+  "skipped": [
+    "12104",
+    "10514",
+    "251656"
+  ]
+}

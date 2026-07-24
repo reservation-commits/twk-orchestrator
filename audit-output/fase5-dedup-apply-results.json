@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-06-10T16:40:20.398Z",
+  "total_groups": 13,
+  "applied": 9,
+  "errors": 1,
+  "fields_copied": 2,
+  "skipped_place_ids": [
+    "ChIJ961s0QWZ4jARvvtf8tT2ZzQ",
+    "ChIJF8IIwLcoRI4RKCdeMuiochQ",
+    "ChIJiaw21ljurw0RX4We9hBkcrI"
+  ],
+  "err_sample": [
+    {
+      "keep": "95341",
+      "losers": [
+        "292661"
+      ],
+      "err": "column \"negotiation_status\" is of type negotiation_status_enum but expression is of type text"
+    }
+  ]
+}

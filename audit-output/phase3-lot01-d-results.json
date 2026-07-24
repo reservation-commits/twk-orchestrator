@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-06-09T18:31:12.401Z",
+  "results": [
+    {
+      "id": "40721",
+      "name": "SAM'S",
+      "status": "ok",
+      "fields_changed": 4
+    },
+    {
+      "id": "14504",
+      "name": "SUR MESURE",
+      "status": "ok",
+      "fields_changed": 1
+    },
+    {
+      "id": "14480",
+      "name": "L'OISEAU BLANC",
+      "status": "ok",
+      "fields_changed": 1
+    },
+    {
+      "id": "14408",
+      "name": "3BK",
+      "status": "ok",
+      "fields_changed": 1
+    }
+  ]
+}

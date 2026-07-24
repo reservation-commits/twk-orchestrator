@@ -1,0 +1,856 @@
+{
+  "generated_at": "2026-06-11T16:25:56.990Z",
+  "total_candidates": 131,
+  "present_count": 20,
+  "absent_count": 111,
+  "absent": [
+    {
+      "name": "L'Olivo — Capri Palace",
+      "city": "Anacapri",
+      "country": "Italy",
+      "tier": "2_star"
+    },
+    {
+      "name": "Mammà",
+      "city": "Capri",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Ristorante Riccio — Capri Palace",
+      "city": "Anacapri",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Da Paolino",
+      "city": "Capri",
+      "country": "Italy",
+      "tier": "$$$"
+    },
+    {
+      "name": "Aurora",
+      "city": "Capri",
+      "country": "Italy",
+      "tier": "$$$"
+    },
+    {
+      "name": "La Capannina",
+      "city": "Capri",
+      "country": "Italy",
+      "tier": "$$$"
+    },
+    {
+      "name": "Riccardo Camanini Lido 84",
+      "city": "Gardone Riviera",
+      "country": "Italy",
+      "tier": "2_star"
+    },
+    {
+      "name": "Atelier Moessmer Norbert Niederkofler",
+      "city": "Brunico",
+      "country": "Italy",
+      "tier": "3_star"
+    },
+    {
+      "name": "Restaurant Krone — Niederkofler",
+      "city": "San Cassiano",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Magdalena",
+      "city": "Bolzano",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Borgo San Felice — Poggio Rosso",
+      "city": "Castelnuovo Berardenga",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Borgo Santo Pietro — Meo Modo",
+      "city": "Chiusdino",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Castello di Reschio — Al Castello",
+      "city": "Lisciano Niccone",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Castello Banfi Il Borgo",
+      "city": "Montalcino",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Locanda Margherita — Borgo Egnazia",
+      "city": "Savelletri",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Due Camini — Borgo Egnazia",
+      "city": "Savelletri",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Vespasia — Palazzo Seneca",
+      "city": "Norcia",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Glam Venezia",
+      "city": "Venice",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Locanda dell'Isola Comacina",
+      "city": "Sala Comacina",
+      "country": "Italy",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Mistral — Grand Hotel Villa Serbelloni",
+      "city": "Bellagio",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "L'Andana — La Trattoria Toscana",
+      "city": "Castiglione della Pescaia",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Il Pellicano",
+      "city": "Porto Ercole",
+      "country": "Italy",
+      "tier": "1_star"
+    },
+    {
+      "name": "Cavo Tagoo",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Bill & Coo Mykonos",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Hippie Fish",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Avant Garden — Santorini",
+      "city": "Santorini",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "1800 Floga",
+      "city": "Santorini",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "La Maltese Estate",
+      "city": "Santorini",
+      "country": "Greece",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Aktaion Santorini",
+      "city": "Santorini",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Pylos",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "$$$"
+    },
+    {
+      "name": "Aleria",
+      "city": "Athens",
+      "country": "Greece",
+      "tier": "1_star"
+    },
+    {
+      "name": "Tickets Bar",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Sant Pau",
+      "city": "Sant Pol de Mar",
+      "country": "Spain",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Espai Kru",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "$$$"
+    },
+    {
+      "name": "Caelis",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Pakta",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Cinc Sentits",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Dos Palillos",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "El Pichi",
+      "city": "Barcelona",
+      "country": "Spain",
+      "tier": "$$$"
+    },
+    {
+      "name": "Tragabuches",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Restaurante El Lago",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Messina",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "1_star"
+    },
+    {
+      "name": "Da Bruno",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "$$$"
+    },
+    {
+      "name": "Nobu Marbella",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Trocadero Arena",
+      "city": "Marbella",
+      "country": "Spain",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Tuju",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Evvai",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "1_star"
+    },
+    {
+      "name": "Kinoshita",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "1_star"
+    },
+    {
+      "name": "Fasano",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Komah",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "1_star"
+    },
+    {
+      "name": "Sushi Hashida",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Hide",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Huto",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$"
+    },
+    {
+      "name": "Olympe",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Roberta Sudbrack",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Ferro e Farinha",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "tier": "$$$"
+    },
+    {
+      "name": "Quintonil",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Contramar",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Em — Lucho Martínez",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Nicos",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Esquina Común",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Anatol",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Central",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Maido",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Astrid y Gastón",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Kjolle",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Rafael",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Mayta",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Mérito",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$$"
+    },
+    {
+      "name": "La Mar Cebicheria",
+      "city": "Lima",
+      "country": "Peru",
+      "tier": "$$$"
+    },
+    {
+      "name": "Tegui",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$$"
+    },
+    {
+      "name": "El Baqueano",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Sucre",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$"
+    },
+    {
+      "name": "Boragó",
+      "city": "Santiago",
+      "country": "Chile",
+      "tier": "$$$$"
+    },
+    {
+      "name": "99 Restaurante",
+      "city": "Santiago",
+      "country": "Chile",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Ambrosía Bistro",
+      "city": "Santiago",
+      "country": "Chile",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Leo",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Mesa Franca",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "tier": "$$$$"
+    },
+    {
+      "name": "El Chato",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "tier": "$$$"
+    },
+    {
+      "name": "Salvo Patria",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Jardin de Sucre",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$"
+    },
+    {
+      "name": "Dar Yacout",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Foundouk",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$"
+    },
+    {
+      "name": "La Maison Arabe",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Comptoir Darna",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$"
+    },
+    {
+      "name": "La Mamounia — Le Marocain",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Royal Mansour — La Grande Table Française",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Selman Marrakech — Restaurant Atyqui",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Beefbar Marrakech",
+      "city": "Marrakech",
+      "country": "Morocco",
+      "tier": "$$$$"
+    },
+    {
+      "name": "La Suerte",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Hartwood",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Rosa Negra Tulum",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Casa Jaguar Tulum",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Arca Tulum",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Carmen Tulum",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Ksar",
+      "city": "Tulum",
+      "country": "Mexico",
+      "tier": "$$$"
+    },
+    {
+      "name": "Eats Vrede en Lust",
+      "city": "Franschhoek",
+      "country": "South Africa",
+      "tier": "$$$$"
+    },
+    {
+      "name": "La Colombe",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "tier": "$$$$"
+    },
+    {
+      "name": "FYN Restaurant",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Wolfgat",
+      "city": "Paternoster",
+      "country": "South Africa",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Toqué!",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Joe Beef",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Au Pied de Cochon",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Beauty's",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$"
+    },
+    {
+      "name": "L'Express",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$"
+    },
+    {
+      "name": "Maison Boulud",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$"
+    },
+    {
+      "name": "Le Filet",
+      "city": "Montréal",
+      "country": "Canada",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Alo",
+      "city": "Toronto",
+      "country": "Canada",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Edulis",
+      "city": "Toronto",
+      "country": "Canada",
+      "tier": "$$$$"
+    },
+    {
+      "name": "Sushi Masaki Saito",
+      "city": "Toronto",
+      "country": "Canada",
+      "tier": "2_star"
+    },
+    {
+      "name": "Aloette",
+      "city": "Toronto",
+      "country": "Canada",
+      "tier": "$$$"
+    }
+  ],
+  "present": [
+    {
+      "name": "Casa Vissani",
+      "city": "Baschi",
+      "country": "Italy",
+      "tier": "$$$",
+      "match_id": "327738",
+      "match_name": "Casa Vissani",
+      "match_published": true
+    },
+    {
+      "name": "Belvedere Hotel Mykonos",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$$",
+      "match_id": "327806",
+      "match_name": "Matsuhisa — Belvedere Hotel",
+      "match_published": true
+    },
+    {
+      "name": "Spilia Seaside",
+      "city": "Mykonos",
+      "country": "Greece",
+      "tier": "$$$",
+      "match_id": "327824",
+      "match_name": "Spilia Seaside",
+      "match_published": true
+    },
+    {
+      "name": "Maní",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$$",
+      "match_id": "253049",
+      "match_name": "MANÍ",
+      "match_published": true
+    },
+    {
+      "name": "D.O.M.",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$$",
+      "match_id": "76993",
+      "match_name": "DOM",
+      "match_published": true
+    },
+    {
+      "name": "A Casa do Porco",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "tier": "$$$",
+      "match_id": "260852",
+      "match_name": "A CASA DO PORCO",
+      "match_published": false
+    },
+    {
+      "name": "Lasai",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "tier": "$$$$",
+      "match_id": "260876",
+      "match_name": "LASAI",
+      "match_published": true
+    },
+    {
+      "name": "Oteque",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "tier": "2_star",
+      "match_id": "13327",
+      "match_name": "OTEQUE",
+      "match_published": true
+    },
+    {
+      "name": "Pujol",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$$",
+      "match_id": "32149",
+      "match_name": "PUJOL",
+      "match_published": true
+    },
+    {
+      "name": "Rosetta",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$",
+      "match_id": "32134",
+      "match_name": "ROSETTA",
+      "match_published": true
+    },
+    {
+      "name": "Sud 777",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$$",
+      "match_id": "32200",
+      "match_name": "SUD 777",
+      "match_published": true
+    },
+    {
+      "name": "Maximo Bistrot",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "tier": "$$$",
+      "match_id": "32142",
+      "match_name": "MÁXIMO",
+      "match_published": true
+    },
+    {
+      "name": "Don Julio",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$$",
+      "match_id": "16159",
+      "match_name": "Don Julio",
+      "match_published": true
+    },
+    {
+      "name": "Aramburu",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$$",
+      "match_id": "16145",
+      "match_name": "ARAMBURU",
+      "match_published": true
+    },
+    {
+      "name": "Mishiguene",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$",
+      "match_id": "16182",
+      "match_name": "MISHIGUENE",
+      "match_published": true
+    },
+    {
+      "name": "Cabaña Las Lilas",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$",
+      "match_id": "16193",
+      "match_name": "LA CABANA",
+      "match_published": true
+    },
+    {
+      "name": "La Cabrera",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "tier": "$$$",
+      "match_id": "16152",
+      "match_name": "La Cabrera",
+      "match_published": true
+    },
+    {
+      "name": "El Cielo Bogotá",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "tier": "$$$$",
+      "match_id": "30190",
+      "match_name": "El Cielo",
+      "match_published": true
+    },
+    {
+      "name": "Harry Sasson",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "tier": "$$$$",
+      "match_id": "30128",
+      "match_name": "HARRY SASSON",
+      "match_published": false
+    },
+    {
+      "name": "The Test Kitchen",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "tier": "$$$$",
+      "match_id": "16512",
+      "match_name": "The Test Kitchen",
+      "match_published": true
+    }
+  ]
+}

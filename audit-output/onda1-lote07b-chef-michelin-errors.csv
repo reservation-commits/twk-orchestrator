@@ -1,0 +1,328 @@
+restaurant_id,name,site_url,reason
+10499,JARDIN TROPEZINA,https://www.jardin-tropezina.fr,fetch: ERR_TLS_CERT_ALTNAME_INVALID
+10658,LA TABLE DU CHEF,https://latableduchefcannes.com/en,no chef found
+10676,TABLE 22 PAR NOËL MANTEL,https://www.restaurantmantel.com/index.php/en/,HTTP 404
+10678,LA VAGUE D'OR,https://www.chevalblanc.com/en/maison/st-tropez/,no chef found
+108100,LE 1903,https://www.perebise.com/restaurant-le-1903/,no chef found
+108114,COTTAGE BISE,https://www.cottagebise.com/,no chef found
+12636,ATMOSPHÈRE,https://www.restaurant-atmosphere.com/,no chef found
+12640,LE COMPTOIR DES ALPES,https://comptoir-des-alpes.com/fr/,no chef found
+13046,LE MATAFAN,https://lematafan.com/,no chef found
+13061,FLOCONS DE SEL,https://www.floconsdesel.com/fr/?utm_source=MyBusiness,no chef found
+13067,LE SAINT NICOLAS,https://www.coindufeu.com/501-restaurants.htm,no chef found
+13144,L'ATELIER D'EDMOND,https://www.maison-benoit-vidal.com/,no chef found
+13146,LA TABLE DE L'OURS,https://www.hotellesbarmes.com/fr/restaurants-and-bar/la-table-de-l-ours/,HTTP 404
+13176,L'EKRIN,"https://www.lekaila.com/fr/l-ekrin-restaurant-gastronomique-meribel-savoie?utm_source=google&amp;utm_medium=organic&amp;utm_campaign=mybusiness",no chef found
+13312,TÉRÈZE,https://conecta.bio/tereze,no chef found
+13325,MARINE RESTÔ,https://fairmontrio.com/marine-resto/,no chef found
+13327,OTEQUE,https://www.oteque.com,no chef found
+13333,GIUSEPPE GRILL,https://www.bestfork.com.br/giuseppegrill/leblon/,no chef found
+13385,TORDESILHAS,https://www.tordesilhas.com/,no chef found
+14129,SUPRA DI MAURO MAIA,https://supracucina.com.br,no chef found
+14145,JUN SAKAMOTO,https://www.junsakamoto.com.br/,no chef found
+14291,LE VOILIER,https://www.levoilier-bonifacio.com/,no chef found
+14462,ERH,https://www.restaurant-erh.com/,no chef found
+14464,GUY SAVOY,https://www.guysavoy.com/,no chef found
+14470,EPICURE,https://www.oetkercollection.com/hotels/le-bristol-paris/restaurants-bar/epicure/,HTTP 429
+14472,PALAIS ROYAL,https://palaisroyalrestaurant.com/,HTTP 503
+14474,MAISON ROSTANG,https://www.maisonrostang.com,no chef found
+14476,KEI,https://restaurant-kei.fr/,no chef found
+14484,ALAN GEAAM,https://restaurant.alangeaam.fr,no chef found
+14488,LE PRÉ CATELAN,https://restaurant.leprecatelan.com/index.cfm/page/lid/2/rid/3896/,HTTP 404
+14492,L'ARÔME,https://larome-paris.com/,no chef found
+14494,APICIUS,https://restaurant-apicius.com,no chef found
+14496,LE BAUDELAIRE,https://www.lebaudelaire.com,fetch: CERT_HAS_EXPIRED
+14498,LE GRAND RESTAURANT,https://xn--jeanfranoispiege-jpb.com/le-grand-restaurant,no chef found
+14502,MARSAN,https://www.marsanhelenedarroze.com/,no chef found
+14508,PIERRE GAGNAIRE,https://pierregagnaire.com/,no chef found
+14510,ALLIANCE,https://www.restaurant-alliance.fr,no chef found
+14516,DESSANCE,http://www.dessance.com/,no chef found
+14522,PUR',https://www.paris-restaurant-pur.fr/?src=corp_lclb_gmb_seo_purjfr,fetch: ECONNRESET
+14526,L'INITIAL,https://restaurant-linitial.fr/,no chef found
+14530,LE SERGENT RECRUTEUR,https://www.lesergentrecruteur.fr/,no chef found
+14534,SEPTIME,https://www.septime-charonne.fr/,no chef found
+14559,LOULOU,https://www.loulou-paris.com/,no chef found
+14570,LE JULES VERNE,"https://www.restaurants-toureiffel.com/fr/restaurant-jules-verne.html?utm_source=google_my_business&amp;utm_medium=referencement_local&amp;utm_campaign=btn_site_web",no chef found
+14590,BISTROT MARLOE,https://www.marloe.fr/,no chef found
+14716,LA ROTONDE,https://www.latabledaurelienlargeau.com/,no chef found
+14718,LE CHANTECLER,https://www.facebook.com/LeChanteclerNice/,no chef found
+15082,De Kas,http://www.restaurantdekas.nl/,no chef found
+15091,Vinkeles,https://www.vinkeles.com/?utm_source=GMB&utm_medium=organic,HTTP 403
+15123,The Duchess,https://the-duchess.com/,no chef found
+15176,GRESCA,https://www.gresca.rest/,no chef found
+15294,DIEKMANN,https://diekmann-restaurant.de/,no chef found
+15394,AUX ARMES DE BRUXELLES,https://auxarmesdebruxelles.com/en/home-2/,no chef found
+15593,CANOE,https://www.canoeatl.com/,HTTP 502
+15836,CHICAGO CUT,https://www.chicagocutsteakhouse.com,no chef found
+15844,ORIOLE,https://www.oriolechicago.com,no chef found
+15849,FRONTERA GRILL,https://www.rickbayless.com/restaurants/frontera-grill/,no chef found
+16100,QUINTESSENCE,http://www.quintessence.jp,no chef found
+16105,JOËL ROBUCHON,https://www.robuchon.jp/shop-list/joelrobuchon,no chef found
+16558,KING'S JOY,https://www.facebook.com/kingsjoybeijing/,no chef found
+16602,MIAM MIAM,https://www.miammiam.com.br/,no chef found
+16610,Fogo de Chão,https://fogodechao.com.br/location/botafogo/,no chef found
+16895,PATEO,https://www.pateorestaurante.pt,no chef found
+16973,Sunset,https://www.marinamirage.com.au/stores/sunset-bar-grill/,no chef found
+16975,BEYTI,http://www.beyti.com/,no chef found
+16987,ELEOS,http://www.eleosrestaurant.com/,no chef found
+16992,PANDELI,https://www.instagram.com/pandeliistanbul/?hl=pt,no chef found
+16994,AHESTE,https://ahesterestaurant.com,no chef found
+17049,LA PERGOLA,https://romecavalieri.com/it/la-pergola-it/,no chef found
+17065,IMÀGO,https://www.facebook.com/imagohassler/photos,no chef found
+17112,BORN AND RAISED,https://bornandraisedsteak.com,HTTP 429
+17130,ADDISON,https://www.addisondelmar.com/,no chef found
+18230,BENTOTECA,https://www.bentoteca.com/,no chef found
+18546,AI MERCANTI,http://www.aimercanti.it/,HTTP 403
+18583,AL COVO,https://www.ristorantealcovo.com/,no chef found
+18587,ANTICHE CARAMPANE,http://www.antichecarampane.com/,no chef found
+18714,LA CORNICHE,https://www.hotel-lacorniche.com/,no chef found
+18722,BOCCAFINE,https://www.boccafine.fr/en/,no chef found
+19027,ROUGE BARRE,https://www.rougebarre.fr/,no chef found
+19065,LES TOQUEES,https://www.lestoquees.com/,no chef found
+19082,LA LAITERIE,"https://www.lalaiterie.fr/?utm_source=google&amp;utm_medium=my_business&amp;utm_campaign=my_business",no chef found
+19086,BLOEMPOT,https://www.bloempot.fr/?lang=en,no chef found
+19095,LE CERISIER,https://www.lecerisier-restaurant.fr/,no chef found
+19328,BLISSS,https://www.blisss.fr/,fetch: ENOTFOUND
+19330,LA FINE BOUCHE,https://la-fine-bouche-chamonix.eatbu.com/?lang=fr,no chef found
+19334,LE CHICOULA,https://www.lechicoula.fr/,no chef found
+19351,INFLUENCES,https://www.restaurant-influences.com/,no chef found
+19354,LA TABLE DE MONTAIGNE,https://www.hotel-palais-gallien-bordeaux.com/restaurant,no chef found
+19356,LE CLOS D'AUGUSTA,https://www.leclosdaugusta.fr/,no chef found
+19360,PARADOXE,https://restaurant-paradoxe.com/,fetch: DEPTH_ZERO_SELF_SIGNED_CERT
+19379,LE PRESSOIR D’ARGENT,https://bordeaux.intercontinental.com/le-pressoir-dargent-gordon-ramsay/,no chef found
+19496,C'YUSHA,https://www.cyusha.com/,no chef found
+19512,LE PRINCE NOIR,https://leprincenoir-restaurant.fr/#our-goodies,no chef found
+19520,SENS BISTROT,https://sens-bistrot-contemporain.com/,fetch: DEPTH_ZERO_SELF_SIGNED_CERT
+19537,L'OBSERVATOIRE DU GABRIEL,https://bordeaux-gabriel.fr/lobservatoire/,fetch: ECONNABORTED
+19554,LIL'HOME,https://www.lilhome-restaurant.fr/,no chef found
+19583,LE PETIT,https://guide.michelin.com/br/pt_BR/corse/ajaccio/restaurant/le-petit-restaurant-1184196,no chef found
+19650,MAISON FLO,https://groupefloasia.com/maison/our-restaurants/,no chef found
+20060,Spago Dining Room,"https://www.marinabaysands.com/restaurants/spago-bar-and-lounge.html/?utm_source=google&amp;utm_medium=GMB&amp;utm_campaign=spago_bar_info_main",no chef found
+20104,LES AMIS,https://www.lesamis.com.sg/,no chef found
+20294,L'ALEXANDRIN,https://www.lalexandrin.fr/,no chef found
+20304,L'ETABLI,https://www.letabli-restaurant.fr/,HTTP 404
+20316,CULINA HORTUS,https://www.culinahortus.com/,HTTP 503
+20318,AU 14 FÉVRIER,https://www.au14fevrier-accueil.com/vieux-lyon/,HTTP 404
+20322,L'ATELIER DES AUGUSTINS,https://latelierdesaugustins.com/fr/,no chef found
+20324,LE ZESTE GOURMAND,https://lezestegourmand.fr/,no chef found
+20328,MIRAFLORES,https://www.restaurant-miraflores.com/,no chef found
+20336,PRAIRIAL,https://www.prairial-restaurant.fr/,no chef found
+20340,LES TROIS DOMES,https://www.les-3-domes.com/fr/,no chef found
+20342,LA TABLE 101,https://latable101.fr/,no chef found
+20365,EPONA,https://lyon.intercontinental.com/le-restaurant-epona/,HTTP 404
+20371,CELEST,https://www.celest-bar-restaurant.com/,no chef found
+20388,RUSTIQUE,https://www.rustiquelyon.fr/,no chef found
+20390,TETEDOIE,https://tetedoie.com/restaurant-gastronomique/,no chef found
+20402,CANAIMA,https://www.restaurantcanaima.fr/,no chef found
+20406,LE PRESIDENT,https://restaurantlepresident.com/,no chef found
+20467,SUMMER PALACE,http://www.conradsingaporeorchard.com/summerpalace,HTTP 403
+20493,BURNT ENDS,https://burntends.com.sg/,no chef found
+20582,COUR DES LOGES,https://en.courdesloges.com/,fetch: EPROTO
+20591,L'ARTICHAUT,https://hotelabbayelyon.com/restaurant-artichaut/,no chef found
+20651,LEI GARDEN,https://leigarden.hk/,no chef found
+20653,CLOUDSTREET,https://cloudstreet.com.sg/,no chef found
+20730,AU POIS GOURMAND,https://pois-gourmand.fr/,no chef found
+20733,MICHEL SARRAN,https://www.michel-sarran.com/fr/,no chef found
+20738,LE CENACLE,https://www.cite-hotels.com/fr/etablissements/restaurant-la-cenacle.html,no chef found
+20742,CECILE,https://cecile-toulouse.fr/,no chef found
+20746,LE GENTY MAGRE,https://www.legentymagre.com/,no chef found
+20748,LE PY-R,https://www.py-r.com/,no chef found
+20754,LES PLANEURS,https://lesplaneurs.com/,no chef found
+20758,LE MAS DE DARDAGNA,https://www.masdedardagna.com/,no chef found
+20764,LES JARDINS DE L'OPERA,https://lesjardinsdelopera.fr/,no chef found
+20992,MANKAMERO,https://www.mankamerou.com/,no chef found
+21014,AJI FUKUSHIMA,https://kccc000.gorp.jp/,no chef found
+21349,OWATARI,https://www.instagram.com/gionowatari/,no chef found
+21582,LES PLAISIRS GOURMANDS,https://les-plaisirs-gourmands.com/,no chef found
+21590,LES SEMAILLES,https://restaurant-semailles.fr/,no chef found
+21607,LE BUEREHIESEL,https://www.buerehiesel.fr/,no chef found
+21609,BLUE FLAMINGO,https://www.blue-flamingo.fr/,no chef found
+21615,BRASSERIE LES HARAS,https://les-haras-brasserie.com/,no chef found
+21631,L'ID,https://restaurant-id.com/,no chef found
+21639,LA VIEILLE ENSEIGNE,https://www.lavieilleenseigne.com/,no chef found
+21645,LA VIEILLE TOUR,https://m.facebook.com/100063774300517/,no chef found
+21684,ALEXANDRE MAZZIA,https://www.alexandre-mazzia.com,no chef found
+21686,LE RELAIS 50,https://www.hotel-residence-marseille.com/fr/restaurant.html,no chef found
+21702,PERON,https://www.restaurant-peron.com/,no chef found
+21714,MICHEL,https://www.facebook.com/pages/Restaurant-Michel/120413651346922,no chef found
+21734,LE PETIT NICE PASSEDAT,https://www.passedat.fr/fr/le-petit-nice/restaurant-3-etoiles-marseille-bord-de-mer,no chef found
+21738,CEDRAT,https://www.cedratxmamakyuna.com/,no chef found
+21748,CHEZ FONFON,https://www.chez-fonfon.com,no chef found
+21789,FRANCK PUTELAT,https://www.franck-putelat.com/,no chef found
+21805,L'AMBROSIA,https://www.ambrosia-pezens.com/,no chef found
+22060,LA TABLE DE MINA,https://hotel-palombaggia.com/en/restaurant.html,no chef found
+22066,LAI HEEN,https://www.ritzcarlton.com/en/hotels/china/macau/dining/lai-heen?scid=bb1a189a-fec3-4d19-a255-54ba596febe2,no chef found
+22108,ZI YAT HEEN,https://www.ziyatheen.com/?seo=google_local_mac2_,no chef found
+22131,ALAIN DUCASSE AT MORPHEUS,"https://www.cityofdreamsmacau.com/en/dine/international/alain-ducasse-at-morpheus?utm_source=Google&amp;utm_medium=GMB",HTTP 400
+22236,PIERRE REBOUL,https://www.chateaudelapioline.com/?utm_source=MyBusiness,no chef found
+22238,LES INSEPARABLES,https://www.lesinseparablesaix.fr/,no chef found
+22240,VINTREPIDE,https://www.vintrepide.com/,no chef found
+22250,Étude,https://www.sauvage-aix.fr/,fetch: ERR_TLS_CERT_ALTNAME_INVALID
+22256,COTE COUR,https://www.facebook.com/ronankernen2/,no chef found
+22270,Louison Villa La Coste,https://www.villalacoste.com/restaurant-provence/,no chef found
+22274,FRANCIS MALLMANN,https://chateau-la-coste.com/fr/restaurants/restaurant-argentin-francis-mallmann.html?utm_source=MyBusiness,no chef found
+22298,ICI,https://restaurant-ici.fr,no chef found
+22305,LAMACCOTTE,https://www.lamaccotte-restaurant-nantes.com/,no chef found
+22309,L'ATLANTIDE 1874,https://www.atlantide1874.fr/,no chef found
+22311,LE BOUCHON,https://www.le-bouchon-nantes.com/,no chef found
+22313,L'ABELIA,https://www.restaurantlabelia.com/,no chef found
+22315,ROZA,https://restaurantroza.com/,no chef found
+22319,SONG SAVEURS ET SENS,https://www.song-saveurs-et-sens-restaurant-nantes.com/,no chef found
+22325,LULUROUGET,https://www.lulurouget.fr/,no chef found
+22329,AUBERGE DU VIEUX GACHET,http://www.aubergeduvieuxgachet.com/,no chef found
+22334,L'OCEANIDE,https://oceanide-nantes.fr/,no chef found
+22371,LE SIN,https://www.instagram.com/lesinbiarritz/?hl=en,no chef found
+22380,MOULIN D'ALOTZ,https://moulindalotz.fr/,no chef found
+22384,L'INATTENDU BAYONNE,https://www.linattendubayonne.com/,fetch: ENOTFOUND
+22388,LA GRANGE,https://lagrange-bayonne.fr/,no chef found
+22399,BRIKETENIA,https://www.briketenia.com/fr/,no chef found
+22401,GAZTELUR,https://gaztelur.com,no chef found
+22421,LA BOUITTE,https://www.la-bouitte.com/fr/restaurant/la-cuisine.html,no chef found
+22748,KAKINUMA,https://www.kakinuma.ch/,no chef found
+22779,Nagomi,https://nagomi-restaurant.ch/,no chef found
+22846,AUBERGE D'ONEX,https://www.facebook.com/pages/Auberge-dOnex/151359911570135,no chef found
+23291,CHENGLONGHANG,https://www.facebook.com/pages/chenglonghang/421291385144280,no chef found
+23458,Core by Clare Smyth,https://www.corebyclaresmyth.com/,no chef found
+23468,The Ledbury,https://www.theledbury.com/,no chef found
+24480,Gymkhana,http://www.gymkhanarestaurants.com/,HTTP 429
+24620,HIDE,https://hide.co.uk/?utm_source=gbp&utm_medium=organic,no chef found
+25014,AL CAPITAN DELLA CITTADELLA,https://www.alcapitan.it/,no chef found
+250860,LES ENFANTS ROUGES,https://les-enfants-rouges-paris.fr/fr,no chef found
+253049,MANÍ,https://manimanioca.com.br/,no chef found
+25387,YARD,https://www.yardrestaurant.it/,no chef found
+25439,I CARRACCI,http://grandhotelmajestic.duetorrihotels.com/,no chef found
+25441,AL CAMBIO,http://www.ristorantealcambio.it/,no chef found
+254759,COTE MIAMI,https://www.cotemiami.com,no chef found
+258041,LE LOUIS XV,https://www.montecarlosbm.com/en/restaurant-monaco/le-louis-xv-alain-ducasse-hotel-de-paris,no chef found
+258686,DIVERXO,https://diverxo.com/en/home/,no chef found
+258698,LASARTE,https://www.restaurantlasarte.com,no chef found
+258725,LA MADIA,https://www.ristorantelamadia.it,no chef found
+260876,LASAI,https://lasai.com.br/,no chef found
+269644,LES OMBRES,https://www.lesombres-restaurant.com/,no chef found
+270118,TERRA,https://www.terraparis.fr/,no chef found
+270168,RACINES,https://racinesparis.com/en/,no chef found
+271665,OLIVE & ARTICHAUT,https://www.oliveartichaut.com/,no chef found
+271818,LES AGITATEURS,https://www.lesagitateurs.com/,no chef found
+271832,SO'METS,https://somets-restaurant.fr/en,no chef found
+271865,AKABEKO,https://akabekorestaurant.com/,HTTP 403
+27486,VERITAS,https://www.veritasrestaurant.it/,no chef found
+28084,APRON,https://www.restaurant-apron.at/,no chef found
+28091,Edvard,https://www.kempinski.com/en/palais-hansen/restaurants-bars/edvard,no chef found
+28129,Silvio Nickol,https://palais-coburg.com/kulinarik/silvio-nickol/,no chef found
+28139,Tian,http://www.tian-restaurant.com/wien,no chef found
+28182,CHAPTER ONE,https://chapteronerestaurant.com/,no chef found
+28185,KONSTANTIN FILIPPOU,https://konstantinfilippou.com/restaurant/de/,no chef found
+28198,BUXBAUM,https://www.buxbaumrestaurant.at/,no chef found
+28203,Mraz & Sohn,https://mrazundsohn.at/,no chef found
+28230,Fabios,https://fabios.at/,no chef found
+28270,Das Loft,https://www.dasloftwien.at/,no chef found
+28666,ALCHEMIST,https://alchemist.dk/,no chef found
+28700,AIRA,https://aira.se/,no chef found
+28719,VAEKST,https://cofoco.dk/vaekst/?utm_source=google&utm_medium=organic&utm_campaign=gmb-website&utm_content=vaekst,no chef found
+28834,ALOUETTE,https://www.restaurantalouette.dk/,no chef found
+28887,SANKT ANNÆ,https://restaurantsanktannae.dk/,no chef found
+294247,IL CARPACCIO,https://restaurantsandbars.accor.com/fr/restaurant/A5D5_R001?utm_source=google+Maps&utm_medium=seo+maps&utm_campaign=seo+maps,no chef found
+29753,KAFER SCHÄNKE,"https://www.google.com/maps/dir//Kafer-Sch%C3%A4nke++munich/@48.1405702,11.6019075,21z/data=!3m1!5s0x479e7582998e18cd:0x15954f5382746a2a!4m8!4m7!1m0!1m5!1m1!1s0x479e758b676e940d:0xdd32819cb61543f2!2m2!1d11.6020464!2d48.1405915",no chef found
+30184,CALIFORNIOS,https://www.californiossf.com/,no chef found
+30203,ATLANTIK FISCH,https://www.atlantik-muenchen.de/,no chef found
+30665,A'L'AISE,https://www.alaise.no/,no chef found
+30703,ARAKATAKA,https://www.arakataka.no/,no chef found
+34569,BLUE ELEPHANT,https://blueelephant.com/restaurant/bangkok/,HTTP 403
+34660,100 MAHASETH,https://www.100mahaseth.com/,no chef found
+34734,CHIM BY SIAM,https://www.facebook.com/Chimbysiamwisdom/,no chef found
+34751,R-HAAN,https://www.r-haan.com/,no chef found
+35239,BAAN SOMTUM SATHORN,https://baansomtum.com/,no chef found
+36759,LE MOISSONNIER,https://lemoissonnier.de/,no chef found
+39126,HISPANIA,http://www.hispaniabrussels.com/,no chef found
+39493,SENZANOME,http://www.senzanome.be/,no chef found
+40749,BLUE ELEPHANT,https://www.blueelephant.com/phuket/,HTTP 403
+40755,Imperial Treasure,http://www.imperialtreasure.com/,no chef found
+40781,ACQUA,https://www.acquarestaurantphuket.com/,no chef found
+40821,LA GAETANA,https://www.facebook.com/LaGaetanaPhuket/info?tab=overview,no chef found
+40888,PRU,https://www.prurestaurant.com/,no chef found
+40899,TA KHAI,https://www.rosewoodhotels.com/en/phuket/dining/ta-khai,no chef found
+42875,MOMA,https://www.ristorantemoma.it/,no chef found
+43298,IL SANLORENZO,http://www.ilsanlorenzo.it/,no chef found
+44602,GREEN TEA,https://www.green-tea.it/,no chef found
+44717,PULEJO,https://pulejo.it/,no chef found
+47938,GAYTAN,https://chefjavieraranda.com/es/gaytan.html,HTTP 404
+48257,AMPARITO ROCA,http://restauranteamparitoroca.com/,HTTP 403
+48290,DOS CIELOS HERMANOS TORRES,http://www.restaurantedoscielos.es/,no chef found
+53393,COCCHI,https://www.ristorantecocchi.it/,no chef found
+57143,CTC,https://ctc-restaurant.com/,no chef found
+57157,SPONDI,http://www.spondi.gr/,no chef found
+57640,MANA,http://www.manarestaurant.co.uk/,no chef found
+58502,ATHÉNÉE,https://www.atheneeathens.gr/,no chef found
+61349,BESTIA,http://www.bestiala.com/,no chef found
+62212,BEIGE ALAIN DUCASSE,http://www.beige-tokyo.com/,no chef found
+62295,NODAIWA AZABU IIKURA HONTE,http://www.nodaiwa.co.jp/index2.html,no chef found
+62825,L'osier,https://losier.shiseido.co.jp/,no chef found
+63021,Sukiyabashi Jiro Roppongi Hills,http://www.roppongihills.com/shops_restaurants/restaurants/00138.html,no chef found
+67025,JUNGSIK,http://www.jungsik.kr/,HTTP 403
+67917,PIERRE GAGNAIRE,https://pierregagnaire.com/,no chef found
+67950,TOH LIM,https://www.lottehotel.com/seoul-hotel/ko/dining/restaurant-toh-lim.html,no chef found
+68019,KWONSOOKSOO,http://kwonsooksoo.com/,no chef found
+68679,LA YEON,https://www.shilla.net/seoul/dining/viewDining.do?contId=KRN#ad-image-0,no chef found
+68698,EVETT,https://www.restaurantevett.com/,no chef found
+68787,BICENA,https://www.bicena.com/,no chef found
+70105,DON SEBASTIÃO,https://www.restaurantedonsebastiao.com/,no chef found
+71791,BOURDASSO,https://www.bourdasso.com/,no chef found
+71816,LE MOULIN,http://www.lemoulindetrebes.com/,no chef found
+72363,D'ALAIS,https://table-alais.fr/fr/accueil-restaurant/,no chef found
+72387,4 TEMPS,https://www.brasserie4temps.com/,no chef found
+72458,BARBACANE,https://restaurantsandbars.accor.com/fr/restaurant/8613_R001,no chef found
+73496,L'AMANT SECRET,https://www.instagram.com/lamant_secret/,no chef found
+75071,ÉBULLITION,http://restaurant-ebullition.fr/,no chef found
+75101,TEMPS D'AIME,https://www.restaurant-tempsdaime.com/,no chef found
+75117,LECLERE,https://www.restaurantleclere.com/,no chef found
+75133,LA RÉSERVE RIMBAUD,https://www.reserve-rimbaud.com/,no chef found
+75198,LE PETIT JARDIN,https://www.petit-jardin.com/,no chef found
+75216,REFLET D'OBIONE,https://reflet-obione.com/fr/,HTTP 404
+75261,TERMINAL #1,https://www.terminalpourcel.com/en/,HTTP 404
+75267,JARDIN DES SENS,https://www.hotel-richerdebelleval.com/jardin-des-sens/,no chef found
+75273,MARCELLE,https://www.domainedeverchant.com/fr/services.html,no chef found
+75277,DISINI,"http://www.disini-hotel.com/?utm_campaign=uberall&amp;utm_source=googlelisting&amp;utm_medium=organic",no chef found
+75300,PASTIS,https://pastis-restaurant.com/,no chef found
+75482,UMAMI LA CINQUIEME SAVEUR,https://www.umami-cinquiemesaveur.com/,no chef found
+75807,CHEZ DELAGARE,https://www.belaroia.fr/chezdelagare,no chef found
+75932,MAHÉ,https://www.mahe-restaurant.fr/,no chef found
+76597,ONJIUM,https://www.instagram.com/onjium_restaurant/,no chef found
+77532,A FIGUEIRA RUBAIYAT,https://www.instagram.com/afigueirarubaiyat/?hl=fr,no chef found
+79067,EPIRO,https://www.facebook.com/EpiroRoma,no chef found
+79628,L'ALCHIMIE,https://www.lalchimie-restaurant.com/,no chef found
+80945,IMAKAY,https://www.instagram.com/imakaysaopaulo/,no chef found
+80962,KINK,https://kink-berlin.de/,no chef found
+83050,NAGA,https://www.instagram.com/restaurantenaga/,no chef found
+86923,L'ESQUISSE,https://esquisse-annecy.fr/,no chef found
+87057,YOANN CONTE,https://www.restaurant-leroc.com/,no chef found
+87117,SABA,https://restaurant-saba.com/,no chef found
+87140,LE CONFIDENTIEL,https://www.restaurant-leconfidentiel.com/,no chef found
+87195,POLLEN,https://www.pollen-restaurant.fr/,no chef found
+87226,LA TABLE,https://urshauri.ch/la-table-bern/,no chef found
+87241,GOXOKI,https://restaurant-goxoki.fr/,no chef found
+87313,ACTE 2,https://www.restaurantacte2.com/,no chef found
+87344,LE PRIEURE,https://www.leprieure.com/,no chef found
+87393,L'ATELIER,https://latelier-alexandrebousquet.com/,fetch: ECONNABORTED
+87398,LA ROTONDE,https://www.latabledaurelienlargeau.com/,no chef found
+87432,LA MIRANDE,https://www.la-mirande.fr/fr/table-haute-avignon-provence.html,no chef found
+87657,LE FOCH,https://www.lefoch.com/,no chef found
+87681,RACINE,https://www.racine.re/,no chef found
+87781,LE CRYPTO,https://restaurantlecrypto.eatbu.com/?lang=pt,no chef found
+88879,PASTIS,https://pastis-restaurant.com/,no chef found
+88883,GRANGE DES AGAPES,https://www.grangeagapes.com/,no chef found
+88904,LES SANTONS,https://restaurant-les-santons.fr/,no chef found
+88907,VERDOYANTE,https://www.la-verdoyante.fr/,no chef found
+89040,L'ESSENTIEL,https://restaurantlessentiel.com/,fetch: ENOTFOUND
+89066,MAXIMIN HELLIO,https://www.maximinhellio.fr/,no chef found
+89966,L'AMANDIER,https://www.restaurant-lamandier-frejus.com/,no chef found
+90186,MARIE,https://marieamsterdam.com/,no chef found
+90218,212,https://www.212.amsterdam/,no chef found
+90361,JUWELIER,https://www.restaurant-dejuwelier.nl/,no chef found
+91206,DUENDE,https://www.maison-albar-hotels-l-imperator.com/fr/page/restaurant-gastronomique-nimes.5196.html,no chef found
+91866,AUX PLAISIRS DES HALLES,https://www.auxplaisirsdeshalles.com/,HTTP 404
+91868,ROUGE,https://www.margaret-hotelchouleur.com/,no chef found
+98657,CHRISTOPHER COUTANCEAU,https://christophercoutanceau.com/fr/,no chef found
+98666,IMPRESSIONS,https://restaurant-impressions.fr/,no chef found
+98678,LES FLOTS,https://les-flots.com/,no chef found
+98687,LE BOUILLON,https://www.le-bouillon-larochelle.fr/,no chef found
+98713,LA PIERREVUE,https://www.lapierrevue.com/,no chef found

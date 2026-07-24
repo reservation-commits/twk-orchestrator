@@ -1,17 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Toaster } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
 import Sidebar from '@/components/Sidebar';
+import CommandPalette from '@/components/command-center/CommandPalette';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const TableViewer = dynamic(() => import('@/components/TableViewer'), { ssr: false, loading: () => <Loader /> });
-const QueryConsole = dynamic(() => import('@/components/QueryConsole'), { ssr: false, loading: () => <Loader /> });
-const RestaurantBuilder = dynamic(() => import('@/components/RestaurantBuilder'), { ssr: false, loading: () => <Loader /> });
-const DataEnricher = dynamic(() => import('@/components/DataEnricher'), { ssr: false, loading: () => <Loader /> });
-const AgentChat = dynamic(() => import('@/components/AgentChat'), { ssr: false, loading: () => <Loader /> });
-const ActivityLogs = dynamic(() => import('@/components/ActivityLogs'), { ssr: false, loading: () => <Loader /> });
+const CommandCenter = dynamic(() => import('@/components/CommandCenter'), { ssr: false, loading: () => <Loader /> });
+const CRM           = dynamic(() => import('@/components/CRM'),           { ssr: false, loading: () => <Loader /> });
+const TableViewer   = dynamic(() => import('@/components/TableViewer'),   { ssr: false, loading: () => <Loader /> });
+const QueryConsole  = dynamic(() => import('@/components/QueryConsole'),  { ssr: false, loading: () => <Loader /> });
+const DataAuditor   = dynamic(() => import('@/components/DataAuditor'),   { ssr: false, loading: () => <Loader /> });
+const AgentChat     = dynamic(() => import('@/components/AgentChat'),     { ssr: false, loading: () => <Loader /> });
+const ActivityLogs  = dynamic(() => import('@/components/ActivityLogs'),  { ssr: false, loading: () => <Loader /> });
+const SeoDashboard  = dynamic(() => import('@/components/SeoDashboard'),  { ssr: false, loading: () => <Loader /> });
+const PhotoStudio   = dynamic(() => import('@/components/PhotoStudio'),   { ssr: false, loading: () => <Loader /> });
 
 function Loader() {
   return (
@@ -22,16 +26,51 @@ function Loader() {
 }
 
 const MODULE_TITLES: Record<string, string> = {
+  command:'Command Center',
+  crm:    'CRM',
   tables: 'Table Viewer',
-  query: 'Query Console',
-  import: 'Restaurant Builder',
-  enrich: 'Data Enricher',
-  agent: 'Agent Chat',
-  logs: 'Activity Logs',
+  query:  'Query Console',
+  audit:  'Data Quality Auditor',
+  agent:  'Agent Chat',
+  logs:   'Activity Logs',
+  photos: 'Photo Studio',
+  seo:    'SEO & Busca Orgânica',
 };
 
+// Linear-style "g then key" shortcuts
+const GOTO: Record<string, string> = { c: 'command', r: 'crm', a: 'agent', q: 'audit', s: 'query', t: 'tables', l: 'logs', p: 'photos', o: 'seo' };
+
 export default function Home() {
-  const [activeModule, setActiveModule] = useState('tables');
+  const [activeModule, setActiveModule] = useState('command');
+  const [askPrompt, setAskPrompt] = useState<string | null>(null);
+  const [agentKey, setAgentKey] = useState(0);
+
+  const ask = useCallback((text: string) => {
+    setAskPrompt(text);
+    setAgentKey((k) => k + 1);
+    setActiveModule('agent');
+  }, []);
+
+  // Global keyboard shortcuts: "g" then a destination key (skips when typing in a field).
+  useEffect(() => {
+    let pendingGoto = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const onKey = (e: KeyboardEvent) => {
+      const el = document.activeElement as HTMLElement | null;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const key = e.key.toLowerCase();
+      if (pendingGoto) {
+        pendingGoto = false;
+        if (timer) clearTimeout(timer);
+        if (GOTO[key]) { e.preventDefault(); setActiveModule(GOTO[key]); }
+        return;
+      }
+      if (key === 'g') { pendingGoto = true; timer = setTimeout(() => { pendingGoto = false; }, 900); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); if (timer) clearTimeout(timer); };
+  }, []);
 
   return (
     <div className="flex h-screen bg-twk-bg overflow-hidden font-dm-sans">
@@ -52,16 +91,18 @@ export default function Home() {
       <Sidebar active={activeModule} onChange={setActiveModule} />
 
       <main className="flex-1 flex flex-col min-w-0 relative z-10">
-        {/* Top bar */}
-        <header className="flex items-center px-6 py-4 border-b border-white/5 bg-black/20 backdrop-blur">
-          <div>
-            <h1 className="font-cormorant text-xl text-white">{MODULE_TITLES[activeModule]}</h1>
-            <p className="text-xs text-white/30 mt-0.5">The World Keys · Database Management</p>
-          </div>
-          <div className="ml-auto flex items-center gap-3">
-            <span className="text-xs text-white/20 font-mono">TWK DB Architect v1.0</span>
-          </div>
-        </header>
+        {/* Top bar — hidden in Command Center and CRM which have their own headers */}
+        {activeModule !== 'command' && activeModule !== 'crm' && (
+          <header className="flex items-center px-6 py-4 border-b border-white/5 bg-black/20 backdrop-blur">
+            <div>
+              <h1 className="font-cormorant text-xl text-white">{MODULE_TITLES[activeModule]}</h1>
+              <p className="text-xs text-white/30 mt-0.5">The World Keys · Database Management</p>
+            </div>
+            <div className="ml-auto flex items-center gap-3">
+              <span className="text-xs text-white/20 font-mono">TWK DB Architect v2.0</span>
+            </div>
+          </header>
+        )}
 
         {/* Module area */}
         <div className="flex-1 overflow-hidden">
@@ -74,16 +115,22 @@ export default function Home() {
               transition={{ duration: 0.15 }}
               className="h-full"
             >
+              {activeModule === 'command'&& <CommandCenter onNavigate={setActiveModule} />}
+              {activeModule === 'crm'    && <CRM />}
               {activeModule === 'tables' && <TableViewer />}
-              {activeModule === 'query' && <QueryConsole />}
-              {activeModule === 'import' && <RestaurantBuilder />}
-              {activeModule === 'enrich' && <DataEnricher />}
-              {activeModule === 'agent' && <AgentChat />}
-              {activeModule === 'logs' && <ActivityLogs />}
+              {activeModule === 'query'  && <QueryConsole />}
+              {activeModule === 'audit'  && <DataAuditor />}
+              {activeModule === 'agent'  && <AgentChat key={agentKey} initialPrompt={askPrompt} onConsumed={() => setAskPrompt(null)} />}
+              {activeModule === 'logs'   && <ActivityLogs />}
+              {activeModule === 'photos' && <PhotoStudio />}
+              {activeModule === 'seo'    && <SeoDashboard onNavigate={setActiveModule} />}
             </motion.div>
           </AnimatePresence>
         </div>
       </main>
+
+      {/* Global ⌘K command palette — available on every module */}
+      <CommandPalette onNavigate={setActiveModule} onAsk={ask} />
 
       <Toaster
         position="bottom-right"

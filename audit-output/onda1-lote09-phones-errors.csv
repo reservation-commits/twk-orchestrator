@@ -1,0 +1,37 @@
+restaurant_id,name,site_url,reason
+10492,OPÉRA PLAGE,https://www.operaplage-nice.fr/en/opera-plage-english/,fetch: Hostname/IP does not match certificate's altnames: Host: www.operaplage-nice.fr. is not in the cert's altnames: DNS:2mad-site.labo-linkibe.fr
+109110,PRIMAL,https://www.primalcapemay.com/,no phone found
+10965,PALAIS MAILLOT,http://www.palaismaillot.fr/,no phone found
+11665,KOY SHUNKA,http://www.koyshunka.com/KoyShunka/esp_home.html,no phone found
+11745,JALOUSY,https://www.facebook.com/Jalousybrussels,no phone found
+13254,YAFFO,https://www.yaffotelaviv.com/,no phone found
+13256,SHILA,https://www.shila-rest.co.il,no phone found
+14534,SEPTIME,https://www.septime-charonne.fr/,no phone found
+14582,GAYA,https://restaurantgaya.com/,no phone found
+14634,Carbone,https://carbonemiami.com,no phone found
+19086,BLOEMPOT,https://www.bloempot.fr/?lang=en,no phone found
+20742,CECILE,https://cecile-toulouse.fr/,no phone found
+22360,CHEZ SCOTT,https://www.chezscott-biarritz.fr,no phone found
+22397,CARLOS VAGUES ET SUNSET,https://www.instagram.com/carlosbiarritz/,no phone found
+26909,BARGAÇO,https://www.instagram.com/bargacorecife/?hl=fr,no phone found
+26953,CAIS ROOFTOP,https://cais-rooftop.cluvi.co/,no phone found
+28155,Imperial,https://www.cafe-imperial.at/,HTTP 403
+28764,NANA OMAKASE,https://nanaomakase.com/,no phone found
+294134,Lutetia,http://www.paris.fr/,no phone found
+32882,AL RIMAL,"https://al-rimal-restaurant.business.site/?utm_source=gmb&amp;utm_medium=referral",HTTP 404
+41475,BAYLEAF CAFE,https://www.bayleafbyronbay.com/,fetch: read ECONNRESET
+42252,THE CHAMBER ROOM,http://www.thechamberroom.com.au/,no phone found
+42563,LA MAISON DU CYGNE,https://www.lamaisonducygne.com/,no phone found
+48385,HUERTA DE CARABANA,https://huertadecarabana.com/,no phone found
+57640,MANA,http://www.manarestaurant.co.uk/,no phone found
+70087,BLACK AND WHITE,https://www.instagram.com/blackandwhitelagos/?hl=en,no phone found
+71791,BOURDASSO,https://www.bourdasso.com/,no phone found
+72431,SAINT ROCH,https://www.facebook.com/lacantinedusaintroch/,no phone found
+72932,CASSA CEVICHE,https://cassaceviche.com/,no phone found
+75790,L'ANGELUS,https://www.restaurant-angelus.fr/,no phone found
+75930,LA PLACE,https://www.facebook.com/profile.php?id=100050354452252,no phone found
+76711,LE RÉFECTOIRE,https://www.facebook.com/lerefectoiremtp/,no phone found
+76716,TERRAZZA ROOFTOP,https://terrazzarooftop.com/,"fetch: Hostname/IP does not match certificate's altnames: Host: terrazzarooftop.com. is not in the cert's altnames: DNS:*.controlpanel.pro, DNS:controlpanel.pro"
+81020,LE CLIN D'OEIL,https://www.leclindoeil-restaurant.com/,fetch: Hostname/IP does not match certificate's altnames: Host: www.leclindoeil-restaurant.com. is not in the cert's altnames: DNS:cluster127.hosting.ovh.net
+87520,NODOGURO,http://www.nodoguropdx.com/,no phone found
+90892,D BAR,https://www.dbartoronto.com/,no phone found

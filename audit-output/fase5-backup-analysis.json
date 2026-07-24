@@ -1,0 +1,701 @@
+{
+  "backup_cols": [
+    {
+      "column_name": "restaurant_id",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "address_of_establishment",
+      "data_type": "text"
+    },
+    {
+      "column_name": "city",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "country",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "email_for_reservations",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "engagement",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "establishment_type",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "identity_proof",
+      "data_type": "text"
+    },
+    {
+      "column_name": "interest_level",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "localization",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "logo_url",
+      "data_type": "text"
+    },
+    {
+      "column_name": "name",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "negotiation_status",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "partner",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "restaurant_category",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "site_url",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "telephone_of_the_establishment",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "url_page_twk",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "created_date",
+      "data_type": "timestamp without time zone"
+    },
+    {
+      "column_name": "sales_representative",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "traded_currency",
+      "data_type": "character varying"
+    },
+    {
+      "column_name": "commission_per_person",
+      "data_type": "numeric"
+    },
+    {
+      "column_name": "internal_notes",
+      "data_type": "text"
+    },
+    {
+      "column_name": "partnership_start_date",
+      "data_type": "date"
+    },
+    {
+      "column_name": "total_reservation",
+      "data_type": "real"
+    },
+    {
+      "column_name": "images_json",
+      "data_type": "jsonb"
+    },
+    {
+      "column_name": "price_range_id",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "michelin_id",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "about_html",
+      "data_type": "text"
+    },
+    {
+      "column_name": "about_text",
+      "data_type": "text"
+    },
+    {
+      "column_name": "business_hours_json",
+      "data_type": "jsonb"
+    },
+    {
+      "column_name": "city_id",
+      "data_type": "integer"
+    },
+    {
+      "column_name": "longitude",
+      "data_type": "numeric"
+    },
+    {
+      "column_name": "latitude",
+      "data_type": "numeric"
+    },
+    {
+      "column_name": "coordinates",
+      "data_type": "USER-DEFINED"
+    }
+  ],
+  "counts": [
+    {
+      "backup_total": 12176,
+      "current_total": 2207,
+      "orphans": 9971
+    }
+  ],
+  "orphans_with_match_in_current": [
+    {
+      "by_name_city": 22,
+      "total_orphans": 9971
+    }
+  ],
+  "by_status_signals": [
+    {
+      "no_coords": 9901,
+      "no_site": 3493,
+      "no_phone": 6038,
+      "no_email": 7358,
+      "no_images": 24,
+      "total": 9971
+    }
+  ],
+  "top_countries": [
+    {
+      "country": "USA",
+      "n": 1943
+    },
+    {
+      "country": "Australia",
+      "n": 800
+    },
+    {
+      "country": "Italy",
+      "n": 778
+    },
+    {
+      "country": "Germany",
+      "n": 670
+    },
+    {
+      "country": "Spain",
+      "n": 574
+    },
+    {
+      "country": "England",
+      "n": 573
+    },
+    {
+      "country": "Brazil",
+      "n": 558
+    },
+    {
+      "country": "Thailand",
+      "n": 379
+    },
+    {
+      "country": "Mexico",
+      "n": 327
+    },
+    {
+      "country": "Malaysia",
+      "n": 294
+    },
+    {
+      "country": "Japan",
+      "n": 281
+    },
+    {
+      "country": "Russia",
+      "n": 208
+    },
+    {
+      "country": "Colombia",
+      "n": 204
+    },
+    {
+      "country": "Canada",
+      "n": 201
+    },
+    {
+      "country": "Israel",
+      "n": 193
+    }
+  ],
+  "top_cities": [
+    {
+      "city": "London",
+      "country": "England",
+      "n": 421
+    },
+    {
+      "city": "Frankfurt",
+      "country": "Germany",
+      "n": 338
+    },
+    {
+      "city": "Gold Coast",
+      "country": "Australia",
+      "n": 326
+    },
+    {
+      "city": "Bangkok",
+      "country": "Thailand",
+      "n": 303
+    },
+    {
+      "city": "Kyoto",
+      "country": "Japan",
+      "n": 216
+    },
+    {
+      "city": "Mexico City",
+      "country": "Mexico",
+      "n": 207
+    },
+    {
+      "city": "Rome",
+      "country": "Italy",
+      "n": 183
+    },
+    {
+      "city": "Moscow",
+      "country": "Russia",
+      "n": 181
+    },
+    {
+      "city": "Milan",
+      "country": "Italy",
+      "n": 169
+    },
+    {
+      "city": "São Paulo",
+      "country": "Brazil",
+      "n": 168
+    },
+    {
+      "city": "Singapore",
+      "country": "Malaysia",
+      "n": 159
+    },
+    {
+      "city": "Madrid",
+      "country": "Spain",
+      "n": 145
+    },
+    {
+      "city": "Mallorca",
+      "country": "Spain",
+      "n": 136
+    },
+    {
+      "city": "Seoul",
+      "country": "South Korea",
+      "n": 131
+    },
+    {
+      "city": "Manchester",
+      "country": "England",
+      "n": 125
+    }
+  ],
+  "by_year": [
+    {
+      "year": 2023,
+      "n": 9731
+    },
+    {
+      "year": 2024,
+      "n": 201
+    },
+    {
+      "year": 2025,
+      "n": 25
+    }
+  ],
+  "rescuable_sample": [
+    {
+      "restaurant_id": "255007",
+      "name": "KÚKÚ",
+      "city": "Paris",
+      "country": "France",
+      "site_url": "https://kukuparis.com",
+      "latitude": "48.87274",
+      "longitude": "2.31563",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "255201",
+      "name": "CABANA DO SOL",
+      "city": "São Luís",
+      "country": "Brazil",
+      "site_url": "https://www.instagram.com/cabanadosol/",
+      "latitude": "-2.48368",
+      "longitude": "-44.25437",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "255392",
+      "name": "BAGA",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "site_url": "https://bagatelle.com/venues/buenos-aires",
+      "latitude": "-34.56932",
+      "longitude": "-58.42641",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "254854",
+      "name": "LA VOGLIA",
+      "city": "Nice",
+      "country": "France",
+      "site_url": "https://www.lavoglia.com/",
+      "latitude": "43.69556",
+      "longitude": "7.27331",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "76882",
+      "name": "PIZZA MONGELLI",
+      "city": "Montpellier",
+      "country": "France",
+      "site_url": "https://www.pizza-mongelli.com/pizzeria/castelnau-le-lez/",
+      "latitude": "43.63306",
+      "longitude": "3.89528",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "78967",
+      "name": "PURE & V",
+      "city": "Nice",
+      "country": "France",
+      "site_url": "https://www.pureandvrestaurant.com/",
+      "latitude": "43.69647",
+      "longitude": "7.25410",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "10493",
+      "name": "PLAGE DE PASSABLE",
+      "city": "Nice",
+      "country": "France",
+      "site_url": "https://www.plage-de-passable.fr",
+      "latitude": "43.69329",
+      "longitude": "7.32528",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "13050",
+      "name": "RENDEZ VOUS",
+      "city": "Megève",
+      "country": "France",
+      "site_url": "https://www.facebook.com/rendezvousclubmegeve/",
+      "latitude": "45.85791",
+      "longitude": "6.62005",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "250502",
+      "name": "NELLU",
+      "city": "Paris",
+      "country": "France",
+      "site_url": "https://www.restaurant-nellu.com/",
+      "latitude": "48.85495",
+      "longitude": "2.35538",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "81220",
+      "name": "OLIM",
+      "city": "Nice",
+      "country": "France",
+      "site_url": "https://www.olim-restaurants.com/",
+      "latitude": "43.69676",
+      "longitude": "7.27172",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "78902",
+      "name": "MOLO26",
+      "city": "Nice",
+      "country": "France",
+      "site_url": "https://www.molo26.com/?utm_source=google&amp;utm_medium=google+my+business",
+      "latitude": "43.69547",
+      "longitude": "7.27469",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "104718",
+      "name": "MIRLO",
+      "city": "Barcelona",
+      "country": "Spain",
+      "site_url": "https://mirlobarcelona.com/",
+      "latitude": "41.41358",
+      "longitude": "2.13485",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "75335",
+      "name": "MAXENS",
+      "city": "Montpellier",
+      "country": "France",
+      "site_url": "https://www.ihg.com/crowneplaza/hotels/fr/fr/montpellier/mopda/hoteldetail/dining",
+      "latitude": "43.61282",
+      "longitude": "3.88377",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "71789",
+      "name": "MELI ET ZELI",
+      "city": "Carcassonne",
+      "country": "France",
+      "site_url": "https://melietzeli.fr/",
+      "latitude": "43.20774",
+      "longitude": "2.36394",
+      "has_about": "sim"
+    },
+    {
+      "restaurant_id": "77428",
+      "name": "LE SPOT",
+      "city": "Montpellier",
+      "country": "France",
+      "site_url": "https://www.instagram.com/le_spot_des_beaux_arts/?hl=en",
+      "latitude": "43.61582",
+      "longitude": "3.88142",
+      "has_about": "sim"
+    }
+  ],
+  "junk_sample": [
+    {
+      "restaurant_id": "39375",
+      "name": "FUJIWARA",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "created_date": "2023-07-25T17:16:05.000Z"
+    },
+    {
+      "restaurant_id": "72317",
+      "name": "Sushi Tatsu",
+      "city": "Seoul",
+      "country": "South Korea",
+      "created_date": "2023-07-25T17:16:03.000Z"
+    },
+    {
+      "restaurant_id": "17494",
+      "name": "ZOA",
+      "city": "Marbella",
+      "country": "Spain",
+      "created_date": "2023-07-25T17:16:05.000Z"
+    },
+    {
+      "restaurant_id": "73100",
+      "name": "Asiana",
+      "city": "Playa Del Carmen",
+      "country": "Mexico",
+      "created_date": "2023-07-25T17:16:00.000Z"
+    },
+    {
+      "restaurant_id": "23911",
+      "name": "El Mirador",
+      "city": "Seville",
+      "country": "Spain",
+      "created_date": "2023-07-25T17:16:04.000Z"
+    },
+    {
+      "restaurant_id": "5141651894",
+      "name": "L’AVENUE",
+      "city": null,
+      "country": null,
+      "created_date": "2025-08-06T19:51:54.801Z"
+    },
+    {
+      "restaurant_id": "11035",
+      "name": "The Box",
+      "city": "London",
+      "country": "England",
+      "created_date": "2023-07-25T17:16:03.000Z"
+    },
+    {
+      "restaurant_id": "24751",
+      "name": "L'INSOLITA TRATTORIA TRE SOLDI",
+      "city": "Florence",
+      "country": "Italy",
+      "created_date": "2023-07-25T17:16:07.000Z"
+    },
+    {
+      "restaurant_id": "18241",
+      "name": "Blue Note",
+      "city": "Milan",
+      "country": "Italy",
+      "created_date": "2023-07-25T17:16:01.000Z"
+    },
+    {
+      "restaurant_id": "21267",
+      "name": "Pittoresque",
+      "city": "Kyoto",
+      "country": "Japan",
+      "created_date": "2023-07-25T17:16:11.000Z"
+    },
+    {
+      "restaurant_id": "11018",
+      "name": "Dolce Kensington",
+      "city": "London",
+      "country": "England",
+      "created_date": "2023-07-25T17:16:03.000Z"
+    },
+    {
+      "restaurant_id": "19666",
+      "name": "BRASSERIE 1893",
+      "city": "Beijing",
+      "country": "China",
+      "created_date": "2023-07-25T17:16:01.000Z"
+    },
+    {
+      "restaurant_id": "19757",
+      "name": "Kongyiji",
+      "city": "Beijing",
+      "country": "China",
+      "created_date": "2023-07-25T17:16:07.000Z"
+    },
+    {
+      "restaurant_id": "18320",
+      "name": "BlackSalt",
+      "city": "Washington DC",
+      "country": "USA",
+      "created_date": "2023-07-25T17:16:01.000Z"
+    },
+    {
+      "restaurant_id": "31869",
+      "name": "ENTRE FUEGOS MASARYK",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "created_date": "2023-07-25T17:16:04.000Z"
+    }
+  ],
+  "lost_duplicates": [
+    {
+      "backup_id": "29023",
+      "backup_name": "SMAK",
+      "backup_city": "Stockholm",
+      "current_id": "28598",
+      "current_name": "Smak",
+      "current_city": "Stockholm"
+    },
+    {
+      "backup_id": "42800",
+      "backup_name": "RINALDI AL QUIRINALE",
+      "backup_city": "Rome",
+      "current_id": "17088",
+      "current_name": "Rinaldi al Quirinale",
+      "current_city": "Rome"
+    },
+    {
+      "backup_id": "17268",
+      "backup_name": "Q",
+      "backup_city": "Doha",
+      "current_id": "17361",
+      "current_name": "Q",
+      "current_city": "Doha"
+    },
+    {
+      "backup_id": "17602",
+      "backup_name": "Nusr-Et",
+      "backup_city": "Doha",
+      "current_id": "257058",
+      "current_name": "NUSR-ET",
+      "current_city": "Doha"
+    },
+    {
+      "backup_id": "83058",
+      "backup_name": "OTEQUE",
+      "backup_city": "Rio de Janeiro",
+      "current_id": "13327",
+      "current_name": "OTEQUE",
+      "current_city": "Rio de janeiro"
+    },
+    {
+      "backup_id": "77497",
+      "backup_name": "OLH EUM",
+      "backup_city": "Seoul",
+      "current_id": "5929",
+      "current_name": "OLH EUM",
+      "current_city": "Seoul"
+    },
+    {
+      "backup_id": "15113",
+      "backup_name": "Marie",
+      "backup_city": "Amsterdam",
+      "current_id": "90186",
+      "current_name": "MARIE",
+      "current_city": "Amsterdam"
+    },
+    {
+      "backup_id": "17041",
+      "backup_name": "Moma",
+      "backup_city": "Rome",
+      "current_id": "42875",
+      "current_name": "MOMA",
+      "current_city": "Rome"
+    },
+    {
+      "backup_id": "25253",
+      "backup_name": "M",
+      "backup_city": "London",
+      "current_id": "25308",
+      "current_name": "M",
+      "current_city": "London"
+    },
+    {
+      "backup_id": "44272",
+      "backup_name": "ZUMA",
+      "backup_city": "Rome",
+      "current_id": "17073",
+      "current_name": "ZUMA",
+      "current_city": "Rome"
+    },
+    {
+      "backup_id": "18246",
+      "backup_name": "VOCE AIMO E NADIA",
+      "backup_city": "Milan",
+      "current_id": "248739",
+      "current_name": "VOCE AIMO E NADIA",
+      "current_city": "Milan"
+    },
+    {
+      "backup_id": "84974",
+      "backup_name": "ZACH'S CABIN",
+      "backup_city": "Beaver Creek",
+      "current_id": "84962",
+      "current_name": "ZACH'S CABIN",
+      "current_city": "Beaver creek"
+    },
+    {
+      "backup_id": "17104",
+      "backup_name": "Top of the Mark",
+      "backup_city": "San Francisco",
+      "current_id": "29910",
+      "current_name": "TOP OF THE MARK",
+      "current_city": "San francisco"
+    },
+    {
+      "backup_id": "28172",
+      "backup_name": "El Gaucho",
+      "backup_city": "Vienna",
+      "current_id": "28219",
+      "current_name": "EL GAUCHO",
+      "current_city": "Vienna"
+    },
+    {
+      "backup_id": "90180",
+      "backup_name": "THE DUCHESS",
+      "backup_city": "Amsterdam",
+      "current_id": "15123",
+      "current_name": "The Duchess",
+      "current_city": "Amsterdam"
+    }
+  ]
+}
