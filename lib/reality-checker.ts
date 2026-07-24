@@ -310,9 +310,10 @@ export async function batchCheckEmails(
       // Falha de checagem NUNCA some do relatório — vira status explícito 'unknown'.
       if (r.status === 'fulfilled') results.push({ ...r.value, id: batch[idx].id });
       else results.push({
-        email: batch[idx].email, status: 'unknown', has_mx: false,
+        email: batch[idx].email, valid_syntax: false, domain: '', has_mx: null,
+        status: 'unreachable',
         message: `Checagem falhou: ${String(r.reason).slice(0, 120)}`, id: batch[idx].id,
-      } as EmailRealityResult & { id: unknown });
+      });
     });
   }
   return results;

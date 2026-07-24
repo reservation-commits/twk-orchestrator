@@ -291,7 +291,7 @@ export const tools: Anthropic.Tool[] = [
   },
   {
     name: 'fix_data_issue',
-    description: 'Apply a single documented fix to a field value. Automatically logs old value, new value and reason to update_events for full auditability.',
+    description: 'Apply a single documented fix to a field value. Automatically logs old value, new value and reason to agent_audit_log for full auditability.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -441,7 +441,7 @@ export const tools: Anthropic.Tool[] = [
   },
   {
     name: 'apply_auto_fixes',
-    description: 'Aplica correções sugeridas por auto_fix_suggestions. Use min_confidence para filtrar (recomendado: high). Cada fix é logado em update_events.',
+    description: 'Aplica correções sugeridas por auto_fix_suggestions. Use min_confidence para filtrar (recomendado: high). Cada fix é logado em agent_audit_log.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -509,7 +509,7 @@ export const tools: Anthropic.Tool[] = [
   },
   {
     name: 'enrich_missing_emails',
-    description: 'Pipeline AUTÔNOMO de e-mails: encontra restaurantes PUBLICADOS com email_for_reservations vazio (opcionalmente filtra por country/city), descobre o e-mail oficial de cada um via find_restaurant_email em lote, e — se apply=true — GRAVA apenas e-mails de DOMÍNIO OFICIAL e alta confiança (score>=80, rejeita imprensa/genéricos), logando cada escrita em update_events. Com apply=false (padrão) só retorna sugestões para revisão. Use limit pequeno (10-25) e mostre o resumo antes de aplicar.',
+    description: 'Pipeline AUTÔNOMO de e-mails: encontra restaurantes PUBLICADOS com email_for_reservations vazio (opcionalmente filtra por country/city), descobre o e-mail oficial de cada um via find_restaurant_email em lote, e — se apply=true — GRAVA apenas e-mails de DOMÍNIO OFICIAL e alta confiança (score>=80, rejeita imprensa/genéricos), logando cada escrita em agent_audit_log. Com apply=false (padrão) só retorna sugestões para revisão. Use limit pequeno (10-25) e mostre o resumo antes de aplicar.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -581,7 +581,7 @@ export const tools: Anthropic.Tool[] = [
   // ═══════════════════════════════════════════════════════════════════════
   {
     name: 'list_recent_mutations',
-    description: 'Lista os últimos eventos do log de auditoria (update_events): id, tabela, operação, record_id, old_data/new_data. Use para localizar o event_id de uma mutação a reverter.',
+    description: 'Lista os últimos eventos do log de auditoria (agent_audit_log): id, tabela, operação, record_id, old_data/new_data. Use para localizar o event_id de uma mutação a reverter.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -597,7 +597,7 @@ export const tools: Anthropic.Tool[] = [
     input_schema: {
       type: 'object' as const,
       properties: {
-        event_id: { type: 'number', description: 'id do evento em update_events' },
+        event_id: { type: 'number', description: 'id do evento em agent_audit_log' },
         reason: { type: 'string', description: 'Motivo da reversão' },
       },
       required: ['event_id'],
@@ -1168,7 +1168,7 @@ async function executeToolInternal(
       const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
       const rows = (await query(
         `SELECT id, table_name, operation, record_id, old_data, new_data, agent, created_at
-         FROM public.update_events ${where} ORDER BY id DESC LIMIT $${params.length}`, params
+         FROM public.agent_audit_log ${where} ORDER BY id DESC LIMIT $${params.length}`, params
       )).rows;
       return { events: rows, note: 'Use revert_operation com o id para desfazer um UPDATE com old_data.' };
     }
@@ -1176,7 +1176,7 @@ async function executeToolInternal(
     case 'revert_operation': {
       const eventId = input.event_id as number;
       const ev = (await query(
-        `SELECT id, table_name, operation, record_id, old_data FROM public.update_events WHERE id = $1`, [eventId]
+        `SELECT id, table_name, operation, record_id, old_data FROM public.agent_audit_log WHERE id = $1`, [eventId]
       )).rows[0] as { id: number; table_name: string; operation: string; record_id: string | null; old_data: Record<string, unknown> | null } | undefined;
       if (!ev) return { error: `Evento ${eventId} não encontrado no log de auditoria.` };
       if (ev.operation !== 'UPDATE') return { error: `Só UPDATEs são reversíveis automaticamente (evento é ${ev.operation}).` };
@@ -1503,7 +1503,7 @@ Você não valida apenas FORMA — valida REALIDADE. Não basta o e-mail ter @, 
 - Antes de QUALQUER correção em massa, mostre um resumo + peça confirmação
 - Toda correção precisa ter \`reason\` documentado
 - Use \`min_confidence: 'high'\` por padrão ao aplicar auto-fixes
-- Toda mutation é logada em update_events automaticamente
+- Toda mutation é logada em agent_audit_log automaticamente
 - Após correções, rode \`save_quality_snapshot\` para evidenciar a melhoria
 - Antes de fix em massa, salve um snapshot ANTES e DEPOIS
 

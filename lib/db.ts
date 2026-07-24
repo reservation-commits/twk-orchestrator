@@ -249,7 +249,7 @@ export interface UpdateEvent {
 export class AuditLogError extends Error {
   constructor(cause: unknown) {
     super(
-      'Falha ao registrar no log de auditoria (update_events). ' +
+      'Falha ao registrar no log de auditoria (agent_audit_log). ' +
         'Mutação bloqueada: nenhuma escrita acontece sem trilha de auditoria. ' +
         `Causa: ${cause instanceof Error ? cause.message : String(cause)}`
     );
@@ -259,7 +259,7 @@ export class AuditLogError extends Error {
 
 async function insertUpdateEvent(event: UpdateEvent): Promise<void> {
   await query(
-    `INSERT INTO public.update_events
+    `INSERT INTO public.agent_audit_log
        (table_name, operation, record_id, old_data, new_data, agent, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
     [
@@ -284,7 +284,7 @@ export async function logUpdateEvent(event: UpdateEvent): Promise<void> {
   } catch (first) {
     try {
       await query(`
-        CREATE TABLE IF NOT EXISTS public.update_events (
+        CREATE TABLE IF NOT EXISTS public.agent_audit_log (
           id          SERIAL PRIMARY KEY,
           table_name  TEXT NOT NULL,
           operation   TEXT NOT NULL,
@@ -297,7 +297,7 @@ export async function logUpdateEvent(event: UpdateEvent): Promise<void> {
       `);
       await insertUpdateEvent(event);
     } catch {
-      console.error('[audit] Falha definitiva ao gravar update_events', first);
+      console.error('[audit] Falha definitiva ao gravar agent_audit_log', first);
       throw new AuditLogError(first);
     }
   }

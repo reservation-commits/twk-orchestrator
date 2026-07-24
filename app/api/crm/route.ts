@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
         } catch { /* reservations optional */ }
 
         let recentActivity = 0;
-        try { recentActivity = Number((await query(`SELECT COUNT(*)::int AS n FROM public.update_events WHERE created_at > now() - interval '7 days'`)).rows[0].n); } catch {}
+        try { recentActivity = Number((await query(`SELECT COUNT(*)::int AS n FROM public.agent_audit_log WHERE created_at > now() - interval '7 days'`)).rows[0].n); } catch {}
 
         return NextResponse.json({ kpis: k, status, price, topCountries, reservations: resv, recentActivity });
       }

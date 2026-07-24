@@ -236,7 +236,7 @@ export async function POST(req: NextRequest) {
         );
 
         await query(
-          `INSERT INTO public.update_events (table_name, operation, record_id, old_data, new_data, agent, created_at)
+          `INSERT INTO public.agent_audit_log (table_name, operation, record_id, old_data, new_data, agent, created_at)
            VALUES ($1, 'UPDATE', $2, $3, $4, 'data-quality-engine', NOW())`,
           [table, String(id_value),
            JSON.stringify({ [column]: old_value }),
@@ -269,7 +269,7 @@ export async function POST(req: NextRequest) {
               [fix.new_value, fix.id_value]
             );
             await query(
-              `INSERT INTO public.update_events (table_name, operation, record_id, new_data, agent, created_at)
+              `INSERT INTO public.agent_audit_log (table_name, operation, record_id, new_data, agent, created_at)
                VALUES ($1, 'UPDATE', $2, $3, 'data-quality-engine', NOW())`,
               [fix.table, String(fix.id_value),
                JSON.stringify({ [fix.column]: fix.new_value, reason: fix.reason })]
@@ -554,7 +554,7 @@ export async function POST(req: NextRequest) {
               [fix.new_value, fix.row_id]
             );
             await query(
-              `INSERT INTO public.update_events (table_name, operation, record_id, new_data, agent, created_at)
+              `INSERT INTO public.agent_audit_log (table_name, operation, record_id, new_data, agent, created_at)
                VALUES ($1, 'UPDATE', $2, $3, 'auto-fixer', NOW())`,
               [fix.table, String(fix.row_id),
                JSON.stringify({ [fix.column]: fix.new_value, reason: fix.reason, rule: fix.rule })]
@@ -665,7 +665,7 @@ export async function POST(req: NextRequest) {
                   [f.best.email, f.id]
                 );
                 await query(
-                  `INSERT INTO public.update_events (table_name, operation, record_id, new_data, agent, created_at)
+                  `INSERT INTO public.agent_audit_log (table_name, operation, record_id, new_data, agent, created_at)
                    VALUES ($1, 'UPDATE', $2, $3, 'email-finder', NOW())`,
                   ['public.db_restaurants', String(f.id),
                    JSON.stringify({

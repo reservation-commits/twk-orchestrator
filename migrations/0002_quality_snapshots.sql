@@ -1,5 +1,5 @@
 -- Snapshots de qualidade/saúde (antes criados on-the-fly por lib/monitoring.ts).
--- Passa a ser schema versionado; o runtime mantém o CREATE IF NOT EXISTS como fallback.
+-- Shape espelha a tabela REAL já existente em produção (captured_at + metadata).
 
 CREATE TABLE IF NOT EXISTS public.quality_snapshots (
   id               SERIAL PRIMARY KEY,
@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS public.quality_snapshots (
   info_count       INTEGER,
   duplicates       INTEGER,
   avg_completeness INTEGER,
-  created_at       TIMESTAMPTZ DEFAULT NOW()
+  metadata         JSONB,
+  captured_at      TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_quality_snapshots_table_time
-  ON public.quality_snapshots (table_name, created_at DESC);
+  ON public.quality_snapshots (table_name, captured_at DESC);

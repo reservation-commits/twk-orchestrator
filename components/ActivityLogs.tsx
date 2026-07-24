@@ -41,7 +41,7 @@ export default function ActivityLogs() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'query',
-          sql: `SELECT * FROM public.update_events ORDER BY created_at DESC LIMIT 50 OFFSET ${(page - 1) * 50}`,
+          sql: `SELECT * FROM public.agent_audit_log ORDER BY created_at DESC LIMIT 50 OFFSET ${(page - 1) * 50}`,
         }),
       });
       const data = await res.json();
@@ -51,7 +51,7 @@ export default function ActivityLogs() {
       const countRes = await fetch('/api/db', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'query', sql: 'SELECT COUNT(*) as n FROM public.update_events' }),
+        body: JSON.stringify({ action: 'query', sql: 'SELECT COUNT(*) as n FROM public.agent_audit_log' }),
       });
       const countData = await countRes.json();
       setTotal(parseInt(countData.rows?.[0]?.n ?? '0', 10));
@@ -82,7 +82,7 @@ export default function ActivityLogs() {
           <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
             <Activity className="w-12 h-12 text-white/10" />
             <p className="text-white/30 text-sm">Nenhum evento registrado ainda.</p>
-            <p className="text-white/20 text-xs">A tabela public.update_events precisa existir no banco.</p>
+            <p className="text-white/20 text-xs">A tabela public.agent_audit_log precisa existir no banco.</p>
           </div>
         ) : (
           <div className="divide-y divide-white/[0.03]">
