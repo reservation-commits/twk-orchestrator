@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { captureSnapshot } from '@/lib/observability';
+import { timingSafeEqualStr } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 // Scheduled health snapshot. Point an external cron (EasyPanel/cron-job.org) at this daily.
-// Locked with CRON_SECRET when set (header `Authorization: Bearer <secret>` or `?secret=`);
-// if the env var is unset it stays open (aggregate score only — no sensitive data).
+// FAIL-CLOSED: sem CRON_SECRET configurado a rota recusa tudo. Somente header
+// `Authorization: Bearer <secret>` — nunca query string (vaza em logs de acesso).
 function authorized(req: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
-  if (!secret) return true;
+  if (!secret) return false;
   const auth = req.headers.get('authorization') ?? '';
-  return auth === `Bearer ${secret}` || req.nextUrl.searchParams.get('secret') === secret;
+  return timingSafeEqualStr(auth, `Bearer ${secret}`);
 }
 
 async function run(req: NextRequest) {

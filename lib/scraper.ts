@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import { assertPublicUrl } from './net-guard';
 
 export interface SearchResult {
   title: string;
@@ -49,6 +50,7 @@ export async function webSearch(query: string, count = 5): Promise<SearchResult[
 }
 
 export async function fetchUrl(url: string): Promise<{ text: string; html: string }> {
+  await assertPublicUrl(url);
   const { data } = await axios.get(url, {
     headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TWK-Bot/1.0)' },
     timeout: 15000,

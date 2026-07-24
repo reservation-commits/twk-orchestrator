@@ -12,6 +12,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { webSearch } from './scraper';
 import { getPlaceDetails } from './places';
+import { isPublicUrl } from './net-guard';
 
 // ── Regex e helpers ──────────────────────────────────────────────────────────
 
@@ -124,6 +125,7 @@ export interface EmailFinderResult {
 
 async function fetchPage(url: string, timeoutMs = 8000): Promise<string | null> {
   try {
+    if (!(await isPublicUrl(url))) return null;
     const { data, status } = await axios.get(url, {
       headers: FETCH_HEADERS,
       timeout: timeoutMs,

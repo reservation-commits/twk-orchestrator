@@ -16,6 +16,7 @@ import { getPlaceDetails, getPlacePhotoUrls } from './places';
 import { webSearch, findSocialMedia } from './scraper';
 import { imageSize, dedupKey, resolutionVariants } from './image-utils';
 import { pickCoverIndex } from './photo-select';
+import { isPublicUrl } from './net-guard';
 
 export { imageSize, resolutionVariants };
 
@@ -71,6 +72,7 @@ export interface FetchedImage { buffer: Buffer; media_type: string; w: number; h
 
 export async function fetchImage(url: string, minW = GALLERY_MIN_W): Promise<FetchedImage | null> {
   try {
+    if (!(await isPublicUrl(url))) return null;
     const r = await axios.get(url, { headers: UA, timeout: 12000, maxRedirects: 4, responseType: 'arraybuffer', validateStatus: () => true, maxContentLength: MAX_FETCH_BYTES });
     if (r.status < 200 || r.status >= 300) return null;
     let ct = String(r.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
@@ -96,7 +98,11 @@ export async function fetchBest(url: string, minW = SOFT_MIN_W): Promise<{ img: 
 }
 
 async function fetchHtml(u: string): Promise<string | null> {
-  try { const { data, status } = await axios.get(u, { headers: UA, timeout: 10000, maxRedirects: 5, validateStatus: () => true }); return status >= 200 && status < 400 && typeof data === 'string' ? data : null; } catch { return null; }
+  try {
+    if (!(await isPublicUrl(u))) return null;
+    const { data, status } = await axios.get(u, { headers: UA, timeout: 10000, maxRedirects: 5, validateStatus: () => true });
+    return status >= 200 && status < 400 && typeof data === 'string' ? data : null;
+  } catch { return null; }
 }
 
 function extractImageUrls(html: string, baseUrl: string, limit = 14): string[] {
