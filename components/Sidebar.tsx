@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import {
   Database, Terminal, MessageSquare, Activity,
   Zap, ChevronRight, ShieldCheck, Command, LayoutGrid, Camera, Search,
+  Network, UtensilsCrossed, Sparkles,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -27,6 +28,9 @@ const navSections = [
     title: 'Dados',
     items: [
       { id: 'photos', label: 'Fotos', icon: Camera, badge: 'NEW' as const },
+      { id: 'schema', label: 'Schema', icon: Network },
+      { id: 'builder', label: 'Restaurant Builder', icon: UtensilsCrossed, badge: 'NEW' as const },
+      { id: 'enricher', label: 'Data Enricher', icon: Sparkles },
       { id: 'query', label: 'SQL Console', icon: Terminal },
       { id: 'tables', label: 'Tabelas', icon: Database },
       { id: 'logs', label: 'Activity Logs', icon: Activity },

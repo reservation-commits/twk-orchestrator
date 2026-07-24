@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldCheck, AlertTriangle, AlertCircle, Info, RefreshCw,
   CheckCircle2, XCircle, Copy, ArrowRight, Loader2, BarChart3,
-  Users, Link2, Phone, Mail, MapPin, Star, Search,
+  Users, Link2, Phone, Mail, MapPin, Star, Search, Sparkles,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -115,9 +115,25 @@ export default function DataAuditor() {
   const [realityLoading, setRealityLoading] = useState<string | null>(null);
   const [trend, setTrend]                   = useState<{ delta_score: number; trend: string; alert?: string; current?: { quality_score: number; captured_at?: string } } | null>(null);
 
+  const [pkColumn, setPkColumn] = useState<string | null>(null);
+
   useEffect(() => {
     fetch('/api/db?action=tables').then((r) => r.json()).then((d) => setTables(d.tables ?? []));
   }, []);
+
+  // Fetch the real primary key of the selected table once per table change.
+  useEffect(() => {
+    let cancelled = false;
+    setPkColumn(null);
+    fetch(`/api/db?action=pk&table=${encodeURIComponent(selectedTable)}`)
+      .then((r) => r.json())
+      .then((d) => { if (!cancelled) setPkColumn(d.pk ?? null); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [selectedTable]);
+
+  // Fallback: db_restaurants uses restaurant_id, everything else defaults to id.
+  const idColumn = pkColumn ?? (selectedTable.includes('restaurants') ? 'restaurant_id' : 'id');
 
   const post = useCallback(async (action: string, extra: object = {}) => {
     const r = await fetch('/api/audit', {
@@ -155,7 +171,7 @@ export default function DataAuditor() {
     setFixingId(issue.row_id);
     try {
       await post('apply_fix', {
-        id_column: 'id', id_value: issue.row_id,
+        id_column: idColumn, id_value: issue.row_id,
         column: issue.column, new_value: issue.suggested,
         reason: `Auto-fix: ${issue.rule} — ${issue.message}`,
       });
@@ -196,20 +212,33 @@ export default function DataAuditor() {
     finally { setRealityLoading(null); }
   };
 
-  const applyHighConfidence = async () => {
-    if (!autoFix?.suggestions.length) return;
-    const highOnly = autoFix.suggestions.filter((s) => s.confidence === 'high');
-    if (!confirm(`Aplicar ${highOnly.length} correções de alta confiança?`)) return;
+  const doApplyHighConfidence = async (highOnly: AutoFixResults['suggestions']) => {
     setRealityLoading('applying');
     try {
       const data = await post('apply_auto_fixes', {
-        suggestions: highOnly.map((s) => ({ ...s, table: selectedTable, id_column: selectedTable.includes('restaurants') ? 'restaurant_id' : 'id' })),
+        suggestions: highOnly.map((s) => ({ ...s, table: selectedTable, id_column: idColumn })),
         min_confidence: 'high',
       });
       toast.success(`${data.applied} correções aplicadas`);
       setAutoFix(null);
     } catch (err) { toast.error(String(err)); }
     finally { setRealityLoading(null); }
+  };
+
+  const applyHighConfidence = () => {
+    if (!autoFix?.suggestions.length) return;
+    const highOnly = autoFix.suggestions.filter((s) => s.confidence === 'high');
+    toast((t) => (
+      <div>
+        <p className="text-sm mb-2">Aplicar {highOnly.length} correções de alta confiança?</p>
+        <div className="flex gap-2">
+          <button onClick={() => { toast.dismiss(t.id); doApplyHighConfidence(highOnly); }}
+            className="px-3 py-1 bg-emerald-600 rounded text-xs text-white">Aplicar</button>
+          <button onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1 bg-gray-600 rounded text-xs text-white">Cancelar</button>
+        </div>
+      </div>
+    ), { duration: 10000 });
   };
 
   const loadTrend = async () => {
@@ -707,8 +736,8 @@ export default function DataAuditor() {
                   }} className="px-4 py-2 bg-gold/15 hover:bg-gold/25 border border-gold/20 rounded-xl text-gold text-sm flex items-center gap-2">
                     <BarChart3 className="w-4 h-4" /> Salvar snapshot agora
                   </button>
-                  <button onClick={loadTrend}
-                    className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/70 text-sm">
+                  <button onClick={loadTrend} aria-label="Recarregar tendências"
+                    className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/70 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40">
                     <RefreshCw className="w-4 h-4" />
                   </button>
                 </div>

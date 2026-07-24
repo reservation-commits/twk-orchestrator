@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
 import Sidebar from '@/components/Sidebar';
 import CommandPalette from '@/components/command-center/CommandPalette';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CommandCenter = dynamic(() => import('@/components/CommandCenter'), { ssr: false, loading: () => <Loader /> });
@@ -16,6 +17,9 @@ const AgentChat     = dynamic(() => import('@/components/AgentChat'),     { ssr:
 const ActivityLogs  = dynamic(() => import('@/components/ActivityLogs'),  { ssr: false, loading: () => <Loader /> });
 const SeoDashboard  = dynamic(() => import('@/components/SeoDashboard'),  { ssr: false, loading: () => <Loader /> });
 const PhotoStudio   = dynamic(() => import('@/components/PhotoStudio'),   { ssr: false, loading: () => <Loader /> });
+const SchemaExplorer    = dynamic(() => import('@/components/SchemaExplorer'),    { ssr: false, loading: () => <Loader /> });
+const RestaurantBuilder = dynamic(() => import('@/components/RestaurantBuilder'), { ssr: false, loading: () => <Loader /> });
+const DataEnricher      = dynamic(() => import('@/components/DataEnricher'),      { ssr: false, loading: () => <Loader /> });
 
 function Loader() {
   return (
@@ -35,21 +39,56 @@ const MODULE_TITLES: Record<string, string> = {
   logs:   'Activity Logs',
   photos: 'Photo Studio',
   seo:    'SEO & Busca Orgânica',
+  schema:   'Schema Explorer',
+  builder:  'Restaurant Builder',
+  enricher: 'Data Enricher',
 };
 
 // Linear-style "g then key" shortcuts
-const GOTO: Record<string, string> = { c: 'command', r: 'crm', a: 'agent', q: 'audit', s: 'query', t: 'tables', l: 'logs', p: 'photos', o: 'seo' };
+const GOTO: Record<string, string> = { c: 'command', r: 'crm', a: 'agent', q: 'audit', s: 'query', t: 'tables', l: 'logs', p: 'photos', o: 'seo', m: 'schema', b: 'builder', e: 'enricher' };
 
 export default function Home() {
-  const [activeModule, setActiveModule] = useState('command');
+  const [activeModule, setActiveModuleState] = useState('command');
   const [askPrompt, setAskPrompt] = useState<string | null>(null);
   const [agentKey, setAgentKey] = useState(0);
+
+  // Navigation with URL sync (?m=<module>)
+  const setActiveModule = useCallback((id: string) => {
+    setActiveModuleState(id);
+    window.history.pushState(null, '', '?m=' + id);
+  }, []);
+
+  // On mount: restore module from URL; on back/forward: follow history
+  useEffect(() => {
+    const readModule = () => {
+      const m = new URLSearchParams(window.location.search).get('m');
+      setActiveModuleState(m && MODULE_TITLES[m] ? m : 'command');
+    };
+    const initial = new URLSearchParams(window.location.search).get('m');
+    if (initial && MODULE_TITLES[initial]) setActiveModuleState(initial);
+    window.addEventListener('popstate', readModule);
+    return () => window.removeEventListener('popstate', readModule);
+  }, []);
 
   const ask = useCallback((text: string) => {
     setAskPrompt(text);
     setAgentKey((k) => k + 1);
     setActiveModule('agent');
-  }, []);
+  }, [setActiveModule]);
+
+  // Ações rápidas do ⌘K → viram missões do agente (que tem as tools exatas).
+  const runAction = useCallback((action: string) => {
+    const MISSIONS: Record<string, string> = {
+      audit_table: 'Execute uma auditoria completa de qualidade da tabela db_restaurants (audit_table + consistency_check) e resuma os problemas por severidade.',
+      check_emails: 'Valide a realidade dos e-mails de reserva dos restaurantes publicados (check_emails_reality via DNS MX) e liste os inválidos.',
+      check_phones: 'Verifique e normalize os telefones dos restaurantes publicados para E.164 (check_phone_reality) e proponha correções.',
+      check_urls: 'Verifique quais site_url dos restaurantes publicados estão fora do ar ou parqueados (check_url_reality) e liste os problemáticos.',
+      check_places: 'Compare os restaurantes publicados com o Google Places (check_places_freshness) e aponte fechados permanentemente ou dados desatualizados.',
+      semantic_analysis: 'Rode análise semântica (semantic_analysis) na db_restaurants e reporte incoerências entre cozinha, descrição e localização.',
+      auto_fix: 'Gere sugestões de auto-fix (auto_fix_suggestions) para db_restaurants, mostre o resumo por confiança e aguarde minha confirmação antes de aplicar.',
+    };
+    ask(MISSIONS[action] ?? action);
+  }, [ask]);
 
   // Global keyboard shortcuts: "g" then a destination key (skips when typing in a field).
   useEffect(() => {
@@ -115,6 +154,7 @@ export default function Home() {
               transition={{ duration: 0.15 }}
               className="h-full"
             >
+              <ErrorBoundary label={MODULE_TITLES[activeModule]}>
               {activeModule === 'command'&& <CommandCenter onNavigate={setActiveModule} />}
               {activeModule === 'crm'    && <CRM />}
               {activeModule === 'tables' && <TableViewer />}
@@ -124,13 +164,17 @@ export default function Home() {
               {activeModule === 'logs'   && <ActivityLogs />}
               {activeModule === 'photos' && <PhotoStudio />}
               {activeModule === 'seo'    && <SeoDashboard onNavigate={setActiveModule} />}
+              {activeModule === 'schema'   && <SchemaExplorer />}
+              {activeModule === 'builder'  && <RestaurantBuilder />}
+              {activeModule === 'enricher' && <DataEnricher />}
+              </ErrorBoundary>
             </motion.div>
           </AnimatePresence>
         </div>
       </main>
 
       {/* Global ⌘K command palette — available on every module */}
-      <CommandPalette onNavigate={setActiveModule} onAsk={ask} />
+      <CommandPalette onNavigate={setActiveModule} onAsk={ask} onRunAction={runAction} />
 
       <Toaster
         position="bottom-right"

@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
       }
       case 'fetch': {
         const { url } = FetchSchema.parse(body);
+        // Anti-SSRF: lib/scraper.fetchUrl chama assertPublicUrl(url) antes de qualquer request
+        // (verificado — bloqueia localhost, IPs privados, metadata e schemes não-http).
         const data = await fetchUrl(url);
         return NextResponse.json(data);
       }

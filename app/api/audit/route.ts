@@ -8,12 +8,31 @@ import { batchSemanticAnalysis } from '@/lib/semantic-checker';
 import { generateAutoFixSuggestions } from '@/lib/auto-fixer';
 import { saveSnapshot, getSnapshotHistory, analyzeTrend } from '@/lib/monitoring';
 import { findRestaurantEmail, batchFindEmails } from '@/lib/email-finder';
+import { safeIdent, safeColumn } from '@/lib/sql-guard';
 
 const BATCH = 2000; // max rows to load for audit
 
 async function loadRows(table: string, limit = BATCH): Promise<Record<string, unknown>[]> {
-  const result = await query(`SELECT * FROM ${table} LIMIT $1`, [limit]);
+  const result = await query(`SELECT * FROM ${safeIdent(table)} LIMIT $1`, [limit]);
   return result.rows;
+}
+
+// Primeira coluna da PK via information_schema (parameterizado); fallback heurístico.
+async function resolvePk(table: string): Promise<string> {
+  try {
+    const [schema, name] = table.includes('.') ? table.split('.') : ['public', table];
+    const r = await query<{ column_name: string }>(
+      `SELECT kcu.column_name
+       FROM information_schema.table_constraints tc
+       JOIN information_schema.key_column_usage kcu
+         ON kcu.constraint_name = tc.constraint_name AND kcu.table_schema = tc.table_schema
+       WHERE tc.constraint_type = 'PRIMARY KEY' AND tc.table_schema = $1 AND tc.table_name = $2
+       ORDER BY kcu.ordinal_position LIMIT 1`,
+      [schema, name]
+    );
+    if (r.rows[0]?.column_name) return r.rows[0].column_name;
+  } catch { /* cai no fallback */ }
+  return table.includes('db_restaurants') ? 'restaurant_id' : 'id';
 }
 
 export async function POST(req: NextRequest) {
@@ -154,7 +173,7 @@ export async function POST(req: NextRequest) {
         const results = checks.map((c, i) => ({
           check:    labels[i],
           severity: severities[i],
-          count:    c.status === 'fulfilled' ? parseInt(c.value.rows[0]?.n ?? '0', 10) : -1,
+          count:    c.status === 'fulfilled' ? parseInt(String(c.value.rows[0]?.n ?? '0'), 10) : -1,
           error:    c.status === 'rejected' ? String(c.reason) : null,
         }));
 
@@ -175,7 +194,8 @@ export async function POST(req: NextRequest) {
           ? Math.round(scored.reduce((a, b) => a + b, 0) / scored.length)
           : 0;
 
-        const report = auditRows(rows.slice(0, 500), table, 'id');
+        const pk = await resolvePk(table);
+        const report = auditRows(rows.slice(0, 500), table, pk);
 
         return NextResponse.json({
           table,
@@ -193,20 +213,25 @@ export async function POST(req: NextRequest) {
       case 'apply_fix': {
         const { table, id_column, id_value, column, new_value, reason } = z.object({
           table:      z.string(),
-          id_column:  z.string().default('id'),
+          id_column:  z.string().optional(),
           id_value:   z.unknown(),
           column:     z.string(),
           new_value:  z.unknown(),
           reason:     z.string(),
         }).parse(body);
 
+        const pkCol = id_column ?? await resolvePk(table);
+        const tbl = safeIdent(table);
+        const col = safeColumn(column);
+        const idCol = safeColumn(pkCol);
+
         const before = await query(
-          `SELECT ${column} FROM ${table} WHERE ${id_column} = $1`, [id_value]
+          `SELECT ${col} FROM ${tbl} WHERE ${idCol} = $1`, [id_value]
         );
         const old_value = before.rows[0]?.[column];
 
         await query(
-          `UPDATE ${table} SET ${column} = $1 WHERE ${id_column} = $2`,
+          `UPDATE ${tbl} SET ${col} = $1 WHERE ${idCol} = $2`,
           [new_value, id_value]
         );
 
@@ -240,7 +265,7 @@ export async function POST(req: NextRequest) {
         for (const fix of fixes) {
           try {
             await query(
-              `UPDATE ${fix.table} SET ${fix.column} = $1 WHERE ${fix.id_column} = $2`,
+              `UPDATE ${safeIdent(fix.table)} SET ${safeColumn(fix.column)} = $1 WHERE ${safeColumn(fix.id_column)} = $2`,
               [fix.new_value, fix.id_value]
             );
             await query(
@@ -271,9 +296,12 @@ export async function POST(req: NextRequest) {
           id_column: z.string().default('restaurant_id'),
           limit: z.number().default(100),
         }).parse(body);
+        const tbl = safeIdent(table);
+        const emailCol = safeColumn(email_column);
+        const idCol = safeColumn(id_column);
         const rows = await query(
-          `SELECT ${id_column}, ${email_column} FROM ${table}
-           WHERE ${email_column} IS NOT NULL AND ${email_column} != '' LIMIT $1`, [limit]);
+          `SELECT ${idCol}, ${emailCol} FROM ${tbl}
+           WHERE ${emailCol} IS NOT NULL AND ${emailCol} != '' LIMIT $1`, [limit]);
         const emails = rows.rows.map((r) => ({ id: r[id_column], email: String(r[email_column]) }));
         const results = await batchCheckEmails(emails, 8);
         const invalid = results.filter((r) => r.status !== 'valid');
@@ -293,9 +321,12 @@ export async function POST(req: NextRequest) {
           id_column: z.string().default('restaurant_id'),
           limit: z.number().default(50),
         }).parse(body);
+        const tbl = safeIdent(table);
+        const urlCol = safeColumn(url_column);
+        const idCol = safeColumn(id_column);
         const rows = await query(
-          `SELECT ${id_column}, ${url_column} FROM ${table}
-           WHERE ${url_column} IS NOT NULL AND ${url_column} != '' LIMIT $1`, [limit]);
+          `SELECT ${idCol}, ${urlCol} FROM ${tbl}
+           WHERE ${urlCol} IS NOT NULL AND ${urlCol} != '' LIMIT $1`, [limit]);
         const urls = rows.rows.map((r) => ({ id: r[id_column], url: String(r[url_column]) }));
         const results = await batchCheckUrls(urls, 5);
         const broken = results.filter((r) => !r.reachable);
@@ -317,9 +348,12 @@ export async function POST(req: NextRequest) {
           country: z.string().default('BR'),
           limit: z.number().default(500),
         }).parse(body);
+        const tbl = safeIdent(table);
+        const phoneCol = safeColumn(phone_column);
+        const idCol = safeColumn(id_column);
         const rows = await query(
-          `SELECT ${id_column}, ${phone_column} FROM ${table}
-           WHERE ${phone_column} IS NOT NULL AND ${phone_column} != '' LIMIT $1`, [limit]);
+          `SELECT ${idCol}, ${phoneCol} FROM ${tbl}
+           WHERE ${phoneCol} IS NOT NULL AND ${phoneCol} != '' LIMIT $1`, [limit]);
         const results = rows.rows.map((r) => ({
           id: r[id_column],
           ...checkPhoneReality(String(r[phone_column]), country as 'BR'),
@@ -340,9 +374,11 @@ export async function POST(req: NextRequest) {
           place_id_column: z.string().default('place_id'),
           limit: z.number().default(20),
         }).parse(body);
+        const tbl = safeIdent(table);
+        const placeIdCol = safeColumn(place_id_column);
         const rows = await query(
-          `SELECT restaurant_id, name, address_of_establishment, telephone_of_the_establishment, site_url, ${place_id_column}
-           FROM ${table} WHERE ${place_id_column} IS NOT NULL AND ${place_id_column} != '' LIMIT $1`, [limit]);
+          `SELECT restaurant_id, name, address_of_establishment, telephone_of_the_establishment, site_url, ${placeIdCol}
+           FROM ${tbl} WHERE ${placeIdCol} IS NOT NULL AND ${placeIdCol} != '' LIMIT $1`, [limit]);
         const results = [];
         for (const r of rows.rows) {
           const diff = await checkPlacesFreshness(String(r[place_id_column]), {
@@ -369,7 +405,7 @@ export async function POST(req: NextRequest) {
           limit: z.number().default(50),
         }).parse(body);
         const rows = await query(
-          `SELECT restaurant_id, latitude, longitude, city FROM ${table}
+          `SELECT restaurant_id, latitude, longitude, city FROM ${safeIdent(table)}
            WHERE latitude IS NOT NULL AND longitude IS NOT NULL
              AND latitude::numeric != 0 LIMIT $1`, [limit]);
         const results = [];
@@ -394,7 +430,7 @@ export async function POST(req: NextRequest) {
           table: z.string(),
           limit: z.number().default(2000),
         }).parse(body);
-        const rows = (await query(`SELECT * FROM ${table} LIMIT $1`, [limit])).rows;
+        const rows = (await query(`SELECT * FROM ${safeIdent(table)} LIMIT $1`, [limit])).rows;
         const idCol = rows[0] && 'restaurant_id' in rows[0] ? 'restaurant_id' : 'id';
 
         const numericOut = [
@@ -444,7 +480,7 @@ export async function POST(req: NextRequest) {
           limit: z.number().default(30),
           focus: z.array(z.string()).optional(),
         }).parse(body);
-        const rows = (await query(`SELECT * FROM ${table} LIMIT $1`, [limit])).rows;
+        const rows = (await query(`SELECT * FROM ${safeIdent(table)} LIMIT $1`, [limit])).rows;
         const result = await batchSemanticAnalysis(rows, {
           tableName: table, batchSize: 10, concurrency: 3, focus,
         });
@@ -466,7 +502,7 @@ export async function POST(req: NextRequest) {
           fixSlugs: z.boolean().optional(),
           fixWhitespace: z.boolean().optional(),
         }).parse(body);
-        const rows = (await query(`SELECT * FROM ${table} LIMIT $1`, [limit])).rows;
+        const rows = (await query(`SELECT * FROM ${safeIdent(table)} LIMIT $1`, [limit])).rows;
         const idCol = rows[0] && 'restaurant_id' in rows[0] ? 'restaurant_id' : 'id';
         const suggestions = generateAutoFixSuggestions(rows, {
           table, idCol, countryCode: country as 'BR', ...flags,
@@ -493,7 +529,7 @@ export async function POST(req: NextRequest) {
             rule: z.string(),
             confidence: z.enum(['high','medium','low']),
             table: z.string().default('public.db_restaurants'),
-            id_column: z.string().default('restaurant_id'),
+            id_column: z.string().optional(),
           })),
           min_confidence: z.enum(['high','medium','low']).default('high'),
         }).parse(body);
@@ -501,11 +537,20 @@ export async function POST(req: NextRequest) {
         const order = { high: 3, medium: 2, low: 1 };
         const eligible = suggestions.filter((s) => order[s.confidence] >= order[min_confidence]);
 
+        // Cache de PK por tabela para não repetir a consulta por sugestão.
+        const pkCache = new Map<string, string>();
+        const pkFor = async (table: string): Promise<string> => {
+          let pk = pkCache.get(table);
+          if (!pk) { pk = await resolvePk(table); pkCache.set(table, pk); }
+          return pk;
+        };
+
         let applied = 0; const errors: string[] = [];
         for (const fix of eligible) {
           try {
+            const idColumn = fix.id_column ?? await pkFor(fix.table);
             await query(
-              `UPDATE ${fix.table} SET ${fix.column} = $1 WHERE ${fix.id_column} = $2`,
+              `UPDATE ${safeIdent(fix.table)} SET ${safeColumn(fix.column)} = $1 WHERE ${safeColumn(idColumn)} = $2`,
               [fix.new_value, fix.row_id]
             );
             await query(
@@ -526,7 +571,7 @@ export async function POST(req: NextRequest) {
 
       case 'save_snapshot': {
         const { table } = z.object({ table: z.string() }).parse(body);
-        const rows = (await query(`SELECT * FROM ${table} LIMIT 2000`)).rows;
+        const rows = (await query(`SELECT * FROM ${safeIdent(table)} LIMIT 2000`)).rows;
         const idCol = rows[0] && 'restaurant_id' in rows[0] ? 'restaurant_id' : 'id';
         const report = auditRows(rows, table, idCol);
         const scored = rows.map((r) => scoreRowCompleteness(r));
@@ -612,7 +657,8 @@ export async function POST(req: NextRequest) {
         let applied = 0;
         if (apply) {
           for (const f of found) {
-            if (f.best && f.best.score > 30) {
+            // Mesmo gate do agente: só aplica automaticamente com score alto E domínio batendo.
+            if (f.best && f.best.score >= 80 && f.best.domain_match) {
               try {
                 await query(
                   `UPDATE public.db_restaurants SET email_for_reservations = $1 WHERE restaurant_id = $2`,
@@ -650,6 +696,10 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: 'Validation error', details: err.issues }, { status: 400 });
+    }
+    // Identificadores rejeitados pelo sql-guard são erro do cliente, não do servidor.
+    if (err instanceof Error && /^(Identificador|Nome de coluna)/.test(err.message)) {
+      return NextResponse.json({ error: err.message }, { status: 400 });
     }
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }

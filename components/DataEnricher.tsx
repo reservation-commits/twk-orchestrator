@@ -37,7 +37,26 @@ export default function DataEnricher() {
       .then((d) => setSchema(d.schema ?? []));
   }, [selectedTable]);
 
+  // Only allow identifiers that came from the /api/db schema responses — never
+  // interpolate arbitrary client state into SQL.
+  const isValidTable = (t: string) =>
+    tables.some((x) => `${x.table_schema}.${x.table_name}` === t);
+  const isValidColumn = (c: string) => schema.some((x) => x.column_name === c);
+
+  const validateSelection = (): boolean => {
+    if (!isValidTable(selectedTable)) {
+      toast.error('Tabela inválida — selecione uma tabela da lista');
+      return false;
+    }
+    if (!isValidColumn(selectedColumn)) {
+      toast.error('Coluna inválida — selecione uma coluna da lista');
+      return false;
+    }
+    return true;
+  };
+
   const loadPreview = async () => {
+    if (!validateSelection()) return;
     setLoading(true);
     try {
       const res = await fetch('/api/db', {
@@ -68,6 +87,7 @@ export default function DataEnricher() {
 
   const runEnrichment = async () => {
     if (!preview.length) { toast.error('Carregue uma prévia primeiro'); return; }
+    if (!validateSelection()) return;
     setLoading(true);
     setJobs([]);
     setEnriched(0);
@@ -91,6 +111,7 @@ export default function DataEnricher() {
     }));
     setJobs(initialJobs);
 
+    let doneCount = 0;
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       setJobs((prev) => prev.map((j, idx) => idx === i ? { ...j, status: 'running' } : j));
@@ -135,17 +156,27 @@ export default function DataEnricher() {
           const reader = agentRes.body!.getReader();
           const decoder = new TextDecoder();
           let text = '';
+          let buf = '';
+          const consumeEvent = (event: string) => {
+            for (const line of event.split('\n')) {
+              if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                try {
+                  const payload = JSON.parse(line.slice(6));
+                  if (payload.text) text += payload.text;
+                } catch { /* partial/malformed event — ignore */ }
+              }
+            }
+          };
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-            const lines = decoder.decode(value).split('\n');
-            for (const line of lines) {
-              if (line.startsWith('data: ') && !line.includes('[DONE]')) {
-                const payload = JSON.parse(line.slice(6));
-                if (payload.text) text += payload.text;
-              }
-            }
+            buf += decoder.decode(value, { stream: true });
+            const events = buf.split('\n\n');
+            buf = events.pop() ?? ''; // keep trailing partial event
+            events.forEach(consumeEvent);
           }
+          buf += decoder.decode(); // flush decoder
+          if (buf.trim()) consumeEvent(buf);
           newValue = text.trim();
         } else if (source === 'web') {
           const searchRes = await fetch('/api/scrape', {
@@ -165,7 +196,8 @@ export default function DataEnricher() {
             body: JSON.stringify({ action: 'update_cell', table: selectedTable, id_column: idCol, id_value: row[idCol], column: selectedColumn, value: newValue }),
           });
           setJobs((prev) => prev.map((j, idx) => idx === i ? { ...j, status: 'done', after: newValue!.slice(0, 60) } : j));
-          setEnriched((e) => e + 1);
+          doneCount += 1;
+          setEnriched(doneCount);
         } else {
           setJobs((prev) => prev.map((j, idx) => idx === i ? { ...j, status: 'error', error: 'No value generated' } : j));
         }
@@ -177,7 +209,7 @@ export default function DataEnricher() {
     }
 
     setLoading(false);
-    toast.success(`Enriquecimento concluído: ${enriched} registros atualizados`);
+    toast.success(`Enriquecimento concluído: ${doneCount} registros atualizados`);
   };
 
   return (

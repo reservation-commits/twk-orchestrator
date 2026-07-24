@@ -1,5 +1,8 @@
-import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
-import { analyzeWriteSql, safeIdent, WriteOperation } from './sql-guard';
+import { Pool } from 'pg';
+import type { PoolClient, QueryResult, QueryResultRow } from 'pg';
+// Extensão .ts explícita: permite rodar este módulo direto no node --test (type-stripping).
+import { analyzeWriteSql, safeIdent } from './sql-guard.ts';
+import type { WriteOperation } from './sql-guard.ts';
 
 // Pool único por processo, inclusive sob hot-reload do Next (que recarrega módulos).
 const globalForPool = globalThis as unknown as { __twkPool?: Pool; __twkSslWarned?: boolean };
@@ -36,7 +39,7 @@ function getPool(): Pool {
   return globalForPool.__twkPool;
 }
 
-export async function query<T = Record<string, unknown>>(
+export async function query<T extends QueryResultRow = Record<string, unknown>>(
   sql: string,
   params?: unknown[]
 ): Promise<QueryResult<T>> {
@@ -215,7 +218,12 @@ export async function getTableSchema(tableName: string): Promise<{
     ? tableName.split('.')
     : ['public', tableName];
 
-  const result = await query(`
+  const result = await query<{
+    column_name: string;
+    data_type: string;
+    is_nullable: string;
+    column_default: string | null;
+  }>(`
     SELECT column_name, data_type, is_nullable, column_default
     FROM information_schema.columns
     WHERE table_schema = $1 AND table_name = $2

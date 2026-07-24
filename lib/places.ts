@@ -124,14 +124,18 @@ export async function getPlaceDetails(placeId: string): Promise<PlaceDetails> {
   return data.result as PlaceDetails;
 }
 
+/**
+ * Retorna caminhos do proxy interno (/api/places/photo) em vez de URLs diretas
+ * do Google: a chave da API nunca vaza para o cliente. O proxy busca a imagem
+ * server-side com a chave e devolve os bytes.
+ */
 export function getPlacePhotoUrls(
   photoReferences: { photo_reference: string }[],
   maxWidth = 1200,
   limit = 5
 ): string[] {
   return photoReferences.slice(0, limit).map(
-    (p) =>
-      `${PLACES_BASE}/photo?maxwidth=${maxWidth}&photo_reference=${p.photo_reference}&key=${API_KEY()}`
+    (p) => `/api/places/photo?ref=${encodeURIComponent(p.photo_reference)}&w=${maxWidth}`
   );
 }
 

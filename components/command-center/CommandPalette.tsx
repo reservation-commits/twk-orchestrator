@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Command, CornerDownLeft,
@@ -29,6 +29,7 @@ export default function CommandPalette({ onNavigate, onRunAction, onAsk }: Props
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // ⌘K / Ctrl+K
   useEffect(() => {
@@ -48,7 +49,9 @@ export default function CommandPalette({ onNavigate, onRunAction, onAsk }: Props
     else { setQuery(''); setSelected(0); }
   }, [open]);
 
-  const commands: CommandItem[] = [
+  // Grouped items with their FLAT display index precomputed (no render-time mutation).
+  const { grouped, flat } = useMemo(() => {
+    const commands: CommandItem[] = [
     { id: 'nav-cmd',     label: 'Command Center',     subtitle: 'Painel ao vivo',          icon: BarChart3,    category: 'Navegação', shortcut: 'G C', action: () => onNavigate('command') },
     { id: 'nav-crm',     label: 'CRM',                subtitle: 'Visão geral, clientes, reservas', icon: LayoutGrid, category: 'Navegação', shortcut: 'G R', action: () => onNavigate('crm') },
     { id: 'nav-chat',    label: 'Agente IA',          subtitle: 'Conversar com o TWK Agent', icon: MessageSquare,category: 'Navegação', shortcut: 'G A', action: () => onNavigate('agent') },
@@ -68,33 +71,45 @@ export default function CommandPalette({ onNavigate, onRunAction, onAsk }: Props
     { id: 'a-places',    label: 'Frescor vs Google Places',    subtitle: 'Restaurantes fechados',      icon: MapPin,      category: 'Ações', action: () => { onNavigate('audit'); onRunAction?.('check_places'); } },
     { id: 'a-semantic',  label: 'Análise semântica via IA',    subtitle: 'Claude detecta incoerências',icon: Brain,       category: 'Ações', action: () => { onNavigate('audit'); onRunAction?.('semantic_analysis'); } },
     { id: 'a-autofix',   label: 'Gerar sugestões de auto-fix', subtitle: 'URLs, telefones, slugs',     icon: Zap,         category: 'Ações', action: () => { onNavigate('audit'); onRunAction?.('auto_fix'); } },
-  ];
+    ];
 
-  const q = query.trim();
-  const baseFiltered = q
-    ? commands.filter((c) =>
-        c.label.toLowerCase().includes(q.toLowerCase()) ||
-        c.subtitle?.toLowerCase().includes(q.toLowerCase()) ||
-        c.category.toLowerCase().includes(q.toLowerCase()))
-    : commands;
-  // Free-text becomes a question routed straight to the AI agent.
-  const askItem: CommandItem | null = q
-    ? { id: 'ask', label: `Perguntar ao agente: “${q}”`, subtitle: 'Enviar pergunta ao TWK Agent', icon: Brain, category: 'Inteligência', action: () => onAsk?.(q) }
-    : null;
-  const filtered = askItem ? [askItem, ...baseFiltered] : baseFiltered;
+    const q = query.trim();
+    const baseFiltered = q
+      ? commands.filter((c) =>
+          c.label.toLowerCase().includes(q.toLowerCase()) ||
+          c.subtitle?.toLowerCase().includes(q.toLowerCase()) ||
+          c.category.toLowerCase().includes(q.toLowerCase()))
+      : commands;
+    // Free-text becomes a question routed straight to the AI agent.
+    const askItem: CommandItem | null = q
+      ? { id: 'ask', label: `Perguntar ao agente: “${q}”`, subtitle: 'Enviar pergunta ao TWK Agent', icon: Brain, category: 'Inteligência', action: () => onAsk?.(q) }
+      : null;
+    const filtered = askItem ? [askItem, ...baseFiltered] : baseFiltered;
 
-  const grouped = filtered.reduce<Record<string, CommandItem[]>>((acc, c) => {
-    (acc[c.category] ??= []).push(c);
-    return acc;
-  }, {});
+    const groupedMap = filtered.reduce<Record<string, CommandItem[]>>((acc, c) => {
+      (acc[c.category] ??= []).push(c);
+      return acc;
+    }, {});
+    // Flat list in DISPLAY order (grouped by category) so keyboard nav matches what is on screen.
+    const flatList: CommandItem[] = Object.values(groupedMap).flat();
+    const groupedWithIdx: [string, { item: CommandItem; idx: number }[]][] = [];
+    let idx = 0;
+    for (const [cat, items] of Object.entries(groupedMap)) {
+      groupedWithIdx.push([cat, items.map((item) => ({ item, idx: idx++ }))]);
+    }
+    return { grouped: groupedWithIdx, flat: flatList };
+  }, [query, onNavigate, onRunAction, onAsk]);
+
+  // Keep the highlighted option visible while navigating with the arrows.
+  useEffect(() => {
+    itemRefs.current[selected]?.scrollIntoView({ block: 'nearest' });
+  }, [selected]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); setSelected((s) => Math.min(s + 1, filtered.length - 1)); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setSelected((s) => Math.min(s + 1, flat.length - 1)); }
     if (e.key === 'ArrowUp')   { e.preventDefault(); setSelected((s) => Math.max(s - 1, 0)); }
-    if (e.key === 'Enter')     { e.preventDefault(); filtered[selected]?.action(); setOpen(false); }
+    if (e.key === 'Enter')     { e.preventDefault(); flat[selected]?.action(); setOpen(false); }
   };
-
-  let runningIdx = -1;
 
   return (
     <AnimatePresence>
@@ -113,6 +128,13 @@ export default function CommandPalette({ onNavigate, onRunAction, onAsk }: Props
             exit={{ y: -20, opacity: 0, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 320, damping: 26 }}
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              // Focus trap: Tab never leaves the palette — focus stays on the input.
+              if (e.key === 'Tab') { e.preventDefault(); inputRef.current?.focus(); }
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Paleta de comandos"
             className="relative w-full max-w-2xl bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden"
             style={{ boxShadow: '0 0 80px rgba(201,169,110,0.15)' }}
           >
@@ -124,6 +146,7 @@ export default function CommandPalette({ onNavigate, onRunAction, onAsk }: Props
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setSelected(0); }}
                 onKeyDown={onKeyDown}
+                aria-label="Buscar comandos, ações, módulos"
                 placeholder="Buscar comandos, ações, módulos…"
                 className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-white/30"
               />
@@ -131,25 +154,27 @@ export default function CommandPalette({ onNavigate, onRunAction, onAsk }: Props
             </div>
 
             {/* Results */}
-            <div className="max-h-[60vh] overflow-y-auto py-2">
-              {filtered.length === 0 ? (
+            <div className="max-h-[60vh] overflow-y-auto py-2" role="listbox" aria-label="Comandos">
+              {flat.length === 0 ? (
                 <div className="px-5 py-8 text-center text-white/30 text-sm">
                   Nenhum comando para &quot;{query}&quot;
                 </div>
               ) : (
-                Object.entries(grouped).map(([cat, items]) => (
+                grouped.map(([cat, items]) => (
                   <div key={cat} className="mb-2">
                     <p className="text-[10px] uppercase tracking-widest text-white/30 px-5 py-1.5 font-medium">{cat}</p>
-                    {items.map((c) => {
-                      runningIdx++;
+                    {items.map(({ item: c, idx }) => {
                       const Icon = c.icon;
-                      const isActive = runningIdx === selected;
+                      const isActive = idx === selected;
                       return (
                         <button
                           key={c.id}
-                          onMouseEnter={() => setSelected(runningIdx)}
+                          ref={(el) => { itemRefs.current[idx] = el; }}
+                          role="option"
+                          aria-selected={isActive}
+                          onMouseEnter={() => setSelected(idx)}
                           onClick={() => { c.action(); setOpen(false); }}
-                          className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors ${
+                          className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-gold/40 ${
                             isActive ? 'bg-gold/10 border-l-2 border-gold' : 'border-l-2 border-transparent hover:bg-white/[0.02]'
                           }`}
                         >

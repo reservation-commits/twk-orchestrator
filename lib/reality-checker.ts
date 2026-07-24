@@ -142,14 +142,14 @@ export async function checkUrlReality(url: string, timeoutMs = 6000): Promise<Ur
       return {
         url: normalised, reachable: g.status < 400,
         status_code: g.status, latency_ms: latency, is_parked: isParked,
-        content_type: g.headers['content-type'],
+        content_type: g.headers['content-type'] != null ? String(g.headers['content-type']) : undefined,
         message: g.status < 400 ? (isParked ? 'Domínio parqueado' : 'OK') : `HTTP ${g.status}`,
       };
     }
 
     return {
       url: normalised, reachable: ok, status_code: r.status,
-      content_type: r.headers['content-type'], latency_ms: latency,
+      content_type: r.headers['content-type'] != null ? String(r.headers['content-type']) : undefined, latency_ms: latency,
       message: ok ? `OK (${r.status})` : `HTTP ${r.status}`,
     };
   } catch (err) {
@@ -307,7 +307,12 @@ export async function batchCheckEmails(
     const batch = emails.slice(i, i + concurrency);
     const settled = await Promise.allSettled(batch.map((e) => checkEmailReality(e.email)));
     settled.forEach((r, idx) => {
+      // Falha de checagem NUNCA some do relatório — vira status explícito 'unknown'.
       if (r.status === 'fulfilled') results.push({ ...r.value, id: batch[idx].id });
+      else results.push({
+        email: batch[idx].email, status: 'unknown', has_mx: false,
+        message: `Checagem falhou: ${String(r.reason).slice(0, 120)}`, id: batch[idx].id,
+      } as EmailRealityResult & { id: unknown });
     });
   }
   return results;
@@ -322,7 +327,12 @@ export async function batchCheckUrls(
     const batch = urls.slice(i, i + concurrency);
     const settled = await Promise.allSettled(batch.map((u) => checkUrlReality(u.url)));
     settled.forEach((r, idx) => {
+      // Falha de checagem NUNCA some do relatório — vira resultado explícito não-alcançável.
       if (r.status === 'fulfilled') results.push({ ...r.value, id: batch[idx].id });
+      else results.push({
+        url: batch[idx].url, reachable: false, latency_ms: 0,
+        message: `Checagem falhou: ${String(r.reason).slice(0, 120)}`, id: batch[idx].id,
+      } as UrlRealityResult & { id: unknown });
     });
   }
   return results;

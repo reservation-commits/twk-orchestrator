@@ -88,8 +88,8 @@ function RestaurantCard({ r, onToggle }: { r: RestaurantCandidate; onToggle: () 
         {r.price_level && (
           <span className="text-xs text-white/40">{PRICE_SYMBOLS[r.price_level]}</span>
         )}
-        {r.enriched?.michelin_stars && Number(r.enriched.michelin_stars) > 0 && (
-          <span className="text-xs text-red-400">{'★'.repeat(Number(r.enriched.michelin_stars))} Michelin</span>
+        {Number(r.enriched?.michelin_stars ?? 0) > 0 && (
+          <span className="text-xs text-red-400">{'★'.repeat(Number(r.enriched?.michelin_stars ?? 0))} Michelin</span>
         )}
       </div>
 
@@ -144,6 +144,7 @@ export default function RestaurantBuilder() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'search', city, cuisine, count }),
       });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setRestaurants((data.results ?? []).map((r: Record<string, unknown>) => ({
@@ -174,8 +175,10 @@ export default function RestaurantBuilder() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'details', place_id: r.place_id, city, enrich_michelin: true, generate_description: true }),
         });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const completeness = calcCompleteness(data.mapped ?? {});
+        if (data.error || !data.mapped) throw new Error(data.error ?? 'Sem dados');
+        const completeness = calcCompleteness(data.mapped);
         setRestaurants((prev) => prev.map((p) =>
           p.place_id === r.place_id
             ? { ...p, enrichStatus: 'done', enriched: data.mapped, completeness }
@@ -200,11 +203,12 @@ export default function RestaurantBuilder() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'bulk_insert', table: 'public.db_restaurants', rows }),
       });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      setImportResult(data);
+      setImportResult({ inserted: data.inserted ?? 0, errors: data.errors ?? [] });
       setStep('done');
-      toast.success(`${data.inserted} restaurantes inseridos com sucesso!`);
+      toast.success(`${data.inserted ?? 0} restaurantes inseridos com sucesso!`);
     } catch (err) {
       toast.error(String(err));
     } finally {

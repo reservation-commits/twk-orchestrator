@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query, logUpdateEvent } from '@/lib/db';
+import { safeColumn } from '@/lib/sql-guard';
 
 // ── CRM data API: a powerful, read-mostly mirror of the database for the command center ──
 // All restaurant data is sourced from public.db_restaurants (+ relational tables).
@@ -261,8 +262,10 @@ export async function POST(req: NextRequest) {
         'commission_per_person', 'address_of_establishment',
       ]);
       if (!EDITABLE.has(column)) return NextResponse.json({ error: 'Column not editable' }, { status: 403 });
-      const before = (await query(`SELECT ${column} FROM public.db_restaurants WHERE restaurant_id = $1`, [id])).rows[0];
-      await query(`UPDATE public.db_restaurants SET ${column} = $1 WHERE restaurant_id = $2`, [value, id]);
+      // Allowlist acima já limita; safeColumn é cinto-e-suspensório na interpolação.
+      const col = safeColumn(column);
+      const before = (await query(`SELECT ${col} FROM public.db_restaurants WHERE restaurant_id = $1`, [id])).rows[0];
+      await query(`UPDATE public.db_restaurants SET ${col} = $1 WHERE restaurant_id = $2`, [value, id]);
       await logUpdateEvent({
         table_name: 'public.db_restaurants', operation: 'UPDATE', record_id: id,
         old_data: before, new_data: { [column]: value, source: 'crm' },

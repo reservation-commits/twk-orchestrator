@@ -103,7 +103,7 @@ export default function ActivityLogs() {
                     {log.record_id && <span className="text-xs text-white/30">#{log.record_id}</span>}
                   </div>
 
-                  {log.new_data && (
+                  {log.new_data != null && (
                     <p className="text-xs text-white/30 mt-1 truncate font-mono">
                       {JSON.stringify(log.new_data).slice(0, 120)}
                     </p>

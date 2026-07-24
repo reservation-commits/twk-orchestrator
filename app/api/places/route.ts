@@ -9,6 +9,21 @@ import {
 } from '@/lib/places';
 import Anthropic from '@anthropic-ai/sdk';
 
+// Cliente único por processo: evita recriar conexão/keep-alive a cada request.
+let anthropicClient: Anthropic | null = null;
+function getAnthropic(): Anthropic {
+  if (!anthropicClient) {
+    anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  }
+  return anthropicClient;
+}
+
+// Extrai o primeiro bloco de texto com segurança (content[0] pode não ser texto).
+function firstTextBlock(res: Anthropic.Message): string | undefined {
+  const block = res.content.find((b): b is Anthropic.TextBlock => b.type === 'text');
+  return block?.text;
+}
+
 const SearchSchema = z.object({
   city: z.string().min(1),
   cuisine: z.string().default('fine dining'),
@@ -45,7 +60,7 @@ export async function POST(req: NextRequest) {
 
         let description: string | undefined;
         if (generate_description) {
-          const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+          const anthropic = getAnthropic();
           const cuisineTypes = (details.types ?? [])
             .filter((t) => !['establishment', 'food', 'point_of_interest'].includes(t))
             .join(', ');
@@ -57,7 +72,7 @@ export async function POST(req: NextRequest) {
               content: `Write a 2-3 sentence luxury editorial description for "${details.name}" in ${city}${cuisineTypes ? `, specialising in ${cuisineTypes}` : ''}${details.editorial_summary?.overview ? `. Note: ${details.editorial_summary.overview}` : ''}. Tone: elegant, evocative, aspirational. Language: English.`,
             }],
           });
-          description = (res.content[0] as { text: string }).text;
+          description = firstTextBlock(res);
         }
 
         const mapped = mapPlaceToDBSchema(details, city, description, michelinData);
@@ -71,6 +86,13 @@ export async function POST(req: NextRequest) {
           restaurants: { place_id: string; name: string }[];
           city: string;
         };
+        const MAX_BATCH = 25;
+        if (!Array.isArray(restaurants) || !restaurants.length) {
+          return NextResponse.json({ error: 'restaurants deve ser um array não vazio' }, { status: 400 });
+        }
+        if (restaurants.length > MAX_BATCH) {
+          return NextResponse.json({ error: `batch_enrich aceita no máximo ${MAX_BATCH} itens por chamada` }, { status: 400 });
+        }
         const MAX_CONCURRENT = 5;
         const results = [];
 
@@ -81,7 +103,7 @@ export async function POST(req: NextRequest) {
               const details = await getPlaceDetails(r.place_id);
               const michelin = await enrichFromMichelinGuide(r.name, city);
 
-              const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+              const anthropic = getAnthropic();
               const res = await anthropic.messages.create({
                 model: 'claude-sonnet-4-6',
                 max_tokens: 200,
@@ -90,7 +112,7 @@ export async function POST(req: NextRequest) {
                   content: `Write a 2-sentence luxury description for "${r.name}" in ${city}. Elegant, aspirational tone. English.`,
                 }],
               });
-              const description = (res.content[0] as { text: string }).text;
+              const description = firstTextBlock(res);
               return mapPlaceToDBSchema(details, city, description, michelin);
             })
           );

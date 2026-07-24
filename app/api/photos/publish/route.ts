@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import axios from 'axios';
 import { query, logUpdateEvent } from '@/lib/db';
 import { uploadObject, extForContentType, isStorageConfigured, storageStatus } from '@/lib/storage';
+import { assertPublicUrl } from '@/lib/net-guard';
 
 export const runtime = 'nodejs';
 export const maxDuration = 120;
@@ -14,6 +15,7 @@ interface ImageObj { id: null; alt_text: string; filename: string; source_url: s
 
 async function download(url: string): Promise<{ buffer: Buffer; contentType: string } | null> {
   try {
+    await assertPublicUrl(url); // anti-SSRF: nunca baixar de host interno/privado
     const r = await axios.get(url, {
       responseType: 'arraybuffer', timeout: 30000, maxRedirects: 5, validateStatus: () => true,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TWK-Bot/1.0)' }, maxContentLength: 10 * 1024 * 1024,

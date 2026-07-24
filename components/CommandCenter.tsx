@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   ShieldCheck, Database, AlertCircle, Activity, Clock,
@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import LiveMetricCard from './command-center/LiveMetricCard';
 import ToolStream, { type ToolEvent } from './command-center/ToolStream';
-import SystemHealth from './command-center/SystemHealth';
+import SystemHealth, { type ServiceProbe } from './command-center/SystemHealth';
 import ActivityTimeline from './command-center/ActivityTimeline';
 
 interface Metrics {
@@ -27,6 +27,7 @@ interface Metrics {
     errors_1h:          number;
   };
   db_latency_ms: number;
+  services?: ServiceProbe[];
 }
 
 interface AgentEvent {
@@ -44,7 +45,6 @@ export default function CommandCenter({ onNavigate }: { onNavigate: (id: string)
   const [connected, setConnected] = useState(false);
   const [latencyHistory, setLatencyHistory] = useState<number[]>([]);
   const [qualityHistory, setQualityHistory] = useState<number[]>([]);
-  const eventMap = useRef<Map<string, ToolEvent>>(new Map());
 
   // Fetch metrics every 10s
   const fetchMetrics = useCallback(async () => {
@@ -76,27 +76,32 @@ export default function CommandCenter({ onNavigate }: { onNavigate: (id: string)
         // Build ToolEvent from agent event
         if (ev.type === 'tool.call.start') {
           const te: ToolEvent = {
-            id: ev.id,
+            // Prefer the correlation id carried in the payload so start/end pair up exactly.
+            id: ev.data.id != null ? String(ev.data.id) : ev.id,
             tool: String(ev.data.tool ?? 'unknown'),
             status: 'running',
             startedAt: ev.timestamp,
             input: ev.data.input as Record<string, unknown>,
           };
-          eventMap.current.set(te.tool + '|' + ev.timestamp, te);
           setEvents((prev) => [te, ...prev].slice(0, 100));
         } else if (ev.type === 'tool.call.end' || ev.type === 'tool.call.error') {
-          setEvents((prev) => prev.map((e) => {
-            if (e.tool === ev.data.tool && e.status === 'running') {
-              return {
-                ...e,
-                status: ev.type === 'tool.call.error' ? 'error' : 'success',
-                duration: ev.duration,
-                result: ev.data.result_summary as Record<string, unknown>,
-                error: ev.data.error as string,
-              };
-            }
-            return e;
-          }));
+          const corrId = ev.data.id != null ? String(ev.data.id) : null;
+          setEvents((prev) => {
+            // Correlate by id when present; otherwise fall back to the first running event with the same tool name.
+            const targetIdx = corrId
+              ? prev.findIndex((e) => e.id === corrId)
+              : prev.findIndex((e) => e.tool === ev.data.tool && e.status === 'running');
+            if (targetIdx === -1) return prev;
+            return prev.map((e, idx) => idx === targetIdx
+              ? {
+                  ...e,
+                  status: ev.type === 'tool.call.error' ? 'error' as const : 'success' as const,
+                  duration: ev.duration,
+                  result: ev.data.result_summary as Record<string, unknown>,
+                  error: ev.data.error as string,
+                }
+              : e);
+          });
         }
       } catch {}
     };
@@ -197,7 +202,10 @@ export default function CommandCenter({ onNavigate }: { onNavigate: (id: string)
           {/* System health + insights */}
           <div className="space-y-4">
             <div className="bg-black/30 backdrop-blur-xl border border-white/5 rounded-2xl p-5">
-              <SystemHealth dbLatency={metrics?.db_latency_ms ?? 0} />
+              <SystemHealth
+                services={metrics?.services}
+                eventsPerMin={Math.round((metrics?.bus_stats?.events_5min ?? 0) / 5)}
+              />
             </div>
 
             {/* Quick stats */}

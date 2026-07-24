@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
-import { query, queryReadOnly, withTransaction, listTables, getTableSchema, getRowCount, logUpdateEvent } from './db';
+import { query, queryReadOnly, queryWrite, withTransaction, listTables, getTableSchema, getRowCount, logUpdateEvent } from './db';
+import { safeIdent, safeColumn } from './sql-guard';
 import { searchRestaurantsByCity, getPlaceDetails, enrichFromMichelinGuide, mapPlaceToDBSchema } from './places';
 import { webSearch, fetchUrl, findSocialMedia } from './scraper';
 import { findRestaurantEmail, batchFindEmails } from './email-finder';
@@ -90,7 +91,11 @@ export const tools: Anthropic.Tool[] = [
   },
   {
     name: 'execute_mutation',
-    description: 'Execute an INSERT, UPDATE or DELETE query with automatic audit logging',
+    description:
+      'Execute an INSERT, UPDATE or DELETE with hard guardrails: single statement, no DDL, ' +
+      'UPDATE/DELETE require WHERE (or allow_full_table=true), automatic rollback if more than ' +
+      'max_affected_rows (default 500) would be touched, and mandatory audit logging. ' +
+      'Schema changes (CREATE/ALTER/DROP) are blocked — use versioned migrations instead.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -98,6 +103,8 @@ export const tools: Anthropic.Tool[] = [
         params: { type: 'array', items: {}, description: 'Optional query parameters' },
         table: { type: 'string', description: 'Table being modified (for audit log)' },
         operation: { type: 'string', enum: ['INSERT', 'UPDATE', 'DELETE'] },
+        max_affected_rows: { type: 'number', description: 'Blast-radius limit; rollback if exceeded (default 500)' },
+        allow_full_table: { type: 'boolean', description: 'Explicitly allow UPDATE/DELETE without WHERE' },
       },
       required: ['sql', 'table', 'operation'],
     },
@@ -568,6 +575,70 @@ export const tools: Anthropic.Tool[] = [
       properties: { days: { type: 'number', description: 'Janela em dias (default 90)' } },
     },
   },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // ── REVERSIBILIDADE (UNDO) ─────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════
+  {
+    name: 'list_recent_mutations',
+    description: 'Lista os últimos eventos do log de auditoria (update_events): id, tabela, operação, record_id, old_data/new_data. Use para localizar o event_id de uma mutação a reverter.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        limit: { type: 'number', description: 'Máx eventos (default 20)' },
+        table: { type: 'string', description: 'Filtrar por tabela' },
+        record_id: { type: 'string', description: 'Filtrar por record_id' },
+      },
+    },
+  },
+  {
+    name: 'revert_operation',
+    description: 'UNDO: reverte um UPDATE registrado no log de auditoria, restaurando os valores de old_data do evento. Só funciona para eventos UPDATE com old_data e record_id. A reversão também é auditada.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        event_id: { type: 'number', description: 'id do evento em update_events' },
+        reason: { type: 'string', description: 'Motivo da reversão' },
+      },
+      required: ['event_id'],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // ── DBA PROFUNDO (performance / saúde do Postgres) ─────────────────────
+  // ═══════════════════════════════════════════════════════════════════════
+  {
+    name: 'slow_queries',
+    description: 'Top queries mais lentas via pg_stat_statements (se a extensão estiver ativa): calls, tempo médio/total, linhas. Se indisponível, retorna instrução de ativação.',
+    input_schema: {
+      type: 'object' as const,
+      properties: { limit: { type: 'number', description: 'default 15' } },
+    },
+  },
+  {
+    name: 'explain_plan',
+    description: 'EXPLAIN (FORMAT JSON) de um SELECT — plano de execução, custo estimado, índices usados. Não executa a query (sem ANALYZE). Use para diagnosticar lentidão e validar índices.',
+    input_schema: {
+      type: 'object' as const,
+      properties: { sql: { type: 'string', description: 'SELECT a analisar' } },
+      required: ['sql'],
+    },
+  },
+  {
+    name: 'index_advisor',
+    description: 'Heurística de índices: tabelas com muitos seq_scans vs index_scans, colunas FK sem índice, índices nunca usados (candidatos a remoção). Base para recomendações de performance.',
+    input_schema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'table_stats',
+    description: 'Estatísticas físicas por tabela: tamanho total, linhas vivas/mortas (bloat), último vacuum/analyze. Ordenado por tamanho.',
+    input_schema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'connection_stats',
+    description: 'Conexões do Postgres: ativas/idle/idle-in-transaction, max_connections, queries em espera. Detecta saturação de pool.',
+    input_schema: { type: 'object' as const, properties: {} },
+  },
 ];
 
 // ── Tool executor ───────────────────────────────────────────────────────────
@@ -593,13 +664,20 @@ async function executeToolInternal(
     }
 
     case 'execute_mutation': {
-      const result = await query(input.sql as string, input.params as unknown[] | undefined);
+      // Todas as camadas de segurança vivem em queryWrite: statement único, operação
+      // declarada == real, DDL bloqueado, WHERE obrigatório, rollback por blast-radius.
+      const result = await queryWrite(input.sql as string, {
+        params: input.params as unknown[] | undefined,
+        operation: input.operation as string,
+        maxAffectedRows: (input.max_affected_rows as number) ?? undefined,
+        allowFullTable: (input.allow_full_table as boolean) ?? false,
+      });
       await logUpdateEvent({
         table_name: input.table as string,
-        operation: input.operation as 'INSERT' | 'UPDATE' | 'DELETE',
-        new_data: { sql: input.sql, params: input.params },
+        operation: result.operation,
+        new_data: { sql: input.sql, params: input.params, rows_affected: result.rowCount },
       });
-      return { rowCount: result.rowCount, command: result.command };
+      return { rowCount: result.rowCount, operation: result.operation };
     }
 
     case 'get_table_schema':
@@ -614,24 +692,29 @@ async function executeToolInternal(
     case 'bulk_insert': {
       const rows = input.rows as Record<string, unknown>[];
       if (!rows.length) return { inserted: 0 };
-      const columns = Object.keys(rows[0]);
+      if (rows.length > 500) {
+        throw new Error(`bulk_insert limitado a 500 linhas por chamada (recebeu ${rows.length}). Divida em lotes.`);
+      }
+      const table = safeIdent(input.table as string);
+      const columns = Object.keys(rows[0]).map((c) => safeColumn(c));
+      const rawCols = Object.keys(rows[0]);
       let inserted = 0;
 
       await withTransaction(async (client) => {
         for (const row of rows) {
-          const values = columns.map((c) => row[c]);
-          const placeholders = columns.map((_, i) => `$${i + 1}`).join(', ');
+          const values = rawCols.map((c) => row[c]);
+          const placeholders = rawCols.map((_, i) => `$${i + 1}`).join(', ');
           await client.query(
-            `INSERT INTO ${input.table} (${columns.join(', ')}) VALUES (${placeholders}) ON CONFLICT DO NOTHING`,
+            `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders}) ON CONFLICT DO NOTHING`,
             values
           );
           inserted++;
         }
-        await logUpdateEvent({
-          table_name: input.table as string,
-          operation: 'INSERT',
-          new_data: { count: inserted },
-        });
+      });
+      await logUpdateEvent({
+        table_name: input.table as string,
+        operation: 'INSERT',
+        new_data: { count: inserted },
       });
       return { inserted };
     }
@@ -674,14 +757,14 @@ async function executeToolInternal(
     // ── Data Quality ──────────────────────────────────────────────────────
     case 'audit_table': {
       const limit = (input.limit as number) ?? 2000;
-      const rows = await query(`SELECT * FROM ${input.table} LIMIT $1`, [limit]);
+      const rows = await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT $1`, [limit]);
       const idCol = rows.rows[0] && 'restaurant_id' in rows.rows[0] ? 'restaurant_id' : 'id';
       return auditRows(rows.rows, input.table as string, idCol, input.columns as string[] | undefined);
     }
 
     case 'validate_column': {
       const limit = (input.limit as number) ?? 1000;
-      const rows = await query(`SELECT * FROM ${input.table} LIMIT $1`, [limit]);
+      const rows = await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT $1`, [limit]);
       const col = input.column as string;
       const issues = rows.rows
         .map((row) => validateValue(col, row[col], row.id ?? row[Object.keys(row)[0]]))
@@ -695,7 +778,7 @@ async function executeToolInternal(
     }
 
     case 'find_duplicates': {
-      const rows = await query(`SELECT * FROM ${input.table} LIMIT 3000`);
+      const rows = await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT 3000`);
       return findDuplicateGroups(
         rows.rows,
         (input.id_column as string) ?? 'id',
@@ -706,7 +789,7 @@ async function executeToolInternal(
 
     case 'completeness_report': {
       const limit = (input.limit as number) ?? 500;
-      const rows = await query(`SELECT * FROM ${input.table} LIMIT $1`, [limit]);
+      const rows = await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT $1`, [limit]);
       const scored = rows.rows.map((row) => ({
         id:    row.id ?? row[Object.keys(row)[0]],
         name:  String(row.name ?? row.title ?? row.id ?? ''),
@@ -742,9 +825,12 @@ async function executeToolInternal(
     }
 
     case 'fix_data_issue': {
-      const before = await query(`SELECT ${input.column} FROM ${input.table} WHERE ${input.id_column ?? 'id'} = $1`, [input.id_value]);
+      const table = safeIdent(input.table as string);
+      const column = safeColumn(input.column as string);
+      const idCol = safeColumn((input.id_column as string) ?? 'id');
+      const before = await query(`SELECT ${column} FROM ${table} WHERE ${idCol} = $1`, [input.id_value]);
       const old_value = before.rows[0]?.[input.column as string];
-      await query(`UPDATE ${input.table} SET ${input.column} = $1 WHERE ${input.id_column ?? 'id'} = $2`, [input.new_value, input.id_value]);
+      await query(`UPDATE ${table} SET ${column} = $1 WHERE ${idCol} = $2`, [input.new_value, input.id_value]);
       await logUpdateEvent({
         table_name: input.table as string, operation: 'UPDATE',
         record_id: String(input.id_value),
@@ -756,19 +842,27 @@ async function executeToolInternal(
 
     case 'batch_fix': {
       const fixes = input.fixes as Array<Record<string, unknown>>;
-      let applied = 0; const errors: string[] = [];
-      for (const fix of fixes) {
-        try {
-          await query(`UPDATE ${fix.table} SET ${fix.column} = $1 WHERE ${fix.id_column ?? 'id'} = $2`, [fix.new_value, fix.id_value]);
-          await logUpdateEvent({
+      // Atômico: ou todas as correções entram, ou nenhuma. old_data é capturado por
+      // linha ANTES do UPDATE, dentro da mesma transação, para permitir revert.
+      const events: Parameters<typeof logUpdateEvent>[0][] = [];
+      await withTransaction(async (client) => {
+        for (const fix of fixes) {
+          const table = safeIdent(fix.table as string);
+          const column = safeColumn(fix.column as string);
+          const idCol = safeColumn((fix.id_column as string) ?? 'id');
+          const before = await client.query(`SELECT ${column} FROM ${table} WHERE ${idCol} = $1`, [fix.id_value]);
+          const old_value = before.rows[0]?.[fix.column as string];
+          await client.query(`UPDATE ${table} SET ${column} = $1 WHERE ${idCol} = $2`, [fix.new_value, fix.id_value]);
+          events.push({
             table_name: fix.table as string, operation: 'UPDATE',
             record_id: String(fix.id_value),
+            old_data: { [fix.column as string]: old_value },
             new_data: { [fix.column as string]: fix.new_value, reason: fix.reason },
           });
-          applied++;
-        } catch (err) { errors.push(`${fix.id_value}/${fix.column}: ${String(err)}`); }
-      }
-      return { applied, errors, total: fixes.length };
+        }
+      });
+      for (const ev of events) await logUpdateEvent(ev);
+      return { applied: events.length, errors: [], total: fixes.length, atomic: true };
     }
 
     // ── Reality Check ───────────────────────────────────────────────────────
@@ -792,7 +886,7 @@ async function executeToolInternal(
     // ── Outliers ───────────────────────────────────────────────────────────
     case 'detect_outliers': {
       const limit = (input.limit as number) ?? 2000;
-      const rows = (await query(`SELECT * FROM ${input.table} LIMIT $1`, [limit])).rows;
+      const rows = (await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT $1`, [limit])).rows;
       const idCol = rows[0] && 'restaurant_id' in rows[0] ? 'restaurant_id' : 'id';
       return {
         numeric_outliers: [
@@ -818,7 +912,7 @@ async function executeToolInternal(
     // ── Semantic AI ────────────────────────────────────────────────────────
     case 'semantic_analysis': {
       const limit = (input.limit as number) ?? 30;
-      const rows = (await query(`SELECT * FROM ${input.table} LIMIT $1`, [limit])).rows;
+      const rows = (await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT $1`, [limit])).rows;
       return batchSemanticAnalysis(rows, {
         tableName: input.table as string,
         batchSize: 10, concurrency: 3,
@@ -829,7 +923,7 @@ async function executeToolInternal(
     // ── Auto-fix ───────────────────────────────────────────────────────────
     case 'auto_fix_suggestions': {
       const limit = (input.limit as number) ?? 500;
-      const rows = (await query(`SELECT * FROM ${input.table ?? 'public.db_restaurants'} LIMIT $1`, [limit])).rows;
+      const rows = (await query(`SELECT * FROM ${safeIdent((input.table as string) ?? 'public.db_restaurants')} LIMIT $1`, [limit])).rows;
       const idCol = rows[0] && 'restaurant_id' in rows[0] ? 'restaurant_id' : 'id';
       const suggestions = generateAutoFixSuggestions(rows, {
         table: (input.table as string) ?? 'public.db_restaurants',
@@ -851,26 +945,32 @@ async function executeToolInternal(
       const minConf = (input.min_confidence as string) ?? 'high';
       const order: Record<string, number> = { high: 3, medium: 2, low: 1 };
       const eligible = suggestions.filter((s) => order[s.confidence as string] >= order[minConf]);
-      let applied = 0; const errors: string[] = [];
-      for (const fix of eligible) {
-        try {
-          const table = (fix.table as string) ?? 'public.db_restaurants';
-          const idCol = (fix.id_column as string) ?? 'restaurant_id';
-          await query(`UPDATE ${table} SET ${fix.column} = $1 WHERE ${idCol} = $2`, [fix.new_value, fix.row_id]);
-          await logUpdateEvent({
-            table_name: table, operation: 'UPDATE',
+      // Atômico + old_data por linha (revert possível via revert_operation).
+      const events: Parameters<typeof logUpdateEvent>[0][] = [];
+      await withTransaction(async (client) => {
+        for (const fix of eligible) {
+          const tableRaw = (fix.table as string) ?? 'public.db_restaurants';
+          const table = safeIdent(tableRaw);
+          const column = safeColumn(fix.column as string);
+          const idCol = safeColumn((fix.id_column as string) ?? 'restaurant_id');
+          const before = await client.query(`SELECT ${column} FROM ${table} WHERE ${idCol} = $1`, [fix.row_id]);
+          const old_value = before.rows[0]?.[fix.column as string];
+          await client.query(`UPDATE ${table} SET ${column} = $1 WHERE ${idCol} = $2`, [fix.new_value, fix.row_id]);
+          events.push({
+            table_name: tableRaw, operation: 'UPDATE',
             record_id: String(fix.row_id),
+            old_data: { [fix.column as string]: old_value },
             new_data: { [fix.column as string]: fix.new_value, reason: fix.reason, rule: fix.rule },
           });
-          applied++;
-        } catch (err) { errors.push(`${fix.row_id}/${fix.column}: ${String(err)}`); }
-      }
-      return { applied, errors, total: eligible.length, skipped: suggestions.length - eligible.length };
+        }
+      });
+      for (const ev of events) await logUpdateEvent(ev);
+      return { applied: events.length, errors: [], total: eligible.length, skipped: suggestions.length - eligible.length, atomic: true };
     }
 
     // ── Monitoring ─────────────────────────────────────────────────────────
     case 'save_quality_snapshot': {
-      const rows = (await query(`SELECT * FROM ${input.table} LIMIT 2000`)).rows;
+      const rows = (await query(`SELECT * FROM ${safeIdent(input.table as string)} LIMIT 2000`)).rows;
       const idCol = rows[0] && 'restaurant_id' in rows[0] ? 'restaurant_id' : 'id';
       const report = auditRows(rows, input.table as string, idCol);
       const scored = rows.map((r) => scoreRowCompleteness(r));
@@ -1058,6 +1158,133 @@ async function executeToolInternal(
       };
     }
 
+    // ── Reversibilidade (undo) ────────────────────────────────────────────
+    case 'list_recent_mutations': {
+      const limit = Math.min((input.limit as number) ?? 20, 100);
+      const clauses: string[] = []; const params: unknown[] = [];
+      if (input.table) { params.push(input.table); clauses.push(`table_name = $${params.length}`); }
+      if (input.record_id) { params.push(String(input.record_id)); clauses.push(`record_id = $${params.length}`); }
+      params.push(limit);
+      const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
+      const rows = (await query(
+        `SELECT id, table_name, operation, record_id, old_data, new_data, agent, created_at
+         FROM public.update_events ${where} ORDER BY id DESC LIMIT $${params.length}`, params
+      )).rows;
+      return { events: rows, note: 'Use revert_operation com o id para desfazer um UPDATE com old_data.' };
+    }
+
+    case 'revert_operation': {
+      const eventId = input.event_id as number;
+      const ev = (await query(
+        `SELECT id, table_name, operation, record_id, old_data FROM public.update_events WHERE id = $1`, [eventId]
+      )).rows[0] as { id: number; table_name: string; operation: string; record_id: string | null; old_data: Record<string, unknown> | null } | undefined;
+      if (!ev) return { error: `Evento ${eventId} não encontrado no log de auditoria.` };
+      if (ev.operation !== 'UPDATE') return { error: `Só UPDATEs são reversíveis automaticamente (evento é ${ev.operation}).` };
+      if (!ev.old_data || !ev.record_id) return { error: 'Evento sem old_data/record_id — reversão automática indisponível.' };
+
+      // Restaura apenas colunas reais (ignora metadados como reason/rule/via).
+      const META = new Set(['reason', 'rule', 'via', 'sql', 'params', 'rows_affected', 'translated']);
+      const schema = await getTableSchema(ev.table_name);
+      const validCols = new Set(schema.map((c) => c.column_name));
+      const entries = Object.entries(ev.old_data).filter(([k]) => !META.has(k) && validCols.has(k));
+      if (!entries.length) return { error: 'old_data não contém colunas restauráveis.' };
+
+      const table = safeIdent(ev.table_name);
+      const idCol = validCols.has('restaurant_id') ? 'restaurant_id' : 'id';
+      const sets = entries.map(([k], i) => `${safeColumn(k)} = $${i + 1}`).join(', ');
+      const params = [...entries.map(([, v]) => v), ev.record_id];
+      const res = await query(`UPDATE ${table} SET ${sets} WHERE ${safeColumn(idCol)} = $${entries.length + 1}`, params);
+      await logUpdateEvent({
+        table_name: ev.table_name, operation: 'UPDATE', record_id: ev.record_id,
+        new_data: { reverted_event_id: ev.id, restored: Object.fromEntries(entries), reason: (input.reason as string) ?? `revert do evento #${ev.id}` },
+      });
+      return { ok: true, reverted_event_id: ev.id, restored_columns: entries.map(([k]) => k), rows_affected: res.rowCount };
+    }
+
+    // ── DBA profundo ──────────────────────────────────────────────────────
+    case 'slow_queries': {
+      const limit = Math.min((input.limit as number) ?? 15, 50);
+      try {
+        const rows = (await query(
+          `SELECT left(query, 300) AS query, calls, round(total_exec_time::numeric, 1) AS total_ms,
+                  round(mean_exec_time::numeric, 2) AS mean_ms, rows,
+                  round((100 * shared_blks_hit / NULLIF(shared_blks_hit + shared_blks_read, 0))::numeric, 1) AS cache_hit_pct
+           FROM pg_stat_statements
+           WHERE query NOT ILIKE '%pg_stat_statements%'
+           ORDER BY mean_exec_time DESC LIMIT $1`, [limit]
+        )).rows;
+        return { available: true, top: rows };
+      } catch {
+        return {
+          available: false,
+          hint: 'pg_stat_statements não está ativo. No Cloud SQL: flag shared_preload_libraries=pg_stat_statements + CREATE EXTENSION pg_stat_statements;',
+        };
+      }
+    }
+
+    case 'explain_plan': {
+      const sql = String(input.sql).trim().replace(/;+\s*$/, '');
+      if (!/^(select|with|table)\b/i.test(sql)) return { error: 'explain_plan aceita apenas SELECT/WITH/TABLE.' };
+      const res = await queryReadOnly<{ 'QUERY PLAN': unknown }>(`EXPLAIN (FORMAT JSON, VERBOSE, COSTS) ${sql}`, { timeoutMs: 15000 });
+      return { plan: res.rows[0]?.['QUERY PLAN'] ?? res.rows };
+    }
+
+    case 'index_advisor': {
+      const [seqHeavy, unusedIdx, fkNoIdx] = await Promise.all([
+        query(`SELECT relname AS table, seq_scan, idx_scan, n_live_tup,
+                      pg_size_pretty(pg_total_relation_size(relid)) AS size
+               FROM pg_stat_user_tables
+               WHERE seq_scan > 100 AND seq_scan > COALESCE(idx_scan, 0) * 5 AND n_live_tup > 1000
+               ORDER BY seq_scan DESC LIMIT 15`),
+        query(`SELECT s.relname AS table, s.indexrelname AS index, pg_size_pretty(pg_relation_size(s.indexrelid)) AS size
+               FROM pg_stat_user_indexes s JOIN pg_index i ON i.indexrelid = s.indexrelid
+               WHERE s.idx_scan = 0 AND NOT i.indisunique AND NOT i.indisprimary
+               ORDER BY pg_relation_size(s.indexrelid) DESC LIMIT 15`),
+        query(`SELECT c.conrelid::regclass::text AS table, a.attname AS fk_column, c.confrelid::regclass::text AS references
+               FROM pg_constraint c
+               JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = ANY(c.conkey)
+               WHERE c.contype = 'f'
+                 AND NOT EXISTS (
+                   SELECT 1 FROM pg_index i
+                   WHERE i.indrelid = c.conrelid AND a.attnum = ANY(i.indkey::int2[]) AND i.indkey[0] = a.attnum
+                 )
+               LIMIT 20`),
+      ]);
+      return {
+        seq_scan_heavy: seqHeavy.rows,
+        unused_indexes: unusedIdx.rows,
+        fk_columns_without_index: fkNoIdx.rows,
+        advice: 'seq_scan_heavy → candidatas a índice em colunas de WHERE frequentes; unused_indexes → candidatos a DROP (via migration); FKs sem índice → JOINs/cascades lentos.',
+      };
+    }
+
+    case 'table_stats': {
+      const rows = (await query(
+        `SELECT relname AS table,
+                pg_size_pretty(pg_total_relation_size(relid)) AS total_size,
+                n_live_tup AS live_rows, n_dead_tup AS dead_rows,
+                CASE WHEN n_live_tup > 0 THEN round(100.0 * n_dead_tup / n_live_tup, 1) ELSE 0 END AS bloat_pct,
+                last_vacuum, last_autovacuum, last_analyze, last_autoanalyze
+         FROM pg_stat_user_tables ORDER BY pg_total_relation_size(relid) DESC LIMIT 30`
+      )).rows;
+      return { tables: rows };
+    }
+
+    case 'connection_stats': {
+      const [byState, limits, waiting] = await Promise.all([
+        query(`SELECT COALESCE(state, 'unknown') AS state, COUNT(*)::int AS n FROM pg_stat_activity GROUP BY 1 ORDER BY n DESC`),
+        query(`SELECT setting::int AS max_connections FROM pg_settings WHERE name = 'max_connections'`),
+        query(`SELECT COUNT(*)::int AS waiting FROM pg_stat_activity WHERE wait_event_type = 'Lock'`),
+      ]);
+      const total = byState.rows.reduce((s, r) => s + Number(r.n), 0);
+      return {
+        total, by_state: byState.rows,
+        max_connections: limits.rows[0]?.max_connections ?? null,
+        waiting_on_locks: waiting.rows[0]?.waiting ?? 0,
+        utilization_pct: limits.rows[0]?.max_connections ? Math.round((100 * total) / Number(limits.rows[0].max_connections)) : null,
+      };
+    }
+
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
@@ -1080,6 +1307,12 @@ const WRITE_SCHEMAS: Record<string, z.ZodType> = {
     params: z.array(z.unknown()).optional(),
     table: z.string().min(1),
     operation: z.enum(['INSERT', 'UPDATE', 'DELETE']),
+    max_affected_rows: z.number().int().positive().max(50000).optional(),
+    allow_full_table: z.boolean().optional(),
+  }),
+  revert_operation: z.object({
+    event_id: z.number().int().positive(),
+    reason: z.string().optional(),
   }),
   bulk_insert: z.object({
     table: z.string().min(1),
@@ -1316,7 +1549,10 @@ Você não valida apenas FORMA — valida REALIDADE. Não basta o e-mail ter @, 
 6. **price_range_id ausente** → o Google quase nunca traz price_level. NÃO invente — deixe nulo e reporte.
 7. **restaurant_category** formato \`[*Michelin|][$$$$|]cozinhas, Vegetarian friendly\`. A verdade normalizada vive em restaurant_category_map/establishment_type_map; não propague cozinha heurística para o mapa sem fonte real.
 8. **Correções em massa**: snapshot antes, confirme, aplique com confidence=high, e rode \`database_health\` depois para evidenciar a melhoria.
-9. **SEO / busca orgânica**: comece com \`seo_audit\`. Maior alavanca = conteúdo multilíngue (\`translate_description\`, PT/EN/FR hoje ~0%) + structured data (\`generate_structured_data\` apply=true → \`structured_data_json\`). Dado de schema (geo/telefone/horários/cozinha/preço) já está ~100% completo; o site só não emite — por isso gerar o JSON-LD completo é ganho rápido. Em lote, peça confirmação e processe aos poucos (custo de LLM nas traduções).`;
+9. **SEO / busca orgânica**: comece com \`seo_audit\`. Maior alavanca = conteúdo multilíngue (\`translate_description\`, PT/EN/FR hoje ~0%) + structured data (\`generate_structured_data\` apply=true → \`structured_data_json\`). Dado de schema (geo/telefone/horários/cozinha/preço) já está ~100% completo; o site só não emite — por isso gerar o JSON-LD completo é ganho rápido. Em lote, peça confirmação e processe aos poucos (custo de LLM nas traduções).
+10. **Guard-rails de escrita (impostos em código, não negociáveis)**: \`execute_mutation\` só aceita statement único INSERT/UPDATE/DELETE; UPDATE/DELETE exigem WHERE (ou allow_full_table=true explícito); rollback automático se afetar mais de 500 linhas (ajuste deliberado via max_affected_rows); DDL é bloqueado — mudanças de schema só por migration versionada. batch_fix/apply_auto_fixes são atômicos (transação) e capturam old_data.
+11. **Reversibilidade**: toda correção fica auditada com old_data. Para desfazer: \`list_recent_mutations\` (ache o event_id) → \`revert_operation\`. Ofereça o undo ao usuário sempre que aplicar correções em massa.
+12. **Performance do banco (DBA)**: para lentidão use \`slow_queries\` (pg_stat_statements) + \`explain_plan\` no SELECT suspeito; \`index_advisor\` sugere índices faltantes/os nunca usados; \`table_stats\` mostra bloat e vacuum; \`connection_stats\` mostra saturação de conexões. Recomende índices via migration, nunca crie DDL direto.`;
 
   let continueLoop = true;
   bus.emit('agent.thinking', { message_count: messages.length }, 'agent');
@@ -1366,25 +1602,44 @@ Você não valida apenas FORMA — valida REALIDADE. Não basta o e-mail ter @, 
 
     // `thinking: {type:'adaptive'}` and `output_config` postdate the pinned SDK's types,
     // so we assemble the body and cast — the request is sent verbatim over HTTP.
-    const stream = anthropic.messages.stream({
-      model: AGENT_MODEL,
-      max_tokens: MAX_TOKENS,
-      system: cachedSystem,
-      tools: cachedTools,
-      messages: historyWithRollingCache(),
-      thinking: thinkingParam,
-      output_config: { effort: AGENT_EFFORT },
-    } as unknown as Anthropic.MessageStreamParams, requestOptions);
+    // Retry transparente para erros transientes (429/5xx/529/rede) — mas só enquanto
+    // nenhum token foi emitido ao cliente, para nunca duplicar conteúdo na UI.
+    let response: Anthropic.Message | null = null;
+    for (let attempt = 0; ; attempt++) {
+      const stream = anthropic.messages.stream({
+        model: AGENT_MODEL,
+        max_tokens: MAX_TOKENS,
+        system: cachedSystem,
+        tools: cachedTools,
+        messages: historyWithRollingCache(),
+        thinking: thinkingParam,
+        output_config: { effort: AGENT_EFFORT },
+      } as unknown as Anthropic.MessageStreamParams, requestOptions);
 
-    // Forward token-level deltas (thinking + text) as they arrive.
-    for await (const ev of stream) {
-      if (ev.type === 'content_block_delta') {
-        if (ev.delta.type === 'thinking_delta') yield { type: 'thinking', thinking: ev.delta.thinking };
-        else if (ev.delta.type === 'text_delta') yield { type: 'text', text: ev.delta.text };
+      let emitted = false;
+      try {
+        // Forward token-level deltas (thinking + text) as they arrive.
+        for await (const ev of stream) {
+          if (ev.type === 'content_block_delta') {
+            if (ev.delta.type === 'thinking_delta') { emitted = true; yield { type: 'thinking', thinking: ev.delta.thinking }; }
+            else if (ev.delta.type === 'text_delta') { emitted = true; yield { type: 'text', text: ev.delta.text }; }
+          }
+        }
+        response = await stream.finalMessage();
+        break;
+      } catch (err) {
+        const status = (err as { status?: number })?.status;
+        const transient =
+          status === 429 || status === 500 || status === 502 || status === 503 || status === 529 ||
+          (status === undefined && /(ECONNRESET|ETIMEDOUT|fetch failed|socket|network)/i.test(String(err)));
+        if (!emitted && !signal?.aborted && transient && attempt < 3) {
+          await new Promise((r) => setTimeout(r, Math.min(1000 * 2 ** attempt, 8000) + Math.random() * 400));
+          continue;
+        }
+        throw err;
       }
     }
-
-    const response = await stream.finalMessage();
+    if (!response) { yield { type: 'error', error: 'Stream terminou sem resposta do modelo.' }; return; }
 
     // Usage telemetry: accumulate + emit (cache hits are nearly free vs fresh input).
     const u = response.usage;

@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import type { OnMount } from '@monaco-editor/react';
 import { motion } from 'framer-motion';
 import { Play, History, Download, Lightbulb, Zap, Shield, ShieldOff, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
+
+const HISTORY_KEY = 'twk_sql_history';
 
 interface QueryResult {
   rows: Record<string, unknown>[];
@@ -31,12 +34,42 @@ export default function QueryConsole() {
   const [showHistory, setShowHistory] = useState(false);
   const [naturalLanguage, setNaturalLanguage] = useState('');
   const startTime = useRef<number>(0);
+  const runRef = useRef<() => void>(() => {});
+  const completionDisposeRef = useRef<{ dispose: () => void } | null>(null);
+  const historyLoaded = useRef(false);
+
+  // Load persisted history once on mount; save on every change afterwards.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) setHistory(parsed.slice(0, 20));
+      }
+    } catch {}
+    historyLoaded.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!historyLoaded.current) return;
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20))); } catch {}
+  }, [history]);
+
+  // Dispose the Monaco completion provider on unmount.
+  useEffect(() => () => { completionDisposeRef.current?.dispose(); completionDisposeRef.current = null; }, []);
 
   const isMutation = (s: string) => /^\s*(INSERT|UPDATE|DELETE|DROP|TRUNCATE|ALTER)/i.test(s);
   const isDestructiveWithoutWhere = (s: string) =>
     /^\s*(DELETE|UPDATE)/i.test(s) && !/WHERE/i.test(s);
+  const hasDropOrTruncate = (s: string) =>
+    s.split(';').some((stmt) => /^\s*(DROP|TRUNCATE)\b/i.test(stmt));
 
   const runQuery = async () => {
+    // DROP/TRUNCATE are always blocked, independent of Safe Mode (server also blocks them).
+    if (hasDropOrTruncate(sql)) {
+      toast.error('DROP e TRUNCATE são bloqueados neste console, mesmo fora do Safe Mode.');
+      return;
+    }
     if (safeMode && isDestructiveWithoutWhere(sql)) {
       toast.error('Safe Mode: DELETE/UPDATE sem WHERE bloqueado. Desative Safe Mode para continuar.');
       return;
@@ -45,7 +78,9 @@ export default function QueryConsole() {
     startTime.current = Date.now();
     try {
       const action = isMutation(sql) ? 'mutate' : 'query';
-      const body: Record<string, unknown> = { action, sql, confirmed: true };
+      // Nunca envia `confirmed` de cara: o servidor devolve um confirm_token no
+      // preview de operações destrutivas e só executa com o token correspondente.
+      const body: Record<string, unknown> = { action, sql };
       if (action === 'mutate') {
         body.table = 'unknown';
         body.operation = sql.trim().toUpperCase().split(' ')[0] as string;
@@ -62,7 +97,7 @@ export default function QueryConsole() {
           <div>
             <p className="text-sm mb-2">{data.message}</p>
             <div className="flex gap-2">
-              <button onClick={() => { toast.dismiss(t.id); runConfirmed(); }}
+              <button onClick={() => { toast.dismiss(t.id); runConfirmed(data.confirm_token); }}
                 className="px-3 py-1 bg-red-500 rounded text-xs text-white">Confirmar</button>
               <button onClick={() => toast.dismiss(t.id)}
                 className="px-3 py-1 bg-gray-600 rounded text-xs text-white">Cancelar</button>
@@ -88,14 +123,14 @@ export default function QueryConsole() {
     }
   };
 
-  const runConfirmed = async () => {
+  const runConfirmed = async (confirmToken?: string) => {
     setLoading(true);
     startTime.current = Date.now();
     try {
       const res = await fetch('/api/db', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'mutate', sql, confirmed: true, table: 'unknown', operation: sql.trim().toUpperCase().split(' ')[0] }),
+        body: JSON.stringify({ action: 'mutate', sql, confirmed: true, confirm_token: confirmToken, table: 'unknown', operation: sql.trim().toUpperCase().split(' ')[0] }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -106,6 +141,54 @@ export default function QueryConsole() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Keep the Ctrl+Enter command pointing at the latest runQuery (avoids stale closure).
+  useEffect(() => { runRef.current = runQuery; });
+
+  const handleEditorMount: OnMount = (editor, monaco) => {
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => runRef.current());
+
+    // Schema-aware autocomplete: table names + column names (simple word-based provider).
+    (async () => {
+      try {
+        const [tablesRes, schemaRes] = await Promise.all([
+          fetch('/api/db?action=tables').then((r) => r.json()),
+          fetch('/api/db?action=schema&table=public.db_restaurants').then((r) => r.json()),
+        ]);
+        const tableNames: string[] = (tablesRes.tables ?? []).map(
+          (t: { table_schema: string; table_name: string }) =>
+            t.table_schema !== 'public' ? `${t.table_schema}.${t.table_name}` : t.table_name,
+        );
+        const columnNames: string[] = (schemaRes.schema ?? []).map(
+          (c: { column_name: string }) => c.column_name,
+        );
+        completionDisposeRef.current?.dispose();
+        completionDisposeRef.current = monaco.languages.registerCompletionItemProvider('sql', {
+          provideCompletionItems: (model: import('monaco-editor').editor.ITextModel, position: import('monaco-editor').Position) => {
+            const word = model.getWordUntilPosition(position);
+            const range = {
+              startLineNumber: position.lineNumber,
+              endLineNumber: position.lineNumber,
+              startColumn: word.startColumn,
+              endColumn: word.endColumn,
+            };
+            return {
+              suggestions: [
+                ...tableNames.map((t) => ({
+                  label: t, insertText: t, range, detail: 'tabela',
+                  kind: monaco.languages.CompletionItemKind.Class,
+                })),
+                ...columnNames.map((c) => ({
+                  label: c, insertText: c, range, detail: 'coluna · db_restaurants',
+                  kind: monaco.languages.CompletionItemKind.Field,
+                })),
+              ],
+            };
+          },
+        });
+      } catch {}
+    })();
   };
 
   const translateNL = async () => {
@@ -122,17 +205,27 @@ export default function QueryConsole() {
       const reader = res.body!.getReader();
       const decoder = new TextDecoder();
       let sqlText = '';
+      const handleEvent = (payload: string) => {
+        if (payload === '[DONE]') return;
+        try {
+          const parsed = JSON.parse(payload);
+          if (typeof parsed.text === 'string') sqlText += parsed.text;
+        } catch {}
+      };
+      // SSE frames are delimited by a blank line; buffer across chunk boundaries.
+      let buffer = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        const lines = decoder.decode(value).split('\n');
-        for (const line of lines) {
-          if (line.startsWith('data: ') && !line.includes('[DONE]')) {
-            const payload = JSON.parse(line.slice(6));
-            if (payload.text) sqlText += payload.text;
-          }
+        buffer += decoder.decode(value, { stream: true });
+        const frames = buffer.split('\n\n');
+        buffer = frames.pop() ?? ''; // keep the trailing partial frame
+        for (const frame of frames) {
+          const line = frame.split('\n').find((l) => l.startsWith('data: '));
+          if (line) handleEvent(line.slice(6));
         }
       }
+      if (buffer.startsWith('data: ')) handleEvent(buffer.slice(6).trim());
       const match = sqlText.match(/```sql\n?([\s\S]+?)```/) ?? sqlText.match(/```\n?([\s\S]+?)```/);
       setSql((match?.[1] ?? sqlText).trim());
       setNaturalLanguage('');
@@ -189,6 +282,7 @@ export default function QueryConsole() {
             theme="vs-dark"
             value={sql}
             onChange={(v: string | undefined) => setSql(v ?? '')}
+            onMount={handleEditorMount}
             options={{
               fontSize: 13,
               fontFamily: 'JetBrains Mono, Fira Code, monospace',
@@ -203,25 +297,25 @@ export default function QueryConsole() {
 
         <div className="w-12 flex flex-col items-center gap-3 py-4 border-l border-white/5 bg-black/20">
           <button onClick={runQuery} disabled={loading}
-            className="p-2.5 bg-gold/20 hover:bg-gold/30 border border-gold/30 rounded-xl text-gold transition-colors disabled:opacity-50"
-            title="Executar (Ctrl+Enter)">
+            className="p-2.5 bg-gold/20 hover:bg-gold/30 border border-gold/30 rounded-xl text-gold transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gold/40"
+            title="Executar (Ctrl+Enter)" aria-label="Executar query (Ctrl+Enter)">
             {loading ? <div className="w-4 h-4 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
               : <Play className="w-4 h-4" />}
           </button>
           <button onClick={() => setSafeMode(!safeMode)}
-            className={`p-2.5 rounded-xl border transition-colors ${safeMode ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' : 'bg-red-500/20 border-red-500/30 text-red-400'}`}
-            title={safeMode ? 'Safe Mode ON' : 'Admin Mode'}>
+            className={`p-2.5 rounded-xl border transition-colors focus:outline-none focus:ring-2 focus:ring-gold/40 ${safeMode ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' : 'bg-red-500/20 border-red-500/30 text-red-400'}`}
+            title={safeMode ? 'Safe Mode ON' : 'Admin Mode'} aria-label={safeMode ? 'Desativar Safe Mode' : 'Ativar Safe Mode'}>
             {safeMode ? <Shield className="w-4 h-4" /> : <ShieldOff className="w-4 h-4" />}
           </button>
           <button onClick={() => setShowHistory(!showHistory)}
-            className="p-2.5 hover:bg-white/10 rounded-xl border border-white/10 text-white/40 hover:text-white/70 transition-colors"
-            title="Histórico">
+            className="p-2.5 hover:bg-white/10 rounded-xl border border-white/10 text-white/40 hover:text-white/70 transition-colors focus:outline-none focus:ring-2 focus:ring-gold/40"
+            title="Histórico" aria-label="Mostrar histórico de queries">
             <History className="w-4 h-4" />
           </button>
           {result && (
             <button onClick={exportCSV}
-              className="p-2.5 hover:bg-white/10 rounded-xl border border-white/10 text-white/40 hover:text-white/70 transition-colors"
-              title="Exportar CSV">
+              className="p-2.5 hover:bg-white/10 rounded-xl border border-white/10 text-white/40 hover:text-white/70 transition-colors focus:outline-none focus:ring-2 focus:ring-gold/40"
+              title="Exportar CSV" aria-label="Exportar resultado em CSV">
               <Download className="w-4 h-4" />
             </button>
           )}

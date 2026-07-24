@@ -2,8 +2,33 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, ChevronDown, ChevronRight, User, Bot, Loader2, Brain, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Send, Sparkles, ChevronDown, ChevronRight, User, Bot, Loader2, Brain, CheckCircle2, AlertCircle, Square, RotateCcw } from 'lucide-react';
 import toast from 'react-hot-toast';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+const CHAT_STORAGE_KEY = 'twk_chat_history';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const markdownComponents = {
+  p:    (props: any) => <p className="my-1 first:mt-0 last:mb-0" {...props} />,
+  a:    (props: any) => <a className="text-gold underline underline-offset-2 hover:text-gold/80" target="_blank" rel="noreferrer" {...props} />,
+  ul:   (props: any) => <ul className="list-disc pl-5 my-1 space-y-0.5" {...props} />,
+  ol:   (props: any) => <ol className="list-decimal pl-5 my-1 space-y-0.5" {...props} />,
+  pre:  (props: any) => <pre className="bg-white/5 border border-white/10 rounded-lg p-3 my-2 overflow-x-auto font-mono text-xs" {...props} />,
+  code: ({ className, ...props }: any) => (
+    <code className={`font-mono text-[12px] ${className ?? 'bg-white/5 rounded px-1 py-0.5'}`} {...props} />
+  ),
+  table: (props: any) => (
+    <div className="overflow-x-auto my-2">
+      <table className="w-full text-xs border-collapse" {...props} />
+    </div>
+  ),
+  th: (props: any) => <th className="border border-white/10 bg-white/5 px-2 py-1 text-left text-gold/80 font-medium" {...props} />,
+  td: (props: any) => <td className="border border-white/10 px-2 py-1" {...props} />,
+  blockquote: (props: any) => <blockquote className="border-l-2 border-gold/40 pl-3 my-1 text-white/60" {...props} />,
+};
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /** Turns raw upstream errors into human-readable Portuguese messages. */
 function formatBackendError(err: string): string {
@@ -57,6 +82,7 @@ interface Message {
   thinking?: string;
   toolCalls?: ToolCall[];
   usage?: Usage;
+  interrupted?: boolean;
 }
 
 const QUICK_COMMANDS = [
@@ -168,7 +194,13 @@ function MessageBubble({ msg }: { msg: Message }) {
           <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
             isUser ? 'bg-white/10 text-white rounded-tr-none' : 'bg-white/[0.04] border border-white/5 text-white/80 rounded-tl-none'
           }`}>
-            <div className="whitespace-pre-wrap">{cleanContent}</div>
+            {isUser ? (
+              <div className="whitespace-pre-wrap">{cleanContent}</div>
+            ) : (
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                {cleanContent}
+              </ReactMarkdown>
+            )}
           </div>
         )}
 
@@ -178,43 +210,88 @@ function MessageBubble({ msg }: { msg: Message }) {
 
         <span className="text-[10px] text-white/20 px-1">
           {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+          {msg.interrupted && <span className="text-amber-400/60 ml-1.5">· interrompida</span>}
         </span>
       </div>
     </motion.div>
   );
 }
 
+const GREETING: Message = {
+  role: 'assistant',
+  content: 'Olá! Sou o **TWK Database Architect**. Tenho acesso completo ao banco de dados PostgreSQL e posso executar queries, importar restaurantes, enriquecer dados e muito mais. Como posso ajudar?',
+  timestamp: new Date().toISOString(),
+};
+
 export default function AgentChat({ initialPrompt = null, onConsumed }: { initialPrompt?: string | null; onConsumed?: () => void } = {}) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content: 'Olá! Sou o **TWK Database Architect**. Tenho acesso completo ao banco de dados PostgreSQL e posso executar queries, importar restaurantes, enriquecer dados e muito mais. Como posso ajudar?',
-      timestamp: new Date().toISOString(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const nearBottomRef = useRef(true);
+  const abortRef = useRef<AbortController | null>(null);
+  const historyLoaded = useRef(false);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  // Restore persisted conversation once on mount.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(CHAT_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) setMessages(parsed.slice(-50));
+      }
+    } catch {}
+    historyLoaded.current = true;
+  }, []);
+
+  // Persist the last 50 messages.
+  useEffect(() => {
+    if (!historyLoaded.current) return;
+    try { localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages.slice(-50))); } catch {}
+  }, [messages]);
+
+  // Only auto-scroll when the user was already near the bottom (< 150px away).
+  useEffect(() => {
+    if (nearBottomRef.current) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const onScrollContainer = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    nearBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 150;
+  };
+
+  const clearConversation = () => {
+    abortRef.current?.abort();
+    setMessages([{ ...GREETING, timestamp: new Date().toISOString() }]);
+    try { localStorage.removeItem(CHAT_STORAGE_KEY); } catch {}
+  };
+
+  const stopStreaming = () => abortRef.current?.abort();
 
   const sendMessage = async (text?: string) => {
     const content = (text ?? input).trim();
     if (!content || loading) return;
 
     setInput('');
+    if (inputRef.current) inputRef.current.style.height = '48px';
     const userMsg: Message = { role: 'user', content, timestamp: new Date().toISOString() };
     setMessages((m) => [...m, userMsg]);
     setLoading(true);
+    nearBottomRef.current = true;
 
     const allMessages = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }));
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const res = await fetch('/api/agent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: allMessages }),
+        signal: controller.signal,
       });
 
       const reader = res.body!.getReader();
@@ -303,8 +380,20 @@ export default function AgentChat({ initialPrompt = null, onConsumed }: { initia
         ));
       }
     } catch (err) {
-      setMessages((m) => [...m, { role: 'assistant', content: `Erro: ${String(err)}`, timestamp: new Date().toISOString() }]);
+      if ((err as Error)?.name === 'AbortError') {
+        // User pressed "Parar": keep whatever partial content arrived and mark it.
+        setMessages((m) => {
+          const last = m[m.length - 1];
+          if (last?.role === 'assistant') {
+            return m.map((msg, idx) => idx === m.length - 1 ? { ...msg, interrupted: true } : msg);
+          }
+          return [...m, { role: 'assistant', content: 'Geração interrompida.', interrupted: true, timestamp: new Date().toISOString() }];
+        });
+      } else {
+        setMessages((m) => [...m, { role: 'assistant', content: `Erro: ${String(err)}`, timestamp: new Date().toISOString() }]);
+      }
     } finally {
+      abortRef.current = null;
       setLoading(false);
     }
   };
@@ -320,8 +409,22 @@ export default function AgentChat({ initialPrompt = null, onConsumed }: { initia
 
   return (
     <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
+        <div className="flex items-center gap-2">
+          <Bot className="w-4 h-4 text-gold/60" />
+          <span className="text-[10px] uppercase tracking-widest text-white/40 font-medium">TWK Agent</span>
+        </div>
+        <button
+          onClick={clearConversation}
+          className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-2.5 py-1.5 transition-colors focus:outline-none focus:ring-2 focus:ring-gold/40"
+        >
+          <RotateCcw className="w-3 h-3" /> Nova conversa
+        </button>
+      </div>
+
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-5">
+      <div ref={containerRef} onScroll={onScrollContainer} className="flex-1 overflow-y-auto p-6 space-y-5">
         <AnimatePresence initial={false}>
           {messages.map((msg, i) => <MessageBubble key={i} msg={msg} />)}
         </AnimatePresence>
@@ -359,17 +462,31 @@ export default function AgentChat({ initialPrompt = null, onConsumed }: { initia
           <textarea
             ref={inputRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            aria-label="Mensagem para o agente"
+            onChange={(e) => {
+              setInput(e.target.value);
+              // Auto-grow up to ~8 rows.
+              const el = e.currentTarget;
+              el.style.height = 'auto';
+              el.style.height = `${Math.min(el.scrollHeight, 176)}px`;
+            }}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
             placeholder="Pergunte ao agente… (Enter para enviar, Shift+Enter para nova linha)"
             rows={1}
-            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-gold/30 placeholder:text-white/20 resize-none transition-colors max-h-32 overflow-y-auto"
-            style={{ minHeight: '48px' }}
+            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-gold/30 focus:ring-2 focus:ring-gold/40 placeholder:text-white/20 resize-none transition-colors overflow-y-auto"
+            style={{ minHeight: '48px', maxHeight: '176px' }}
           />
-          <button onClick={() => sendMessage()} disabled={loading || !input.trim()}
-            className="p-3 bg-gold/20 hover:bg-gold/30 border border-gold/30 rounded-xl text-gold transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0">
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-          </button>
+          {loading ? (
+            <button onClick={stopStreaming} aria-label="Parar geração"
+              className="flex items-center gap-2 px-4 py-3 bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 rounded-xl text-red-400 text-sm font-medium transition-all flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-gold/40">
+              <Square className="w-4 h-4 fill-current" /> Parar
+            </button>
+          ) : (
+            <button onClick={() => sendMessage()} disabled={!input.trim()} aria-label="Enviar mensagem"
+              className="p-3 bg-gold/20 hover:bg-gold/30 border border-gold/30 rounded-xl text-gold transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-gold/40">
+              <Send className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
     </div>
