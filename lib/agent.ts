@@ -1358,7 +1358,9 @@ export async function executeTool(
   input: Record<string, unknown>
 ): Promise<unknown> {
   const startTime = Date.now();
-  bus.emit('tool.call.start', { tool: name, input: summariseInput(input) }, 'agent');
+  // id de correlação: o Command Center pareia start/end por ele (nome pode repetir em paralelo).
+  const corr = `agent-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  bus.emit('tool.call.start', { id: corr, tool: name, input: summariseInput(input) }, 'agent');
   try {
     const schema = WRITE_SCHEMAS[name];
     if (schema) {
@@ -1371,6 +1373,7 @@ export async function executeTool(
     const result = await withTimeout(executeToolInternal(name, input), timeout, name);
     const duration = Date.now() - startTime;
     bus.emit('tool.call.end', {
+      id: corr,
       tool: name,
       input: summariseInput(input),
       result_summary: summariseResult(result),
@@ -1378,7 +1381,7 @@ export async function executeTool(
     return result;
   } catch (err) {
     const duration = Date.now() - startTime;
-    bus.emit('tool.call.error', { tool: name, error: String(err) }, 'agent', duration);
+    bus.emit('tool.call.error', { id: corr, tool: name, error: String(err) }, 'agent', duration);
     throw err;
   }
 }

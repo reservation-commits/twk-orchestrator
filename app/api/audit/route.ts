@@ -9,6 +9,7 @@ import { generateAutoFixSuggestions } from '@/lib/auto-fixer';
 import { saveSnapshot, getSnapshotHistory, analyzeTrend } from '@/lib/monitoring';
 import { findRestaurantEmail, batchFindEmails } from '@/lib/email-finder';
 import { safeIdent, safeColumn } from '@/lib/sql-guard';
+import { bus } from '@/lib/event-bus';
 
 const BATCH = 2000; // max rows to load for audit
 
@@ -36,10 +37,18 @@ async function resolvePk(table: string): Promise<string> {
 }
 
 export async function POST(req: NextRequest) {
+  // Toda ação de qualidade emite eventos no bus → aparece ao vivo no
+  // Tool Execution Stream do Command Center (antes só o Agente IA aparecia).
+  const started = Date.now();
+  const corr = `audit-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  let action = 'unknown';
+  let tableForLog: unknown;
   try {
     const body = await req.json();
-    const action = body.action as string;
-
+    action = (body.action as string) ?? 'unknown';
+    tableForLog = body.table;
+    bus.emit('tool.call.start', { id: corr, tool: `audit:${action}`, input: { table: tableForLog } }, 'quality-engine');
+    const response = await (async (): Promise<NextResponse> => {
     switch (action) {
 
       // ── Full table audit ─────────────────────────────────────────────────
@@ -693,7 +702,16 @@ export async function POST(req: NextRequest) {
       default:
         return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
     }
+    })();
+    bus.emit(
+      'tool.call.end',
+      { id: corr, tool: `audit:${action}`, input: { table: tableForLog }, result_summary: `HTTP ${response.status}` },
+      'quality-engine',
+      Date.now() - started
+    );
+    return response;
   } catch (err) {
+    bus.emit('tool.call.error', { id: corr, tool: `audit:${action}`, error: String(err).slice(0, 200) }, 'quality-engine', Date.now() - started);
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: 'Validation error', details: err.issues }, { status: 400 });
     }

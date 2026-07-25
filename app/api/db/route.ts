@@ -14,6 +14,7 @@ import {
   AuditLogError,
 } from '@/lib/db';
 import { safeIdent, safeColumn, safeOrderDir } from '@/lib/sql-guard';
+import { bus } from '@/lib/event-bus';
 
 const QuerySchema = z.object({
   sql: z.string().min(1),
@@ -265,16 +266,31 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // queryWrite: statement único, operação declarada == real, sem DDL, WHERE
-        // obrigatório (salvo confirmação explícita), rollback por blast-radius.
-        const result = await queryWrite(sql, {
-          params: params as unknown[],
-          operation,
-          allowFullTable: confirmed === true,
-        });
-        // Fail-closed: se a trilha de auditoria falhar, a resposta é erro (500 abaixo).
-        await logUpdateEvent({ table_name: table, operation, new_data: { sql, params } });
-        return NextResponse.json({ rowCount: result.rowCount, command: result.operation });
+        // Par start/end com id de correlação → aparece ao vivo no Tool Execution Stream.
+        const corr = `db-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+        bus.emit('tool.call.start', { id: corr, tool: `db:${operation.toLowerCase()}`, input: { table } }, 'sql-console');
+        const mutStarted = Date.now();
+        try {
+          // queryWrite: statement único, operação declarada == real, sem DDL, WHERE
+          // obrigatório (salvo confirmação explícita), rollback por blast-radius.
+          const result = await queryWrite(sql, {
+            params: params as unknown[],
+            operation,
+            allowFullTable: confirmed === true,
+          });
+          // Fail-closed: se a trilha de auditoria falhar, a resposta é erro (500 abaixo).
+          await logUpdateEvent({ table_name: table, operation, new_data: { sql, params } });
+          bus.emit(
+            'tool.call.end',
+            { id: corr, tool: `db:${operation.toLowerCase()}`, input: { table }, result_summary: `${result.rowCount} linha(s)` },
+            'sql-console',
+            Date.now() - mutStarted
+          );
+          return NextResponse.json({ rowCount: result.rowCount, command: result.operation });
+        } catch (err) {
+          bus.emit('tool.call.error', { id: corr, tool: `db:${operation.toLowerCase()}`, error: String(err).slice(0, 200) }, 'sql-console', Date.now() - mutStarted);
+          throw err;
+        }
       }
 
       case 'bulk_insert': {

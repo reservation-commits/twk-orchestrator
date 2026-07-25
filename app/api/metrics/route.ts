@@ -26,9 +26,10 @@ interface OverviewMetrics {
   services: ServiceHealth[];
 }
 
-// Cache module-level da sonda do Google Places (60s) para não gerar custo a cada poll.
+// Cache module-level das sondas externas (60s) para não gerar custo a cada poll.
 const globalForHealth = globalThis as unknown as {
   __twkPlacesHealth?: { health: ServiceHealth; at: number };
+  __twkAnthropicHealth?: { health: ServiceHealth; at: number };
 };
 const PLACES_HEALTH_TTL_MS = 60_000;
 
@@ -59,6 +60,40 @@ async function probeGooglePlaces(): Promise<ServiceHealth | null> {
     checked_at: new Date().toISOString(),
   };
   globalForHealth.__twkPlacesHealth = { health, at: Date.now() };
+  return health;
+}
+
+// Sonda REAL e gratuita da Anthropic: GET /v1/models valida chave + conectividade
+// + latência sem consumir nenhum token (não é um request de inferência).
+async function probeAnthropic(): Promise<ServiceHealth> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) return { name: 'anthropic', ok: false, note: 'ANTHROPIC_API_KEY ausente' };
+
+  const cached = globalForHealth.__twkAnthropicHealth;
+  if (cached && Date.now() - cached.at < PLACES_HEALTH_TTL_MS) return cached.health;
+
+  const start = Date.now();
+  let ok = false;
+  let note: string | undefined;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/models?limit=1', {
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      signal: AbortSignal.timeout(4000),
+    });
+    ok = res.ok;
+    if (res.status === 401) note = 'chave inválida';
+    else if (res.status === 429) { ok = true; note = 'rate limit (API alcançável)'; }
+    else if (!res.ok) note = `HTTP ${res.status}`;
+  } catch {
+    ok = false;
+    note = 'sem conectividade';
+  }
+
+  const health: ServiceHealth = {
+    name: 'anthropic', ok, latency_ms: Date.now() - start,
+    checked_at: new Date().toISOString(), ...(note ? { note } : {}),
+  };
+  globalForHealth.__twkAnthropicHealth = { health, at: Date.now() };
   return health;
 }
 
@@ -110,10 +145,9 @@ export async function GET() {
   const services: ServiceHealth[] = [
     { name: 'postgres', ok: pgOk, latency_ms: pgLatency, checked_at: new Date().toISOString() },
   ];
-  const placesHealth = await probeGooglePlaces();
+  const [placesHealth, anthropicHealth] = await Promise.all([probeGooglePlaces(), probeAnthropic()]);
   if (placesHealth) services.push(placesHealth);
-  // Anthropic: sem sonda ativa (chamada é paga); ok:null = estado desconhecido.
-  services.push({ name: 'anthropic', ok: null, note: 'sem sonda ativa' });
+  services.push(anthropicHealth);
 
   const data: OverviewMetrics = {
     quality_score: qualityScore,
