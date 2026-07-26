@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { pickCoverIndex, type CoverItem } from '../lib/photo-select.ts';
+import { pickCoverIndex, composeSelection, type CoverItem } from '../lib/photo-select.ts';
 
 test('prefers a landscape AMBIENCE over larger dishes (the 1800 Floga case)', () => {
   const items: CoverItem[] = [
@@ -39,4 +39,50 @@ test('below minW, the largest landscape ambience still wins', () => {
 
 test('empty list returns -1', () => {
   assert.equal(pickCoverIndex([]), -1);
+});
+
+// ── composeSelection: máx. 2 pratos, mín. 3 ambientes ─────────────────────────
+test('composeSelection: só pratos → recomenda apenas 2 e sinaliza falta de ambientes', () => {
+  const c = composeSelection(['prato', 'prato', 'prato', 'prato', 'prato']);
+  assert.deepEqual(c.recommended, [true, true, false, false, false]);
+  assert.equal(c.dishes, 2);
+  assert.equal(c.ambience, 0);
+  assert.equal(c.ambienceShortfall, true);
+});
+
+test('composeSelection: mix saudável 3 ambientes + 2 pratos → tudo recomendado', () => {
+  const c = composeSelection(['ambiente', 'ambiente', 'ambiente', 'prato', 'prato']);
+  assert.deepEqual(c.recommended, [true, true, true, true, true]);
+  assert.equal(c.ambienceShortfall, false);
+});
+
+test('composeSelection: 3º prato fica de fora mesmo com ambientes de sobra', () => {
+  const c = composeSelection(['ambiente', 'prato', 'ambiente', 'prato', 'ambiente', 'prato']);
+  assert.deepEqual(c.recommended, [true, true, true, true, true, false]);
+  assert.equal(c.dishes, 2);
+  assert.equal(c.ambience, 3);
+});
+
+test('composeSelection: ambientes nunca são cortados', () => {
+  const c = composeSelection(['ambiente', 'ambiente', 'ambiente', 'ambiente', 'ambiente', 'ambiente']);
+  assert.equal(c.recommended.every(Boolean), true);
+  assert.equal(c.ambience, 6);
+});
+
+test('composeSelection: capa-prato consome o orçamento de pratos', () => {
+  // ordem de publicação: capa primeiro — se a capa é prato, sobra 1 prato p/ galeria
+  const c = composeSelection(['prato', 'ambiente', 'prato', 'prato']);
+  assert.deepEqual(c.recommended, [true, true, true, false]);
+});
+
+test('composeSelection: limites customizados via opts', () => {
+  const c = composeSelection(['prato', 'prato', 'prato'], { maxDishes: 1, minAmbience: 2 });
+  assert.deepEqual(c.recommended, [true, false, false]);
+  assert.equal(c.ambienceShortfall, true);
+});
+
+test('composeSelection: lista vazia', () => {
+  const c = composeSelection([]);
+  assert.deepEqual(c.recommended, []);
+  assert.equal(c.ambienceShortfall, true);
 });

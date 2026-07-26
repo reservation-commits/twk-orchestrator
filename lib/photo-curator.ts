@@ -15,7 +15,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { getPlaceDetails, getPlacePhotoUrls } from './places';
 import { webSearch, findSocialMedia } from './scraper';
 import { imageSize, dedupKey, resolutionVariants } from './image-utils';
-import { pickCoverIndex } from './photo-select';
+import { pickCoverIndex, composeSelection } from './photo-select';
 import { isPublicUrl } from './net-guard';
 
 export { imageSize, resolutionVariants };
@@ -41,7 +41,15 @@ export interface CuratedPhoto {
   is_cover: boolean;
   alt_text: string;
   quality: 'high' | 'low'; // 'low' = below the ideal pixel bar for its role (cover/gallery)
+  // Política editorial (composeSelection): ambientes sempre; pratos até o limite (2).
+  // false = disponível no contact sheet, mas fora da seleção automática.
+  recommended: boolean;
 }
+
+// Regra editorial da galeria (env-ajustável): das 5 fotos-alvo, no máximo 2 pratos
+// e pelo menos 3 ambientes. Ambiente vende o restaurante; prato ilustra.
+const MAX_DISHES = parseInt(process.env.PHOTO_MAX_DISHES ?? '2', 10);
+const MIN_AMBIENCE = parseInt(process.env.PHOTO_MIN_AMBIENCE ?? '3', 10);
 
 export interface CaptureProgress {
   (ev:
@@ -204,6 +212,10 @@ export interface CaptureResult {
   shortfall: boolean;
   bySource: Record<string, number>;
   message: string;
+  // Composição editorial da seleção recomendada (política: mín. 3 ambientes, máx. 2 pratos).
+  ambience_count?: number;
+  dish_count?: number;
+  ambience_shortfall?: boolean;
 }
 
 /**
@@ -236,33 +248,51 @@ export async function capturePhotos(
     onProgress({ phase: 'source', source: s.source, status: 'done', found });
   }
 
-  // 2) Download "best source": for each candidate try a higher-res original first and keep the
-  //    largest. Soft floor only (SOFT_MIN_W) — good content below the ideal bar is kept and
+  // 2+3) Download + classificação em LOTES: baixa uma janela, classifica, e — se ainda
+  //    não achou MIN_AMBIENCE fotos de ambiente — continua nas candidatas seguintes.
+  //    (Antes parava nas 14 primeiras: sites cheios de pratos terminavam sem ambientes.)
+  //    Soft floor only (SOFT_MIN_W) — good content below the ideal bar is kept and
   //    flagged 'low' (not dropped), so the user can still use/approve or manually upgrade it.
-  const toFetch = raw.slice(0, 28);
+  const FETCH_WINDOW = 14;
+  const MAX_TOTAL_FETCH = 28;
   const fetched: { cand: RawCandidate; img: FetchedImage }[] = [];
-  let i = 0;
-  for (const c of toFetch) {
-    if (signal?.aborted) break;
-    const best = await fetchBest(c.url, SOFT_MIN_W);
-    i++;
-    onProgress({ phase: 'fetch', fetched: i, total: toFetch.length });
-    if (best) {
-      const key = dedupKey(best.url);
-      const dup = fetched.find((f) => dedupKey(f.cand.url) === key);
-      if (dup) { if (best.img.w > dup.img.w) { dup.img = best.img; dup.cand = { ...dup.cand, url: best.url }; } }
-      else fetched.push({ cand: { source: c.source, url: best.url }, img: best.img });
+  const verdicts: VisionVerdict[] = [];
+  let cursor = 0;
+
+  const ambienceSoFar = () =>
+    verdicts.filter((v) => v.cat === 'ambiente' && v.person !== true).length;
+
+  while (cursor < raw.length && fetched.length < MAX_TOTAL_FETCH) {
+    const windowStart = fetched.length;
+    while (cursor < raw.length && fetched.length < Math.min(windowStart + FETCH_WINDOW, MAX_TOTAL_FETCH)) {
+      if (signal?.aborted) break;
+      const c = raw[cursor++];
+      const best = await fetchBest(c.url, SOFT_MIN_W);
+      onProgress({ phase: 'fetch', fetched: cursor, total: Math.min(raw.length, MAX_TOTAL_FETCH) });
+      if (best) {
+        const key = dedupKey(best.url);
+        const dup = fetched.find((f) => dedupKey(f.cand.url) === key);
+        if (dup) { if (best.img.w > dup.img.w) { dup.img = best.img; dup.cand = { ...dup.cand, url: best.url }; } }
+        else fetched.push({ cand: { source: c.source, url: best.url }, img: best.img });
+      }
     }
-    if (fetched.length >= 14) break;
+    if (signal?.aborted || fetched.length === windowStart) break;
+
+    const fresh = fetched.slice(windowStart);
+    onProgress({ phase: 'classify', count: fresh.length });
+    const vs = await classify(fresh.map((f) => f.img));
+    for (const v of vs) verdicts.push({ ...v, i: v.i + windowStart });
+
+    if (ambienceSoFar() >= MIN_AMBIENCE) break;
+    if (cursor < raw.length && fetched.length < MAX_TOTAL_FETCH) {
+      onProgress({ phase: 'note', message: `Só ${ambienceSoFar()} ambiente(s) até aqui — buscando mais candidatas…` });
+    }
   }
 
   if (!fetched.length) {
     return { photos: [], gallery: [], shortfall: true, bySource: {}, message: 'Nenhuma imagem utilizável encontrada nas fontes.' };
   }
 
-  // 3) Vision-classify in one batch.
-  onProgress({ phase: 'classify', count: fetched.length });
-  const verdicts = await classify(fetched.map((f) => f.img));
   const get = (idx: number) => verdicts.find((v) => v.i === idx) || ({ i: idx, cat: 'outro', hq: false, person: false } as VisionVerdict);
 
   // 4) Keep ambiente (priority) then prato; never people/menus. Low-res good content is kept
@@ -293,6 +323,7 @@ export async function capturePhotos(
     return {
       source_url: q.cand.url, source: q.cand.source, width: q.img.w, height: q.img.h,
       category: q.cat, is_cover: isCover, alt_text: `${r.name}${city ? ' ' + city : ''}`, quality,
+      recommended: true, // sobrescrito logo abaixo pela política de composição
     };
   };
 
@@ -300,17 +331,35 @@ export async function capturePhotos(
   if (cover) photos.push(mk(cover, true));
   for (const q of ordered) photos.push(mk(q, false));
 
+  // Política editorial: no máx. MAX_DISHES pratos na seleção automática; ambientes
+  // sempre entram. Pratos excedentes ficam recommended:false (inclusão manual).
+  const comp = composeSelection(
+    photos.map((p) => (p.category === 'ambiente' ? 'ambiente' : 'prato')),
+    { maxDishes: MAX_DISHES, minAmbience: MIN_AMBIENCE }
+  );
+  photos.forEach((p, idx) => { p.recommended = comp.recommended[idx]; });
+
   const bySource: Record<string, number> = {};
   for (const p of photos) bySource[p.source] = (bySource[p.source] ?? 0) + 1;
 
   const gallery = photos.filter((p) => !p.is_cover);
+  const recommendedCount = comp.ambience + comp.dishes;
   const lowCount = photos.filter((p) => p.quality === 'low').length;
-  const shortfall = photos.length < 5;
-  const message = shortfall
-    ? `Apenas ${photos.length} foto(s) (meta: 5)${lowCount ? ` · ${lowCount} em baixa resolução` : ''}.`
-    : `${photos.length} fotos: 1 capa + ${gallery.length} galeria${lowCount ? ` · ${lowCount} otimizável(is) (baixa res)` : ''}.`;
+  const shortfall = recommendedCount < 5;
+  const extraDishes = photos.filter((p) => !p.recommended).length;
 
-  return { photos, cover: cover ? photos[0] : undefined, gallery, shortfall, bySource, message };
+  const parts: string[] = [];
+  parts.push(`${comp.ambience} ambiente(s) + ${comp.dishes} prato(s) na seleção`);
+  if (extraDishes) parts.push(`${extraDishes} prato(s) extra fora da seleção (máx. ${MAX_DISHES})`);
+  if (lowCount) parts.push(`${lowCount} otimizável(is) (baixa res)`);
+  if (comp.ambienceShortfall) parts.push(`⚠ meta de ${MIN_AMBIENCE}+ ambientes NÃO atingida — considere recapturar ou subir fotos manualmente`);
+  else if (shortfall) parts.push(`⚠ menos de 5 fotos na seleção`);
+  const message = parts.join(' · ') + '.';
+
+  return {
+    photos, cover: cover ? photos[0] : undefined, gallery, shortfall, bySource, message,
+    ambience_count: comp.ambience, dish_count: comp.dishes, ambience_shortfall: comp.ambienceShortfall,
+  };
 }
 
 export { basename };

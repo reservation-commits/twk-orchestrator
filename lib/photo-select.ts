@@ -26,3 +26,37 @@ export function pickCoverIndex(items: CoverItem[], coverMinW = 1500): number {
     idx.slice().sort(byW)[0];
   return pick ? pick.i : -1;
 }
+
+/**
+ * Pure gallery-composition policy: a restaurant's photo set must ser dominado por
+ * AMBIENTES, não por pratos. Regra editorial (2026-07): das 5 fotos-alvo, no máximo
+ * `maxDishes` (2) pratos — o resto precisa ser ambiente.
+ *
+ * Recebe as fotos NA ORDEM de publicação (capa primeiro) e devolve, por índice,
+ * se a foto entra na seleção recomendada: ambientes sempre; pratos até o limite.
+ * Pratos excedentes ficam de fora da recomendação (mas seguem disponíveis para
+ * inclusão manual pelo curador humano).
+ */
+export interface ComposeOptions { maxDishes?: number; minAmbience?: number }
+export interface Composition {
+  recommended: boolean[];
+  ambience: number;        // ambientes recomendados
+  dishes: number;          // pratos recomendados (≤ maxDishes)
+  ambienceShortfall: boolean; // true se ambientes < minAmbience
+}
+
+export function composeSelection(
+  categories: Array<'ambiente' | 'prato'>,
+  opts: ComposeOptions = {}
+): Composition {
+  const { maxDishes = 2, minAmbience = 3 } = opts;
+  let dishBudget = maxDishes;
+  let ambience = 0;
+  let dishes = 0;
+  const recommended = categories.map((cat) => {
+    if (cat === 'ambiente') { ambience++; return true; }
+    if (dishBudget > 0) { dishBudget--; dishes++; return true; }
+    return false;
+  });
+  return { recommended, ambience, dishes, ambienceShortfall: ambience < minAmbience };
+}

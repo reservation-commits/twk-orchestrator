@@ -15,6 +15,8 @@ interface CuratedPhoto {
   source_url: string; source: PhotoSource; width: number; height: number;
   category: 'ambiente' | 'prato' | 'pessoa' | 'texto' | 'outro'; is_cover: boolean; alt_text: string;
   quality?: 'high' | 'low';
+  // Política editorial: false = prato acima do limite (máx. 2) — fora da pré-seleção.
+  recommended?: boolean;
 }
 interface Restaurant {
   restaurant_id: string; name: string; city?: string; country?: string; slug?: string;
@@ -103,14 +105,19 @@ export default function PhotoStudio() {
               setProgress((p) => { const c = [...p]; const txt = `⬇️ Validando imagens ${ev.fetched}/${ev.total}…`; if (c[c.length - 1]?.startsWith('⬇️')) c[c.length - 1] = txt; else c.push(txt); return c; });
             } else if (ev.phase === 'classify') {
               setProgress((p) => [...p, `🧠 Classificando ${ev.count} imagens por visão…`]);
+            } else if (ev.phase === 'note') {
+              setProgress((p) => [...p, `ℹ️ ${ev.message}`]);
             }
           } else if (ev.type === 'result') {
             const photos = (ev.photos as CuratedPhoto[]) ?? [];
             setCandidates(photos);
             setCaptureMsg(ev.message as string);
-            // pre-select all + cover
-            setChosen(new Set(photos.map((p) => p.source_url)));
-            const cov = photos.find((p) => p.is_cover); setCoverUrl(cov?.source_url ?? photos[0]?.source_url ?? null);
+            // Pré-seleciona só o recomendado pela política editorial (máx. 2 pratos,
+            // ambientes sempre). Pratos extras ficam no grid para inclusão manual.
+            const recommended = photos.filter((p) => p.recommended !== false);
+            setChosen(new Set(recommended.map((p) => p.source_url)));
+            const cov = recommended.find((p) => p.is_cover) ?? photos.find((p) => p.is_cover);
+            setCoverUrl(cov?.source_url ?? recommended[0]?.source_url ?? photos[0]?.source_url ?? null);
           } else if (ev.type === 'error') {
             toast.error(String(ev.error));
           }
@@ -376,6 +383,11 @@ export default function PhotoStudio() {
                         <span className={`text-[10px] px-1 rounded ${c.category === 'ambiente' ? 'text-emerald-300' : 'text-orange-300'}`}>{c.category}</span>
                       </div>
                       {isCover && <span className="absolute top-9 right-2 text-[9px] font-semibold text-gold bg-black/60 px-1.5 py-0.5 rounded">CAPA</span>}
+                      {c.recommended === false && !isChosen && (
+                        <span className="absolute top-2 left-10 text-[9px] font-medium text-orange-300 bg-black/60 border border-orange-400/30 px-1.5 py-0.5 rounded" title="Fora da seleção automática: limite de pratos atingido (máx. 2). Clique no ✓ para incluir mesmo assim.">
+                          extra
+                        </span>
+                      )}
                     </motion.div>
                   );
                 })}
