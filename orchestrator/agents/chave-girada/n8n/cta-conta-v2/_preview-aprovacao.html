@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CTA de conta v2 — preview para aprovação</title>
+<style>
+  body{margin:0;padding:28px;background:#EFECE4;font-family:"Segoe UI",Arial,sans-serif;color:#16130E}
+  h1{font-family:Georgia,serif;font-weight:normal;font-size:24px;margin:0 0 4px 0}
+  .sub{color:#6E6551;font-size:13px;margin:0 0 10px 0}
+  h2{font-family:Georgia,serif;font-weight:normal;font-size:18px;border-bottom:1.5px solid #8C6A28;color:#8C6A28;padding-bottom:5px;margin:30px 0 12px 0}
+  .par{display:flex;gap:18px;flex-wrap:wrap}
+  .col{flex:1;min-width:340px;max-width:520px}
+  .tag{font-size:11px;font-weight:700;letter-spacing:.12em;padding:4px 10px;display:inline-block;border-radius:3px;margin-bottom:6px}
+  .antes{background:#D8D2C4;color:#4A4438}.depois{background:#8C6A28;color:#fff}
+  iframe{width:100%;height:640px;border:1px solid #C9C2B2;border-radius:8px;background:#0B0A08}
+  .nota{background:#F7F5F0;border-left:3px solid #8C6A28;padding:10px 14px;font-size:13px;max-width:1080px}
+</style></head><body>
+<h1>CTA da conta nos e-mails de reserva — preview para aprovação</h1>
+<p class="sub">09/09/2026 · dados de exemplo (SRI TRAT) · role dentro de cada quadro para ver o e-mail inteiro</p>
+<div class="nota">O que muda: a linha de texto discreta dos fluxos 1 e 2 vira o cartão dourado com botão; o cartão do fluxo 3 ganha hierarquia (título maior, botão central) — e <b>todos os quatro botões passam a ser rastreados</b> pelo /go (campanhas <code>notif-pedido</code>, <code>notif-lembrete</code>, <code>resposta-aceite</code>, <code>resposta-recusa</code>), com o rid protegido contra o defeito de corrupção do canal. Nada mais muda nos e-mails.</div>
+
+  <h2>Fluxo 1 · nova reserva</h2>
+  <div class="par">
+    <div class="col"><div class="tag antes">ANTES — como está no ar</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>New Reservation Request</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <!-- Preheader (hidden) -->
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>
+    New booking request — Sat, 13 Sept 2026, 8:00 PM, 2 guests. Please respond.
+  </div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <!-- Header -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <!-- Headline -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>
+                A new booking awaits you.
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>
+                Dear <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span>,
+                congratulations — you have just received a new booking request.
+                Please review the details and respond as soon as possible.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Details card -->
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr>
+                  <td style=&quot;padding:20px 20px;&quot;>
+                    <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;>
+                      <tr>
+                        <td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUEST</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Adi P.</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td>
+                      </tr>
+                    </table>
+                    <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;>
+                      WQ4LVHVL
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Privacy note -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:16px 24px 0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;&quot;>
+                For security and data protection, guest contact details are available only through the response page.
+              </p>
+            </td>
+          </tr>
+
+          <!-- CTA -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td align=&quot;center&quot; style=&quot;background-color:#CE9E3C;&quot;>
+                  <a href=&quot;https://theworldkeys.com/r/WQ4LVHVL&quot; target=&quot;_blank&quot;
+                     style=&quot;display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;&quot;>
+                    Respond to pending requests
+                  </a>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:14px 24px 0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;&quot;>
+                Prefer to answer every request from one place, in one tap? The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts your requests, hours and page in your hands.
+                <a href=&quot;https://manager.theworldkeys.com/register&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:underline; white-space:nowrap;&quot;>Activate my key &amp;rarr;</a>
+              </p>
+              <p style=&quot;margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</p>
+            </td>
+          </tr>
+
+<tr>
+            <td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;&quot;>
+                Need anything? <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our team on WhatsApp</a>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>
+                Accept, decline, or propose a new time — a quick response gives your guest the best possible experience.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;·&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-Élysées, 75008 Paris, France<br/>
+                VAT: FR24901268326 · R.C.S Paris: 901 268 326 · © 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"></iframe></div>
+    <div class="col"><div class="tag depois">DEPOIS — proposta</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>New Reservation Request</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <!-- Preheader (hidden) -->
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>
+    New booking request — Sat, 13 Sept 2026, 8:00 PM, 2 guests. Please respond.
+  </div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <!-- Header -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <!-- Headline -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>
+                A new booking awaits you.
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>
+                Dear <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span>,
+                congratulations — you have just received a new booking request.
+                Please review the details and respond as soon as possible.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Details card -->
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr>
+                  <td style=&quot;padding:20px 20px;&quot;>
+                    <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;>
+                      <tr>
+                        <td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUEST</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Adi P.</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td>
+                      </tr>
+                      <tr>
+                        <td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td>
+                        <td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td>
+                      </tr>
+                    </table>
+                    <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;>
+                      WQ4LVHVL
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Privacy note -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:16px 24px 0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;&quot;>
+                For security and data protection, guest contact details are available only through the response page.
+              </p>
+            </td>
+          </tr>
+
+          <!-- CTA -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td align=&quot;center&quot; style=&quot;background-color:#CE9E3C;&quot;>
+                  <a href=&quot;https://theworldkeys.com/r/WQ4LVHVL&quot; target=&quot;_blank&quot;
+                     style=&quot;display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;&quot;>
+                    Respond to pending requests
+                  </a>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:14px 24px 0 24px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td align=&quot;center&quot; style=&quot;padding:24px 22px 20px 22px;&quot;>
+                  <div style=&quot;font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:1.35; color:#F5EFE3; padding-bottom:8px;&quot;>Answer every request in one tap.</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#B5AB93; padding-bottom:16px;&quot;>The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts your requests, your hours and your page in your hands.</div>
+                  <table role=&quot;presentation&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;margin:0 auto;&quot;><tr><td align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;background-color:#CE9E3C; border-radius:4px; text-align:center; vertical-align:middle;&quot;>
+                    <a href=&quot;https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/go?c=notif-pedido&amp;rid=r35219&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:14px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center; vertical-align:middle;&quot;>Activate my key</a>
+                  </td></tr></table>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#8F8368; padding-top:11px;&quot;>Free &amp;middot; two minutes &amp;middot; the code goes to this email</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#6E6551; padding-top:7px;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+<tr>
+            <td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;&quot;>
+                Need anything? <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our team on WhatsApp</a>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>
+                Accept, decline, or propose a new time — a quick response gives your guest the best possible experience.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;·&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-Élysées, 75008 Paris, France<br/>
+                VAT: FR24901268326 · R.C.S Paris: 901 268 326 · © 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"></iframe></div>
+  </div>
+
+  <h2>Fluxo 2 · lembrete 6h</h2>
+  <div class="par">
+    <div class="col"><div class="tag antes">ANTES — como está no ar</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>Still Awaiting Your Reply</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>A booking request is awaiting your reply &amp;#8212; respond to confirm availability.</div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>Still awaiting your reply.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>Dear <span style=&quot;color:#E6C87A;&quot;></span>, a reservation request via The World Keys is awaiting your reply. Please review and respond to confirm availability.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:20px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;><tr><td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td><td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td></tr></table>
+                  <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;></div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td align=&quot;center&quot; style=&quot;padding:16px 24px 0 24px;&quot;><p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;&quot;>For security and data protection, guest contact details are available only through the response page.</p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td align=&quot;center&quot; style=&quot;background-color:#CE9E3C;&quot;>
+                  <a href=&quot;https://theworldkeys.com/r/&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;&quot;>Respond to pending requests</a>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:14px 24px 0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;&quot;>
+                Prefer to answer every request from one place, in one tap? The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts your requests, hours and page in your hands.
+                <a href=&quot;https://manager.theworldkeys.com/register&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:underline; white-space:nowrap;&quot;>Activate my key &amp;rarr;</a>
+              </p>
+              <p style=&quot;margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</p>
+            </td>
+          </tr>
+
+<tr><td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;><p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;&quot;>Need anything? <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>A quick response gives your guest the best possible experience &amp;#8212; thank you for being part of The World Keys.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;&amp;#183;&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&amp;#201;lys&amp;#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &amp;#183; R.C.S Paris: 901 268 326 &amp;#183; &amp;#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"></iframe></div>
+    <div class="col"><div class="tag depois">DEPOIS — proposta</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>Still Awaiting Your Reply</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>A booking request is awaiting your reply &amp;#8212; respond to confirm availability.</div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>Still awaiting your reply.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>Dear <span style=&quot;color:#E6C87A;&quot;></span>, a reservation request via The World Keys is awaiting your reply. Please review and respond to confirm availability.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:20px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;><tr><td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td><td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td></tr></table>
+                  <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;></div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td align=&quot;center&quot; style=&quot;padding:16px 24px 0 24px;&quot;><p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;&quot;>For security and data protection, guest contact details are available only through the response page.</p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td align=&quot;center&quot; style=&quot;background-color:#CE9E3C;&quot;>
+                  <a href=&quot;https://theworldkeys.com/r/&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;&quot;>Respond to pending requests</a>
+                </td>
+              </tr></table>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:14px 24px 0 24px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td align=&quot;center&quot; style=&quot;padding:24px 22px 20px 22px;&quot;>
+                  <div style=&quot;font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:1.35; color:#F5EFE3; padding-bottom:8px;&quot;>Answer every request in one tap.</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#B5AB93; padding-bottom:16px;&quot;>The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts your requests, your hours and your page in your hands.</div>
+                  <table role=&quot;presentation&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;margin:0 auto;&quot;><tr><td align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;background-color:#CE9E3C; border-radius:4px; text-align:center; vertical-align:middle;&quot;>
+                    <a href=&quot;https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/go?c=notif-lembrete&amp;rid=r35219&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:14px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center; vertical-align:middle;&quot;>Activate my key</a>
+                  </td></tr></table>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#8F8368; padding-top:11px;&quot;>Free &amp;middot; two minutes &amp;middot; the code goes to this email</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#6E6551; padding-top:7px;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+<tr><td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;><p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;&quot;>Need anything? <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>A quick response gives your guest the best possible experience &amp;#8212; thank you for being part of The World Keys.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;&amp;#183;&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&amp;#201;lys&amp;#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &amp;#183; R.C.S Paris: 901 268 326 &amp;#183; &amp;#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"></iframe></div>
+  </div>
+
+  <h2>Fluxo 3 · após Accept</h2>
+  <div class="par">
+    <div class="col"><div class="tag antes">ANTES — como está no ar</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>Reservation Confirmed</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>A reservation has been confirmed for your establishment.</div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>The booking is confirmed.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>Dear <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span>, a reservation has been confirmed for your establishment. Details below.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:20px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;><tr><td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUEST</td><td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Adi P.</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td></tr></table>
+                  <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;>WQ4LVHVL</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!--
+  BLOCO &quot;CONVERTER NO CLIQUE&quot; — inserir nos nós &quot;Establishment (Accept)&quot; e &quot;Establishment (Decline)&quot; do workflow
+  &quot;3 - resposta do restaurante (site novo)&quot; (id YDOdJQ46C8okIIdm), IMEDIATAMENTE ANTES da linha
+  <tr><td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;><p ...>Need anything? ...
+  Mesma identidade visual dos templates existentes. Expressão n8n preservada: SRI TRAT.
+  Link rastreado (opcional): trocar href por https://theworldkeys.com/r/WQ4LVHVL … quando o /go existir; por ora o /register real.
+-->
+          <tr>
+            <td style=&quot;padding:24px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:18px 20px;&quot;>
+                  <p style=&quot;margin:0 0 6px 0; font-family:Georgia,'Times New Roman',serif; font-size:17px; color:#F5EFE3;&quot;>You just replied through the link. Next time, one tap.</p>
+                  <p style=&quot;margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;&quot;>The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts every request in one dashboard, lets you reply from your phone, and makes the hours on your page the ones you actually serve. Two minutes to activate; the code goes to this address.</p>
+                  <table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr><td align=&quot;center&quot; style=&quot;background-color:#CE9E3C;&quot;>
+                    <a href=&quot;https://manager.theworldkeys.com/register&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:11px 24px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:600; color:#12100C; text-decoration:none;&quot;>Activate my key</a>
+                  </td></tr></table>
+                  <p style=&quot;margin:12px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+ <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>The reservation is live in our system. Please prepare to welcome your guest on the scheduled date.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;&amp;#183;&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&amp;#201;lys&amp;#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &amp;#183; R.C.S Paris: 901 268 326 &amp;#183; &amp;#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"></iframe></div>
+    <div class="col"><div class="tag depois">DEPOIS — proposta</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>Reservation Confirmed</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>A reservation has been confirmed for your establishment.</div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>The booking is confirmed.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>Dear <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span>, a reservation has been confirmed for your establishment. Details below.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:20px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;><tr><td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUEST</td><td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Adi P.</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td></tr></table>
+                  <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;>WQ4LVHVL</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!--
+  BLOCO &quot;CONVERTER NO CLIQUE&quot; — inserir nos nós &quot;Establishment (Accept)&quot; e &quot;Establishment (Decline)&quot; do workflow
+  &quot;3 - resposta do restaurante (site novo)&quot; (id YDOdJQ46C8okIIdm), IMEDIATAMENTE ANTES da linha
+  <tr><td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;><p ...>Need anything? ...
+  Mesma identidade visual dos templates existentes. Expressão n8n preservada: SRI TRAT.
+  Link rastreado (opcional): trocar href por https://theworldkeys.com/r/WQ4LVHVL … link rastreado pelo /go (c + rid com prefixo r anti-QP) desde 09/09.
+-->
+          <tr>
+            <td style=&quot;padding:24px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:18px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td align=&quot;center&quot; style=&quot;padding:24px 22px 20px 22px;&quot;>
+                  <div style=&quot;font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:1.35; color:#F5EFE3; padding-bottom:8px;&quot;>You just replied through the link.<br/>Next time, one tap.</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#B5AB93; padding-bottom:16px;&quot;>The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts every request in one dashboard, lets you reply from your phone, and makes the hours on your page the ones you actually serve.</div>
+                  <table role=&quot;presentation&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;margin:0 auto;&quot;><tr><td align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;background-color:#CE9E3C; border-radius:4px; text-align:center; vertical-align:middle;&quot;>
+                    <a href=&quot;https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/go?c=resposta-aceite&amp;rid=r35219&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:14px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center; vertical-align:middle;&quot;>Activate my key</a>
+                  </td></tr></table>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#8F8368; padding-top:11px;&quot;>Free &amp;middot; two minutes &amp;middot; the code goes to this address</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#6E6551; padding-top:7px;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</div>
+                </td></tr>
+              </table>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+ <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>The reservation is live in our system. Please prepare to welcome your guest on the scheduled date.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;&amp;#183;&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&amp;#201;lys&amp;#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &amp;#183; R.C.S Paris: 901 268 326 &amp;#183; &amp;#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"></iframe></div>
+  </div>
+
+  <h2>Fluxo 3 · após Decline</h2>
+  <div class="par">
+    <div class="col"><div class="tag antes">ANTES — como está no ar</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>Reservation Declined</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>Decline recorded &amp;#8212; the guest has been notified.</div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>Decline recorded.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>Dear <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span>, you've declined the reservation request below. The guest has been notified &amp;#8212; no further action is needed.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:20px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;><tr><td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUEST</td><td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Adi P.</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td></tr></table>
+                  <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;>WQ4LVHVL</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!--
+  BLOCO &quot;CONVERTER NO CLIQUE&quot; — inserir nos nós &quot;Establishment (Accept)&quot; e &quot;Establishment (Decline)&quot; do workflow
+  &quot;3 - resposta do restaurante (site novo)&quot; (id YDOdJQ46C8okIIdm), IMEDIATAMENTE ANTES da linha
+  <tr><td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;><p ...>Need anything? ...
+  Mesma identidade visual dos templates existentes. Expressão n8n preservada: SRI TRAT.
+  Link rastreado (opcional): trocar href por https://theworldkeys.com/r/WQ4LVHVL … quando o /go existir; por ora o /register real.
+-->
+          <tr>
+            <td style=&quot;padding:24px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:18px 20px;&quot;>
+                  <p style=&quot;margin:0 0 6px 0; font-family:Georgia,'Times New Roman',serif; font-size:17px; color:#F5EFE3;&quot;>You just replied through the link. Next time, one tap.</p>
+                  <p style=&quot;margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;&quot;>The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts every request in one dashboard, lets you reply from your phone, and makes the hours on your page the ones you actually serve. Two minutes to activate; the code goes to this address.</p>
+                  <table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr><td align=&quot;center&quot; style=&quot;background-color:#CE9E3C;&quot;>
+                    <a href=&quot;https://manager.theworldkeys.com/register&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:11px 24px; font-family:Arial,Helvetica,sans-serif; font-size:13px; font-weight:600; color:#12100C; text-decoration:none;&quot;>Activate my key</a>
+                  </td></tr></table>
+                  <p style=&quot;margin:12px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</p>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+ <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>Thank you for the quick response &amp;#8212; it helps us take care of every guest.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;&amp;#183;&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&amp;#201;lys&amp;#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &amp;#183; R.C.S Paris: 901 268 326 &amp;#183; &amp;#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"></iframe></div>
+    <div class="col"><div class="tag depois">DEPOIS — proposta</div><iframe srcdoc="=<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot; />
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+  <meta name=&quot;color-scheme&quot; content=&quot;dark&quot; />
+  <title>Reservation Declined</title>
+</head>
+<body style=&quot;margin:0; padding:0; background-color:#0B0A08;&quot;>
+
+  <div style=&quot;display:none; max-height:0; overflow:hidden; mso-hide:all;&quot;>Decline recorded &amp;#8212; the guest has been notified.</div>
+
+  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#0B0A08; border-collapse:collapse;&quot;>
+    <tr>
+      <td align=&quot;center&quot; style=&quot;padding:12px 6px;&quot;>
+        <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;&quot;>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:36px 20px 0 20px;&quot;>
+              <a href=&quot;https://theworldkeys.com/&quot; target=&quot;_blank&quot; style=&quot;text-decoration:none;&quot;>
+                <img src=&quot;https://theworldkeys.com/images/twk-logo.gif&quot; width=&quot;56&quot; alt=&quot;&quot; style=&quot;display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+                <img src=&quot;https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png&quot; width=&quot;220&quot; alt=&quot;THE WORLD KEYS&quot; style=&quot;display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;&quot; border=&quot;0&quot; />
+              </a>
+              <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;&quot;>PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 0 20px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;48&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;><tr>
+                <td style=&quot;border-top:1px solid #CE9E3C; font-size:0; line-height:0;&quot;>&amp;nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 20px 8px 20px;&quot;>
+              <h1 style=&quot;margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;&quot;>Decline recorded.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:0 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;&quot;>Dear <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span>, you've declined the reservation request below. The guest has been notified &amp;#8212; no further action is needed.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style=&quot;padding:28px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:20px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border-collapse:collapse;&quot;><tr><td style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUEST</td><td align=&quot;right&quot; style=&quot;padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Adi P.</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>DATE</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>Sat, 13 Sept 2026</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>TIME</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>8:00 PM</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>GUESTS</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>2 guests</strong></td></tr><tr><td style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;&quot;>NOTES</td><td align=&quot;right&quot; style=&quot;padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;&quot;><strong>No special requests</strong></td></tr></table>
+                  <div style=&quot;padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;&quot;>WQ4LVHVL</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!--
+  BLOCO &quot;CONVERTER NO CLIQUE&quot; — inserir nos nós &quot;Establishment (Accept)&quot; e &quot;Establishment (Decline)&quot; do workflow
+  &quot;3 - resposta do restaurante (site novo)&quot; (id YDOdJQ46C8okIIdm), IMEDIATAMENTE ANTES da linha
+  <tr><td align=&quot;center&quot; style=&quot;padding:8px 20px 0 20px;&quot;><p ...>Need anything? ...
+  Mesma identidade visual dos templates existentes. Expressão n8n preservada: SRI TRAT.
+  Link rastreado (opcional): trocar href por https://theworldkeys.com/r/WQ4LVHVL … link rastreado pelo /go (c + rid com prefixo r anti-QP) desde 09/09.
+-->
+          <tr>
+            <td style=&quot;padding:24px 16px 0 16px;&quot;>
+              <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td style=&quot;padding:18px 20px;&quot;>
+                  <table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;&quot;>
+                <tr><td align=&quot;center&quot; style=&quot;padding:24px 22px 20px 22px;&quot;>
+                  <div style=&quot;font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:1.35; color:#F5EFE3; padding-bottom:8px;&quot;>You just replied through the link.<br/>Next time, one tap.</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#B5AB93; padding-bottom:16px;&quot;>The free professional account for <span style=&quot;color:#E6C87A;&quot;>SRI TRAT</span> puts every request in one dashboard, lets you reply from your phone, and makes the hours on your page the ones you actually serve.</div>
+                  <table role=&quot;presentation&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;margin:0 auto;&quot;><tr><td align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;background-color:#CE9E3C; border-radius:4px; text-align:center; vertical-align:middle;&quot;>
+                    <a href=&quot;https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/go?c=resposta-recusa&amp;rid=r35219&quot; target=&quot;_blank&quot; style=&quot;display:inline-block; padding:14px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center; vertical-align:middle;&quot;>Activate my key</a>
+                  </td></tr></table>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#8F8368; padding-top:11px;&quot;>Free &amp;middot; two minutes &amp;middot; the code goes to this address</div>
+                  <div style=&quot;font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#6E6551; padding-top:7px;&quot;>PT Ative a conta gratuita da casa &amp;#183; FR Activez le compte gratuit de la maison &amp;#183; ES Active la cuenta gratuita de la casa &amp;#183; IT Attivate l'account gratuito del locale</div>
+                </td></tr>
+              </table>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+ <a href=&quot;https://wa.me/5521967841007&quot; target=&quot;_blank&quot; style=&quot;color:#E6C87A; text-decoration:none;&quot;>Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:24px 24px 32px 24px;&quot;>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;&quot;>Thank you for the quick response &amp;#8212; it helps us take care of every guest.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align=&quot;center&quot; style=&quot;padding:20px 20px 28px 20px; border-top:1px solid #26200F;&quot;>
+              <p style=&quot;margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;&quot;>THE WORLD KEYS</p>
+              <p style=&quot;margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;&quot;>
+                <a href=&quot;https://theworldkeys.com/terms-of-use/&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>Terms &amp;amp; Conditions</a>
+                &amp;nbsp;&amp;#183;&amp;nbsp;
+                <a href=&quot;mailto:support@theworldkeys.com&quot; style=&quot;color:#8F8368; text-decoration:none;&quot;>support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&amp;#201;lys&amp;#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &amp;#183; R.C.S Paris: 901 268 326 &amp;#183; &amp;#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"></iframe></div>
+  </div>
+</body></html>

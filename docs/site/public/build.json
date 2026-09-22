@@ -1,0 +1,44 @@
+{
+  "build": "2026-09-15-1203",
+  "idiomas": [
+    "pt",
+    "fr"
+  ],
+  "documentos": [
+    {
+      "slug": "plano-reserva-direta",
+      "titulo": "Plano Reserva Direta",
+      "data": "2026-09-14",
+      "estado": "vigente",
+      "fr": "manual"
+    },
+    {
+      "slug": "conciergerie-plano-60-dias",
+      "titulo": "Conciergerie · Plano de 60 dias",
+      "data": "2026-09-14",
+      "estado": "vigente",
+      "fr": "bilingue"
+    },
+    {
+      "slug": "dossie-reserva-direta",
+      "titulo": "Dossiê Reserva Direta",
+      "data": "2026-09-14",
+      "estado": "análise",
+      "fr": "pendente"
+    },
+    {
+      "slug": "reserva-direta-rastreada",
+      "titulo": "Reserva Direta Rastreada",
+      "data": "2026-09-14",
+      "estado": "superado",
+      "fr": "pendente"
+    },
+    {
+      "slug": "chave-girada",
+      "titulo": "Chave Girada",
+      "data": "2026-09-05",
+      "estado": "referência",
+      "fr": "pendente"
+    }
+  ]
+}

@@ -1,0 +1,922 @@
+restaurant_id,name,city,country,status,confidence,email,source
+"328200","1800 Floga","Santorini","Greece",found,high,"info@oia-1800.com","https://www.oia-1800.com/"
+"327813","360 — Restaurant","Dubrovnik","Croatia",found,high,"reservations@360dubrovnik.com","https://360dubrovnik.com/"
+"327677","Aan de Poel","Amstelveen","Netherlands",found,high,"info@aandepoel.nl","https://aandepoel.nl/"
+"327770","Aend","Vienna","Austria",found,high,"hello@aend.at","https://aend.at/reservierung/"
+"327623","ABaC","Barcelona","Spain",only_rejected,,,
+"327966","Ai Fiori","New York","United States",only_rejected,,,
+"328005","Acquerello","San Francisco","United States",found,high,"info@acquerellosf.com","http://www.acquerellosf.com/"
+"327708","Akrame","Paris","France",found,high,"reservations@akrame.com","http://www.akrame.com/"
+"328015","Alinea","Chicago","United States",found,high,"hospitality@alinearestaurant.com","http://www.alinearestaurant.com/"
+"327911","Adrián Quetglas","Palma de Mallorca","Spain",found,high,"reservas@adrianquetglas.es","http://www.adrianquetglas.es/"
+"328202","Aktaion Santorini","Santorini","Greece",found,high,"info@aktaionsantorini.com","http://www.aktaionsantorini.com/"
+"328323","Al Fassia","Marrakech","Morocco",found,high,"info@alfassia.com","http://www.alfassia.com/"
+"327572","Allénothèque","Paris","France",no_email,,,
+"327619","Akelarre","Donostia-San Sebastián","Spain",found,high,"info@akelarre.net","https://akelarre.net/"
+"328414","Allegro","Las Vegas","United States",found,high,"roomreservations@wynnlasvegas.com","https://www.wynnlasvegas.com/accessibility-policy"
+"328204","Aleria","Athens","Greece",found,high,"info@aleria.gr","http://www.aleria.gr/contact"
+"328282","Aloette","Toronto","Canada",found,high,"info@aloetterestaurant.com","http://aloetterestaurant.com/"
+"328279","Alo","Toronto","Canada",found,high,"info@alorestaurant.com","https://alorestaurant.com/"
+"328103","Ajikitcho Daimaru","Osaka","Japan",no_email,,,
+"327703","Allard — Alain Ducasse","Paris","France",only_rejected,,,
+"328248","Ambrosía Bistro","Santiago","Chile",only_rejected,,,
+"328344","Altura","Seattle","United States",found,high,"contactaltura@alturarestaurant.com","http://www.alturarestaurant.com/"
+"328134","Amber","Hong Kong","Hong Kong",found,high,"direct@mandarinoriental.com","https://www.mandarinoriental.com/en/hong-kong/the-landmark/dine/amber?src=loc.yext.lmhkg.ggl"
+"328427","American Seasons","Nantucket","United States",found,high,"bookatable@americanseasons.com","http://americanseasons.com/"
+"328312","Amisfield Bistro","Queenstown","New Zealand",found,high,"restaurant@amisfield.co.nz","http://www.amisfield.co.nz/pages/contact"
+"327890","Aman Venice — Arva","Venice","Italy",found,high,"reservations@aman.com","https://www.aman.com/contact-us"
+"327823","Apsendos","Mykonos","Greece",only_rejected,,,
+"328247","99 Restaurante","Santiago","Chile",no_email,,,
+"327729","Andrea Aprea","Milan","Italy",found,high,"info@andreaaprea.com","https://www.andreaaprea.com/il-ristorante/"
+"327949","Antiqvvm","Porto","Portugal",found,low,"antiqvvm@gmail.com","http://www.antiqvvm.pt/pt/reservas"
+"328391","Andreu Genestra","Capdepera","Spain",found,high,"reservas@andreugenestra.com","http://andreugenestra.com/"
+"327961","Aquavit","New York","United States",found,high,"info@aquavit.org","http://www.aquavit.org/"
+"328295","Aria Sydney","Sydney","Australia",only_rejected,,,
+"328265","Arca Tulum","Tulum","Mexico",found,high,"contact@arcatulum.com","http://www.arcatulum.com/"
+"327811","Araka","Istanbul","Türkiye",found,high,"info@araka.com.tr","https://araka.com.tr/"
+"328054","Ariete","Coconut Grove","United States",found,high,"contactinfo@arietecoconutgrove.com","https://arietecoconutgrove.com/"
+"327618","Aponiente","El Puerto de Santa María","Spain",found,high,"reservas@aponiente.com","https://www.aponiente.com/"
+"328234","Anatol","Mexico City","Mexico",no_email,,,
+"327620","Arzak","Donostia-San Sebastián","Spain",found,high,"reservas@arzak.es","https://www.arzak.es/reserva/"
+"327960","Aska","New York","United States",found,high,"reservations@askanyc.com","http://askanyc.com/"
+"98700","ARCO","La rochelle","France",no_email,,,
+"327787","Atelier","Budapest","Hungary",no_site,,,
+"327554","AT","Paris","France",found,high,"info@atsushitanaka.com","http://www.atsushitanaka.com/"
+"328543","Asahina Gastronome","Tokyo","Japan",found,high,"info@asahinagastronome.com","https://asahinagastronome.com/"
+"327650","Atelier — Hotel Bayerischer Hof","München","Germany",no_email,,,
+"327625","Asador Etxebarri","Atxondo","Spain",no_email,,,
+"327797","Atelier Amaro","Warsaw","Poland",found,high,"hello@foodtown.pl","http://foodtown.pl/"
+"328182","Atelier Moessmer Norbert Niederkofler","Brunico","Italy",found,high,"reservations@ateliernorbertniederkofler.com","https://ateliernorbertniederkofler.com/it/"
+"327999","Atelier Crenn","San Francisco","United States",found,high,"info@ateliercrenn.com","http://www.ateliercrenn.com/"
+"327959","Atera","New York","United States",found,high,"reservations@ateranyc.com","http://www.ateranyc.com/"
+"327958","Atomix","New York","United States",found,high,"info@atomixnyc.com","http://www.atomixnyc.com/"
+"327598","Auberge de la Madone","Peillon","France",no_email,,,
+"327627","Atrio","Cáceres","Spain",no_email,,,
+"328237","Astrid y Gastón","Lima","Peru",no_email,,,
+"327699","Astier","Paris","France",no_email,,,
+"328274","Au Pied de Cochon","Montréal","Canada",only_rejected,,,
+"327574","Auberge du Vieux Puits","Fontjoncouse","France",found,high,"reception@aubergeduvieuxpuits.fr","https://www.aubergeduvieuxpuits.fr/fr/"
+"328199","Avant Garden — Santorini","Santorini","Greece",only_rejected,,,
+"328302","Attica","Melbourne","Australia",found,high,"meet@attica.com.au","http://www.attica.com.au/"
+"328429","Atria","Edgartown","United States",no_email,,,
+"327701","Aux Lyonnais","Paris","France",found,high,"reservations@auxlyonnais.com","http://auxlyonnais.com/"
+"327983","Babbo","New York","United States",only_rejected,,,
+"327632","Annua","San Vicente de la Barquera","Spain",found,high,"info@laostreriasanvicente.com","http://www.laostreriasanvicente.com/reservas"
+"328179","Aurora","Capri","Italy",no_email,,,
+"327759","A. Wong","London","United Kingdom",found,high,"info@awong.co.uk","http://www.awong.co.uk/"
+"327864","Auberge du Schoenenbourg","Riquewihr","France",found,high,"info@hotel-schoenenbourg.fr","https://www.hotel-schoenenbourg.fr/"
+"328331","Babel Bay","Beirut","Lebanon",only_rejected,,,
+"328398","Bahia","Mdina","Malta",found,high,"info@bahia.com.mt","http://www.bahia.com.mt/"
+"328387","Bambuddha","Ibiza","Spain",found,high,"info@bambuddha.com","https://bambuddha.com/"
+"328172","Avartana","Chennai","India",found,high,"reservations@itchotels.com","https://www.itchotels.com/in/en/itcgrandchola-chennai"
+"328286","Bar de l'Oubli","Gustavia","Saint Barthélemy",found,high,"info@bardeloubli.com","http://www.bardeloubli.com/"
+"327926","Bar Hemingway — Ritz Paris","Paris","France",no_email,,,
+"327792","Babel","Budapest","Hungary",no_email,,,
+"328358","Barley Swine","Austin","United States",found,high,"reservations@barleyswine.com","http://www.barleyswine.com/"
+"328527","Basil's Bar Mustique","Mustique","Saint Vincent and the Grenadines",found,high,"reservations@basilsbar.com","https://basilsbar.com/"
+"328023","Avec","Chicago","United States",no_email,,,
+"328275","Beauty's","Montréal","Canada",only_rejected,,,
+"327748","Bardal","Ronda","Spain",found,high,"reservas@restaurantebardal.com","http://restaurantebardal.com/contacto"
+"328026","Bavette's Bar & Boeuf","Chicago","United States",only_rejected,,,
+"328285","Bagatelle Saint Barth","Gustavia","Saint Barthélemy",found,high,"st.barths@bagatelle.com","https://bagatelle.com/venues/st-barths"
+"328454","Beefbar Cannes","Cannes","France",no_email,,,
+"328452","Beefbar Athens","Athens","Greece",found,high,"athens@beefbar.com","https://beefbar.com/athens/"
+"328453","Beefbar Mykonos","Mykonos","Greece",found,high,"reservations@billandcoo.com","https://billandcoo.com/beefbar-mykonos/"
+"328450","Beefbar Hong Kong","Hong Kong","Hong Kong",found,high,"monaco@beefbar.com","https://beefbar.com/monaco/"
+"328456","Beefbar Saint Tropez","Saint-Tropez","France",found,high,"monaco@beefbar.com","https://beefbar.com/monaco/"
+"328455","Beefbar Monaco","Monte-Carlo","Monaco",found,high,"monaco@beefbar.com","https://beefbar.com/monaco/"
+"327992","Balthazar","New York","United States",no_email,,,
+"328457","Beefbar Doha","Doha","Qatar",no_email,,,
+"327664","Belcanto","Lisbon","Portugal",found,high,"belcanto@belcanto.pt","https://www.belcanto.pt/"
+"327993","Bemelmans Bar","New York","United States",found,high,"carlyle.reservations@rosewoodhotels.com","https://www.rosewoodhotels.com/en/the-carlyle-new-york/reservations/select-a-service"
+"328077","Bern's Steak House","Tampa","United States",found,high,"bshcontact@bernssteakhouse.com","http://www.bernssteakhouse.com/"
+"328197","Bill & Coo Mykonos","Mykonos","Greece",found,high,"reservations@billandcoo.com","https://billandcoo.com/suites/"
+"328002","Birdsong","San Francisco","United States",found,high,"contact@birdsongsf.com","http://www.birdsongsf.com/info"
+"327560","Bistrot Paul Bert","Paris","France",no_email,,,
+"328135","Belon","Hong Kong","Hong Kong",found,high,"info@belonsoho.com","http://belonsoho.com/"
+"327962","Blue Hill at Stone Barns","Pocantico Hills","United States",found,high,"reservationsnyc@bluehillfarm.com","https://www.bluehillfarm.com/contact"
+"328375","Bocca Mar","Nice","France",found,high,"contact@boccamar.com","http://www.boccamar.com/"
+"327732","Berton","Milan","Italy",found,high,"info@ristoranteberton.com","http://www.ristoranteberton.com/"
+"328000","Benu","San Francisco","United States",found,high,"contact@benusf.com","http://www.benusf.com/reservations"
+"327683","Blue Bay — Monte-Carlo Bay","Monte-Carlo","Monaco",only_rejected,,,
+"328053","Boia De","Miami","United States",found,high,"info@boiaderestaurant.com","http://www.boiaderestaurant.com/location/boia-de/"
+"328127","Bo Innovation","Hong Kong","Hong Kong",found,high,"dine@boinnovation.com","http://www.boinnovation.com/"
+"328169","Bombay Brasserie","Dubai","United Arab Emirates",no_email,,,
+"328020","Boka","Chicago","United States",found,high,"info@bokachicago.com","http://www.bokachicago.com/contact"
+"328144","Bo.lan","Bangkok","Thailand",found,high,"contact@bolan.co.th","http://www.bolan.co.th/contact.php"
+"327989","Bond St","New York","United States",no_email,,,
+"328451","Beefbar Riyadh","Riyadh","Saudi Arabia",no_email,,,
+"328185","Borgo San Felice — Poggio Rosso","Castelnuovo Berardenga","Italy",found,high,"reservations@borgosanfelice.com","http://www.borgosanfelice.com/contatti"
+"328186","Borgo Santo Pietro — Meo Modo","Chiusdino","Italy",found,high,"info@borgosantopietro.com","http://borgosantopietro.com/"
+"327788","Borkonyha","Budapest","Hungary",found,high,"borkonyha@borkonyha.hu","http://borkonyha.hu/"
+"328283","Black Ginger","Saint-Jean","Saint Barthélemy",no_email,,,
+"327828","Bord van Berlage","Amsterdam","Netherlands",found,high,"info@bistroberlage.com","https://www.bistroberlage.com/"
+"328246","Boragó","Santiago","Chile",found,high,"reservations@borago.cl","https://borago.cl/reservas/"
+"327816","Boškinac","Novalja","Croatia",found,high,"info@boskinac.com","https://www.boskinac.com/kontakt"
+"327801","Botrini's","Athens","Greece",found,high,"info@botrinis.com","http://www.botrinis.com/"
+"327984","Bouley at Home","New York","United States",no_site,,,
+"327698","Bouillon Chartier","Paris","France",only_rejected,,,
+"327800","Bottiglieria 1881","Krakow","Poland",found,high,"biuro@1881.com.pl","http://www.1881.com.pl/"
+"328013","Boulevard","San Francisco","United States",found,high,"events@boulevardrestaurant.com","https://www.boulevardrestaurant.com/contact-us/"
+"328048","Bouchon Las Vegas","Las Vegas","United States",only_rejected,,,
+"327580","Bras","Laguiole","France",found,high,"reser@bras.fr","https://www.bras.fr/reserver/"
+"328511","Brasserie Auteuil","Paris","France",only_rejected,,,
+"328534","Boulevard Kitchen & Oyster Bar","Vancouver","Canada",found,high,"info@boulevardvancouver.ca","https://www.boulevardvancouver.ca/"
+"327752","BonAmb","Xàbia","Spain",no_email,,,
+"328306","Brae","Birregurra","Australia",found,high,"enquire@braerestaurant.com","http://www.braerestaurant.com/"
+"328071","Brennan's","New Orleans","United States",only_rejected,,,
+"328509","Buddha-Bar Beach Dubai","Dubai","United Arab Emirates",found,high,"reserve@blabladubai.ae","http://www.blabladubai.ae/"
+"328508","Buddha-Bar Monte-Carlo","Monte-Carlo","Monaco",only_rejected,,,
+"328531","Buca Yorkville","Toronto","Canada",only_rejected,,,
+"327848","Byblos Hôtel — Restaurant Rivea","Saint-Tropez","France",found,high,"saint-tropez@byblos.com","https://www.byblos.com/"
+"327643","Brat","London","United Kingdom",no_email,,,
+"328208","Caelis","Barcelona","Spain",no_email,,,
+"328506","Buddha-Bar Paris","Paris","France",found,high,"contact@buddhabar.com","https://www.buddhabar.com/contact/"
+"327978","Cafe Carmellini","New York","United States",only_rejected,,,
+"328408","Café Lotus","Ubud","Indonesia",only_rejected,,,
+"328324","Café Arabe","Marrakech","Morocco",found,high,"info@cafearabe.com","http://www.cafearabe.com/contact"
+"328171","Bukhara","New Delhi","India",found,high,"reservations@itchotels.com","https://www.itchotels.com/in/en/itcmaurya-new-delhi"
+"328298","Cafe Paci","Sydney","Australia",found,high,"info@cafepaci.com.au","http://www.cafepaci.com.au/"
+"328340","Canlis","Seattle","United States",found,high,"reservations@canlis.com","https://canlis.com/"
+"327937","Caffè Stern","Paris","France",found,high,"booking@alajmo.it","https://alajmo.it/pages/booking-le-calandre"
+"328150","Cadence by Dan Bark","Bangkok","Thailand",no_email,,,
+"327908","Cap Vermell Beach","Mallorca","Spain",only_rejected,,,
+"328420","Cala di Volpe — Beefbar","Porto Cervo","Italy",found,high,"bestrateguarantee@marriott.com","https://www.marriott.com/online-hotel-booking.mi"
+"328075","Cache Cache","Aspen","United States",no_email,,,
+"328266","Carmen Tulum","Tulum","Mexico",only_rejected,,,
+"328382","Cap des Falco","Ibiza","Spain",found,high,"ibizasalavip@aena.es","https://www.aena.es/es/ibiza/servicios-vip/salas-vip/sala-vip-cap-des-falco.html?p=1575049401515&utm_source=Google&utm_medium=GMB_VIP_FALCO_IBZ"
+"327741","Caruso — Hotel Caruso Belmond","Ravello","Italy",found,high,"unsubscribe@belmond.com","https://www.belmond.com/hotels/europe/italy/amalfi-coast/belmond-hotel-caruso/?utm_source=local_search&utm_medium=link&utm_campaign=google_business"
+"328379","Cap Estel — La Table de Patrick Raingeard","Èze-Bord-de-Mer","France",found,high,"contact@capestel.com","https://www.capestel.com/fr/restaurant-gastronomique-cote-dazur.html?utm_source=mybusiness&utm_medium=organic&utm_id=mybusinessorganic"
+"328264","Casa Jaguar Tulum","Tulum","Mexico",no_email,,,
+"328352","Caracol","Houston","United States",only_rejected,,,
+"327924","Café Comptoir Abel","Lyon","France",no_email,,,
+"327631","Casa Marcial","Arriondas","Spain",found,high,"reservas@casamarcial.com","http://www.casamarcial.com/"
+"327725","Casa Perbellini","Verona","Italy",no_email,,,
+"328062","Casa Tua","Miami Beach","United States",no_email,,,
+"327951","Casa de Chá da Boa Nova","Leça da Palmeira","Portugal",only_rejected,,,
+"328516","Casa Velas Boutique Restaurant","Puerto Vallarta","Mexico",only_rejected,,,
+"328363","Casa Tua Aspen","Aspen","United States",no_email,,,
+"328337","Castagna","Portland","United States",found,high,"info@okomens.com","http://okomens.com/"
+"327982","Casa Mono","New York","United States",no_email,,,
+"328381","Casa Maca","Ibiza","Spain",no_email,,,
+"328505","Catch New York","New York","United States",only_rejected,,,
+"327551","Caviar Kaspia","Paris","France",found,high,"contact@caviarkaspia.com","http://www.caviarkaspia.com/pages/contact"
+"328187","Castello di Reschio — Al Castello","Lisciano Niccone","Italy",found,high,"reservations@reschio.com","https://www.reschio.com/it/privacy-policy"
+"328188","Castello Banfi Il Borgo","Montalcino","Italy",found,high,"banfi@banfi.it","https://www.banfi.it/eng/hospitality/"
+"328196","Cavo Tagoo","Mykonos","Greece",no_email,,,
+"328559","Caviar Russe Miami","Miami","United States",found,high,"reservationsmia@caviarrusse.com","http://caviarrusse.com/pages/miami-about"
+"328558","Caviar Russe","New York","United States",found,high,"reservationsmia@caviarrusse.com","https://www.caviarrusse.com/pages/miami-about"
+"328311","Cazador","Auckland","New Zealand",no_email,,,
+"328235","Central","Lima","Peru",found,high,"reservas@centralrestaurante.com.pe","http://www.centralrestaurante.com.pe/"
+"328556","Charlie Bird","New York","United States",found,high,"info@charliebirdnyc.com","https://www.charliebirdnyc.com/contact/"
+"328383","Cas Costas","Ibiza","Spain",found,high,"info@cascostasibiza.com","http://www.cascostasibiza.com/"
+"327659","Cheval Blanc by Peter Knogl","Basel","Switzerland",only_rejected,,,
+"328425","Chatham Bars Inn","Chatham","United States",found,high,"welcome@chathambarsinn.com","https://www.chathambarsinn.com/"
+"327847","Cheval Blanc Saint-Tropez","Saint-Tropez","France",no_email,,,
+"328393","Chrysso Restaurant","Limassol","Cyprus",no_site,,,
+"327678","Ciel Bleu","Amsterdam","Netherlands",only_rejected,,,
+"327861","Château de la Chèvre d'Or","Èze","France",found,high,"reservation@chevredor.com","https://www.chevredor.com/"
+"328210","Cinc Sentits","Barcelona","Spain",no_email,,,
+"328519","Chileno Bay Resort — Comal","Cabo San Lucas","Mexico",found,high,"cbr.reservations@auberge.com","https://auberge.com/chileno-bay/resort-policies/"
+"327891","Cipriani — Belmond Hotel Cipriani","Venice","Italy",found,high,"restaurant.cip@belmond.com","https://www.belmond.com/dining/europe/italy/venice/cips-club/?utm_source=local_search&utm_medium=link&utm_campaign=google_restaurant"
+"327894","Ciccio Sultano — Duomo","Ragusa","Italy",only_rejected,,,
+"328293","Bennelong","Sydney","Australia",no_email,,,
+"328384","Cipriani Downtown Ibiza","Ibiza","Spain",found,high,"reservationsbh@cipriani.com","https://www.cipriani.com/cipriani-ibiza?utm_source=gbp&utm_medium=organic&utm_campaign=gbp-ibiza"
+"328419","Cipriani Porto Cervo","Porto Cervo","Italy",found,high,"booking@cibosaporiditalia.it","https://cibosaporiditalia.it/"
+"328448","Cipriani Abu Dhabi","Abu Dhabi","United Arab Emirates",found,high,"reservationsbh@cipriani.com","https://www.cipriani.com/cipriani-dolci-marina-mall?utm_source=gbp&utm_medium=organic&utm_campaign=gbp-dolci-marina-mall"
+"328032","Citrin","Santa Monica","United States",found,high,"info@citrinandmelisse.com","http://citrinandmelisse.com/"
+"328447","Cipriani Riyadh","Riyadh","Saudi Arabia",found,high,"reservationsbh@cipriani.com","https://www.cipriani.com/cipriani-riyadh?utm_source=gbp&utm_medium=organic&utm_campaign=gbp-riyadh"
+"327850","Château de Berne","Lorgues","France",found,high,"info@chateauberne.com","https://www.chateauberne.com/mentions-legales/"
+"327738","Casa Vissani","Baschi","Italy",found,high,"info@casavissani.it","http://www.casavissani.it/"
+"328445","Cipriani Wall Street","New York","United States",no_email,,,
+"327558","Clamato","Paris","France",only_rejected,,,
+"328073","Compère Lapin","New Orleans","United States",found,high,"lyndie@comperelapin.com","http://comperelapin.com/"
+"327624","Cocina Hermanos Torres","Barcelona","Spain",found,high,"reservas@cocinahermanostorres.com","http://www.cocinahermanostorres.com/contact"
+"327932","Comice","Paris","France",found,high,"bonjour@comice.paris","http://comice.paris/"
+"328321","Cocoșatu","Bucharest","Romania",found,high,"office@lacocosatu.ro","https://www.lacocosatu.ro/"
+"328070","Commander's Palace","New Orleans","United States",found,high,"reservations@commanderspalace.com","http://www.commanderspalace.com/"
+"328231","Contramar","Mexico City","Mexico",only_rejected,,,
+"328314","Conte Restaurant Perast","Perast","Montenegro",found,high,"info@hotelconte.me","https://hotelconte.me/restaurant"
+"328256","Comptoir Darna","Marrakech","Morocco",only_rejected,,,
+"327663","Comerç 24","Barcelona","Spain",no_email,,,
+"327747","Compartir Cadaqués","Cadaqués","Spain",found,high,"apartaments@compartircadaques.com","http://www.compartircadaques.com/"
+"327979","Cote","New York","United States",found,high,"reservations@cotekoreansteakhouse.com","https://www.cotekoreansteakhouse.com/"
+"328339","Coquine","Portland","United States",found,high,"info@coquinepdx.com","https://www.coquinepdx.com/"
+"328151","Côte by Mauro Colagreco","Bangkok","Thailand",no_email,,,
+"328423","ConFusion Sardinia","Porto Cervo","Italy",found,high,"info@confusion-restaurant.com","https://www.confusion-restaurant.com/"
+"328010","Cotogna","San Francisco","United States",found,high,"info@cotognasf.com","http://cotognasf.com/"
+"327630","Coque","Madrid","Spain",found,high,"refreservas@restaurantecoque.com","https://restaurantecoque.com/contacto.php"
+"328488","COYA Abu Dhabi","Abu Dhabi","United Arab Emirates",only_rejected,,,
+"328526","Cotton House Mustique","Mustique","Saint Vincent and the Grenadines",only_rejected,,,
+"328486","COYA Dubai","Dubai","United Arab Emirates",only_rejected,,,
+"328487","COYA Doha","Doha","Qatar",only_rejected,,,
+"328484","COYA London Mayfair","London","United Kingdom",found,high,"reservations@coyarestaurant.com","https://coyarestaurant.com/restaurants/london-mayfair/"
+"327613","Cracco","Milan","Italy",found,high,"prenotazioni@ristorantecracco.it","http://www.ristorantecracco.it/"
+"328489","COYA Riyadh","Riyadh","Saudi Arabia",found,high,"reservations@coyarestaurant.com","https://coyarestaurant.com/"
+"328421","Costa Smeralda — Cala di Volpe Barbecue","Porto Cervo","Italy",found,low,"fratirossirestaurant@gmail.com","https://www.fratirossi.it/"
+"328490","COYA Monte Carlo","Monte-Carlo","Monaco",only_rejected,,,
+"328105","Cra to Cra","Osaka","Japan",found,high,"sample@douraku.co.jp","https://douraku.co.jp/contact/"
+"327791","Costes","Budapest","Hungary",only_rejected,,,
+"328304","Cumulus Inc","Melbourne","Australia",found,high,"us.info@cumulusinc.com.au","http://cumulusinc.com.au/contactus"
+"328500","Cut by Wolfgang Puck New York","New York","United States",found,high,"lvbanquets@wolfgangpuck.com","https://wolfgangpuck.com/dining/cut-new-york/"
+"327980","Crown Shy","New York","United States",no_email,,,
+"328501","CUT by Wolfgang Puck Beverly Hills","Beverly Hills","United States",only_rejected,,,
+"328303","Cutler & Co","Melbourne","Australia",found,high,"4888info@cutlerandco.com.au","http://www.cutlerandco.com.au/"
+"327956","Daniel","New York","United States",found,high,"danielinquiry@danielnyc.com","http://www.danielnyc.com/"
+"327552","David Toutain","Paris","France",found,high,"reservations@davidtoutain.com","https://www.davidtoutain.com/contact/"
+"327761","Da Terra","London","United Kingdom",found,high,"info@daterra.co.uk","https://daterra.co.uk/"
+"327938","Daroco","Paris","France",only_rejected,,,
+"328216","Da Bruno","Marbella","Spain",only_rejected,,,
+"328397","De Mondion","Mdina","Malta",found,high,"demondion@xaracollection.com","https://demondion.xaracollection.com/"
+"327586","Daniel et Denise","Lyon","France",only_rejected,,,
+"327675","De Librije","Zwolle","Netherlands",found,high,"info@librije.com","https://www.librije.com/"
+"327981","Dirt Candy","New York","United States",found,high,"info@dirtcandynyc.com","http://www.dirtcandynyc.com/about"
+"327819","Dill","Reykjavik","Iceland",found,high,"dillrestaurant@dillrestaurant.is","http://www.dillrestaurant.is/"
+"328530","Don Alfonso 1890 Toronto","Toronto","Canada",found,high,"info@donalfonsotoronto.com","https://www.donalfonsotoronto.com/contact"
+"328178","Da Paolino","Capri","Italy",found,high,"booking@paolinocapri.com","https://paolinocapri.com/"
+"328211","Dos Palillos","Barcelona","Spain",found,high,"jobs@dospalillos.com","http://www.dospalillos.com/"
+"327548","Drouant","Paris","France",found,high,"16restaurant@drouant.com","http://www.drouant.com/"
+"328049","Catch Las Vegas","Las Vegas","United States",no_email,,,
+"327614","Don Alfonso 1890","Sant'Agata sui Due Golfi","Italy",found,high,"info@donalfonso.com","https://www.donalfonso.com/"
+"327628","DSTAge","Madrid","Spain",found,high,"reservas@dstageconcept.com","http://www.dstageconcept.com/contact"
+"328190","Due Camini — Borgo Egnazia","Savelletri","Italy",only_rejected,,,
+"327596","Eden-Roc — Hôtel du Cap Eden-Roc","Antibes","France",no_email,,,
+"327602","Da Vittorio","Brusaporto","Italy",no_email,,,
+"328518","Edith's Cabo San Lucas","Cabo San Lucas","Mexico",no_email,,,
+"328514","Eden Roc Cap Cana","Punta Cana","Dominican Republic",found,high,"reservation@edenroccapcana.com","https://www.edenroccapcana.com/direct-booking-benefits-at-eden-roc-cap-cana/"
+"328280","Edulis","Toronto","Canada",found,high,"info@edulisrestaurant.com","http://www.edulisrestaurant.com/"
+"327904","El Bohío","Illescas","Spain",found,high,"contacto@elbohio.net","http://www.elbohio.net/"
+"328366","Edge Restaurant","Vail","United States",found,high,"vrdevents@vailrec.com","https://www.vailrec.com/grill-on-the-gore-restaurant"
+"328251","El Chato","Bogotá","Colombia",no_email,,,
+"327972","Don Angie","New York","United States",no_email,,,
+"328074","Element 47 — The Little Nell","Aspen","United States",found,high,"diningreservations@thelittlenell.com","https://www.thelittlenell.com/dine/element-47"
+"327907","El Ibérico","Ibiza","Spain",no_site,,,
+"328521","El Farallon","Cabo San Lucas","Mexico",only_rejected,,,
+"327617","El Celler de Can Roca","Girona","Spain",found,high,"info@cellercanroca.com","https://cellercanroca.com/contactar/"
+"327751","El Poblet","Valencia","Spain",found,high,"restaurante@floresraras.com","https://floresraras.com/"
+"327952","Eleven Madison Park","New York","United States",found,high,"infoemp@elevenmadisonpark.com","https://www.elevenmadisonpark.com/contact"
+"327762","Endo at the Rotunda","London","United Kingdom",only_rejected,,,
+"327944","Eleven","Lisbon","Portugal",found,high,"reservas@restauranteleven.com","http://www.restauranteleven.com/contacts"
+"327606","Enoteca Pinchiorri","Florence","Italy",only_rejected,,,
+"327817","Dubravkin Put","Zagreb","Croatia",found,high,"info@dubravkin-put.com","https://www.dubravkin-put.com/kontakt"
+"328268","Eats Vrede en Lust","Franschhoek","South Africa",found,high,"info@vnl.co.za","https://www.vnl.co.za/dining/lust-bistro-bakery/"
+"328212","El Pichi","Barcelona","Spain",found,low,"pichigelateria@gmail.com","https://www.heladeriapichi.com/"
+"327880","Eppolino Restaurant — Cellar in the Sky","Dubai","United Arab Emirates",no_email,,,
+"327611","Enrico Bartolini al Mudec","Milan","Italy",found,high,"ristorante@enricobartolini.net","http://www.enricobartolini.net/i-contatti"
+"327744","Enigma — Albert Adrià","Barcelona","Spain",found,high,"info@enigmaconcept.es","http://www.enigmaconcept.es/"
+"327796","Eska","Prague","Czechia",found,high,"eska@ambi.cz","https://eska.karlin.ambi.cz/"
+"327886","Equitable — Hotel Schweizerhof Zürich","Zürich","Switzerland",found,high,"restaurant@equi-table.ch","https://www.equi-table.ch/"
+"328111","Esora","Singapore","Singapore",found,high,"hello@willowrestaurant.sg","http://www.willowrestaurant.sg/"
+"328329","Em Sherif","Beirut","Lebanon",no_email,,,
+"327971","Estela","New York","United States",found,high,"info@estelanyc.com","http://estelanyc.com/"
+"328233","Esquina Común","Mexico City","Mexico",no_email,,,
+"328552","Esquina Mocoto","São Paulo","Brazil",found,high,"contato@mocoto.com.br","http://www.mocoto.com.br/"
+"327780","Esszimmer — BMW Welt","München","Germany",only_rejected,,,
+"328050","Esther's Kitchen","Las Vegas","United States",found,high,"media@estherslv.com","https://www.estherslv.com/press"
+"328018","Esmé","Chicago","United States",found,high,"reservations@esmechicago.com","http://esmechicago.com/"
+"328307","Ester","Sydney","Australia",found,low,"esterrestaurant@gmail.com","http://www.ester-restaurant.com.au/"
+"327714","Etheliya — Etxeko Cyril Lignac","Paris","France",found,low,"restauranttalya@gmail.com","https://talya-restaurant.com/"
+"328380","Es Tragón","Ibiza","Spain",found,high,"info@estragonibiza.com","http://estragonibiza.com/"
+"327772","Falco","Leipzig","Germany",no_email,,,
+"328110","Cut by Wolfgang Puck","Singapore","Singapore",no_email,,,
+"327822","Estiatorio Milos","Athens","Greece",found,high,"reservations@estiatoriomilos.com","https://www.estiatoriomilos.com/location/montreal/events"
+"328017","Ever","Chicago","United States",found,high,"info@ever-restaurant.com","http://www.ever-restaurant.com/"
+"328416","Estrelas Restaurant — Pateo","Funchal","Portugal",no_email,,,
+"328220","Evvai","São Paulo","Brazil",found,high,"contato@evvai.com.br","http://evvai.com.br/"
+"327945","Feitoria — Bairro Alto Hotel","Lisbon","Portugal",only_rejected,,,
+"328540","Faro","Tokyo","Japan",no_email,,,
+"328083","ESqUISSE","Tokyo","Japan",no_email,,,
+"327731","Felix Lo Basso Home & Restaurant","Milan","Italy",found,high,"info@felixlobassorestaurant.com","https://www.felixlobassorestaurant.com/"
+"328061","Forte dei Marmi Miami Beach","Miami Beach","United States",found,high,"reservations@fdmmiami.com","https://fdmmiami.com/contact/"
+"327721","Flaveur","Nice","France",only_rejected,,,
+"328207","Espai Kru","Barcelona","Spain",no_email,,,
+"327794","Field","Prague","Czechia",found,high,"info@fieldrestaurant.cz","http://www.fieldrestaurant.cz/"
+"328011","Foreign Cinema","San Francisco","United States",found,high,"info@foreigncinema.com","http://www.foreigncinema.com/"
+"328222","Fasano","São Paulo","Brazil",found,high,"reservas.ar@fasano.com.br","https://fasano.com.br/contato/"
+"99366","FRANCO'S","Scottsdale","United States",no_email,,,
+"327564","Fouquet's","Paris","France",only_rejected,,,
+"328038","Funke","Beverly Hills","United States",found,high,"info@funkela.com","https://www.funkela.com/"
+"328155","Gaon","Seoul","South Korea",no_site,,,
+"328356","Franklin Barbecue","Austin","United States",only_rejected,,,
+"328270","FYN Restaurant","Cape Town","South Africa",found,high,"info@fynrestaurant.com","http://fynrestaurant.com/"
+"327964","Gabriel Kreuther","New York","United States",found,high,"office@gknyc.com","https://www.gknyc.com/"
+"328345","Frasca Food and Wine","Boulder","United States",no_email,,,
+"328529","George Restaurant","Toronto","Canada",found,high,"info@georgeonqueen.com","http://www.georgeonqueen.com/"
+"328229","Ferro e Farinha","Rio de Janeiro","Brazil",no_email,,,
+"327766","Gidleigh Park","Chagford","United Kingdom",found,high,"info@gidleigh.co.uk","https://www.gidleigh.co.uk/"
+"327668","Geranium","Copenhagen","Denmark",found,high,"info@geranium.dk","http://www.geranium.dk/"
+"328037","Gjelina","Los Angeles","United States",found,high,"nybookings@gjelina.com","http://www.gjelina.com/"
+"328042","Geoffrey's Malibu","Malibu","United States",found,low,"geoffreysmalibu@gmail.com","http://geoffreysmalibu.com/"
+"327609","Glass Hostaria","Rome","Italy",found,low,"infoglasshostaria@gmail.com","https://www.glasshostaria.it/en/"
+"328475","Hakkasan Doha","Doha","Qatar",only_rejected,,,
+"327726","Glam Enrico Bartolini","Venice","Italy",only_rejected,,,
+"327975","Frenchette","New York","United States",no_email,,,
+"328474","Hakkasan Abu Dhabi","Abu Dhabi","United Arab Emirates",only_rejected,,,
+"328548","Goh","Fukuoka","Japan",no_email,,,
+"327639","Hakkasan Hanway Place","London","United Kingdom",found,high,"ukpress@hakkasangroup.com","https://hakkasangroup.com/venues/hakkasan-mayfair-london/?utm_source=google&utm_medium=organic&utm_campaign=gbp_mayfair"
+"328473","Hakkasan Las Vegas","Las Vegas","United States",only_rejected,,,
+"328471","Hakkasan Miami","Miami","United States",only_rejected,,,
+"328159","Hakkasan Shanghai","Shanghai","China",only_rejected,,,
+"327547","Granite","Paris","France",found,high,"reservation@granite.paris","https://granite.paris/"
+"328104","Hajime","Osaka","Japan",found,high,"pr@hajime-artistes.com","https://www.hajime-artistes.com/contact/"
+"327892","Harry's Bar","Venice","Italy",found,high,"reservationsbh@cipriani.com","https://www.cipriani.com/harrys-bar?utm_source=gbp&utm_medium=organic&utm_campaign=gbp-harrys-bar"
+"327934","Hambar — Hôtel de Ville Paris","Paris","France",found,high,"contact@lahambar.com","http://www.lahambar.com/"
+"328449","Harry's Dolci Venice","Venice","Italy",found,high,"reservationsbh@cipriani.com","https://www.cipriani.com/harrys-dolci?utm_source=gbp&utm_medium=organic&utm_campaign=gbp-harrys-dolci"
+"328090","Hashida Sushi","Tokyo","Japan",no_email,,,
+"328102","Hana Kitcho","Osaka","Japan",no_email,,,
+"328262","Hartwood","Tulum","Mexico",no_email,,,
+"328476","Hakkasan Mumbai","Mumbai","India",no_email,,,
+"328533","Hawksworth","Vancouver","Canada",found,high,"info@hawksworthrestaurant.com","https://hawksworthrestaurant.com/"
+"327946","Henrique Sá Pessoa — Alma","Lisbon","Portugal",only_rejected,,,
+"328125","Hill Street Tai Hwa Pork Noodle","Singapore","Singapore",found,high,"support@taihwa.com.sg","https://taihwa.com.sg/"
+"327673","Hertog Jan","Bruges","Belgium",found,high,"reservations@hertog-jan.com","http://www.hertog-jan.com/"
+"327745","Hofmann","Barcelona","Spain",only_rejected,,,
+"328225","Hide","São Paulo","Brazil",no_email,,,
+"327782","Heinz Winkler","Aschau im Chiemgau","Germany",found,high,"info@residenz-heinz-winkler.de","http://www.residenz-heinz-winkler.de/"
+"328198","Hippie Fish","Mykonos","Greece",found,high,"reservations@hippiefish-mykonos.com","https://hippiefish-mykonos.com/"
+"327672","Hof van Cleve","Kruishoutem","Belgium",found,high,"info@hofvancleve.com","http://www.hofvancleve.com/"
+"327654","Horváth","Berlin","Germany",found,high,"shopkontaktmail@restaurant-horvath.de","https://www.restaurant-horvath.de/"
+"327746","Hoja Santa","Barcelona","Spain",found,high,"info@come.com.es","http://www.come.com.es/"
+"328167","Hoseki","Dubai","United Arab Emirates",found,high,"dine.dubai@bulgarihotels.com","https://www.bulgarihotels.com/en_US/dubai/bars-and-restaurants/japanese-restaurant-hoseki"
+"328510","Hotel Costes Paris","Paris","France",found,high,"contact@hotelcostes.com","https://www.hotelcostes.com/en/restaurant-bar/restaurant#info"
+"328288","Hotel Christopher — Mango","Pointe Milou","Saint Barthélemy",found,high,"reservations@hotelchristopher.com","https://www.hotelchristopher.com/contact/"
+"327876","Hôtel Crillon le Brave","Crillon-le-Brave","France",found,high,"reservations@crillonlebrave.com","http://www.crillonlebrave.com/"
+"327660","Hôtel de Rougemont","Rougemont","Switzerland",found,high,"info@hotelderougemont.com","http://www.hotelderougemont.com/"
+"327925","Hôtel Plaza Athénée — La Galerie","Paris","France",found,high,"reservations.hpa@dorchestercollection.com","https://www.dorchestercollection.com/paris/hotel-plaza-athenee"
+"327841","Hôtel Mont-Blanc","Megève","France",found,high,"contact@hotelmontblanc.com","http://www.hotelmontblanc.com/"
+"328226","Huto","São Paulo","Brazil",no_site,,,
+"328299","Hubert","Sydney","Australia",only_rejected,,,
+"327829","Hostellerie Le Cerf","Marlenheim","France",no_email,,,
+"327644","Ikoyi","London","United Kingdom",found,high,"reservations@ikoyilondon.com","http://ikoyilondon.com/?utm_campaign=SDM&utm_id=GMB&utm_medium=website+click&utm_source=GMB"
+"328093","Hommura","Tokyo","Japan",no_email,,,
+"328401","Il Borgo del Castello","Bellagio","Italy",found,low,"torredelgustobellagio@gmail.com","https://www.lumos.it/vetrine/ristoranti/torre-del-gusto-bellagio-ristorante"
+"327608","Il Convivio Troiani","Rome","Italy",found,high,"info@ilconviviotroiani.com","http://www.ilconviviotroiani.com/"
+"328112","Iggy's","Singapore","Singapore",no_email,,,
+"328195","Il Pellicano","Porto Ercole","Italy",only_rejected,,,
+"328417","Il Gallo d'Oro","Funchal","Portugal",only_rejected,,,
+"328095","Hyotei","Kyoto","Japan",no_email,,,
+"328161","Il Ristorante — Niko Romito","Dubai","United Arab Emirates",no_email,,,
+"327802","Hytra","Athens","Greece",no_email,,,
+"328124","Imperial Treasure Super Peking Duck","Singapore","Singapore",found,high,"sg.marketing@imperialtreasure.com","https://www.imperialtreasure.com/contact"
+"328170","Indian Accent","New Delhi","India",found,high,"reservations.del@indianaccent.com","https://indianaccent.com/newdelhi"
+"327676","Inter Scaldes","Kruiningen","Netherlands",found,high,"info@interscaldes.nl","https://www.interscaldes.nl/"
+"328396","ION Harbour by Simon Rogan","Valletta","Malta",found,high,"dine@ionharbour.com","http://ionharbour.com/"
+"328101","Ishibashi","Kyoto","Japan",no_site,,,
+"328554","Iqari","Lima","Peru",found,low,"intiwarmaclientes@gmail.com","http://intiwarma.com/"
+"327607","Il Pagliaccio","Rome","Italy",found,high,"info@ristoranteilpagliaccio.com","http://www.ristoranteilpagliaccio.com/"
+"328019","Indienne","Chicago","United States",no_email,,,
+"328392","ION Cyprus","Limassol","Cyprus",found,high,"reservations@dionysusmansion.com","http://www.dionysusmansion.com/"
+"328316","Iva Smara","Belgrade","Serbia",found,high,"iva@newbalkancuisine.com","https://newbalkancuisine.com/iva/"
+"328555","I Sodi","New York","United States",found,high,"info@isodinyc.com","http://www.isodinyc.com/"
+"328364","Italian Embassy","Aspen","United States",found,high,"info@santambroeus.com","https://www.santambroeus.com/pages/contact"
+"327568","Jin","Paris","France",no_email,,,
+"327734","Iyo","Milan","Italy",found,high,"info@iyo-restaurant.com","https://www.iyo-restaurant.com/"
+"328113","Jaan by Kirk Westaway","Singapore","Singapore",only_rejected,,,
+"328156","Jin Jin","Seoul","South Korea",no_email,,,
+"327957","Jean-Georges","New York","United States",no_email,,,
+"328128","Forum Restaurant","Hong Kong","Hong Kong",no_email,,,
+"328273","Joe Beef","Montréal","Canada",no_email,,,
+"328066","Jaleo","Washington","United States",no_email,,,
+"327670","Jordnær","Gentofte","Denmark",found,high,"info@restaurantjordnaer.dk","http://restaurantjordnaer.dk/"
+"328335","Ka'moon","Philadelphia","United States",found,low,"fatmoonphilly@gmail.com","https://fatmoonrestaurantbar0930.s4shops.com/"
+"328055","Joe's Stone Crab","Miami Beach","United States",found,high,"eventsinfo@joesstonecrab.com","https://joesstonecrab.com/pages/contact"
+"327965","Jungsik","New York","United States",found,high,"info@jungsik.com","http://www.jungsik.com/"
+"327865","JY's — Jean-Yves Schillinger","Colmar","France",only_rejected,,,
+"328096","Kikunoi","Kyoto","Japan",only_rejected,,,
+"328238","Kjolle","Lima","Peru",found,high,"reservas@kjolle.com","http://www.kjolle.com/"
+"328221","Kinoshita","São Paulo","Brazil",no_email,,,
+"328080","Kanda","Tokyo","Japan",no_email,,,
+"328319","Kané","Bucharest","Romania",found,high,"hello@kanerestaurant.ro","https://kanerestaurant.ro/"
+"328223","Komah","São Paulo","Brazil",found,low,"komah.gerencia@gmail.com","https://komahrestaurante.com.br/"
+"328058","Komodo","Miami","United States",found,high,"info@komodomiami.com","https://komodomiami.com/"
+"328094","Kohaku","Tokyo","Japan",no_email,,,
+"328162","Hakkasan Dubai","Dubai","United Arab Emirates",no_email,,,
+"328097","Kitcho Arashiyama","Kyoto","Japan",no_email,,,
+"328360","Knife","Dallas","United States",no_email,,,
+"327779","Königshof","München","Germany",no_email,,,
+"328092","Kyo Aji","Tokyo","Japan",no_email,,,
+"327742","Krëfto — Belmond Caruso","Ravello","Italy",found,high,"info@palazzoconfalone.it","https://www.palazzoconfalone.it/terrazza-del-confalone-restaurant/"
+"328267","Ksar","Tulum","Mexico",found,high,"reservations@casabanana.net","http://www.casabanana.net/"
+"328114","Labyrinth","Singapore","Singapore",only_rejected,,,
+"327578","La Bouitte","Saint-Martin-de-Belleville","France",found,high,"info@la-bouitte.com","https://www.la-bouitte.com/fr/?utm_source=google&utm_medium=mybusiness&utm_campaign=hotel"
+"327692","La Bastide de Capelongue — Alain Llorca","Bonnieux","France",found,high,"welcome@beaumier.com","https://www.beaumier.com/fr/mentions-legales/"
+"328031","Hayato","Los Angeles","United States",no_email,,,
+"328180","La Capannina","Capri","Italy",no_email,,,
+"328269","La Colombe","Cape Town","South Africa",only_rejected,,,
+"328373","L'Acchiardo","Nice","France",no_email,,,
+"327685","La Côte d'Or — Bernard Loiseau","Saulieu","France",found,high,"contact@bernard-loiseau.com","https://www.bernard-loiseau.com/fr/"
+"327597","La Colombe d'Or","Saint-Paul-de-Vence","France",found,high,"contact@la-colombe-dor.com","http://www.la-colombe-dor.com/indexEN.html"
+"327860","La Chèvre d'Or — Èze","Èze","France",found,low,"recrutementchevredor@gmail.com","https://www.chevredor.fr/acces-contact/"
+"327906","La Gaia","Ibiza","Spain",only_rejected,,,
+"327690","La Côte Saint-Jacques","Joigny","France",found,high,"reception@cotesaintjacques.com","http://www.cotesaintjacques.com/"
+"327879","La Cancalaise","Cancale","France",no_email,,,
+"327775","Lafleur","Frankfurt","Germany",found,high,"info@remove-this.restaurant-lafleur.de","http://www.restaurant-lafleur.de/lafleur/"
+"327591","La Grande Maison de Bernard Magrez","Bordeaux","France",no_email,,,
+"327795","La Degustation Bohême Bourgeoise","Prague","Czechia",found,high,"nkykontaktboheme@ambi.cz","https://ladegustation.ambi.cz/"
+"327737","La Madonnina del Pescatore — Cedroni","Senigallia","Italy",no_email,,,
+"327901","La Locanda Severini","Camastra","Italy",no_email,,,
+"328106","La Cime","Osaka","Japan",no_email,,,
+"328255","La Maison Arabe","Marrakech","Morocco",found,high,"reservation@lamaisonarabe.com","http://www.lamaisonarabe.com/"
+"327562","L'Ami Louis","Paris","France",no_site,,,
+"328194","L'Andana — La Trattoria Toscana","Castiglione della Pescaia","Italy",found,high,"info@andana.it","https://www.andana.it/"
+"328257","La Mamounia — Le Marocain","Marrakech","Morocco",found,high,"reservations@mamounia.com","https://mamounia.com/en/contact.html"
+"328201","La Maltese Estate","Santorini","Greece",found,high,"info@lamaltese.com","https://www.lamaltese.com/"
+"327689","La Marine — Alexandre Couillon","Noirmoutier","France",found,high,"contact@alexandrecouillon.com","http://alexandrecouillon.com/"
+"327857","La Ferme Saint-Siméon","Honfleur","France",no_email,,,
+"328242","La Mar Cebicheria","Lima","Peru",no_email,,,
+"328465","La Petite Maison Cannes","Cannes","France",found,high,"contact@lapetitemaison-cannes.com","http://www.lapetitemaison-cannes.com/"
+"328464","La Petite Maison Abu Dhabi","Abu Dhabi","United Arab Emirates",only_rejected,,,
+"327718","La Petite Maison de Nicole","Nice","France",no_email,,,
+"328467","La Petite Maison Doha","Doha","Qatar",only_rejected,,,
+"328163","La Petite Maison Dubai","Dubai","United Arab Emirates",only_rejected,,,
+"328466","La Petite Maison Hong Kong","Hong Kong","Hong Kong",only_rejected,,,
+"328462","La Petite Maison Miami","Miami","United States",only_rejected,,,
+"328463","La Petite Maison Riyadh","Riyadh","Saudi Arabia",only_rejected,,,
+"328468","La Petite Maison Limassol","Limassol","Cyprus",only_rejected,,,
+"327593","L'Arnsbourg","Baerenthal","France",found,high,"contact@arnsbourg.com","https://www.arnsbourg.com/fr/"
+"328261","La Suerte","Tulum","Mexico",only_rejected,,,
+"327583","L'Assiette Champenoise","Tinqueux","France",found,high,"infos@assiettechampenoise.com","https://www.assiettechampenoise.com/contact/"
+"328326","La Sultana — Marrakech","Marrakech","Morocco",found,high,"reservation@lasultanahotels.com","https://www.lasultanahotels.com/Marrakech/les_tables"
+"327844","La Table des Dranses","Chamonix","France",found,high,"reservation@restaurant-la-tablee-chamonix.com","https://www.restaurant-la-tablee-chamonix.com/mentions-legales"
+"327843","La Table de l'Alpaga","Megève","France",found,high,"info@beaumier.com","https://www.beaumier.com/fr/proprietes/hotel-alpaga/?namastay=true"
+"327686","La Pyramide — Patrick Henriroux","Vienne","France",only_rejected,,,
+"327570","L'Atelier de Joël Robuchon Étoile","Paris","France",only_rejected,,,
+"327594","La Tupina","Bordeaux","France",found,high,"latupina@latupina.com","http://www.latupina.com/"
+"327571","L'Atelier de Joël Robuchon Saint-Germain","Paris","France",only_rejected,,,
+"327918","L'Auberge de l'Hermitage","Beaucroissant","France",found,high,"contact@lermitage-hotel.com","https://www.lermitage-hotel.com/fr/cuisine-a-manger.html"
+"328131","L'Atelier de Joël Robuchon Hong Kong","Hong Kong","Hong Kong",no_email,,,
+"327592","L'Auberge de l'Ill","Illhaeusern","France",only_rejected,,,
+"327875","L'Auberge de Cassagne","Le Pontet","France",found,high,"resa@aubergedecassagne.com","https://www.aubergedecassagne.com/contact/"
+"327719","La Merenda","Nice","France",no_email,,,
+"328044","Joël Robuchon Las Vegas","Las Vegas","United States",no_email,,,
+"327830","L'Auberge des Templiers","Les Bezards","France",found,high,"reception@lestempliers.com","https://www.lestempliers.com/"
+"327585","L'Auberge du Cheval Blanc","Lembach","France",only_rejected,,,
+"327588","La Villa Archange","Le Cannet","France",found,high,"reservation@bruno-oger.com","http://bruno-oger.com/fr/?utm_source=gmb"
+"328515","La Yola Restaurant","Punta Cana","Dominican Republic",no_site,,,
+"327581","L'Auberge du Pont de Collonges (Bocuse)","Collonges-au-Mont-d'Or","France",found,high,"reservation@bocuse.fr","https://bocuse.fr/?utm_source=Google&utm_medium=My+Business"
+"327845","La Villa Belrose","Gassin","France",only_rejected,,,
+"327579","Le 1947 — Cheval Blanc Courchevel","Courchevel","France",no_email,,,
+"327815","LD Restaurant — Lešić Dimitri","Korčula","Croatia",found,high,"management@ldrestaurant.com","http://www.ldrestaurant.com/contact"
+"328003","Lazy Bear","San Francisco","United States",found,high,"contact@lazybearsf.com","http://www.lazybearsf.com/contact-info/"
+"327955","Le Bernardin","New York","United States",found,high,"reservations@le-bernardin.com","https://www.le-bernardin.com/home"
+"327696","Le Baratin","Paris","France",no_email,,,
+"327697","Le 6 Paul Bert","Paris","France",no_email,,,
+"327661","Le Bayview — Hôtel President Wilson","Geneva","Switzerland",no_email,,,
+"327724","Le Cap — Grand-Hôtel du Cap-Ferrat","Saint-Jean-Cap-Ferrat","France",no_email,,,
+"328522","Le Caprice Anguilla","The Valley","Anguilla",found,high,"unsubscribe@belmond.com","https://www.belmond.com/hotels/north-america/caribbean/anguilla/belmond-cap-juluca/dining?utm_source=local_search&utm_medium=link&utm_campaign=google_restaurant"
+"327688","Le Chabichou — Stéphane Buron","Courchevel","France",only_rejected,,,
+"328372","Le Bistrot d'Antoine","Nice","France",no_email,,,
+"327600","Le Calandre","Sarmeola di Rubano","Italy",found,high,"booking@alajmo.it","https://alajmo.it/pages/homepage-le-calandre"
+"327687","L'Auberge du Père Bise — Jean Sulpice","Talloires","France",no_email,,,
+"327833","Le Chêne Liège","Saint-Tropez","France",no_site,,,
+"327767","Le Champignon Sauvage","Cheltenham","United Kingdom",only_rejected,,,
+"327557","Le Chateaubriand","Paris","France",no_email,,,
+"327871","Le Charlemagne","Pernand-Vergelesses","France",found,low,"lecharlemagne.restaurant@gmail.com","https://www.lecharlemagne.fr/"
+"327842","Le Cinq Mondes — Four Seasons","Megève","France",found,high,"reception@leslogesblanches-megeve.com","https://leslogesblanches-megeve.com/"
+"327863","Le Chambard — Olivier Nasti","Kaysersberg","France",found,high,"info@lechambard.fr","https://www.lechambard.fr/fr/?utm_source=mybusiness&utm_medium=organic&utm_id=mybusinessorganic"
+"327561","Le Comptoir du Relais","Paris","France",only_rejected,,,
+"327976","Le Coucou","New York","United States",only_rejected,,,
+"328140","Le Du","Bangkok","Thailand",found,high,"info@ledubkk.com","http://ledubkk.com/"
+"327877","Le Coquillage — Olivier Roellinger","Cancale","France",found,high,"info@roellinger-bricourt.com","http://www.roellinger-bricourt.com/"
+"327874","Le Domaine de Clairefontaine","Chonas-l'Amballan","France",only_rejected,,,
+"327840","Le Coucou","Méribel","France",found,high,"reservations@lecoucoumeribel.com","https://www.lecoucoumeribel.com/fr/"
+"327702","Le Florimond","Paris","France",found,low,"le.florimond@orange.fr","http://leflorimond.com/"
+"327831","Le Domaine de Châteauvieux","Satigny","Switzerland",found,high,"reservation@chateauvieux.ch","https://www.chateauvieux.ch/"
+"328278","Le Filet","Montréal","Canada",found,high,"rose-marie@lefilet.ca","http://www.lefilet.ca/"
+"327549","Le Grand Véfour","Paris","France",found,high,"contact@legrandvefour.com","https://legrandvefour.com/"
+"328254","Le Foundouk","Marrakech","Morocco",found,high,"contact@foundouk.com","http://www.foundouk.com/"
+"327679","Le Grill — Hôtel de Paris","Monte-Carlo","Monaco",only_rejected,,,
+"328322","Le Goulet","Marrakech","Morocco",found,high,"courrier@riad-monceau.com","https://www.riad-monceau.com/contact"
+"328253","Le Jardin de Sucre","Marrakech","Morocco",found,high,"info@lejardinmarrakech.com","https://lejardinmarrakech.com/contact/"
+"327836","Le K2 Palace","Courchevel","France",found,high,"welcome@lek2palace.com","https://www.lek2palace.com/?utm_source=google&utm_medium=my_business"
+"328377","Le Magnolia — Cap d'Antibes Beach Hotel","Cap d'Antibes","France",no_email,,,
+"328376","Le Méditerranée — Hôtel Le Royal Antibes","Antibes","France",no_site,,,
+"327544","Le Meurice Alain Ducasse","Paris","France",no_email,,,
+"327849","Le Mas de Pierre","Saint-Paul-de-Vence","France",found,high,"info@lemasdepierre.com","http://www.lemasdepierre.com/"
+"327589","La Villa Madie","Cassis","France",no_email,,,
+"327927","Le Jardin du Royal Monceau","Paris","France",found,high,"concierge.paris@raffles.com","https://www.raffles.com/paris/?goto=fiche_hotel&code_hotel=A5D5&merchantid=seo-maps-FR-A5D5&sourceid=aw-cen&utm_medium=seo%20maps&utm_source=google%20Maps&utm_campaign=seo%20maps"
+"327636","L'Enclume","Cartmel","United Kingdom",found,high,"info@lenclume.co.uk","http://www.lenclume.co.uk/"
+"327858","Le Manoir d'Hastings","Bénouville","France",only_rejected,,,
+"328249","Leo","Bogotá","Colombia",found,high,"reservas@restauranteleo.com","http://restauranteleo.com/"
+"327584","Le Parc — Les Crayères","Reims","France",found,high,"00contact@lescrayeres.com","http://lescrayeres.com/en/restaurant-le-parc.html"
+"327821","Le Pavillon — Hôtel d'Angleterre","Bristol","United Kingdom",no_email,,,
+"327903","Leña — Dani García","Marbella","Spain",only_rejected,,,
+"328336","Le Pigeon","Portland","United States",found,high,"info@lepigeon.com","https://www.lepigeon.com/"
+"328147","Le Normandie","Bangkok","Thailand",found,high,"direct@mandarinoriental.com","https://www.mandarinoriental.com/bangkok/chao-phraya-river/fine-dining/restaurants/french-cuisine/le-normandie?htl=MOBKK&kw=MOBKK_normandie&eng=google&src=local"
+"327834","Le Pirate Saint-Tropez","Ramatuelle","France",no_email,,,
+"328069","Le Pavillon — Hôtel des Tours","New Orleans","United States",no_email,,,
+"327695","Le Quartier Français","Franschhoek","South Africa",found,high,"reservations@leeucollection.com","https://leeucollection.com/SA/le-quartier-francais"
+"327704","Le Petit Sommelier","Paris","France",no_email,,,
+"327939","Le Mermoz","Paris","France",no_email,,,
+"327706","Le Restaurant — L'Hôtel","Paris","France",no_email,,,
+"328327","Le Salama","Marrakech","Morocco",found,high,"reservations@lesalamamarrakech.com","https://www.lesalamamarrakech.com/"
+"327720","Le Roof — Hôtel Aston La Scala","Nice","France",found,high,"info@hotelmonsignynice.com","https://www.hotelmonsignynice.com/fr/page/rooftop-hotel-nice-vue-mer-rooftop-nice.11028.html"
+"327837","Le Sarkara — Le K2 Palace","Courchevel","France",found,high,"welcome@lek2palace.com","https://www.lek2palace.com/en/taste/le-sarkara.html"
+"327868","Le Pré aux Clercs","Dijon","France",found,high,"contact@lepreauxclercs.fr","http://www.lepreauxclercs.fr/"
+"328287","Le Sereno — Saint Barth","Grand Cul-de-Sac","Saint Barthélemy",no_email,,,
+"328378","Les Pêcheurs — Cap d'Antibes Beach Hotel","Cap d'Antibes","France",only_rejected,,,
+"327753","L'Escaleta","Cocentaina","Spain",found,high,"lescaleta@lescaleta.com","http://www.lescaleta.com/"
+"98695","LES 4 SERGENTS","La rochelle","France",found,low,"jonathan.dumele@gmail.com","https://www.les4sergents.com/mentions-legales/"
+"327556","Le Servan","Paris","France",only_rejected,,,
+"327722","La Réserve de Ramatuelle","Ramatuelle","France",no_email,,,
+"98678","LES FLOTS","La rochelle","France",only_rejected,,,
+"327838","Le Strato — Hôtel Le Strato","Courchevel","France",found,high,"info@hotelstrato.com","http://www.hotelstrato.com/"
+"327694","Les Trois Couronnes — Philippe Chevrier","Vevey","Switzerland",only_rejected,,,
+"328512","La Réserve Paris Restaurant Le Gabriel","Paris","France",no_email,,,
+"327565","Le Train Bleu","Paris","France",only_rejected,,,
+"327590","L'Estuaire","Bordeaux","France",only_rejected,,,
+"327681","Le Vistamar — Hôtel Hermitage","Monte-Carlo","Monaco",only_rejected,,,
+"327566","Le V — Four Seasons George V","Paris","France",only_rejected,,,
+"328126","Liao Fan Hong Kong Soya Sauce Chicken","Singapore","Singapore",only_rejected,,,
+"328007","Liholiho Yacht Club","San Francisco","United States",found,high,"aloha@lycsf.com","https://lycsf.com/pages/contact-us"
+"328276","L'Express","Montréal","Canada",no_email,,,
+"327693","L'Hostellerie de Plaisance","Saint-Émilion","France",found,high,"contact@hoteldepavie.com","http://www.hoteldepavie.com/"
+"327893","Locanda Don Serafino","Ragusa Ibla","Italy",found,high,"info@locandadonserafino.it","https://www.locandadonserafino.it/en/restaurant-in-ragusa"
+"328189","Locanda Margherita — Borgo Egnazia","Savelletri","Italy",found,low,"lalocandadelriccio@yahoo.com","https://lalocandadelriccio.com/"
+"328284","Le Toiny","Saint-Jean","Saint Barthélemy",no_email,,,
+"327974","Lilia","New York","United States",found,high,"reservations@lilianewyork.com","http://www.lilianewyork.com/"
+"328404","Locavore","Ubud","Indonesia",found,high,"reservations@locavorenxt.com","https://locavorenxt.com/"
+"327691","L'Espérance","Vézelay","France",found,high,"reservation@hplv-vezelay.com","http://hplv-vezelay.com/"
+"328385","Lío Ibiza","Ibiza","Spain",found,high,"info@lioibiza.com","http://www.lioibiza.com/"
+"327846","Lily of the Valley — La Croix-Valmer","La Croix-Valmer","France",found,high,"shapeclub@lilyofthevalley.com","http://www.lilyofthevalley.com/shape-club-treatments"
+"327736","Locanda Margon","Trento","Italy",found,high,"ristorante@locandamargon.it","http://www.locandamargon.it/contatti"
+"327873","Lung King Heen — Four Seasons","Hong Kong","China",no_email,,,
+"327870","Loiseau des Vignes","Beaune","France",found,high,"contact@bernard-loiseau.com","https://www.bernard-loiseau.com/fr/maisons/loiseau-des-vignes/beaune-loiseau-des-vignes.html"
+"328175","L'Olivo — Capri Palace","Anacapri","Italy",found,high,"reservations.jmh@jumeirah.com","https://www.jumeirah.com/en/stay/italy/capri-palace-jumeirah/dining/l-olivo-restaurant?utm_source=google&utm_medium=google%20places&utm_campaign=restaurant"
+"328184","Magdalena","Bolzano","Italy",found,high,"info@magdalenerhof.it","https://www.magdalenerhof.it/restaurant-bozen?utm_source=google&utm_medium=organic&utm_campaign=google_business_profile&utm_term=restaurant"
+"328389","Maca de Castro","Port d'Alcúdia","Spain",found,high,"info@macadecastro.com","https://macadecastro.com/"
+"327671","Maaemo","Oslo","Norway",found,high,"booking@maaemo.no","http://www.maaemo.no/contact"
+"327756","LÚ Cocina y Alma","Jerez de la Frontera","Spain",found,high,"info@lucocinayalma.com","http://www.lucocinayalma.com/"
+"327684","L'Oustau de Baumanière","Les Baux-de-Provence","France",found,high,"contact@baumaniere.com","https://www.baumaniere.com/gastronomie/loustau-de-baumaniere"
+"328277","Maison Boulud","Montréal","Canada",only_rejected,,,
+"328236","Maido","Lima","Peru",found,high,"reservas@maido.pe","https://maido.pe/reservas/maido"
+"327577","Maison Lameloise","Chagny","France",found,high,"reception@lameloise.fr","https://www.lameloise.fr/"
+"327867","Maison Kammerzell","Strasbourg","France",found,high,"info@maison-kammerzell.com","http://www.maison-kammerzell.com/"
+"327878","Maisons de Bricourt","Cancale","France",found,high,"info@roellinger-bricourt.com","https://www.roellinger-bricourt.com/fr/"
+"327994","Major Food Group Sadelle's","New York","United States",found,high,"reservations@sadelles.com","https://www.sadelles.com/?utm_medium=Click&utm_source=GoogleMyBusiness"
+"327576","Maison Pic","Valence","France",only_rejected,,,
+"327582","Maison Troisgros","Ouches","France",only_rejected,,,
+"327940","Mantica","Lisbon","Portugal",found,high,"hello@mantecarestaurant.co.uk","http://www.mantecarestaurant.co.uk/contact-1"
+"327653","Lorenz Adlon Esszimmer","Berlin","Germany",found,high,"lorenz.adlon@kempinski.com","https://www.kempinski.com/en/hotel-adlon/restaurants-bars/lorenz-adlon-esszimmer?utm_medium=organic&utm_source=google&utm_campaign=KIBER2&utm_content=gmb&source=S308962248"
+"328025","Maple & Ash","Chicago","United States",only_rejected,,,
+"328350","March","Houston","United States",found,high,"reservations@marchrestaurant.com","https://www.marchrestaurant.com/reservation/"
+"327968","Marea","New York","United States",only_rejected,,,
+"328308","Marque","Sydney","Australia",no_site,,,
+"327723","Magnetic Café — Eden-Roc","Antibes","France",no_email,,,
+"327996","Manresa","Los Gatos","United States",no_email,,,
+"328315","Maškrt","Belgrade","Serbia",no_site,,,
+"328060","Marion Miami","Miami","United States",found,high,"reservations@marionmiami.com","https://marionmiami.com/"
+"327954","Masa","New York","United States",only_rejected,,,
+"327621","Martín Berasategui","Lasarte-Oria","Spain",found,high,"info@martinberasategui.com","https://www.martinberasategui.com/es/reservar"
+"327806","Matsuhisa — Belvedere Hotel","Mykonos","Greece",found,high,"reservations@belvederehotel.com","https://www.belvederehotel.com/contact/"
+"327933","Mavrommatis","Paris","France",only_rejected,,,
+"327912","Marc Fosh","Palma de Mallorca","Spain",found,high,"info@marcfosh.com","http://www.marcfosh.com/"
+"328174","Masque","Mumbai","India",found,high,"bookings@masquerestaurant.com","http://www.masquerestaurant.com/reservations"
+"328405","Mejekawi at Ku De Ta","Seminyak","Indonesia",found,high,"reservations@kudeta.com","http://www.kudeta.com/"
+"328028","Mélisse","Santa Monica","United States",found,high,"info@citrinandmelisse.com","http://citrinandmelisse.com/"
+"328241","Mérito","Lima","Peru",found,high,"unete@merito.com.pe","https://www.merito.com.pe/"
+"327943","Loco — Alexandre Silva","Lisbon","Portugal",only_rejected,,,
+"328250","Mesa Franca","Bogotá","Colombia",found,low,"eventosmesafranca@gmail.com","http://restaurantemesafranca.com/"
+"328215","Messina","Marbella","Spain",found,high,"info@restaurantemessina.com","http://www.restaurantemessina.com/"
+"328145","Methavalai Sorndaeng","Bangkok","Thailand",found,low,"sorndaeng1@hotmail.com","https://methavalaisorndaeng.carrd.co/"
+"328407","Merah Putih","Seminyak","Indonesia",found,high,"info@merahputihbali.com","https://merahputihbali.com/"
+"328086","Mibu","Tokyo","Japan",no_site,,,
+"327884","Memories — Grand Hotel Bad Ragaz","Bad Ragaz","Switzerland",found,high,"info@memories.ch","http://www.memories.ch/"
+"327935","Mimosa — La Samaritaine","Paris","France",found,high,"reservation@mimosa-rueroyale.com","https://www.mimosa-rueroyale.com/"
+"328064","minibar by José Andrés","Washington","United States",found,high,"reserve@minibarbyjoseandres.com","https://www.minibarbyjoseandres.com/contact"
+"327575","Mirazur","Menton","France",found,high,"reservation@mirazur.fr","http://www.mirazur.fr/"
+"327942","Mini Bar — José Avillez","Lisbon","Portugal",only_rejected,,,
+"327973","Misi","New York","United States",found,high,"info@misinewyork.com","http://www.misinewyork.com/"
+"328193","Mistral — Grand Hotel Villa Serbelloni","Bellagio","Italy",found,high,"info@villaserbelloni.com","https://www.villaserbelloni.com/en/mistral-restaurant.html"
+"328115","Meta","Singapore","Singapore",found,high,"reservations@metarestaurant.sg","http://www.metarestaurant.sg/contact"
+"328152","Mingles","Seoul","South Korea",no_email,,,
+"328100","Mizai","Kyoto","Japan",no_email,,,
+"328346","Mizuna","Denver","United States",no_email,,,
+"328143","Mezzaluna","Bangkok","Thailand",found,high,"dome@lebua.com","http://www.lebua.com/mezzaluna/"
+"328136","Mono","Hong Kong","Hong Kong",found,high,"reservations@mono.hk","http://mono.hk/"
+"327743","Moments","Barcelona","Spain",found,high,"direct@mandarinoriental.com","https://www.mandarinoriental.com/barcelona/passeig-de-gracia/fine-dining/restaurants/catalan-cuisine/moments?htl=MOBCN&kw=MOBCN_moments&eng=google&src=local"
+"328368","Mountain Standard","Vail","United States",found,high,"info@mtnstandard.com","http://mtnstandard.com/"
+"328403","Mozaic","Ubud","Indonesia",found,high,"info@mozaic-bali.com","http://www.mozaic-bali.com/"
+"327626","Mugaritz","Errenteria","Spain",found,high,"info@mugaritz.com","https://www.mugaritz.com/contacto/"
+"328374","Mama Shelter Nice","Nice","France",found,high,"reception.nice@mamashelter.com","https://fr.mamashelter.com/nice?goto=fiche_hotel&code_hotel=B950&merchantid=seo-maps-France-B950&sourceid=aw-cen&utm_medium=seo%20maps&utm_source=google%20Maps&utm_campaign=seo%20maps"
+"328153","Mosu Seoul","Seoul","South Korea",no_email,,,
+"327764","Murano — Angela Hartnett","London","United Kingdom",found,high,"enquiries@muranolondon.com","http://www.muranolondon.com/"
+"98854","MOXIE","Sacramento","United States",no_email,,,
+"328370","Mw Restaurant","Honolulu","United States",found,high,"info@mwrestaurant.com","http://mwrestaurant.com/"
+"327812","Mürver","Istanbul","Türkiye",found,high,"info@murverrestaurant.com","http://www.murverrestaurant.com/"
+"328039","Mr. Chow Beverly Hills","Beverly Hills","United States",no_email,,,
+"328029","n/naka","Los Angeles","United States",found,high,"info@n-naka.com","https://n-naka.com/"
+"328240","Mayta","Lima","Peru",no_email,,,
+"328141","Nahm","Bangkok","Thailand",only_rejected,,,
+"327825","Nammos","Mykonos","Greece",found,high,"press@nammos.com","https://www.nammos.com/"
+"328436","Nobu Doha","Doha","Qatar",no_email,,,
+"327809","Neolokal","Istanbul","Türkiye",found,high,"info@neolokal.com","http://neolokal.com/"
+"328441","Nobu Atlantis Bahamas","Paradise Island","Bahamas",only_rejected,,,
+"328442","Nobu Barcelona","Barcelona","Spain",found,high,"inquiries-barcelona@nobuhotels.com","https://www.nobuhotels.com/barcelona/es/dining/nobu-restaurant/"
+"328232","Nicos","Mexico City","Mexico",no_email,,,
+"328431","Nobu London","London","United Kingdom",found,high,"london.reservations@noburestaurants.com","https://www.noburestaurants.com/london-old-park-lane/contact-and-hours"
+"328040","Nobu Malibu","Malibu","United States",found,high,"globalpress@noburestaurants.com","https://www.noburestaurants.com/malibu/contact-and-hours"
+"328438","Nobu Bahrain","Manama","Bahrain",found,high,"reservation@bushido.com.bh","https://www.bushido.com.bh/reserve/"
+"328217","Nobu Marbella","Marbella","Spain",found,high,"ryokan@nobuhotels.com","https://www.nobuhotels.com/contact"
+"328439","Nobu São Paulo","São Paulo","Brazil",found,high,"contato@kobu.com.br","http://www.kobu.com.br/"
+"328437","Nobu Manila","Manila","Philippines",no_email,,,
+"328435","Nobu Riyadh","Riyadh","Saudi Arabia",found,high,"ryokan@nobuhotels.com","http://www.nobuhotels.com/contact"
+"328434","Nobu Vegas","Las Vegas","United States",no_email,,,
+"328056","Nobu Miami Beach","Miami Beach","United States",found,high,"miamibeach@noburestaurants.com","https://www.noburestaurants.com/miami/contact-and-hours"
+"328318","Lola Bistro","Bucharest","Romania",no_email,,,
+"328444","Nobu Warsaw","Warsaw","Poland",found,high,"reserve-warsaw@nobuhotels.com","https://www.nobuhotels.com/warsaw/contact-us/"
+"328433","Nobu Newport Beach","Newport Beach","United States",found,high,"newportbeach@noburestaurants.com","https://www.noburestaurants.com/newportbeach/contact-and-hours"
+"327799","Nolita","Warsaw","Poland",found,high,"rezerwacja@nolita.pl","http://www.nolita.pl/reservations"
+"328394","Noni — InterContinental Malta","Valletta","Malta",no_email,,,
+"328008","Nopa","San Francisco","United States",found,high,"info@nopasf.com","http://www.nopasf.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp-listing"
+"327669","Noma","Copenhagen","Denmark",no_email,,,
+"328440","Nobu Mexico City","Mexico City","Mexico",no_email,,,
+"327667","Ocean — Vila Vita Parc","Porches","Portugal",only_rejected,,,
+"328325","Nomad Marrakech","Marrakech","Morocco",found,high,"info@nomadmarrakech.com","https://nomadmarrakech.com/fr/reservation/"
+"328357","Olamaie","Austin","United States",found,high,"reservations@olamaieaustin.com","http://olamaieaustin.com/contact"
+"327790","Onyx","Budapest","Hungary",found,high,"onyx@onyxrestaurant.hu","https://onyxrestaurant.hu/en"
+"99579","ORANGE SKY","Scottsdale","United States",found,high,"valerie.lewis@talkingstickresort.com","https://www.talkingstickresort.com/contact-us/"
+"327896","Otto Geleng — Belmond Grand Hotel Timeo","Taormina","Italy",found,high,"otto.geleng@belmond.com","https://www.belmond.com/dining/europe/italy/taormina/otto-geleng/?utm_source=local_search&utm_medium=link&utm_campaign=google_restaurant"
+"327820","Óx","Reykjavik","Iceland",no_email,,,
+"328116","Nouri","Singapore","Singapore",found,high,"info@nouri.com.sg","https://nouri.com.sg/reservations/"
+"327768","Northcote","Langho","United Kingdom",found,high,"reception@northcote.com","https://www.northcote.com/contact"
+"328107","Odette","Singapore","Singapore",no_email,,,
+"328386","Pacha Ibiza","Ibiza","Spain",found,high,"info@pacha.com","https://pacha.com/contact-us"
+"327715","Pages — Ryuji Teshima","Paris","France",found,high,"reservations@restaurantpages.fr","http://www.restaurantpages.fr/reservation.php"
+"328351","Pappas Bros Steakhouse","Houston","United States",only_rejected,,,
+"327786","Park Hotel Vitznau","Vitznau","Switzerland",found,high,"info@parkhotel-vitznau.ch","https://www.parkhotel-vitznau.ch/"
+"327915","Park Hyatt Vienna — The Bank","Vienna","Austria",no_email,,,
+"327573","Pavyllon — Alain Ducasse au Pavillon Ledoyen","Paris","France",found,high,"presse@yannick-alleno.com","https://www.yannick-alleno.com/contact"
+"328227","Olympe","Rio de Janeiro","Brazil",no_email,,,
+"328532","Pai Northern Thai Kitchen","Toronto","Canada",found,high,"downtown@paitoronto.com","http://www.paitoronto.com/"
+"327807","Pelagos — One&Only Aesthesis","Athens","Greece",only_rejected,,,
+"327740","Pellegrino — Diego Vitagliano","Naples","Italy",found,high,"support@slope.it","https://booking.slope.it/440191f2-841a-4e76-947c-444468d84371"
+"327948","Pedro Lemos","Porto","Portugal",no_email,,,
+"328149","Paste","Bangkok","Thailand",found,high,"info@pastebangkok.com","https://www.pastebangkok.com/contact/"
+"327814","Pelegrini","Šibenik","Croatia",found,high,"reservations@pelegrini.hr","https://pelegrini.hr/"
+"327947","Pesca","Lisbon","Portugal",no_email,,,
+"327953","Per Se","New York","United States",no_email,,,
+"327931","Penati al Baretto","Paris","France",no_email,,,
+"328422","Phi Beach","Baja Sardinia","Italy",found,high,"booking@phibeach.com","https://phibeach.com/pages/contact"
+"328560","Petrossian","New York","United States",found,high,"customersupport@petrossian.com","https://www.petrossian.com/"
+"328561","Petrossian Boutique Paris","Paris","France",found,high,"restaurant@petrossian.fr","https://restaurant.petrossian.fr/"
+"327604","Piazza Duomo","Alba","Italy",found,high,"booking@piazzaduomoalba.it","http://www.piazzaduomoalba.it/"
+"327610","Pipero","Rome","Italy",found,high,"info@piperoroma.it","http://www.piperoroma.it/"
+"328553","Picchi","São Paulo","Brazil",found,high,"contato@restaurantepicchi.com.br","https://www.restaurantepicchi.com.br/"
+"327936","Plaza Athénée — Galerie Restaurant","Paris","France",no_email,,,
+"327638","Pollen Street Social","London","United Kingdom",no_email,,,
+"327545","Plénitude — Cheval Blanc","Paris","France",no_email,,,
+"328550","Pirajá","Rio de Janeiro","Brazil",no_email,,,
+"328065","Pineapple and Pearls","Washington","United States",no_email,,,
+"327771","Pramerl & The Wolf","Vienna","Austria",found,high,"office@pramerlandthewolf.com","http://www.pramerlandthewolf.com/"
+"327727","Quadri","Venice","Italy",found,high,"booking@alajmo.it","https://alajmo.it/pages/homepage-ristorante-quadri"
+"327998","Quince","San Francisco","United States",found,high,"info@quincerestaurant.com","http://www.quincerestaurant.com/"
+"327895","Principe Cerami — San Domenico Palace","Taormina","Italy",no_email,,,
+"328290","Quintessence","Sydney","Australia",found,high,"info@estebanrestaurant.com.au","https://www.estebanrestaurant.com.au/"
+"327599","Osteria Francescana","Modena","Italy",no_email,,,
+"328230","Quintonil","Mexico City","Mexico",found,high,"contacto@quintonil.com","http://www.quintonil.com/"
+"328027","Providence","Los Angeles","United States",found,high,"info@providencela.com","https://providencela.com/"
+"328551","Ramirez","Rio de Janeiro","Brazil",no_site,,,
+"328239","Rafael","Lima","Peru",no_email,,,
+"327622","Quique Dacosta","Dénia","Spain",found,high,"universodacosta@quiquedacosta.es","https://quiquedacosta.es/?utm_source=google-my-business"
+"327716","Quinsou","Paris","France",no_email,,,
+"327855","Ré-Hôtel — Saint-Martin-de-Ré","Saint-Martin-de-Ré","France",found,high,"contact@hotel-de-toiras.com","http://www.hotel-de-toiras.com/"
+"328164","Nobu Dubai","Dubai","United Arab Emirates",no_email,,,
+"327781","Restaurant 181 — Olympiaturm","München","Germany",found,high,"info@restaurant181.com","https://www.restaurant181.com/"
+"328036","Republique","Los Angeles","United States",found,high,"info@republiquela.com","http://www.republiquela.com/contact"
+"328349","Restaurant August Escoffier","Houston","United States",found,high,"hello@lateaugusthtx.com","https://www.lateaugusthtx.com/"
+"327601","Reale","Castel di Sangro","Italy",found,high,"comunicazione@nikoromito.com","http://www.nikoromito.com/reale/"
+"328388","ON — Capdepera","Capdepera","Spain",no_email,,,
+"327717","Restaurant ADAR","Paris","France",found,high,"info@adar-paris.com","http://adar-paris.com/"
+"328545","Renaissance","Tokyo","Japan",no_email,,,
+"327985","Restaurant Daniel Boulud Sud","New York","United States",only_rejected,,,
+"328289","Restaurant des Pêcheurs — Le Sereno","Grand Cul-de-Sac","Saint Barthélemy",found,high,"reservations@bardespres.com","https://www.bardespres.com/saint-barth-restaurant-coming-soon/"
+"328072","Restaurant August","New Orleans","United States",found,high,"info@restaurantaugust.com","http://www.restaurantaugust.com/"
+"328214","Restaurante El Lago","Marbella","Spain",found,high,"restaurante@restauranteellago.com","http://www.restauranteellago.com/"
+"328123","Restaurant Born","Singapore","Singapore",found,high,"reservations@restaurantborn.com","https://restaurantborn.com/contact-us/"
+"327657","Restaurant de l'Hôtel de Ville (Crissier)","Crissier","Switzerland",found,high,"contact@restaurantcrissier.com","http://restaurantcrissier.com/"
+"328203","Pylos","Athens","Greece",found,high,"info@pylosrestaurant.com","http://www.pylosrestaurant.com/contact"
+"327648","Restaurant Bareiss","Baiersbronn","Germany",found,high,"info@bareiss.com","https://www.bareiss.com/kulinarik/a-la-carte-restaurants/3-restaurant-bareiss.html"
+"328045","Restaurant Guy Savoy Las Vegas","Las Vegas","United States",no_email,,,
+"327711","Restaurant H — Hubert Duchenne","Paris","France",found,high,"contact@restauranth.com","https://www.restauranth.com/"
+"327546","Restaurant Le Cinq Mars","Paris","France",only_rejected,,,
+"327928","Restaurant La Scène — Stéphanie Le Quellec","Paris","France",found,high,"contact@la-scene.paris","https://www.la-scene.paris/"
+"327563","Restaurant Le Coq Rico","Paris","France",found,high,"cyril.menard@lecoq-fils.com","https://lecoq-fils.com/"
+"327832","Restaurant Lou Marquès — Hôtel Jules César","Arles","France",found,high,"h9736-fb@accor.com","https://restaurantsandbars.accor.com/fr/restaurant/9736_R001?utm_source=google+Maps&utm_medium=seo+maps&utm_campaign=seo+maps"
+"327866","Restaurant La Palette","Wettolsheim","France",found,high,"lapalette@lapalette.fr","https://www.lapalette.fr/"
+"327852","Restaurant Le Pigonnet — Hôtel Le Pigonnet","Aix-en-Provence","France",only_rejected,,,
+"328183","Restaurant Krone — Niederkofler","San Cassiano","Italy",found,high,"info@gasthof-krone.com","https://www.gasthof-krone.com/?utm_source=my-business&utm_medium=organic"
+"328348","Restaurant Olivia","Denver","United States",found,high,"info@oliviadenver.com","https://www.oliviadenver.com/contact"
+"327885","Restaurant Pavillon — Baur au Lac","Zürich","Switzerland",found,high,"info@the-pavilion.ch","https://www.the-pavilion.ch/"
+"327635","Restaurant Gordon Ramsay","London","United Kingdom",only_rejected,,,
+"327765","Restaurant Sat Bains","Nottingham","United Kingdom",only_rejected,,,
+"328047","Restaurant Sage","Las Vegas","United States",no_email,,,
+"327929","Restaurant Helen","Paris","France",no_email,,,
+"328228","Roberta Sudbrack","Rio de Janeiro","Brazil",no_email,,,
+"328165","Roberto's Dubai","Dubai","United Arab Emirates",found,high,"info@robertosrestaurants.com","https://robertosrestaurants.com/dubai/"
+"327735","Ristorante Berton al Lago — Il Sereno","Torno","Italy",no_email,,,
+"328177","Ristorante Riccio — Capri Palace","Anacapri","Italy",found,high,"reservations.jmh@jumeirah.com","https://www.jumeirah.com/en/stay/italy/capri-palace-jumeirah/dining/il-riccio-restaurant?utm_source=google&utm_medium=google%20places&utm_campaign=restaurant"
+"328459","Roberto's Riyadh","Riyadh","Saudi Arabia",no_email,,,
+"327750","Ricard Camarena","Valencia","Spain",found,high,"info@ricardcamarena.com","https://www.ricardcamarena.com/"
+"328087","Restaurant Toyo","Tokyo","Japan",no_email,,,
+"327818","Restaurant Hiša Franko — Ana Roš","Kobarid","Slovenia",no_email,,,
+"327856","Restaurant Sa.Qua.Na — Alexandre Bourdas","Honfleur","France",no_email,,,
+"328460","Roberto's Hong Kong","Hong Kong","Hong Kong",no_email,,,
+"328546","Restaurant Tarjuit","Tokyo","Japan",found,high,"reservations@fairmont.com","https://www.fairmont.com/reservations/ja/find-reservation/"
+"328493","Roka Aldwych","London","United Kingdom",found,high,"infoaldwych@rokarestaurant.com","https://www.rokarestaurant.com/en/roka-aldwych-london?utm_source=InfoButtonClick&utm_medium=Home&utm_campaign=GoogleBusinessProfile"
+"328494","Roka Charlotte Street","London","United Kingdom",found,high,"infocharlottestreet@rokarestaurant.com","https://www.rokarestaurant.com/en/roka-charlotte-street-london?utm_source=InfoButtonClick&utm_medium=Home&utm_campaign=GoogleBusinessProfile"
+"328495","Roka Mayfair","London","United Kingdom",found,high,"infomayfair@rokarestaurant.com","https://www.rokarestaurant.com/en/roka-mayfair-london?utm_source=InfoButtonClick&utm_medium=Home&utm_campaign=GoogleBusinessProfile"
+"328496","Roka Canary Wharf","London","United Kingdom",found,high,"infocanarywharf@rokarestaurant.com","https://www.rokarestaurant.com/en/roka-canary-wharf-london?utm_source=InfoButtonClick&utm_medium=Home&utm_campaign=GoogleBusinessProfile"
+"328263","Rosa Negra Tulum","Tulum","Mexico",found,high,"contacto@rosanegra.com.mx","https://www.rosanegra.com.mx/en/groups-events"
+"328068","Rose's Luxury","Washington","United States",found,high,"info@rosesluxury.com","https://www.rosesluxury.com/"
+"328168","Row on 45","Dubai","United Arab Emirates",no_email,,,
+"328148","Saawaan","Bangkok","Thailand",found,high,"contact@saawaan.com","https://www.saawaan.com/contact"
+"328258","Royal Mansour — La Grande Table Française","Marrakech","Morocco",found,high,"reservation@royalmansour.com","https://www.royalmansour.com/en/marrakech/dining/la-grande-table-marocaine/"
+"327827","Ron Gastrobar — Ron Blaauw","Amsterdam","Netherlands",found,high,"info@rongastrobar.nl","http://www.rongastrobar.nl/contact"
+"327651","Rutz","Berlin","Germany",found,high,"info@rutz-restaurant.de","http://www.rutz-restaurant.de/"
+"328001","Saison","San Francisco","United States",found,high,"info@saisonsf.com","https://www.saisonsf.com/"
+"328118","Saint Pierre","Singapore","Singapore",found,high,"reservations@saintpierre.com.sg","https://www.saintpierre.com.sg/reservations"
+"328317","Salon 1905","Belgrade","Serbia",found,high,"reservation@salon1905.rs","https://www.salon1905.rs/"
+"328296","Saint Peter","Sydney","Australia",found,high,"3703hello@saintpeter.com.au","http://www.saintpeter.com.au/"
+"327922","Saisons — Davy Tissot","Écully","France",found,high,"restaurantsaisons@saisons-restaurant.fr","http://www.saisons-restaurant.fr/mentions-legales/"
+"328252","Salvo Patria","Bogotá","Colombia",no_email,,,
+"327793","Salt","Budapest","Hungary",found,high,"salt@saltbudapest.com","https://saltbudapest.com/reservations/"
+"328523","Sandbar Anguilla","The Valley","Anguilla",found,low,"sandbaranguilla22@gmail.com","https://sandbar-anguilla.com/"
+"328537","Salt Riyadh","Riyadh","Saudi Arabia",no_email,,,
+"327991","Sant Ambroeus","New York","United States",found,high,"info@santambroeus.com","https://www.santambroeus.com/pages/contact"
+"328024","RPM Italian","Chicago","United States",no_email,,,
+"327917","Sasso San Gottardo","Lugano","Switzerland",no_site,,,
+"328424","Sant Marsino Cape Cod","Provincetown","United States",found,low,"fanizziinc@gmail.com","https://fanizzisrestaurant.com/"
+"327916","Sasso — Mariëlla Maagdenberg","Lugano","Switzerland",found,high,"info@villasassa.ch","https://villasassa.ch/en/?utm_source=google&utm_medium=organic&utm_campaign=gmb_listing"
+"328206","Sant Pau","Sant Pol de Mar","Spain",found,high,"comunicacion@cuina-santpau.cat","http://www.cuina-santpau.cat/contact-us"
+"328081","Ryugin","Tokyo","Japan",no_email,,,
+"327658","Schloss Schauenstein","Fürstenau","Switzerland",found,high,"kontakt@schauenstein.ch","http://www.schauenstein.ch/"
+"327808","Selene","Santorini","Greece",found,high,"info@selene.gr","https://selene.gr/"
+"327555","Saturne","Paris","France",no_email,,,
+"327647","Schwarzwaldstube — Hotel Traube Tonbach","Baiersbronn","Germany",found,high,"reservations@traube-tonbach.de","https://www.traube-tonbach.de/restaurants-bar/schwarzwaldstube/"
+"328517","Sea Soul Beach Club","Cabo San Lucas","Mexico",found,high,"reservaciones@seadcabo.com","http://www.seadcabo.com/contact"
+"327798","Senses","Warsaw","Poland",no_email,,,
+"327898","Sapio","Catania","Italy",found,high,"info@sapiorestaurant.it","https://www.sapiorestaurant.it/contatti/"
+"328082","Sézanne","Tokyo","Japan",no_email,,,
+"328259","Selman Marrakech — Restaurant Atyqui","Marrakech","Morocco",found,high,"info@selman-marrakech.com","https://www.selman-marrakech.com/fr/restaurants-bars/restaurant-assyl"
+"328491","Sexy Fish London","London","United Kingdom",only_rejected,,,
+"328402","Sayan — Four Seasons Bali","Ubud","Indonesia",no_email,,,
+"327612","Seta — Mandarin Oriental","Milan","Italy",found,high,"direct@mandarinoriental.com","https://www.mandarinoriental.com/en/milan/la-scala/dine/seta?src=loc.yext.momln.ggl"
+"327550","Senderens — Lucas Carton","Paris","France",only_rejected,,,
+"327897","Saro","Taormina","Italy",found,high,"info@ristorantedasaro.it","https://www.ristorantedasaro.it/"
+"327997","SingleThread","Healdsburg","United States",no_email,,,
+"328297","Sixpenny","Sydney","Australia",found,high,"info@sixpenny.com.au","https://www.sixpenny.com.au/"
+"328492","Sexy Fish Manchester","Manchester","United Kingdom",only_rejected,,,
+"328119","Shisen Hanten","Singapore","Singapore",only_rejected,,,
+"328412","Sinatra","Las Vegas","United States",found,high,"roomreservations@wynnlasvegas.com","https://www.wynnlasvegas.com/accessibility-policy"
+"327755","Sollo — Diego Gallegos","Marbella","Spain",found,high,"info@sollo.es","https://www.sollo.es/es/"
+"328371","Sichuan Moon — Wynn Palace Macau","Macau","Macau",only_rejected,,,
+"328154","Soigné Seoul","Seoul","South Korea",no_email,,,
+"327754","Skina","Marbella","Spain",found,high,"info@restauranteskina.com","https://www.restauranteskina.com/"
+"327709","Solstice — Eric Trochon","Paris","France",found,high,"parisreservations@solsticeparis.com","http://www.solsticeparis.com/"
+"328016","Smyth","Chicago","United States",no_email,,,
+"327805","Soul","Athens","Greece",found,high,"hello@soilrestaurant.gr","https://www.soilrestaurant.gr/"
+"328400","Spazio Niko Romito","Rome","Italy",no_email,,,
+"327824","Spilia Seaside","Mykonos","Greece",no_email,,,
+"328022","Spiaggia","Chicago","United States",found,high,"info@sepiachicago.com","https://www.sepiachicago.com/"
+"327888","Sonnenberg Restaurant","Zürich","Switzerland",found,high,"welcome@sonnenberg-zurich.ch","http://www.sonnenberg-zurich.ch/"
+"328030","Spago","Beverly Hills","United States",no_email,,,
+"327629","Smoked Room","Madrid","Spain",no_email,,,
+"328004","Spruce","San Francisco","United States",found,high,"info@sprucesf.com","http://www.sprucesf.com/"
+"327789","Stand by Szulló & Széll","Budapest","Hungary",found,high,"info@standrestaurant.hu","https://standrestaurant.hu/"
+"328041","Soho House Malibu","Malibu","United States",only_rejected,,,
+"328341","Spinasse","Seattle","United States",found,high,"info@spinasse.com","https://spinasse.com/"
+"327773","Speisemeisterei","Stuttgart","Germany",found,high,"info@speisemeisterei.de","http://www.speisemeisterei.de/"
+"327662","Steirereck","Vienna","Austria",found,high,"wien@steirereck.at","http://www.steirereck.at/impressum.html"
+"328006","State Bird Provisions","San Francisco","United States",found,high,"info@statebirdsf.com","http://www.statebirdsf.com/"
+"327655","Steinheuers Restaurant","Bad Neuenahr-Ahrweiler","Germany",found,high,"info@steinheuers.de","https://www.steinheuers.de/"
+"327641","St. John","London","United Kingdom",found,high,"reservations@stjohnrestaurant.com","https://www.stjohnrestaurant.com/"
+"328146","Sra Bua by Kiin Kiin","Bangkok","Thailand",found,high,"dining.siambangkok@kempinski.com","https://www.kempinski.com/en/siam-hotel/restaurants-bars/sra-bua-by-kiin-kiin?utm_medium=organic&utm_source=google&utm_campaign=KIBKK1&utm_content=gmb&source=S308962248"
+"327859","Stéphane Carbone","Caen","France",found,high,"reservation@stephanecarbone.fr","http://www.stephanecarbone.fr/"
+"328052","Stubborn Seed","Miami Beach","United States",no_email,,,
+"328399","St. Regis Rome — Restaurant Lumen","Rome","Italy",no_email,,,
+"327889","St. Regis Venice — Gio's","Venice","Italy",no_email,,,
+"328497","STK Steakhouse Atlanta","Atlanta","United States",only_rejected,,,
+"328499","STK Steakhouse Miami","Miami","United States",only_rejected,,,
+"328498","STK Steakhouse Las Vegas","Las Vegas","United States",only_rejected,,,
+"327763","Story — Tom Sellers","London","United Kingdom",found,high,"dine@restaurantstory.co.uk","http://www.restaurantstory.co.uk/"
+"328142","Sühring","Bangkok","Thailand",found,high,"reservation@restaurantsuhring.com","http://www.restaurantsuhring.com/"
+"327567","Sushi B Paris","Paris","France",found,high,"info@sushi-b-fr.com","http://sushi-b-fr.com/"
+"328520","Sunset Mona Lisa","Cabo San Lucas","Mexico",found,high,"reservaciones@sunsetmonalisa.com","https://www.sunsetmonalisa.com/contact"
+"328079","Sukiyabashi Jiro Ginza","Tokyo","Japan",no_email,,,
+"328343","Sushi Kashiba","Seattle","United States",found,high,"reservations@sushikashiba.com","https://sushikashiba.com/reservations"
+"327713","Substance — Matthias Marc","Paris","France",found,high,"reservation@substance.paris","http://www.substance.paris/"
+"328224","Sushi Hashida","São Paulo","Brazil",no_email,,,
+"327987","Sushi Noz","New York","United States",found,high,"reservations@sushinoz.com","http://www.sushinoz.com/"
+"328139","Sushi Saito Hong Kong","Hong Kong","Hong Kong",no_email,,,
+"327986","Sushi Nakazawa","New York","United States",no_email,,,
+"328085","Sushi Saiko","Tokyo","Japan",no_email,,,
+"328281","Sushi Masaki Saito","Toronto","Canada",found,high,"infoto@masakisaito.ca","https://www.masakisaito.ca/contact/"
+"328051","SW Steakhouse","Las Vegas","United States",found,high,"roomreservations@wynnlasvegas.com","https://www.wynnlasvegas.com/accessibility-policy"
+"328367","Sweet Basil","Vail","United States",found,high,"reservationmedianewscareerscommunityinfo@sweetbasilvail.com","https://sweetbasilvail.com/reservation-policy"
+"328130","Sushi Shikon","Hong Kong","Hong Kong",found,high,"reservations@sushi-shikon.com","https://www.sushi-shikon.com/"
+"328084","Sushi Ginza Onodera","Tokyo","Japan",no_email,,,
+"328129","T'ang Court","Hong Kong","Hong Kong",found,high,"tlhkg.info@langhamhotels.com","http://www.langhamhotels.com/en/the-langham/hong-kong/dining/tang-court/"
+"327587","Takao Takano","Lyon","France",found,high,"restaurant@takaotakano.com","http://takaotakano.com/mentions-legales"
+"328504","Tao Chicago","Chicago","United States",found,high,"taochicagoinfo@taogroup.com","https://taogroup.com/venues/tao-asian-bistro-chicago/"
+"328502","Tao Las Vegas","Las Vegas","United States",found,high,"lvtaoreservations@taogroup.com","https://taogroup.com/venues/tao-asian-bistro-las-vegas/reservations/"
+"328503","Tao Downtown New York","New York","United States",found,high,"nytaodtreservations@taogroup.com","https://taogroup.com/venues/tao-downtown-new-york/reservations/"
+"328009","Tartine Manufactory","San Francisco","United States",no_email,,,
+"328243","Tegui","Buenos Aires","Argentina",no_site,,,
+"328132","Tate Dining Room","Hong Kong","Hong Kong",found,high,"info@tate.com.hk","http://www.tate.com.hk/"
+"327649","Tantris","München","Germany",found,high,"contact@tantris.de","https://www.tantris.de/"
+"328098","Tankuma Kitamise","Kyoto","Japan",no_email,,,
+"327637","The Araki","London","United Kingdom",found,high,"info@the-araki.co.uk","https://the-araki.co.uk/"
+"328428","The Beach Plum Inn","Menemsha","United States",found,high,"guestservices@innsatmenemsha.com","http://www.innsatmenemsha.com/"
+"328320","The Artist","Bucharest","Romania",found,high,"reservation@artorestaurant.ro","http://www.artorestaurant.ro/"
+"328313","The Bunker","Queenstown","New Zealand",found,high,"info@thebunker.co.nz","http://www.thebunker.co.nz/"
+"327758","The Clove Club","London","United Kingdom",found,high,"reservations@thecloveclub.com","http://thecloveclub.com/contact"
+"328524","Tasty's Anguilla","The Valley","Anguilla",found,low,"chefcarty2@hotmail.com","http://tastys-anguilla.com/"
+"328063","The Inn at Little Washington","Washington","United States",found,high,"reservations@theinnatlittlewashington.com","http://www.theinnatlittlewashington.com/"
+"327633","The Fat Duck","Bray","United Kingdom",found,high,"reservations@thefatduck.co.uk","http://www.thefatduck.co.uk/contact"
+"327969","The Grill","New York","United States",found,high,"reservations@thegrillnewyork.com","https://www.thegrillnewyork.com/?utm_medium=Click&utm_source=GoogleMyBusiness"
+"327995","The French Laundry","Yountville","United States",only_rejected,,,
+"328043","The Ivy","Los Angeles","United States",found,high,"info@theivyrestaurants.com","http://www.theivyrestaurants.com/"
+"328430","The Outermost Inn","Aquinnah","United States",no_email,,,
+"327963","The Modern","New York","United States",no_email,,,
+"327970","The Pool","New York","United States",found,high,"info@thepoolnewyork.com","https://www.thepoolnewyork.com/?utm_medium=Click&utm_source=GoogleMyBusiness"
+"328528","The Old Stone Inn","Niagara Falls","Canada",no_email,,,
+"328365","The Snowmass Club","Snowmass Village","United States",found,high,"ecavarra@snowmassclub.com","https://www.snowmassclub.com/properties"
+"327642","The Ritz Restaurant","London","United Kingdom",found,high,"reservations@theritzlondon.com","https://www.theritzlondon.com/dine-with-us/the-ritz-restaurant/?utm_source=google&utm_medium=local&utm_campaign=Ritz_Restaurant"
+"327656","The Table Kevin Fehling","Hamburg","Germany",no_email,,,
+"328033","Sushi Ginza Onodera","Los Angeles","United States",no_email,,,
+"327634","The Waterside Inn","Bray","United Kingdom",found,high,"reservations@waterside-inn.co.uk","https://www.waterside-inn.co.uk/"
+"327674","The Jane","Antwerp","Belgium",found,high,"contact@thejaneantwerp.com","https://www.thejaneantwerp.com/"
+"328121","Thevar","Singapore","Singapore",found,high,"reservations@thevar.sg","http://thevar.sg/"
+"327950","The Yeatman","Vila Nova de Gaia","Portugal",only_rejected,,,
+"328539","Tirpse","Tokyo","Japan",found,high,"reservationphk@peninsula.com","https://www.peninsula.com/ja/tokyo/hotel-fine-dining/peter-modern-french"
+"327776","Tiger Gourmet","Frankfurt","Germany",found,high,"info@tigerpalast.de","http://www.tigerpalast.de/"
+"328426","Topper's at the Wauwinet","Nantucket","United States",found,high,"reservations@wauwinet.com","https://www.wauwinet.com/dining/toppers"
+"327652","Tim Raue","Berlin","Germany",found,high,"office@tim-raue.com","https://tim-raue.com/"
+"328272","Toqué!","Montréal","Canada",found,high,"info@restaurant-toque.com","https://www.restaurant-toque.com/fr/"
+"327616","Torre del Saracino","Vico Equense","Italy",no_email,,,
+"328091","Sushi Yoshitake","Tokyo","Japan",no_email,,,
+"327990","Torrisi","New York","United States",found,high,"reservations@torrisinyc.com","https://www.torrisinyc.com/?utm_medium=Click&utm_source=GoogleMyBusiness"
+"328021","Topolobampo","Chicago","United States",no_email,,,
+"328213","Tragabuches","Marbella","Spain",only_rejected,,,
+"328218","Trocadero Arena","Marbella","Spain",found,high,"rrhh@grupotrocadero.com","https://grupotrocadero.com/trocadero-arena/"
+"328160","TRESIND Studio","Dubai","United Arab Emirates",only_rejected,,,
+"327733","Trippa","Milan","Italy",found,high,"info@trippamilano.it","http://www.trippamilano.it/"
+"327914","Trois Rois — Cheval Blanc Basel","Basel","Switzerland",found,high,"reservation@lestroisrois.com","https://www.lestroisrois.com/de/restaurants-bars/brasserie/"
+"328415","Twist by Pierre Gagnaire","Las Vegas","United States",no_site,,,
+"328219","Tuju","São Paulo","Brazil",found,high,"reserva@tuju.com.br","https://tuju.com.br/"
+"327757","Trinity — Adam Byatt","London","United Kingdom",found,high,"dine@trinityrestaurant.co.uk","http://www.trinityrestaurant.co.uk/contact"
+"327810","Turk Fatih Tutak","Istanbul","Türkiye",found,high,"info@turkft.com","https://turkft.com/"
+"327710","Tomy & Co","Paris","France",no_email,,,
+"327881","STAY by Yannick Alléno","Dubai","United Arab Emirates",no_email,,,
+"328354","Uchi Houston","Houston","United States",found,high,"uchiwesthollywoodmanagers@uchirestaurants.com","https://uchi.uchirestaurants.com/location/houston/"
+"328355","Uchi Austin","Austin","United States",found,high,"uchiwesthollywoodmanagers@uchirestaurants.com","https://uchi.uchirestaurants.com/location/austin/"
+"327605","Uliassi","Senigallia","Italy",found,high,"info@uliassi.com","http://www.uliassi.com/contact"
+"328395","Under Grain","Valletta","Malta",no_email,,,
+"327645","Vendôme — Schloss Bensberg","Bergisch Gladbach","Germany",only_rejected,,,
+"328334","Vernick Food & Drink","Philadelphia","United States",found,high,"info@vernickphilly.com","https://www.vernickphilly.com/vernick-food-and-drink"
+"327730","Verso — Capitani","Milan","Italy",found,high,"info@ristoranteverso.com","http://www.ristoranteverso.com/"
+"327559","Verjus","Paris","France",found,low,"verjusparis@gmail.com","http://www.verjusparis.com/"
+"327853","Une Table au Sud","Marseille","France",found,low,"unetableausud@wanadoo.fr","http://www.unetableausud.com/"
+"328525","Veya Anguilla","The Valley","Anguilla",found,low,"veyarestaurant@gmail.com","http://veyarestaurant.com/"
+"328333","Vetri","Philadelphia","United States",found,high,"vetri@vetricucina.com","http://www.vetricucina.com/"
+"328191","Vespasia — Palazzo Seneca","Norcia","Italy",only_rejected,,,
+"328157","Ultraviolet by Paul Pairet","Shanghai","China",no_email,,,
+"328035","Vespertine","Los Angeles","United States",no_email,,,
+"327913","Voro — Park Hyatt Mallorca","Canyamel","Spain",only_rejected,,,
+"327900","Villa Crespi — Antonino Cannavacciuolo","Orta San Giulio","Italy",found,high,"info@villacrespi.it","https://www.villacrespi.it/ristorante-antonino-cannavacciuolo-villa-crespi/"
+"328301","Vue de monde","Melbourne","Australia",found,high,"vuedemonde@vuedemonde.com.au","http://www.vuedemonde.com.au/contact"
+"328549","Wabisuke","Tokyo","Japan",no_email,,,
+"328173","Wasabi by Morimoto","Mumbai","India",no_email,,,
+"328014","Wayfare Tavern","San Francisco","United States",found,high,"contact@wayfaretavern.com","https://www.wayfaretavern.com/"
+"328133","VEA","Hong Kong","Hong Kong",found,high,"info@vea.hk","http://www.vea.hk/"
+"328418","William — Belmond Reid's","Funchal","Portugal",found,high,"restaurants.rds@belmond.com","https://www.belmond.com/hotels/europe/portugal/madeira/belmond-reids-palace/william-restaurant?utm_source=local_search&utm_medium=link&utm_campaign=google_restaurant"
+"327769","Whatley Manor — Niall Keating","Wiltshire","United Kingdom",found,high,"reservations@whatleymanor.com","https://www.whatleymanor.com/"
+"328410","Wing Lei","Las Vegas","United States",found,high,"roomreservations@wynnlasvegas.com","https://www.wynnlasvegas.com/accessibility-policy"
+"328122","Whitegrass","Singapore","Singapore",found,high,"reservations@whitegrass.com.sg","https://www.whitegrass.com.sg/contact"
+"327887","Widder Restaurant","Zürich","Switzerland",only_rejected,,,
+"327666","Vila Joya","Albufeira","Portugal",found,high,"info@vilajoya.com","http://www.vilajoya.com/"
+"327778","Wolfshöhle","Freiburg","Germany",found,high,"info@wolfshoehle-freiburg.de","http://www.wolfshoehle-freiburg.de/"
+"327640","Yauatcha","London","United Kingdom",found,high,"ukpress@hakkasangroup.com","https://hakkasangroup.com/venues/yauatcha-soho-london/contact/"
+"328158","Yong Yi Ting","Shanghai","China",no_site,,,
+"327804","Vezene","Athens","Greece",found,high,"reservations@vezene.gr","http://www.vezene.gr/contact"
+"328536","Yamamoto Japanese Restaurant","Riyadh","Saudi Arabia",found,high,"enquiries@myazu.com","https://www.myazu.com/contact"
+"328300","Yellow","Sydney","Australia",found,high,"info@yellowsydney.com.au","https://www.yellowsydney.com.au/"
+"328390","Zaranda — Mallorca","Es Capdellà","Spain",found,high,"zaranda@zaranda.es","https://zaranda.es/"
+"327680","Yoshi — Métropole Monte-Carlo","Monte-Carlo","Monaco",found,high,"reservations@metropole.com","https://metropole.com/fr/acces-contact"
+"328271","Wolfgat","Paternoster","South Africa",found,low,"diewolfgat@gmail.com","http://www.wolfgat.co.za/"
+"327941","Yakuza by Olivier","Lisbon","Portugal",only_rejected,,,
+"328369","The Modern Honolulu","Honolulu","United States",no_email,,,
+"328332","Zahav","Philadelphia","United States",found,high,"info@zahavrestaurant.com","http://www.zahavrestaurant.com/about"
+"328108","Zen","Singapore","Singapore",found,high,"reservations@restaurantzen.com","http://www.restaurantzen.com/"
+"327569","Ze Kitchen Galerie","Paris","France",found,low,"resa.relaislouis13@gmail.com","http://www.zekitchengalerie.fr/"
+"328137","Ying Jee Club","Hong Kong","Hong Kong",found,high,"reservation@yingjeeclub.hk","http://yingjeeclub.hk/"
+"328479","Zuma Boston","Boston","United States",only_rejected,,,
+"328481","Zuma Abu Dhabi","Abu Dhabi","United Arab Emirates",only_rejected,,,
+"328480","Zuma Las Vegas","Las Vegas","United States",only_rejected,,,
+"328482","Zuma Doha","Doha","Qatar",only_rejected,,,
+"328483","Zuma Hong Kong","Hong Kong","Hong Kong",only_rejected,,,
+"328478","Zuma New York","New York","United States",only_rejected,,,
+"328059","Zuma Miami","Miami","United States",only_rejected,,,
+"328477","Zuma London","London","United Kingdom",found,high,"info@zumarestaurant.com","https://www.zumarestaurant.com/en/london?utm_source=InfoButtonClick&utm_medium=Home&utm_campaign=GoogleBusinessProfile"
+"328012","Zuni Café","San Francisco","United States",no_email,,,

@@ -1,0 +1,514 @@
+<title>A Porta Que Não Abre</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  /* Tokens do site theworldkeys.com (extraídos 2026-09-01) — dossiê dark-first */
+  :root {
+    --ink: #070b10;
+    --surface: #0f1218;
+    --surface-2: #181c24;
+    --border: #232838;
+    --gold: #c9a96e;
+    --gold-strong: #e4c990;
+    --gold-deep: #9e7c48;
+    --text: #ede9df;
+    --text-strong: #f7f4ef;
+    --muted: #9a97a8;
+    --muted-2: #6f6d80;
+    --bleed: #c8695c;
+    --ok: #86a985;
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans: "Jost", "Segoe UI", Helvetica, Arial, sans-serif;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink: #f4f1ea;
+      --surface: #fbf9f4;
+      --surface-2: #ece7db;
+      --border: #d6cfbf;
+      --gold: #9e7c48;
+      --gold-strong: #7d5f34;
+      --gold-deep: #c9a96e;
+      --text: #1d2029;
+      --text-strong: #0b0e14;
+      --muted: #5f5d6e;
+      --muted-2: #8b889a;
+      --bleed: #a8463a;
+      --ok: #4f7a4f;
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --ink: #f4f1ea;
+    --surface: #fbf9f4;
+    --surface-2: #ece7db;
+    --border: #d6cfbf;
+    --gold: #9e7c48;
+    --gold-strong: #7d5f34;
+    --gold-deep: #c9a96e;
+    --text: #1d2029;
+    --text-strong: #0b0e14;
+    --muted: #5f5d6e;
+    --muted-2: #8b889a;
+    --bleed: #a8463a;
+    --ok: #4f7a4f;
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    padding-block: 0 96px;
+    padding-inline: clamp(16px, 5vw, 48px);
+  }
+  a { color: var(--gold); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); }
+  a:hover, a:focus-visible { color: var(--gold-strong); border-bottom-color: var(--gold-strong); outline: none; }
+  a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  strong, b { font-weight: 600; color: var(--text-strong); }
+  em { font-style: italic; }
+  p { margin: 0 0 1em; max-width: 68ch; }
+  ul, ol { max-width: 68ch; padding-left: 1.2em; margin: 0 0 1.2em; }
+  li { margin-bottom: .55em; }
+  li::marker { color: var(--gold); }
+
+  .wrap { max-width: 1040px; margin: 0 auto; }
+
+  /* Cabeçalho de página */
+  .masthead {
+    display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px 24px;
+    padding-block: 26px 18px; border-bottom: 1px solid var(--border);
+  }
+  .brand { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .48em; text-transform: uppercase; color: var(--gold); }
+  .meta { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+
+  /* Capa */
+  .cover { padding-block: 64px 48px; border-bottom: 1px solid var(--border); }
+  .eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .42em; text-transform: uppercase; color: var(--gold); margin: 0 0 18px; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(42px, 7vw, 84px); line-height: 1.02; letter-spacing: -.02em; color: var(--text-strong); margin: 0 0 26px; max-width: 14ch; text-wrap: balance; }
+  .deck { font-size: 19px; line-height: 1.55; color: var(--text); max-width: 60ch; margin: 0 0 32px; }
+  .deck strong { font-weight: 500; }
+  .thesis { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .thesis > div { padding: 18px 22px 18px 0; border-right: 1px solid var(--border); }
+  .thesis > div + div { padding-left: 22px; }
+  .thesis > div:last-child { border-right: 0; }
+  .thesis .k { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .thesis .v { font-family: var(--serif); font-size: 44px; line-height: 1; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+  .thesis .v small { font-family: var(--sans); font-size: 12px; color: var(--muted); letter-spacing: .08em; margin-left: 6px; }
+  .thesis .d { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  /* Legenda de rótulos */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 12.5px; color: var(--muted); padding-block: 22px; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .14em; padding: 1px 6px 0; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); vertical-align: middle; line-height: 1.6; margin-left: 4px; }
+  .tag.f { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); }
+  .tag.s { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 50%, transparent); }
+  .tag.l { color: var(--bleed); border-color: color-mix(in srgb, var(--bleed) 50%, transparent); }
+
+  /* Seções */
+  section { padding-block: 56px 24px; border-bottom: 1px solid var(--border); }
+  .part { font-size: 11px; letter-spacing: .42em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4vw, 44px); line-height: 1.08; letter-spacing: -.015em; color: var(--text-strong); margin: 0 0 22px; max-width: 24ch; text-wrap: balance; }
+  h3 { font-family: var(--serif); font-weight: 500; font-size: 25px; line-height: 1.15; color: var(--text-strong); margin: 36px 0 12px; text-wrap: balance; }
+  .lead { font-size: 18px; line-height: 1.55; max-width: 62ch; }
+  .note { font-size: 13.5px; color: var(--muted); max-width: 68ch; }
+  .src { font-size: 12px; color: var(--muted-2); }
+
+  /* Funil em degraus (escala log) */
+  .funnel { display: grid; gap: 0; border-top: 1px solid var(--border); margin: 26px 0 14px; }
+  .step { display: grid; grid-template-columns: 5.2em minmax(0, 1fr); gap: 0 18px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .step .n { font-family: var(--serif); font-size: 34px; line-height: 1; color: var(--text-strong); font-variant-numeric: tabular-nums; text-align: right; }
+  .step .n.zero { color: var(--bleed); }
+  .step .bar { position: relative; height: 26px; }
+  .step .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); border-radius: 1px; min-width: 2px; }
+  .step .bar i.dead { background: var(--bleed); }
+  .step .lbl { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; font-size: 14px; margin-top: 6px; }
+  .step .lbl .r { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .step .lbl .src { display: block; width: 100%; }
+
+  /* Barras comparativas */
+  .bars { display: grid; gap: 12px; margin: 20px 0 10px; max-width: 760px; }
+  .brow { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0,1fr) 4.5em; gap: 14px; align-items: center; font-size: 14px; }
+  .brow .t { color: var(--text); }
+  .brow .t small { display: block; font-size: 12px; color: var(--muted); }
+  .brow .b { height: 16px; background: var(--surface-2); border-radius: 1px; overflow: hidden; }
+  .brow .b i { display: block; height: 100%; background: var(--gold); }
+  .brow .b i.twk { background: var(--bleed); }
+  .brow .v { font-family: var(--serif); font-size: 22px; text-align: right; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+
+  /* Tabelas */
+  .tscroll { overflow-x: auto; margin: 18px 0 10px; border-top: 1px solid var(--border); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th { text-align: left; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 12px 14px 10px 0; border-bottom: 1px solid var(--border); vertical-align: bottom; white-space: nowrap; }
+  td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; padding-right: 8px; }
+  td .who { font-family: var(--serif); font-size: 19px; color: var(--text-strong); display: block; }
+  td .yr { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+  table.wide { min-width: 960px; }
+  table.wide td { max-width: 280px; }
+  tr.hl td { background: color-mix(in srgb, var(--gold) 8%, transparent); }
+
+  /* Dupla sangria */
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 26px; margin: 22px 0 6px; }
+  .bleedbox { border-left: 2px solid var(--bleed); padding: 4px 0 4px 20px; }
+  .bleedbox .k { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--bleed); margin-bottom: 8px; }
+  .bleedbox .v { font-family: var(--serif); font-size: 40px; line-height: 1; color: var(--text-strong); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+  .bleedbox p { font-size: 14.5px; }
+
+  /* Padrões (o segredo) */
+  .patterns { counter-reset: pat; display: grid; gap: 0; border-top: 1px solid var(--border); margin-top: 22px; max-width: 100%; padding: 0; list-style: none; }
+  .patterns li { counter-increment: pat; display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: 18px; padding: 22px 0; border-bottom: 1px solid var(--border); margin: 0; }
+  .patterns li::before { content: counter(pat, upper-roman); font-family: var(--serif); font-size: 30px; line-height: 1; color: var(--gold); padding-top: 4px; }
+  .patterns h4 { font-family: var(--serif); font-weight: 500; font-size: 24px; line-height: 1.15; margin: 0 0 8px; color: var(--text-strong); text-wrap: balance; }
+  .patterns p { margin: 0 0 6px; max-width: 70ch; }
+  .patterns .twk { font-size: 13.5px; color: var(--muted); border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 8px; max-width: 70ch; }
+  .patterns .twk b { color: var(--gold); font-weight: 500; }
+
+  /* Rota */
+  .route { display: grid; gap: 26px; margin-top: 8px; }
+  .phase { display: grid; grid-template-columns: minmax(150px, 190px) minmax(0, 1fr); gap: 20px; padding: 26px 0; border-top: 1px solid var(--border); }
+  .phase .when { font-family: var(--serif); font-size: 26px; line-height: 1.1; color: var(--gold); }
+  .phase .when small { display: block; font-family: var(--sans); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+  .phase h4 { font-family: var(--serif); font-weight: 500; font-size: 24px; margin: 0 0 10px; color: var(--text-strong); }
+  .phase ul { margin-bottom: 8px; }
+  .phase .kpi { font-size: 13.5px; color: var(--muted); border-left: 2px solid var(--gold); padding-left: 12px; margin-top: 10px; max-width: 68ch; }
+  .phase .kpi b { color: var(--gold); font-weight: 500; }
+
+  .decisions { list-style: none; padding: 0; border-top: 1px solid var(--border); margin-top: 18px; max-width: 100%; }
+  .decisions li { display: grid; grid-template-columns: 2em minmax(0,1fr); gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); margin: 0; }
+  .decisions li span.n { font-family: var(--serif); font-size: 22px; color: var(--gold); line-height: 1.2; }
+  .decisions li p { margin: 0; max-width: 72ch; }
+
+  .sources { columns: 2; column-gap: 40px; font-size: 12.5px; color: var(--muted); max-width: 100%; }
+  .sources li { break-inside: avoid; margin-bottom: 6px; }
+
+  .foot { padding-top: 28px; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted-2); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; }
+
+  @media (max-width: 640px) {
+    .thesis > div { border-right: 0; border-bottom: 1px solid var(--border); padding-left: 0 !important; }
+    .thesis > div:last-child { border-bottom: 0; }
+    .phase { grid-template-columns: 1fr; gap: 8px; }
+    .sources { columns: 1; }
+    .step { grid-template-columns: 4em minmax(0,1fr); }
+    .step .n { font-size: 26px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .step .bar i { transition: width .6s ease; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">The World Keys</div>
+    <div class="meta">Dossiê · Conversão de estabelecimentos · 15 set 2026 · Paris</div>
+  </header>
+
+  <div class="cover">
+    <p class="eyebrow">Levantamento e mudança de rota</p>
+    <h1>A porta que não abre</h1>
+    <p class="deck">Cinco semanas, 185 e-mails, 148 casas, uma candidatura, zero contas. A campanha alcançou as pessoas certas e não converteu nenhuma. A pesquisa sobre OpenTable, TheFork, Resy, Tock e os demais diz por quê: <strong>nenhuma grande plataforma nasceu de e-mail frio</strong>. Todas nasceram de venda presencial a casas-âncora numa cidade, com a plataforma fazendo o cadastro pelo restaurante e entregando demanda real antes de pedir esforço.</p>
+    <div class="thesis">
+      <div><div class="k">E-mails enviados</div><div class="v">185</div><div class="d">21 ago a 5 set · 148 casas · 5 idiomas · zero WhatsApp, zero voz</div></div>
+      <div><div class="k">Respostas humanas</div><div class="v">3<small>2%</small></div><div class="d">mais 3 respostas automáticas; abertura não medida</div></div>
+      <div><div class="k">Candidaturas</div><div class="v">1</div><div class="d">ELEOS, 5 set, vencida em 7 set por defeito nosso</div></div>
+      <div><div class="k">Contas de restaurante</div><div class="v" style="color:var(--bleed)">0</div><div class="d">banco lido em 15 set via papel somente-leitura</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="tag f">F</span> fato com origem verificável</span>
+      <span><span class="tag s">S</span> suposição ou estimativa</span>
+      <span><span class="tag l">L</span> lacuna: não medido</span>
+      <span>Origens completas no fim do dossiê.</span>
+    </div>
+  </div>
+
+  <!-- PARTE I -->
+  <section>
+    <p class="part">Parte I · O funil real</p>
+    <h2>Cada degrau, com o número que temos e o que não temos</h2>
+    <p class="lead">Barras em escala logarítmica, senão os últimos degraus somem. O universo é o catálogo publicado lido no banco em 15 de setembro.</p>
+
+    <div class="funnel">
+      <div class="step"><div class="n">1.546</div><div><div class="bar"><i style="width:100%"></i></div><div class="lbl"><span>Restaurantes publicados<span class="tag f">F</span></span><span class="r">2.217 despublicados fora do funil</span><span class="src">db_restaurants · 15/09</span></div></div></div>
+      <div class="step"><div class="n">≈1.515</div><div><div class="bar"><i style="width:99.7%"></i></div><div class="lbl"><span>Contatáveis<span class="tag s">S</span></span><span class="r">menos 27 e-mails mortos e 4 opt-outs registrados</span><span class="src">contatos-invalidos-*.csv · v_listing_consent_atual</span></div></div></div>
+      <div class="step"><div class="n">148</div><div><div class="bar"><i style="width:68%"></i></div><div class="lbl"><span>Casas tocadas<span class="tag f">F</span></span><span class="r">9,6% do universo · 185 e-mails · toque 1: 148 · toque 2: 17 · toque 3: 1 · Extratos: 19</span><span class="src">envios-fundadores-2026-08.csv</span></div></div></div>
+      <div class="step"><div class="n">≈144</div><div><div class="bar"><i style="width:67.7%"></i></div><div class="lbl"><span>Entregues<span class="tag f">F</span></span><span class="r">4 devolvidos · 2,7%</span><span class="src">funil-campanha-fundadores-2026-08-31.csv</span></div></div></div>
+      <div class="step"><div class="n">?</div><div><div class="bar"><i class="dead" style="width:2px"></i></div><div class="lbl"><span>Abertos<span class="tag l">L</span></span><span class="r">sem pixel; os 31 cliques rastreados têm padrão de scanner, não de humano</span><span class="src">RELATORIO-2026-09-04 §1.1 · portao0-eleos Adendo 2</span></div></div></div>
+      <div class="step"><div class="n">3</div><div><div class="bar"><i style="width:19%"></i></div><div class="lbl"><span>Responderam (humano)<span class="tag f">F</span></span><span class="r">2% de 148 · WOO TENDER pediu código 2× e desistiu · 0 respostas aos 19 Extratos em 4 dias</span><span class="src">RELATORIO §1.1 · logs 2026-09-07</span></div></div></div>
+      <div class="step"><div class="n">1</div><div><div class="bar"><i style="width:9.5%"></i></div><div class="lbl"><span>Candidatura<span class="tag f">F</span></span><span class="r">ELEOS · aprovada sem e-mail de senha · link corrompido · prazo vencido em 7/09 · ainda vencida em 15/09</span><span class="src">restaurant_invitations · portao0-eleos.md</span></div></div></div>
+      <div class="step"><div class="n zero">0</div><div><div class="bar"><i class="dead" style="width:2px"></i></div><div class="lbl"><span>Conta criada<span class="tag f">F</span></span><span class="r">restaurant_users vazia · em 8/09 havia 2 linhas internas, hoje 0, sem log de remoção</span><span class="src">banco 15/09</span></div></div></div>
+      <div class="step"><div class="n zero">0</div><div><div class="bar"><i class="dead" style="width:2px"></i></div><div class="lbl"><span>Página assumida · reserva confirmada pelo painel<span class="tag f">F</span></span><span class="r">106 aceites em 90 dias, todos pelo link do e-mail, nenhum por conta</span><span class="src">reservations · modified_by · Despacho 15/09</span></div></div></div>
+    </div>
+    <p class="note">Correção a registros anteriores: o relatório de 4 de setembro falava em 166 envios; o ledger atual soma 185 reais porque incorporou os Extratos e reclassificou linhas. "34 casas respondem" são 33 (a 34ª era a casa de teste). A tabela de envios no banco não existe; o CSV manual é a única fonte, e produziu duplicatas em 4 de setembro.</p>
+
+    <h3>Onde sangra: dois lugares, e o segundo é o decisivo</h3>
+    <div class="two">
+      <div class="bleedbox"><div class="k">Sangria de volume</div><div class="v">98%</div><p>de silêncio entre e-mail entregue e qualquer reação humana. É a taxa esperada de e-mail frio a restaurante: a Toast diz que o dono <em>não é alcançável por e-mail</em>. O canal está errado, não o texto.</p></div>
+      <div class="bleedbox"><div class="k">Sangria decisiva</div><div class="v">1 → 0</div><p>A única mensagem que funcionou (Extrato aos 11 confirmadores: 1 candidatura em 13 horas, 9%) morreu na porta: aprovação sem e-mail de senha, link corrompido, prazo vencido do nosso lado. E o cadastro ainda se apresentava como <strong>"The World's Kitchen"</strong> em 14 de setembro.</p></div>
+    </div>
+    <p class="note">Outras causas documentadas: pitch de cobrança ("N clientes sem resposta") dirigido a quem já respondia; o link do e-mail levava à tela de login em vez do cadastro; Aria sem créditos de API entre 6 e 9 de setembro, três dias sem responder a estabelecimentos; sem link de descadastro até 3 de setembro; decisão de não usar voz porque o time não fala os oito idiomas, e o template de WhatsApp da Meta ainda não foi criado.</p>
+
+    <h3>A demanda existe e é mal distribuída</h3>
+    <p>Nos últimos 90 dias a plataforma gerou 993 pedidos de mesa. Só 106 foram aceitos. A diferença entre casa parceira e casa listada sem acordo é o dado mais importante deste dossiê.</p>
+    <div class="bars">
+      <div class="brow"><div class="t">Casas parceiras<small>25 aceites em 49 pedidos</small></div><div class="b"><i style="width:51%"></i></div><div class="v">51%</div></div>
+      <div class="brow"><div class="t">Casas não parceiras<small>81 aceites em 944 pedidos</small></div><div class="b"><i class="twk" style="width:8.6%"></i></div><div class="v">8,6%</div></div>
+      <div class="brow"><div class="t">Taxa geral de aceite<small>106 de 993 · 682 ainda pendentes</small></div><div class="b"><i style="width:10.7%"></i></div><div class="v">10,7%</div></div>
+    </div>
+    <p class="src">reservations, 90 dias, dedup por cliente + data + hora · banco 15/09 <span class="tag f">F</span></p>
+    <p>Das 243 casas que receberam pedido, 44 responderam ao menos uma vez e 38 aceitaram ao menos uma. Só 11 passam o critério do Guardião (quatro ou mais pedidos, metade ou mais respondidos). Há 85 pendências vivas hoje.</p>
+
+    <h3>Quem responde não é quem domina o catálogo</h3>
+    <div class="tscroll">
+      <table>
+        <tr><th>Corte</th><th>Respondedores (33)</th><th>Catálogo publicado</th><th>Leitura</th></tr>
+        <tr><td>França</td><td class="num">5 · 15%</td><td class="num">599 · 39%</td><td>Sub-representada quatro vezes. Paris é a sede e só tem 2 respondedores.</td></tr>
+        <tr class="hl"><td>Portugal</td><td class="num">7 · 21%</td><td class="num">42 · 2,7%</td><td>Sobre-representada oito vezes. Lagos sozinha tem 6. É o cluster mais quente <span class="tag s">S</span></td></tr>
+        <tr><td>Itália</td><td class="num">7 · 21%</td><td class="num">n/d <span class="tag l">L</span></td><td>Roma 4, Milão 2.</td></tr>
+        <tr><td>Grécia · Tailândia · outros</td><td class="num">3 · 2 · 9</td><td class="num">n/d</td><td>Um respondedor por país em TR, QA, GB, CN, MA, CA, AR, KR.</td></tr>
+        <tr><td>Com telefone no catálogo</td><td class="num">32 de 33</td><td></td><td>Todos são alcançáveis por voz ou WhatsApp.</td></tr>
+        <tr><td>Com pendência viva</td><td class="num">7 de 33</td><td></td><td>Quem responde não acumula fila. O pitch de pendências não fala com eles.</td></tr>
+        <tr><td>Faixa de preço</td><td colspan="3">Nunca cruzada em nenhum artefato <span class="tag l">L</span></td></tr>
+      </table>
+    </div>
+    <p class="src">chave-girada/alvos-2026-09-03.csv · db_restaurants por país · coorte-150-2026-08-31.csv</p>
+
+    <h3>O que custou</h3>
+    <p>A operação automatizada (Aria, sondas de banco, agentes) consumiu cerca de 14 dólares de API desde julho. As sessões interativas de desenvolvimento e operação somam cerca de 5.200 dólares desde agosto, com picos de 250 a 420 dólares por dia, e os créditos zeraram em 6 de setembro. Esse valor é uma estimativa por transcrições, não fatura confirmada, e não é separável por campanha. Horas humanas não foram registradas. <span class="tag f">F</span> <span class="tag l">L</span></p>
+    <p class="note">Leitura: o dinheiro não foi para enviar e-mails. Foi para construir e operar o sistema que os envia. A mudança de rota precisa deslocar gasto de sessão para conversa humana com 17 casas.</p>
+  </section>
+
+  <!-- PARTE II -->
+  <section>
+    <p class="part">Parte II · Como as grandes começaram</p>
+    <h2>Nenhuma delas vendeu por e-mail. Todas venderam na porta.</h2>
+    <p class="lead">Pesquisa em fontes primárias: prospecto de abertura de capital da OpenTable, entrevistas dos fundadores, imprensa da época. Cada linha traz a tática concreta dos primeiros restaurantes, o modelo de receita inicial, a quase-morte e o que virou marca.</p>
+
+    <div class="tscroll">
+      <table class="wide">
+        <tr><th>Plataforma</th><th>Primeiros restaurantes: a tática</th><th>Receita inicial</th><th>Quase-morte e correção</th><th>O que virou marca</th><th>Tração</th></tr>
+        <tr>
+          <td><span class="who">OpenTable</span><span class="yr">São Francisco · 1998 · Chuck Templeton</span></td>
+          <td>Nove meses observando donos de restaurante antes de vender. Alvo: 3 a 5 dos 20 melhores do Zagat da cidade, que "não queriam clientes novos, queriam cuidar melhor dos atuais". Com 10 a 15 casas de topo, "as 75 seguintes vinham por aspiração". Contrato de uma página chamado "agreement", visita de 35 minutos, <strong>3,2 visitas por venda</strong>. A equipe digitava o caderno de reservas na véspera e puxava o cabo de rede pelo forro.</td>
+          <td>Instalação + assinatura mensal (~199 dólares) + 1 dólar por cliente sentado vindo do site. Em 2008: assinatura 54%, reservas 42%.</td>
+          <td>2001: 50 cidades, queimando 1 milhão por mês para faturar 100 mil. Thomas Layton assume, zera marketing ao consumidor, <strong>sai de todas as cidades exceto quatro</strong> e monta vendas porta a porta em casas de alto nível. De 500 para 7.000 restaurantes até 2007.</td>
+          <td>Utilidade: o caderno eletrônico no balcão. A marca ao consumidor veio depois da densidade. O ressentimento contra a taxa por cliente (2010) abriu espaço para Resy e Tock.</td>
+          <td>3.944 casas (2005) → 9.709 (2008). IPO 2009. Priceline paga 2,6 bilhões em 2014 com 31 mil casas.</td>
+        </tr>
+        <tr>
+          <td><span class="who">TheFork</span><span class="yr">Paris · 2007 · Bertrand Jelensperger</span></td>
+          <td>"Prospecção e evangelização" direta. Duas ofertas desde o início: software de reserva gratuito que vira fichário de clientes, e promoção ao consumidor. Quem foram as primeiras 50 casas: não encontrado.</td>
+          <td>Software básico grátis; premium por assinatura (50 a 89 euros); comissão de cerca de 2 euros por couvert, que financia os descontos de 30% a 50% e os Yums.</td>
+          <td>Erro admitido pelo fundador: "fomos tímidos demais na promoção e no marketing" no começo.</td>
+          <td>O desconto visível em horário vazio virou reflexo do consumidor. Expansão por compra de líderes locais (Iens, Restorando, Bookatable).</td>
+          <td>8.000 casas em 2011; lucrativa em 2013; TripAdvisor compra em 2014 por 100 a 150 milhões (fontes divergem) com 12 mil casas.</td>
+        </tr>
+        <tr>
+          <td><span class="who">Resy</span><span class="yr">Nova York · 2014 · Ben Leventhal, Gary Vaynerchuk</span></td>
+          <td>Beta com <strong>20 casas quentes de NY</strong> escolhidas a dedo (Charlie Bird, Minetta Tavern, Gotham). O dono do Charlie Bird disse que entraria "de graça, porque os clientes que chegam são o tipo certo". Capa do New York Times no lançamento.</td>
+          <td>Reserva paga pelo cliente em mesas disputadas, receita dividida. Não funcionou: "polarizante e pequeno". Pivô para assinatura fixa (~189 dólares) e zero taxa por cliente.</td>
+          <td>O modelo pago quase a definiu como nicho. A correção foi copiar a OpenTable, cobrar menos e prometer "seus dados são seus".</td>
+          <td>Estar na Resy virou selo de casa quente; "fazer um Resy" virou verbo. Programação editorial: Hit List mensal por cidade, Off Menu Week (pratos secretos, não desconto).</td>
+          <td>4.000 casas nos EUA em 2019 quando a Amex comprou. 16 mil em 2023.</td>
+        </tr>
+        <tr>
+          <td><span class="who">Tock</span><span class="yr">Chicago · 2014 · Nick Kokonas (Alinea)</span></td>
+          <td>Provou em casa: ingressos pré-pagos no Next em 2012 derrubaram o no-show de mais de 15% para 1% e subiram o EBITDA do Alinea em 38%. Vendeu a pares da alta gastronomia; donos do Eleven Madison Park viraram investidores.</td>
+          <td>Preço fixo mensal (600 a 800 dólares), nunca por cliente. Prospects estranhavam; "alavancagem operacional não é intuitiva".</td>
+          <td>Pandemia: em 6 de março de 2020 o volume ia a zero; em seis dias lançaram Tock To Go cobrando 3%.</td>
+          <td>Depósito e ingresso: quem paga aparece. Posse dos dados do cliente como bandeira.</td>
+          <td>167 casas pagantes em 38 cidades no fim de 2016. Squarespace paga 400 milhões em 2021; Amex em 2024.</td>
+        </tr>
+        <tr>
+          <td><span class="who">Quandoo</span><span class="yr">Berlim · 2012 · ex-Groupon</span></td>
+          <td>Fundadores vinham do Citydeal/Groupon: herdaram a máquina de vendas de campo <span class="tag s">S</span>.</td>
+          <td>Não encontrado.</td>
+          <td>Não documentada.</td>
+          <td>Escala europeia rápida; a Recruit notou que só 16% das reservas na Europa eram online.</td>
+          <td>6.000 casas em 3 anos; Recruit paga cerca de 219 milhões em 2015.</td>
+        </tr>
+        <tr>
+          <td><span class="who">SevenRooms</span><span class="yr">Nova York · 2011</span></td>
+          <td>Fundadores passaram dois anos na porta de boates, 10 a 15 horas por semana, antes de vender. Primeiros clientes: Bagatelle, Tao, Marquee.</td>
+          <td>CRM do salão por assinatura.</td>
+          <td>No mês 12 ficaram sem dinheiro e zeraram salários.</td>
+          <td>Ferramenta do operador, não canal do consumidor.</td>
+          <td>Sobreviveu; hoje concorrente direto nas casas que a TWK lista.</td>
+        </tr>
+        <tr>
+          <td><span class="who">Dorsia</span><span class="yr">Miami · 2021</span></td>
+          <td>Os donos das casas mais disputadas (Carbone, Grutman) são <strong>sócios</strong>. Gasto mínimo pré-pago por pessoa e membership de 175 a 25 mil dólares por ano.</td>
+          <td>Membership + gasto mínimo garantido ao restaurante.</td>
+          <td>Ainda em construção.</td>
+          <td>Acesso ao impossível. O mercado negro de reservas (até 1.050 dólares por mesa no Carbone) provou que a escassez tem preço.</td>
+          <td>21 mercados, 125 mil membros, 50 mil na fila; 50 milhões captados em 2025.</td>
+        </tr>
+        <tr>
+          <td><span class="who">Zomato · Yelp · Michelin</span><span class="yr">2008 · 2004 · 1900</span></td>
+          <td>Zomato: o fundador escaneava cardápios e publicava, 25 usuários por dia no início. Yelp: comunidade de avaliadores, Elite Squad em bares vazios. Michelin: 35 mil guias grátis antes de cobrar; estrelas com inspetores anônimos e zero publicidade.</td>
+          <td>Conteúdo útil grátis por anos; transação depois (Yelp comprou reservas em 2013 com 200 casas).</td>
+          <td>Zomato só entrou em delivery em 2015, sete anos depois.</td>
+          <td>Curadoria confiável. Amex comprou Resy e Tock, Chase comprou The Infatuation e Zagat, Michelin comprou Bookatable, Visa fechou com OpenTable: o comprador final da marca de curadoria é o emissor de cartão.</td>
+          <td>Zomato: maior diretório da região em 9 meses.</td>
+        </tr>
+      </table>
+    </div>
+    <p class="src">Fontes por linha na lista final. Números com fontes divergentes estão marcados no texto.</p>
+
+    <h3>O que os outros marketplaces fizeram com o lado difícil</h3>
+    <ul>
+      <li><strong>Airbnb</strong> alugou uma câmera e fotografou anúncios porta a porta em Nova York em 2009. Reservas e receita da cidade dobraram. Em 2012 tinha 2.000 fotógrafos.</li>
+      <li><strong>DoorDash</strong> publicou oito cardápios em PDF sem acordo com os restaurantes, fez as primeiras 200 entregas com os próprios fundadores, e só então foi porta a porta assinar os primeiros 50.</li>
+      <li><strong>Uber</strong> garantiu renda por hora aos motoristas até a demanda girar. Andrew Chen: "identifique o lado mais difícil e resolva-o primeiro".</li>
+      <li><strong>Toast</strong>, hoje: reunião presencial converte cerca de três vezes mais porque o dono "não é alcançável por e-mail"; a taxa de fechamento sobe quando a penetração local passa de certo ponto; um em cinco negócios vem de indicação.</li>
+    </ul>
+
+    <h3>Benchmarks de canal</h3>
+    <div class="bars">
+      <div class="brow"><div class="t">E-mail frio B2B, média 2026<small>caiu de 8,5% em 2019</small></div><div class="b"><i style="width:11%"></i></div><div class="v">3,4%</div></div>
+      <div class="brow"><div class="t">TWK, e-mail a restaurantes<small>3 respostas humanas em 148</small></div><div class="b"><i class="twk" style="width:6.5%"></i></div><div class="v">2%</div></div>
+      <div class="brow"><div class="t">Ligação fria, reunião marcada<small>1 reunião a cada 40 discagens</small></div><div class="b"><i style="width:13%"></i></div><div class="v">2 a 5%</div></div>
+      <div class="brow"><div class="t">Visita presencial, OpenTable<small>3,2 visitas por venda fechada</small></div><div class="b"><i style="width:100%"></i></div><div class="v">≈31%</div></div>
+    </div>
+    <p class="src">Lemlist, Belkins, SalesHive, entrevista de Chuck Templeton. A taxa presencial é por visita, com venda fechada, não resposta: uma ordem de grandeza acima. Benchmark de e-mail específico a restaurantes: não encontrado <span class="tag l">L</span>. Churn de OpenTable, TheFork e Resy: não publicado; Toast retém cerca de 90% ao ano.</p>
+  </section>
+
+  <!-- PARTE III -->
+  <section>
+    <p class="part">Parte III · O segredo</p>
+    <h2>Oito padrões que se repetem em todas elas</h2>
+    <p class="lead">Não há truque escondido. Há oito escolhas que todas fizeram e que a TWK ainda não fez. Cada uma vem com a leitura para a nossa situação.</p>
+    <ol class="patterns">
+      <li><div><h4>Servir o lado difícil com uma ferramenta que vale sozinha</h4><p>OpenTable vendeu operação (caderno eletrônico, histórico de cliente), não "clientes novos". TheFork deu software grátis que vira fichário. Tock vendeu fim do no-show e posse dos dados. O consumidor chega depois.</p><p class="twk"><b>TWK hoje:</b> pedimos ao restaurante que assuma uma página. O que ele ganha sozinho, sem nenhum cliente nosso? A resposta precisa caber numa frase e hoje não cabe.</p></div></li>
+      <li><div><h4>Âncoras de prestígio primeiro, densidade depois, amplitude por último</h4><p>Templeton: 3 a 5 dos 20 melhores da cidade puxam os 75 seguintes. Resy abriu com 20 casas quentes de uma cidade. Layton salvou a OpenTable encolhendo de 50 para 4 cidades. Toast confirma: a taxa de fechamento sobe com penetração local.</p><p class="twk"><b>TWK hoje:</b> 1.546 casas em dezenas de países e 33 respondedores em 20 cidades. Densidade zero em toda parte. Lagos tem 6 respondedores em 42 casas portuguesas; Paris, a sede, tem 2 em 599.</p></div></li>
+      <li><div><h4>Venda presencial, curta e padronizada</h4><p>3,2 visitas por venda, 35 minutos por visita, contrato de uma página. Quandoo nasceu de gente do Groupon, uma máquina de campo. Nenhuma das plataformas estudadas cita e-mail como canal de aquisição inicial.</p><p class="twk"><b>TWK hoje:</b> 185 e-mails, zero ligações, zero WhatsApp. O kit de ligações e a ficha das 11 casas existem desde 3 de setembro e não foram usados. 32 das 33 casas têm telefone.</p></div></li>
+      <li><div><h4>A plataforma faz o cadastro; o restaurante só aprova</h4><p>OpenTable digitava o caderno de reservas e puxava cabo. Airbnb fotografava. DoorDash publicou os cardápios. Ninguém pediu ao dono que "se cadastrasse".</p><p class="twk"><b>TWK hoje:</b> o dono recebe um código, cai numa página com o nome de outra empresa e precisa completar um cadastro. Já sabemos fazer o oposto: o preview gerado para o AI MERCANTI em 14 de setembro é uma página pronta esperando um "sim".</p></div></li>
+      <li><div><h4>Demanda real antes de pedir esforço</h4><p>DoorDash entregou 200 pedidos antes de assinar restaurantes. O Charlie Bird toparia a Resy de graça pelos clientes certos. Michelin distribuiu 35 mil guias antes de cobrar.</p><p class="twk"><b>TWK hoje:</b> é o único padrão em que estamos à frente. A ATHÉNÉE aceitou 33 de 33 pedidos nossos. O Extrato de Resposta, que mostra ao dono os clientes que já mandamos, foi a única mensagem que converteu.</p></div></li>
+      <li><div><h4>Curadoria é a marca, e a marca é vendável a emissores de cartão</h4><p>Estar na Resy virou sinal. Hit List e Off Menu Week são editorial, não desconto. Amex, Chase, Visa e Michelin compraram exatamente isso.</p><p class="twk"><b>TWK hoje:</b> "premium" está no posicionamento, mas o catálogo tem 2.217 despublicados e uma landing que prometia "centenas de restaurantes". O selo Clé d'Or existe e ainda não significa acesso a nada que só nós damos.</p></div></li>
+      <li><div><h4>Incentivo ao consumidor que o restaurante paga de bom grado é gestão de ocupação</h4><p>TheFork com 50% em horário vazio e Eatigo por hora funcionam porque enchem mesas que ficariam vazias. Taxa por cliente que a casa já teria, como a da OpenTable, gera revolta.</p><p class="twk"><b>TWK hoje:</b> nenhum incentivo ao consumidor e nenhuma taxa. Não é problema agora; vira decisão quando houver 30 casas ativas numa cidade.</p></div></li>
+      <li><div><h4>Preço fixo e "seus dados são seus"</h4><p>A revolta contra a taxa por cliente da OpenTable criou Resy e Tock. Ambas venderam assinatura fixa e posse dos dados.</p><p class="twk"><b>TWK hoje:</b> a página gratuita é a promessa certa. Falta dizê-la na porta e cumpri-la em cinco minutos.</p></div></li>
+    </ol>
+
+    <h3>O que não funcionou, para não repetir</h3>
+    <ul>
+      <li><strong>Amplitude sem densidade e marketing ao consumidor cedo demais.</strong> OpenTable em 2001. A correção foi retração violenta e vendas na porta.</li>
+      <li><strong>Cobrar antes de entregar valor.</strong> Reservas pagas da Resy. Pivô para software fixo.</li>
+      <li><strong>Timidez em marketing depois que a oferta existe.</strong> Erro admitido pela TheFork.</li>
+      <li><strong>Vender sem conhecer a operação.</strong> SevenRooms só destravou após dois anos na porta das boates.</li>
+      <li><strong>E-mail frio em massa.</strong> Ausente em todas as histórias de origem. Na TWK: 110 e-mails a coortes frias, zero respostas.</li>
+    </ul>
+  </section>
+
+  <!-- PARTE IV -->
+  <section>
+    <p class="part">Parte IV · Mudança de rota</p>
+    <h2>Consertar a porta, escolher duas cidades, falar ao telefone</h2>
+    <p class="lead">O critério de morte do plano de 3 de setembro (menos de três contas em 30 dias) já foi atingido antes do prazo. Isso não é fracasso da mensagem: é a prova de que o problema é produto e canal. A rota abaixo segue os oito padrões na ordem em que as grandes os aplicaram. Tudo o que envolve envio externo, novo fluxo ou publicação passa pelo fundador, como manda a constituição.</p>
+
+    <div class="route">
+      <div class="phase">
+        <div class="when">Antes de qualquer envio<small>Semana 1 · bloqueante</small></div>
+        <div>
+          <h4>Fechar a porta</h4>
+          <ul>
+            <li>Trocar "The World's Kitchen" no cadastro e no e-mail do código; tirar "Trusted by hundreds" da landing do gestor. Duas strings no front, um template no n8n.</li>
+            <li>Criar o passo que não existe: candidatura aprovada gera e-mail de senha, no idioma da casa, com link testado. Hoje não há workflow e o envio de código não roda desde 6 de setembro.</li>
+            <li>Reemitir o convite do ELEOS com pedido de desculpas em uma frase, como manda o ADR-015.</li>
+            <li>Fechar a falha de segurança: o link de resposta vencido segue mostrando dados do cliente sem login.</li>
+            <li>Rastrear o botão principal dos Extratos; hoje só os cliques de scanner são medidos.</li>
+          </ul>
+          <p class="kpi"><b>Prova de aceite:</b> um dono fictício, a partir do e-mail, chega ao painel com a página pronta em menos de cinco minutos e sem ajuda. Enquanto isso não passar, nenhum e-mail de convite sai.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="when">Dias 1 a 30<small>Densidade e voz</small></div>
+        <div>
+          <h4>Duas cidades, dezessete conversas, aprovação em vez de cadastro</h4>
+          <ul>
+            <li><strong>Cidades-piloto: Lagos e Paris.</strong> Lagos concentra 6 respondedores em 42 casas portuguesas e o fundador fala a língua. Paris é a sede, permite visita presencial, e tem 599 casas com só 2 respondedores: é onde a densidade mais falta e onde um jantar com o dono custa uma tarde.</li>
+            <li><strong>Telefone ou WhatsApp para os 11 confirmadores e os 6 mistos</strong>, com a ficha de ligação já pronta em cada idioma. Onde o time não fala a língua, WhatsApp escrito com template da Meta aprovado. Meta pelo benchmark da OpenTable: 3,2 contatos por conta.</li>
+            <li><strong>Página pronta antes da ligação.</strong> Gerar o preview de cada uma das 17 casas, como o do AI MERCANTI. O dono recebe um link e diz sim. Cadastro vira aprovação.</li>
+            <li><strong>Congelar coortes frias.</strong> 110 e-mails, zero respostas. Nenhum envio a casa que nunca respondeu enquanto as 17 não estiverem resolvidas.</li>
+            <li><strong>Segmento "já tenho sistema".</strong> Casas com SevenRooms ou OpenTable (Shellona, Les Ombres, AI Mercanti) não vão trocar. Oferecer encaminhamento do pedido para o sistema deles e contá-las como respondedoras. Não brigar com o software que a casa já paga.</li>
+          </ul>
+          <p class="kpi"><b>Meta em 30 dias:</b> 5 contas ativas com pelo menos uma reserva respondida pelo painel, em duas cidades. <b>Critério de morte:</b> menos de 3 com a porta consertada e 17 conversas feitas significa que a oferta de "página gratuita" não vale sozinha, e a Parte III, padrão I, vira o trabalho.</p>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="when">Dias 31 a 90<small>Produto e marca</small></div>
+        <div>
+          <h4>Dar ao restaurante algo que vale sem nós, e ao cliente algo que só nós damos</h4>
+          <ul>
+            <li><strong>Entrada sem senha a partir do link de resposta.</strong> Quem aceita um pedido pelo e-mail já provou ser o dono. Um toque cria a conta. É o momento de maior intenção, cerca de 40 vezes por mês, e hoje ele termina em silêncio ou num cadastro.</li>
+            <li><strong>Ferramenta solo:</strong> histórico dos clientes que nós enviamos, com idioma, tamanho de grupo e ocasião. É o "caderno" da OpenTable: útil mesmo no dia em que não mandamos ninguém.</li>
+            <li><strong>Curadoria por cidade com nome próprio</strong>, no modelo da Hit List: só casas que confirmam, assinada pela editoria, um selo que o restaurante quer exibir. Clé d'Or passa a significar "responde em 24 horas".</li>
+            <li><strong>Expandir por densidade, não por país:</strong> terceira cidade só quando metade das casas com quatro ou mais pedidos nas duas primeiras estiver ativa. Candidatas pelos dados: Roma (4 respondedores) e Atenas (3).</li>
+            <li><strong>Medir de verdade:</strong> tabela de envios no banco (a migração já está proposta em SQL), pixel de abertura, registro de consentimento populado (hoje a checagem obrigatória roda contra tabela vazia), e o indicador "primeira resposta pelo painel".</li>
+            <li><strong>Longo prazo, não agora:</strong> a marca de curadoria só vale para um emissor de cartão quando houver acesso exclusivo real numa cidade. Amex e Visa compraram densidade, não catálogo.</li>
+          </ul>
+          <p class="kpi"><b>Meta em 90 dias:</b> 20 casas ativas em duas cidades, taxa de aceite dos pedidos nessas cidades acima de 40% (parceiras hoje: 51%), e uma lista curada publicada por cidade.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Sobre "o tempo mais breve possível"</h3>
+    <p>A OpenTable levou três anos para corrigir a rota e seis para chegar a 4.000 casas. A Resy abriu com 20 casas porque os fundadores eram conhecidos em cada uma. A TWK tem uma vantagem que nenhuma delas teve no dia zero: 33 casas que já disseram sim 340 vezes e 993 pedidos reais em 90 dias. O caminho mais curto não é mais alcance. É converter essas 33, numa cidade de cada vez, ao telefone, com a porta aberta. O prazo honesto para as primeiras cinco contas é 30 dias a partir do dia em que a porta passar no teste. Qualquer prazo mais curto seria promessa sem processo.</p>
+
+    <h3>O que só o fundador decide</h3>
+    <ol class="decisions">
+      <li><span class="n">1</span><p><strong>Autorizar o canal de voz e WhatsApp</strong> para as 17 casas, com a ficha de ligação revista, e criar o template da Meta. Envio externo exige aprovação sempre.</p></li>
+      <li><span class="n">2</span><p><strong>Priorizar o desenvolvimento</strong> na ordem: segurança do link de resposta, marca no cadastro e no código, e-mail de senha na aprovação, entrada sem senha a partir da resposta.</p></li>
+      <li><span class="n">3</span><p><strong>Congelar as coortes frias</strong> e fixar Lagos e Paris como cidades-piloto até a meta de 30 dias.</p></li>
+      <li><span class="n">4</span><p><strong>Aprovar o segmento "já tenho sistema"</strong> como fluxo orquestrado novo: encaminhar o pedido ao sistema da casa em vez de pedir troca.</p></li>
+      <li><span class="n">5</span><p><strong>Decidir o que é a ferramenta solo</strong> que o restaurante ganha sem clientes nossos. Sem essa frase, a ligação não tem argumento além de "responda pelo painel".</p></li>
+    </ol>
+
+    <h3>O que este dossiê não sabe</h3>
+    <ul>
+      <li>Se a tabela de contas está realmente vazia ou se o papel somente-leitura não enxerga todas as linhas. Em 8 de setembro havia duas linhas internas; hoje nenhuma, sem log de remoção.</li>
+      <li>Quantas das 148 casas abriram o e-mail. Não há instrumentação.</li>
+      <li>Se "já tenho sistema" é a causa dominante do silêncio ou só das casas que escreveram.</li>
+      <li>Se o cadastro foi corrigido depois de 14 de setembro.</li>
+      <li>O custo real das sessões, que vem de transcrições locais e não de fatura.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="part">Origens</p>
+    <h2>De onde vem cada número</h2>
+    <h3>Dados da TWK</h3>
+    <ul class="sources">
+      <li>Banco twk_auth via papel twk_ro, 15 set 2026 13:22 UTC: db_restaurants, restaurant_users, restaurant_invitations, reservations (90 dias, dedup), v_listing_consent_atual, aria_contact_consent.</li>
+      <li>orchestrator/state/envios-fundadores-2026-08.csv (ledger de envios, 188 linhas).</li>
+      <li>orchestrator/state/funil-campanha-fundadores-2026-08-31.csv.</li>
+      <li>orchestrator/state/chave-girada/alvos-2026-09-03.csv e manifesto-extratos.csv.</li>
+      <li>orchestrator/state/coorte-150-2026-08-31.csv; contatos-invalidos-2026-08-28.csv e 2026-09-02.csv.</li>
+      <li>docs/agentes/PLANO-CHAVE-GIRADA.md, PLANO-FUNDADORES-50.md, RELATORIO-2026-09-04.md, AUDITORIA-CADASTRO-RESTAURANTE.md.</li>
+      <li>orchestrator/logs/2026-09-07-analise-conversao-fundadores.md, 2026-09-07-portao0-eleos.md, 2026-09-09-analise-custo-api.md, 2026-09-14-atendimento-correcoes.md.</li>
+      <li>orchestrator/command-center/state/despachos/2026-09-15.md.</li>
+    </ul>
+    <h3>Pesquisa externa</h3>
+    <ul class="sources">
+      <li>OpenTable: <a href="https://www.sec.gov/Archives/edgar/data/0001125914/000104746909000513/a2190140zs-1.htm">prospecto S-1 (2009)</a>; <a href="https://fortune.com/2009/08/14/opentable-the-hottest-spot-in-town/">Fortune, 2009</a>; <a href="https://www.adammendler.com/blog/chuck-templeton/">entrevista Chuck Templeton</a>; <a href="https://techcrunch.com/2014/06/13/priceline-buying-opentable-for-2-6-billion-in-cash/">TechCrunch, 2014</a>; <a href="https://techcrunch.com/2010/11/16/can-and-should-opentable-be-disrupted/">TechCrunch, 2010</a>.</li>
+      <li>TheFork: <a href="https://www.maddyness.com/2017/06/12/10ansapres-success-story-lafourchette/">Maddyness, 2017</a>; <a href="https://techcrunch.com/2014/05/07/lafourchette-gobbled-up-by-tripadvisor/">TechCrunch, 2014</a>; <a href="https://brewbook.fr/blog/cout-thefork-lafourchette.html">Brewbook</a>.</li>
+      <li>Resy: <a href="https://techcrunch.com/2014/07/31/resy-the-app-that-lets-you-buy-a-reservation-eats-up-2-million-in-seed-funding">TechCrunch, 2014</a>; <a href="https://www.nrn.com/restaurant-executives/resy-ceo-ben-leventhal-bolsters-the-company-s-position-in-the-competitive-restaurant-reservation-space">Nation's Restaurant News</a>; <a href="https://techcrunch.com/2019/05/15/american-express-is-acquiring-resy/">TechCrunch, 2019</a>; <a href="https://blog.resy.com/newsroom/resy-expands-brand-programming-with-reveal-of-2020-events-lineup/">Resy, 2020</a>.</li>
+      <li>Tock: <a href="https://www.acquired.fm/acq2-episodes/arming-the-restaurant-rebels-with-tock-ceo-nick-kokonas">Acquired, entrevista Nick Kokonas</a>; <a href="https://fortune.com/2016/06/26/tock-system-restaurant-ticketing">Fortune, 2016</a>; <a href="https://www.restaurant-hospitality.com/technology/booking-startup-tock-reaches-out-casual-operators">Restaurant Hospitality</a>.</li>
+      <li>Quandoo: <a href="https://techcrunch.com/2015/03/05/recruit-quandoo/">TechCrunch, 2015</a>; <a href="https://www.mcei.de/success-stories/quandoo">MCEI</a>.</li>
+      <li>SevenRooms: <a href="https://fortune.com/2016/09/29/sevenrooms-nightclub-restaurant/amp">Fortune, 2016</a>.</li>
+      <li>Dorsia e mercado negro: <a href="https://refreshmiami.com/news/investors-bet-50-4m-on-miami-based-dorsia-a-member-based-reservation-platform-for-top-venues/">Refresh Miami, 2025</a>; <a href="https://gothamist.com/news/new-york-law-aims-to-kill-black-market-for-restaurant-reservations">Gothamist, 2024</a>.</li>
+      <li>Zomato, Yelp, Michelin, Infatuation: <a href="https://en.wikipedia.org/wiki/Zomato">Wikipedia</a>; <a href="https://blog.yelp.com/news/welcoming-seatme-to-yelp/">Yelp, 2013</a>; <a href="https://www.cnn.com/2024/02/10/business/michelin-guide-history">CNN, 2024</a>; <a href="https://media.chase.com/news/jpmorgan-chase-acquire-leading-restaurant-discovery-platform">Chase, 2021</a>.</li>
+      <li>Airbnb, DoorDash, Uber, Toast: <a href="https://www.alexanderjarvis.com/airbnb-doing-things-that-dont-scale/">Jarvis sobre Airbnb</a>; <a href="https://www.alexanderjarvis.com/doordash-doing-things-that-dont-scale/">Jarvis sobre DoorDash</a>; <a href="https://stripe.com/guides/atlas/andrew-chen-marketplaces">Stripe Atlas, Andrew Chen</a>; <a href="https://www.saastr.com/10-things-that-are-different-in-vertical-smb-sales-with-toasts-cro/">SaaStr, CRO da Toast</a>.</li>
+      <li>Benchmarks: <a href="https://www.lemlist.com/blog/cold-email-response-rate">Lemlist</a>; <a href="https://belkins.io/blog/cold-email-response-rates">Belkins</a>; <a href="https://saleshive.com/blog/b2b-sales-cold-calling-benchmarks-teams-2025">SalesHive</a>; <a href="https://www.kalungi.com/blog/saas-churn-rate-benchmarks">Kalungi</a>.</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    <span>The World Keys · Orquestrador · somente leitura, nenhum envio realizado</span>
+    <span>15 set 2026 · Europe/Paris</span>
+  </div>
+</div>

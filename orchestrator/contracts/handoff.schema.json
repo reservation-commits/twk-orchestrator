@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theworldkeys.com/schemas/handoff/v1",
+  "title": "TWK Handoff Contract v1",
+  "description": "Contrato obrigatório para todo repasse de tarefa entre agentes da operação The World Keys. Nenhum agente aceita trabalho fora deste formato; nenhum agente devolve resultado fora do bloco 'resultado'.",
+  "type": "object",
+  "required": ["task_id", "trace_id", "origem", "destino", "objetivo", "contexto_minimo", "prioridade", "criterio_de_pronto", "autonomia", "criado_em"],
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^TWK-[0-9]{8}-[0-9]{4}$",
+      "description": "Identificador único da tarefa: TWK-AAAAMMDD-NNNN (sequencial do dia)."
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^trc-[a-z0-9]{12}$",
+      "description": "Propagado inalterado por TODA a cadeia — uma jornada, um trace."
+    },
+    "parent_task_id": {
+      "type": ["string", "null"],
+      "pattern": "^TWK-[0-9]{8}-[0-9]{4}$",
+      "description": "Tarefa que originou esta (subtarefa de decomposição do Orquestrador)."
+    },
+    "origem": { "$ref": "#/$defs/agente" },
+    "destino": { "$ref": "#/$defs/agente" },
+    "objetivo": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "Uma frase imperativa: o que o destino deve produzir. Sem contexto, sem justificativa — isso vai em contexto_minimo."
+    },
+    "contexto_minimo": {
+      "type": "object",
+      "description": "APENAS o necessário para executar. Referências a dados (ids, códigos), nunca dumps. PII sensível NUNCA trafega aqui — trafega a referência (ex.: reservation_code, customer_id).",
+      "additionalProperties": true,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9_]*$" }
+    },
+    "prazo": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Deadline ISO-8601 com timezone (Europe/Paris para fechamentos). null = sem prazo rígido."
+    },
+    "prioridade": {
+      "type": "string",
+      "enum": ["critica", "alta", "normal", "baixa"],
+      "description": "critica = cliente esperando ou dinheiro em risco; baixa = pode rodar em lote noturno."
+    },
+    "criterio_de_pronto": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Condições verificáveis de aceite. O Orquestrador só marca done se todas forem satisfeitas."
+    },
+    "autonomia": {
+      "type": "string",
+      "enum": ["autonomo", "autonomo_com_log", "requer_aprovacao_orquestrador", "requer_aprovacao_humana"],
+      "description": "Nível máximo de autonomia concedido para ESTA tarefa. O agente destino nunca excede o seu próprio teto nem este."
+    },
+    "orcamento": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_passos": { "type": "integer", "minimum": 1, "maximum": 20, "default": 8 },
+        "max_tokens_estimado": { "type": "integer", "minimum": 1000 },
+        "max_custo_eur": { "type": "number", "minimum": 0 }
+      },
+      "description": "Teto de recursos. Estourou → o agente para e devolve status 'bloqueada' com o parcial."
+    },
+    "criado_em": { "type": "string", "format": "date-time" },
+    "resultado": {
+      "type": ["object", "null"],
+      "description": "Preenchido pelo agente DESTINO ao devolver. null enquanto em andamento.",
+      "additionalProperties": false,
+      "required": ["status", "resumo", "concluido_em"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["concluida", "bloqueada", "recusada", "escalada_humano", "falhou"]
+        },
+        "resumo": { "type": "string", "maxLength": 1000, "description": "O que foi feito, em linguagem humana." },
+        "evidencias": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Referências verificáveis: query executada, id criado, arquivo escrito, mensagem enviada."
+        },
+        "criterios_atendidos": {
+          "type": "array",
+          "items": { "type": "boolean" },
+          "description": "Espelha criterio_de_pronto, posição a posição."
+        },
+        "pendencias": { "type": "array", "items": { "type": "string" } },
+        "custo": {
+          "type": "object",
+          "properties": {
+            "tokens": { "type": "integer" },
+            "eur": { "type": "number" },
+            "passos": { "type": "integer" }
+          }
+        },
+        "concluido_em": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "$defs": {
+    "agente": {
+      "type": "string",
+      "enum": ["orquestrador", "comercial", "suporte-concierge", "editorial", "financeiro", "dba", "guardiao-reserva", "humano"],
+      "description": "Nomes canônicos (v1.1, 2026-09-02: + guardiao-reserva, ADR-009). 'humano' só aparece como destino em escalonamento."
+    }
+  }
+}

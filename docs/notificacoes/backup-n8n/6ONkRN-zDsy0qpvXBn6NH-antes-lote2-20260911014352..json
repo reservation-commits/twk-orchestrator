@@ -1,0 +1,255 @@
+{
+ "updatedAt": "2026-08-24T18:10:34.211Z",
+ "createdAt": "2026-07-20T22:01:51.297Z",
+ "id": "6ONkRN-zDsy0qpvXBn6NH",
+ "name": "envia email de resposta a solicitacao de parceria",
+ "description": null,
+ "active": true,
+ "isArchived": false,
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "invite",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -112,
+    0
+   ],
+   "id": "895852bb-4113-4056-947f-ce61c2590dd0",
+   "name": "Webhook",
+   "webhookId": "d9dd54b7-f972-4b57-86ca-ab4c4511b187"
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $json.body.email }}",
+    "subject": "We've Received Your Partnership Application",
+    "message": "=<!doctype html> <html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"> <head> <meta charset=\"utf-8\"/> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/> <meta name=\"color-scheme\" content=\"light\"/> <meta name=\"supported-color-schemes\" content=\"light\"/> <title>The World Keys</title> </head> <body style=\"margin:0;padding:0;background-color:#ede9df;\"> <!-- preheader --> <div style=\"display:none;max-height:0;overflow:hidden;mso-hide:all;\">   Dear {{ $json.body.fullName.split(' ')[0] }}, we have received your partnership request.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj; </div>  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#ede9df\" style=\"background-color:#ede9df;\"> <tr><td align=\"center\" style=\"padding:28px 14px;\">    <table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:100%;\">      <!-- Header -->     <tr><td bgcolor=\"#070b10\" style=\"background-color:#070b10;padding:30px 40px 26px;text-align:center;\">       <div style=\"font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-size:27px;font-weight:400;letter-spacing:6px;color:#c9a96e;\">THE&nbsp;WORLD&nbsp;KEYS</div>       <div style=\"font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;font-weight:400;letter-spacing:4px;color:#9a97a8;padding-top:9px;\">PARTNERS&nbsp;&amp;&nbsp;RESTAURANTS</div>     </td></tr>      <!-- Gold divider -->     <tr><td style=\"height:2px;line-height:2px;font-size:2px;background:linear-gradient(90deg,#9e7c48,#e4c990,#9e7c48);background-color:#c9a96e;\">&nbsp;</td></tr>      <!-- Body -->     <tr><td bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:38px 44px 22px;\">       <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         Dear {{ $json.body.fullName.split(' ')[0] }},       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         We have received the partnership request for         <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.restaurantName || $json.body.publicListingSlug }}</strong>         and our team is currently reviewing the submitted information.       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         We will contact you shortly via         <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.email }}</strong>         or         <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.phone }}</strong>         to continue the process.       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         In the meantime, no further action is required. We will notify you as soon as the review has been completed.       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         Kind regards,<br/>         The World Keys<br/>        </p>     </td></tr>      <!-- Application Summary -->     <tr><td bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:0 44px 28px;\">       <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border:1px solid #ddd6c6;\">         <tr>           <td style=\"padding:16px 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:11px;letter-spacing:2px;color:#6e6a5e;border-bottom:1px solid #ddd6c6;\">             APPLICATION SUMMARY           </td>         </tr>         <tr>           <td style=\"padding:14px 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:1.7;color:#1d222b;\">             <div><span style=\"color:#6e6a5e;\">Name:</span> {{ $json.body.fullName }}</div>             <div><span style=\"color:#6e6a5e;\">Position:</span> {{ $json.body.jobTitle }}</div>             <div><span style=\"color:#6e6a5e;\">Restaurant:</span> {{ $json.body.restaurantName || $json.body.publicListingSlug }}</div>             <div><span style=\"color:#6e6a5e;\">Application Type:</span> {{ $json.body.applicationType === 'link' ? 'Link Existing Listing' : 'New Restaurant' }}</div>           </td>         </tr>       </table>     </td></tr>      <!-- Signature -->           <!-- Footer -->     <tr><td align=\"center\" style=\"padding:20px 30px 6px;\">       <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">         <tr>           <td style=\"padding:0 13px;\">             <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"text-decoration:none;\">               <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/whatsapp.png\" width=\"26\" height=\"26\" alt=\"WhatsApp\" style=\"display:block;border:0;opacity:0.75;\" />             </a>           </td>           <td style=\"padding:0 13px;\">             <a href=\"mailto:support@theworldkeys.com\" target=\"_blank\" style=\"text-decoration:none;\">               <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/email.png\" width=\"26\" height=\"26\" alt=\"Email\" style=\"display:block;border:0;opacity:0.75;\" />             </a>           </td>           <td style=\"padding:0 13px;\">             <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">               <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/site.png\" width=\"26\" height=\"26\" alt=\"Website\" style=\"display:block;border:0;opacity:0.75;\" />             </a>           </td>         </tr>       </table>     </td></tr>      <tr><td style=\"padding:14px 30px 8px;text-align:center;\">             <p style=\"margin:0;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;letter-spacing:1.5px;color:#9a97a8;\">         THE&nbsp;WORLD&nbsp;KEYS&nbsp;&middot;&nbsp;PARIS&nbsp;&middot;&nbsp;2026       </p>     </td></tr>    </table> </td></tr> </table> </body> </html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    208,
+    0
+   ],
+   "id": "c5425e58-bb3b-4b41-86ed-a03ab727a6f8",
+   "name": "Send a message",
+   "webhookId": "fe2257f9-c6ec-49ca-9ff2-a732ec919b1e",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  }
+ ],
+ "connections": {
+  "Webhook": {
+   "main": [
+    [
+     {
+      "node": "Send a message",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "binaryMode": "separate",
+  "availableInMCP": true
+ },
+ "staticData": null,
+ "meta": {
+  "templateCredsSetupCompleted": true
+ },
+ "pinData": {
+  "Webhook": [
+   {
+    "json": {
+     "headers": {
+      "host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8875",
+      "content-length": "374",
+      "content-type": "application/json",
+      "expect": "100-continue",
+      "x-forwarded-for": "192.140.64.63",
+      "x-forwarded-host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https",
+      "x-forwarded-server": "8d89ae07a74e",
+      "x-real-ip": "192.140.64.63",
+      "accept-encoding": "gzip"
+     },
+     "params": {},
+     "query": {},
+     "body": {
+      "fullName": "Marlon Teste",
+      "createdAt": "2026-07-20T22:05:16.6698979Z",
+      "publicListingSlug": null,
+      "jobTitle": "OWNER",
+      "restaurantName": "Restaurante Exemplo",
+      "invitationId": "test-invite-001",
+      "applicationType": "create",
+      "status": "pending",
+      "phone": "+5521999999999",
+      "email": "marlon.teste@example.com"
+     },
+     "webhookUrl": "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/invite",
+     "executionMode": "production"
+    }
+   }
+  ]
+ },
+ "versionId": "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+ "activeVersionId": "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+ "versionCounter": 37,
+ "triggerCount": 1,
+ "shared": [
+  {
+   "updatedAt": "2026-07-20T22:01:51.302Z",
+   "createdAt": "2026-07-20T22:01:51.302Z",
+   "role": "workflow:owner",
+   "workflowId": "6ONkRN-zDsy0qpvXBn6NH",
+   "projectId": "j3RBnUKpdJnI0HPr",
+   "project": {
+    "updatedAt": "2025-10-09T18:24:30.274Z",
+    "createdAt": "2025-10-09T18:21:52.771Z",
+    "id": "j3RBnUKpdJnI0HPr",
+    "name": "The World keys <thekeys.need@gmail.com>",
+    "type": "personal",
+    "icon": null,
+    "description": null,
+    "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+    "projectRelations": [
+     {
+      "updatedAt": "2025-10-09T18:21:52.771Z",
+      "createdAt": "2025-10-09T18:21:52.771Z",
+      "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "user": {
+       "updatedAt": "2026-09-10T07:00:17.000Z",
+       "createdAt": "2025-10-09T18:21:52.389Z",
+       "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+       "email": "thekeys.need@gmail.com",
+       "firstName": "The World",
+       "lastName": "keys",
+       "personalizationAnswers": {
+        "version": "v4",
+        "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+        "personalization_survey_n8n_version": "1.103.2"
+       },
+       "settings": {
+        "userActivated": true,
+        "easyAIWorkflowOnboarded": true,
+        "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+        "userActivatedAt": 1760038686025,
+        "npsSurvey": {
+         "responded": true,
+         "lastShownAt": 1785180247186
+        }
+       },
+       "disabled": false,
+       "mfaEnabled": false,
+       "lastActiveAt": "2026-09-10",
+       "isPending": false
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "tags": [],
+ "activeVersion": {
+  "updatedAt": "2026-07-27T19:24:43.000Z",
+  "createdAt": "2026-07-27T19:24:39.815Z",
+  "versionId": "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+  "workflowId": "6ONkRN-zDsy0qpvXBn6NH",
+  "nodes": [
+   {
+    "parameters": {
+     "httpMethod": "POST",
+     "path": "invite",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.webhook",
+    "typeVersion": 2.1,
+    "position": [
+     -112,
+     0
+    ],
+    "id": "895852bb-4113-4056-947f-ce61c2590dd0",
+    "name": "Webhook",
+    "webhookId": "d9dd54b7-f972-4b57-86ca-ab4c4511b187"
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $json.body.email }}",
+     "subject": "We've Received Your Partnership Application",
+     "message": "=<!doctype html> <html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"> <head> <meta charset=\"utf-8\"/> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/> <meta name=\"color-scheme\" content=\"light\"/> <meta name=\"supported-color-schemes\" content=\"light\"/> <title>The World Keys</title> </head> <body style=\"margin:0;padding:0;background-color:#ede9df;\"> <!-- preheader --> <div style=\"display:none;max-height:0;overflow:hidden;mso-hide:all;\">   Dear {{ $json.body.fullName.split(' ')[0] }}, we have received your partnership request.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj; </div>  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#ede9df\" style=\"background-color:#ede9df;\"> <tr><td align=\"center\" style=\"padding:28px 14px;\">    <table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:100%;\">      <!-- Header -->     <tr><td bgcolor=\"#070b10\" style=\"background-color:#070b10;padding:30px 40px 26px;text-align:center;\">       <div style=\"font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-size:27px;font-weight:400;letter-spacing:6px;color:#c9a96e;\">THE&nbsp;WORLD&nbsp;KEYS</div>       <div style=\"font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;font-weight:400;letter-spacing:4px;color:#9a97a8;padding-top:9px;\">PARTNERS&nbsp;&amp;&nbsp;RESTAURANTS</div>     </td></tr>      <!-- Gold divider -->     <tr><td style=\"height:2px;line-height:2px;font-size:2px;background:linear-gradient(90deg,#9e7c48,#e4c990,#9e7c48);background-color:#c9a96e;\">&nbsp;</td></tr>      <!-- Body -->     <tr><td bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:38px 44px 22px;\">       <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         Dear {{ $json.body.fullName.split(' ')[0] }},       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         We have received the partnership request for         <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.restaurantName || $json.body.publicListingSlug }}</strong>         and our team is currently reviewing the submitted information.       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         We will contact you shortly via         <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.email }}</strong>         or         <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.phone }}</strong>         to continue the process.       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         In the meantime, no further action is required. We will notify you as soon as the review has been completed.       </p>        <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">         Kind regards,<br/>         The World Keys<br/>        </p>     </td></tr>      <!-- Application Summary -->     <tr><td bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:0 44px 28px;\">       <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border:1px solid #ddd6c6;\">         <tr>           <td style=\"padding:16px 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:11px;letter-spacing:2px;color:#6e6a5e;border-bottom:1px solid #ddd6c6;\">             APPLICATION SUMMARY           </td>         </tr>         <tr>           <td style=\"padding:14px 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;line-height:1.7;color:#1d222b;\">             <div><span style=\"color:#6e6a5e;\">Name:</span> {{ $json.body.fullName }}</div>             <div><span style=\"color:#6e6a5e;\">Position:</span> {{ $json.body.jobTitle }}</div>             <div><span style=\"color:#6e6a5e;\">Restaurant:</span> {{ $json.body.restaurantName || $json.body.publicListingSlug }}</div>             <div><span style=\"color:#6e6a5e;\">Application Type:</span> {{ $json.body.applicationType === 'link' ? 'Link Existing Listing' : 'New Restaurant' }}</div>           </td>         </tr>       </table>     </td></tr>      <!-- Signature -->           <!-- Footer -->     <tr><td align=\"center\" style=\"padding:20px 30px 6px;\">       <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">         <tr>           <td style=\"padding:0 13px;\">             <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"text-decoration:none;\">               <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/whatsapp.png\" width=\"26\" height=\"26\" alt=\"WhatsApp\" style=\"display:block;border:0;opacity:0.75;\" />             </a>           </td>           <td style=\"padding:0 13px;\">             <a href=\"mailto:support@theworldkeys.com\" target=\"_blank\" style=\"text-decoration:none;\">               <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/email.png\" width=\"26\" height=\"26\" alt=\"Email\" style=\"display:block;border:0;opacity:0.75;\" />             </a>           </td>           <td style=\"padding:0 13px;\">             <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">               <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/site.png\" width=\"26\" height=\"26\" alt=\"Website\" style=\"display:block;border:0;opacity:0.75;\" />             </a>           </td>         </tr>       </table>     </td></tr>      <tr><td style=\"padding:14px 30px 8px;text-align:center;\">             <p style=\"margin:0;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;letter-spacing:1.5px;color:#9a97a8;\">         THE&nbsp;WORLD&nbsp;KEYS&nbsp;&middot;&nbsp;PARIS&nbsp;&middot;&nbsp;2026       </p>     </td></tr>    </table> </td></tr> </table> </body> </html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     208,
+     0
+    ],
+    "id": "c5425e58-bb3b-4b41-86ed-a03ab727a6f8",
+    "name": "Send a message",
+    "webhookId": "fe2257f9-c6ec-49ca-9ff2-a732ec919b1e",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   }
+  ],
+  "connections": {
+   "Webhook": {
+    "main": [
+     [
+      {
+       "node": "Send a message",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   }
+  },
+  "authors": "The World keys",
+  "name": "Version c9e23460",
+  "description": "",
+  "autosaved": true,
+  "workflowPublishHistory": [
+   {
+    "createdAt": "2026-07-27T19:24:43.104Z",
+    "id": 211,
+    "workflowId": "6ONkRN-zDsy0qpvXBn6NH",
+    "versionId": "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   },
+   {
+    "createdAt": "2026-08-24T18:10:34.302Z",
+    "id": 232,
+    "workflowId": "6ONkRN-zDsy0qpvXBn6NH",
+    "versionId": "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   }
+  ]
+ }
+}

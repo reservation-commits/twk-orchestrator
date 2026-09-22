@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Private Driver · The World Keys</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  /* ------------------------------------------------------------------
+     The World Keys · Private Driver · fluxo completo (página → checkout → confirmação)
+     Tokens do :root de theworldkeys.com. O site é escuro em qualquer tema.
+     Foto do veículo: colocar "private-driver-hero.jpg" ao lado deste ficheiro;
+     sem a foto, o palco mostra apenas a luz de piso dourada.
+     ------------------------------------------------------------------ */
+  :root {
+    --ink: #070b10; --charcoal: #0f1218; --warm: #181c24; --border: #1e2230; --border-2: #2a2f40;
+    --gold: #c9a96e; --gold-light: #e4c990; --gold-dark: #9e7c48;
+    --cream: #ede9df; --cream-d: #b8b3a6; --white: #f7f4ef; --silver: #9a97a8; --gray: #585668;
+    --ok: #7fb58a; --bleed: #c8695c;
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans: "Jost", "Segoe UI", Helvetica, Arial, sans-serif;
+    --radius: 6px;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--ink); color: var(--cream); font-family: var(--sans); font-size: 15px; line-height: 1.6; padding: 0; }
+  a { color: var(--gold); text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  strong { color: var(--white); font-weight: 500; }
+  p { margin: 0 0 1em; max-width: 68ch; }
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; color: var(--white); margin: 0; text-wrap: balance; }
+  ul { padding-left: 1.2em; margin: 0 0 1em; max-width: 68ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--gold); }
+  [hidden] { display: none !important; }
+  .gutter { padding-inline: clamp(16px, 4vw, 40px); }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+  .eyebrow { font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans); font-weight: 500; font-size: 14px; padding: 12px 20px; border-radius: var(--radius); border: 1px solid transparent; cursor: pointer; letter-spacing: .02em; text-decoration: none; }
+  .btn.gold { background: linear-gradient(180deg, var(--gold-light), var(--gold)); color: var(--ink); }
+  .btn.gold:hover { filter: brightness(1.05); }
+  .btn.gold[disabled] { opacity: .6; cursor: wait; }
+  .btn.ghost { background: transparent; color: var(--cream); border-color: var(--border-2); }
+  .btn.ghost:hover { border-color: var(--gold); color: var(--white); }
+  .btn.wa { background: #1f7a4d; color: #fff; }
+  .tag { display: inline-block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 3px 9px; border: 1px solid var(--border-2); border-radius: 999px; color: var(--cream-d); }
+  .tag.new { color: var(--ink); background: var(--gold); border-color: var(--gold); }
+
+  /* ---- cabeçalho do site ---- */
+  .site-head { position: sticky; top: 0; z-index: 40; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--ink) 94%, transparent); backdrop-filter: blur(8px); }
+  .site-head .wrap { display: flex; align-items: center; gap: 14px; padding-block: 12px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-family: var(--serif); letter-spacing: .3em; text-transform: uppercase; font-size: 12px; }
+  .logo svg { width: 28px; height: 36px; }
+  .citysel { display: inline-flex; align-items: center; gap: 8px; background: var(--charcoal); border: 1px solid var(--border-2); border-radius: 999px; padding: 8px 14px; font-size: 13px; color: var(--cream); }
+  .search { flex: 1 1 200px; min-width: 140px; background: var(--charcoal); border: 1px solid var(--border-2); border-radius: 999px; padding: 8px 14px; font-size: 13px; color: var(--silver); }
+  .nav-services { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--gold) 50%, transparent); color: var(--gold); font-size: 13px; }
+  .enter { margin-left: auto; }
+
+  /* ---- stepper ---- */
+  .stepper { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin: 0 0 8px; overflow-x: auto; }
+  .stepper div { display: flex; align-items: center; gap: 8px; padding: 14px 18px 12px 0; margin-right: 18px; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--gray); border-bottom: 2px solid transparent; white-space: nowrap; }
+  .stepper div i { font-style: normal; font-family: var(--serif); font-size: 18px; letter-spacing: 0; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border-2); display: grid; place-items: center; }
+  .stepper div.on { color: var(--white); border-bottom-color: var(--gold); }
+  .stepper div.on i { border-color: var(--gold); color: var(--gold); }
+  .stepper div.done { color: var(--cream-d); }
+  .stepper div.done i { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+  /* ---- páginas do fluxo ---- */
+  .page { display: none; }
+  .page.on { display: block; }
+  @media (prefers-reduced-motion: no-preference) { .page.on { animation: fade .3s ease; } @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } } }
+
+  /* ---- página do serviço ---- */
+  .crumbs { font-size: 12px; color: var(--silver); padding-block: 14px 0; letter-spacing: .04em; }
+  .crumbs span { color: var(--gray); margin: 0 8px; }
+  .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, 420px); gap: 36px; align-items: start; padding-block: 20px 40px; }
+  .stage { position: relative; border: 1px solid var(--border); border-radius: 10px; min-height: 340px; overflow: hidden; margin-bottom: 26px;
+    background: url("private-driver-hero.jpg") center / cover no-repeat, radial-gradient(ellipse 70% 45% at 50% 92%, rgba(201,169,110,.32), transparent 60%), linear-gradient(180deg, #05070b, #0b0e14); }
+  .stage::after { content: ""; position: absolute; inset: auto 8% 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: .6; }
+  .stage .frame { position: absolute; inset: 14px; border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); border-radius: 8px; pointer-events: none; }
+  .stage .cap { position: absolute; left: 24px; bottom: 22px; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--cream-d); }
+  .stage .cap b { display: block; font-family: var(--serif); font-size: 26px; letter-spacing: 0; text-transform: none; color: var(--white); font-weight: 400; }
+  .hero h1 { font-size: clamp(38px, 5vw, 64px); line-height: 1.02; letter-spacing: -.015em; margin: 12px 0 14px; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero .sub { font-size: 17px; color: var(--cream); max-width: 56ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px; }
+  .partner { display: grid; grid-template-columns: 52px minmax(0,1fr); gap: 14px; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--charcoal); max-width: 560px; }
+  .partner .av { width: 52px; height: 52px; border-radius: 50%; background: var(--warm); border: 1px solid var(--border-2); display: grid; place-items: center; font-family: var(--serif); font-size: 22px; color: var(--gold); }
+  .partner .nm { font-family: var(--serif); font-size: 20px; color: var(--white); }
+  .partner .rl { font-size: 12px; color: var(--silver); letter-spacing: .06em; }
+  .partner .rl i { color: var(--ok); font-style: normal; }
+
+  .book { position: sticky; top: 76px; background: var(--charcoal); border: 1px solid var(--border-2); border-radius: 12px; padding: 20px; }
+  .book h3 { font-family: var(--sans); font-size: 14px; font-weight: 500; text-align: center; color: var(--white); margin-bottom: 14px; }
+  .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--ink); border: 1px solid var(--border); border-radius: 8px; padding: 4px; margin-bottom: 14px; }
+  .modes button { font-family: var(--sans); font-size: 12px; padding: 8px 4px; border: 0; border-radius: 6px; background: transparent; color: var(--cream-d); cursor: pointer; }
+  .modes button[aria-selected="true"] { background: var(--warm); color: var(--white); box-shadow: inset 0 0 0 1px var(--border-2); }
+  .field { display: grid; gap: 4px; margin-bottom: 10px; }
+  .field label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--silver); }
+  .field input, .field select { width: 100%; background: var(--ink); border: 1px solid var(--border-2); border-radius: 8px; color: var(--cream); font-family: var(--sans); font-size: 14px; padding: 10px 12px; }
+  .field input::placeholder { color: var(--gray); }
+  .field input[aria-invalid="true"] { border-color: var(--bleed); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .price { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--border); padding-top: 12px; margin: 6px 0 12px; gap: 12px; }
+  .price .k { font-size: 12px; color: var(--silver); }
+  .price .v { font-family: var(--serif); font-size: 32px; color: var(--white); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .price .v small { font-family: var(--sans); font-size: 12px; color: var(--silver); margin-left: 4px; }
+  .lines { font-size: 12.5px; color: var(--cream-d); display: grid; gap: 4px; margin-bottom: 12px; }
+  .lines div { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+  .book .btn { width: 100%; }
+  .fine { font-size: 11.5px; color: var(--silver); text-align: center; margin: 10px 0 0; line-height: 1.5; }
+  .stripe-mark b { font-weight: 600; color: var(--cream-d); }
+
+  section.svc { padding-block: 36px; border-top: 1px solid var(--border); }
+  section.svc h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 10px; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin-top: 22px; }
+  .step { border: 1px solid var(--border); border-radius: 10px; padding: 18px; background: var(--charcoal); }
+  .step .n { font-family: var(--serif); font-size: 30px; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+  .step h4 { margin: 0 0 6px; font-weight: 500; font-size: 20px; }
+  .step p { font-size: 14px; color: var(--cream-d); margin: 0; }
+  .tscroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 16px; }
+  th { text-align: left; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--silver); font-weight: 500; padding: 10px 12px 8px 0; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td .t { font-family: var(--serif); font-size: 19px; color: var(--white); display: block; }
+  td .d { font-size: 13px; color: var(--cream-d); }
+  .spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 18px; }
+  .spec div { border-top: 1px solid var(--border); padding-top: 10px; font-size: 14px; color: var(--cream-d); }
+  .spec div b { display: block; color: var(--white); font-weight: 500; }
+  .faq details { border-top: 1px solid var(--border); padding: 12px 0; max-width: 72ch; }
+  .faq summary { cursor: pointer; color: var(--white); font-size: 15px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .faq summary::after { content: "+"; color: var(--gold); }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { margin: 10px 0 0; font-size: 14px; color: var(--cream-d); }
+  .foot { border-top: 1px solid var(--border); margin-top: 40px; padding-block: 24px 40px; font-size: 12px; color: var(--silver); display: flex; gap: 28px; flex-wrap: wrap; }
+  .foot b { display: block; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--cream-d); margin-bottom: 4px; font-weight: 500; }
+
+  /* ---- checkout ---- */
+  .co { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); gap: 32px; padding-block: 10px 50px; }
+  .co h2 { font-size: 36px; margin: 4px 0 6px; }
+  .panel { border: 1px solid var(--border-2); border-radius: 12px; padding: 22px; background: var(--charcoal); margin-bottom: 18px; }
+  .panel .eyebrow { display: block; margin-bottom: 12px; }
+  .pm { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .pm button { font-family: var(--sans); font-size: 13px; padding: 10px 8px; border-radius: 8px; border: 1px solid var(--border-2); background: var(--ink); color: var(--cream-d); cursor: pointer; }
+  .pm button[aria-pressed="true"] { border-color: var(--gold); color: var(--white); box-shadow: inset 0 0 0 1px var(--gold); }
+  .fake { border: 1px solid var(--border-2); border-radius: 8px; padding: 11px 12px; background: var(--ink); color: var(--gray); font-size: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 10px; }
+  .fake span:last-child { color: var(--cream-d); letter-spacing: .12em; }
+  .wallet { border: 1px solid var(--border-2); border-radius: 8px; padding: 14px; background: var(--ink); text-align: center; color: var(--cream-d); font-size: 14px; margin-bottom: 10px; }
+  .wallet b { color: var(--white); font-weight: 500; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--cream-d); margin: 12px 0 14px; }
+  .consent input { margin-top: 4px; accent-color: var(--gold); }
+  .err { color: var(--bleed); font-size: 12.5px; margin: 0 0 10px; }
+  .summary { border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--charcoal); position: sticky; top: 76px; }
+  .summary .it { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  .summary .it b { font-weight: 500; }
+  .summary .tot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; gap: 12px; }
+  .summary .tot .v { font-family: var(--serif); font-size: 32px; color: var(--white); font-variant-numeric: tabular-nums; }
+  .summary .pol { font-size: 12px; color: var(--silver); margin: 10px 0 0; }
+  .summary a.edit { font-size: 12px; }
+
+  /* ---- processamento ---- */
+  .processing { min-height: 60vh; display: grid; place-items: center; text-align: center; padding-block: 40px; }
+  .spinner { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--border-2); border-top-color: var(--gold); margin: 0 auto 18px; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation: none; border-color: var(--gold); } }
+  .processing h2 { font-size: 30px; margin-bottom: 6px; }
+  .processing p { color: var(--silver); margin: 0 auto; }
+
+  /* ---- confirmação ---- */
+  .done { padding-block: 24px 60px; }
+  .voucher { max-width: 680px; margin: 10px auto 22px; border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); border-radius: 14px; background: var(--charcoal); overflow: hidden; }
+  .voucher .top { padding: 28px 26px 20px; border-bottom: 1px dashed var(--border-2); text-align: center; position: relative; }
+  .voucher .top::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark)); }
+  .check { width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--ok) 18%, transparent); border: 1px solid var(--ok); color: var(--ok); font-size: 24px; }
+  .voucher .top h2 { font-size: 34px; margin: 4px 0 6px; }
+  .voucher .top p { margin: 0 auto; color: var(--cream-d); font-size: 14px; }
+  .voucher .code { font-family: var(--serif); font-size: 26px; letter-spacing: .18em; color: var(--gold-light); margin-top: 10px; }
+  .voucher .bd { padding: 20px 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; font-size: 14px; }
+  .voucher .bd div b { display: block; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--silver); font-weight: 500; margin-bottom: 2px; }
+  .voucher .acts { padding: 4px 26px 24px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .drv { display: grid; grid-template-columns: 52px minmax(0,1fr); gap: 14px; align-items: center; padding: 16px 26px; border-top: 1px dashed var(--border-2); }
+  .drv .av { width: 52px; height: 52px; border-radius: 50%; background: var(--warm); border: 1px solid var(--border-2); display: grid; place-items: center; font-family: var(--serif); font-size: 22px; color: var(--gold); }
+  .drv .nm { font-family: var(--serif); font-size: 20px; color: var(--white); }
+  .drv .rl { font-size: 12.5px; color: var(--silver); }
+  .next { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .next div { border-top: 1px solid var(--border); padding-top: 10px; font-size: 13.5px; color: var(--cream-d); }
+  .next div b { display: block; color: var(--white); font-weight: 500; }
+  .linkres { max-width: 680px; margin: 22px auto 0; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 12px; align-items: center; background: var(--charcoal); font-size: 14px; }
+  .linkres .ic { width: 34px; height: 34px; border-radius: 8px; background: var(--gold); color: var(--ink); display: grid; place-items: center; }
+  .linkres .st { font-size: 12.5px; color: var(--silver); }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--warm); border: 1px solid var(--border-2); color: var(--cream); padding: 10px 16px; border-radius: 999px; font-size: 13px; z-index: 60; }
+
+  @media (max-width: 860px) {
+    .hero, .co, .voucher .bd { grid-template-columns: 1fr; }
+    .book, .summary { position: static; }
+    .enter { margin-left: 0; }
+    .pm { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ===================== CABEÇALHO DO SITE ===================== -->
+<header class="site-head gutter"><div class="wrap">
+  <a class="logo" href="#" aria-label="The World Keys"><svg viewBox="0 0 28 36" aria-hidden="true"><circle cx="14" cy="10" r="7" fill="none" stroke="#c9a96e" stroke-width="1.6"/><path d="M14 3v-2M21 10h2M5 10h2M19 5l1.5-1.5M9 5 7.5 3.5" stroke="#c9a96e" stroke-width="1.2"/><path d="M11 15h6l4 18H7z" fill="none" stroke="#c9a96e" stroke-width="1.6"/></svg><span>The World Keys</span></a>
+  <span class="citysel">◎ Paris, France ▾</span>
+  <span class="search">Buscar estabelecimentos no mundo todo...</span>
+  <a class="nav-services" href="#"><span>Serviços</span> <span class="tag new">novo</span></a>
+  <button class="btn ghost enter" type="button">Entrar</button>
+</div></header>
+
+<div class="gutter"><div class="wrap">
+  <nav class="stepper" aria-label="Etapas">
+    <div class="on" id="st1"><i>1</i> Reserva</div>
+    <div id="st2"><i>2</i> Pagamento</div>
+    <div id="st3"><i>3</i> Confirmação</div>
+  </nav>
+</div></div>
+
+<!-- ===================== 1 · PÁGINA DO SERVIÇO ===================== -->
+<main class="page on gutter" id="p-servico">
+  <div class="wrap">
+    <div class="crumbs">Paris<span>›</span>Serviços<span>›</span>Private Driver</div>
+
+    <div class="hero">
+      <div>
+        <div class="stage"><div class="frame"></div><div class="cap"><b>Tesla Model X</b>Chauffeur de sécurité · Paris</div></div>
+        <p class="eyebrow">Private Driver · Paris</p>
+        <h1>Chegue como <em>convidado de honra.</em></h1>
+        <p class="sub">Chauffeur de sécurité, Tesla Model X, até 6 passageiros, dia e noite. Transfers privados, horas à disposição e a noite completa: ida, espera durante o jantar e regresso. Reserva e pagamento em um minuto.</p>
+        <div class="chips">
+          <span class="tag">Transfers privados</span><span class="tag">À disposição</span><span class="tag">Até 6 passageiros</span><span class="tag">Dia e noite</span><span class="tag">Céu estrelado</span><span class="tag">Ecrãs · Wi-Fi</span><span class="tag">Águas minerais e doçaria</span>
+        </div>
+        <div class="partner">
+          <div class="av">JG</div>
+          <div><div class="nm">Julien Guilloteau</div><div class="rl">Chauffeur de sécurité · Serviços de grande remise · <i>✔ Parceiro verificado The World Keys</i></div></div>
+        </div>
+      </div>
+
+      <aside class="book" aria-label="Reservar motorista">
+        <h3>Reservar motorista</h3>
+        <div class="modes" role="tablist">
+          <button type="button" role="tab" aria-selected="false" data-mode="transfer">Transfer</button>
+          <button type="button" role="tab" aria-selected="false" data-mode="hourly">À disposição</button>
+          <button type="button" role="tab" aria-selected="true" data-mode="soiree">Soirée</button>
+        </div>
+        <div class="field"><label for="pickup">Recolha</label><input id="pickup" type="text" value="Hôtel Le Bristol, 112 rue du Faubourg Saint-Honoré"></div>
+        <div class="field"><label for="dropoff">Destino</label><select id="dropoff"><option>Le Clarence · minha reserva de sábado</option><option>Aeroporto Charles de Gaulle</option><option>Aeroporto Orly</option><option>Outro endereço em Paris</option></select></div>
+        <div class="row2">
+          <div class="field"><label for="date">Data</label><input id="date" type="date" value="2026-09-26"></div>
+          <div class="field"><label for="time">Recolha às</label><input id="time" type="time" value="19:50"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="pax">Passageiros</label><select id="pax"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div class="field" id="hours-field" hidden><label for="hours">Horas</label><select id="hours"><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option></select></div>
+          <div class="field" id="wait-field"><label for="wait">Espera incluída</label><select id="wait"><option>até 4 h</option><option>até 5 h (+85 €)</option><option>até 6 h (+170 €)</option></select></div>
+        </div>
+        <div class="price"><span class="k" id="price-k">Soirée · ida, espera e regresso</span><span class="v" id="price-v">390,00 €<small>IVA incl.</small></span></div>
+        <div class="lines" id="price-lines"></div>
+        <button class="btn gold" type="button" id="go-checkout">Continuar para pagamento</button>
+        <p class="fine">Preço fechado, confirmação imediata e voucher por e-mail e WhatsApp. Cancelamento gratuito até 24 h antes.</p>
+        <p class="fine stripe-mark">Pagamento seguro por <b>Stripe</b></p>
+      </aside>
+    </div>
+
+    <section class="svc">
+      <p class="eyebrow">Como funciona</p>
+      <h2>Três passos, nenhuma cotação</h2>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h4>Escolha e pague</h4><p>Transfer, horas à disposição ou a noite completa. Preço na tela, pagamento com cartão, Apple Pay ou Google Pay.</p></div>
+        <div class="step"><div class="n">2</div><h4>Receba o voucher</h4><p>Confirmação imediata com o contacto do motorista por WhatsApp. Lembrete na véspera com a matrícula do veículo.</p></div>
+        <div class="step"><div class="n">3</div><h4>Motorista à porta</h4><p>Na Soirée, o carro espera durante o jantar e leva-o de volta. Águas, doçaria, Wi-Fi e ecrãs a bordo.</p></div>
+      </div>
+    </section>
+
+    <section class="svc">
+      <p class="eyebrow">Tarifas · Paris</p>
+      <h2>Preço fechado, sem surpresas</h2>
+      <div class="tscroll"><table>
+        <tr><th>Serviço</th><th>Inclui</th><th class="num">Preço</th></tr>
+        <tr><td><span class="t">Transfer em Paris</span><span class="d">um trajeto dentro de Paris intramuros</span></td><td>Até 6 passageiros, bagagem, 15 min de espera</td><td class="num">120,00 €</td></tr>
+        <tr><td><span class="t">Transfer aeroporto</span><span class="d">CDG, Orly ou Le Bourget ↔ Paris</span></td><td>Acompanhamento do voo, 60 min de espera na chegada, receção com placa</td><td class="num">180,00 €</td></tr>
+        <tr><td><span class="t">À disposição</span><span class="d">mínimo 3 horas</span></td><td>Motorista e veículo à sua ordem, trajetos ilimitados em Île-de-France</td><td class="num">95,00 € / h</td></tr>
+        <tr><td><span class="t">Soirée</span><span class="d">ida, espera até 4 h e regresso</span></td><td>Chegada ao restaurante 10 min antes da mesa, regresso ao seu sinal, hora extra 85 €</td><td class="num">390,00 €</td></tr>
+      </table></div>
+      <p style="font-size:12.5px;color:var(--silver);margin-top:10px">Entre as 22h e as 6h aplica-se suplemento noturno de 15%. Preços com IVA.</p>
+    </section>
+
+    <section class="svc">
+      <p class="eyebrow">O veículo e o motorista</p>
+      <h2>Tesla Model X, chauffeur de sécurité</h2>
+      <div class="spec">
+        <div><b>Capacidade</b>até 6 passageiros, portas Falcon para entrada sem esforço</div>
+        <div><b>A bordo</b>céu estrelado, ecrãs individuais, Wi-Fi, águas minerais e doçaria</div>
+        <div><b>Motorista</b>chauffeur de sécurité formado, discreto, francês e inglês</div>
+        <div><b>Disponibilidade</b>dia e noite, Paris e Île-de-France, aeroportos</div>
+        <div><b>Empresa</b>The World Keys SAS · 66 avenue des Champs-Élysées · RCS Paris 901 268 326</div>
+        <div><b>Contacto direto</b><a href="#">WhatsApp +33 7 81 93 72 70</a> · driver@theworldkeys.com</div>
+      </div>
+    </section>
+
+    <section class="svc faq">
+      <p class="eyebrow">Perguntas frequentes</p>
+      <h2>Antes de reservar</h2>
+      <details><summary>O preço é final?</summary><p>Sim. O valor mostrado inclui IVA, motorista, combustível, portagens e a espera indicada. Só a hora extra na Soirée e o suplemento noturno se acrescentam, e ambos aparecem antes do pagamento.</p></details>
+      <details><summary>Posso cancelar?</summary><p>Gratuitamente até 24 horas antes da recolha. Entre 24 e 6 horas, 50%. Menos de 6 horas, o valor total. Se o restaurante cancelar a mesa, o reembolso é integral e automático.</p></details>
+      <details><summary>Quem me leva?</summary><p>Julien Guilloteau, chauffeur de sécurité parceiro da The World Keys em Paris. O nome, a fotografia e a matrícula chegam no voucher e no lembrete da véspera.</p></details>
+      <details><summary>E se o meu voo atrasar?</summary><p>No transfer aeroporto acompanhamos o voo e a espera de 60 minutos conta a partir da aterragem real.</p></details>
+    </section>
+
+    <footer class="foot">
+      <div><b>Empresa</b>Sobre nós · Contato</div>
+      <div><b>Legal</b>Termos de uso · Política de privacidade · Cookies</div>
+      <div><b>Serviços</b>Private Driver · em breve: barcos, helicóptero, experiências</div>
+      <div><b>Idioma</b>English · Português · Français · Español · Italiano · 中文 · 日本語</div>
+    </footer>
+  </div>
+</main>
+
+<!-- ===================== 2 · CHECKOUT ===================== -->
+<main class="page gutter" id="p-checkout">
+  <div class="wrap">
+    <div class="co">
+      <div>
+        <p class="eyebrow">Passo 2 de 3</p>
+        <h2>Pagamento</h2>
+        <p style="color:var(--cream-d)">Você paga à The World Keys, que reserva e paga o motorista em seu nome. O recibo chega no seu e-mail.</p>
+
+        <form id="co-form" novalidate>
+          <div class="panel">
+            <span class="eyebrow">Os seus dados</span>
+            <div class="row2">
+              <div class="field"><label for="co-name">Nome completo</label><input id="co-name" type="text" placeholder="Como no documento" autocomplete="name"></div>
+              <div class="field"><label for="co-phone">WhatsApp</label><input id="co-phone" type="tel" placeholder="+351 9…" autocomplete="tel"></div>
+            </div>
+            <div class="field"><label for="co-email">E-mail</label><input id="co-email" type="email" placeholder="para o voucher e o recibo" autocomplete="email"></div>
+            <div class="field"><label for="co-note">Nota ao motorista (opcional)</label><input id="co-note" type="text" placeholder="cadeira de criança, bagagem extra, ponto de encontro…"></div>
+            <p style="font-size:12.5px;color:var(--silver);margin:4px 0 0">Tem conta? <a href="#">Entrar</a> preenche estes campos e guarda a reserva em "Minhas reservas".</p>
+          </div>
+
+          <div class="panel">
+            <span class="eyebrow">Método de pagamento</span>
+            <div class="pm" role="group" aria-label="Método de pagamento">
+              <button type="button" aria-pressed="true" data-pm="card">Cartão</button>
+              <button type="button" aria-pressed="false" data-pm="apple">Apple Pay</button>
+              <button type="button" aria-pressed="false" data-pm="google">Google Pay</button>
+            </div>
+            <div id="pm-card">
+              <div class="fake"><span>Número do cartão</span><span>•••• •••• •••• ••••</span></div>
+              <div class="row2"><div class="fake"><span>Validade</span><span>MM / AA</span></div><div class="fake"><span>CVC</span><span>•••</span></div></div>
+              <div class="fake"><span>País</span><span>Portugal</span></div>
+            </div>
+            <div id="pm-wallet" hidden><div class="wallet">Toque em <b>Pagar</b> e confirme no seu dispositivo.</div></div>
+            <p style="font-size:12px;color:var(--silver);margin:6px 0 0">Elemento de pagamento do Stripe embutido na página. Nenhum dado de cartão passa pelos servidores da The World Keys.</p>
+          </div>
+
+          <label class="consent"><input type="checkbox" id="co-consent"><span>Li e aceito os <a href="#">termos do serviço</a> e a <a href="#">política de cancelamento</a>: gratuito até 24 h antes, 50% entre 24 h e 6 h, 100% depois.</span></label>
+          <p class="err" id="co-err" hidden></p>
+          <button class="btn gold" type="submit" id="pay-btn" style="width:100%">Pagar 390,00 € e confirmar</button>
+          <p class="fine" style="text-align:left;margin-top:8px">Confirmação imediata. Cancelamento gratuito até <span id="free-until">25 set, 19:50</span>.</p>
+        </form>
+      </div>
+
+      <aside class="summary" aria-label="Resumo da reserva">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><span class="eyebrow">Resumo</span><a class="edit" href="#" id="edit-link">Alterar</a></div>
+        <div class="it"><span id="sum-label">Soirée · Tesla Model X</span><b id="sum-price">390,00 €</b></div>
+        <div class="it"><span id="sum-when">Sáb 26 set · recolha 19:50</span><span id="sum-pax">2 passageiros</span></div>
+        <div class="it"><span id="sum-route">Hôtel Le Bristol → Le Clarence → regresso</span></div>
+        <div class="it" id="sum-extra-row"><span id="sum-extra">Espera incluída até 4 h</span></div>
+        <div class="tot"><span>Total, IVA incl.</span><span class="v" id="sum-total">390,00 €</span></div>
+        <p class="pol">Motorista: Julien Guilloteau · Tesla Model X. Recolha 10 minutos antes da hora indicada, se preferir; regresso ao seu sinal.</p>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== 2b · A CONFIRMAR PAGAMENTO ===================== -->
+<main class="page gutter" id="p-processing">
+  <div class="wrap processing">
+    <div>
+      <div class="spinner" aria-hidden="true"></div>
+      <h2>A confirmar o pagamento</h2>
+      <p>Não feche esta página. Estamos a reservar o seu motorista.</p>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== 3 · CONFIRMAÇÃO ===================== -->
+<main class="page gutter" id="p-done">
+  <div class="wrap done">
+    <div class="voucher" id="voucher">
+      <div class="top">
+        <div class="check" aria-hidden="true">✓</div>
+        <p class="eyebrow">Pagamento confirmado</p>
+        <h2>O seu motorista está reservado</h2>
+        <p>Enviámos o voucher e o recibo para <span id="v-email">o seu e-mail</span> e uma mensagem para o seu WhatsApp.</p>
+        <div class="code" id="v-code">TWK-DRV-7K2M</div>
+      </div>
+      <div class="bd">
+        <div><b>Quando</b><span id="v-when">Sábado, 26 set 2026 · recolha às 19:50</span></div>
+        <div><b>Serviço</b><span id="v-service">Soirée · ida, espera até 4 h e regresso</span></div>
+        <div><b>Recolha</b><span id="v-pickup">Hôtel Le Bristol, 112 rue du Faubourg Saint-Honoré</span></div>
+        <div><b>Destino</b><span id="v-drop">Le Clarence, 31 av. Franklin D. Roosevelt · mesa 20:30</span></div>
+        <div><b>Passageiros</b><span id="v-pax">2</span></div>
+        <div><b>Pago</b><span id="v-paid">390,00 € · cartão · recibo enviado</span></div>
+        <div><b>Cancelamento</b><span>gratuito até <span id="v-free">25 set, 19:50</span></span></div>
+        <div><b>Nome</b><span id="v-name">—</span></div>
+      </div>
+      <div class="drv">
+        <div class="av">JG</div>
+        <div><div class="nm">Julien Guilloteau</div><div class="rl">Chauffeur de sécurité · Tesla Model X preto · a matrícula chega no lembrete da véspera</div></div>
+      </div>
+      <div class="acts">
+        <a class="btn wa" href="#">WhatsApp do motorista</a>
+        <a class="btn ghost" href="#">Adicionar ao calendário</a>
+        <a class="btn ghost" href="#">Ver recibo</a>
+        <a class="btn ghost" href="#">Minhas reservas</a>
+      </div>
+    </div>
+
+    <div class="next">
+      <div><b>Agora</b>o motorista recebe a reserva e confirma com um toque. Se não confirmar em 2 horas, a nossa equipa assume e escreve-lhe.</div>
+      <div><b>Na véspera</b>lembrete por WhatsApp com a matrícula, a fotografia do motorista e o ponto de encontro.</div>
+      <div><b>No dia</b>o carro chega 10 minutos antes. Para partir do restaurante, uma mensagem ao motorista basta.</div>
+    </div>
+
+    <div class="linkres">
+      <div class="ic">◆</div>
+      <div><div>Ligado à sua mesa no <strong>Le Clarence</strong>, sábado 26 set às 20:30</div><div class="st">Se o restaurante cancelar a mesa, o motorista é reembolsado automaticamente. Se a hora mudar, ajuste a recolha em "Minhas reservas".</div></div>
+    </div>
+
+    <p style="text-align:center;margin:26px auto 0"><a class="btn ghost" href="#" id="again">Reservar outro trajeto</a></p>
+  </div>
+</main>
+
+<script>
+  // ---------- estado e utilidades (dinheiro em cêntimos inteiros) ----------
+  const PRICES = { transfer: 12000, airport: 18000, hourly: 9500, soiree: 39000, extraWait: 8500, nightPct: 15 };
+  const fmt = c => (c / 100).toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  const $ = id => document.getElementById(id);
+  const MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const DIAS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  const DIAS_C = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let mode = 'soiree';
+  let pm = 'card';
+
+  function parseDate() { const [y, m, d] = ($('date').value || '2026-09-26').split('-').map(Number); return new Date(y, m - 1, d); }
+  function whenShort() { const d = parseDate(); return DIAS_C[d.getDay()] + ' ' + d.getDate() + ' ' + MESES[d.getMonth()] + ' · recolha ' + ($('time').value || '19:50'); }
+  function whenLong() { const d = parseDate(); return DIAS[d.getDay()] + ', ' + d.getDate() + ' ' + MESES[d.getMonth()] + ' ' + d.getFullYear() + ' · recolha às ' + ($('time').value || '19:50'); }
+  function freeUntil() { const d = parseDate(); d.setDate(d.getDate() - 1); return d.getDate() + ' ' + MESES[d.getMonth()] + ', ' + ($('time').value || '19:50'); }
+
+  function compute() {
+    const drop = $('dropoff').value;
+    const hours = parseInt($('hours').value, 10);
+    const waitIdx = $('wait').selectedIndex;
+    const h = parseInt(($('time').value || '19:50').split(':')[0], 10);
+    const night = (h >= 22 || h < 6);
+    let base = 0, label = '', service = '', extra = '', lines = [];
+    if (mode === 'transfer') {
+      const air = /Aeroporto/.test(drop);
+      base = air ? PRICES.airport : PRICES.transfer;
+      label = air ? 'Transfer aeroporto' : 'Transfer em Paris';
+      service = label + (air ? ' · 60 min de espera na chegada' : ' · 15 min de espera');
+      lines.push([label, base]);
+    } else if (mode === 'hourly') {
+      base = PRICES.hourly * hours;
+      label = 'À disposição · ' + hours + ' h';
+      service = 'À disposição · ' + hours + ' horas · Île-de-France';
+      lines.push(['95,00 € × ' + hours + ' h', base]);
+    } else {
+      base = PRICES.soiree + PRICES.extraWait * waitIdx;
+      label = 'Soirée · ida, espera e regresso';
+      service = 'Soirée · ida, espera até ' + (4 + waitIdx) + ' h e regresso';
+      extra = 'Espera incluída até ' + (4 + waitIdx) + ' h';
+      lines.push(['Soirée (espera até 4 h)', PRICES.soiree]);
+      if (waitIdx > 0) lines.push(['Espera adicional · ' + waitIdx + ' h', PRICES.extraWait * waitIdx]);
+    }
+    let total = base;
+    if (night) { const sup = Math.round(base * PRICES.nightPct / 100); total += sup; lines.push(['Suplemento noturno 15%', sup]); extra = (extra ? extra + ' · ' : '') + 'suplemento noturno'; }
+    return { total, label, service, extra, lines };
+  }
+
+  function route() {
+    const drop = $('dropoff').value.split(' · ')[0];
+    const pick = $('pickup').value.split(',')[0] || 'Recolha';
+    return mode === 'soiree' ? pick + ' → ' + drop + ' → regresso' : pick + ' → ' + drop;
+  }
+
+  function render() {
+    $('hours-field').hidden = mode !== 'hourly';
+    $('wait-field').hidden = mode !== 'soiree';
+    const r = compute();
+    $('price-k').textContent = r.label;
+    $('price-v').innerHTML = fmt(r.total) + '<small>IVA incl.</small>';
+    $('price-lines').innerHTML = r.lines.map(l => '<div><span>' + l[0] + '</span><span>' + fmt(l[1]) + '</span></div>').join('');
+  }
+
+  function fillSummary() {
+    const r = compute();
+    $('sum-label').textContent = (mode === 'soiree' ? 'Soirée' : r.label) + ' · Tesla Model X';
+    $('sum-price').textContent = fmt(r.total);
+    $('sum-total').textContent = fmt(r.total);
+    $('sum-when').textContent = whenShort();
+    $('sum-pax').textContent = $('pax').value + ' passageiro' + ($('pax').value === '1' ? '' : 's');
+    $('sum-route').textContent = route();
+    $('sum-extra').textContent = r.extra;
+    $('sum-extra-row').hidden = !r.extra;
+    $('pay-btn').textContent = 'Pagar ' + fmt(r.total) + ' e confirmar';
+    $('free-until').textContent = freeUntil();
+  }
+
+  // ---------- navegação entre etapas ----------
+  function go(step) {
+    ['p-servico', 'p-checkout', 'p-processing', 'p-done'].forEach(id => $(id).classList.remove('on'));
+    const map = { 1: 'p-servico', 2: 'p-checkout', 2.5: 'p-processing', 3: 'p-done' };
+    $(map[step]).classList.add('on');
+    [1, 2, 3].forEach(n => { const el = $('st' + n); el.classList.toggle('on', n === Math.ceil(step)); el.classList.toggle('done', n < step); });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ---------- página do serviço ----------
+  document.querySelectorAll('.modes [role="tab"]').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.mode;
+    document.querySelectorAll('.modes [role="tab"]').forEach(x => x.setAttribute('aria-selected', String(x === b)));
+    render();
+  }));
+  ['dropoff', 'time', 'hours', 'wait', 'date', 'pax', 'pickup'].forEach(id => $(id).addEventListener('change', render));
+  $('go-checkout').addEventListener('click', () => { fillSummary(); go(2); });
+  $('edit-link').addEventListener('click', e => { e.preventDefault(); go(1); });
+
+  // ---------- checkout ----------
+  document.querySelectorAll('.pm button').forEach(b => b.addEventListener('click', () => {
+    pm = b.dataset.pm;
+    document.querySelectorAll('.pm button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    $('pm-card').hidden = pm !== 'card';
+    $('pm-wallet').hidden = pm === 'card';
+  }));
+
+  $('co-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('co-name'), email = $('co-email'), phone = $('co-phone'), consent = $('co-consent'), err = $('co-err');
+    const problems = [];
+    [name, email, phone].forEach(f => f.setAttribute('aria-invalid', 'false'));
+    if (!name.value.trim()) { problems.push('o nome'); name.setAttribute('aria-invalid', 'true'); }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) { problems.push('um e-mail válido'); email.setAttribute('aria-invalid', 'true'); }
+    if (!phone.value.trim()) { problems.push('o WhatsApp'); phone.setAttribute('aria-invalid', 'true'); }
+    if (!consent.checked) problems.push('a aceitação dos termos');
+    if (problems.length) { err.hidden = false; err.textContent = 'Falta ' + problems.join(', ') + '.'; return; }
+    err.hidden = true;
+    const btn = $('pay-btn'); btn.disabled = true; btn.textContent = 'A processar…';
+    go(2.5);
+    // Aqui entra o stripe.confirmPayment(); o webhook payment_intent.succeeded gera o voucher.
+    setTimeout(() => { btn.disabled = false; fillVoucher(); go(3); toast('Voucher enviado para ' + email.value.trim()); }, 1800);
+  });
+
+  // ---------- confirmação ----------
+  function fillVoucher() {
+    const r = compute();
+    const code = 'TWK-DRV-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    $('v-code').textContent = code;
+    $('v-email').textContent = $('co-email').value.trim();
+    $('v-when').textContent = whenLong();
+    $('v-service').textContent = r.service;
+    $('v-pickup').textContent = $('pickup').value;
+    $('v-drop').textContent = $('dropoff').value.replace(' · minha reserva de sábado', ', 31 av. Franklin D. Roosevelt · mesa 20:30');
+    $('v-pax').textContent = $('pax').value;
+    $('v-paid').textContent = fmt(r.total) + ' · ' + ({ card: 'cartão', apple: 'Apple Pay', google: 'Google Pay' })[pm] + ' · recibo enviado';
+    $('v-free').textContent = freeUntil();
+    $('v-name').textContent = $('co-name').value.trim();
+  }
+  $('again').addEventListener('click', e => { e.preventDefault(); $('co-form').reset(); go(1); });
+
+  function toast(msg) {
+    const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<title>Plan Réservation Directe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #FBFAF7; --surface: #F3F0E8; --ink: #1B1812; --ink-2: #4A443A; --muted: #6E6657; --rule: #E2DCCE;
+    --accent: #8A6512; --accent-soft: #CE9E3C; --silent: #C4572E; --good: #2F7A4A;
+    --bubble: #E4F2E6; --bubble-ink: #17311F; --focus: #2A6BB0;
+    --serif: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #15130F; --surface: #1E1B15; --ink: #EFE9DC; --ink-2: #CFC6B4; --muted: #A39883; --rule: #2F2A21;
+      --accent: #D9AE55; --accent-soft: #CE9E3C; --silent: #D9693D; --good: #6DBB86;
+      --bubble: #1F3326; --bubble-ink: #DDEFE2; --focus: #D9AE55;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #15130F; --surface: #1E1B15; --ink: #EFE9DC; --ink-2: #CFC6B4; --muted: #A39883; --rule: #2F2A21;
+    --accent: #D9AE55; --accent-soft: #CE9E3C; --silent: #D9693D; --good: #6DBB86;
+    --bubble: #1F3326; --bubble-ink: #DDEFE2; --focus: #D9AE55;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); font-size: 16.5px; line-height: 1.6; padding-inline: 20px; padding-block: 0 56px; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 720px; margin-inline: auto; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  header.doc { padding-block: 48px 26px; border-bottom: 1px solid var(--rule); display: grid; gap: 14px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 6vw, 48px); line-height: 1.08; margin: 0; text-wrap: balance; }
+  .lede { font-size: 19px; line-height: 1.5; color: var(--ink-2); margin: 0; max-width: 60ch; text-wrap: pretty; }
+  section { padding-block: 34px 4px; display: grid; gap: 14px; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: 27px; line-height: 1.2; margin: 0; text-wrap: balance; }
+  h3 { font-family: var(--sans); font-weight: 600; font-size: 16px; margin: 0; }
+  p { margin: 0; max-width: 64ch; text-wrap: pretty; }
+  .note { font-size: 14.5px; color: var(--muted); }
+  strong { font-weight: 600; }
+  .big { font-family: var(--serif); font-size: clamp(22px, 4vw, 30px); line-height: 1.25; margin: 0; text-wrap: balance; }
+  .big em { font-style: italic; color: var(--silent); }
+
+  .vs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .vs article { border-radius: 6px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; border: 1px solid var(--rule); }
+  .vs article.now { }
+  .vs article.new { background: var(--surface); border-color: color-mix(in srgb, var(--accent-soft) 45%, var(--rule)); }
+  .vs h3 { font-family: var(--serif); font-weight: 400; font-size: 20px; }
+  .vs ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; font-size: 15px; color: var(--ink-2); }
+  .vs .end { font-size: 15px; font-weight: 600; }
+  .vs .now .end { color: var(--silent); }
+  .vs .new .end { color: var(--good); }
+
+  .box { background: var(--surface); border-radius: 6px; padding: 16px 18px; display: grid; gap: 8px; }
+  .box ul, .steps ul { margin: 0; padding-left: 20px; display: grid; gap: 5px; font-size: 15px; color: var(--ink-2); }
+  .ref { font-family: var(--mono); font-size: 0.92em; background: var(--ground); padding: 1px 6px; border-radius: 3px; }
+
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+  .steps > li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 14px; padding-block: 18px; border-bottom: 1px solid var(--rule); counter-increment: s; }
+  .steps > li:first-child { border-top: 1px solid var(--rule); }
+  .steps > li::before { content: counter(s); font-family: var(--serif); font-size: 28px; line-height: 1; color: var(--accent); padding-top: 2px; }
+  .steps h3 { font-family: var(--serif); font-weight: 400; font-size: 21px; line-height: 1.2; }
+  .steps .b { grid-column: 2; display: grid; gap: 10px; font-size: 15.5px; }
+  .steps p { font-size: 15.5px; }
+
+  .mock { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; background: var(--ground); max-width: 400px; }
+  .mock .row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mock .fld { flex: 1 1 90px; border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; font-size: 13.5px; color: var(--ink-2); }
+  .mock .btn { font-weight: 600; font-size: 14px; color: #1B1812; background: var(--accent-soft); border-radius: 4px; padding: 9px 12px; text-align: center; }
+  .mock .sub { font-size: 12.5px; color: var(--muted); }
+  .bubble { justify-self: start; max-width: 420px; background: var(--bubble); color: var(--bubble-ink); border-radius: 12px 12px 12px 3px; padding: 10px 13px; font-size: 14.5px; line-height: 1.5; }
+  .mail { border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; max-width: 420px; font-size: 14.5px; display: grid; gap: 8px; }
+  .mail .btns { display: flex; gap: 8px; }
+  .mail .btns span { border: 1px solid var(--accent-soft); border-radius: 4px; padding: 4px 14px; font-weight: 600; font-size: 13.5px; }
+  .quote { font-family: var(--serif); font-style: italic; font-size: 18px; line-height: 1.45; border-left: 2px solid var(--accent-soft); padding-left: 14px; max-width: 56ch; }
+
+  .cases { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+  .cases li { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 4px 16px; padding-block: 9px; border-bottom: 1px solid var(--rule); font-size: 15px; }
+  .cases li:first-child { border-top: 1px solid var(--rule); }
+  .cases b { font-weight: 600; }
+  .cases .r { color: var(--ink-2); }
+  .cases .yes { color: var(--good); font-weight: 600; }
+  .cases .no { color: var(--muted); font-weight: 600; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .tiles div { border-top: 2px solid var(--rule); padding-top: 10px; display: grid; gap: 2px; }
+  .tiles div:nth-child(2) { border-top-color: var(--good); }
+  .tiles div:nth-child(3) { border-top-color: var(--silent); }
+  .tiles span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .tiles b { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .tiles small { font-size: 14px; color: var(--ink-2); line-height: 1.4; }
+
+  .decisions { background: var(--surface); border-radius: 6px; padding: 22px 22px 20px; display: grid; gap: 12px; }
+  .decisions ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .decisions li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; font-size: 15.5px; }
+  .decisions li::before { content: ""; width: 14px; height: 14px; margin-top: 4px; border: 1.5px solid var(--accent); border-radius: 3px; }
+  footer.sources { margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .vs, .tiles { grid-template-columns: 1fr; }
+    .cases li { grid-template-columns: 1fr; }
+    header.doc { padding-block: 32px 22px; }
+  }
+</style>
+
+<div class="page">
+  <header class="doc">
+    <p class="eyebrow">Version finale · 14 sept. 2026</p>
+    <h1>Plan Réservation Directe</h1>
+    <p class="lede">Beaucoup de restaurants de notre site ne répondent jamais aux demandes de table. Pour ceux-là, le client réservera directement auprès du restaurant, par WhatsApp, par son site ou par téléphone, sans jamais sortir de notre suivi. Voici le plan, du début à la fin.</p>
+  </header>
+
+  <section>
+    <p class="eyebrow">Le problème</p>
+    <p class="big">Sur 10 demandes de table faites sur notre site, <em>6 vont à des restaurants qui n’ont jamais répondu</em> à aucune demande.</p>
+    <p>Ces restaurants ne refusent pas les clients. Ils réservent simplement à leur façon : par leur propre site, par WhatsApp ou par téléphone. Onze d’entre eux nous l’ont écrit noir sur blanc. Pendant ce temps, le client attend et rien ne se passe.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">L’idée</p>
+    <h2>Un exemple : Laurent veut dîner chez AI MERCANTI, à Venise</h2>
+    <div class="vs">
+      <article class="now">
+        <h3>Aujourd’hui</h3>
+        <ol>
+          <li>Laurent demande une table sur notre site.</li>
+          <li>Nous envoyons un e-mail au restaurant.</li>
+          <li>Le restaurant ne répond pas.</li>
+          <li>La demande expire.</li>
+        </ol>
+        <p class="end">Laurent reste sans table et sans réponse.</p>
+      </article>
+      <article class="new">
+        <h3>Avec le plan</h3>
+        <ol>
+          <li>Laurent choisit le jour, l’heure et le nombre de personnes.</li>
+          <li>Il touche « Réserver directement auprès de l’établissement ».</li>
+          <li>Le système de réservation du restaurant s’ouvre, déjà rempli.</li>
+          <li>Laurent réserve sur place.</li>
+        </ol>
+        <p class="end">Nous lui demandons si cela a marché et nous nous occupons du reste.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Le numéro de réservation</p>
+    <h2>Pourquoi chaque réservation reçoit un numéro</h2>
+    <p>Avant que Laurent ne quitte notre page, sa réservation reçoit un numéro, par exemple <span class="ref">TWK-4M8Q2Z</span>. C’est comme le numéro de suivi d’un colis. Il sert à trois choses :</p>
+    <div class="box">
+      <ul>
+        <li><strong>Le restaurant sait que le client vient de chez nous.</strong> Le numéro figure dans le message WhatsApp, ou Laurent le cite au téléphone.</li>
+        <li><strong>Nous savons de quelle réservation parle le client</strong> quand il répond à notre e-mail « avez-vous obtenu la table ? ».</li>
+        <li><strong>Le restaurant confirme avec le numéro</strong>, s’il a un compte sur notre plateforme. Il suffit de saisir le numéro et la réservation est confirmée des deux côtés.</li>
+      </ul>
+      <p class="note">Sans ce numéro, une réservation faite directement auprès du restaurant disparaîtrait de notre vue. Avec lui, elle reste une réservation The World Keys.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Pas à pas</p>
+    <h2>Ce qui arrive à une réservation</h2>
+    <ol class="steps">
+      <li>
+        <h3>Laurent choisit et touche le bouton</h3>
+        <div class="b">
+          <p>Sur la page du restaurant, il choisit le jour, l’heure et le nombre de personnes. La réservation reçoit son numéro.</p>
+          <div class="mock" aria-label="Exemple du bouton">
+            <div class="row"><span class="fld">mer. 7 oct.</span><span class="fld">20:00</span><span class="fld">2 personnes</span></div>
+            <div class="btn">Réserver directement auprès de l’établissement</div>
+            <div class="sub">Ouvre le système de réservation du restaurant. La confirmation vient du restaurant lui-même.</div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <h3>Le moyen de réservation du restaurant s’ouvre</h3>
+        <div class="b">
+          <p>Cela dépend de la façon dont le restaurant travaille :</p>
+          <ul>
+            <li><strong>Il a un site de réservation :</strong> la page du site s’ouvre, déjà avec la date et le nombre de personnes. C’est le cas d’AI MERCANTI.</li>
+            <li><strong>Il utilise WhatsApp :</strong> la conversation s’ouvre avec le message prêt. Laurent n’a qu’à écrire son nom et envoyer. C’est le cas des restaurants de Lagos.</li>
+            <li><strong>Il ne répond que par téléphone :</strong> l’appel se lance, et le numéro de réservation reste à l’écran pour qu’il le cite. C’est le cas de GIGI, à Paris.</li>
+          </ul>
+          <div class="bubble">Boa tarde! Gostaria de reservar uma mesa através da The World Keys: 4 pessoas, sábado 3 de outubro, 20h00. Ref. TWK-4M8Q2Z</div>
+          <p class="note">Exemple du message prêt pour un restaurant de Lagos, dans la langue du restaurant. C’est toujours le client qui envoie, depuis son propre téléphone. Nous n’envoyons jamais de message en son nom.</p>
+        </div>
+      </li>
+      <li>
+        <h3>Nous demandons si cela a marché</h3>
+        <div class="b">
+          <p>Dès que Laurent touche le bouton, il reçoit un e-mail de notre part :</p>
+          <div class="mail">
+            <div>Nous avons ouvert le système d’AI MERCANTI pour vous. Avez-vous obtenu la table pour le 7 octobre ?</div>
+            <div class="btns"><span>Oui</span><span>Non</span></div>
+          </div>
+          <ul>
+            <li><strong>Oui :</strong> la réservation est confirmée. La veille, nous envoyons le rappel avec l’adresse et l’heure. Après le dîner, nous demandons son avis.</li>
+            <li><strong>Non :</strong> nous proposons aussitôt d’autres restaurants de Venise qui confirment habituellement.</li>
+            <li><strong>Sans réponse :</strong> un rappel le lendemain, et c’est tout.</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <h3>Grandes tables ou entreprises : nous appelons</h3>
+        <div class="b">
+          <p>S’il s’agit de 6 personnes ou plus, ou d’un client d’entreprise, nous appelons nous-mêmes le restaurant et confirmons la table au nom du client. Nous ne promettons jamais de délai au client : il ne reçoit la confirmation que lorsqu’elle existe.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="eyebrow">Quels restaurants</p>
+    <h2>Qui reçoit le bouton</h2>
+    <p>Seulement les restaurants qui ne répondent pas via la plateforme. La règle, en clair : il a reçu 4 demandes ou plus au cours des 3 derniers mois, n’a répondu à aucune et dispose d’un moyen de réservation que nous avons vérifié. Ou il l’a demandé lui-même. Ceux qui répondent restent comme ils sont.</p>
+    <ul class="cases">
+      <li><b>MONAK, Paris</b><span class="r">a répondu à 26 demandes sur 33 → <span class="no">reste comme aujourd’hui</span></span></li>
+      <li><b>AI MERCANTI, Venise</b><span class="r">l’a demandé : « uniquement par notre lien » → <span class="yes">reçoit le bouton</span>, vers son site de réservation</span></li>
+      <li><b>CASA DO PREGO, Lagos</b><span class="r">90 demandes, aucune réponse → <span class="yes">reçoit le bouton</span>, par WhatsApp, une fois le numéro confirmé avec eux</span></li>
+      <li><b>Ceux qui se mettent à répondre</b><span class="r">ou ouvrent un compte → <span class="no">reviennent à la normale</span>, s’ils le souhaitent</span></li>
+    </ul>
+    <p class="note">Avant d’activer le bouton, nous vérifions le moyen de chaque restaurant. Les liens sont testés chaque jour par un robot ; pour WhatsApp et le téléphone, nous confirmons avec le restaurant une fois par mois. Si le moyen cesse de fonctionner, le bouton disparaît aussitôt.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Le restaurant</p>
+    <h2>Ce qu’il y gagne, et ce que nous lui disons</h2>
+    <p>Nous appelons le restaurant, par téléphone et non par e-mail, et nous lui disons :</p>
+    <p class="quote">Nous avons fait ce que vous demandiez : notre plateforme amène les clients vers votre système.</p>
+    <p>Nous lui demandons seulement de confirmer son WhatsApp ou son lien. Chaque mois, le restaurant reçoit un récapitulatif de ce qui est arrivé par nous :</p>
+    <div class="box">
+      <p><strong>CASA DO PREGO · octobre</strong> (exemple)</p>
+      <ul>
+        <li>14 clients sont arrivés sur votre WhatsApp via The World Keys</li>
+        <li>9 ont réservé</li>
+        <li>7 sont venus et ont laissé un avis</li>
+      </ul>
+    </div>
+    <p>Avec un compte sur notre plateforme, le restaurant confirme ces réservations avec le numéro et gère lui-même son lien, ses horaires et ses jours de fermeture. C’est cela qui donne de la valeur au compte.</p>
+    <p><strong>Par où nous commençons :</strong> par les 26 restaurants qui reçoivent le plus de demandes sans y répondre. À eux seuls, ils représentent plus de la moitié de tout ce qui reste sans réponse, et tous ont un téléphone dans notre fichier. Lagos vient en premier, avec 13 d’entre eux.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">30 jours</p>
+    <h2>Comment nous saurons si cela a marché</h2>
+    <p>Pour comparer vraiment, les restaurants qui n’ont pas demandé le bouton sont partagés en deux par tirage au sort : une moitié reçoit le bouton, l’autre reste comme elle est. Au bout de 30 jours, nous regardons trois chiffres.</p>
+    <div class="tiles">
+      <div><span>Aujourd’hui</span><b>8 sur 100</b><small>demandes sont acceptées dans ces restaurants</small></div>
+      <div><span>Objectif</span><b>25 sur 100</b><small>réservations directes confirmées par le restaurant, par le système ou par la visite</small></div>
+      <div><span>On arrête si</span><b>&lt; 8 sur 100</b><small>ou si aucune réservation n’aboutit à une table</small></div>
+    </div>
+    <p class="note">Arrêter est simple : le bouton disparaît et tout redevient comme avant. Pendant le pilote, personne ne paie rien. Si un jour il y a une facturation, ce sera par client assis à table, jamais par clic.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Avant de commencer</p>
+    <h2>Ce que le développeur doit faire</h2>
+    <div class="box">
+      <ul>
+        <li>Le bouton sur la page, avec le même champ jour, heure et personnes.</li>
+        <li>Un emplacement dans la fiche de chaque restaurant pour enregistrer son moyen de réservation : site, WhatsApp ou téléphone.</li>
+        <li>L’enregistrement des réservations directes, avec numéro et statut, séparé des demandes classiques.</li>
+        <li>Le test automatique quotidien des liens.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="decisions">
+      <p class="eyebrow">Décisions demandées</p>
+      <ul>
+        <li><span>Approuver le pilote de 30 jours, en commençant par Lagos et par les 8 restaurants qui l’ont déjà demandé.</span></li>
+        <li><span>Confirmer que le pilote ne facture rien à personne.</span></li>
+        <li><span>Décider qui appelle les restaurants et qui confirme les grandes tables.</span></li>
+        <li><span>Demander au développeur les quatre éléments ci-dessus.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="sources">
+    Chiffres du problème : base de données de la plateforme, 14/09/2026, 6 derniers mois. Laurent, le numéro TWK-4M8Q2Z et le récapitulatif d’octobre sont des exemples inventés pour expliquer ; les restaurants et les demandes cités sont réels.
+  </footer>
+</div>

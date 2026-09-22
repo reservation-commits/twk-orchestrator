@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070b10">
+<title>Conciergerie World Keys — Plano 60 dias · Plan 60 jours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b10;
+  --panel:#0c1219;
+  --panel-2:#101a24;
+  --line:rgba(201,164,92,.16);
+  --line-strong:rgba(201,164,92,.32);
+  --gold:#c9a45c;
+  --gold-bright:#e6c98c;
+  --gold-deep:#8a6d35;
+  --steel:#6e8aa5;
+  --ivory:#ece7db;
+  --muted:#939daa;
+  --green:#8fbf9a;
+  --amber:#d9b45c;
+  --red:#c9705c;
+  --nav-w:266px;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  background:var(--bg);color:var(--ivory);
+  font-family:var(--sans);font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:var(--gold-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+
+html[data-lang="pt"] .fr{display:none!important}
+html[data-lang="fr"] .pt{display:none!important}
+
+/* language switch */
+.lang-switch{
+  display:inline-flex;border:1px solid var(--line-strong);
+  border-radius:999px;overflow:hidden;background:var(--panel);
+}
+.lang-switch button{
+  background:none;border:none;color:var(--muted);
+  font:600 .76rem var(--sans);letter-spacing:.08em;
+  padding:.38rem .8rem;cursor:pointer;
+}
+.lang-switch button.on{background:var(--gold);color:var(--bg)}
+.lang-desktop{position:fixed;top:1.05rem;right:1.3rem;z-index:70}
+@media (max-width:960px){.lang-desktop{display:none}}
+
+/* top bar (mobile) */
+.topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:60;
+  align-items:center;justify-content:space-between;gap:.8rem;
+  padding:.8rem 1.1rem;background:rgba(7,11,16,.94);
+  border-bottom:1px solid var(--line);backdrop-filter:blur(8px);
+}
+.topbar .brand{font-family:var(--serif);font-size:1.1rem;color:var(--ivory)}
+.topbar .brand em{color:var(--gold)}
+.topbar .right{display:flex;gap:.6rem;align-items:center}
+.menu-btn{
+  background:none;border:1px solid var(--line-strong);color:var(--ivory);
+  font-family:var(--sans);font-size:.85rem;padding:.42rem .9rem;
+  border-radius:999px;cursor:pointer;
+}
+.menu-btn:hover{border-color:var(--gold)}
+
+/* side nav */
+nav.side{
+  position:fixed;top:0;left:0;bottom:0;width:var(--nav-w);z-index:50;
+  padding:1.6rem 1.1rem 1.6rem 1.3rem;border-right:1px solid var(--line);
+  background:var(--bg);overflow-y:auto;overflow-x:hidden;
+  transition:width .25s ease;
+}
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+nav.side .brand{
+  font-family:var(--serif);font-size:1.42rem;line-height:1.2;
+  color:var(--ivory);display:block;
+}
+nav.side .brand em{color:var(--gold);font-style:italic}
+nav.side .brand-sub{
+  font-size:.7rem;color:var(--muted);letter-spacing:.04em;
+  margin-top:.15rem;display:block;
+}
+.collapse-btn{
+  flex-shrink:0;width:1.9rem;height:1.9rem;border-radius:50%;
+  border:1px solid var(--line-strong);background:var(--panel);
+  color:var(--gold);cursor:pointer;font-size:.85rem;line-height:1;
+}
+.collapse-btn:hover{border-color:var(--gold)}
+nav.side ol{list-style:none;margin-top:1.3rem}
+nav.side li{margin:.1rem 0}
+nav.side a{
+  display:flex;gap:.6rem;align-items:baseline;
+  padding:.42rem .55rem;border-radius:6px;
+  color:var(--muted);font-size:.85rem;line-height:1.35;white-space:nowrap;
+}
+nav.side a:hover{color:var(--ivory);text-decoration:none;background:var(--panel)}
+nav.side a .n{
+  font-family:var(--serif);font-style:italic;font-size:.95rem;
+  color:var(--gold);min-width:1.15rem;text-align:center;flex-shrink:0;
+}
+nav.side a.active{color:var(--ivory);background:var(--panel-2)}
+nav.side a.active .n{color:var(--gold-bright)}
+nav.side .nav-foot{
+  margin-top:1.8rem;padding-top:1rem;border-top:1px solid var(--line);
+  font-size:.7rem;color:var(--muted);line-height:1.6;
+}
+
+/* collapsed rail (desktop) */
+body.rail{--nav-w:74px}
+body.rail nav.side{padding:1.6rem .55rem}
+body.rail .side-head{justify-content:center}
+body.rail nav.side .brand,
+body.rail nav.side .brand-sub,
+body.rail nav.side .label,
+body.rail nav.side .nav-foot{display:none}
+body.rail nav.side a{justify-content:center;padding:.55rem .3rem}
+body.rail nav.side a .n{min-width:auto;font-size:1.05rem}
+
+/* main + pages */
+main{
+  margin-left:var(--nav-w);
+  padding:1.2rem clamp(1.2rem,4.5vw,4rem) 4rem;
+  transition:margin-left .25s ease;
+}
+.wrap{max-width:980px}
+.page{display:none}
+.page.on{display:block;animation:fadeIn .32s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* page header */
+.page-head{padding:2.2rem 0 1.4rem}
+.page-head .kicker{
+  font-size:.76rem;letter-spacing:.14em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:.7rem;
+}
+.page-head h1{
+  font-family:var(--serif);font-weight:500;
+  font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.1;
+}
+.page-head h1 em{font-style:italic;color:var(--gold-bright)}
+.page-head .lede{max-width:62ch;margin-top:.9rem;color:var(--muted);font-size:.98rem}
+
+h3{
+  font-family:var(--serif);font-weight:600;font-size:1.24rem;
+  margin:1.9rem 0 .7rem;color:var(--ivory);
+}
+h3 em{color:var(--gold-bright)}
+p{max-width:72ch;margin-bottom:1rem}
+p.small,li.small{font-size:.88rem;color:var(--muted)}
+strong{color:var(--ivory);font-weight:600}
+ul.clean,ol.clean{margin:0 0 1.2rem 1.2rem;max-width:72ch}
+ul.clean li,ol.clean li{margin-bottom:.55rem}
+
+/* KPI strip */
+.meta-strip{
+  display:flex;flex-wrap:wrap;margin:1.6rem 0;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+}
+.meta-strip>div{
+  flex:1 1 150px;padding:1rem 1.2rem;
+  border-right:1px solid var(--line);background:var(--panel);
+}
+.meta-strip>div:last-child{border-right:none}
+.meta-strip .v{font-family:var(--serif);font-size:1.7rem;color:var(--gold-bright);line-height:1.1}
+.meta-strip .k{font-size:.74rem;color:var(--muted);margin-top:.25rem}
+
+/* dashboard cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.1rem 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.1rem 0}
+.card{
+  border:1px solid var(--line);border-radius:12px;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel) 60%);
+  padding:1.05rem 1.2rem 1.1rem;
+}
+.card.full{grid-column:1/-1}
+.card h4{
+  font-family:var(--serif);font-weight:600;font-size:1.16rem;
+  color:var(--ivory);margin-bottom:.1rem;
+}
+.card .sub{font-size:.75rem;color:var(--muted);margin-bottom:.75rem}
+.card svg{width:100%;height:auto;display:block}
+.card svg text{font-family:var(--sans)}
+.insight{
+  margin-top:.7rem;padding-top:.6rem;border-top:1px solid var(--line);
+  font-family:var(--serif);font-style:italic;font-size:1rem;
+  color:var(--gold-bright);
+}
+.legend{display:flex;flex-wrap:wrap;gap:.9rem;font-size:.74rem;color:var(--muted);margin-top:.55rem}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:.35rem;vertical-align:-1px}
+
+/* stat tiles */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin:1.2rem 0}
+.stats .s{border:1px solid var(--line);border-radius:12px;padding:.9rem 1rem;background:var(--panel)}
+.stats .v{font-family:var(--serif);font-size:1.55rem;color:var(--gold-bright);line-height:1.15}
+.stats .k{font-size:.72rem;color:var(--muted);margin-top:.2rem;line-height:1.45}
+
+/* semaphore dots */
+.dot{display:inline-block;width:.65rem;height:.65rem;border-radius:50%;margin-right:.45rem;vertical-align:-1px}
+.dotG{background:var(--green)}.dotY{background:var(--amber)}.dotR{background:var(--red)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;margin:1.1rem 0 1.4rem;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.87rem;min-width:620px}
+thead th{
+  text-align:left;padding:.68rem .9rem;
+  font-family:var(--serif);font-style:italic;font-weight:600;font-size:1rem;
+  color:var(--gold-bright);background:var(--panel-2);
+  border-bottom:1px solid var(--line-strong);white-space:nowrap;
+}
+tbody td{padding:.62rem .9rem;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ivory)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+td .dim{color:var(--muted)}
+tr.total td{
+  background:var(--panel-2)!important;color:var(--gold-bright);
+  font-weight:600;border-top:1px solid var(--line-strong);
+}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 1.3rem}
+.chip{border:1px solid var(--line-strong);border-radius:999px;padding:.4rem .9rem;font-size:.83rem;background:var(--panel)}
+.chip b{color:var(--gold-bright);font-weight:600}
+
+/* duo cards */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.1rem 0 1.4rem}
+.duo>div{border:1px solid var(--line);border-radius:12px;padding:1.15rem 1.25rem;background:var(--panel)}
+.duo h4{font-family:var(--serif);font-size:1.18rem;font-weight:600;margin-bottom:.5rem;color:var(--gold-bright)}
+.duo p{font-size:.9rem;color:var(--muted);margin-bottom:.5rem;max-width:none}
+.duo .tag{
+  display:inline-block;font-size:.7rem;letter-spacing:.06em;color:var(--bg);
+  background:var(--gold);border-radius:4px;padding:.12rem .5rem;
+  margin-bottom:.7rem;font-weight:600;
+}
+
+/* callouts */
+.callout{
+  border-left:2px solid var(--gold);background:var(--panel);
+  padding:1.05rem 1.3rem;border-radius:0 10px 10px 0;
+  margin:1.3rem 0;max-width:78ch;
+}
+.callout p:last-child{margin-bottom:0}
+.callout.green{border-left-color:var(--green)}
+
+/* mechanisms */
+.mech{border-top:1px solid var(--line);margin-top:1.4rem}
+.mech>div{display:grid;grid-template-columns:2.6rem 1fr;gap:.6rem;padding:1.05rem 0;border-bottom:1px solid var(--line)}
+.mech .m-num{font-family:var(--serif);font-style:italic;font-size:1.45rem;color:var(--gold);line-height:1.1}
+.mech h4{font-weight:600;font-size:1rem;margin-bottom:.3rem}
+.mech p{font-size:.92rem;color:var(--muted);margin:0;max-width:66ch}
+
+/* accordions */
+details{border:1px solid var(--line);border-radius:10px;margin:.6rem 0;background:var(--panel)}
+details summary{
+  cursor:pointer;padding:.85rem 1.1rem;font-size:.92rem;font-weight:500;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;
+}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'+';font-family:var(--serif);font-size:1.3rem;color:var(--gold);line-height:1;flex-shrink:0}
+details[open] summary::after{content:'–'}
+details[open] summary{border-bottom:1px solid var(--line);color:var(--gold-bright)}
+details .body{padding:1rem 1.2rem 1.2rem;font-size:.9rem}
+details .body p{max-width:none}
+details .tbl-wrap{margin:.4rem 0 .3rem;border:none}
+.frdoc{
+  font-size:.88rem;color:var(--ivory);border-left:2px solid var(--line-strong);
+  padding:.2rem 0 .2rem 1rem;margin:.8rem 0;white-space:pre-line;
+}
+.frdoc .obj{color:var(--gold-bright);font-style:italic}
+.lang-note{font-size:.76rem;color:var(--gold);letter-spacing:.06em;margin-bottom:.4rem}
+
+/* flow */
+.flow{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:1rem 0 1.3rem;font-size:.85rem}
+.flow span{border:1px solid var(--line-strong);border-radius:6px;padding:.4rem .7rem;background:var(--panel)}
+.flow i{color:var(--gold);font-style:normal}
+.flow b{color:var(--gold-bright)}
+
+/* timeline */
+.week{display:grid;grid-template-columns:5.2rem 1fr;gap:1.1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+.week:last-of-type{border-bottom:none}
+.week .w{font-family:var(--serif);font-style:italic;font-size:1.35rem;color:var(--gold);line-height:1.15}
+.week .w small{display:block;font-family:var(--sans);font-style:normal;font-size:.64rem;color:var(--muted)}
+.week h4{font-size:.96rem;font-weight:600;margin-bottom:.3rem}
+.week p{font-size:.89rem;color:var(--muted);margin-bottom:.3rem;max-width:68ch}
+.week .kpi{font-size:.79rem;color:var(--green)}
+
+/* risks */
+.risk{margin:.9rem 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.risk .r-head{padding:.8rem 1.1rem;background:var(--panel-2);font-weight:600;font-size:.93rem}
+.risk .r-body{padding:.8rem 1.1rem;font-size:.9rem;color:var(--muted)}
+.risk .r-body b{color:var(--green);font-weight:600}
+
+/* checklist */
+.check{margin:1.1rem 0}
+.check label{
+  display:flex;gap:.85rem;align-items:flex-start;
+  padding:.8rem .9rem;border:1px solid var(--line);border-radius:10px;
+  margin-bottom:.5rem;cursor:pointer;background:var(--panel);font-size:.93rem;
+}
+.check label:hover{border-color:var(--line-strong)}
+.check input{
+  appearance:none;width:1.15rem;height:1.15rem;flex-shrink:0;margin-top:.15rem;
+  border:1px solid var(--gold);border-radius:4px;cursor:pointer;position:relative;
+}
+.check input:checked{background:var(--gold)}
+.check input:checked::after{
+  content:'✓';position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;color:#070b10;font-size:.8rem;font-weight:700;
+}
+.check label:has(input:checked){opacity:.55}
+.check label:has(input:checked) .txt{text-decoration:line-through}
+.check .n{font-family:var(--serif);font-style:italic;color:var(--gold);min-width:1.3rem;text-align:right;margin-top:.05rem}
+#progress{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--gold-bright);margin:.3rem 0 .5rem}
+.pbar{height:6px;border-radius:3px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden;max-width:420px;margin-bottom:1rem}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold-bright));transition:width .3s ease}
+
+/* pager */
+.pager{display:flex;justify-content:space-between;gap:1rem;margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.pager a{
+  font-size:.85rem;color:var(--muted);border:1px solid var(--line);
+  border-radius:8px;padding:.55rem .9rem;max-width:48%;
+}
+.pager a:hover{color:var(--gold-bright);border-color:var(--line-strong);text-decoration:none}
+
+footer{
+  margin-left:var(--nav-w);padding:1.6rem clamp(1.2rem,4.5vw,4rem) 2.6rem;
+  border-top:1px solid var(--line);color:var(--muted);font-size:.78rem;
+  transition:margin-left .25s ease;
+}
+footer .wrap{max-width:980px}
+
+@media (max-width:960px){
+  :root{--nav-w:0px}
+  .topbar{display:flex}
+  .collapse-btn{display:none}
+  nav.side{
+    transform:translateX(-100%);transition:transform .28s ease;
+    width:min(320px,85vw);padding:4.6rem 1.2rem 1.6rem 1.4rem;
+    box-shadow:8px 0 40px rgba(0,0,0,.5);
+  }
+  nav.side.open{transform:none}
+  main{margin-left:0;padding-top:4.4rem}
+  footer{margin-left:0}
+  .grid2,.grid3,.duo{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .week{grid-template-columns:4rem 1fr;gap:.8rem}
+  body.nav-open{overflow:hidden}
+}
+</style>
+</head>
+<body>
+
+<div class="lang-switch lang-desktop" role="group" aria-label="Idioma / Langue">
+  <button type="button" data-setlang="pt" class="on">PT</button>
+  <button type="button" data-setlang="fr">FR</button>
+</div>
+
+<header class="topbar">
+  <span class="brand">The World <em>Keys</em></span>
+  <span class="right">
+    <span class="lang-switch" role="group" aria-label="Idioma / Langue">
+      <button type="button" data-setlang="pt" class="on">PT</button>
+      <button type="button" data-setlang="fr">FR</button>
+    </span>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="sideNav">Menu</button>
+  </span>
+</header>
+
+<nav class="side" id="sideNav" aria-label="Seções / Sections">
+  <div class="side-head">
+    <span>
+      <span class="brand">The World <em>Keys</em></span>
+      <span class="brand-sub">
+        <span class="pt">Conciergerie · Plano de lançamento</span>
+        <span class="fr">Conciergerie · Plan de lancement</span>
+      </span>
+    </span>
+    <button class="collapse-btn" id="collapseBtn" title="Recolher / Réduire" aria-label="Recolher menu / Réduire le menu">«</button>
+  </div>
+  <ol>
+    <li><a href="#/visao" data-page="visao" title="Visão geral · Vue d'ensemble"><span class="n">⌂</span><span class="label"><span class="pt">Visão geral</span><span class="fr">Vue d'ensemble</span></span></a></li>
+    <li><a href="#/painel" data-page="painel" title="Painel executivo · Tableau de bord"><span class="n">◈</span><span class="label"><span class="pt">Painel executivo</span><span class="fr">Tableau de bord</span></span></a></li>
+    <li><a href="#/porque" data-page="porque" title="Por que funciona · Pourquoi ça marche"><span class="n">✦</span><span class="label"><span class="pt">Por que o plano funciona</span><span class="fr">Pourquoi ce plan fonctionne</span></span></a></li>
+    <li><a href="#/s1" data-page="s1" title="Benchmark"><span class="n">1</span><span class="label"><span class="pt">Benchmark do mercado</span><span class="fr">Benchmark du marché</span></span></a></li>
+    <li><a href="#/s2" data-page="s2" title="Parceria · Partenariat"><span class="n">2</span><span class="label"><span class="pt">Modelo de parceria</span><span class="fr">Modèle de partenariat</span></span></a></li>
+    <li><a href="#/s3" data-page="s3" title="Prioridades · Priorités"><span class="n">3</span><span class="label"><span class="pt">Prioridades &amp; a matemática</span><span class="fr">Priorités &amp; le calcul</span></span></a></li>
+    <li><a href="#/s4" data-page="s4" title="Site (devs)"><span class="n">4</span><span class="label"><span class="pt">O site (para os devs)</span><span class="fr">Le site (pour les devs)</span></span></a></li>
+    <li><a href="#/s5" data-page="s5" title="Prospecção B2B · Prospection B2B"><span class="n">5</span><span class="label"><span class="pt">Prospecção B2B</span><span class="fr">Prospection B2B</span></span></a></li>
+    <li><a href="#/s6" data-page="s6" title="Primeiros clientes · Premiers clients"><span class="n">6</span><span class="label"><span class="pt">Primeiros clientes</span><span class="fr">Premiers clients</span></span></a></li>
+    <li><a href="#/s7" data-page="s7" title="Plano 60 dias · Plan 60 jours"><span class="n">7</span><span class="label"><span class="pt">Plano de 60 dias</span><span class="fr">Plan de 60 jours</span></span></a></li>
+    <li><a href="#/s8" data-page="s8" title="Checklist"><span class="n">8</span><span class="label"><span class="pt">Checklist — 7 dias</span><span class="fr">Checklist — 7 jours</span></span></a></li>
+    <li><a href="#/s9" data-page="s9" title="Avaliação & plano otimizado · Évaluation & plan optimisé"><span class="n">9</span><span class="label"><span class="pt">Avaliação &amp; plano otimizado</span><span class="fr">Évaluation &amp; plan optimisé</span></span></a></li>
+  </ol>
+  <span class="nav-foot">
+    <span class="pt">Documento interno · THE WORLD KEYS SAS<br>Atualizado em 14/09/2026<br>Meta: caixa até 14/11/2026</span>
+    <span class="fr">Document interne · THE WORLD KEYS SAS<br>Mis à jour le 14/09/2026<br>Objectif : trésorerie au 14/11/2026</span>
+  </span>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- ==================== PAGE: VISÃO ==================== -->
+<article class="page" id="p-visao">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Plano de negócio · Conciergerie</span><span class="fr">Plan d'affaires · Conciergerie</span></div>
+    <h1><span class="pt">Sessenta dias para abrir <em>as portas certas</em></span><span class="fr">Soixante jours pour ouvrir <em>les bonnes portes</em></span></h1>
+    <p class="lede pt">
+      O plano de lançamento da Conciergerie World Keys em Paris e na Côte
+      d'Azur: barcos, helicóptero, carros, motoristas e experiências — um
+      negócio de comissão sem custo fixo, pilotado por um painel executivo.
+      Navegue pelos blocos no menu lateral.
+    </p>
+    <p class="lede fr">
+      Le plan de lancement de la Conciergerie World Keys à Paris et sur la
+      Côte d'Azur : bateaux, hélicoptère, voitures, chauffeurs et expériences
+      — un modèle à la commission, sans coût fixe, piloté par un tableau de
+      bord exécutif. Naviguez par blocs dans le menu latéral.
+    </p>
+  </div>
+
+  <div class="meta-strip">
+    <div><span class="v">€ 1 920</span>
+      <span class="k pt">receita planejada (meta: € 1.600 / R$ 10 mil)</span>
+      <span class="k fr">revenu planifié (objectif : 1 600 € / 10 000 R$)</span></div>
+    <div><span class="v">18</span>
+      <span class="k pt">reservas pagas em 60 dias</span>
+      <span class="k fr">réservations payées en 60 jours</span></div>
+    <div><span class="v">12</span>
+      <span class="k pt">parceiros ativos até a semana 4</span>
+      <span class="k fr">partenaires actifs à la semaine 4</span></div>
+    <div><span class="v">≈ € 0</span>
+      <span class="k pt">custo fixo do lançamento</span>
+      <span class="k fr">coût fixe du lancement</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="pt">Trajetória de caixa</span><span class="fr">Trajectoire de trésorerie</span></h4>
+      <div class="sub"><span class="pt">8 semanas · meta batida na S7</span><span class="fr">8 semaines · objectif atteint en S7</span></div>
+      <div id="sparkCash"></div>
+      <div class="insight"><span class="pt">A S8 inteira é folga, não requisito.</span><span class="fr">La S8 entière est une marge, pas une exigence.</span></div>
+    </div>
+    <div class="card">
+      <h4><span class="pt">Cumprimento da meta</span><span class="fr">Atteinte de l'objectif</span></h4>
+      <div class="sub"><span class="pt">€ 1.920 planejados sobre € 1.600 exigidos</span><span class="fr">1 920 € planifiés sur 1 600 € exigés</span></div>
+      <div id="gaugeHome"></div>
+      <div class="insight"><span class="pt">O plano mira 120% — errar 20% ainda é meta batida.</span><span class="fr">Le plan vise 120 % — se tromper de 20 % reste un objectif atteint.</span></div>
+    </div>
+  </div>
+
+  <h3><span class="pt">Como ler este relatório</span><span class="fr">Comment lire ce rapport</span></h3>
+  <ul class="clean pt">
+    <li><strong>Painel executivo</strong> — todos os números do plano em gráficos, com o semáforo de correção semanal.</li>
+    <li><strong>Blocos 1 a 8</strong> — o plano completo: mercado, contrato, prioridades, site, prospecção, clientes, cronograma e checklist.</li>
+    <li><strong>Materiais em francês</strong> (contrato, e-mails, objeções) ficam em blocos expansíveis, prontos para uso.</li>
+    <li><strong>Bloco 9</strong> — a avaliação independente do plano e a versão otimizada: sete correções validadas pelo mercado que quase dobram a receita por reserva.</li>
+  </ul>
+  <ul class="clean fr">
+    <li><strong>Tableau de bord</strong> — tous les chiffres du plan en graphiques, avec les feux de pilotage hebdomadaires.</li>
+    <li><strong>Blocs 1 à 8</strong> — le plan complet : marché, contrat, priorités, site, prospection, clients, calendrier et checklist.</li>
+    <li><strong>Les supports en français</strong> (contrat, e-mails, objections) sont dans des blocs dépliables, prêts à l'emploi.</li>
+    <li><strong>Bloc 9</strong> — l'évaluation indépendante du plan et sa version optimisée : sept corrections validées par le marché qui doublent presque le revenu par réservation.</li>
+  </ul>
+</article>
+
+<!-- ==================== PAGE: PAINEL ==================== -->
+<article class="page" id="p-painel">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Painel executivo</span><span class="fr">Tableau de bord</span></div>
+    <h1><span class="pt">O plano <em>em números</em></span><span class="fr">Le plan <em>en chiffres</em></span></h1>
+    <p class="lede pt">
+      Nada aqui exige milagre: 3 reservas por semana a partir da semana 3,
+      com premissas explícitas e folga de 20% sobre a meta.
+    </p>
+    <p class="lede fr">
+      Rien ici n'exige de miracle : 3 réservations par semaine dès la semaine
+      3, avec des hypothèses explicites et 20 % de marge sur l'objectif.
+    </p>
+  </div>
+
+  <div class="stats">
+    <div class="s"><span class="v">45%</span>
+      <span class="k pt">conversão pedido → reserva paga (premissa: resposta &lt; 1 h)</span>
+      <span class="k fr">conversion demande → réservation payée (hypothèse : réponse &lt; 1 h)</span></div>
+    <div class="s"><span class="v">5–7</span>
+      <span class="k pt">pedidos qualificados / semana a partir da S3 (42 no total)</span>
+      <span class="k fr">demandes qualifiées / semaine dès S3 (42 au total)</span></div>
+    <div class="s"><span class="v">3</span>
+      <span class="k pt">reservas pagas / semana — 1 a cada 2 dias úteis</span>
+      <span class="k fr">réservations payées / semaine — 1 tous les 2 jours ouvrés</span></div>
+    <div class="s"><span class="v">€ 30</span>
+      <span class="k pt">comissão mínima por reserva (HT)</span>
+      <span class="k fr">commission minimale par réservation (HT)</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card full">
+      <h4><span class="pt">Caixa acumulado, semana a semana</span><span class="fr">Trésorerie cumulée, semaine par semaine</span></h4>
+      <div class="sub"><span class="pt">Comissões e margens recebidas no ato da reserva</span><span class="fr">Commissions et marges encaissées à la réservation</span></div>
+      <div id="chartCash"></div>
+      <div class="legend">
+        <span><i style="background:#c9a45c"></i><span class="pt">Caixa planejado</span><span class="fr">Trésorerie planifiée</span></span>
+        <span><i style="background:#8fbf9a"></i><span class="pt">Meta € 1.600</span><span class="fr">Objectif 1 600 €</span></span>
+      </div>
+      <div class="insight"><span class="pt">A meta cruza a linha na S7 — a S8 existe para absorver imprevistos.</span><span class="fr">L'objectif est franchi en S7 — la S8 est là pour absorber les imprévus.</span></div>
+    </div>
+    <div class="card">
+      <h4><span class="pt">De onde vem a receita</span><span class="fr">D'où vient le revenu</span></h4>
+      <div class="sub"><span class="pt">18 reservas · € 1.920</span><span class="fr">18 réservations · 1 920 €</span></div>
+      <div id="chartMix"></div>
+      <div class="insight"><span class="pt">47% vem dos motoristas — a categoria sob nosso controle total.</span><span class="fr">47 % vient des chauffeurs — la catégorie sous notre contrôle total.</span></div>
+    </div>
+    <div class="card">
+      <h4><span class="pt">Parceiros ativos por semana</span><span class="fr">Partenaires actifs par semaine</span></h4>
+      <div class="sub"><span class="pt">10 bastam para operar</span><span class="fr">10 suffisent pour opérer</span></div>
+      <div id="chartPartners"></div>
+      <div class="insight"><span class="pt">18 assinados = 80% de margem sobre o necessário.</span><span class="fr">18 signés = 80 % de marge sur le nécessaire.</span></div>
+    </div>
+    <div class="card full">
+      <h4><span class="pt">O funil B2B de cada semana (S1–S3)</span><span class="fr">Le funnel B2B hebdomadaire (S1–S3)</span></h4>
+      <div class="sub"><span class="pt">Taxas conservadoras: 15% de resposta a e-mail frio e 50% de fechamento pós-ligação</span><span class="fr">Taux prudents : 15 % de réponse à froid et 50 % de closing après appel</span></div>
+      <div id="chartFunnel"></div>
+      <div class="insight"><span class="pt">3 parcerias por semana × 4 semanas = 12 ativos — com 60 e-mails semanais, o funil se paga.</span><span class="fr">3 partenariats par semaine × 4 semaines = 12 actifs — à 60 e-mails hebdo, le funnel s'autofinance.</span></div>
+    </div>
+  </div>
+
+  <h3><span class="pt">O que a meta exige por dia útil</span><span class="fr">Ce que l'objectif exige par jour ouvré</span></h3>
+  <ul class="clean pt">
+    <li><strong>12 e-mails</strong> novos personalizados e <strong>1–2 ligações</strong> de prospecção (S1–S3).</li>
+    <li><strong>1 cotação</strong> enviada a cliente em menos de 4 horas.</li>
+    <li><strong>0,6 reserva paga</strong> — ou seja, 3 por semana. Nada além disso.</li>
+  </ul>
+  <ul class="clean fr">
+    <li><strong>12 e-mails</strong> personnalisés et <strong>1–2 appels</strong> de prospection (S1–S3).</li>
+    <li><strong>1 devis</strong> envoyé au client en moins de 4 heures.</li>
+    <li><strong>0,6 réservation payée</strong> — soit 3 par semaine. Rien de plus.</li>
+  </ul>
+
+  <h3><span class="pt">Semáforo de correção — checado toda terça, no fim de cada semana do plano</span><span class="fr">Feux de pilotage — vérifiés chaque mardi, à la fin de chaque semaine du plan</span></h3>
+  <div class="tbl-wrap pt"><table>
+    <thead><tr><th>Checkpoint</th><th>Verde — seguir</th><th>Amarelo — reforçar</th><th>Vermelho — plano B</th></tr></thead>
+    <tbody>
+      <tr><td><strong>S2</strong> · 29/09</td><td><span class="dot dotG"></span>Landing no ar + ≥ 4 parceiros</td><td><span class="dot dotY"></span>2–3 parceiros → dobrar ligações e priorizar contatos quentes</td><td><span class="dot dotR"></span>&lt; 2 → aceite de 1 página + ligações diretas em vez de e-mail</td></tr>
+      <tr><td><strong>S4</strong> · 13/10</td><td><span class="dot dotG"></span>≥ € 500 em caixa e ≥ 8 parceiros</td><td><span class="dot dotY"></span>€ 250–500 → campanha #2 reforçada + upsell de motorista</td><td><span class="dot dotR"></span>&lt; € 250 → foco total em motoristas + Ads antecipado</td></tr>
+      <tr><td><strong>S6</strong> · 27/10</td><td><span class="dot dotG"></span>≥ € 1.000 em caixa</td><td><span class="dot dotY"></span>€ 700–1.000 → pacotes de outono + follow-up de todos os pedidos</td><td><span class="dot dotR"></span>&lt; € 700 → € 300 de Ads + operação 100% Paris e motoristas</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap fr"><table>
+    <thead><tr><th>Checkpoint</th><th>Vert — continuer</th><th>Orange — renforcer</th><th>Rouge — plan B</th></tr></thead>
+    <tbody>
+      <tr><td><strong>S2</strong> · 29/09</td><td><span class="dot dotG"></span>Landing en ligne + ≥ 4 partenaires</td><td><span class="dot dotY"></span>2–3 partenaires → doubler les appels, prioriser les contacts chauds</td><td><span class="dot dotR"></span>&lt; 2 → accord d'une page + appels directs au lieu des e-mails</td></tr>
+      <tr><td><strong>S4</strong> · 13/10</td><td><span class="dot dotG"></span>≥ 500 € encaissés et ≥ 8 partenaires</td><td><span class="dot dotY"></span>250–500 € → campagne #2 renforcée + upsell chauffeur</td><td><span class="dot dotR"></span>&lt; 250 € → focus total chauffeurs + Ads anticipé</td></tr>
+      <tr><td><strong>S6</strong> · 27/10</td><td><span class="dot dotG"></span>≥ 1 000 € encaissés</td><td><span class="dot dotY"></span>700–1 000 € → offres d'automne + relance de toutes les demandes</td><td><span class="dot dotR"></span>&lt; 700 € → 300 € d'Ads + opération 100 % Paris et chauffeurs</td></tr>
+    </tbody>
+  </table></div>
+</article>
+
+<!-- ==================== PAGE: PORQUE ==================== -->
+<article class="page" id="p-porque">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">A tese</span><span class="fr">La thèse</span></div>
+    <h1><span class="pt">Por que este é <em>o plano certo</em></span><span class="fr">Pourquoi c'est <em>le bon plan</em></span></h1>
+    <p class="lede pt">
+      A força do plano não está em uma aposta genial — está em cinco
+      mecanismos que tiram a sorte da equação. Ele foi desenhado para não
+      depender de nenhuma peça única dar certo.
+    </p>
+    <p class="lede fr">
+      La force du plan ne tient pas à un pari génial — mais à cinq mécanismes
+      qui retirent la chance de l'équation. Il est conçu pour ne dépendre
+      d'aucune pièce unique.
+    </p>
+  </div>
+
+  <div class="mech pt">
+    <div><span class="m-num">1</span><div>
+      <h4>Não inventamos nada: cobramos o que o mercado inteiro já paga</h4>
+      <p>Toda empresa de barco, helicóptero ou carro de luxo já reserva 10–15%
+      de comissão para concierges de hotel e plataformas. Nossa proposta não
+      pede nada novo a ninguém — só redireciona um fluxo que já existe.</p>
+    </div></div>
+    <div><span class="m-num">2</span><div>
+      <h4>Risco assimétrico: ninguém perde se der errado</h4>
+      <p>O parceiro não paga nada fixo — só comissão sobre venda realizada e
+      paga. Nós não investimos capital — só horas. Abandonar uma categoria que
+      não performa custa zero.</p>
+    </div></div>
+    <div><span class="m-num">3</span><div>
+      <h4>Temos a peça mais rentável dentro de casa</h4>
+      <p>A categoria motoristas é nossa: margem de 30% a 100%, zero
+      sazonalidade, zero dependência de parceiro. Sozinha, cobre quase metade
+      da meta — e é o gancho de venda das outras categorias.</p>
+    </div></div>
+    <div><span class="m-num">4</span><div>
+      <h4>Não partimos do zero</h4>
+      <p>15.000 usuários na plataforma, marca registrada no INPI, site no ar,
+      2 devs, rede de motoristas e 30 h/semana de comercial dedicado. O plano
+      só conecta ativos que já existem.</p>
+    </div></div>
+    <div><span class="m-num">5</span><div>
+      <h4>Cada risco tem plano B pronto antes de acontecer</h4>
+      <p>Parceiro lento → aceite de 1 página. Riviera esvazia em outubro →
+      pivot para Paris. Stripe atrasa → links de pagamento manuais. E o
+      semáforo semanal aciona a correção antes que vire problema.</p>
+    </div></div>
+  </div>
+
+  <div class="mech fr">
+    <div><span class="m-num">1</span><div>
+      <h4>Nous n'inventons rien : nous demandons ce que le marché paie déjà</h4>
+      <p>Chaque société de bateaux, d'hélicoptère ou de voitures de luxe
+      provisionne déjà 10–15 % pour les concierges d'hôtel et les plateformes.
+      Notre proposition ne demande rien de nouveau — elle redirige un flux
+      existant.</p>
+    </div></div>
+    <div><span class="m-num">2</span><div>
+      <h4>Risque asymétrique : personne ne perd si ça échoue</h4>
+      <p>Le partenaire ne paie aucun frais fixe — uniquement une commission
+      sur les ventes réalisées et payées. Nous n'investissons pas de capital —
+      seulement des heures. Abandonner une catégorie ne coûte rien.</p>
+    </div></div>
+    <div><span class="m-num">3</span><div>
+      <h4>La pièce la plus rentable est déjà chez nous</h4>
+      <p>La catégorie chauffeurs est la nôtre : marge de 30 à 100 %, aucune
+      saisonnalité, aucune dépendance à un partenaire. À elle seule, elle
+      couvre près de la moitié de l'objectif.</p>
+    </div></div>
+    <div><span class="m-num">4</span><div>
+      <h4>Nous ne partons pas de zéro</h4>
+      <p>15 000 utilisateurs, marque déposée à l'INPI, site en ligne, 2 devs,
+      un réseau de chauffeurs et 30 h/semaine de commercial dédié. Le plan ne
+      fait que connecter des actifs existants.</p>
+    </div></div>
+    <div><span class="m-num">5</span><div>
+      <h4>Chaque risque a son plan B, préparé à l'avance</h4>
+      <p>Partenaire lent → accord d'une page. Riviera vide en octobre → pivot
+      vers Paris. Stripe en retard → liens de paiement manuels. Et les feux
+      hebdomadaires déclenchent la correction avant le problème.</p>
+    </div></div>
+  </div>
+
+  <div class="callout">
+    <p class="pt"><strong>Honestidade sobre o "100%":</strong> nenhum plano é
+    garantido por decreto. Este é o mais próximo disso que um lançamento pode
+    ser, porque substitui sorte por redundância — folga na meta, plano B em
+    cada elo e correção semanal. O que garante o resultado é a execução do
+    checklist, semana após semana.</p>
+    <p class="fr"><strong>Honnêteté sur le « 100 % » :</strong> aucun plan
+    n'est garanti par décret. Celui-ci s'en approche autant qu'un lancement
+    peut le faire, parce qu'il remplace la chance par la redondance — marge
+    sur l'objectif, plan B à chaque maillon, correction hebdomadaire. Ce qui
+    garantit le résultat, c'est l'exécution de la checklist, semaine après
+    semaine.</p>
+  </div>
+</article>
+
+<!-- ==================== PAGE: S1 BENCHMARK ==================== -->
+<article class="page" id="p-s1">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 1</span><span class="fr">Bloc 1</span></div>
+    <h1><span class="pt">Benchmark: como o mercado <em>ganha dinheiro</em></span><span class="fr">Benchmark : comment le marché <em>gagne de l'argent</em></span></h1>
+    <p class="lede pt">
+      Todos os modelos de Paris e da Côte d'Azur vivem de comissão de 10–30%
+      e recebem do cliente antes do serviço. Nossos 12% estão no centro da
+      faixa — não pedimos nada fora do padrão.
+    </p>
+    <p class="lede fr">
+      Tous les modèles de Paris et de la Côte d'Azur vivent d'une commission
+      de 10–30 % et encaissent le client avant la prestation. Nos 12 % sont
+      au centre de la fourchette — rien d'hors norme.
+    </p>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">Comissões praticadas no mercado</span><span class="fr">Commissions pratiquées sur le marché</span></h4>
+    <div class="sub"><span class="pt">Faixa mínima–máxima por tipo de player, em % do valor da reserva</span><span class="fr">Fourchette min–max par type d'acteur, en % de la réservation</span></div>
+    <div id="chartComm"></div>
+    <div class="insight"><span class="pt">Pedir 12% não é negociação — é o padrão que todo fornecedor já provisiona.</span><span class="fr">Demander 12 % n'est pas une négociation — c'est le standard que chaque fournisseur provisionne déjà.</span></div>
+  </div>
+
+  <h3><span class="pt">As três conclusões que moldam tudo</span><span class="fr">Les trois conclusions qui façonnent tout</span></h3>
+  <ul class="clean pt">
+    <li><strong>Pedir 12% não é negociação, é o padrão.</strong> A conversa com
+    o parceiro é sobre confiança e volume, não sobre taxa.</li>
+    <li><strong>Cliente paga antes, fornecedor recebe depois.</strong> Reter
+    nossa comissão no ato da reserva é aceito e esperado.</li>
+    <li><strong>Nossas brechas reais:</strong> humano e rápido (WhatsApp,
+    resposta em menos de 1 h) sem adesão; pacote com motorista — a peça que só
+    nós temos; e atendimento em português, raríssimo na região.</li>
+  </ul>
+  <ul class="clean fr">
+    <li><strong>Demander 12 %, ce n'est pas négocier, c'est le standard.</strong>
+    La discussion avec le partenaire porte sur la confiance et le volume, pas
+    sur le taux.</li>
+    <li><strong>Le client paie avant, le fournisseur encaisse après.</strong>
+    Retenir notre commission à la réservation est accepté et attendu.</li>
+    <li><strong>Nos vraies brèches :</strong> humain et rapide (WhatsApp,
+    réponse en moins d'1 h) sans adhésion ; le package avec chauffeur — la
+    pièce que nous seuls possédons ; et le service en portugais, rarissime
+    dans la région.</li>
+  </ul>
+
+  <details>
+    <summary><span class="pt">Tabela completa: 8 modelos, como ganham e a brecha de cada um</span><span class="fr">Tableau complet : 8 modèles, leurs revenus et leur brèche</span></summary>
+    <div class="body">
+      <div class="tbl-wrap pt"><table>
+        <thead><tr><th>Modelo</th><th>Como ganha</th><th>Comissão</th><th>A brecha para nós</th></tr></thead>
+        <tbody>
+          <tr><td><strong>John Paul</strong> (Accor)</td><td>Bancos e cartões premium pagam fee mensal por membro</td><td>10–15%</td><td class="dim">Inacessível sem cartão premium; atendimento de call center</td></tr>
+          <tr><td><strong>Quintessentially</strong></td><td>Adesão anual € 3–5 mil + comissões</td><td>~10%</td><td class="dim">Quem gasta € 5–20 mil numa semana não quer pagar adesão anual</td></tr>
+          <tr><td><strong>Concierge de hotel 5★</strong></td><td>Comissão dos fornecedores locais</td><td>10–20%</td><td class="dim">Só atende hóspedes — villas e Airbnb de luxo ficam órfãos</td></tr>
+          <tr><td><strong>Click&amp;Boat / Samboat</strong></td><td>Marketplace: taxa dos dois lados</td><td>25–30%</td><td class="dim">Self-service, sem humano, sem pacote barco + motorista + mesa</td></tr>
+          <tr><td><strong>Brokers de charter</strong> (MYBA)</td><td>Comissão sobre o charter semanal</td><td>15%</td><td class="dim">Só charters ≥ € 20 mil; o day charter de € 800–3.000 é mal atendido</td></tr>
+          <tr><td><strong>Locadoras prestige</strong></td><td>Afiliação e canais de hotel</td><td>5–15%</td><td class="dim">Dependem de hotéis; querem canal digital humano</td></tr>
+          <tr><td><strong>Helicóptero</strong> (Monacair, Blade…)</td><td>Venda direta + rede de agências</td><td>8–12%</td><td class="dim">Transfer virou commodity; o valor está no pacote com motorista</td></tr>
+          <tr><td><strong>DMCs / réceptivos</strong></td><td>Markup sobre tarifas net</td><td>15–25%</td><td class="dim">Focados em grupos e corporate; ignoram indivíduos e last-minute</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl-wrap fr"><table>
+        <thead><tr><th>Modèle</th><th>Comment il gagne</th><th>Commission</th><th>La brèche pour nous</th></tr></thead>
+        <tbody>
+          <tr><td><strong>John Paul</strong> (Accor)</td><td>Banques et cartes premium paient un forfait mensuel par membre</td><td>10–15 %</td><td class="dim">Inaccessible sans carte premium ; service de call center</td></tr>
+          <tr><td><strong>Quintessentially</strong></td><td>Adhésion annuelle 3–5 k€ + commissions</td><td>~10 %</td><td class="dim">Celui qui dépense 5–20 k€ en une semaine ne veut pas d'adhésion annuelle</td></tr>
+          <tr><td><strong>Concierge d'hôtel 5★</strong></td><td>Commission des fournisseurs locaux</td><td>10–20 %</td><td class="dim">Ne sert que les clients de l'hôtel — villas et locations de luxe restent orphelines</td></tr>
+          <tr><td><strong>Click&amp;Boat / Samboat</strong></td><td>Marketplace : frais des deux côtés</td><td>25–30 %</td><td class="dim">Self-service, sans humain, sans package bateau + chauffeur + table</td></tr>
+          <tr><td><strong>Brokers de charter</strong> (MYBA)</td><td>Commission sur le charter à la semaine</td><td>15 %</td><td class="dim">Uniquement ≥ 20 k€ ; le day charter de 800–3 000 € est mal servi</td></tr>
+          <tr><td><strong>Loueurs prestige</strong></td><td>Affiliation et canaux hôteliers</td><td>5–15 %</td><td class="dim">Dépendants des hôtels ; veulent un canal digital humain</td></tr>
+          <tr><td><strong>Hélicoptère</strong> (Monacair, Blade…)</td><td>Vente directe + réseau d'agences</td><td>8–12 %</td><td class="dim">Le transfert est devenu une commodité ; la valeur est dans le package avec chauffeur</td></tr>
+          <tr><td><strong>DMC / réceptifs</strong></td><td>Markup sur tarifs nets</td><td>15–25 %</td><td class="dim">Centrés groupes et corporate ; ignorent les individuels et le last-minute</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+</article>
+
+<!-- ==================== PAGE: S2 PARCERIA ==================== -->
+<article class="page" id="p-s2">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 2</span><span class="fr">Bloc 2</span></div>
+    <h1><span class="pt">O modelo de parceria <em>irrecusável</em></span><span class="fr">Le modèle de partenariat <em>irrésistible</em></span></h1>
+    <p class="lede pt">
+      O princípio comercial cabe em três palavras: zéro coût, zéro risque,
+      zéro exclusivité. O parceiro não tem nada a perder — e é exatamente por
+      isso que ele assina.
+    </p>
+    <p class="lede fr">
+      Le principe commercial tient en trois mots : zéro coût, zéro risque,
+      zéro exclusivité. Le partenaire n'a rien à perdre — et c'est exactement
+      pour cela qu'il signe.
+    </p>
+  </div>
+
+  <h3><span class="pt">Grade de comissão</span><span class="fr">Grille de commissions</span></h3>
+  <div class="chips">
+    <span class="chip"><span class="pt">Barcos com skipper</span><span class="fr">Bateaux avec skipper</span> <b>12%</b></span>
+    <span class="chip">Jet ski <b>15%</b></span>
+    <span class="chip"><span class="pt">Carros prestige</span><span class="fr">Voitures prestige</span> <b>10%</b></span>
+    <span class="chip"><span class="pt">Helicóptero</span><span class="fr">Hélicoptère</span> <b>10%</b></span>
+    <span class="chip"><span class="pt">Experiências</span><span class="fr">Expériences</span> <b>15%</b></span>
+    <span class="chip"><span class="pt">Motoristas parceiros</span><span class="fr">Chauffeurs partenaires</span> <b>15%</b></span>
+    <span class="chip"><span class="pt">Mínimo</span><span class="fr">Minimum</span> <b>€ 30 HT</b></span>
+  </div>
+  <p class="small pt">Base: montante HT, excluindo caução, combustível/APA,
+  gorjetas e taxas de pagamento.</p>
+  <p class="small fr">Assiette : montant HT, hors caution, carburant/APA,
+  pourboires et frais de paiement.</p>
+
+  <h3><span class="pt">Dois modos de pagamento, à escolha do parceiro</span><span class="fr">Deux modes de paiement, au choix du partenaire</span></h3>
+  <div class="duo pt">
+    <div>
+      <span class="tag">MODO A · do dia 1</span>
+      <h4>Pagamento direto</h4>
+      <p>O cliente paga o parceiro. Nós emitimos fatura de comissão na
+      confirmação da reserva, pagável em 15 dias.</p>
+      <p>Zero desenvolvimento. Reembolso ao cliente = avoir proporcional — o
+      parceiro nunca deve comissão sobre dinheiro devolvido.</p>
+    </div>
+    <div>
+      <span class="tag">MODO B · a partir de S3–S4</span>
+      <h4>Plataforma Stripe Connect</h4>
+      <p>O cliente paga no nosso site. O Stripe vira o valor líquido para o
+      parceiro (J+1 após o serviço) e retém a nossa comissão.</p>
+      <p>O parceiro continua sendo o vendedor e fatura o cliente — nós nunca
+      carregamos dinheiro alheio.</p>
+    </div>
+  </div>
+  <div class="duo fr">
+    <div>
+      <span class="tag">MODE A · dès le jour 1</span>
+      <h4>Paiement direct</h4>
+      <p>Le client règle le partenaire. Nous émettons la facture de commission
+      à la confirmation, payable à 15 jours.</p>
+      <p>Zéro développement. Remboursement au client = avoir au prorata — le
+      partenaire ne doit jamais de commission sur de l'argent remboursé.</p>
+    </div>
+    <div>
+      <span class="tag">MODE B · dès S3–S4</span>
+      <h4>Plateforme Stripe Connect</h4>
+      <p>Le client paie sur notre site. Stripe vire le montant net au
+      partenaire (J+1 après la prestation) et retient notre commission.</p>
+      <p>Le partenaire reste le vendeur et facture le client — nous ne portons
+      jamais l'argent d'autrui.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="pt"><strong>Por que essa arquitetura, e não "receber tudo e
+    repassar":</strong> vender em nome próprio serviços de terceiros exige
+    imatriculação Atout France (garantia financeira + RC Pro), inviável em 60
+    dias. Como apporteur d'affaires com Stripe Connect, obtemos o mesmo efeito
+    de caixa sem o risco jurídico. O dossier Atout France corre em paralelo,
+    para 2027.</p>
+    <p class="fr"><strong>Pourquoi cette architecture, et non « tout encaisser
+    puis reverser » :</strong> vendre en son nom propre des prestations de
+    tiers exige l'immatriculation Atout France (garantie financière + RC Pro),
+    impossible en 60 jours. En apporteur d'affaires avec Stripe Connect, nous
+    obtenons le même effet de trésorerie sans le risque juridique. Le dossier
+    Atout France avance en parallèle, pour 2027.</p>
+  </div>
+
+  <h3><span class="pt">Por que o parceiro assina sem medo</span><span class="fr">Pourquoi le partenaire signe sans crainte</span></h3>
+  <ul class="clean pt">
+    <li><strong>Ele não perde nenhum canal</strong> — sem exclusividade nos dois sentidos (Art. 3).</li>
+    <li><strong>Só paga sobre dinheiro que recebeu e conservou</strong> — cancelou e reembolsou, comissão devolvida (Art. 7 e 9).</li>
+    <li><strong>As regras de cancelamento são as dele</strong>, exibidas ao cliente antes do pagamento (Art. 9).</li>
+    <li><strong>Nunca prometemos nada em nome dele</strong> sem confirmação escrita (Art. 5).</li>
+    <li><strong>Sai quando quiser</strong> — 30 dias de aviso, sem multa (Art. 17).</li>
+    <li><strong>A única cláusula "a nosso favor"</strong> — não-contornamento de 12 meses — é a mesma que hotéis e plataformas já exigem dele (Art. 15).</li>
+  </ul>
+  <ul class="clean fr">
+    <li><strong>Il ne perd aucun canal</strong> — aucune exclusivité, dans les deux sens (Art. 3).</li>
+    <li><strong>Il ne paie que sur l'argent reçu et conservé</strong> — annulation remboursée, commission rendue (Art. 7 et 9).</li>
+    <li><strong>Les conditions d'annulation sont les siennes</strong>, affichées au client avant paiement (Art. 9).</li>
+    <li><strong>Nous ne promettons jamais rien en son nom</strong> sans confirmation écrite (Art. 5).</li>
+    <li><strong>Il part quand il veut</strong> — préavis de 30 jours, sans indemnité (Art. 17).</li>
+    <li><strong>La seule clause « en notre faveur »</strong> — non-contournement de 12 mois — est celle que les hôtels et plateformes lui imposent déjà (Art. 15).</li>
+  </ul>
+
+  <details>
+    <summary><span class="pt">O contrato completo — 18 artigos (FR, para o advogado)</span><span class="fr">Le contrat complet — 18 articles (pour l'avocat)</span></summary>
+    <div class="body">
+      <div class="lang-note pt">DOCUMENTO EM FRANCÊS — vai para o advogado e para os parceiros</div>
+      <div class="lang-note fr">DOCUMENT DESTINÉ À L'AVOCAT ET AUX PARTENAIRES</div>
+      <div class="frdoc">Art. 1 – Objet · apport de clients ; le Partenaire réalise les prestations et verse une commission sur les réservations confirmées et payées.
+Art. 2 – Définitions · Client, Demande, Devis, Réservation confirmée, Montant commissionnable (HT hors caution, carburant, pourboires).
+Art. 3 – Indépendance et absence d'exclusivité · dans les deux sens.
+Art. 4 – Obligations du Partenaire · réponse sous 4 h en saison ; parité tarifaire ; licences et assurances avec attestations ; ses propres CGV au Client.
+Art. 5 – Obligations de World Keys · demandes qualifiées ; jamais d'engagement sans confirmation écrite du Partenaire.
+Art. 6 – Processus de réservation · Demande → Devis → Paiement → Confirmation → Prestation → Clôture.
+Art. 7 – Commission · % HT selon grille ; minimum 30 € ; exigible à la réservation ; avoir au prorata en cas de remboursement.
+Art. 8 – Facturation et paiement · 8.1 Paiement direct (facture à 15 jours) ou 8.2 Plateforme Stripe Connect (net viré J+1).
+Art. 9 – Annulation · les conditions du Partenaire s'appliquent ; remboursement intégral si annulation du Partenaire ou force majeure, sans commission.
+Art. 10 – Responsabilité · le Partenaire est seul responsable de la prestation ; World Keys limitée à son rôle d'intermédiaire.
+Art. 11 – Assurances · attestations annuelles ; RC Pro d'intermédiaire côté World Keys.
+Art. 12 – Qualité et réclamations · interlocuteur dédié ; traitement sous 48 h.
+Art. 13 – Marques · licence réciproque limitée à la promotion du partenariat.
+Art. 14 – Données personnelles · RGPD ; pas de prospection du Client sans base légale propre.
+Art. 15 – Non-contournement · 12 mois sur les clients présentés par World Keys.
+Art. 16 – Confidentialité · tarifs nets, volumes, données Clients.
+Art. 17 – Durée · 12 mois, tacite reconduction ; résiliation libre avec préavis de 30 jours, sans indemnité.
+Art. 18 – Droit applicable · droit français ; Tribunal de commerce de Paris.
+Annexes · 1 Grille de commissions · 2 Conditions d'annulation · 3 Attestations · 4 Fiche Partenaire.</div>
+    </div>
+  </details>
+
+  <div class="callout green">
+    <p class="pt"><strong>Acelerador:</strong> uma página de "Conditions de
+    partenariat" (resumo dos Art. 3, 7, 8, 9, 15 e 17) para aceite por e-mail
+    — "OK pour ces conditions". Metade dos parceiros começa a operar assim; o
+    contrato completo vem com a primeira fatura.</p>
+    <p class="fr"><strong>Accélérateur :</strong> une page de « Conditions de
+    partenariat » (résumé des Art. 3, 7, 8, 9, 15 et 17) à accepter par e-mail
+    — « OK pour ces conditions ». La moitié des partenaires démarre ainsi ; le
+    contrat complet arrive avec la première facture.</p>
+  </div>
+</article>
+
+<!-- ==================== PAGE: S3 PRIORIDADES ==================== -->
+<article class="page" id="p-s3">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 3</span><span class="fr">Bloc 3</span></div>
+    <h1><span class="pt">Prioridades e <em>a matemática da meta</em></span><span class="fr">Priorités et <em>le calcul de l'objectif</em></span></h1>
+    <p class="lede pt">
+      Seis categorias avaliadas por ticket, comissão, sazonalidade set–nov e
+      velocidade até a primeira venda. Começamos por três — e uma delas é
+      nossa.
+    </p>
+    <p class="lede fr">
+      Six catégories évaluées par panier moyen, commission, saisonnalité
+      sept.–nov. et vitesse jusqu'à la première vente. Nous commençons par
+      trois — dont une nous appartient.
+    </p>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">Composição da receita vs. meta</span><span class="fr">Composition du revenu vs objectif</span></h4>
+    <div class="sub"><span class="pt">As 18 reservas empilhadas contra a linha de € 1.600</span><span class="fr">Les 18 réservations empilées contre la ligne des 1 600 €</span></div>
+    <div id="chartStack"></div>
+    <div class="insight"><span class="pt">Motoristas + barcos já entregam € 1.620 — heli e carros são a folga.</span><span class="fr">Chauffeurs + bateaux livrent déjà 1 620 € — hélico et voitures sont la marge.</span></div>
+  </div>
+
+  <h3><span class="pt">A conta que fecha a meta</span><span class="fr">Le calcul qui boucle l'objectif</span></h3>
+  <div class="tbl-wrap pt"><table>
+    <thead><tr><th>Categoria</th><th>Reservas</th><th>Ticket</th><th>Take</th><th>Receita</th></tr></thead>
+    <tbody>
+      <tr><td>Motoristas</td><td>10</td><td>€ 300</td><td>30%</td><td>€ 900</td></tr>
+      <tr><td>Barcos</td><td>4</td><td>€ 1.500</td><td>12%</td><td>€ 720</td></tr>
+      <tr><td>Helicóptero</td><td>3</td><td>€ 600</td><td>10%</td><td>€ 180</td></tr>
+      <tr><td>Carros</td><td>1</td><td>€ 1.200</td><td>10%</td><td>€ 120</td></tr>
+      <tr class="total"><td>Total</td><td>18</td><td></td><td></td><td>€ 1.920 ≈ R$ 12.000</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap fr"><table>
+    <thead><tr><th>Catégorie</th><th>Résas</th><th>Panier</th><th>Take</th><th>Revenu</th></tr></thead>
+    <tbody>
+      <tr><td>Chauffeurs</td><td>10</td><td>300 €</td><td>30 %</td><td>900 €</td></tr>
+      <tr><td>Bateaux</td><td>4</td><td>1 500 €</td><td>12 %</td><td>720 €</td></tr>
+      <tr><td>Hélicoptère</td><td>3</td><td>600 €</td><td>10 %</td><td>180 €</td></tr>
+      <tr><td>Voitures</td><td>1</td><td>1 200 €</td><td>10 %</td><td>120 €</td></tr>
+      <tr class="total"><td>Total</td><td>18</td><td></td><td></td><td>1 920 € ≈ 12 000 R$</td></tr>
+    </tbody>
+  </table></div>
+
+  <ul class="clean pt">
+    <li class="small"><strong>Premissas:</strong> reservas concentradas nas
+    semanas 3–8 (3 por semana); conversão de 45% com resposta em menos de 1 h
+    → ~40 pedidos qualificados, 5–7 por semana a partir de S3.</li>
+    <li class="small"><strong>O motorista é decisivo:</strong> sem essa
+    categoria, as comissões de parceiros somam ~€ 1.000. A meta depende de
+    vendermos o nosso próprio serviço — e ele está sob controle total.</li>
+    <li class="small"><strong>Plano B de margem:</strong> se os parceiros
+    travarem em 10%, aplicamos "frais de service" de 5% ao cliente (padrão de
+    marketplace) e o take sobe para 15%.</li>
+  </ul>
+  <ul class="clean fr">
+    <li class="small"><strong>Hypothèses :</strong> réservations concentrées
+    sur les semaines 3–8 (3 par semaine) ; conversion de 45 % avec réponse en
+    moins d'1 h → ~40 demandes qualifiées, 5–7 par semaine dès S3.</li>
+    <li class="small"><strong>Le chauffeur est décisif :</strong> sans cette
+    catégorie, les commissions partenaires totalisent ~1 000 €. L'objectif
+    repose sur la vente de notre propre service — sous contrôle total.</li>
+    <li class="small"><strong>Plan B de marge :</strong> si les partenaires
+    bloquent à 10 %, nous appliquons des « frais de service » de 5 % au client
+    (standard des marketplaces) et le take monte à 15 %.</li>
+  </ul>
+
+  <details>
+    <summary><span class="pt">As 6 categorias avaliadas — tabela completa com veredictos</span><span class="fr">Les 6 catégories évaluées — tableau complet avec verdicts</span></summary>
+    <div class="body">
+      <div class="tbl-wrap pt"><table>
+        <thead><tr><th>#</th><th>Categoria</th><th>Ticket médio</th><th>Nossa receita / reserva</th><th>Veredicto</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Motoristas privados</strong></td><td>€ 300</td><td>€ 90–300 (margem 30–100%)</td><td class="dim">Já é nosso. Sem sazonalidade. Começa hoje.</td></tr>
+          <tr><td>2</td><td><strong>Barcos</strong></td><td>€ 900–2.500 (Riviera) · € 400–1.200 (Seine)</td><td>€ 110–300 (12%)</td><td class="dim">Riviera até ~15/10, depois Seine. Parceiro fácil de fechar.</td></tr>
+          <tr><td>3</td><td><strong>Helicóptero</strong></td><td>€ 500–800 (Nice–Monaco) · € 900–1.500 (tour Paris)</td><td>€ 50–150 (10%)</td><td class="dim">Ano todo. Picos: Monaco Yacht Show, MIPCOM.</td></tr>
+          <tr><td>4</td><td>Carros prestige</td><td>€ 1.200</td><td>€ 100–150 (10%)</td><td class="dim">Oportunista — 2–3 parceiros sem esforço.</td></tr>
+          <tr><td>5</td><td>Experiências</td><td>€ 250</td><td>€ 40–90 (15%)</td><td class="dim">Só como complemento de pacote.</td></tr>
+          <tr><td>6</td><td>Jet ski &amp; náutico</td><td>€ 120</td><td>€ 18</td><td class="dim">Temporada acabou. Reabrir em abril de 2027.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl-wrap fr"><table>
+        <thead><tr><th>#</th><th>Catégorie</th><th>Panier moyen</th><th>Notre revenu / résa</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Chauffeurs privés</strong></td><td>300 €</td><td>90–300 € (marge 30–100 %)</td><td class="dim">Déjà à nous. Aucune saisonnalité. Démarre aujourd'hui.</td></tr>
+          <tr><td>2</td><td><strong>Bateaux</strong></td><td>900–2 500 € (Riviera) · 400–1 200 € (Seine)</td><td>110–300 € (12 %)</td><td class="dim">Riviera jusqu'au ~15/10, puis la Seine. Partenaire facile à signer.</td></tr>
+          <tr><td>3</td><td><strong>Hélicoptère</strong></td><td>500–800 € (Nice–Monaco) · 900–1 500 € (tour Paris)</td><td>50–150 € (10 %)</td><td class="dim">Toute l'année. Pics : Monaco Yacht Show, MIPCOM.</td></tr>
+          <tr><td>4</td><td>Voitures prestige</td><td>1 200 €</td><td>100–150 € (10 %)</td><td class="dim">Opportuniste — 2–3 partenaires sans effort.</td></tr>
+          <tr><td>5</td><td>Expériences</td><td>250 €</td><td>40–90 € (15 %)</td><td class="dim">Uniquement en complément de package.</td></tr>
+          <tr><td>6</td><td>Jet ski &amp; nautique</td><td>120 €</td><td>18 €</td><td class="dim">Saison terminée. Rouvrir en avril 2027.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+</article>
+
+<!-- ==================== PAGE: S4 SITE ==================== -->
+<article class="page" id="p-s4">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 4</span><span class="fr">Bloc 4</span></div>
+    <h1><span class="pt">O site: mínimo que <em>vende, máximo que atrasa</em></span><span class="fr">Le site : le minimum <em>qui vend, sans retarder</em></span></h1>
+    <p class="lede pt">
+      Regra da V1: tudo o que um humano resolve em 5 minutos por e-mail não
+      vira código nas duas primeiras semanas. O site só precisa capturar o
+      pedido e receber o pagamento.
+    </p>
+    <p class="lede fr">
+      Règle de la V1 : tout ce qu'un humain règle en 5 minutes par e-mail ne
+      devient pas du code les deux premières semaines. Le site doit seulement
+      capter la demande et encaisser le paiement.
+    </p>
+  </div>
+
+  <h3><span class="pt">O fluxo completo</span><span class="fr">Le flux complet</span></h3>
+  <div class="flow pt">
+    <span>Pedido no formulário</span><i>→</i>
+    <span>Cotação com o parceiro <em class="dim">(manual, ≤ 4 h)</em></span><i>→</i>
+    <span>E-mail com preço firme</span><i>→</i>
+    <span>Pagamento (link Stripe)</span><i>→</i>
+    <span>Confirmação + voucher</span><i>→</i>
+    <span>Serviço</span><i>→</i>
+    <span>Repasse / fatura</span>
+  </div>
+  <div class="flow fr">
+    <span>Demande via formulaire</span><i>→</i>
+    <span>Devis avec le partenaire <em class="dim">(manuel, ≤ 4 h)</em></span><i>→</i>
+    <span>E-mail avec prix ferme</span><i>→</i>
+    <span>Paiement (lien Stripe)</span><i>→</i>
+    <span>Confirmation + voucher</span><i>→</i>
+    <span>Prestation</span><i>→</i>
+    <span>Virement / facture</span>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">Esforço de desenvolvimento por entrega</span><span class="fr">Effort de développement par livrable</span></h4>
+    <div class="sub"><span class="pt">Dias-dev · P0 = 8 dias (2 devs = 1 semana) · P1 = 12 dias</span><span class="fr">Jours-dev · P0 = 8 jours (2 devs = 1 semaine) · P1 = 12 jours</span></div>
+    <div id="chartDev"></div>
+    <div class="legend">
+      <span><i style="background:#e6c98c"></i>P0 · S1–S2</span>
+      <span><i style="background:#6e8aa5"></i>P1 · S3–S4</span>
+    </div>
+    <div class="insight"><span class="pt">O maior item (Stripe Connect, 5 dias) só começa depois que o caixa já entra pelo P0.</span><span class="fr">Le plus gros poste (Stripe Connect, 5 jours) ne démarre qu'une fois la trésorerie ouverte par le P0.</span></div>
+  </div>
+
+  <details>
+    <summary><span class="pt">Backlog completo P0 / P1 / P2 com dias-dev</span><span class="fr">Backlog complet P0 / P1 / P2 avec jours-dev</span></summary>
+    <div class="body">
+      <div class="tbl-wrap pt"><table>
+        <thead><tr><th>Fase</th><th>Entrega</th><th>Dias</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="5"><strong>P0</strong><br><span class="dim">S1–S2</span></td>
+              <td>Landing /conciergerie em FR: hero, 6 categorias, "como funciona", confiança, FAQ</td><td>2</td></tr>
+          <tr><td>Formulário + banco + notificação + auto-reply FR/EN</td><td>2</td></tr>
+          <tr><td>Confirmação + CGV + política de cancelamento + mentions légales</td><td>1</td></tr>
+          <tr><td>Stripe Checkout live testado (€ 1 real + reembolso) + webhook. Interim: Payment Links manuais</td><td>2</td></tr>
+          <tr><td>GA4 (form_submit, payment_success) + botão WhatsApp</td><td>1</td></tr>
+          <tr><td rowspan="4"><strong>P1</strong><br><span class="dim">S3–S4</span></td>
+              <td>Back-office: pedidos, filtros, "gerar link de pagamento"</td><td>4</td></tr>
+          <tr><td>E-mails transacionais: cotação, voucher, lembrete J-2, pós-serviço</td><td>2</td></tr>
+          <tr><td>Stripe Connect Express: onboarding, transfer J+1, comissão retida, reembolsos</td><td>5</td></tr>
+          <tr><td>Versão EN + valor indicativo em BRL</td><td>1</td></tr>
+          <tr><td><strong>P2</strong><br><span class="dim">S6+</span></td>
+              <td>Espaço parceiro, catálogo, avaliações, pacotes, automações WhatsApp, CRM</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl-wrap fr"><table>
+        <thead><tr><th>Phase</th><th>Livrable</th><th>Jours</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="5"><strong>P0</strong><br><span class="dim">S1–S2</span></td>
+              <td>Landing /conciergerie en FR : hero, 6 catégories, « comment ça marche », confiance, FAQ</td><td>2</td></tr>
+          <tr><td>Formulaire + base + notification + auto-reply FR/EN</td><td>2</td></tr>
+          <tr><td>Confirmation + CGV + politique d'annulation + mentions légales</td><td>1</td></tr>
+          <tr><td>Stripe Checkout live testé (1 € réel + remboursement) + webhook. Intérim : Payment Links manuels</td><td>2</td></tr>
+          <tr><td>GA4 (form_submit, payment_success) + bouton WhatsApp</td><td>1</td></tr>
+          <tr><td rowspan="4"><strong>P1</strong><br><span class="dim">S3–S4</span></td>
+              <td>Back-office : demandes, filtres, « générer le lien de paiement »</td><td>4</td></tr>
+          <tr><td>E-mails transactionnels : devis, voucher, rappel J-2, post-prestation</td><td>2</td></tr>
+          <tr><td>Stripe Connect Express : onboarding, transfert J+1, commission retenue, remboursements</td><td>5</td></tr>
+          <tr><td>Version EN + montant indicatif en BRL</td><td>1</td></tr>
+          <tr><td><strong>P2</strong><br><span class="dim">S6+</span></td>
+              <td>Espace partenaire, catalogue, avis, packages, automatisations WhatsApp, CRM</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="pt">Campos do formulário de solicitação</span><span class="fr">Champs du formulaire de demande</span></summary>
+    <div class="body">
+      <p>Catégorie* (bateau, jet ski &amp; nautique, hélicoptère, voiture,
+      chauffeur, expérience, sur-mesure) · Ville/zone* (Paris, Nice, Cannes,
+      Antibes, Saint-Tropez, Monaco, autre) · Date(s)* et heure · Nombre de
+      personnes* · Budget indicatif (&lt; 500 / 500–1 500 / 1 500–5 000 /
+      &gt; 5 000 € / à définir) · Votre demande* · Prénom/Nom* · E-mail* ·
+      Téléphone/WhatsApp* · Langue (FR/EN/PT) · Comment nous avez-vous connus ·
+      RGPD* · UTM (champ caché).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="pt">Textos prontos do site (FR / EN)</span><span class="fr">Textes prêts du site (FR / EN)</span></summary>
+    <div class="body">
+      <div class="frdoc"><span class="obj">Hero FR</span> — « Votre conciergerie privée à Paris et sur la Côte d'Azur. Bateau, hélicoptère, voiture, chauffeur, expériences : dites-nous ce que vous voulez vivre, nous nous occupons de tout. Réponse sous 4 heures. » CTA « Faire une demande »
+<span class="obj">Hero EN</span> — "Your private concierge in Paris and on the French Riviera. Boat, helicopter, car, chauffeur, experiences: tell us what you want to live, we take care of everything. Reply within 4 hours." CTA "Make a request"
+<span class="obj">3 étapes FR</span> — « 1. Vous décrivez votre envie · 2. Nous vous envoyons une proposition et un prix ferme · 3. Vous validez et payez en ligne, nous confirmons tout »
+<span class="obj">Auto-reply FR</span> — « Merci, nous avons bien reçu votre demande. Un membre de l'équipe World Keys vous répond sous 4 heures (24 h le week-end) avec une proposition et un prix ferme. Pour toute urgence : [WhatsApp]. »</div>
+      <p class="small pt">Custos de pagamento a embutir no preço: Stripe ~1,5% +
+      € 0,25 (cartões UE) até ~3,25% + € 0,25 (internacionais).</p>
+      <p class="small fr">Frais de paiement à intégrer au prix : Stripe ~1,5 % +
+      0,25 € (cartes UE) jusqu'à ~3,25 % + 0,25 € (internationales).</p>
+    </div>
+  </details>
+</article>
+
+<!-- ==================== PAGE: S5 PROSPECCAO ==================== -->
+<article class="page" id="p-s5">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 5</span><span class="fr">Bloc 5</span></div>
+    <h1><span class="pt">Prospecção B2B: <em>o funil de parceiros</em></span><span class="fr">Prospection B2B : <em>le funnel partenaires</em></span></h1>
+    <p class="lede pt">
+      30 horas por semana de comercial, um funil com números claros e
+      materiais prontos em francês. Alvo: 12 parceiros ativos até o fim da
+      semana 4 — quando só 10 são necessários.
+    </p>
+    <p class="lede fr">
+      30 heures de commercial par semaine, un funnel chiffré et des supports
+      prêts en français. Cible : 12 partenaires actifs à la fin de la semaine
+      4 — quand 10 suffisent.
+    </p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="pt">O funil de cada semana</span><span class="fr">Le funnel de chaque semaine</span></h4>
+      <div class="sub"><span class="pt">De 60 e-mails a 3 parcerias</span><span class="fr">De 60 e-mails à 3 partenariats</span></div>
+      <div id="chartFunnel2"></div>
+      <div class="insight"><span class="pt">Cada parceria custa ~20 e-mails e 2 ligações. Só isso.</span><span class="fr">Chaque partenariat coûte ~20 e-mails et 2 appels. C'est tout.</span></div>
+    </div>
+    <div class="card">
+      <h4><span class="pt">Alvos mapeados por cidade</span><span class="fr">Cibles cartographiées par ville</span></h4>
+      <div class="sub"><span class="pt">47 empresas na lista inicial</span><span class="fr">47 entreprises dans la liste initiale</span></div>
+      <div id="chartCities"></div>
+      <div class="insight"><span class="pt">Riviera primeiro — a temporada fecha ~15/10; Paris assume depois.</span><span class="fr">Riviera d'abord — la saison ferme ~15/10 ; Paris prend le relais ensuite.</span></div>
+    </div>
+  </div>
+
+  <p class="small pt"><strong>Critérios de seleção (mínimo 5 de 8):</strong>
+  responde no mesmo dia · já trabalha com concierges · aceita ≥ 10% · licenças
+  e seguros em dia · Google ≥ 4,5 com ≥ 50 avaliações · fala inglês ·
+  inventário de médio porte · preços públicos transparentes.</p>
+  <p class="small fr"><strong>Critères de sélection (minimum 5 sur 8) :</strong>
+  répond le jour même · travaille déjà avec des concierges · accepte ≥ 10 % ·
+  licences et assurances à jour · Google ≥ 4,5 avec ≥ 50 avis · parle anglais ·
+  inventaire de taille moyenne · tarifs publics transparents.</p>
+
+  <details>
+    <summary><span class="pt">Alvos prioritários, cidade por cidade</span><span class="fr">Cibles prioritaires, ville par ville</span></summary>
+    <div class="body">
+      <div class="tbl-wrap pt"><table>
+        <thead><tr><th>Cidade</th><th>Alvos prioritários</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Paris</strong></td><td>5 barcos na Seine · 2 operadores de helicóptero · 3 locadoras prestige · 3 guias/experiências · 2 VTC premium</td></tr>
+          <tr><td><strong>Antibes</strong></td><td>4 day charters com skipper no Port Vauban — a capital do charter</td></tr>
+          <tr><td><strong>Cannes</strong></td><td>4 day charters (Port Canto / Vieux Port) · 3 agências de villas como canal</td></tr>
+          <tr><td><strong>Nice</strong></td><td>2 helicóptero Nice–Monaco · 3 day charters · 2 locadoras no aeroporto · 1 VTC parceiro</td></tr>
+          <tr><td><strong>Monaco</strong></td><td>2 helicóptero · 2 locadoras prestige · 2 day charters · concierges de hotel como canal</td></tr>
+          <tr><td><strong>Saint-Tropez</strong></td><td>3 barcos (até início de outubro) · 2 agências de villas</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl-wrap fr"><table>
+        <thead><tr><th>Ville</th><th>Cibles prioritaires</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Paris</strong></td><td>5 bateaux sur la Seine · 2 opérateurs d'hélicoptère · 3 loueurs prestige · 3 guides/expériences · 2 VTC premium</td></tr>
+          <tr><td><strong>Antibes</strong></td><td>4 day charters avec skipper au Port Vauban — la capitale du charter</td></tr>
+          <tr><td><strong>Cannes</strong></td><td>4 day charters (Port Canto / Vieux Port) · 3 agences de villas comme canal</td></tr>
+          <tr><td><strong>Nice</strong></td><td>2 hélicoptère Nice–Monaco · 3 day charters · 2 loueurs à l'aéroport · 1 VTC partenaire</td></tr>
+          <tr><td><strong>Monaco</strong></td><td>2 hélicoptère · 2 loueurs prestige · 2 day charters · concierges d'hôtel comme canal</td></tr>
+          <tr><td><strong>Saint-Tropez</strong></td><td>3 bateaux (jusqu'à début octobre) · 2 agences de villas</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="pt">Sequência de 3 e-mails (FR) — objetivo: ligação de 15 minutos</span><span class="fr">Séquence de 3 e-mails — objectif : un appel de 15 minutes</span></summary>
+    <div class="body">
+      <div class="lang-note pt">E-MAILS EM FRANCÊS — enviados aos parceiros</div>
+      <div class="lang-note fr">E-MAILS ENVOYÉS AUX PARTENAIRES</div>
+      <div class="frdoc"><span class="obj">E1 · Jour 0 — « Partenariat apporteur d'affaires – clientèle privée Paris / Côte d'Azur »</span>
+Bonjour [Prénom], World Keys est une conciergerie privée (Paris · Côte d'Azur) : nous organisons pour une clientèle française, internationale et lusophone des journées complètes – chauffeur, bateau, hélicoptère, table – et nous cherchons à [ville] un partenaire de référence pour [catégorie]. Le principe est simple : aucun frais, aucune exclusivité, une commission uniquement sur les réservations payées, et vous restez maître de vos tarifs et de vos conditions d'annulation. Auriez-vous 15 minutes cette semaine ? [lien agenda]</div>
+      <div class="frdoc"><span class="obj">E2 · Jour +3 — relance</span>
+Nous lançons la Conciergerie World Keys dans les prochains jours et nous nous limitons à deux partenaires par catégorie et par ville. Concrètement : nous vous transmettons des demandes qualifiées, vous confirmez la disponibilité, le client règle, vous encaissez le net. La commission de 12 % ne s'applique qu'aux réservations effectivement payées. Un appel de 15 minutes suffit : [lien]</div>
+      <div class="frdoc"><span class="obj">E3 · Jour +8 — dernier message</span>
+Si le sujet n'est pas d'actualité, un simple « pas maintenant » me suffit et je reviendrai au printemps. Si au contraire vous êtes ouvert à recevoir nos premières demandes dès [mois], répondez « OK » et je vous envoie nos conditions de partenariat (une page).</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="pt">Roteiro da ligação de 15 minutos</span><span class="fr">Script de l'appel de 15 minutes</span></summary>
+    <div class="body">
+      <ul class="clean pt">
+        <li><strong>0–2 min · Contexto:</strong> conciergerie com atividade de chauffeur e 15.000 usuários; procuramos um parceiro [categoria] em [cidade].</li>
+        <li><strong>2–6 min · Descoberta:</strong> temporada real, canais atuais, quanto paga a concierges de hotel, condições de cancelamento, prazo de confirmação, WhatsApp.</li>
+        <li><strong>6–10 min · Proposta:</strong> sem custo, sem exclusividade, 12% só sobre reserva paga, dois modos de recebimento, não-contornamento de 12 meses, saída livre com 30 dias.</li>
+        <li><strong>10–13 min · Objeções</strong> (abaixo).</li>
+        <li><strong>13–15 min · Fechamento:</strong> "envio hoje as condições em 1 página + grade de tarifas + lista de atestados; responda em 48 h e a primeira demanda chega em seguida."</li>
+      </ul>
+      <ul class="clean fr">
+        <li><strong>0–2 min · Contexte :</strong> conciergerie avec activité de chauffeur et 15 000 utilisateurs ; nous cherchons un partenaire [catégorie] à [ville].</li>
+        <li><strong>2–6 min · Découverte :</strong> saison réelle, canaux actuels, ce qu'il verse aux concierges d'hôtel, conditions d'annulation, délai de confirmation, WhatsApp.</li>
+        <li><strong>6–10 min · Proposition :</strong> aucun frais, aucune exclusivité, 12 % uniquement sur réservation payée, deux modes d'encaissement, non-contournement de 12 mois, sortie libre à 30 jours.</li>
+        <li><strong>10–13 min · Objections</strong> (ci-dessous).</li>
+        <li><strong>13–15 min · Closing :</strong> « je vous envoie ce soir les conditions en une page + la grille tarifaire + la liste des attestations ; répondez sous 48 h et la première demande arrive aussitôt. »</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="pt">As 9 objeções prováveis — e a resposta pronta (FR)</span><span class="fr">Les 9 objections probables — et la réponse prête</span></summary>
+    <div class="body">
+      <div class="lang-note pt">RESPOSTAS EM FRANCÊS — usadas na ligação</div>
+      <div class="lang-note fr">RÉPONSES UTILISÉES PENDANT L'APPEL</div>
+      <div class="frdoc"><span class="obj">« On travaille déjà avec des conciergeries. »</span> — Parfait, le modèle vous convient donc. Nous sommes un canal supplémentaire, sans exclusivité, avec un humain qui filtre les demandes.
+<span class="obj">« Quelle commission ? »</span> — 12 % HT, hors caution et carburant, uniquement sur les réservations payées — la fourchette que vous versez déjà aux concierges d'hôtel.
+<span class="obj">« On veut être payés avant la prestation. »</span> — Vous le serez : le client paie à la réservation, directement ou via notre plateforme.
+<span class="obj">« Qui gère les annulations ? »</span> — Vos conditions s'appliquent telles quelles ; en cas de remboursement, aucune commission n'est due.
+<span class="obj">« Vous n'avez pas de volume. »</span> — Vrai, et c'est pour cela que c'est sans frais et sans engagement. Testons une première réservation.
+<span class="obj">« On ferme en octobre. »</span> — Alors signons pour les dernières semaines et, surtout, pour être en place dès avril.
+<span class="obj">« Exclusivité ? »</span> — Aucune, dans les deux sens. Une seule clause : ne pas contourner World Keys avec un client présenté, pendant 12 mois.
+<span class="obj">« Envoyez-moi un mail. »</span> — Bien sûr. Puis-je vous rappeler jeudi à 11 h ?
+<span class="obj">« Êtes-vous immatriculés Atout France ? »</span> — Nous intervenons comme apporteur d'affaires : vous restez le vendeur et facturez le client. Notre immatriculation est en cours pour 2027.</div>
+    </div>
+  </details>
+
+  <p class="small pt"><strong>Distribuição das 30 h semanais (S1–S3):</strong>
+  6 h e-mails novos · 2 h follow-ups · 4 h ligações · 3 h contratos e admin ·
+  8 h cotações a clientes · 4 h conteúdo e campanhas · 3 h de reserva. A
+  partir de S4, prospecção cai para manutenção (30 e-mails/semana).</p>
+  <p class="small fr"><strong>Répartition des 30 h hebdomadaires (S1–S3) :</strong>
+  6 h nouveaux e-mails · 2 h relances · 4 h appels · 3 h contrats et admin ·
+  8 h devis clients · 4 h contenu et campagnes · 3 h de réserve. Dès S4, la
+  prospection passe en maintenance (30 e-mails/semaine).</p>
+</article>
+
+<!-- ==================== PAGE: S6 CLIENTES ==================== -->
+<article class="page" id="p-s6">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 6</span><span class="fr">Bloc 6</span></div>
+    <h1><span class="pt">Primeiros clientes com <em>orçamento próximo de zero</em></span><span class="fr">Premiers clients avec <em>un budget proche de zéro</em></span></h1>
+    <p class="lede pt">
+      Oito canais ordenados por custo e velocidade. Os três primeiros custam
+      € 0 e produzem resultado em menos de uma semana.
+    </p>
+    <p class="lede fr">
+      Huit canaux classés par coût et vitesse. Les trois premiers coûtent 0 €
+      et produisent un résultat en moins d'une semaine.
+    </p>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">De onde vêm os 42 pedidos qualificados</span><span class="fr">D'où viennent les 42 demandes qualifiées</span></h4>
+    <div class="sub"><span class="pt">Alocação planejada por canal, nos 60 dias</span><span class="fr">Allocation planifiée par canal, sur 60 jours</span></div>
+    <div id="chartChannels"></div>
+    <div class="insight"><span class="pt">57% da demanda vem de um ativo que já pagamos: os 15 mil usuários da plataforma.</span><span class="fr">57 % de la demande vient d'un actif déjà payé : les 15 000 utilisateurs de la plateforme.</span></div>
+  </div>
+
+  <details>
+    <summary><span class="pt">Os 8 canais em detalhe — custo, prazo e o movimento</span><span class="fr">Les 8 canaux en détail — coût, délai et le mouvement</span></summary>
+    <div class="body">
+      <div class="tbl-wrap pt"><table>
+        <thead><tr><th>#</th><th>Canal</th><th>Custo</th><th>Resultado em</th><th>O movimento</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>E-mail aos 15 mil usuários</strong></td><td>€ 0–40/mês</td><td>48 h</td><td class="dim">3 campanhas (S2, S4, S6). 25% abertura × 2% clique ≈ 75 cliques → 8–12 pedidos por disparo. Checar RGPD antes.</td></tr>
+          <tr><td>2</td><td><strong>Clientes do serviço de chauffeur</strong></td><td>€ 0</td><td>24 h</td><td class="dim">Mensagem pessoal do fundador por WhatsApp. ~50 clientes → 2 reservas.</td></tr>
+          <tr><td>3</td><td><strong>Instagram orgânico</strong></td><td>€ 0</td><td>Contínuo</td><td class="dim">3 posts + 2 reels/semana; reposts cruzados com cada parceiro.</td></tr>
+          <tr><td>4</td><td><strong>Google Business Profile</strong></td><td>€ 0</td><td>1–2 sem.</td><td class="dim">"Conciergerie &amp; Chauffeur privé", post semanal, avaliação a cada cliente.</td></tr>
+          <tr><td>5</td><td><strong>Agentes de viagem BR / PT</strong></td><td>€ 0</td><td>2–3 sem.</td><td class="dim">20 agentes; referral 5% + "concierge que fala português". Feriados 12/10 e 2/11.</td></tr>
+          <tr><td>6</td><td><strong>Villas, agências e hotéis boutique</strong></td><td>€ 0</td><td>3–4 sem.</td><td class="dim">Isca: o motorista. Landing/QR "Conciergerie offerte par [Villa]".</td></tr>
+          <tr><td>7</td><td><strong>Google Ads teste</strong></td><td>€ 300</td><td>S5</td><td class="dim">Só se abaixo da meta. 5 palavras-chave exatas, CPC € 1–3.</td></tr>
+          <tr><td>8</td><td><strong>Restaurantes da plataforma</strong></td><td>€ 0</td><td>—</td><td class="dim">Cartão/QR nos parceiros. Baixa prioridade.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl-wrap fr"><table>
+        <thead><tr><th>#</th><th>Canal</th><th>Coût</th><th>Résultat en</th><th>Le mouvement</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>E-mail aux 15 000 utilisateurs</strong></td><td>0–40 €/mois</td><td>48 h</td><td class="dim">3 campagnes (S2, S4, S6). 25 % d'ouverture × 2 % de clic ≈ 75 clics → 8–12 demandes par envoi. Vérifier le RGPD avant.</td></tr>
+          <tr><td>2</td><td><strong>Clients du service de chauffeur</strong></td><td>0 €</td><td>24 h</td><td class="dim">Message personnel du fondateur par WhatsApp. ~50 clients → 2 réservations.</td></tr>
+          <tr><td>3</td><td><strong>Instagram organique</strong></td><td>0 €</td><td>Continu</td><td class="dim">3 posts + 2 reels/semaine ; reposts croisés avec chaque partenaire.</td></tr>
+          <tr><td>4</td><td><strong>Google Business Profile</strong></td><td>0 €</td><td>1–2 sem.</td><td class="dim">« Conciergerie &amp; Chauffeur privé », post hebdo, avis à chaque client.</td></tr>
+          <tr><td>5</td><td><strong>Agents de voyage BR / PT</strong></td><td>0 €</td><td>2–3 sem.</td><td class="dim">20 agents ; referral 5 % + « concierge qui parle portugais ». Fériés 12/10 et 2/11.</td></tr>
+          <tr><td>6</td><td><strong>Villas, agences et hôtels boutique</strong></td><td>0 €</td><td>3–4 sem.</td><td class="dim">Appât : le chauffeur. Landing/QR « Conciergerie offerte par [Villa] ».</td></tr>
+          <tr><td>7</td><td><strong>Test Google Ads</strong></td><td>300 €</td><td>S5</td><td class="dim">Seulement si sous l'objectif. 5 mots-clés exacts, CPC 1–3 €.</td></tr>
+          <tr><td>8</td><td><strong>Restaurants de la plateforme</strong></td><td>0 €</td><td>—</td><td class="dim">Carte/QR chez les partenaires. Priorité basse.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+</article>
+
+<!-- ==================== PAGE: S7 PLANO 60 DIAS ==================== -->
+<article class="page" id="p-s7">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 7</span><span class="fr">Bloc 7</span></div>
+    <h1><span class="pt">Os 60 dias, <em>semana a semana</em></span><span class="fr">Les 60 jours, <em>semaine par semaine</em></span></h1>
+    <p class="lede pt">
+      Cada semana tem tarefas, entregáveis e a linha de KPIs acumulados:
+      parceiros / pedidos / reservas / caixa. Revisão de 30 minutos toda terça — o semáforo do painel decide: seguir, reforçar ou plano B.
+    </p>
+    <p class="lede fr">
+      Chaque semaine a ses tâches, ses livrables et sa ligne de KPIs cumulés :
+      partenaires / demandes / réservations / trésorerie. Revue de 30 minutes
+      chaque mardi — les feux du tableau de bord décident : continuer,
+      renforcer ou plan B.
+    </p>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">Reservas da semana × caixa acumulado</span><span class="fr">Réservations hebdo × trésorerie cumulée</span></h4>
+    <div class="sub"><span class="pt">Barras: novas reservas pagas · Linha: caixa acumulado em €</span><span class="fr">Barres : nouvelles réservations payées · Ligne : trésorerie cumulée en €</span></div>
+    <div id="chartCombo"></div>
+    <div class="legend">
+      <span><i style="background:#6e8aa5"></i><span class="pt">Reservas / semana</span><span class="fr">Résas / semaine</span></span>
+      <span><i style="background:#c9a45c"></i><span class="pt">Caixa acumulado</span><span class="fr">Trésorerie cumulée</span></span>
+    </div>
+    <div class="insight"><span class="pt">O ritmo estabiliza em 3 reservas/semana da S4 em diante — regularidade, não heroísmo.</span><span class="fr">Le rythme se stabilise à 3 résas/semaine dès S4 — de la régularité, pas de l'héroïsme.</span></div>
+  </div>
+
+  <div class="pt">
+    <div class="week"><span class="w">S1<small>16–22 set</small></span><div>
+      <h4>Fundação</h4>
+      <p>Grade de comissão + condições de 1 página · lista de 40 alvos ·
+      ligar para as empresas já conhecidas · 40 e-mails E1 (Riviera primeiro)
+      · contrato ao advogado · Stripe live · devs iniciam o P0.</p>
+      <span class="kpi">2 parceiros · 0 pedidos · 0 reservas · € 0</span>
+    </div></div>
+    <div class="week"><span class="w">S2<small>23–29 set</small></span><div>
+      <h4>Lançamento</h4>
+      <p>Landing no ar (P0 testado com pagamento real de € 1) · campanha #1
+      aos 15 mil usuários · WhatsApp aos clientes chauffeur · 60 novos E1 +
+      10 ligações · Google Business + Instagram.</p>
+      <span class="kpi">5 parceiros · 3 pedidos · 1 reserva · € 100</span>
+    </div></div>
+    <div class="week"><span class="w">S3<small>30 set–6 out</small></span><div>
+      <h4>Primeiras vendas em série</h4>
+      <p>60 E1 focados em Paris · cotações em ≤ 4 h · pacote "Monaco Yacht
+      Show" (motorista + heli) · primeiros reels com parceiros · devs no
+      back-office.</p>
+      <span class="kpi">8 parceiros · 8 pedidos · 3 reservas · € 350</span>
+    </div></div>
+    <div class="week"><span class="w">S4<small>7–13 out</small></span><div>
+      <h4>Escala de canais</h4>
+      <p>Feriado brasileiro de 12/10 · campanha #2 · 20 agentes BR/PT · 10 villas/hotéis · Stripe Connect
+      em produção e parceiros no onboarding.</p>
+      <span class="kpi">12 parceiros · 15 pedidos · 6 reservas · € 700</span>
+    </div></div>
+    <div class="week"><span class="w">S5<small>14–20 out</small></span><div>
+      <h4>Checkpoint do meio</h4>
+      <p>Decisão sobre € 300 de Ads (só se
+      caixa &lt; € 700) · revisão da conversão · ajuste de preços e pacotes.</p>
+      <span class="kpi">14 parceiros · 22 pedidos · 9 reservas · € 1.000</span>
+    </div></div>
+    <div class="week"><span class="w">S6<small>21–27 out</small></span><div>
+      <h4>Pivot de outono</h4>
+      <p>Peso desloca da Riviera para Paris: Seine, helicóptero, motoristas,
+      experiências · campanha #3 · avaliações Google · 3 pacotes de outono.</p>
+      <span class="kpi">15 parceiros · 30 pedidos · 12 reservas · € 1.350</span>
+    </div></div>
+    <div class="week"><span class="w">S7<small>28 out–3 nov</small></span><div>
+      <h4>Janela final de demanda</h4>
+      <p>Feriado 31/10–2/11 (BR) · follow-up de todos os pedidos abertos ·
+      upsell de motorista em cada reserva confirmada.</p>
+      <span class="kpi">17 parceiros · 36 pedidos · 15 reservas · € 1.650 — meta batida</span>
+    </div></div>
+    <div class="week"><span class="w">S8<small>4–14 nov</small></span><div>
+      <h4>Fechamento</h4>
+      <p>Cobrar comissões pendentes do Modo A · balanço dos 60 dias · plano
+      para a temporada de abril de 2027.</p>
+      <span class="kpi">18 parceiros · 42 pedidos · 18 reservas · € 1.950</span>
+    </div></div>
+  </div>
+
+  <div class="fr">
+    <div class="week"><span class="w">S1<small>16–22 sept</small></span><div>
+      <h4>Fondations</h4>
+      <p>Grille de commissions + conditions d'une page · liste de 40 cibles ·
+      appeler les entreprises déjà connues · 40 e-mails E1 (Riviera d'abord) ·
+      contrat chez l'avocat · Stripe live · les devs lancent le P0.</p>
+      <span class="kpi">2 partenaires · 0 demande · 0 résa · 0 €</span>
+    </div></div>
+    <div class="week"><span class="w">S2<small>23–29 sept</small></span><div>
+      <h4>Lancement</h4>
+      <p>Landing en ligne (P0 testé avec un paiement réel d'1 €) · campagne
+      #1 aux 15 000 utilisateurs · WhatsApp aux clients chauffeur · 60
+      nouveaux E1 + 10 appels · Google Business + Instagram.</p>
+      <span class="kpi">5 partenaires · 3 demandes · 1 résa · 100 €</span>
+    </div></div>
+    <div class="week"><span class="w">S3<small>30 sept–6 oct</small></span><div>
+      <h4>Premières ventes en série</h4>
+      <p>60 E1 ciblés Paris · devis en ≤ 4 h · offre « Monaco Yacht Show »
+      (chauffeur + hélico) · premiers reels avec les partenaires · devs sur
+      le back-office.</p>
+      <span class="kpi">8 partenaires · 8 demandes · 3 résas · 350 €</span>
+    </div></div>
+    <div class="week"><span class="w">S4<small>7–13 oct</small></span><div>
+      <h4>Montée en canaux</h4>
+      <p>Férié brésilien du 12/10 · campagne #2 · 20 agents BR/PT · 10 villas/hôtels · Stripe Connect en
+      production et partenaires en onboarding.</p>
+      <span class="kpi">12 partenaires · 15 demandes · 6 résas · 700 €</span>
+    </div></div>
+    <div class="week"><span class="w">S5<small>14–20 oct</small></span><div>
+      <h4>Checkpoint de mi-parcours</h4>
+      <p>Décision sur les 300 € d'Ads (seulement
+      si trésorerie &lt; 700 €) · revue de la conversion · ajustement des
+      prix et des offres.</p>
+      <span class="kpi">14 partenaires · 22 demandes · 9 résas · 1 000 €</span>
+    </div></div>
+    <div class="week"><span class="w">S6<small>21–27 oct</small></span><div>
+      <h4>Pivot d'automne</h4>
+      <p>Le poids passe de la Riviera à Paris : Seine, hélicoptère,
+      chauffeurs, expériences · campagne #3 · avis Google · 3 offres
+      d'automne.</p>
+      <span class="kpi">15 partenaires · 30 demandes · 12 résas · 1 350 €</span>
+    </div></div>
+    <div class="week"><span class="w">S7<small>28 oct–3 nov</small></span><div>
+      <h4>Dernière fenêtre de demande</h4>
+      <p>Férié 31/10–2/11 (BR) · relance de toutes les demandes ouvertes ·
+      upsell chauffeur sur chaque réservation confirmée.</p>
+      <span class="kpi">17 partenaires · 36 demandes · 15 résas · 1 650 € — objectif atteint</span>
+    </div></div>
+    <div class="week"><span class="w">S8<small>4–14 nov</small></span><div>
+      <h4>Clôture</h4>
+      <p>Encaisser les commissions en attente du Mode A · bilan des 60 jours
+      · plan pour la saison d'avril 2027.</p>
+      <span class="kpi">18 partenaires · 42 demandes · 18 résas · 1 950 €</span>
+    </div></div>
+  </div>
+
+  <h3><span class="pt">Os 3 riscos — cada um com plano B pronto</span><span class="fr">Les 3 risques — chacun avec son plan B</span></h3>
+  <div class="pt">
+    <div class="risk">
+      <div class="r-head">1 · Parceiros demoram a assinar o contrato</div>
+      <div class="r-body"><b>Plano B:</b> aceite por e-mail das condições de 1
+      página + primeira reserva-teste no Modo A. O contrato completo vem
+      depois da primeira operação bem-sucedida.</div>
+    </div>
+    <div class="risk">
+      <div class="r-head">2 · Demanda fraca na Riviera em outubro–novembro</div>
+      <div class="r-body"><b>Plano B:</b> pivot para Paris e para os feriados
+      brasileiros; Ads em S5; motorista — sem sazonalidade — empurrado em
+      cada reserva.</div>
+    </div>
+    <div class="risk">
+      <div class="r-head">3 · Stripe Connect atrasa ou pagamentos falham</div>
+      <div class="r-body"><b>Plano B:</b> Payment Links manuais para a
+      comissão/sinal e saldo pago direto ao parceiro, até o Connect
+      estabilizar. Zero código, caixa imediato.</div>
+    </div>
+    <p class="small"><strong>Guarda-corpo jurídico permanente:</strong> sem
+    Atout France, nenhuma venda em nome próprio nem pacote faturado pela
+    World Keys — cada prestação é vendida pelo parceiro; o motorista é
+    vendido pela nossa SAS por ser serviço próprio. Subcontratação de
+    motoristas só com exploitants VTC registrados e RC verificada.</p>
+  </div>
+  <div class="fr">
+    <div class="risk">
+      <div class="r-head">1 · Les partenaires tardent à signer le contrat</div>
+      <div class="r-body"><b>Plan B :</b> acceptation par e-mail des
+      conditions d'une page + première réservation-test en Mode A. Le contrat
+      complet arrive après la première opération réussie.</div>
+    </div>
+    <div class="risk">
+      <div class="r-head">2 · Demande faible sur la Riviera en octobre–novembre</div>
+      <div class="r-body"><b>Plan B :</b> pivot vers Paris et les fériés
+      brésiliens ; Ads en S5 ; le chauffeur — sans saisonnalité — proposé sur
+      chaque réservation.</div>
+    </div>
+    <div class="risk">
+      <div class="r-head">3 · Stripe Connect en retard ou paiements en échec</div>
+      <div class="r-body"><b>Plan B :</b> Payment Links manuels pour la
+      commission/l'acompte et solde payé directement au partenaire, jusqu'à
+      stabilisation du Connect. Zéro code, trésorerie immédiate.</div>
+    </div>
+    <p class="small"><strong>Garde-fou juridique permanent :</strong> sans
+    Atout France, aucune vente en nom propre ni package facturé par World
+    Keys — chaque prestation est vendue par le partenaire ; le chauffeur est
+    vendu par notre SAS car c'est un service propre. Sous-traitance de
+    chauffeurs uniquement avec des exploitants VTC enregistrés et RC
+    vérifiée.</p>
+  </div>
+</article>
+
+<!-- ==================== PAGE: S8 CHECKLIST ==================== -->
+<article class="page" id="p-s8">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 8</span><span class="fr">Bloc 8</span></div>
+    <h1><span class="pt">Esta semana: <em>as 10 ações do fundador</em></span><span class="fr">Cette semaine : <em>les 10 actions du fondateur</em></span></h1>
+    <p class="lede pt">
+      Em ordem de execução. Marque conforme concluir — o progresso vale só
+      para esta sessão; o controle oficial fica na sua planilha.
+    </p>
+    <p class="lede fr">
+      Dans l'ordre d'exécution. Cochez au fur et à mesure — la progression ne
+      vaut que pour cette session ; le suivi officiel reste dans votre
+      tableur.
+    </p>
+  </div>
+  <div id="progress">0 / 13</div>
+  <div class="pbar"><i id="pbarFill"></i></div>
+  <div class="check" id="checklist">
+    <label><input type="checkbox"><span class="n">1</span><span class="txt"><span class="pt"><strong>Hoje:</strong> fixar a grade de comissão e os dois modos de pagamento; escrever as "conditions de partenariat" de 1 página em francês.</span><span class="fr"><strong>Aujourd'hui :</strong> figer la grille de commissions et les deux modes de paiement ; rédiger les « conditions de partenariat » d'une page.</span></span></label>
+    <label><input type="checkbox"><span class="n">2</span><span class="txt"><span class="pt"><strong>Hoje:</strong> enviar aos devs o documento funcional do P0 com entrega marcada para S2.</span><span class="fr"><strong>Aujourd'hui :</strong> transmettre aux devs le cahier fonctionnel du P0 avec livraison fixée à S2.</span></span></label>
+    <label><input type="checkbox"><span class="n">3</span><span class="txt"><span class="pt"><strong>Amanhã:</strong> planilha com 40 empresas-alvo (cidade, categoria, contato, nota Google, canal atual) — as já conhecidas no topo.</span><span class="fr"><strong>Demain :</strong> tableur de 40 entreprises cibles (ville, catégorie, contact, note Google, canal actuel) — les déjà connues en tête.</span></span></label>
+    <label><input type="checkbox"><span class="n">4</span><span class="txt"><span class="pt"><strong>Amanhã:</strong> ligar (não escrever) para as empresas que já temos em mente; fechar 2 parcerias verbais e pedir tarifas + atestado de seguro.</span><span class="fr"><strong>Demain :</strong> appeler (ne pas écrire) les entreprises déjà identifiées ; conclure 2 accords verbaux et demander tarifs + attestation d'assurance.</span></span></label>
+    <label><input type="checkbox"><span class="n">5</span><span class="txt"><span class="pt">Criar conciergerie@theworldkeys.com, WhatsApp Business com número francês e agenda de 15 min (Calendly ou similar).</span><span class="fr">Créer conciergerie@theworldkeys.com, WhatsApp Business avec numéro français et agenda de 15 min (Calendly ou équivalent).</span></span></label>
+    <label><input type="checkbox"><span class="n">6</span><span class="txt"><span class="pt">Enviar E1 a 40 empresas — Nice, Cannes e Antibes primeiro, porque a temporada acaba; programar E2 para D+3.</span><span class="fr">Envoyer E1 à 40 entreprises — Nice, Cannes et Antibes d'abord, car la saison se termine ; programmer E2 à J+3.</span></span></label>
+    <label><input type="checkbox"><span class="n">7</span><span class="txt"><span class="pt">Contrato completo + condições de 1 página → advogado para revisão em 48 h.</span><span class="fr">Contrat complet + conditions d'une page → avocat pour revue sous 48 h.</span></span></label>
+    <label><input type="checkbox"><span class="n">8</span><span class="txt"><span class="pt">Stripe: ativar conta live (KYB completo), pagamento real de € 1 + reembolso, modelo de Payment Link, solicitar Connect Express.</span><span class="fr">Stripe : activer le compte live (KYB complet), paiement réel d'1 € + remboursement, modèle de Payment Link, demander Connect Express.</span></span></label>
+    <label><input type="checkbox"><span class="n">9</span><span class="txt"><span class="pt">Cotação de RC Pro de intermediário e abertura do dossier Atout France — não bloqueia o lançamento, mas decide 2027.</span><span class="fr">Devis de RC Pro d'intermédiaire et ouverture du dossier Atout France — ne bloque pas le lancement, mais décide 2027.</span></span></label>
+    <label><input type="checkbox"><span class="n">10</span><span class="txt"><span class="pt">Preparar campanha #1 (FR/EN), checar RGPD, criar Google Business Profile e os 3 primeiros posts do Instagram — prontos para o dia em que a landing subir.</span><span class="fr">Préparer la campagne #1 (FR/EN), vérifier le RGPD, créer le Google Business Profile et les 3 premiers posts Instagram — prêts pour le jour de mise en ligne.</span></span></label>
+    <label><input type="checkbox"><span class="n">11</span><span class="txt"><span class="pt"><strong>Otimização:</strong> fixar frais de service de 8% ao cliente, sinal de 30% e a oferta "motorista à disposição 8 h" — atualizar CGV e a página de preços antes da landing subir.</span><span class="fr"><strong>Optimisation :</strong> figer les frais de service de 8 %, l'acompte de 30 % et l'offre « chauffeur à disposition 8 h » — mettre à jour les CGV et la page tarifs avant la mise en ligne.</span></span></label>
+    <label><input type="checkbox"><span class="n">12</span><span class="txt"><span class="pt"><strong>Otimização:</strong> montar a lista de expositores brasileiros e portugueses do MIPCOM (12–15/10) e da TFWA (27/09–01/10) e enviar a oferta "ground service em português" até 21/09.</span><span class="fr"><strong>Optimisation :</strong> constituer la liste des exposants brésiliens et portugais du MIPCOM (12–15/10) et du TFWA (27/09–01/10) et envoyer l'offre « ground service en portugais » avant le 21/09.</span></span></label>
+    <label><input type="checkbox"><span class="n">13</span><span class="txt"><span class="pt"><strong>Otimização:</strong> bloquear capacidade de motoristas para 23–26/09 (Monaco Yacht Show) e 27/09–01/10 (TFWA) — e confirmar quantos veículos existem de fato em Paris e na Riviera.</span><span class="fr"><strong>Optimisation :</strong> bloquer la capacité chauffeurs pour les 23–26/09 (Monaco Yacht Show) et 27/09–01/10 (TFWA) — et confirmer combien de véhicules existent réellement à Paris et sur la Riviera.</span></span></label>
+  </div>
+</article>
+
+<!-- ==================== PAGE: S9 AVALIAÇÃO & PLANO OTIMIZADO ==================== -->
+<article class="page" id="p-s9">
+  <div class="page-head">
+    <div class="kicker"><span class="pt">Bloco 9 · Avaliação independente</span><span class="fr">Bloc 9 · Évaluation indépendante</span></div>
+    <h1><span class="pt">O que o mundo já validou — e <em>o plano otimizado</em></span><span class="fr">Ce que le monde a déjà validé — et <em>le plan optimisé</em></span></h1>
+    <p class="lede pt">
+      Avaliação do plano contra o que funciona em conciergerie, charter e
+      marketplaces no mundo. Veredicto em uma frase: a estrutura está certa,
+      a economia por reserva está fraca e a demanda é o elo mais frágil. Sete
+      correções validadas resolvem isso sem mudar o modelo.
+    </p>
+    <p class="lede fr">
+      Évaluation du plan face à ce qui fonctionne en conciergerie, charter et
+      marketplaces dans le monde. Verdict en une phrase : la structure est
+      juste, l'économie par réservation est faible et la demande est le
+      maillon fragile. Sept corrections validées y remédient sans changer le
+      modèle.
+    </p>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">Scorecard: o plano hoje vs. com as otimizações</span><span class="fr">Scorecard : le plan aujourd'hui vs avec les optimisations</span></h4>
+    <div class="sub"><span class="pt">Nota de 0 a 10 por dimensão, comparada às melhores práticas do setor</span><span class="fr">Note de 0 à 10 par dimension, comparée aux meilleures pratiques du secteur</span></div>
+    <div id="chartScore"></div>
+    <div class="legend">
+      <span><i style="background:#6e8aa5"></i><span class="pt">Plano atual</span><span class="fr">Plan actuel</span></span>
+      <span><i style="background:#e6c98c"></i><span class="pt">Com otimizações</span><span class="fr">Avec optimisations</span></span>
+    </div>
+    <div class="insight"><span class="pt">A oferta está resolvida. O dinheiro está na demanda e no ticket — é lá que as sete correções atuam.</span><span class="fr">L'offre est réglée. L'argent est dans la demande et le panier — c'est là qu'agissent les sept corrections.</span></div>
+  </div>
+
+  <h3><span class="pt">Três verdades incômodas</span><span class="fr">Trois vérités inconfortables</span></h3>
+  <div class="pt">
+    <div class="callout"><p><strong>€ 1.600 em 60 dias = € 8 por hora do fundador.</strong>
+    240 horas de comercial para € 1.920. Financeiramente, os 60 dias não se
+    pagam — eles compram o ativo: parceiros, processo, avaliações e o primeiro
+    cliente recorrente. A meta financeira é o piso; o prêmio é a máquina.</p></div>
+    <div class="callout"><p><strong>O ticket está baixo demais para uma conciergerie.</strong>
+    Transfer de € 300 × 30% = € 90. A conciergerie no mundo vive de dias
+    inteiros: motorista à disposição € 650–900, day charter € 3–8 mil,
+    fim de semana de evento € 5–20 mil. Mesmo esforço de venda, 3–5× a
+    receita por reserva.</p></div>
+    <div class="callout"><p><strong>A demanda inbound está superestimada.</strong>
+    15 mil usuários de um app de restaurantes convertem em 3–6 pedidos de
+    conciergerie por disparo, não 8–12. E 45% de pedido → pago é teto, não
+    média (inbound frio no setor: 20–35%). A resposta é demanda por eventos e
+    contas corporativas — não mais e-mail.</p></div>
+    <p class="small"><strong>Ponto a confirmar antes de tudo:</strong> 47% da
+    receita depende de capacidade real de motoristas em Paris e na Riviera nas
+    datas de evento. Se essa capacidade não está lá, o pilar mais forte do
+    plano vira o mais fraco.</p>
+  </div>
+  <div class="fr">
+    <div class="callout"><p><strong>1 600 € en 60 jours = 8 € de l'heure pour le fondateur.</strong>
+    240 heures de commercial pour 1 920 €. Financièrement, les 60 jours ne se
+    paient pas — ils achètent l'actif : partenaires, process, avis et premier
+    client récurrent. L'objectif financier est le plancher ; le prix, c'est la
+    machine.</p></div>
+    <div class="callout"><p><strong>Le panier est trop bas pour une conciergerie.</strong>
+    Transfert à 300 € × 30 % = 90 €. Dans le monde, la conciergerie vit de
+    journées entières : chauffeur à disposition 650–900 €, day charter
+    3–8 k€, week-end d'événement 5–20 k€. Même effort de vente, 3–5× le
+    revenu par réservation.</p></div>
+    <div class="callout"><p><strong>La demande entrante est surestimée.</strong>
+    15 000 utilisateurs d'une app de restaurants convertissent en 3–6 demandes
+    de conciergerie par envoi, pas 8–12. Et 45 % de demande → payé est un
+    plafond, pas une moyenne (entrant froid dans le secteur : 20–35 %). La
+    réponse : la demande événementielle et les comptes corporate — pas plus
+    d'e-mails.</p></div>
+    <p class="small"><strong>Point à confirmer avant tout :</strong> 47 % du
+    revenu dépend d'une capacité réelle de chauffeurs à Paris et sur la
+    Riviera aux dates d'événement. Si elle n'est pas là, le pilier le plus
+    fort du plan devient le plus faible.</p>
+  </div>
+
+  <h3><span class="pt">Sete otimizações validadas pelo mercado</span><span class="fr">Sept optimisations validées par le marché</span></h3>
+  <div class="mech pt">
+    <div><span class="m-num">1</span><div>
+      <h4>Frais de service de 8% ao cliente, desde o dia 1</h4>
+      <p>Take rate sobe de 12% para 20% sem tocar no parceiro. <strong>Validado
+      por:</strong> Airbnb (taxa de hóspede), Click&amp;Boat, GetYourGuide e
+      todo concierge independente que cobra 10–20% em pedidos sob medida.
+      Obrigatório exibir o preço total antes do pagamento. <strong>Impacto:
+      +67% de receita por reserva de parceiro.</strong></p>
+    </div></div>
+    <div><span class="m-num">2</span><div>
+      <h4>Vender dias, não trajetos</h4>
+      <p>Produto principal de motorista = "mise à disposition" 8 h a
+      € 650–900; o transfer vira complemento. <strong>Validado por:</strong> o
+      padrão de precificação de chauffeurs premium em Paris e na Riviera.
+      <strong>Impacto: ticket médio de motorista € 300 → € 500+.</strong></p>
+    </div></div>
+    <div><span class="m-num">3</span><div>
+      <h4>Calendário de eventos como motor de demanda</h4>
+      <p>Oito janelas caem dentro dos 60 dias (gráfico abaixo): Monaco Yacht
+      Show, TFWA e MIPCOM em Cannes, Fashion Week, Mondial de l'Auto e Rolex
+      Paris Masters em Paris, Toussaint e dois feriados brasileiros.
+      <strong>Validado por:</strong> a economia inteira de Cannes e Monaco —
+      hotéis triplicam o preço e motoristas esgotam nessas datas.
+      <strong>Impacto: demanda previsível, corporativa e de ticket alto.</strong></p>
+    </div></div>
+    <div><span class="m-num">4</span><div>
+      <h4>Nicho lusófono corporativo</h4>
+      <p>Expositores e delegações brasileiras e portuguesas em MIPCOM e TFWA
+      compram motorista, jantares e transfers — e ninguém os atende em
+      português. Oferta "ground service em português" enviada às empresas
+      antes do evento. <strong>Validado por:</strong> os DMCs de nicho
+      linguístico que dominaram a Riviera para clientelas específicas.
+      <strong>Impacto: 1 conta corporativa = 5–10 reservas.</strong></p>
+    </div></div>
+    <div><span class="m-num">5</span><div>
+      <h4>Sinal de 30% na aceitação da cotação</h4>
+      <p>Pré-pagamento integral abaixo de € 1.000; sinal de 30% acima, saldo
+      J-7, política de cancelamento espelhada na do parceiro.
+      <strong>Validado por:</strong> prática universal de charter e
+      conciergerie. <strong>Impacto: zero no-show, comissão garantida.</strong></p>
+    </div></div>
+    <div><span class="m-num">6</span><div>
+      <h4>Canal reverso: o parceiro traz clientes</h4>
+      <p>Cada parceiro assinado lista World Keys como "chauffeur &amp;
+      concierge partner" (link/QR) e recebe 10% por cliente que trouxer.
+      <strong>Validado por:</strong> as redes de cross-referral entre
+      concierges, hotéis e charters. <strong>Impacto: 18 parceiros = 18
+      vitrines a custo zero.</strong></p>
+    </div></div>
+    <div><span class="m-num">7</span><div>
+      <h4>Prova social acelerada e resposta em 15 minutos</h4>
+      <p>Pedido de avaliação Google a cada cliente (meta: 20 até 14/11) e SLA
+      de 15 minutos em horário de evento. <strong>Validado por:</strong> o
+      efeito de avaliações na conversão de serviços locais.
+      <strong>Impacto: conversão inbound estimada +20–30%.</strong></p>
+    </div></div>
+  </div>
+  <div class="mech fr">
+    <div><span class="m-num">1</span><div>
+      <h4>Frais de service de 8 % au client, dès le jour 1</h4>
+      <p>Le take rate passe de 12 % à 20 % sans toucher au partenaire.
+      <strong>Validé par :</strong> Airbnb (frais voyageur), Click&amp;Boat,
+      GetYourGuide et tout concierge indépendant facturant 10–20 % sur les
+      demandes sur mesure. Prix total obligatoirement affiché avant paiement.
+      <strong>Impact : +67 % de revenu par réservation partenaire.</strong></p>
+    </div></div>
+    <div><span class="m-num">2</span><div>
+      <h4>Vendre des journées, pas des trajets</h4>
+      <p>Produit chauffeur principal = mise à disposition 8 h à 650–900 € ;
+      le transfert devient un complément. <strong>Validé par :</strong> la
+      tarification standard des chauffeurs premium à Paris et sur la Riviera.
+      <strong>Impact : panier chauffeur 300 € → 500 €+.</strong></p>
+    </div></div>
+    <div><span class="m-num">3</span><div>
+      <h4>Le calendrier événementiel comme moteur de demande</h4>
+      <p>Huit fenêtres tombent dans les 60 jours (graphique ci-dessous) :
+      Monaco Yacht Show, TFWA et MIPCOM à Cannes, Fashion Week, Mondial de
+      l'Auto et Rolex Paris Masters à Paris, la Toussaint et deux fériés
+      brésiliens. <strong>Validé par :</strong> toute l'économie de Cannes et
+      Monaco — les hôtels triplent leurs prix et les chauffeurs affichent
+      complet à ces dates. <strong>Impact : demande prévisible, corporate et
+      à panier élevé.</strong></p>
+    </div></div>
+    <div><span class="m-num">4</span><div>
+      <h4>Niche lusophone corporate</h4>
+      <p>Exposants et délégations brésiliens et portugais au MIPCOM et au
+      TFWA achètent chauffeur, dîners et transferts — et personne ne les sert
+      en portugais. Offre « ground service en portugais » envoyée aux
+      entreprises avant l'événement. <strong>Validé par :</strong> les DMC de
+      niche linguistique qui ont conquis la Riviera pour des clientèles
+      précises. <strong>Impact : 1 compte corporate = 5–10 réservations.</strong></p>
+    </div></div>
+    <div><span class="m-num">5</span><div>
+      <h4>Acompte de 30 % à l'acceptation du devis</h4>
+      <p>Prépaiement intégral sous 1 000 € ; 30 % d'acompte au-dessus, solde
+      J-7, politique d'annulation calquée sur celle du partenaire.
+      <strong>Validé par :</strong> la pratique universelle du charter et de
+      la conciergerie. <strong>Impact : zéro no-show, commission garantie.</strong></p>
+    </div></div>
+    <div><span class="m-num">6</span><div>
+      <h4>Canal inverse : le partenaire apporte des clients</h4>
+      <p>Chaque partenaire signé affiche World Keys comme « chauffeur &amp;
+      concierge partner » (lien/QR) et touche 10 % par client apporté.
+      <strong>Validé par :</strong> les réseaux de cross-referral entre
+      concierges, hôtels et charters. <strong>Impact : 18 partenaires = 18
+      vitrines à coût zéro.</strong></p>
+    </div></div>
+    <div><span class="m-num">7</span><div>
+      <h4>Preuve sociale accélérée et réponse en 15 minutes</h4>
+      <p>Demande d'avis Google à chaque client (objectif : 20 au 14/11) et SLA
+      de 15 minutes en période d'événement. <strong>Validé par :</strong>
+      l'effet des avis sur la conversion des services locaux.
+      <strong>Impact : conversion entrante estimée +20–30 %.</strong></p>
+    </div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card full">
+      <h4><span class="pt">Receita por categoria: plano atual vs. otimizado</span><span class="fr">Revenu par catégorie : plan actuel vs optimisé</span></h4>
+      <div class="sub"><span class="pt">Otimizado = frais de service 8% + motorista à € 500 de ticket · 16 reservas em vez de 18</span><span class="fr">Optimisé = frais de service 8 % + chauffeur à 500 € de panier · 16 réservations au lieu de 18</span></div>
+      <div id="chartUplift"></div>
+      <div class="legend">
+        <span><i style="background:#6e8aa5"></i><span class="pt">Plano atual · 18 reservas</span><span class="fr">Plan actuel · 18 résas</span></span>
+        <span><i style="background:#e6c98c"></i><span class="pt">Otimizado · 16 reservas</span><span class="fr">Optimisé · 16 résas</span></span>
+      </div>
+      <div class="insight"><span class="pt">Menos reservas, € 3.240 em vez de € 1.920 — a meta é batida com 8 reservas, não 15.</span><span class="fr">Moins de réservations, 3 240 € au lieu de 1 920 € — l'objectif est atteint avec 8 réservations, pas 15.</span></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="s"><span class="v">12% → 20%</span>
+      <span class="k pt">take rate sobre categorias de parceiros</span>
+      <span class="k fr">take rate sur les catégories partenaires</span></div>
+    <div class="s"><span class="v">€ 107 → € 203</span>
+      <span class="k pt">receita média por reserva</span>
+      <span class="k fr">revenu moyen par réservation</span></div>
+    <div class="s"><span class="v">15 → 8</span>
+      <span class="k pt">reservas necessárias para bater € 1.600</span>
+      <span class="k fr">réservations nécessaires pour 1 600 €</span></div>
+    <div class="s"><span class="v">+102%</span>
+      <span class="k pt">folga sobre a meta (antes: +20%)</span>
+      <span class="k fr">marge sur l'objectif (avant : +20 %)</span></div>
+  </div>
+
+  <div class="card full">
+    <h4><span class="pt">Calendário de demanda: 8 janelas dentro dos 60 dias</span><span class="fr">Calendrier de demande : 8 fenêtres dans les 60 jours</span></h4>
+    <div class="sub"><span class="pt">16 set – 14 nov 2026 · dourado = Riviera · azul = Paris · verde = França · losango = feriado BR · * datas a confirmar</span><span class="fr">16 sept – 14 nov 2026 · doré = Riviera · bleu = Paris · vert = France · losange = férié BR · * dates à confirmer</span></div>
+    <div id="chartEvents"></div>
+    <div class="insight"><span class="pt">Todo dia útil dos 60 dias está a menos de uma semana de um evento. A prospecção deve ser datada, não genérica.</span><span class="fr">Chaque jour ouvré des 60 jours est à moins d'une semaine d'un événement. La prospection doit être datée, pas générique.</span></div>
+  </div>
+
+  <h3><span class="pt">O que não fazer agora — parece genial e queima os 60 dias</span><span class="fr">Ce qu'il ne faut pas faire maintenant — ça semble génial et ça brûle les 60 jours</span></h3>
+  <div class="chips pt">
+    <span class="chip">App nativo</span>
+    <span class="chip">Programa de adesão / membership</span>
+    <span class="chip">Ads em escala antes de 20 avaliações</span>
+    <span class="chip">Jet ski e náutico agora</span>
+    <span class="chip">Atout France como pré-requisito</span>
+    <span class="chip">Marketplace self-service</span>
+    <span class="chip">Mais de 4 categorias ativas</span>
+  </div>
+  <div class="chips fr">
+    <span class="chip">App natif</span>
+    <span class="chip">Programme d'adhésion / membership</span>
+    <span class="chip">Ads à l'échelle avant 20 avis</span>
+    <span class="chip">Jet ski et nautique maintenant</span>
+    <span class="chip">Atout France comme prérequis</span>
+    <span class="chip">Marketplace self-service</span>
+    <span class="chip">Plus de 4 catégories actives</span>
+  </div>
+
+  <div class="callout green">
+    <p class="pt"><strong>Recomendação final:</strong> adote as otimizações 1, 2,
+    3 e 5 esta semana — são decisões de preço e processo, custam zero e
+    dobram a receita por reserva. As otimizações 4, 6 e 7 entram em S2–S3.
+    O plano base continua como piso; este é o plano que se apresenta ao
+    CEO. Três ações foram adicionadas ao checklist do Bloco 8.</p>
+    <p class="fr"><strong>Recommandation finale :</strong> adoptez les
+    optimisations 1, 2, 3 et 5 cette semaine — ce sont des décisions de prix
+    et de process, à coût zéro, qui doublent le revenu par réservation. Les
+    optimisations 4, 6 et 7 arrivent en S2–S3. Le plan de base reste le
+    plancher ; celui-ci est le plan à présenter au CEO. Trois actions ont été
+    ajoutées à la checklist du Bloc 8.</p>
+  </div>
+</article>
+
+<div class="pager" id="pager">
+  <a href="#" id="pagerPrev" hidden></a>
+  <a href="#" id="pagerNext" hidden></a>
+</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="pt">Documento interno · THE WORLD KEYS SAS · Conciergerie —
+    Plano de lançamento 60 dias · Atualizado em 14/09/2026. Materiais em
+    francês prontos para revisão jurídica e uso comercial imediato.</p>
+    <p class="fr">Document interne · THE WORLD KEYS SAS · Conciergerie — Plan
+    de lancement 60 jours · Mis à jour le 14/09/2026. Supports en français
+    prêts pour revue juridique et usage commercial immédiat.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  var GOLD='#c9a45c',GOLDB='#e6c98c',DEEP='#8a6d35',STEEL='#6e8aa5',
+      GREEN='#8fbf9a',MUT='#939daa',GRID='rgba(201,164,92,.12)',IVORY='#ece7db';
+
+  var CASH=[0,100,350,700,1000,1350,1650,1920];
+  var PARTNERS=[2,5,8,12,14,15,17,18];
+  var RES=[0,1,2,3,3,3,3,3];
+  var MIX=[900,720,180,120];
+  var MIXCOLORS=[GOLDB,GOLD,DEEP,STEEL];
+
+  var L={
+    pt:{
+      weeks:['S1','S2','S3','S4','S5','S6','S7','S8'],
+      target:'Meta € 1.600',need:'Necessário: 10',
+      gaugeSub:'da meta cumprida no plano',
+      donutSub:'18 reservas',
+      mix:['Motoristas','Barcos','Helicóptero','Carros'],
+      funnel:[['E-mails enviados',60],['Respostas · 15%',9],['Ligações de 15 min',6],['Parcerias fechadas',3]],
+      comm:[['Concierge hotel 5★',10,20],['Click&Boat / Samboat',25,30],['DMCs / réceptivos',15,25],['John Paul (Accor)',10,15],['Brokers MYBA',15,15],['Locadoras prestige',5,15],['Helicóptero',8,12],['Quintessentially',10,10]],
+      us:'World Keys · 12%',
+      dev:[['Landing FR',2,0],['Formulário + auto-reply',2,0],['CGV + legal',1,0],['Stripe Checkout live',2,0],['GA4 + WhatsApp',1,0],['Back-office',4,1],['E-mails transacionais',2,1],['Stripe Connect',5,1],['Versão EN + BRL',1,1]],
+      cities:[['Paris',15],['Nice',8],['Monaco',8],['Cannes',7],['St-Tropez',5],['Antibes',4]],
+      channels:[['Campanhas e-mail (15 mil)',24],['Instagram orgânico',5],['Clientes chauffeur',4],['Agentes BR/PT',4],['Villas & hotéis',3],['Google Business',2]],
+      score:[['Modelo jurídico e financeiro',9,9],['Oferta e parceiros',8,8],['Timing e sazonalidade',7,9],['Economia por reserva',5,8],['Demanda e conversão',4,7],['Capacidade de execução',6,7]],
+      uplift:[['Motoristas',900,1200],['Barcos',720,1440],['Helicóptero',180,360],['Carros',120,240],['Total',1920,3240]],
+      wk:['16–22/9','23–29/9','30/9–6/10','7–13/10','14–20/10','21–27/10','28/10–3/11','4–14/11'],
+      events:[['Monaco Yacht Show · Monaco',[[7,10]],'riv'],['TFWA · Cannes',[[11,15]],'riv'],['Paris Fashion Week* · Paris',[[12,20]],'par'],['MIPCOM · Cannes',[[26,29]],'riv'],['Mondial de l’Auto · Paris',[[27,32]],'par'],['Férias da Toussaint · França',[[31,47]],'fr'],['Rolex Paris Masters · Paris',[[45,53]],'par'],['Feriados BR · 12/10 e 2/11',[[26,26],[47,47]],'br']],
+      stackMeta:'Meta € 1.600',
+      progress:function(d,t){return d+' / '+t+(d===t?' — semana fechada':'')},
+      titles:{visao:'Visão geral',painel:'Painel executivo',porque:'Por que o plano funciona',s1:'1 · Benchmark do mercado',s2:'2 · Modelo de parceria',s3:'3 · Prioridades & a matemática',s4:'4 · O site (devs)',s5:'5 · Prospecção B2B',s6:'6 · Primeiros clientes',s7:'7 · Plano de 60 dias',s8:'8 · Checklist — 7 dias',s9:'9 · Avaliação & plano otimizado'}
+    },
+    fr:{
+      weeks:['S1','S2','S3','S4','S5','S6','S7','S8'],
+      target:'Objectif 1 600 €',need:'Nécessaire : 10',
+      gaugeSub:'de l’objectif couvert par le plan',
+      donutSub:'18 réservations',
+      mix:['Chauffeurs','Bateaux','Hélicoptère','Voitures'],
+      funnel:[['E-mails envoyés',60],['Réponses · 15 %',9],['Appels de 15 min',6],['Partenariats signés',3]],
+      comm:[['Concierge hôtel 5★',10,20],['Click&Boat / Samboat',25,30],['DMC / réceptifs',15,25],['John Paul (Accor)',10,15],['Brokers MYBA',15,15],['Loueurs prestige',5,15],['Hélicoptère',8,12],['Quintessentially',10,10]],
+      us:'World Keys · 12 %',
+      dev:[['Landing FR',2,0],['Formulaire + auto-reply',2,0],['CGV + légal',1,0],['Stripe Checkout live',2,0],['GA4 + WhatsApp',1,0],['Back-office',4,1],['E-mails transactionnels',2,1],['Stripe Connect',5,1],['Version EN + BRL',1,1]],
+      cities:[['Paris',15],['Nice',8],['Monaco',8],['Cannes',7],['St-Tropez',5],['Antibes',4]],
+      channels:[['Campagnes e-mail (15 000)',24],['Instagram organique',5],['Clients chauffeur',4],['Agents BR/PT',4],['Villas & hôtels',3],['Google Business',2]],
+      score:[['Modèle juridique et financier',9,9],['Offre et partenaires',8,8],['Timing et saisonnalité',7,9],['Économie par réservation',5,8],['Demande et conversion',4,7],['Capacité d’exécution',6,7]],
+      uplift:[['Chauffeurs',900,1200],['Bateaux',720,1440],['Hélicoptère',180,360],['Voitures',120,240],['Total',1920,3240]],
+      wk:['16–22/9','23–29/9','30/9–6/10','7–13/10','14–20/10','21–27/10','28/10–3/11','4–14/11'],
+      events:[['Monaco Yacht Show · Monaco',[[7,10]],'riv'],['TFWA · Cannes',[[11,15]],'riv'],['Paris Fashion Week* · Paris',[[12,20]],'par'],['MIPCOM · Cannes',[[26,29]],'riv'],['Mondial de l’Auto · Paris',[[27,32]],'par'],['Vacances de la Toussaint · France',[[31,47]],'fr'],['Rolex Paris Masters · Paris',[[45,53]],'par'],['Fériés BR · 12/10 et 2/11',[[26,26],[47,47]],'br']],
+      stackMeta:'Objectif 1 600 €',
+      progress:function(d,t){return d+' / '+t+(d===t?' — semaine bouclée':'')},
+      titles:{visao:'Vue d’ensemble',painel:'Tableau de bord',porque:'Pourquoi ce plan fonctionne',s1:'1 · Benchmark du marché',s2:'2 · Modèle de partenariat',s3:'3 · Priorités & le calcul',s4:'4 · Le site (devs)',s5:'5 · Prospection B2B',s6:'6 · Premiers clients',s7:'7 · Plan de 60 jours',s8:'8 · Checklist — 7 jours',s9:'9 · Évaluation & plan optimisé'}
+    }
+  };
+
+  function eu(v,lang){
+    var s=String(v).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+    return lang==='fr'? s+' €':'€ '+s;
+  }
+  function put(id,svg){var el=document.getElementById(id);if(el)el.innerHTML=svg;}
+
+  /* ---- spark: cash trajectory (visao) ---- */
+  function sparkCash(lang){
+    var W=640,H=170,pl=14,pr=70,pt=18,pb=26,maxY=2000;
+    var iw=W-pl-pr,ih=H-pt-pb;
+    function x(i){return pl+i*iw/7}
+    function y(v){return pt+(1-v/maxY)*ih}
+    var line='M'+x(0)+' '+y(CASH[0]),area=line;
+    for(var i=1;i<8;i++){line+=' L'+x(i)+' '+y(CASH[i]);area+=' L'+x(i)+' '+y(CASH[i]);}
+    area+=' L'+x(7)+' '+y(0)+' L'+x(0)+' '+y(0)+' Z';
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">'
+      +'<defs><linearGradient id="gSp" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0" stop-color="'+GOLD+'" stop-opacity=".35"/>'
+      +'<stop offset="1" stop-color="'+GOLD+'" stop-opacity="0"/></linearGradient></defs>'
+      +'<path d="'+area+'" fill="url(#gSp)"/>'
+      +'<line x1="'+pl+'" y1="'+y(1600)+'" x2="'+(W-pr+34)+'" y2="'+y(1600)+'" stroke="'+GREEN+'" stroke-width="1.4" stroke-dasharray="6 5"/>'
+      +'<path d="'+line+'" fill="none" stroke="'+GOLD+'" stroke-width="2.6" stroke-linejoin="round"/>'
+      +'<circle cx="'+x(7)+'" cy="'+y(1920)+'" r="4.5" fill="'+GOLDB+'"/>'
+      +'<text x="'+(x(7)+8)+'" y="'+(y(1920)+4)+'" font-size="12" fill="'+GOLDB+'" font-weight="600">'+eu(1920,lang)+'</text>'
+      +'<text x="'+(W-pr+38)+'" y="'+(y(1600)+4)+'" font-size="10" fill="'+GREEN+'">1 600</text>';
+    for(var j=0;j<8;j++){
+      s+='<text x="'+x(j)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10" fill="'+MUT+'">'+L[lang].weeks[j]+'</text>';
+    }
+    s+='</svg>';
+    put('sparkCash',s);
+  }
+
+  /* ---- gauge: goal attainment (visao) ---- */
+  function gauge(lang){
+    var W=640,H=200,cx=320,cy=178,R=128,max=140,val=120;
+    function P(a){var r=a*Math.PI/180;return [cx+R*Math.cos(r),cy-R*Math.sin(r)]}
+    function arc(a0,a1){var p0=P(a0),p1=P(a1);
+      return 'M'+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+' A'+R+' '+R+' 0 0 1 '+p1[0].toFixed(1)+' '+p1[1].toFixed(1);}
+    var aV=180-val/max*180,aM=180-100/max*180;
+    function tick(a,len,col,w){var r=a*Math.PI/180,
+      x1=cx+(R-len)*Math.cos(r),y1=cy-(R-len)*Math.sin(r),
+      x2=cx+(R+len)*Math.cos(r),y2=cy-(R+len)*Math.sin(r);
+      return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="'+w+'"/>';}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">'
+      +'<defs><linearGradient id="gGa" x1="0" y1="0" x2="1" y2="0">'
+      +'<stop offset="0" stop-color="'+DEEP+'"/><stop offset="1" stop-color="'+GOLDB+'"/></linearGradient></defs>'
+      +'<path d="'+arc(180,0)+'" fill="none" stroke="'+GRID+'" stroke-width="18" stroke-linecap="round"/>'
+      +'<path d="'+arc(180,aV)+'" fill="none" stroke="url(#gGa)" stroke-width="18" stroke-linecap="round"/>'
+      +tick(aM,14,GREEN,2.5)
+      +'<text x="'+(P(aM)[0])+'" y="'+(P(aM)[1]-22)+'" text-anchor="middle" font-size="11" fill="'+GREEN+'">100%</text>'
+      +'<text x="'+cx+'" y="'+(cy-34)+'" text-anchor="middle" font-size="46" fill="'+GOLDB+'" font-family="Cormorant Garamond,serif" font-weight="600">120%</text>'
+      +'<text x="'+cx+'" y="'+(cy-10)+'" text-anchor="middle" font-size="12" fill="'+MUT+'">'+L[lang].gaugeSub+'</text>'
+      +'<text x="'+(cx-R)+'" y="'+(cy+16)+'" text-anchor="middle" font-size="10" fill="'+MUT+'">0</text>'
+      +'<text x="'+(cx+R)+'" y="'+(cy+16)+'" text-anchor="middle" font-size="10" fill="'+MUT+'">140%</text>'
+      +'</svg>';
+    put('gaugeHome',s);
+  }
+
+  /* ---- area: cumulative cash (painel) ---- */
+  function chartCash(lang){
+    var W=720,H=290,pl=52,pr=18,pt=20,pb=32,maxY=2000;
+    var iw=W-pl-pr,ih=H-pt-pb;
+    function x(i){return pl+i*iw/7}
+    function y(v){return pt+(1-v/maxY)*ih}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">'
+      +'<defs><linearGradient id="gCa" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0" stop-color="'+GOLD+'" stop-opacity=".32"/>'
+      +'<stop offset="1" stop-color="'+GOLD+'" stop-opacity="0"/></linearGradient></defs>';
+    for(var g=0;g<=2000;g+=500){
+      s+='<line x1="'+pl+'" y1="'+y(g)+'" x2="'+(W-pr)+'" y2="'+y(g)+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+(pl-8)+'" y="'+(y(g)+4)+'" text-anchor="end" font-size="10" fill="'+MUT+'">'+(g?g/1000+'k':'0')+'</text>';
+    }
+    var line='M'+x(0)+' '+y(CASH[0]),area=line;
+    for(var i=1;i<8;i++){line+=' L'+x(i)+' '+y(CASH[i]);area+=' L'+x(i)+' '+y(CASH[i]);}
+    area+=' L'+x(7)+' '+y(0)+' L'+x(0)+' '+y(0)+' Z';
+    s+='<path d="'+area+'" fill="url(#gCa)"/>';
+    s+='<line x1="'+pl+'" y1="'+y(1600)+'" x2="'+(W-pr)+'" y2="'+y(1600)+'" stroke="'+GREEN+'" stroke-width="1.5" stroke-dasharray="6 5"/>';
+    s+='<text x="'+(W-pr)+'" y="'+(y(1600)-7)+'" text-anchor="end" font-size="11" fill="'+GREEN+'">'+L[lang].target+'</text>';
+    s+='<path d="'+line+'" fill="none" stroke="'+GOLD+'" stroke-width="2.6" stroke-linejoin="round"/>';
+    for(var j=0;j<8;j++){
+      s+='<circle cx="'+x(j)+'" cy="'+y(CASH[j])+'" r="'+(j===7?5:3.5)+'" fill="'+GOLDB+'"/>';
+      if(j>0)s+='<text x="'+x(j)+'" y="'+(y(CASH[j])-10)+'" text-anchor="middle" font-size="10" fill="'+GOLDB+'">'+eu(CASH[j],lang)+'</text>';
+      s+='<text x="'+x(j)+'" y="'+(H-9)+'" text-anchor="middle" font-size="11" fill="'+MUT+'">'+L[lang].weeks[j]+'</text>';
+    }
+    s+='</svg>';
+    put('chartCash',s);
+  }
+
+  /* ---- donut: revenue mix (painel) ---- */
+  function chartMix(lang){
+    var W=620,H=250,cx=160,cy=122,R=82,SW=27,C=2*Math.PI*R,total=1920,acc=0;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">'
+      +'<g transform="rotate(-90 '+cx+' '+cy+')">';
+    MIX.forEach(function(v,i){
+      var len=v/total*C;
+      s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="'+MIXCOLORS[i]+'" stroke-width="'+SW+'" stroke-dasharray="'+(len-2)+' '+(C-len+2)+'" stroke-dashoffset="'+(-acc)+'"/>';
+      acc+=len;
+    });
+    s+='</g>'
+      +'<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="27" fill="'+GOLDB+'" font-family="Cormorant Garamond,serif" font-weight="600">'+eu(1920,lang)+'</text>'
+      +'<text x="'+cx+'" y="'+(cy+18)+'" text-anchor="middle" font-size="11" fill="'+MUT+'">'+L[lang].donutSub+'</text>';
+    var lx=310,ly=52;
+    MIX.forEach(function(v,i){
+      var pct=Math.round(v/total*100);
+      s+='<rect x="'+lx+'" y="'+(ly+i*40-9)+'" width="11" height="11" rx="2" fill="'+MIXCOLORS[i]+'"/>'
+        +'<text x="'+(lx+20)+'" y="'+(ly+i*40+1)+'" font-size="13" fill="'+IVORY+'">'+L[lang].mix[i]+'</text>'
+        +'<text x="'+(lx+20)+'" y="'+(ly+i*40+17)+'" font-size="11" fill="'+MUT+'">'+eu(v,lang)+' · '+pct+'%</text>';
+    });
+    s+='</svg>';
+    put('chartMix',s);
+  }
+
+  /* ---- bars: partners ramp (painel) ---- */
+  function chartPartners(lang){
+    var W=620,H=240,pl=34,pr=14,pt=18,pb=30,maxY=20;
+    var iw=W-pl-pr,ih=H-pt-pb,bw=iw/8*0.55;
+    function x(i){return pl+(i+0.5)*iw/8}
+    function y(v){return pt+(1-v/maxY)*ih}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">'
+      +'<defs><linearGradient id="gPa" x1="0" y1="1" x2="0" y2="0">'
+      +'<stop offset="0" stop-color="'+DEEP+'"/><stop offset="1" stop-color="'+GOLD+'"/></linearGradient></defs>';
+    [0,5,10,15,20].forEach(function(g){
+      s+='<line x1="'+pl+'" y1="'+y(g)+'" x2="'+(W-pr)+'" y2="'+y(g)+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+(pl-7)+'" y="'+(y(g)+4)+'" text-anchor="end" font-size="10" fill="'+MUT+'">'+g+'</text>';
+    });
+    PARTNERS.forEach(function(v,i){
+      s+='<rect x="'+(x(i)-bw/2)+'" y="'+y(v)+'" width="'+bw+'" height="'+(y(0)-y(v))+'" rx="4" fill="url(#gPa)"/>';
+      s+='<text x="'+x(i)+'" y="'+(y(v)-6)+'" text-anchor="middle" font-size="10" fill="'+GOLDB+'">'+v+'</text>';
+      s+='<text x="'+x(i)+'" y="'+(H-9)+'" text-anchor="middle" font-size="11" fill="'+MUT+'">'+L[lang].weeks[i]+'</text>';
+    });
+    s+='<line x1="'+pl+'" y1="'+y(10)+'" x2="'+(W-pr)+'" y2="'+y(10)+'" stroke="'+GREEN+'" stroke-width="1.5" stroke-dasharray="6 5"/>';
+    s+='<text x="'+(W-pr)+'" y="'+(y(10)-6)+'" text-anchor="end" font-size="11" fill="'+GREEN+'">'+L[lang].need+'</text>';
+    s+='</svg>';
+    put('chartPartners',s);
+  }
+
+  /* ---- funnel (painel + s5) ---- */
+  function funnelSvg(lang){
+    var rows=L[lang].funnel,W=720,rh=52,pt=8,H=pt+rows.length*rh,
+        lw=196,zx=lw+14,zw=W-zx-96,cxm=zx+zw/2,max=rows[0][1];
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh,bh=26,w=Math.max(26,r[1]/max*zw),
+          pct=Math.round(r[1]/max*100);
+      s+='<text x="'+lw+'" y="'+(yy+bh/2+4)+'" text-anchor="end" font-size="12.5" fill="'+IVORY+'">'+r[0]+'</text>';
+      s+='<rect x="'+(cxm-w/2)+'" y="'+yy+'" width="'+w+'" height="'+bh+'" rx="4" fill="'+GOLD+'" opacity="'+(1-i*0.16)+'"/>';
+      s+='<text x="'+(cxm+w/2+10)+'" y="'+(yy+bh/2+4)+'" font-size="12.5" fill="'+GOLDB+'" font-weight="600">'+r[1]+'</text>';
+      s+='<text x="'+(W-6)+'" y="'+(yy+bh/2+4)+'" text-anchor="end" font-size="11" fill="'+MUT+'">'+pct+'%</text>';
+    });
+    s+='</svg>';
+    return s;
+  }
+  function chartFunnel(lang){put('chartFunnel',funnelSvg(lang));}
+  function chartFunnel2(lang){put('chartFunnel2',funnelSvg(lang));}
+
+  /* ---- ranges: market commissions (s1) ---- */
+  function chartComm(lang){
+    var rows=L[lang].comm,W=720,rh=40,pt=26,H=pt+rows.length*rh+8,
+        lw=190,zx=lw+14,zw=W-zx-24,maxP=32;
+    function x(p){return zx+p/maxP*zw}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    [0,10,20,30].forEach(function(g){
+      s+='<line x1="'+x(g)+'" y1="'+pt+'" x2="'+x(g)+'" y2="'+(H-8)+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+x(g)+'" y="'+(pt-12)+'" text-anchor="middle" font-size="10" fill="'+MUT+'">'+g+'%</text>';
+    });
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh+rh/2;
+      s+='<text x="'+lw+'" y="'+(yy+4)+'" text-anchor="end" font-size="12" fill="'+IVORY+'">'+r[0]+'</text>';
+      s+='<line x1="'+x(0)+'" y1="'+yy+'" x2="'+x(maxP)+'" y2="'+yy+'" stroke="rgba(255,255,255,.05)"/>';
+      if(r[1]===r[2]){
+        s+='<circle cx="'+x(r[1])+'" cy="'+yy+'" r="6" fill="'+GOLD+'"/>';
+      }else{
+        s+='<rect x="'+x(r[1])+'" y="'+(yy-6)+'" width="'+(x(r[2])-x(r[1]))+'" height="12" rx="6" fill="'+GOLD+'" opacity=".85"/>';
+      }
+      s+='<text x="'+(x(r[2])+10)+'" y="'+(yy+4)+'" font-size="10.5" fill="'+MUT+'">'+r[1]+(r[1]===r[2]?'':'–'+r[2])+'%</text>';
+    });
+    s+='<line x1="'+x(12)+'" y1="'+(pt-4)+'" x2="'+x(12)+'" y2="'+(H-8)+'" stroke="'+GREEN+'" stroke-width="1.6" stroke-dasharray="6 5"/>';
+    s+='<rect x="'+(x(12)-52)+'" y="'+(pt-24)+'" width="104" height="17" rx="8" fill="rgba(143,191,154,.14)"/>';
+    s+='<text x="'+x(12)+'" y="'+(pt-11.5)+'" text-anchor="middle" font-size="10.5" fill="'+GREEN+'" font-weight="600">'+L[lang].us+'</text>';
+    s+='</svg>';
+    put('chartComm',s);
+  }
+
+  /* ---- stacked bar: revenue vs goal (s3) ---- */
+  function chartStack(lang){
+    var W=720,H=150,pl=20,pr=20,by=64,bh=34,maxV=2000;
+    var zw=W-pl-pr,acc=0;
+    function x(v){return pl+v/maxV*zw}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    MIX.forEach(function(v,i){
+      var x0=x(acc),w=x(acc+v)-x0;
+      s+='<rect x="'+x0+'" y="'+by+'" width="'+(w-1.5)+'" height="'+bh+'" rx="3" fill="'+MIXCOLORS[i]+'"/>';
+      if(w>70){
+        s+='<text x="'+(x0+w/2)+'" y="'+(by+bh/2+4)+'" text-anchor="middle" font-size="11.5" fill="#070b10" font-weight="600">'+eu(v,lang)+'</text>';
+      }else{
+        s+='<text x="'+(x0+w/2)+'" y="'+(by+bh+16)+'" text-anchor="middle" font-size="10" fill="'+MUT+'">'+eu(v,lang)+'</text>';
+      }
+      s+='<text x="'+(x0+w/2)+'" y="'+(by-10)+'" text-anchor="middle" font-size="10.5" fill="'+MUT+'">'+L[lang].mix[i]+'</text>';
+      acc+=v;
+    });
+    s+='<line x1="'+x(1600)+'" y1="'+(by-28)+'" x2="'+x(1600)+'" y2="'+(by+bh+22)+'" stroke="'+GREEN+'" stroke-width="1.6" stroke-dasharray="6 5"/>';
+    s+='<text x="'+x(1600)+'" y="'+(by-34)+'" text-anchor="middle" font-size="11" fill="'+GREEN+'" font-weight="600">'+L[lang].stackMeta+'</text>';
+    s+='<text x="'+(x(1920)+6)+'" y="'+(by+bh/2+4)+'" font-size="13" fill="'+GOLDB+'" font-weight="600">'+eu(1920,lang)+'</text>';
+    s+='</svg>';
+    put('chartStack',s);
+  }
+
+  /* ---- hbars: dev effort (s4) ---- */
+  function chartDev(lang){
+    var rows=L[lang].dev,W=720,rh=34,pt=6,H=pt+rows.length*rh,
+        lw=228,zx=lw+14,zw=W-zx-56,max=5;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh,bh=17,w=Math.max(8,r[1]/max*zw),
+          col=r[2]===0?GOLDB:STEEL;
+      s+='<text x="'+lw+'" y="'+(yy+bh/2+4)+'" text-anchor="end" font-size="12" fill="'+IVORY+'">'+r[0]+'</text>';
+      s+='<rect x="'+zx+'" y="'+yy+'" width="'+w+'" height="'+bh+'" rx="3.5" fill="'+col+'" opacity=".9"/>';
+      s+='<text x="'+(zx+w+8)+'" y="'+(yy+bh/2+4)+'" font-size="11" fill="'+MUT+'">'+r[1]+'d</text>';
+    });
+    s+='</svg>';
+    put('chartDev',s);
+  }
+
+  /* ---- vbars: city targets (s5) ---- */
+  function chartCities(lang){
+    var rows=L[lang].cities,W=620,H=240,pl=30,pr=10,pt=18,pb=32,maxY=16;
+    var iw=W-pl-pr,ih=H-pt-pb,n=rows.length,bw=iw/n*0.55;
+    function x(i){return pl+(i+0.5)*iw/n}
+    function y(v){return pt+(1-v/maxY)*ih}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    [0,4,8,12,16].forEach(function(g){
+      s+='<line x1="'+pl+'" y1="'+y(g)+'" x2="'+(W-pr)+'" y2="'+y(g)+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+(pl-6)+'" y="'+(y(g)+4)+'" text-anchor="end" font-size="10" fill="'+MUT+'">'+g+'</text>';
+    });
+    rows.forEach(function(r,i){
+      s+='<rect x="'+(x(i)-bw/2)+'" y="'+y(r[1])+'" width="'+bw+'" height="'+(y(0)-y(r[1]))+'" rx="4" fill="'+(i===0?GOLDB:GOLD)+'" opacity="'+(i===0?1:.8)+'"/>';
+      s+='<text x="'+x(i)+'" y="'+(y(r[1])-6)+'" text-anchor="middle" font-size="11" fill="'+GOLDB+'">'+r[1]+'</text>';
+      s+='<text x="'+x(i)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10.5" fill="'+MUT+'">'+r[0]+'</text>';
+    });
+    s+='</svg>';
+    put('chartCities',s);
+  }
+
+  /* ---- hbars: demand channels (s6) ---- */
+  function chartChannels(lang){
+    var rows=L[lang].channels,W=720,rh=40,pt=6,H=pt+rows.length*rh,
+        lw=232,zx=lw+14,zw=W-zx-86,max=24,total=42;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh,bh=19,w=Math.max(8,r[1]/max*zw),
+          pct=Math.round(r[1]/total*100);
+      s+='<text x="'+lw+'" y="'+(yy+bh/2+4)+'" text-anchor="end" font-size="12" fill="'+IVORY+'">'+r[0]+'</text>';
+      s+='<rect x="'+zx+'" y="'+yy+'" width="'+w+'" height="'+bh+'" rx="4" fill="'+(i===0?GOLDB:GOLD)+'" opacity="'+(i===0?1:.75)+'"/>';
+      s+='<text x="'+(zx+w+8)+'" y="'+(yy+bh/2+4)+'" font-size="11" fill="'+MUT+'">'+r[1]+' · '+pct+'%</text>';
+    });
+    s+='</svg>';
+    put('chartChannels',s);
+  }
+
+  /* ---- combo: weekly reservations + cash (s7) ---- */
+  function chartCombo(lang){
+    var W=720,H=270,pl=34,pr=18,pt=20,pb=32,maxB=4,maxC=2000;
+    var iw=W-pl-pr,ih=H-pt-pb,bw=iw/8*0.42;
+    function x(i){return pl+(i+0.5)*iw/8}
+    function yb(v){return pt+(1-v/maxB)*ih}
+    function yc(v){return pt+(1-v/maxC)*ih}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    [0,1,2,3,4].forEach(function(g){
+      s+='<line x1="'+pl+'" y1="'+yb(g)+'" x2="'+(W-pr)+'" y2="'+yb(g)+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+(pl-7)+'" y="'+(yb(g)+4)+'" text-anchor="end" font-size="10" fill="'+MUT+'">'+g+'</text>';
+    });
+    RES.forEach(function(v,i){
+      if(v>0)s+='<rect x="'+(x(i)-bw/2)+'" y="'+yb(v)+'" width="'+bw+'" height="'+(yb(0)-yb(v))+'" rx="4" fill="'+STEEL+'" opacity=".8"/>';
+      s+='<text x="'+x(i)+'" y="'+(H-9)+'" text-anchor="middle" font-size="11" fill="'+MUT+'">'+L[lang].weeks[i]+'</text>';
+    });
+    var line='M'+x(0)+' '+yc(CASH[0]);
+    for(var i=1;i<8;i++)line+=' L'+x(i)+' '+yc(CASH[i]);
+    s+='<path d="'+line+'" fill="none" stroke="'+GOLD+'" stroke-width="2.6" stroke-linejoin="round"/>';
+    [2,4,6,7].forEach(function(j){
+      s+='<circle cx="'+x(j)+'" cy="'+yc(CASH[j])+'" r="3.8" fill="'+GOLDB+'"/>';
+      s+='<text x="'+x(j)+'" y="'+(yc(CASH[j])-9)+'" text-anchor="middle" font-size="10" fill="'+GOLDB+'">'+eu(CASH[j],lang)+'</text>';
+    });
+    s+='</svg>';
+    put('chartCombo',s);
+  }
+
+
+  /* ---- grouped hbars: scorecard (s9) ---- */
+  function chartScore(lang){
+    var rows=L[lang].score,W=720,rh=44,pt=22,H=pt+rows.length*rh,
+        lw=236,zx=lw+14,zw=W-zx-40,max=10;
+    function x(v){return zx+v/max*zw}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    [0,2,4,6,8,10].forEach(function(g){
+      s+='<line x1="'+x(g)+'" y1="'+pt+'" x2="'+x(g)+'" y2="'+H+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+x(g)+'" y="'+(pt-9)+'" text-anchor="middle" font-size="10" fill="'+MUT+'">'+g+'</text>';
+    });
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh+6;
+      s+='<text x="'+lw+'" y="'+(yy+16)+'" text-anchor="end" font-size="12" fill="'+IVORY+'">'+r[0]+'</text>';
+      s+='<rect x="'+zx+'" y="'+yy+'" width="'+(x(r[1])-zx)+'" height="11" rx="3" fill="'+STEEL+'" opacity=".85"/>';
+      s+='<rect x="'+zx+'" y="'+(yy+14)+'" width="'+(x(r[2])-zx)+'" height="11" rx="3" fill="'+GOLDB+'"/>';
+      s+='<text x="'+(x(r[1])+6)+'" y="'+(yy+10)+'" font-size="10" fill="'+MUT+'">'+r[1]+'</text>';
+      s+='<text x="'+(x(r[2])+6)+'" y="'+(yy+24)+'" font-size="10" fill="'+GOLDB+'" font-weight="600">'+r[2]+'</text>';
+    });
+    s+='</svg>';
+    put('chartScore',s);
+  }
+
+  /* ---- grouped hbars: revenue uplift (s9) ---- */
+  function chartUplift(lang){
+    var rows=L[lang].uplift,W=720,rh=46,pt=6,H=pt+rows.length*rh,
+        lw=150,zx=lw+14,zw=W-zx-90,max=3400;
+    function x(v){return zx+v/max*zw}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh+6,tot=(i===rows.length-1);
+      if(tot)s+='<line x1="'+zx+'" y1="'+(yy-5)+'" x2="'+(W-10)+'" y2="'+(yy-5)+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+lw+'" y="'+(yy+17)+'" text-anchor="end" font-size="12" fill="'+IVORY+'"'+(tot?' font-weight="600"':'')+'>'+r[0]+'</text>';
+      s+='<rect x="'+zx+'" y="'+yy+'" width="'+(x(r[1])-zx)+'" height="12" rx="3" fill="'+STEEL+'" opacity=".85"/>';
+      s+='<rect x="'+zx+'" y="'+(yy+15)+'" width="'+(x(r[2])-zx)+'" height="12" rx="3" fill="'+GOLDB+'"/>';
+      s+='<text x="'+(x(r[1])+6)+'" y="'+(yy+10)+'" font-size="10" fill="'+MUT+'">'+eu(r[1],lang)+'</text>';
+      s+='<text x="'+(x(r[2])+6)+'" y="'+(yy+25)+'" font-size="10.5" fill="'+GOLDB+'" font-weight="600">'+eu(r[2],lang)+' · +'+Math.round((r[2]/r[1]-1)*100)+'%</text>';
+    });
+    s+='</svg>';
+    put('chartUplift',s);
+  }
+
+  /* ---- gantt: demand calendar (s9) ---- */
+  function chartEvents(lang){
+    var rows=L[lang].events,W=720,rh=34,pt=40,H=pt+rows.length*rh+6,
+        lw=214,zx=lw+12,zw=W-zx-12,days=61;
+    function x(d){return zx+d/days*zw}
+    var COL={riv:GOLD,par:STEEL,fr:GREEN,br:GOLDB};
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    for(var w=0;w<8;w++){
+      var d0=w*7,d1=(w===7?61:d0+7);
+      s+='<line x1="'+x(d0)+'" y1="'+(pt-6)+'" x2="'+x(d0)+'" y2="'+H+'" stroke="'+GRID+'"/>';
+      s+='<text x="'+((x(d0)+x(d1))/2)+'" y="'+(pt-22)+'" text-anchor="middle" font-size="11" fill="'+GOLD+'" font-style="italic" font-family="Cormorant Garamond,serif">S'+(w+1)+'</text>';
+      s+='<text x="'+((x(d0)+x(d1))/2)+'" y="'+(pt-10)+'" text-anchor="middle" font-size="8.5" fill="'+MUT+'">'+L[lang].wk[w]+'</text>';
+    }
+    s+='<line x1="'+x(61)+'" y1="'+(pt-6)+'" x2="'+x(61)+'" y2="'+H+'" stroke="'+GRID+'"/>';
+    rows.forEach(function(r,i){
+      var yy=pt+i*rh+8,col=COL[r[2]];
+      s+='<text x="'+lw+'" y="'+(yy+13)+'" text-anchor="end" font-size="11.5" fill="'+IVORY+'">'+r[0]+'</text>';
+      s+='<line x1="'+zx+'" y1="'+(yy+9)+'" x2="'+x(61)+'" y2="'+(yy+9)+'" stroke="rgba(255,255,255,.04)"/>';
+      r[1].forEach(function(rg){
+        if(rg[0]===rg[1]){
+          var cx=x(rg[0]+0.5),cy=yy+9;
+          s+='<polygon points="'+cx+','+(cy-8)+' '+(cx+8)+','+cy+' '+cx+','+(cy+8)+' '+(cx-8)+','+cy+'" fill="'+col+'"/>';
+        }else{
+          s+='<rect x="'+x(rg[0])+'" y="'+yy+'" width="'+(x(rg[1]+1)-x(rg[0]))+'" height="18" rx="4" fill="'+col+'" opacity=".85"/>';
+        }
+      });
+    });
+    s+='</svg>';
+    put('chartEvents',s);
+  }
+
+  /* ---------- page registry & router ---------- */
+  var ORDER=['visao','painel','porque','s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+  var RENDER={
+    visao:[sparkCash,gauge],
+    painel:[chartCash,chartMix,chartPartners,chartFunnel],
+    s1:[chartComm],
+    s3:[chartStack],
+    s4:[chartDev],
+    s5:[chartFunnel2,chartCities],
+    s6:[chartChannels],
+    s7:[chartCombo],
+    s9:[chartScore,chartUplift,chartEvents]
+  };
+  var current='pt',activePage='visao';
+
+  function renderPage(id){
+    (RENDER[id]||[]).forEach(function(fn){fn(current)});
+  }
+
+  var pagerPrev=document.getElementById('pagerPrev'),
+      pagerNext=document.getElementById('pagerNext');
+  function updatePager(){
+    var i=ORDER.indexOf(activePage),t=L[current].titles;
+    if(i>0){pagerPrev.hidden=false;pagerPrev.href='#/'+ORDER[i-1];
+      pagerPrev.textContent='← '+t[ORDER[i-1]];}
+    else pagerPrev.hidden=true;
+    if(i<ORDER.length-1){pagerNext.hidden=false;pagerNext.href='#/'+ORDER[i+1];
+      pagerNext.textContent=t[ORDER[i+1]]+' →';}
+    else pagerNext.hidden=true;
+  }
+
+  var nav=document.getElementById('sideNav'),
+      menuBtn=document.getElementById('menuBtn');
+  function closeDrawer(){
+    nav.classList.remove('open');
+    document.body.classList.remove('nav-open');
+    menuBtn.setAttribute('aria-expanded','false');
+    menuBtn.textContent='Menu';
+  }
+  function show(id){
+    if(ORDER.indexOf(id)<0)id='visao';
+    activePage=id;
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+    var pg=document.getElementById('p-'+id);
+    if(pg)pg.classList.add('on');
+    nav.querySelectorAll('a[data-page]').forEach(function(a){
+      a.classList.toggle('active',a.getAttribute('data-page')===id);
+    });
+    window.scrollTo(0,0);
+    renderPage(id);
+    updatePager();
+    closeDrawer();
+  }
+  function route(){
+    var h=location.hash.replace(/^#\/?/,'')||'visao';
+    show(h);
+  }
+  window.addEventListener('hashchange',route);
+
+  /* ---------- language ---------- */
+  function setLang(lang){
+    current=lang;
+    document.documentElement.setAttribute('data-lang',lang);
+    document.documentElement.setAttribute('lang',lang==='fr'?'fr':'pt-BR');
+    document.querySelectorAll('[data-setlang]').forEach(function(b){
+      b.classList.toggle('on',b.getAttribute('data-setlang')===lang);
+    });
+    renderPage(activePage);
+    updatePager();
+    updateProgress();
+  }
+  document.querySelectorAll('[data-setlang]').forEach(function(b){
+    b.addEventListener('click',function(){setLang(b.getAttribute('data-setlang'))});
+  });
+
+  /* ---------- collapse (desktop) ---------- */
+  var colBtn=document.getElementById('collapseBtn');
+  colBtn.addEventListener('click',function(){
+    var rail=document.body.classList.toggle('rail');
+    colBtn.textContent=rail?'»':'«';
+    colBtn.setAttribute('aria-expanded',String(!rail));
+  });
+
+  /* ---------- mobile drawer ---------- */
+  menuBtn.addEventListener('click',function(){
+    var open=nav.classList.toggle('open');
+    document.body.classList.toggle('nav-open',open);
+    menuBtn.setAttribute('aria-expanded',open);
+    menuBtn.textContent=open?(current==='fr'?'Fermer':'Fechar'):'Menu';
+  });
+
+  /* ---------- checklist ---------- */
+  var list=document.getElementById('checklist'),
+      prog=document.getElementById('progress'),
+      fill=document.getElementById('pbarFill');
+  function updateProgress(){
+    var total=list.querySelectorAll('input').length,
+        done=list.querySelectorAll('input:checked').length;
+    prog.textContent=L[current].progress(done,total);
+    fill.style.width=Math.round(done/total*100)+'%';
+  }
+  list.addEventListener('change',updateProgress);
+
+  /* ---------- init ---------- */
+  route();
+  updateProgress();
+})();
+</script>
+</body>
+</html>
+
+<nav aria-label="Biblioteca" style="position:fixed;bottom:14px;right:14px;z-index:9;padding:6px 12px;border-radius:999px;background:rgba(27,24,18,.88);font:12px/1 'IBM Plex Mono',ui-monospace,Consolas,monospace;letter-spacing:.06em;backdrop-filter:blur(4px)"><a href="/" style="color:#EFE9DC;text-decoration:none">Biblioteca</a></nav>

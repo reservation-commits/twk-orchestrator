@@ -1,0 +1,390 @@
+{
+ "updatedAt": "2026-09-10T20:47:57.308Z",
+ "createdAt": "2026-08-18T19:42:40.615Z",
+ "id": "WwHnwL8P0hkcgCaz",
+ "name": "alteração na reserva (site novo)",
+ "description": null,
+ "active": true,
+ "isArchived": false,
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "reservation-change",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -656,
+    0
+   ],
+   "id": "40262fbd-c421-4642-9d80-54798b03678f",
+   "name": "Webhook",
+   "webhookId": "698716e3-ef56-4650-8553-289dab1e14fe"
+  },
+  {
+   "parameters": {
+    "jsCode": "const body = $input.first().json.body;\n\nconst reservation = body.reservation;\nconst previous = body.previous;\n\n// -------- DATE -> \"Tue, 08 Sep 2026\"\nconst dateObj = new Date(`${reservation.date}T00:00:00`);\n\nconst dateParts = new Intl.DateTimeFormat('en-GB', {\n  weekday: 'short',\n  day: '2-digit',\n  month: 'short',\n  year: 'numeric',\n}).formatToParts(dateObj);\n\nconst getPart = (type) =>\n  dateParts.find(p => p.type === type)?.value || '';\n\nconst formattedDate =\n  `${getPart('weekday')}, ${getPart('day')} ${getPart('month')} ${getPart('year')}`;\n\n\n// -------- TIME FORMATTER\nfunction formatTime(time) {\n  if (!time) return '';\n\n  let timeObj;\n\n  if (\n    typeof time === 'string' &&\n    /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(time)\n  ) {\n    const [h, m] = time.split(':');\n    timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n  } else {\n    timeObj = new Date(time);\n  }\n\n  return new Intl.DateTimeFormat('en-US', {\n    hour: 'numeric',\n    minute: '2-digit',\n    hour12: true,\n  }).format(timeObj);\n}\n\n\n// -------- CURRENT TIME\nconst formattedTime = formatTime(reservation.time);\n\n\n// -------- PREVIOUS / PROPOSED TIME\n// No novo schema, o horário anterior vem em previous.time\nconst formattedProposedTime = formatTime(previous?.time);\n\n\n// -------- PEOPLE -> \"1 guest\" / \"4 guests\"\nconst people = Number(reservation.people);\n\nconst formattedPeople =\n  `${people} ${people === 1 ? 'guest' : 'guests'}`;\n\n\n// -------- DETAILS -> default \"No details.\"\nconst formattedDetails =\n  reservation.details &&\n  String(reservation.details).trim() !== ''\n    ? String(reservation.details).trim()\n    : 'No details.';\n\n\n// -------- OPTIONAL: PREVIOUS VALUES\nconst previousPeople = Number(previous?.people);\n\nconst formattedPreviousPeople =\n  previous?.people != null\n    ? `${previousPeople} ${previousPeople === 1 ? 'guest' : 'guests'}`\n    : '';\n\nconst formattedPreviousDetails =\n  previous?.details &&\n  String(previous.details).trim() !== ''\n    ? String(previous.details).trim()\n    : 'No details.';\n\n\nreturn [\n  {\n    json: {\n      formattedDate,\n      formattedTime,\n      formattedProposedTime,\n      formattedPeople,\n      formattedDetails,\n\n      // Dados anteriores, caso sejam necessários no próximo nó\n      previousDate: previous?.date || '',\n      formattedPreviousTime: formatTime(previous?.time),\n      formattedPreviousPeople,\n      formattedPreviousDetails,\n    },\n  },\n];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -464,
+    0
+   ],
+   "id": "744e2846-d30e-4e28-a3c5-e819da4de281",
+   "name": "Code in JavaScript"
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.restaurant.email }}",
+    "subject": "Reservation Updated — Pending Confirmation",
+    "message": "=\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\n  <style type=\"text/css\">\n    @media only screen and (max-width: 600px) {\n      .cta {\n        width: 100% !important;\n        box-sizing: border-box !important;\n      }\n    }\n  </style>\n</head>\n\n<body style=\"margin:0; padding:0; font-family:Arial, sans-serif; background:#000;\">\n\n<table\n  width=\"100%\"\n  cellpadding=\"0\"\n  cellspacing=\"0\"\n  border=\"0\"\n  style=\"max-width:800px; margin:auto; background:#000; color:#fff;\"\n>\n\n  <!-- Header -->\n  <tr>\n    <td>\n      <a href=\"https://theworldkeys.com/\">\n        <img\n          src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n          alt=\"TheWorldKeys\"\n          style=\"width:100%; display:block;\"\n        />\n      </a>\n    </td>\n  </tr>\n\n  <!-- Title -->\n  <tr>\n    <td style=\"padding:35px 30px 15px; text-align:center;\">\n\n      <h2 style=\"color:#ce9e3c; font-size:15px; margin:0 0 10px;\">\n        Reservation Updated\n      </h2>\n\n      <p style=\"font-size:12px; line-height:1.6; color:#fff; margin:0;\">\n        A reservation at your restaurant has been updated.\n      </p>\n\n      <p\n        style=\"\n          display:inline-block;\n          margin:12px 0 0;\n          padding:5px 12px;\n          border:1px solid #ce9e3c;\n          border-radius:20px;\n          color:#ce9e3c;\n          font-size:10px;\n          font-weight:bold;\n        \"\n      >\n        PENDING CONFIRMATION\n      </p>\n\n    </td>\n  </tr>\n\n  <!-- Reservation -->\n<tr>\n  <td style=\"padding:15px 30px 25px;\">\n\n    <div\n      style=\"\n        background:#111;\n        border:1px solid #222;\n        border-radius:8px;\n        padding:20px;\n        text-align:center;\n      \"\n    >\n\n      <h3\n        style=\"\n          color:#ce9e3c;\n          font-size:13px;\n          margin:0 0 12px;\n        \"\n      >\n        Reservation Details\n      </h3>\n\n      <p\n        style=\"\n          font-size:11px;\n          line-height:1.8;\n          color:#ccc;\n          margin:0;\n        \"\n      >\n        <strong>Guest:</strong>\n        {{ $('Webhook').item.json.body.user.name }}<br />\n\n        <strong>Email:</strong>\n        {{ $('Webhook').item.json.body.user.email }}<br />\n\n        <strong>Phone:</strong>\n        {{ $('Webhook').item.json.body.user.phone }}<br />\n\n        <strong>Date:</strong>\n        {{ $json.formattedDate }}<br />\n\n        <strong>Time:</strong>\n        {{ $json.formattedTime }}<br />\n\n        <strong>Guests:</strong>\n        {{ $json.formattedPeople }}<br />\n\n        <strong>Notes:</strong>\n        {{ $json.formattedDetails }}\n      </p>\n\n      <p\n        style=\"\n          font-size:9px;\n          color:#777;\n          margin:12px 0 0;\n        \"\n      >\n        Reservation ID:\n        {{ $('Webhook').item.json.body.reservation.reservation_code }}\n      </p>\n\n    </div>\n\n  </td>\n</tr>\n\n  <!-- Pending Notice -->\n  <tr>\n    <td style=\"padding:0 30px 20px; text-align:center;\">\n\n      <p\n        style=\"\n          color:#aaa;\n          font-size:10px;\n          line-height:1.6;\n          margin:0;\n        \"\n      >\n        Please review the updated reservation details.\n        This reservation is currently <strong style=\"color:#ce9e3c;\">pending confirmation</strong>.\n      </p>\n\n    </td>\n  </tr>\n\n  <!-- CTA -->\n  <tr>\n    <td style=\"padding:0 30px 35px; text-align:center;\">\n\n      <a\n        class=\"cta\"\n        href=\"https://manager.theworldkeys.com/admin/reservations\"\n        style=\"\n          background:#ce9e3c;\n          color:#fff;\n          border-radius:50px;\n          padding:10px 28px;\n          font-size:11px;\n          font-weight:bold;\n          text-decoration:none;\n          display:inline-block;\n        \"\n      >\n        Review Reservation\n      </a>\n\n    </td>\n  </tr>\n\n  <!-- Footer -->\n  <tr>\n    <td\n      style=\"\n        background:#1b1b1a;\n        padding:15px;\n        color:#888;\n        font-size:9px;\n        text-align:center;\n      \"\n    >\n\n      <strong style=\"color:#ce9e3c;\">\n        TheWorldKeys.com\n      </strong>\n\n      <br />\n\n      Your trusted partner for premium experiences\n\n      <br /><br />\n\n      <a\n        href=\"mailto:support@theworldkeys.com\"\n        style=\"color:#fff; text-decoration:none;\"\n      >\n        support@theworldkeys.com\n      </a>\n\n      <br />\n\n      Copyright ©2026 all rights reserved\n\n    </td>\n  </tr>\n\n</table>\n\n</body>\n</html>\n",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    -80,
+    112
+   ],
+   "id": "cc7390e7-3260-4680-bb5d-6b4fc5dc8db3",
+   "name": "Recusado - Estabelecimento",
+   "webhookId": "20214de9-57fa-41ff-8979-01fd1695cdb1",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+    "subject": "Your Reservation Has Been Updated",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\n  <style type=\"text/css\">\n    @media only screen and (max-width: 600px) {\n      .cta-col {\n        display: block !important;\n        width: 100% !important;\n      }\n\n      .cta-col a {\n        display: block !important;\n        width: 100% !important;\n        max-width: 450px !important;\n        margin: 8px auto !important;\n        box-sizing: border-box !important;\n      }\n    }\n  </style>\n</head>\n\n<body style=\"margin:0; padding:0; font-family:Arial, sans-serif; background:#000;\">\n\n<table\n  width=\"100%\"\n  cellpadding=\"0\"\n  cellspacing=\"0\"\n  border=\"0\"\n  style=\"max-width:900px; margin:auto; background:#000; color:#fff; text-align:center;\"\n>\n  <tr>\n    <td>\n      <a href=\"https://theworldkeys.com/\">\n        <img\n          src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n          alt=\"TheWorldKeys\"\n          style=\"width:100%; display:block;\"\n        />\n      </a>\n    </td>\n  </tr>\n\n  <!-- Message -->\n  <tr>\n    <td style=\"padding:35px 30px 15px;\">\n      <h2 style=\"color:#ce9e3c; font-size:14px; margin:0 0 10px;\">\n        Reservation Updated\n      </h2>\n\n      <p style=\"font-size:12px; line-height:1.6; margin:0; color:#fff;\">\n        Hi <strong>{{ $('Webhook').item.json.body.user.name }}</strong>,\n        your reservation at\n        <strong>{{ $('Webhook').item.json.body.restaurant.name }}</strong>\n        has been updated.\n      </p>\n    </td>\n  </tr>\n\n  <!-- Reservation -->\n  <tr>\n    <td style=\"padding:15px 30px 25px;\">\n\n      <div style=\"background:#111; border:1px solid #222; border-radius:8px; padding:18px;\">\n\n        <h3 style=\"color:#ce9e3c; font-size:13px; margin:0 0 10px;\">\n          Reservation Details\n        </h3>\n\n        <p style=\"font-size:11px; line-height:1.8; color:#ccc; margin:0;\">\n          <strong>Date:</strong> {{ $json.formattedDate }}<br />\n          <strong>Time:</strong> {{ $json.formattedTime }}<br />\n          <strong>Guests:</strong> {{ $json.formattedPeople }}<br />\n          <strong>Notes:</strong> {{ $json.formattedDetails }}\n        </p>\n\n        <p style=\"font-size:9px; color:#777; margin:10px 0 0;\">\n          Reservation ID:\n          {{ $('Webhook').item.json.body.reservation.reservation_code }}\n        </p>\n\n      </div>\n\n    </td>\n  </tr>\n\n  <!-- CTA -->\n  <tr>\n    <td style=\"padding:0 30px 30px;\">\n\n      <a\n        href=\"{{ $('Webhook').item.json.body.management_url }}\"\n        style=\"\n          background:#ce9e3c;\n          color:#fff;\n          border-radius:50px;\n          padding:10px 28px;\n          font-size:11px;\n          font-weight:bold;\n          text-decoration:none;\n          display:inline-block;\n        \"\n      >\n        Manage My Reservation\n      </a>\n\n    </td>\n  </tr>\n\n  <!-- Footer -->\n  <tr>\n    <td\n      style=\"\n        background:#1b1b1a;\n        padding:15px;\n        color:#888;\n        font-size:9px;\n      \"\n    >\n      <strong style=\"color:#ce9e3c;\">TheWorldKeys.com</strong><br />\n      Your trusted partner for premium experiences<br /><br />\n\n      <a\n        href=\"mailto:support@theworldkeys.com\"\n        style=\"color:#fff; text-decoration:none;\"\n      >\n        support@theworldkeys.com\n      </a>\n      <br />\n\n      Copyright ©2026 all rights reserved\n    </td>\n  </tr>\n\n</table>\n\n</body>\n</html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    -80,
+    -128
+   ],
+   "id": "16d87b7b-b1c6-4e1f-93d5-8fbc5ef14114",
+   "name": "notifica cliente",
+   "webhookId": "a89f2caa-3ebf-41de-afef-ccadfaeaa6cd",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  }
+ ],
+ "connections": {
+  "Webhook": {
+   "main": [
+    [
+     {
+      "node": "Code in JavaScript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Code in JavaScript": {
+   "main": [
+    [
+     {
+      "node": "notifica cliente",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Recusado - Estabelecimento",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Recusado - Estabelecimento": {
+   "main": [
+    []
+   ]
+  },
+  "notifica cliente": {
+   "main": [
+    []
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "callerPolicy": "workflowsFromSameOwner"
+ },
+ "staticData": null,
+ "meta": {
+  "templateCredsSetupCompleted": true
+ },
+ "pinData": {
+  "Webhook": [
+   {
+    "json": {
+     "headers": {
+      "host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "user-agent": "node",
+      "content-length": "488",
+      "accept": "*/*",
+      "accept-encoding": "br, gzip, deflate",
+      "accept-language": "*",
+      "content-type": "application/json",
+      "sec-fetch-mode": "cors",
+      "x-forwarded-for": "45.70.52.83",
+      "x-forwarded-host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https",
+      "x-forwarded-server": "8976530a2a6d",
+      "x-real-ip": "45.70.52.83"
+     },
+     "params": {},
+     "query": {},
+     "body": {
+      "action": "decline",
+      "reservation": {
+       "id": "31e9bc44-8837-4b66-88ea-63bc3797e0ef",
+       "reservation_code": "PEP0RE",
+       "date": "2026-02-04",
+       "time": "08:00",
+       "proposed_time": "12:55",
+       "people": 2,
+       "status": "Accept",
+       "details": "testes teste"
+      },
+      "restaurant": {
+       "restaurant_id": "253542",
+       "name": "BOTECO BELMONTE",
+       "email": "costa.marlon08@gmail.com",
+       "phone": " +55 21 2267 9909"
+      },
+      "user": {
+       "id": "b41e2a22-3d69-4b22-ae30-b74d72a872d0",
+       "name": "lucas peixoto",
+       "email": "lucaspeixotodacruz@gmail.com",
+       "phone": "+5521995681995"
+      }
+     },
+     "webhookUrl": "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/reschedule-response",
+     "executionMode": "production"
+    }
+   }
+  ]
+ },
+ "versionId": "0a33c6ca-7b8e-4cb2-9ca2-d75d63dd36e9",
+ "activeVersionId": "0a33c6ca-7b8e-4cb2-9ca2-d75d63dd36e9",
+ "versionCounter": 29,
+ "triggerCount": 1,
+ "shared": [
+  {
+   "updatedAt": "2026-08-18T19:42:40.621Z",
+   "createdAt": "2026-08-18T19:42:40.621Z",
+   "role": "workflow:owner",
+   "workflowId": "WwHnwL8P0hkcgCaz",
+   "projectId": "j3RBnUKpdJnI0HPr",
+   "project": {
+    "updatedAt": "2025-10-09T18:24:30.274Z",
+    "createdAt": "2025-10-09T18:21:52.771Z",
+    "id": "j3RBnUKpdJnI0HPr",
+    "name": "The World keys <thekeys.need@gmail.com>",
+    "type": "personal",
+    "icon": null,
+    "description": null,
+    "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+    "projectRelations": [
+     {
+      "updatedAt": "2025-10-09T18:21:52.771Z",
+      "createdAt": "2025-10-09T18:21:52.771Z",
+      "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "user": {
+       "updatedAt": "2026-09-10T07:00:17.000Z",
+       "createdAt": "2025-10-09T18:21:52.389Z",
+       "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+       "email": "thekeys.need@gmail.com",
+       "firstName": "The World",
+       "lastName": "keys",
+       "personalizationAnswers": {
+        "version": "v4",
+        "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+        "personalization_survey_n8n_version": "1.103.2"
+       },
+       "settings": {
+        "userActivated": true,
+        "easyAIWorkflowOnboarded": true,
+        "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+        "userActivatedAt": 1760038686025,
+        "npsSurvey": {
+         "responded": true,
+         "lastShownAt": 1785180247186
+        }
+       },
+       "disabled": false,
+       "mfaEnabled": false,
+       "lastActiveAt": "2026-09-10",
+       "isPending": false
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "tags": [],
+ "activeVersion": {
+  "updatedAt": "2026-09-10T20:47:57.310Z",
+  "createdAt": "2026-09-10T20:47:57.310Z",
+  "versionId": "0a33c6ca-7b8e-4cb2-9ca2-d75d63dd36e9",
+  "workflowId": "WwHnwL8P0hkcgCaz",
+  "nodes": [
+   {
+    "parameters": {
+     "httpMethod": "POST",
+     "path": "reservation-change",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.webhook",
+    "typeVersion": 2.1,
+    "position": [
+     -656,
+     0
+    ],
+    "id": "40262fbd-c421-4642-9d80-54798b03678f",
+    "name": "Webhook",
+    "webhookId": "698716e3-ef56-4650-8553-289dab1e14fe"
+   },
+   {
+    "parameters": {
+     "jsCode": "const body = $input.first().json.body;\n\nconst reservation = body.reservation;\nconst previous = body.previous;\n\n// -------- DATE -> \"Tue, 08 Sep 2026\"\nconst dateObj = new Date(`${reservation.date}T00:00:00`);\n\nconst dateParts = new Intl.DateTimeFormat('en-GB', {\n  weekday: 'short',\n  day: '2-digit',\n  month: 'short',\n  year: 'numeric',\n}).formatToParts(dateObj);\n\nconst getPart = (type) =>\n  dateParts.find(p => p.type === type)?.value || '';\n\nconst formattedDate =\n  `${getPart('weekday')}, ${getPart('day')} ${getPart('month')} ${getPart('year')}`;\n\n\n// -------- TIME FORMATTER\nfunction formatTime(time) {\n  if (!time) return '';\n\n  let timeObj;\n\n  if (\n    typeof time === 'string' &&\n    /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(time)\n  ) {\n    const [h, m] = time.split(':');\n    timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n  } else {\n    timeObj = new Date(time);\n  }\n\n  return new Intl.DateTimeFormat('en-US', {\n    hour: 'numeric',\n    minute: '2-digit',\n    hour12: true,\n  }).format(timeObj);\n}\n\n\n// -------- CURRENT TIME\nconst formattedTime = formatTime(reservation.time);\n\n\n// -------- PREVIOUS / PROPOSED TIME\n// No novo schema, o horário anterior vem em previous.time\nconst formattedProposedTime = formatTime(previous?.time);\n\n\n// -------- PEOPLE -> \"1 guest\" / \"4 guests\"\nconst people = Number(reservation.people);\n\nconst formattedPeople =\n  `${people} ${people === 1 ? 'guest' : 'guests'}`;\n\n\n// -------- DETAILS -> default \"No details.\"\nconst formattedDetails =\n  reservation.details &&\n  String(reservation.details).trim() !== ''\n    ? String(reservation.details).trim()\n    : 'No details.';\n\n\n// -------- OPTIONAL: PREVIOUS VALUES\nconst previousPeople = Number(previous?.people);\n\nconst formattedPreviousPeople =\n  previous?.people != null\n    ? `${previousPeople} ${previousPeople === 1 ? 'guest' : 'guests'}`\n    : '';\n\nconst formattedPreviousDetails =\n  previous?.details &&\n  String(previous.details).trim() !== ''\n    ? String(previous.details).trim()\n    : 'No details.';\n\n\nreturn [\n  {\n    json: {\n      formattedDate,\n      formattedTime,\n      formattedProposedTime,\n      formattedPeople,\n      formattedDetails,\n\n      // Dados anteriores, caso sejam necessários no próximo nó\n      previousDate: previous?.date || '',\n      formattedPreviousTime: formatTime(previous?.time),\n      formattedPreviousPeople,\n      formattedPreviousDetails,\n    },\n  },\n];"
+    },
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     -464,
+     0
+    ],
+    "id": "744e2846-d30e-4e28-a3c5-e819da4de281",
+    "name": "Code in JavaScript"
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.restaurant.email }}",
+     "subject": "Reservation Updated — Pending Confirmation",
+     "message": "=\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\n  <style type=\"text/css\">\n    @media only screen and (max-width: 600px) {\n      .cta {\n        width: 100% !important;\n        box-sizing: border-box !important;\n      }\n    }\n  </style>\n</head>\n\n<body style=\"margin:0; padding:0; font-family:Arial, sans-serif; background:#000;\">\n\n<table\n  width=\"100%\"\n  cellpadding=\"0\"\n  cellspacing=\"0\"\n  border=\"0\"\n  style=\"max-width:800px; margin:auto; background:#000; color:#fff;\"\n>\n\n  <!-- Header -->\n  <tr>\n    <td>\n      <a href=\"https://theworldkeys.com/\">\n        <img\n          src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n          alt=\"TheWorldKeys\"\n          style=\"width:100%; display:block;\"\n        />\n      </a>\n    </td>\n  </tr>\n\n  <!-- Title -->\n  <tr>\n    <td style=\"padding:35px 30px 15px; text-align:center;\">\n\n      <h2 style=\"color:#ce9e3c; font-size:15px; margin:0 0 10px;\">\n        Reservation Updated\n      </h2>\n\n      <p style=\"font-size:12px; line-height:1.6; color:#fff; margin:0;\">\n        A reservation at your restaurant has been updated.\n      </p>\n\n      <p\n        style=\"\n          display:inline-block;\n          margin:12px 0 0;\n          padding:5px 12px;\n          border:1px solid #ce9e3c;\n          border-radius:20px;\n          color:#ce9e3c;\n          font-size:10px;\n          font-weight:bold;\n        \"\n      >\n        PENDING CONFIRMATION\n      </p>\n\n    </td>\n  </tr>\n\n  <!-- Reservation -->\n<tr>\n  <td style=\"padding:15px 30px 25px;\">\n\n    <div\n      style=\"\n        background:#111;\n        border:1px solid #222;\n        border-radius:8px;\n        padding:20px;\n        text-align:center;\n      \"\n    >\n\n      <h3\n        style=\"\n          color:#ce9e3c;\n          font-size:13px;\n          margin:0 0 12px;\n        \"\n      >\n        Reservation Details\n      </h3>\n\n      <p\n        style=\"\n          font-size:11px;\n          line-height:1.8;\n          color:#ccc;\n          margin:0;\n        \"\n      >\n        <strong>Guest:</strong>\n        {{ $('Webhook').item.json.body.user.name }}<br />\n\n        <strong>Email:</strong>\n        {{ $('Webhook').item.json.body.user.email }}<br />\n\n        <strong>Phone:</strong>\n        {{ $('Webhook').item.json.body.user.phone }}<br />\n\n        <strong>Date:</strong>\n        {{ $json.formattedDate }}<br />\n\n        <strong>Time:</strong>\n        {{ $json.formattedTime }}<br />\n\n        <strong>Guests:</strong>\n        {{ $json.formattedPeople }}<br />\n\n        <strong>Notes:</strong>\n        {{ $json.formattedDetails }}\n      </p>\n\n      <p\n        style=\"\n          font-size:9px;\n          color:#777;\n          margin:12px 0 0;\n        \"\n      >\n        Reservation ID:\n        {{ $('Webhook').item.json.body.reservation.reservation_code }}\n      </p>\n\n    </div>\n\n  </td>\n</tr>\n\n  <!-- Pending Notice -->\n  <tr>\n    <td style=\"padding:0 30px 20px; text-align:center;\">\n\n      <p\n        style=\"\n          color:#aaa;\n          font-size:10px;\n          line-height:1.6;\n          margin:0;\n        \"\n      >\n        Please review the updated reservation details.\n        This reservation is currently <strong style=\"color:#ce9e3c;\">pending confirmation</strong>.\n      </p>\n\n    </td>\n  </tr>\n\n  <!-- CTA -->\n  <tr>\n    <td style=\"padding:0 30px 35px; text-align:center;\">\n\n      <a\n        class=\"cta\"\n        href=\"https://manager.theworldkeys.com/admin/reservations\"\n        style=\"\n          background:#ce9e3c;\n          color:#fff;\n          border-radius:50px;\n          padding:10px 28px;\n          font-size:11px;\n          font-weight:bold;\n          text-decoration:none;\n          display:inline-block;\n        \"\n      >\n        Review Reservation\n      </a>\n\n    </td>\n  </tr>\n\n  <!-- Footer -->\n  <tr>\n    <td\n      style=\"\n        background:#1b1b1a;\n        padding:15px;\n        color:#888;\n        font-size:9px;\n        text-align:center;\n      \"\n    >\n\n      <strong style=\"color:#ce9e3c;\">\n        TheWorldKeys.com\n      </strong>\n\n      <br />\n\n      Your trusted partner for premium experiences\n\n      <br /><br />\n\n      <a\n        href=\"mailto:support@theworldkeys.com\"\n        style=\"color:#fff; text-decoration:none;\"\n      >\n        support@theworldkeys.com\n      </a>\n\n      <br />\n\n      Copyright ©2026 all rights reserved\n\n    </td>\n  </tr>\n\n</table>\n\n</body>\n</html>\n",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     -80,
+     112
+    ],
+    "id": "cc7390e7-3260-4680-bb5d-6b4fc5dc8db3",
+    "name": "Recusado - Estabelecimento",
+    "webhookId": "20214de9-57fa-41ff-8979-01fd1695cdb1",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+     "subject": "Your Reservation Has Been Updated",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\n  <style type=\"text/css\">\n    @media only screen and (max-width: 600px) {\n      .cta-col {\n        display: block !important;\n        width: 100% !important;\n      }\n\n      .cta-col a {\n        display: block !important;\n        width: 100% !important;\n        max-width: 450px !important;\n        margin: 8px auto !important;\n        box-sizing: border-box !important;\n      }\n    }\n  </style>\n</head>\n\n<body style=\"margin:0; padding:0; font-family:Arial, sans-serif; background:#000;\">\n\n<table\n  width=\"100%\"\n  cellpadding=\"0\"\n  cellspacing=\"0\"\n  border=\"0\"\n  style=\"max-width:900px; margin:auto; background:#000; color:#fff; text-align:center;\"\n>\n  <tr>\n    <td>\n      <a href=\"https://theworldkeys.com/\">\n        <img\n          src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n          alt=\"TheWorldKeys\"\n          style=\"width:100%; display:block;\"\n        />\n      </a>\n    </td>\n  </tr>\n\n  <!-- Message -->\n  <tr>\n    <td style=\"padding:35px 30px 15px;\">\n      <h2 style=\"color:#ce9e3c; font-size:14px; margin:0 0 10px;\">\n        Reservation Updated\n      </h2>\n\n      <p style=\"font-size:12px; line-height:1.6; margin:0; color:#fff;\">\n        Hi <strong>{{ $('Webhook').item.json.body.user.name }}</strong>,\n        your reservation at\n        <strong>{{ $('Webhook').item.json.body.restaurant.name }}</strong>\n        has been updated.\n      </p>\n    </td>\n  </tr>\n\n  <!-- Reservation -->\n  <tr>\n    <td style=\"padding:15px 30px 25px;\">\n\n      <div style=\"background:#111; border:1px solid #222; border-radius:8px; padding:18px;\">\n\n        <h3 style=\"color:#ce9e3c; font-size:13px; margin:0 0 10px;\">\n          Reservation Details\n        </h3>\n\n        <p style=\"font-size:11px; line-height:1.8; color:#ccc; margin:0;\">\n          <strong>Date:</strong> {{ $json.formattedDate }}<br />\n          <strong>Time:</strong> {{ $json.formattedTime }}<br />\n          <strong>Guests:</strong> {{ $json.formattedPeople }}<br />\n          <strong>Notes:</strong> {{ $json.formattedDetails }}\n        </p>\n\n        <p style=\"font-size:9px; color:#777; margin:10px 0 0;\">\n          Reservation ID:\n          {{ $('Webhook').item.json.body.reservation.reservation_code }}\n        </p>\n\n      </div>\n\n    </td>\n  </tr>\n\n  <!-- CTA -->\n  <tr>\n    <td style=\"padding:0 30px 30px;\">\n\n      <a\n        href=\"{{ $('Webhook').item.json.body.management_url }}\"\n        style=\"\n          background:#ce9e3c;\n          color:#fff;\n          border-radius:50px;\n          padding:10px 28px;\n          font-size:11px;\n          font-weight:bold;\n          text-decoration:none;\n          display:inline-block;\n        \"\n      >\n        Manage My Reservation\n      </a>\n\n    </td>\n  </tr>\n\n  <!-- Footer -->\n  <tr>\n    <td\n      style=\"\n        background:#1b1b1a;\n        padding:15px;\n        color:#888;\n        font-size:9px;\n      \"\n    >\n      <strong style=\"color:#ce9e3c;\">TheWorldKeys.com</strong><br />\n      Your trusted partner for premium experiences<br /><br />\n\n      <a\n        href=\"mailto:support@theworldkeys.com\"\n        style=\"color:#fff; text-decoration:none;\"\n      >\n        support@theworldkeys.com\n      </a>\n      <br />\n\n      Copyright ©2026 all rights reserved\n    </td>\n  </tr>\n\n</table>\n\n</body>\n</html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     -80,
+     -128
+    ],
+    "id": "16d87b7b-b1c6-4e1f-93d5-8fbc5ef14114",
+    "name": "notifica cliente",
+    "webhookId": "a89f2caa-3ebf-41de-afef-ccadfaeaa6cd",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   }
+  ],
+  "connections": {
+   "Webhook": {
+    "main": [
+     [
+      {
+       "node": "Code in JavaScript",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Code in JavaScript": {
+    "main": [
+     [
+      {
+       "node": "notifica cliente",
+       "type": "main",
+       "index": 0
+      },
+      {
+       "node": "Recusado - Estabelecimento",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Recusado - Estabelecimento": {
+    "main": [
+     []
+    ]
+   },
+   "notifica cliente": {
+    "main": [
+     []
+    ]
+   }
+  },
+  "authors": "The World keys",
+  "name": null,
+  "description": null,
+  "autosaved": false,
+  "workflowPublishHistory": [
+   {
+    "createdAt": "2026-09-10T20:47:57.568Z",
+    "id": 273,
+    "workflowId": "WwHnwL8P0hkcgCaz",
+    "versionId": "0a33c6ca-7b8e-4cb2-9ca2-d75d63dd36e9",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   }
+  ]
+ }
+}

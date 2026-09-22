@@ -1,0 +1,411 @@
+﻿{
+    "updatedAt":  "2026-08-24T18:05:24.894Z",
+    "createdAt":  "2026-01-26T15:42:19.633Z",
+    "id":  "6sIa2gOyhVdZyAc6",
+    "name":  "5 - botão de cancelamento (site novo)",
+    "description":  null,
+    "active":  true,
+    "isArchived":  false,
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "client-cancel",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2.1,
+                      "position":  [
+                                       -720,
+                                       0
+                                   ],
+                      "id":  "a404f0a5-f863-48bf-b7d5-c2a8c6e1074d",
+                      "name":  "Webhook",
+                      "webhookId":  "f545c4da-cc0c-4fae-b33d-55a919e40c12"
+                  },
+                  {
+                      "parameters":  {
+                                         "jsCode":  "const reservation = $input.first().json.body.reservation;\n\n// -------- DATE -\u003e \"Thu, 17 Aug 2025\" (ordem garantida)\nconst dateObj = new Date(reservation.date);\n\nconst dateParts = new Intl.DateTimeFormat(\u0027en-GB\u0027, {\n  weekday: \u0027short\u0027,\n  day: \u00272-digit\u0027,\n  month: \u0027short\u0027,\n  year: \u0027numeric\u0027,\n}).formatToParts(dateObj);\n\nconst getPart = (type) =\u003e dateParts.find(p =\u003e p.type === type)?.value || \u0027\u0027;\n\nconst formattedDate = `${getPart(\u0027weekday\u0027)}, ${getPart(\u0027day\u0027)} ${getPart(\u0027month\u0027)} ${getPart(\u0027year\u0027)}`;\n\n// -------- TIME -\u003e \"9:00 PM\"\nlet timeObj;\nif (typeof reservation.time === \u0027string\u0027 \u0026\u0026 /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.time)) {\n  const [h, m] = reservation.time.split(\u0027:\u0027);\n  timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n} else {\n  timeObj = new Date(reservation.time);\n}\n\nconst formattedTime = new Intl.DateTimeFormat(\u0027en-US\u0027, {\n  hour: \u0027numeric\u0027,\n  minute: \u00272-digit\u0027,\n  hour12: true,\n}).format(timeObj);\n\n// -------- PEOPLE -\u003e \"1 guest\" / \"4 guests\"\nconst people = Number(reservation.people);\nconst formattedPeople = `${people} ${people === 1 ? \u0027guest\u0027 : \u0027guests\u0027}`;\n\n// -------- DETAILS -\u003e default \"No details.\"\nconst formattedDetails =\n  reservation.details \u0026\u0026 String(reservation.details).trim() !== \u0027\u0027\n    ? String(reservation.details).trim()\n    : \u0027No details.\u0027;\n\nreturn [\n  {\n    json: {\n      formattedDate,\n      formattedTime,\n      formattedPeople,\n      formattedDetails,\n    },\n  },\n];\n"
+                                     },
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -560,
+                                       0
+                                   ],
+                      "id":  "301a99ae-f2f6-4c0b-8a6c-26b00c96590c",
+                      "name":  "Code in JavaScript"
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.user.email }}",
+                                         "subject":  "Reservation Successfully Cancelled",
+                                         "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Canceled Reservation\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin:0; padding:0; font-family:\u0027Hind\u0027, Arial, sans-serif; background-color:#000; display:block;\"\u003e\n  \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n    style=\"width:100%; max-width:900px; margin:0 auto; color:#fff; text-align:center; background-color:#000;\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\" target=\"_blank\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n              alt=\"The World Keys\"\n              style=\"width:100%; display:block; margin:0 auto; border:0;\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.5rem 0;\"\u003e\n            Reservation Canceled\n          \u003c/h2\u003e\n          \u003cp style=\"font-size:11px; color:#fff; margin:0;\"\u003e\n            Hi \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e, your reservation has been successfully\n            canceled as requested.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Card --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:1rem 2.3rem; text-align:center;\"\u003e\n          \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n            style=\"background-color:#111; border:1px solid #222; border-radius:8px; margin:0 auto; max-width:550px;\"\u003e\n            \u003ctr\u003e\n              \u003ctd style=\"padding:15px;\"\u003e\n\n                \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 12px 0; font-weight:600; text-align:center;\"\u003e\n                  Reservation Details\n                \u003c/h2\u003e\n\n                \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n                  style=\"font-size:11px; color:#fff; text-align:center; border-collapse:collapse;\"\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eEstablishment:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eDate:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $json.formattedDate }}\u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eTime:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $json.formattedTime }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eGuests:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $json.formattedPeople }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eNotes:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $json.formattedDetails }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                \u003c/table\u003e\n\n                \u003ci style=\"font-size:9px; color:#aaa; margin-top:6px; text-align:center; display:block;\"\u003e\n                  ID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\n                \u003c/i\u003e\n\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Support / Next Steps --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0.5rem 2rem; text-align:center;\"\u003e\n          \u003ch4 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.5rem 0;\"\u003e\n            We\u0027re Still Here for You\n          \u003c/h4\u003e\n          \u003cp style=\"color:#ccc; font-size:11px; line-height:1.6; max-width:550px; margin:0 auto;\"\u003e\n            Although this reservation has been canceled, our support team remains at your disposal to help you plan\n            your next experience. You can easily make a new reservation, explore personalized recommendations, or contact us at any time.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Buttons --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 1rem; text-align:center;\"\u003e\n          \u003ctable role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"\u003e\n            \u003ctr\u003e\n              \u003ctd style=\"padding-right:5px;\"\u003e\n                \u003ca href=\"https://theworldkeys.com/hospitality/\"\n                  style=\"border:1px solid #CE9E3C; border-radius:150px; color:#fff; font-size:11px; padding:8px 15px; text-decoration:none; display:inline-block; font-weight:bold;\"\u003e\n                  New Reservation\n                \u003c/a\u003e\n              \u003c/td\u003e\n\n              \u003ctd style=\"padding-left:5px;\"\u003e\n                \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n                  style=\"border:1px solid #ce9e3c; border-radius:150px; color:#fff; background-color:#000; font-size:11px; padding:8px 15px; text-decoration:none; display:inline-block; font-weight:bold;\"\u003e\n                  Whatsapp Support\n                  \u003cimg\n                    src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                    alt=\"WhatsApp\"\n                    style=\"vertical-align:middle; margin-left:6px; width:14px; height:14px; border:0;\"\n                  /\u003e\n                \u003c/a\u003e\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Signature --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:1.5rem 1rem; text-align:center;\"\u003e\n          \u003cdiv style=\"font-size:11px; color:#fff; max-width:550px; margin:1rem auto 0;\"\u003e\n            \u003cstrong style=\"display:block; text-align:center;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n            \u003ci style=\"font-size:11px; color:#fff; text-align:center; display:block;\"\u003e\n              Your trusted partner for premium experiences\n            \u003c/i\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align:center; background-color:#1b1b1a; border-radius:12px 12px 0 0; padding:10px 0; color:#fff; font-size:0.5rem;\"\u003e\n          \u003cp style=\"margin:0; color:#ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration:none; color:#ce9e3c;\"\u003e\n              Terms \u0026amp; Conditions\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration:none; color:#fff;\"\u003e\n              support@theworldkeys.com\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\"\n              style=\"text-decoration:none; color:#fff;\"\u003e\n              66, Av. des Champs-Élysées, 75008 Paris, France\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\"\n              alt=\"Company Logo\"\n              style=\"width:7rem; margin:-0.3rem; border:0;\"\n            /\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0; color:#ce9e3c; font-size:8px;\"\u003e\n            \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       -368,
+                                       0
+                                   ],
+                      "id":  "726c74f0-b63e-470b-a92a-dd9d6b49102b",
+                      "name":  "Cancel Button - Usuário",
+                      "webhookId":  "997f0436-b1f7-49d0-98e2-359b6b3e63aa",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.restaurant.email }}",
+                                         "subject":  "Reservation Canceled by Client",
+                                         "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Canceled Reservation\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin:0; padding:0; font-family:\u0027Hind\u0027, Arial, sans-serif; background-color:#000; display:block;\"\u003e\n  \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n    style=\"width:100%; max-width:900px; margin:0 auto; color:#fff; text-align:center; background-color:#000;\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\" target=\"_blank\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n              alt=\"The World Keys\"\n              style=\"width:100%; display:block; margin:0 auto; border:0;\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.5rem 0;\"\u003e\n            Reservation Canceled by Client\n          \u003c/h2\u003e\n\n          \u003cp style=\"font-size:11px; color:#fff; margin:0; line-height:1.6;\"\u003e\n            Dear \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e, we wish to inform you that the client has chosen to cancel their reservation directly\n            through their dashboard.\n            \u003cbr /\u003e\u003cbr /\u003e\n            Thank you for your attention, and we look forward to collaborating on future bookings.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Card --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:1rem 2.3rem; text-align:center;\"\u003e\n          \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n            style=\"background-color:#111; border:1px solid #222; border-radius:8px; margin:0 auto; max-width:550px;\"\u003e\n            \u003ctr\u003e\n              \u003ctd style=\"padding:15px;\"\u003e\n\n                \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 12px 0; font-weight:600; text-align:center;\"\u003e\n                  Reservation Details\n                \u003c/h2\u003e\n\n                \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n                  style=\"font-size:11px; color:#fff; text-align:center; border-collapse:collapse;\"\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eName:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eDate:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $(\u0027Code in JavaScript\u0027).item.json.formattedDate }} \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eTime:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $(\u0027Code in JavaScript\u0027).item.json.formattedTime }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eGuests:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $(\u0027Code in JavaScript\u0027).item.json.formattedPeople }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eNotes:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDetails }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                \u003c/table\u003e\n\n                \u003ci style=\"font-size:9px; color:#aaa; margin-top:6px; text-align:center; display:block;\"\u003e\n                  ID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\n                \u003c/i\u003e\n\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Guidance --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0.5rem 1.5rem; text-align:center;\"\u003e\n          \u003ch4 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.75rem 0;\"\u003e\n            Useful Note\n          \u003c/h4\u003e\n          \u003cp style=\"font-size:11px; color:#fff; margin:0 auto; max-width:550px; line-height:1.6;\"\u003e\n            This reservation is now closed in our system. If you have any questions or availability to offer,\n            feel free to reach out to our support team.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- WhatsApp CTA --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0.5rem 1.5rem; text-align:center;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n            style=\"border:1px solid #CE9E3C; border-radius:150px; color:#fff; font-size:11px; padding:7px 15px; text-decoration:none; display:inline-block; font-weight:bold;\"\u003e\n            WhatsApp Support\n            \u003cimg\n              src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n              alt=\"WhatsApp\"\n              style=\"vertical-align:middle; margin-left:6px; width:16px; height:16px; border:0;\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Signature --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; text-align:center;\"\u003e\n          \u003cdiv style=\"font-size:11px; color:#fff; max-width:550px; margin:1rem auto 0;\"\u003e\n            \u003cstrong style=\"display:block; text-align:center;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n            \u003ci style=\"font-size:11px; color:#fff; text-align:center; display:block;\"\u003e\n              Your trusted partner for premium experiences\n            \u003c/i\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align:center; background-color:#1b1b1a; border-radius:12px 12px 0 0; padding:10px 0; color:#fff; font-size:0.5rem;\"\u003e\n          \u003cp style=\"margin:0; color:#ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration:none; color:#ce9e3c;\"\u003e\n              Terms \u0026amp; Conditions\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration:none; color:#fff;\"\u003e\n              support@theworldkeys.com\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\"\n              style=\"text-decoration:none; color:#fff;\"\u003e\n              66, Av. des Champs-Élysées, 75008 Paris, France\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\"\n              alt=\"Company Logo\"\n              style=\"width:7rem; margin:-0.3rem; border:0;\"\n            /\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0; color:#ce9e3c; font-size:8px;\"\u003e\n            \u003cstrong\u003eGLOBAL EXPERIENCE PREMIUM\u003c/strong\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       -176,
+                                       0
+                                   ],
+                      "id":  "4fe11b44-2764-49dc-88a0-e482b2195a6f",
+                      "name":  "Cancel Button - Establishment",
+                      "webhookId":  "899dd8ab-35b3-459b-a317-1b3b1bb13b5f",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  }
+              ],
+    "connections":  {
+                        "Webhook":  {
+                                        "main":  [
+                                                     [
+                                                         {
+                                                             "node":  "Code in JavaScript",
+                                                             "type":  "main",
+                                                             "index":  0
+                                                         }
+                                                     ]
+                                                 ]
+                                    },
+                        "Code in JavaScript":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Cancel Button - Usuário",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "Cancel Button - Usuário":  {
+                                                        "main":  [
+                                                                     [
+                                                                         {
+                                                                             "node":  "Cancel Button - Establishment",
+                                                                             "type":  "main",
+                                                                             "index":  0
+                                                                         }
+                                                                     ]
+                                                                 ]
+                                                    },
+                        "Cancel Button - Establishment":  {
+                                                              "main":  [
+                                                                           [
+
+                                                                           ]
+                                                                       ]
+                                                          }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "availableInMCP":  true
+                 },
+    "staticData":  null,
+    "meta":  {
+                 "templateCredsSetupCompleted":  true
+             },
+    "pinData":  {
+                    "Webhook":  [
+                                    {
+                                        "json":  {
+                                                     "headers":  {
+                                                                     "host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "user-agent":  "node",
+                                                                     "content-length":  "447",
+                                                                     "accept":  "*/*",
+                                                                     "accept-encoding":  "br, gzip, deflate",
+                                                                     "accept-language":  "*",
+                                                                     "content-type":  "application/json",
+                                                                     "sec-fetch-mode":  "cors",
+                                                                     "x-forwarded-for":  "45.70.52.83",
+                                                                     "x-forwarded-host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "x-forwarded-port":  "443",
+                                                                     "x-forwarded-proto":  "https",
+                                                                     "x-forwarded-server":  "8976530a2a6d",
+                                                                     "x-real-ip":  "45.70.52.83"
+                                                                 },
+                                                     "params":  {
+
+                                                                },
+                                                     "query":  {
+
+                                                               },
+                                                     "body":  {
+                                                                  "reservation":  {
+                                                                                      "id":  "c838373d-1c2a-4e2e-a461-8db03c6b5da4",
+                                                                                      "reservation_code":  "3GNEJK",
+                                                                                      "date":  "2026-01-29",
+                                                                                      "time":  "21:02",
+                                                                                      "people":  2,
+                                                                                      "status":  "Declined (client)",
+                                                                                      "details":  null
+                                                                                  },
+                                                                  "restaurant":  {
+                                                                                     "restaurant_id":  "253542",
+                                                                                     "name":  "BOTECO BELMONTE",
+                                                                                     "email":  "costa.marlon08@gmail.com",
+                                                                                     "phone":  " +55 21 2267 9909"
+                                                                                 },
+                                                                  "user":  {
+                                                                               "id":  "b41e2a22-3d69-4b22-ae30-b74d72a872d0",
+                                                                               "name":  "lucas peixoto",
+                                                                               "email":  "lucaspeixotodacruz@gmail.com",
+                                                                               "phone":  "+5521995681995"
+                                                                           }
+                                                              },
+                                                     "webhookUrl":  "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/client-cancel",
+                                                     "executionMode":  "production"
+                                                 }
+                                    }
+                                ]
+                },
+    "versionId":  "da426487-1a97-4695-8da9-33aff0d50ae6",
+    "activeVersionId":  "da426487-1a97-4695-8da9-33aff0d50ae6",
+    "versionCounter":  49,
+    "triggerCount":  1,
+    "shared":  [
+                   {
+                       "updatedAt":  "2026-01-26T15:42:19.638Z",
+                       "createdAt":  "2026-01-26T15:42:19.638Z",
+                       "role":  "workflow:owner",
+                       "workflowId":  "6sIa2gOyhVdZyAc6",
+                       "projectId":  "j3RBnUKpdJnI0HPr",
+                       "project":  {
+                                       "updatedAt":  "2025-10-09T18:24:30.274Z",
+                                       "createdAt":  "2025-10-09T18:21:52.771Z",
+                                       "id":  "j3RBnUKpdJnI0HPr",
+                                       "name":  "The World keys \u003cthekeys.need@gmail.com\u003e",
+                                       "type":  "personal",
+                                       "icon":  null,
+                                       "description":  null,
+                                       "creatorId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                       "projectRelations":  [
+                                                                {
+                                                                    "updatedAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "createdAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                    "projectId":  "j3RBnUKpdJnI0HPr",
+                                                                    "user":  {
+                                                                                 "updatedAt":  "2026-08-26T07:00:16.000Z",
+                                                                                 "createdAt":  "2025-10-09T18:21:52.389Z",
+                                                                                 "id":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                                 "email":  "thekeys.need@gmail.com",
+                                                                                 "firstName":  "The World",
+                                                                                 "lastName":  "keys",
+                                                                                 "personalizationAnswers":  {
+                                                                                                                "version":  "v4",
+                                                                                                                "personalization_survey_submitted_at":  "2025-10-09T18:24:41.538Z",
+                                                                                                                "personalization_survey_n8n_version":  "1.103.2"
+                                                                                                            },
+                                                                                 "settings":  {
+                                                                                                  "userActivated":  true,
+                                                                                                  "easyAIWorkflowOnboarded":  true,
+                                                                                                  "firstSuccessfulWorkflowId":  "iczjt9eyILmHEwU7",
+                                                                                                  "userActivatedAt":  1760038686025,
+                                                                                                  "npsSurvey":  {
+                                                                                                                    "responded":  true,
+                                                                                                                    "lastShownAt":  1785180247186
+                                                                                                                }
+                                                                                              },
+                                                                                 "disabled":  false,
+                                                                                 "mfaEnabled":  false,
+                                                                                 "lastActiveAt":  "2026-08-26",
+                                                                                 "isPending":  false
+                                                                             }
+                                                                }
+                                                            ]
+                                   }
+                   }
+               ],
+    "tags":  [
+
+             ],
+    "activeVersion":  {
+                          "updatedAt":  "2026-03-09T15:06:34.000Z",
+                          "createdAt":  "2026-03-09T15:06:33.092Z",
+                          "versionId":  "da426487-1a97-4695-8da9-33aff0d50ae6",
+                          "workflowId":  "6sIa2gOyhVdZyAc6",
+                          "nodes":  [
+                                        {
+                                            "parameters":  {
+                                                               "httpMethod":  "POST",
+                                                               "path":  "client-cancel",
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.webhook",
+                                            "typeVersion":  2.1,
+                                            "position":  [
+                                                             -720,
+                                                             0
+                                                         ],
+                                            "id":  "a404f0a5-f863-48bf-b7d5-c2a8c6e1074d",
+                                            "name":  "Webhook",
+                                            "webhookId":  "f545c4da-cc0c-4fae-b33d-55a919e40c12"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "jsCode":  "const reservation = $input.first().json.body.reservation;\n\n// -------- DATE -\u003e \"Thu, 17 Aug 2025\" (ordem garantida)\nconst dateObj = new Date(reservation.date);\n\nconst dateParts = new Intl.DateTimeFormat(\u0027en-GB\u0027, {\n  weekday: \u0027short\u0027,\n  day: \u00272-digit\u0027,\n  month: \u0027short\u0027,\n  year: \u0027numeric\u0027,\n}).formatToParts(dateObj);\n\nconst getPart = (type) =\u003e dateParts.find(p =\u003e p.type === type)?.value || \u0027\u0027;\n\nconst formattedDate = `${getPart(\u0027weekday\u0027)}, ${getPart(\u0027day\u0027)} ${getPart(\u0027month\u0027)} ${getPart(\u0027year\u0027)}`;\n\n// -------- TIME -\u003e \"9:00 PM\"\nlet timeObj;\nif (typeof reservation.time === \u0027string\u0027 \u0026\u0026 /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.time)) {\n  const [h, m] = reservation.time.split(\u0027:\u0027);\n  timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n} else {\n  timeObj = new Date(reservation.time);\n}\n\nconst formattedTime = new Intl.DateTimeFormat(\u0027en-US\u0027, {\n  hour: \u0027numeric\u0027,\n  minute: \u00272-digit\u0027,\n  hour12: true,\n}).format(timeObj);\n\n// -------- PEOPLE -\u003e \"1 guest\" / \"4 guests\"\nconst people = Number(reservation.people);\nconst formattedPeople = `${people} ${people === 1 ? \u0027guest\u0027 : \u0027guests\u0027}`;\n\n// -------- DETAILS -\u003e default \"No details.\"\nconst formattedDetails =\n  reservation.details \u0026\u0026 String(reservation.details).trim() !== \u0027\u0027\n    ? String(reservation.details).trim()\n    : \u0027No details.\u0027;\n\nreturn [\n  {\n    json: {\n      formattedDate,\n      formattedTime,\n      formattedPeople,\n      formattedDetails,\n    },\n  },\n];\n"
+                                                           },
+                                            "type":  "n8n-nodes-base.code",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             -560,
+                                                             0
+                                                         ],
+                                            "id":  "301a99ae-f2f6-4c0b-8a6c-26b00c96590c",
+                                            "name":  "Code in JavaScript"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.user.email }}",
+                                                               "subject":  "Reservation Successfully Cancelled",
+                                                               "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Canceled Reservation\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin:0; padding:0; font-family:\u0027Hind\u0027, Arial, sans-serif; background-color:#000; display:block;\"\u003e\n  \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n    style=\"width:100%; max-width:900px; margin:0 auto; color:#fff; text-align:center; background-color:#000;\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\" target=\"_blank\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n              alt=\"The World Keys\"\n              style=\"width:100%; display:block; margin:0 auto; border:0;\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.5rem 0;\"\u003e\n            Reservation Canceled\n          \u003c/h2\u003e\n          \u003cp style=\"font-size:11px; color:#fff; margin:0;\"\u003e\n            Hi \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e, your reservation has been successfully\n            canceled as requested.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Card --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:1rem 2.3rem; text-align:center;\"\u003e\n          \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n            style=\"background-color:#111; border:1px solid #222; border-radius:8px; margin:0 auto; max-width:550px;\"\u003e\n            \u003ctr\u003e\n              \u003ctd style=\"padding:15px;\"\u003e\n\n                \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 12px 0; font-weight:600; text-align:center;\"\u003e\n                  Reservation Details\n                \u003c/h2\u003e\n\n                \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n                  style=\"font-size:11px; color:#fff; text-align:center; border-collapse:collapse;\"\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eEstablishment:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eDate:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $json.formattedDate }}\u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eTime:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $json.formattedTime }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eGuests:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $json.formattedPeople }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eNotes:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $json.formattedDetails }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                \u003c/table\u003e\n\n                \u003ci style=\"font-size:9px; color:#aaa; margin-top:6px; text-align:center; display:block;\"\u003e\n                  ID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\n                \u003c/i\u003e\n\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Support / Next Steps --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0.5rem 2rem; text-align:center;\"\u003e\n          \u003ch4 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.5rem 0;\"\u003e\n            We\u0027re Still Here for You\n          \u003c/h4\u003e\n          \u003cp style=\"color:#ccc; font-size:11px; line-height:1.6; max-width:550px; margin:0 auto;\"\u003e\n            Although this reservation has been canceled, our support team remains at your disposal to help you plan\n            your next experience. You can easily make a new reservation, explore personalized recommendations, or contact us at any time.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Buttons --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 1rem; text-align:center;\"\u003e\n          \u003ctable role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"\u003e\n            \u003ctr\u003e\n              \u003ctd style=\"padding-right:5px;\"\u003e\n                \u003ca href=\"https://theworldkeys.com/hospitality/\"\n                  style=\"border:1px solid #CE9E3C; border-radius:150px; color:#fff; font-size:11px; padding:8px 15px; text-decoration:none; display:inline-block; font-weight:bold;\"\u003e\n                  New Reservation\n                \u003c/a\u003e\n              \u003c/td\u003e\n\n              \u003ctd style=\"padding-left:5px;\"\u003e\n                \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n                  style=\"border:1px solid #ce9e3c; border-radius:150px; color:#fff; background-color:#000; font-size:11px; padding:8px 15px; text-decoration:none; display:inline-block; font-weight:bold;\"\u003e\n                  Whatsapp Support\n                  \u003cimg\n                    src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                    alt=\"WhatsApp\"\n                    style=\"vertical-align:middle; margin-left:6px; width:14px; height:14px; border:0;\"\n                  /\u003e\n                \u003c/a\u003e\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Signature --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:1.5rem 1rem; text-align:center;\"\u003e\n          \u003cdiv style=\"font-size:11px; color:#fff; max-width:550px; margin:1rem auto 0;\"\u003e\n            \u003cstrong style=\"display:block; text-align:center;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n            \u003ci style=\"font-size:11px; color:#fff; text-align:center; display:block;\"\u003e\n              Your trusted partner for premium experiences\n            \u003c/i\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align:center; background-color:#1b1b1a; border-radius:12px 12px 0 0; padding:10px 0; color:#fff; font-size:0.5rem;\"\u003e\n          \u003cp style=\"margin:0; color:#ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration:none; color:#ce9e3c;\"\u003e\n              Terms \u0026amp; Conditions\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration:none; color:#fff;\"\u003e\n              support@theworldkeys.com\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\"\n              style=\"text-decoration:none; color:#fff;\"\u003e\n              66, Av. des Champs-Élysées, 75008 Paris, France\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\"\n              alt=\"Company Logo\"\n              style=\"width:7rem; margin:-0.3rem; border:0;\"\n            /\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0; color:#ce9e3c; font-size:8px;\"\u003e\n            \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             -368,
+                                                             0
+                                                         ],
+                                            "id":  "726c74f0-b63e-470b-a92a-dd9d6b49102b",
+                                            "name":  "Cancel Button - Usuário",
+                                            "webhookId":  "997f0436-b1f7-49d0-98e2-359b6b3e63aa",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.restaurant.email }}",
+                                                               "subject":  "Reservation Canceled by Client",
+                                                               "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Canceled Reservation\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin:0; padding:0; font-family:\u0027Hind\u0027, Arial, sans-serif; background-color:#000; display:block;\"\u003e\n  \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n    style=\"width:100%; max-width:900px; margin:0 auto; color:#fff; text-align:center; background-color:#000;\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\" target=\"_blank\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n              alt=\"The World Keys\"\n              style=\"width:100%; display:block; margin:0 auto; border:0;\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.5rem 0;\"\u003e\n            Reservation Canceled by Client\n          \u003c/h2\u003e\n\n          \u003cp style=\"font-size:11px; color:#fff; margin:0; line-height:1.6;\"\u003e\n            Dear \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e, we wish to inform you that the client has chosen to cancel their reservation directly\n            through their dashboard.\n            \u003cbr /\u003e\u003cbr /\u003e\n            Thank you for your attention, and we look forward to collaborating on future bookings.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Card --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:1rem 2.3rem; text-align:center;\"\u003e\n          \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n            style=\"background-color:#111; border:1px solid #222; border-radius:8px; margin:0 auto; max-width:550px;\"\u003e\n            \u003ctr\u003e\n              \u003ctd style=\"padding:15px;\"\u003e\n\n                \u003ch2 style=\"color:#ce9e3c; font-size:13px; margin:0 0 12px 0; font-weight:600; text-align:center;\"\u003e\n                  Reservation Details\n                \u003c/h2\u003e\n\n                \u003ctable role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\n                  style=\"font-size:11px; color:#fff; text-align:center; border-collapse:collapse;\"\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eName:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                  \n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eDate:\u003c/span\u003e\n                      \u003cstrong\u003e{{ $(\u0027Code in JavaScript\u0027).item.json.formattedDate }} \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eTime:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $(\u0027Code in JavaScript\u0027).item.json.formattedTime }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eGuests:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $(\u0027Code in JavaScript\u0027).item.json.formattedPeople }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n\n                  \u003ctr\u003e\n                    \u003ctd style=\"padding:6px 0;\"\u003e\n                      \u003cspan style=\"color:#ccc;\"\u003eNotes:\u003c/span\u003e\n                      \u003cstrong\u003e\n                        {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDetails }}\n                      \u003c/strong\u003e\n                    \u003c/td\u003e\n                  \u003c/tr\u003e\n                \u003c/table\u003e\n\n                \u003ci style=\"font-size:9px; color:#aaa; margin-top:6px; text-align:center; display:block;\"\u003e\n                  ID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\n                \u003c/i\u003e\n\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Guidance --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0.5rem 1.5rem; text-align:center;\"\u003e\n          \u003ch4 style=\"color:#ce9e3c; font-size:13px; margin:0 0 0.75rem 0;\"\u003e\n            Useful Note\n          \u003c/h4\u003e\n          \u003cp style=\"font-size:11px; color:#fff; margin:0 auto; max-width:550px; line-height:1.6;\"\u003e\n            This reservation is now closed in our system. If you have any questions or availability to offer,\n            feel free to reach out to our support team.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- WhatsApp CTA --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0.5rem 1.5rem; text-align:center;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n            style=\"border:1px solid #CE9E3C; border-radius:150px; color:#fff; font-size:11px; padding:7px 15px; text-decoration:none; display:inline-block; font-weight:bold;\"\u003e\n            WhatsApp Support\n            \u003cimg\n              src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n              alt=\"WhatsApp\"\n              style=\"vertical-align:middle; margin-left:6px; width:16px; height:16px; border:0;\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Signature --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; text-align:center;\"\u003e\n          \u003cdiv style=\"font-size:11px; color:#fff; max-width:550px; margin:1rem auto 0;\"\u003e\n            \u003cstrong style=\"display:block; text-align:center;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n            \u003ci style=\"font-size:11px; color:#fff; text-align:center; display:block;\"\u003e\n              Your trusted partner for premium experiences\n            \u003c/i\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align:center; background-color:#1b1b1a; border-radius:12px 12px 0 0; padding:10px 0; color:#fff; font-size:0.5rem;\"\u003e\n          \u003cp style=\"margin:0; color:#ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration:none; color:#ce9e3c;\"\u003e\n              Terms \u0026amp; Conditions\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration:none; color:#fff;\"\u003e\n              support@theworldkeys.com\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\"\n              style=\"text-decoration:none; color:#fff;\"\u003e\n              66, Av. des Champs-Élysées, 75008 Paris, France\n            \u003c/a\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003e\n            \u003cimg\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\"\n              alt=\"Company Logo\"\n              style=\"width:7rem; margin:-0.3rem; border:0;\"\n            /\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0; color:#ce9e3c; font-size:8px;\"\u003e\n            \u003cstrong\u003eGLOBAL EXPERIENCE PREMIUM\u003c/strong\u003e\n          \u003c/p\u003e\n\n          \u003cp style=\"margin:0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             -176,
+                                                             0
+                                                         ],
+                                            "id":  "4fe11b44-2764-49dc-88a0-e482b2195a6f",
+                                            "name":  "Cancel Button - Establishment",
+                                            "webhookId":  "899dd8ab-35b3-459b-a317-1b3b1bb13b5f",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        }
+                                    ],
+                          "connections":  {
+                                              "Webhook":  {
+                                                              "main":  [
+                                                                           [
+                                                                               {
+                                                                                   "node":  "Code in JavaScript",
+                                                                                   "type":  "main",
+                                                                                   "index":  0
+                                                                               }
+                                                                           ]
+                                                                       ]
+                                                          },
+                                              "Code in JavaScript":  {
+                                                                         "main":  [
+                                                                                      [
+                                                                                          {
+                                                                                              "node":  "Cancel Button - Usuário",
+                                                                                              "type":  "main",
+                                                                                              "index":  0
+                                                                                          }
+                                                                                      ]
+                                                                                  ]
+                                                                     },
+                                              "Cancel Button - Usuário":  {
+                                                                              "main":  [
+                                                                                           [
+                                                                                               {
+                                                                                                   "node":  "Cancel Button - Establishment",
+                                                                                                   "type":  "main",
+                                                                                                   "index":  0
+                                                                                               }
+                                                                                           ]
+                                                                                       ]
+                                                                          },
+                                              "Cancel Button - Establishment":  {
+                                                                                    "main":  [
+                                                                                                 [
+
+                                                                                                 ]
+                                                                                             ]
+                                                                                }
+                                          },
+                          "authors":  "The World keys",
+                          "name":  "Version da426487",
+                          "description":  "",
+                          "autosaved":  true,
+                          "workflowPublishHistory":  [
+                                                         {
+                                                             "createdAt":  "2026-03-09T15:06:34.724Z",
+                                                             "id":  138,
+                                                             "workflowId":  "6sIa2gOyhVdZyAc6",
+                                                             "versionId":  "da426487-1a97-4695-8da9-33aff0d50ae6",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         },
+                                                         {
+                                                             "createdAt":  "2026-08-24T18:05:25.584Z",
+                                                             "id":  225,
+                                                             "workflowId":  "6sIa2gOyhVdZyAc6",
+                                                             "versionId":  "da426487-1a97-4695-8da9-33aff0d50ae6",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         }
+                                                     ]
+                      }
+}

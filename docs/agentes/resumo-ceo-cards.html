@@ -1,0 +1,130 @@
+<title>Chave Girada · The World Keys</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#0B0A08; --card:#12100C; --line:#26200F; --line-strong:#3A3018;
+    --gold:#CE9E3C; --gold-soft:#E6C87A; --text:#F5EFE3; --muted:#B5AB93; --dim:#8F8368;
+    --ok:#7FB27A; --test:#E6C87A; --site:#D98B6B;
+    --display:'Cormorant Garamond',Georgia,'Times New Roman',serif; --body:'Jost',Arial,Helvetica,sans-serif;
+  }
+  html,body{background:var(--ground);color:var(--text);margin:0}
+  body{font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 22px 56px}
+  header{display:grid;grid-template-columns:1fr auto;gap:28px 40px;align-items:end;border-bottom:1px solid var(--line);padding-bottom:28px}
+  .brand{font-family:var(--display);font-weight:600;letter-spacing:.32em;font-size:12px;color:var(--dim);text-transform:uppercase}
+  .brand small{display:block;letter-spacing:.34em;font-size:10px;margin-top:6px;color:var(--dim)}
+  h1{font-family:var(--display);font-weight:500;font-size:clamp(30px,4.2vw,44px);line-height:1.1;margin:14px 0 10px;text-wrap:balance;color:var(--text)}
+  .thesis{max-width:62ch;color:var(--muted);margin:0;font-size:16px}
+  .kpi{border:1px solid var(--gold);border-radius:14px;padding:18px 22px;min-width:220px;background:var(--card)}
+  .kpi .lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .kpi .num{font-family:var(--display);font-weight:600;font-size:44px;line-height:1;color:var(--gold-soft);margin:6px 0 4px;font-variant-numeric:tabular-nums}
+  .kpi .num span{font-size:20px;color:var(--muted);font-weight:500;margin-left:6px}
+  .kpi .meta{font-size:12px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:28px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;display:flex;flex-direction:column;gap:12px;min-height:100%}
+  .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+  .chip{font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
+  .chip.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 55%,transparent)}
+  .chip.test{color:var(--test);border-color:color-mix(in srgb,var(--test) 55%,transparent)}
+  .chip.site{color:var(--site);border-color:color-mix(in srgb,var(--site) 55%,transparent)}
+  .card h2{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;margin:0;text-wrap:balance}
+  .card p{margin:0;color:var(--muted);max-width:60ch}
+  .card .result{color:var(--text);border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
+  .card .result b{color:var(--gold-soft);font-weight:500}
+  .pend{margin-top:30px;border-top:1px solid var(--line);padding-top:24px;display:grid;grid-template-columns:auto 1fr;gap:10px 28px;align-items:start}
+  .pend .eyebrow{color:var(--site);padding-top:4px}
+  .pend ol{margin:0;padding-left:18px;color:var(--muted);max-width:70ch}
+  .pend li{margin-bottom:6px}
+  .pend li b{color:var(--text);font-weight:500}
+  footer{margin-top:28px;color:var(--dim);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
+  @media (max-width:720px){header{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.pend{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:no-preference){.card{transition:border-color .2s}.card:hover{border-color:var(--line-strong)}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="brand">The World Keys <small>Paris · resumo para a direção</small></div>
+      <h1>Consertamos o caminho até a porta antes de convidar mais alguém a entrar.</h1>
+      <p class="thesis">A plataforma lista 1.548 restaurantes e nenhum tinha acesso ao próprio painel. Em vez de mandar mais e-mails, corrigimos onde os donos desistiam, falamos só com quem já responde às reservas e passamos a acompanhar cada pedido de mesa até a resposta.</p>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Restaurantes com acesso ao painel</div>
+      <div class="num">0<span>→ 6 → 12</span></div>
+      <div class="meta">hoje → duas semanas → um mês</div>
+    </div>
+  </header>
+
+  <section class="grid" aria-label="O que foi feito">
+    <article class="card">
+      <div class="top"><span class="eyebrow">Campanha aos restaurantes</span><span class="chip ok">Feito</span></div>
+      <h2>166 e-mails a 148 restaurantes, em 5 idiomas</h2>
+      <p>Convite para cada casa assumir a própria página, gratuitamente.</p>
+      <p class="result"><b>Nenhum cadastro concluído.</b> A lição: o convite não era o problema. O caminho até a porta era.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">Diagnóstico do funil</span><span class="chip ok">Feito</span></div>
+      <h2>Percorremos o cadastro como um dono percorreria</h2>
+      <p>Quatro travas: o código de acesso chegava com o nome de outra empresa; a página de cadastro citava essa empresa; prometia "centenas de restaurantes" que não existem; e o e-mail que a casa recebe ao responder uma reserva não a convidava a assumir a página.</p>
+      <p class="result"><b>Três das quatro travas já corrigidas.</b> A quarta depende do site.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">E-mails de reserva</span><span class="chip ok">Feito</span></div>
+      <h2>Todos os e-mails ao restaurante refeitos com a nossa marca</h2>
+      <p>O convite para assumir a página aparece nos quatro momentos em que a casa nos lê: novo pedido, lembrete, depois de aceitar, depois de recusar. E-mails duplicados e uma falha de segurança no envio eliminados.</p>
+      <p class="result"><b>Cada pedido de reserva virou um convite.</b> Antes, silêncio.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">Nova campanha</span><span class="chip test">Em teste</span></div>
+      <h2>Falar só com quem já responde</h2>
+      <p>33 restaurantes respondem aos pedidos de reserva; 11 aceitam tudo o que veem. Cada um recebeu os próprios números, em vez de uma cobrança de pendências.</p>
+      <p class="result"><b>Primeira leva enviada aos 11 melhores.</b> Sinal esperado nas próximas duas semanas.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">Guardião da Reserva</span><span class="chip test">Em teste</span></div>
+      <h2>Nenhum pedido de mesa morre mais em silêncio</h2>
+      <p>Um sistema acompanha cada pedido até a resposta: cobra o restaurante pelo canal certo, monta a fila de ligações e avisa o cliente antes da data quando não há resposta. Hoje 9 em cada 10 pedidos a não parceiros ficam sem resposta.</p>
+      <p class="result"><b>Construído e testado.</b> Em teste controlado em três cidades; nada sai sem aprovação humana.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">Proteção jurídica</span><span class="chip ok">Feito</span></div>
+      <h2>Quem pediu para sair não volta ao ar por acidente</h2>
+      <p>Registro oficial de restaurantes que pediram remoção, com trava no banco que impede republicá-los. A assistente reconhece pedidos de remoção e nunca responde com venda.</p>
+      <p class="result"><b>Trava ativa e testada.</b> Falta o site tirar a página do ar.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">Comando único</span><span class="chip ok">Feito</span></div>
+      <h2>Um relatório por dia, em vez de cinco painéis</h2>
+      <p>Os agentes reportam a um coordenador, que decide o que pode fazer sozinho e envia à direção só o que precisa de decisão humana.</p>
+      <p class="result"><b>Já apontou</b> clientes com mesa no dia sem resposta, casas despublicadas ainda recebendo pedidos e atendimentos abertos há semanas.</p>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="eyebrow">Disciplina e qualidade</span><span class="chip ok">Feito</span></div>
+      <h2>Um agente novo, não oito</h2>
+      <p>Oito ideias de agentes avaliadas; seis recusadas com justificativa. Todo agente tem meta, custo e condição de desligamento. 112 testes automáticos antes de operar; nenhum e-mail sem descadastro; nenhuma ação sensível sem aprovação registrada.</p>
+      <p class="result"><b>Tudo verde.</b> Confiança por prova, não por promessa.</p>
+    </article>
+  </section>
+
+  <section class="pend" aria-label="O que ainda depende do site">
+    <span class="eyebrow">Depende do site</span>
+    <ol>
+      <li><b>Segurança primeiro:</b> a página onde o restaurante responde à reserva mostra dados do cliente sem login, mesmo depois da data.</li>
+      <li>Remover do cadastro o nome da outra empresa e a frase "centenas de restaurantes"; tirar do ar as páginas despublicadas.</li>
+      <li>Hospedar o relatório diário no servidor, para não depender de um computador ligado.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Fontes: banco de dados da plataforma, registros de envio e de auditoria.</span>
+    <span>Nada foi enviado ou alterado sem autorização registrada.</span>
+  </footer>
+</div>

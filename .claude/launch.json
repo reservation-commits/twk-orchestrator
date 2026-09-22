@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "command-center",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "orchestrator/command-center/server.js"
+      ],
+      "port": 8787
+    },
+    {
+      "name": "biblioteca",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "docs/site/server.js"
+      ],
+      "port": 8080
+    }
+  ]
+}

@@ -1,0 +1,260 @@
+﻿{
+    "updatedAt":  "2026-08-24T18:05:28.062Z",
+    "createdAt":  "2026-02-02T12:52:16.855Z",
+    "id":  "xn33VGxkjsasnGlo",
+    "name":  "6 - desativação de conta (site novo)",
+    "description":  null,
+    "active":  true,
+    "isArchived":  false,
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "account-deletion",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2.1,
+                      "position":  [
+                                       -240,
+                                       0
+                                   ],
+                      "id":  "cdcd4a0c-11f7-4b75-81a1-b119b23859c2",
+                      "name":  "Webhook",
+                      "webhookId":  "eba994ae-f992-4f4d-a1d0-a81ef607de1c"
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $json.body.email }}",
+                                         "subject":  "Account Deactivation Confirmed",
+                                         "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eAccount Deleted\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 0.5rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0; font-weight: 700; letter-spacing: 0.2px;\"\u003e\n            Account Deactivation Confirmed\n          \u003c/h2\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Main Message (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem;\"\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0 auto; max-width: 600px; line-height: 1.6;\"\u003e\n            Hi \u003cstrong\u003e{{ $json.body.name }}\u003c/strong\u003e,\u003cbr\u003e\u003cbr\u003e\n            This email confirms that your request to delete your The World Keys account has been processed.\u003cbr\u003e\n            Your profile and the data associated with your account are no longer accessible from our platform and are handled in line with applicable privacy requirements.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Helpful Notes (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 1.25rem 2rem 0 2rem;\"\u003e\n          \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.75rem 0; font-weight: 700;\"\u003e\n            Important information\n          \u003c/h4\u003e\n          \u003cp style=\"font-size: 11px; color: #ccc; margin: 0 auto; max-width: 550px; line-height: 1.6;\"\u003e\n            If you did not initiate this request, or if it was made by mistake, please contact our support team immediately.\u003cbr\u003e\n            If you decide to come back, you can create a new account anytime — we’ll be glad to welcome you again.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Buttons (UPDATED BODY - keeps styles consistent) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 0.5rem 2rem;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n             style=\"border: 1px solid #CE9E3C; border-radius: 150px; color: #fff; font-size: 11px; padding: 8px 20px; text-decoration: none; display: inline-block; font-weight: bold;\"\u003e\n            Whatsapp Support\n            \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                 alt=\"WhatsApp Icon\"\n                 style=\"vertical-align: text-top; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Secondary CTA (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0.75rem 2rem 1.75rem 2rem;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/log-in/?redirect_to=https://theworldkeys.com/account/\"\n             style=\"background-color: #ce9e3c; border-radius: 150px; color: #000; font-size: 11px; padding: 8px 20px; text-decoration: none; display: inline-block; font-weight: 600;\"\u003e\n            Return to TheWorldKeys.com\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n          \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n            \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       16,
+                                       0
+                                   ],
+                      "id":  "c0041422-b261-4689-ae46-a9799aa45725",
+                      "name":  "Send a message",
+                      "webhookId":  "6f5bd95e-5e65-4be8-b72d-729ee937c5a7",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  }
+              ],
+    "connections":  {
+                        "Webhook":  {
+                                        "main":  [
+                                                     [
+                                                         {
+                                                             "node":  "Send a message",
+                                                             "type":  "main",
+                                                             "index":  0
+                                                         }
+                                                     ]
+                                                 ]
+                                    }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "availableInMCP":  true
+                 },
+    "staticData":  null,
+    "meta":  {
+                 "templateCredsSetupCompleted":  true
+             },
+    "pinData":  {
+                    "Webhook":  [
+                                    {
+                                        "json":  {
+                                                     "headers":  {
+                                                                     "host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "user-agent":  "node",
+                                                                     "content-length":  "112",
+                                                                     "accept":  "*/*",
+                                                                     "accept-encoding":  "br, gzip, deflate",
+                                                                     "accept-language":  "*",
+                                                                     "content-type":  "application/json",
+                                                                     "sec-fetch-mode":  "cors",
+                                                                     "x-forwarded-for":  "34.96.62.131",
+                                                                     "x-forwarded-host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "x-forwarded-port":  "443",
+                                                                     "x-forwarded-proto":  "https",
+                                                                     "x-forwarded-server":  "8976530a2a6d",
+                                                                     "x-real-ip":  "34.96.62.131"
+                                                                 },
+                                                     "params":  {
+
+                                                                },
+                                                     "query":  {
+
+                                                               },
+                                                     "body":  {
+                                                                  "name":  "Jussi J",
+                                                                  "id":  "cmo1i4f8t0020s6014i2xnyyp",
+                                                                  "phone":  "913246903",
+                                                                  "email":  "catch.all.jjussi.com@gmail.com"
+                                                              },
+                                                     "webhookUrl":  "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/account-deletion",
+                                                     "executionMode":  "production"
+                                                 }
+                                    }
+                                ]
+                },
+    "versionId":  "3725037c-c32c-4f19-ae31-a469ca974e30",
+    "activeVersionId":  "3725037c-c32c-4f19-ae31-a469ca974e30",
+    "versionCounter":  44,
+    "triggerCount":  1,
+    "shared":  [
+                   {
+                       "updatedAt":  "2026-02-02T12:52:16.862Z",
+                       "createdAt":  "2026-02-02T12:52:16.862Z",
+                       "role":  "workflow:owner",
+                       "workflowId":  "xn33VGxkjsasnGlo",
+                       "projectId":  "j3RBnUKpdJnI0HPr",
+                       "project":  {
+                                       "updatedAt":  "2025-10-09T18:24:30.274Z",
+                                       "createdAt":  "2025-10-09T18:21:52.771Z",
+                                       "id":  "j3RBnUKpdJnI0HPr",
+                                       "name":  "The World keys \u003cthekeys.need@gmail.com\u003e",
+                                       "type":  "personal",
+                                       "icon":  null,
+                                       "description":  null,
+                                       "creatorId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                       "projectRelations":  [
+                                                                {
+                                                                    "updatedAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "createdAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                    "projectId":  "j3RBnUKpdJnI0HPr",
+                                                                    "user":  {
+                                                                                 "updatedAt":  "2026-08-26T07:00:16.000Z",
+                                                                                 "createdAt":  "2025-10-09T18:21:52.389Z",
+                                                                                 "id":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                                 "email":  "thekeys.need@gmail.com",
+                                                                                 "firstName":  "The World",
+                                                                                 "lastName":  "keys",
+                                                                                 "personalizationAnswers":  {
+                                                                                                                "version":  "v4",
+                                                                                                                "personalization_survey_submitted_at":  "2025-10-09T18:24:41.538Z",
+                                                                                                                "personalization_survey_n8n_version":  "1.103.2"
+                                                                                                            },
+                                                                                 "settings":  {
+                                                                                                  "userActivated":  true,
+                                                                                                  "easyAIWorkflowOnboarded":  true,
+                                                                                                  "firstSuccessfulWorkflowId":  "iczjt9eyILmHEwU7",
+                                                                                                  "userActivatedAt":  1760038686025,
+                                                                                                  "npsSurvey":  {
+                                                                                                                    "responded":  true,
+                                                                                                                    "lastShownAt":  1785180247186
+                                                                                                                }
+                                                                                              },
+                                                                                 "disabled":  false,
+                                                                                 "mfaEnabled":  false,
+                                                                                 "lastActiveAt":  "2026-08-26",
+                                                                                 "isPending":  false
+                                                                             }
+                                                                }
+                                                            ]
+                                   }
+                   }
+               ],
+    "tags":  [
+
+             ],
+    "activeVersion":  {
+                          "updatedAt":  "2026-04-17T12:28:05.000Z",
+                          "createdAt":  "2026-04-17T12:26:40.287Z",
+                          "versionId":  "3725037c-c32c-4f19-ae31-a469ca974e30",
+                          "workflowId":  "xn33VGxkjsasnGlo",
+                          "nodes":  [
+                                        {
+                                            "parameters":  {
+                                                               "httpMethod":  "POST",
+                                                               "path":  "account-deletion",
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.webhook",
+                                            "typeVersion":  2.1,
+                                            "position":  [
+                                                             -240,
+                                                             0
+                                                         ],
+                                            "id":  "cdcd4a0c-11f7-4b75-81a1-b119b23859c2",
+                                            "name":  "Webhook",
+                                            "webhookId":  "eba994ae-f992-4f4d-a1d0-a81ef607de1c"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $json.body.email }}",
+                                                               "subject":  "Account Deactivation Confirmed",
+                                                               "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eAccount Deleted\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 0.5rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0; font-weight: 700; letter-spacing: 0.2px;\"\u003e\n            Account Deactivation Confirmed\n          \u003c/h2\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Main Message (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem;\"\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0 auto; max-width: 600px; line-height: 1.6;\"\u003e\n            Hi \u003cstrong\u003e{{ $json.body.name }}\u003c/strong\u003e,\u003cbr\u003e\u003cbr\u003e\n            This email confirms that your request to delete your The World Keys account has been processed.\u003cbr\u003e\n            Your profile and the data associated with your account are no longer accessible from our platform and are handled in line with applicable privacy requirements.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Helpful Notes (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 1.25rem 2rem 0 2rem;\"\u003e\n          \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.75rem 0; font-weight: 700;\"\u003e\n            Important information\n          \u003c/h4\u003e\n          \u003cp style=\"font-size: 11px; color: #ccc; margin: 0 auto; max-width: 550px; line-height: 1.6;\"\u003e\n            If you did not initiate this request, or if it was made by mistake, please contact our support team immediately.\u003cbr\u003e\n            If you decide to come back, you can create a new account anytime — we’ll be glad to welcome you again.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Buttons (UPDATED BODY - keeps styles consistent) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 0.5rem 2rem;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n             style=\"border: 1px solid #CE9E3C; border-radius: 150px; color: #fff; font-size: 11px; padding: 8px 20px; text-decoration: none; display: inline-block; font-weight: bold;\"\u003e\n            Whatsapp Support\n            \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                 alt=\"WhatsApp Icon\"\n                 style=\"vertical-align: text-top; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Secondary CTA (UPDATED BODY) --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0.75rem 2rem 1.75rem 2rem;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/log-in/?redirect_to=https://theworldkeys.com/account/\"\n             style=\"background-color: #ce9e3c; border-radius: 150px; color: #000; font-size: 11px; padding: 8px 20px; text-decoration: none; display: inline-block; font-weight: 600;\"\u003e\n            Return to TheWorldKeys.com\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n          \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n            \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             16,
+                                                             0
+                                                         ],
+                                            "id":  "c0041422-b261-4689-ae46-a9799aa45725",
+                                            "name":  "Send a message",
+                                            "webhookId":  "6f5bd95e-5e65-4be8-b72d-729ee937c5a7",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        }
+                                    ],
+                          "connections":  {
+                                              "Webhook":  {
+                                                              "main":  [
+                                                                           [
+                                                                               {
+                                                                                   "node":  "Send a message",
+                                                                                   "type":  "main",
+                                                                                   "index":  0
+                                                                               }
+                                                                           ]
+                                                                       ]
+                                                          }
+                                          },
+                          "authors":  "The World keys",
+                          "name":  "Version 3725037c",
+                          "description":  "",
+                          "autosaved":  true,
+                          "workflowPublishHistory":  [
+                                                         {
+                                                             "createdAt":  "2026-04-17T12:28:05.955Z",
+                                                             "id":  152,
+                                                             "workflowId":  "xn33VGxkjsasnGlo",
+                                                             "versionId":  "3725037c-c32c-4f19-ae31-a469ca974e30",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         },
+                                                         {
+                                                             "createdAt":  "2026-08-24T18:05:28.121Z",
+                                                             "id":  226,
+                                                             "workflowId":  "xn33VGxkjsasnGlo",
+                                                             "versionId":  "3725037c-c32c-4f19-ae31-a469ca974e30",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         }
+                                                     ]
+                      }
+}

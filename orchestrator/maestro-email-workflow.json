@@ -1,0 +1,74 @@
+{
+  "name": "MAESTRO — Enviar email",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "maestro-email",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 0],
+      "id": "96768418-6114-4886-8e3d-56fd976238df",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6e24616e-8382-4c47-a753-306d5bfdd3c7",
+              "leftValue": "={{ $json.headers['authorization'] }}",
+              "rightValue": "Bearer 4576678091924305d1f9c4f5236e29528171359ce8cc94d2",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [208, 0],
+      "id": "951b254a-a017-412e-a8d9-c3fde2da9292",
+      "name": "Token válido?"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.para }}",
+        "subject": "={{ $json.body.assunto }}",
+        "emailType": "html",
+        "message": "={{ $json.body.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [416, -64],
+      "name": "Enviar (Gmail)"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Token válido?", "type": "main", "index": 0 }]]
+    },
+    "Token válido?": {
+      "main": [[{ "node": "Enviar (Gmail)", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}

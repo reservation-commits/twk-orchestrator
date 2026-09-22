@@ -1,0 +1,914 @@
+{
+ "updatedAt": "2026-09-03T20:45:10.403Z",
+ "createdAt": "2026-01-21T22:34:00.552Z",
+ "id": "TvyfkENpfds0MpgJ",
+ "name": "2 - 6h e 12h pendente (site novo)",
+ "description": null,
+ "active": true,
+ "isArchived": false,
+ "nodes": [
+  {
+   "parameters": {
+    "mode": "runOnceForEachItem",
+    "jsCode": "// runOnceForEachItem\nreturn {\n  json: $input.item.json\n};\n\nconst body = $('When Executed by Another Workflow').item.json.body;\n\nconst texto = `Hello\nI'd like to activate your Concierge service (€1) to assist with my reservation below:\n\n👤 ${body.user.name}\n📍 ${body.restaurant.name}\n🗓️ ${formattedDate} 🕰️ ${formattedTime}\n👥 ${formattedPeople}\n🆔 ${body.reservation.reservation_code}\n\nThank you for your help.\n– Sent via The World Keys Experience.`;\n\n// devolve tudo o que você já devolvia + o link pronto\nreturn [{\n  json: {\n    formattedDate,\n    formattedTime,\n    formattedPeople,\n    waText: encodeURIComponent(texto)\n  }\n}];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -112,
+    -192
+   ],
+   "id": "13c09376-4669-4fa3-8908-3a449371b37b",
+   "name": "Code in JavaScript"
+  },
+  {
+   "parameters": {
+    "inputSource": "passthrough"
+   },
+   "type": "n8n-nodes-base.executeWorkflowTrigger",
+   "typeVersion": 1.1,
+   "position": [
+    -272,
+    -192
+   ],
+   "id": "6aac748f-ce00-4ab8-96f6-c1ded6855a79",
+   "name": "When Executed by Another Workflow"
+  },
+  {
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT booking_status\nFROM reservations\nWHERE reservation_code = $1\nLIMIT 1;",
+    "options": {
+     "queryReplacement": "={{ $('Code in JavaScript').item.json.reservationCode }}"
+    }
+   },
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    192,
+    -192
+   ],
+   "id": "0a60d846-db6b-426a-8213-5543222a9f37",
+   "name": "Buscar Reserva 6h",
+   "alwaysOutputData": true,
+   "credentials": {
+    "postgres": {
+     "id": "QSEOM0Wb5DzGkuXy",
+     "name": "Postgres account 2"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "SELECT booking_status\nFROM reservations\nWHERE reservation_id = $1;\n",
+    "options": {
+     "queryReplacement": "={{ $('When Executed by Another Workflow').item.json.body.reservation.id }}"
+    }
+   },
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    1296,
+    -192
+   ],
+   "id": "cfdad28f-4161-435c-8066-063e5926a235",
+   "name": "Buscar Reserva 12h",
+   "credentials": {
+    "postgres": {
+     "id": "QSEOM0Wb5DzGkuXy",
+     "name": "Postgres account 2"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "amount": 6,
+    "unit": "hours"
+   },
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "position": [
+    48,
+    -192
+   ],
+   "id": "015ca4fd-abad-454e-9b32-cae8ff140853",
+   "name": "Wait 1",
+   "webhookId": "49a7c33c-cd99-4298-9f7d-403faa65d59f"
+  },
+  {
+   "parameters": {
+    "amount": 6,
+    "unit": "hours"
+   },
+   "type": "n8n-nodes-base.wait",
+   "typeVersion": 1.1,
+   "position": [
+    1136,
+    -192
+   ],
+   "id": "2a90fe7d-a3e5-4d59-a20c-58086c3eb1b6",
+   "name": "Wait 2",
+   "webhookId": "49a7c33c-cd99-4298-9f7d-403faa65d59f"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "9e23d1fe-ed62-4de6-aec1-a8727cd74725",
+       "leftValue": "={{ $json.booking_status }}",
+       "rightValue": "Pending",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    336,
+    -192
+   ],
+   "id": "4add5044-fce7-4e8f-97ed-51e9219b9f94",
+   "name": "Está Pendente?"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "9e23d1fe-ed62-4de6-aec1-a8727cd74725",
+       "leftValue": "={{ $json.booking_status }}",
+       "rightValue": "Pending",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    1472,
+    -192
+   ],
+   "id": "d34c9361-5865-4642-b0ae-6095d7f7e819",
+   "name": "Ainda está Pendente?"
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('When Executed by Another Workflow').item.json.body.user.email }}",
+    "subject": "=Your Concierge at Your Service",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Still Working On It</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">An update on your request &#8212; our team is personally engaged.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">Still on it.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('When Executed by Another Workflow').item.json.body.user.name }}, it's been 12 hours since we sent your request to <span style=\"color:#E6C87A;\">{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</span>. This is taking longer than we'd like &#8212; our team is now personally engaged to get you an answer.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">ESTABLISHMENT</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">If you prefer, our concierge can suggest an equally special alternative right away &#8212; no waiting.</p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Follow my request</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">Thank you for your patience &#8212; we'll notify you the moment the restaurant responds.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    1808,
+    -304
+   ],
+   "id": "ba42629a-0064-426c-8f14-feca52b00e4d",
+   "name": "12h Sem resposta usuário",
+   "webhookId": "3d9b2d91-fb0b-4aa1-8886-a01d0e2170be",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('When Executed by Another Workflow').item.json.body.user.email }}",
+    "subject": "=Your Reservation Update",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>We Haven't Forgotten You</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">An update on your request &#8212; our team is following it closely.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">We haven't forgotten you.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('When Executed by Another Workflow').item.json.body.user.name }}, it's been 6 hours since we sent your request to <span style=\"color:#E6C87A;\">{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</span>. The restaurant hasn't replied yet &#8212; rest assured, your request is being carefully followed.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">ESTABLISHMENT</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\"><strong style=\"color:#B5AB93;\">Our team is actively working behind the scenes to secure your table.</strong></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Follow my request</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">You can track your request in your account at any time &#8212; and our concierge is on WhatsApp whenever you need us.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    608,
+    -352
+   ],
+   "id": "c3419dd6-eb45-450e-a23d-b85fa3f580ce",
+   "name": "6h (Usuário)",
+   "webhookId": "3d9b2d91-fb0b-4aa1-8886-a01d0e2170be",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('When Executed by Another Workflow').item.json.body.restaurant.email }}",
+    "subject": "=Pending Request - {{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Still Awaiting Your Reply</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">A booking request is awaiting your reply &#8212; respond to confirm availability.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">Still awaiting your reply.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">Dear <span style=\"color:#E6C87A;\">{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</span>, a reservation request via The World Keys is awaiting your reply. Please review and respond to confirm availability.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">For security and data protection, guest contact details are available only through the response page.</p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/r/{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Respond to pending requests</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:14px 24px 0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;\">\n                Prefer to answer every request from one place, in one tap? The free professional account for <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span> puts your requests, hours and page in your hands.\n                <a href=\"https://manager.theworldkeys.com/register\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:underline; white-space:nowrap;\">Activate my key &rarr;</a>\n              </p>\n              <p style=\"margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;\">PT Ative a conta gratuita da casa &#183; FR Activez le compte gratuit de la maison &#183; ES Active la cuenta gratuita de la casa &#183; IT Attivate l'account gratuito del locale</p>\n            </td>\n          </tr>\n\n<tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">A quick response gives your guest the best possible experience &#8212; thank you for being part of The World Keys.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    800,
+    -352
+   ],
+   "id": "cb6449e4-1c0a-476d-b180-aa13599b0c3e",
+   "name": "6h (estabelecimento)",
+   "webhookId": "3d9b2d91-fb0b-4aa1-8886-a01d0e2170be",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "jsCode": "const message =\n`*Hello*\n\nI'd like to activate your Concierge service (€1) to assist with my reservation below:\n\n👤 ${$('When Executed by Another Workflow').item.json.body.user.name}\n📍 ${$('When Executed by Another Workflow').item.json.body.restaurant.name}\n🗓️ ${$('Code in JavaScript').item.json.formattedDate} 🕰️ ${$('Code in JavaScript').item.json.formattedTime}\n👥 ${$('Code in JavaScript').item.json.formattedPeople}\n🆔 ${$('When Executed by Another Workflow').item.json.body.reservation.reservation_code}\n\n*Thank you for your help*\n_– Sent via The World Keys Experience_`;\n\nconst whatsappLink =\n'https://wa.me/33781937270?text=' +\nencodeURIComponent(message);\n\nreturn [{\njson: {\n...$json,\nwhatsappLink\n}\n}];\n"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1632,
+    -304
+   ],
+   "id": "9fd7ea6a-2b56-4385-bd13-1175773e3a6b",
+   "name": "Whatsapp Code"
+  }
+ ],
+ "connections": {
+  "Code in JavaScript": {
+   "main": [
+    [
+     {
+      "node": "Wait 1",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "When Executed by Another Workflow": {
+   "main": [
+    [
+     {
+      "node": "Code in JavaScript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Buscar Reserva 6h": {
+   "main": [
+    [
+     {
+      "node": "Está Pendente?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Wait 1": {
+   "main": [
+    [
+     {
+      "node": "Buscar Reserva 6h",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Wait 2": {
+   "main": [
+    [
+     {
+      "node": "Buscar Reserva 12h",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Está Pendente?": {
+   "main": [
+    [
+     {
+      "node": "6h (Usuário)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Buscar Reserva 12h": {
+   "main": [
+    [
+     {
+      "node": "Ainda está Pendente?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Ainda está Pendente?": {
+   "main": [
+    [
+     {
+      "node": "Whatsapp Code",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6h (Usuário)": {
+   "main": [
+    [
+     {
+      "node": "6h (estabelecimento)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "6h (estabelecimento)": {
+   "main": [
+    [
+     {
+      "node": "Wait 2",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "12h Sem resposta usuário": {
+   "main": [
+    []
+   ]
+  },
+  "Whatsapp Code": {
+   "main": [
+    [
+     {
+      "node": "12h Sem resposta usuário",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": false,
+  "callerPolicy": "workflowsFromSameOwner"
+ },
+ "staticData": null,
+ "meta": {
+  "templateCredsSetupCompleted": true
+ },
+ "pinData": {
+  "When Executed by Another Workflow": [
+   {
+    "json": {
+     "body": {
+      "user": {
+       "id": "c723c3aa-13cc-4f11-961d-62190b1bbb10",
+       "name": "Márlon Andrade",
+       "email": "marlonmibam@gmail.com",
+       "phone": "+5521981335800"
+      },
+      "reservation": {
+       "id": "866413da-e10c-4aae-8c15-e895027ffb12",
+       "reservation_code": "ZEDW58SS",
+       "date": "2026-06-27",
+       "time": "11:00",
+       "people": 2,
+       "status": "Pending",
+       "details": null
+      },
+      "restaurant": {
+       "id": "253542",
+       "name": "BOTECO BELMONTE",
+       "restaurant_id": "253542",
+       "email": "costa.marlon08@gmail.com",
+       "phone": "+55 21 2267 9909"
+      },
+      "management_url": "https://theworldkeys.com/r/ZEDW58SS"
+     },
+     "reservationCode": "ZEDW58SS",
+     "formattedDate": "Sat, 27 Jun 2026",
+     "formattedTime": "11:00 AM",
+     "formattedPeople": "2 guests",
+     "formattedDetails": "No details."
+    },
+    "pairedItem": {
+     "item": 0
+    }
+   }
+  ]
+ },
+ "versionId": "369ef19b-7195-4a8b-9485-1b6e4b53264b",
+ "activeVersionId": "369ef19b-7195-4a8b-9485-1b6e4b53264b",
+ "versionCounter": 221,
+ "triggerCount": 0,
+ "shared": [
+  {
+   "updatedAt": "2026-01-21T22:34:00.563Z",
+   "createdAt": "2026-01-21T22:34:00.563Z",
+   "role": "workflow:owner",
+   "workflowId": "TvyfkENpfds0MpgJ",
+   "projectId": "j3RBnUKpdJnI0HPr",
+   "project": {
+    "updatedAt": "2025-10-09T18:24:30.274Z",
+    "createdAt": "2025-10-09T18:21:52.771Z",
+    "id": "j3RBnUKpdJnI0HPr",
+    "name": "The World keys <thekeys.need@gmail.com>",
+    "type": "personal",
+    "icon": null,
+    "description": null,
+    "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+    "projectRelations": [
+     {
+      "updatedAt": "2025-10-09T18:21:52.771Z",
+      "createdAt": "2025-10-09T18:21:52.771Z",
+      "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "user": {
+       "updatedAt": "2026-09-09T07:00:17.000Z",
+       "createdAt": "2025-10-09T18:21:52.389Z",
+       "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+       "email": "thekeys.need@gmail.com",
+       "firstName": "The World",
+       "lastName": "keys",
+       "personalizationAnswers": {
+        "version": "v4",
+        "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+        "personalization_survey_n8n_version": "1.103.2"
+       },
+       "settings": {
+        "userActivated": true,
+        "easyAIWorkflowOnboarded": true,
+        "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+        "userActivatedAt": 1760038686025,
+        "npsSurvey": {
+         "responded": true,
+         "lastShownAt": 1785180247186
+        }
+       },
+       "disabled": false,
+       "mfaEnabled": false,
+       "lastActiveAt": "2026-09-09",
+       "isPending": false
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "tags": [],
+ "activeVersion": {
+  "updatedAt": "2026-09-03T20:45:10.405Z",
+  "createdAt": "2026-09-03T20:45:10.405Z",
+  "versionId": "369ef19b-7195-4a8b-9485-1b6e4b53264b",
+  "workflowId": "TvyfkENpfds0MpgJ",
+  "nodes": [
+   {
+    "parameters": {
+     "mode": "runOnceForEachItem",
+     "jsCode": "// runOnceForEachItem\nreturn {\n  json: $input.item.json\n};\n\nconst body = $('When Executed by Another Workflow').item.json.body;\n\nconst texto = `Hello\nI'd like to activate your Concierge service (€1) to assist with my reservation below:\n\n👤 ${body.user.name}\n📍 ${body.restaurant.name}\n🗓️ ${formattedDate} 🕰️ ${formattedTime}\n👥 ${formattedPeople}\n🆔 ${body.reservation.reservation_code}\n\nThank you for your help.\n– Sent via The World Keys Experience.`;\n\n// devolve tudo o que você já devolvia + o link pronto\nreturn [{\n  json: {\n    formattedDate,\n    formattedTime,\n    formattedPeople,\n    waText: encodeURIComponent(texto)\n  }\n}];"
+    },
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     -112,
+     -192
+    ],
+    "id": "13c09376-4669-4fa3-8908-3a449371b37b",
+    "name": "Code in JavaScript"
+   },
+   {
+    "parameters": {
+     "inputSource": "passthrough"
+    },
+    "type": "n8n-nodes-base.executeWorkflowTrigger",
+    "typeVersion": 1.1,
+    "position": [
+     -272,
+     -192
+    ],
+    "id": "6aac748f-ce00-4ab8-96f6-c1ded6855a79",
+    "name": "When Executed by Another Workflow"
+   },
+   {
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "SELECT booking_status\nFROM reservations\nWHERE reservation_code = $1\nLIMIT 1;",
+     "options": {
+      "queryReplacement": "={{ $('Code in JavaScript').item.json.reservationCode }}"
+     }
+    },
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     192,
+     -192
+    ],
+    "id": "0a60d846-db6b-426a-8213-5543222a9f37",
+    "name": "Buscar Reserva 6h",
+    "alwaysOutputData": true,
+    "credentials": {
+     "postgres": {
+      "id": "QSEOM0Wb5DzGkuXy",
+      "name": "Postgres account 2"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "SELECT booking_status\nFROM reservations\nWHERE reservation_id = $1;\n",
+     "options": {
+      "queryReplacement": "={{ $('When Executed by Another Workflow').item.json.body.reservation.id }}"
+     }
+    },
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     1296,
+     -192
+    ],
+    "id": "cfdad28f-4161-435c-8066-063e5926a235",
+    "name": "Buscar Reserva 12h",
+    "credentials": {
+     "postgres": {
+      "id": "QSEOM0Wb5DzGkuXy",
+      "name": "Postgres account 2"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "amount": 6,
+     "unit": "hours"
+    },
+    "type": "n8n-nodes-base.wait",
+    "typeVersion": 1.1,
+    "position": [
+     48,
+     -192
+    ],
+    "id": "015ca4fd-abad-454e-9b32-cae8ff140853",
+    "name": "Wait 1",
+    "webhookId": "49a7c33c-cd99-4298-9f7d-403faa65d59f"
+   },
+   {
+    "parameters": {
+     "amount": 6,
+     "unit": "hours"
+    },
+    "type": "n8n-nodes-base.wait",
+    "typeVersion": 1.1,
+    "position": [
+     1136,
+     -192
+    ],
+    "id": "2a90fe7d-a3e5-4d59-a20c-58086c3eb1b6",
+    "name": "Wait 2",
+    "webhookId": "49a7c33c-cd99-4298-9f7d-403faa65d59f"
+   },
+   {
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "strict",
+       "version": 3
+      },
+      "conditions": [
+       {
+        "id": "9e23d1fe-ed62-4de6-aec1-a8727cd74725",
+        "leftValue": "={{ $json.booking_status }}",
+        "rightValue": "Pending",
+        "operator": {
+         "type": "string",
+         "operation": "equals"
+        }
+       }
+      ],
+      "combinator": "and"
+     },
+     "options": {}
+    },
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.3,
+    "position": [
+     336,
+     -192
+    ],
+    "id": "4add5044-fce7-4e8f-97ed-51e9219b9f94",
+    "name": "Está Pendente?"
+   },
+   {
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "strict",
+       "version": 3
+      },
+      "conditions": [
+       {
+        "id": "9e23d1fe-ed62-4de6-aec1-a8727cd74725",
+        "leftValue": "={{ $json.booking_status }}",
+        "rightValue": "Pending",
+        "operator": {
+         "type": "string",
+         "operation": "equals"
+        }
+       }
+      ],
+      "combinator": "and"
+     },
+     "options": {}
+    },
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.3,
+    "position": [
+     1472,
+     -192
+    ],
+    "id": "d34c9361-5865-4642-b0ae-6095d7f7e819",
+    "name": "Ainda está Pendente?"
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('When Executed by Another Workflow').item.json.body.user.email }}",
+     "subject": "=Your Concierge at Your Service",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Still Working On It</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">An update on your request &#8212; our team is personally engaged.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">Still on it.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('When Executed by Another Workflow').item.json.body.user.name }}, it's been 12 hours since we sent your request to <span style=\"color:#E6C87A;\">{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</span>. This is taking longer than we'd like &#8212; our team is now personally engaged to get you an answer.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">ESTABLISHMENT</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">If you prefer, our concierge can suggest an equally special alternative right away &#8212; no waiting.</p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Follow my request</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">Thank you for your patience &#8212; we'll notify you the moment the restaurant responds.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     1808,
+     -304
+    ],
+    "id": "ba42629a-0064-426c-8f14-feca52b00e4d",
+    "name": "12h Sem resposta usuário",
+    "webhookId": "3d9b2d91-fb0b-4aa1-8886-a01d0e2170be",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('When Executed by Another Workflow').item.json.body.user.email }}",
+     "subject": "=Your Reservation Update",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>We Haven't Forgotten You</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">An update on your request &#8212; our team is following it closely.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">We haven't forgotten you.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('When Executed by Another Workflow').item.json.body.user.name }}, it's been 6 hours since we sent your request to <span style=\"color:#E6C87A;\">{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</span>. The restaurant hasn't replied yet &#8212; rest assured, your request is being carefully followed.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">ESTABLISHMENT</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\"><strong style=\"color:#B5AB93;\">Our team is actively working behind the scenes to secure your table.</strong></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Follow my request</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">You can track your request in your account at any time &#8212; and our concierge is on WhatsApp whenever you need us.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     608,
+     -352
+    ],
+    "id": "c3419dd6-eb45-450e-a23d-b85fa3f580ce",
+    "name": "6h (Usuário)",
+    "webhookId": "3d9b2d91-fb0b-4aa1-8886-a01d0e2170be",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('When Executed by Another Workflow').item.json.body.restaurant.email }}",
+     "subject": "=Pending Request - {{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Still Awaiting Your Reply</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">A booking request is awaiting your reply &#8212; respond to confirm availability.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">Still awaiting your reply.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">Dear <span style=\"color:#E6C87A;\">{{ $('When Executed by Another Workflow').item.json.body.restaurant.name }}</span>, a reservation request via The World Keys is awaiting your reply. Please review and respond to confirm availability.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">For security and data protection, guest contact details are available only through the response page.</p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/r/{{ $('When Executed by Another Workflow').item.json.body.reservation.reservation_code }}\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Respond to pending requests</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:14px 24px 0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;\">\n                Prefer to answer every request from one place, in one tap? The free professional account for <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span> puts your requests, hours and page in your hands.\n                <a href=\"https://manager.theworldkeys.com/register\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:underline; white-space:nowrap;\">Activate my key &rarr;</a>\n              </p>\n              <p style=\"margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;\">PT Ative a conta gratuita da casa &#183; FR Activez le compte gratuit de la maison &#183; ES Active la cuenta gratuita de la casa &#183; IT Attivate l'account gratuito del locale</p>\n            </td>\n          </tr>\n\n<tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">A quick response gives your guest the best possible experience &#8212; thank you for being part of The World Keys.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     800,
+     -352
+    ],
+    "id": "cb6449e4-1c0a-476d-b180-aa13599b0c3e",
+    "name": "6h (estabelecimento)",
+    "webhookId": "3d9b2d91-fb0b-4aa1-8886-a01d0e2170be",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "jsCode": "const message =\n`*Hello*\n\nI'd like to activate your Concierge service (€1) to assist with my reservation below:\n\n👤 ${$('When Executed by Another Workflow').item.json.body.user.name}\n📍 ${$('When Executed by Another Workflow').item.json.body.restaurant.name}\n🗓️ ${$('Code in JavaScript').item.json.formattedDate} 🕰️ ${$('Code in JavaScript').item.json.formattedTime}\n👥 ${$('Code in JavaScript').item.json.formattedPeople}\n🆔 ${$('When Executed by Another Workflow').item.json.body.reservation.reservation_code}\n\n*Thank you for your help*\n_– Sent via The World Keys Experience_`;\n\nconst whatsappLink =\n'https://wa.me/33781937270?text=' +\nencodeURIComponent(message);\n\nreturn [{\njson: {\n...$json,\nwhatsappLink\n}\n}];\n"
+    },
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     1632,
+     -304
+    ],
+    "id": "9fd7ea6a-2b56-4385-bd13-1175773e3a6b",
+    "name": "Whatsapp Code"
+   }
+  ],
+  "connections": {
+   "Code in JavaScript": {
+    "main": [
+     [
+      {
+       "node": "Wait 1",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "When Executed by Another Workflow": {
+    "main": [
+     [
+      {
+       "node": "Code in JavaScript",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Buscar Reserva 6h": {
+    "main": [
+     [
+      {
+       "node": "Está Pendente?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Wait 1": {
+    "main": [
+     [
+      {
+       "node": "Buscar Reserva 6h",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Wait 2": {
+    "main": [
+     [
+      {
+       "node": "Buscar Reserva 12h",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Está Pendente?": {
+    "main": [
+     [
+      {
+       "node": "6h (Usuário)",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Buscar Reserva 12h": {
+    "main": [
+     [
+      {
+       "node": "Ainda está Pendente?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Ainda está Pendente?": {
+    "main": [
+     [
+      {
+       "node": "Whatsapp Code",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "6h (Usuário)": {
+    "main": [
+     [
+      {
+       "node": "6h (estabelecimento)",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "6h (estabelecimento)": {
+    "main": [
+     [
+      {
+       "node": "Wait 2",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "12h Sem resposta usuário": {
+    "main": [
+     []
+    ]
+   },
+   "Whatsapp Code": {
+    "main": [
+     [
+      {
+       "node": "12h Sem resposta usuário",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   }
+  },
+  "authors": "The World keys",
+  "name": null,
+  "description": null,
+  "autosaved": false,
+  "workflowPublishHistory": [
+   {
+    "createdAt": "2026-09-03T20:45:10.473Z",
+    "id": 262,
+    "workflowId": "TvyfkENpfds0MpgJ",
+    "versionId": "369ef19b-7195-4a8b-9485-1b6e4b53264b",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   }
+  ]
+ }
+}

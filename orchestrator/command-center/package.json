@@ -1,0 +1,16 @@
+{
+  "name": "maestro-command-center",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Central de Comando do Orquestrador TWK - cockpit + conversa multimodal + atelie de entregas + aprovacoes do fundador (Anthropic API)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0"
+  },
+  "optionalDependencies": {
+    "pg": "^8.13.0"
+  }
+}

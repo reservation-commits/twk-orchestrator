@@ -1,0 +1,1038 @@
+{
+ "updatedAt": "2026-09-03T20:45:09.737Z",
+ "createdAt": "2025-12-31T06:53:33.210Z",
+ "id": "ztI9ws9F6BAGJSGr",
+ "name": "1 - nova reserva (site novo)",
+ "description": null,
+ "active": true,
+ "isArchived": false,
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "nova-reserva",
+    "responseMode": "responseNode",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -784,
+    -160
+   ],
+   "id": "932810f6-2251-47c4-84c7-ad931b250350",
+   "name": "Webhook",
+   "webhookId": "4264f6df-b363-4e70-b857-781856cfc4aa"
+  },
+  {
+   "parameters": {
+    "jsCode": "const input = $input.first()?.json;\nconst body = input?.body || {};\nconst reservation = body?.reservation;\nconst user = body?.user || {};\nconst restaurant = body?.restaurant || {};\n\nif (!reservation) {\n  return [{ json: { error: \"reservation not found in input\", input } }];\n}\n\n// DATE\nconst dateObj = new Date(reservation.date);\nconst safeDate = isNaN(dateObj.getTime()) ? null : dateObj;\nlet formattedDate = \"Invalid date\";\nif (safeDate) {\n  const dateParts = new Intl.DateTimeFormat(\"en-GB\", {\n    weekday: \"short\",\n    day: \"2-digit\",\n    month: \"short\",\n    year: \"numeric\",\n  }).formatToParts(safeDate);\n  const getPart = (type) => dateParts.find((p) => p.type === type)?.value || \"\";\n  formattedDate = `${getPart(\"weekday\")}, ${getPart(\"day\")} ${getPart(\"month\")} ${getPart(\"year\")}`;\n}\n\n// TIME\nlet formattedTime = \"Invalid time\";\nif (reservation.time) {\n  let timeObj;\n  if (typeof reservation.time === \"string\" && /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.time)) {\n    const [h, m] = reservation.time.split(\":\");\n    timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n  } else {\n    timeObj = new Date(reservation.time);\n  }\n  if (!isNaN(timeObj.getTime())) {\n    formattedTime = new Intl.DateTimeFormat(\"en-US\", {\n      hour: \"numeric\",\n      minute: \"2-digit\",\n      hour12: true,\n    }).format(timeObj);\n  }\n}\n\n// PEOPLE\nconst peopleNum = Number(reservation.people);\nconst formattedPeople =\n  Number.isFinite(peopleNum) && peopleNum > 0\n    ? `${peopleNum} ${peopleNum === 1 ? \"guest\" : \"guests\"}`\n    : \"Guests not specified\";\n\n// DETAILS\nconst formattedDetails =\n  reservation.details && String(reservation.details).trim() !== \"\"\n    ? String(reservation.details).trim()\n    : \"No details.\";\n\n// RESERVATION CODE\nconst reservationCode = reservation.reservation_code || \"Code not available\";\n\nreturn [\n  {\n    json: {\n      // Dados formatados\n      formattedDate,\n      formattedTime,\n      formattedPeople,\n      formattedDetails,\n      reservationCode,\n\n      // Usuário\n      userId: user.id,\n      userName: user.name,\n      userEmail: user.email,\n      userPhone: user.phone,\n\n      // Reserva\n      reservationId: reservation.id,\n      reservationDate: reservation.date,\n      reservationTime: reservation.time,\n      reservationPeople: reservation.people,\n      reservationStatus: reservation.status,\n      reservationDetails: reservation.details,\n\n      // Restaurante\n      restaurantId: restaurant.id,\n      restaurantName: restaurant.name,\n      restaurantEmail: restaurant.email,\n      restaurantPhone: restaurant.phone,\n\n      // Management\n      managementUrl: body.management_url,\n    },\n  },\n];"
+   },
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    -592,
+    -160
+   ],
+   "id": "ab0a833e-d53c-4f07-aebc-1f6dfebc43f4",
+   "name": "Code in JavaScript"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "4aececdd-d3e9-446e-a2e8-355bffb1c01e",
+       "leftValue": "={{ $('Webhook').item.json.body.restaurant.email }}",
+       "rightValue": "@",
+       "operator": {
+        "type": "string",
+        "operation": "contains"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    -416,
+    -160
+   ],
+   "id": "341135a5-948e-411f-b55e-d8b1f2d3183c",
+   "name": "Tem Email?"
+  },
+  {
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 3
+     },
+     "conditions": [
+      {
+       "id": "23f6e02c-6d5b-4d99-a1de-35c1b9bd91ab",
+       "leftValue": "={{ $('Webhook').item.json.body.restaurant.id }}",
+       "rightValue": "255019",
+       "operator": {
+        "type": "string",
+        "operation": "equals"
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   },
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.3,
+   "position": [
+    -208,
+    -240
+   ],
+   "id": "8566649a-63d6-42a0-b608-6871428f9663",
+   "name": "Confirmação Automática?"
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+    "subject": "Reservation Confirmed Successfully!",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Confirmed</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <!-- Preheader (hidden) -->\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">\n    Your table at {{ $('Webhook').item.json.body.restaurant.name }} is confirmed — {{ $('Code in JavaScript').item.json.formattedDate }}, {{ $('Code in JavaScript').item.json.formattedTime }}.\n  </div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <!-- Header: emblema estático + logomarca -->\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">\n                Your table is reserved.\n              </h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">\n                {{ $('Webhook').item.json.body.user.name }}, your reservation at\n                <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>\n                is confirmed. We look forward to welcoming you.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Details card -->\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr>\n                  <td style=\"padding:20px 20px;\">\n                    <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\">\n                      <tr>\n                        <td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td>\n                        <td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td>\n                      </tr>\n                    </table>\n                    <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">\n                      {{ $('Webhook').item.json.body.reservation.reservation_code }}\n                    </div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n          <!-- CTA: cantos retos, padrão do site -->\n          <tr>\n            <td align=\"center\" style=\"padding:28px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\"\n                     style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">\n                    Manage my reservation\n                  </a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:8px 20px 0 20px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">\n                Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a>\n              </p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">\n                Please arrive 10–15 minutes early and give your name on arrival.\n                If your plans change, let us know as soon as possible — we'll be glad to assist.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;·&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-Élysées, 75008 Paris, France<br/>\n                VAT: FR24901268326 · R.C.S Paris: 901 268 326 · © 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    -16,
+    -352
+   ],
+   "id": "86ca9527-8b61-482b-8963-fc89c365e1f2",
+   "name": "Confirmação Automática Usuário",
+   "webhookId": "af2a93e9-5c22-44fe-b2b4-486c0b81282a",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.restaurant.email }}",
+    "subject": "Reservation Successfully Confirmed",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Confirmed</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">A reservation has been confirmed for your establishment.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">The booking is confirmed.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">Dear <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>, a reservation has been confirmed for your establishment. Details below.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUEST</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Webhook').item.json.body.user.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n\n\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">The reservation is live in our system. Please prepare to welcome your guest on the scheduled date.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    208,
+    -352
+   ],
+   "id": "687203ca-4532-4bc9-a5fd-15b06908e776",
+   "name": "Confirmação Automática Estabelecimento",
+   "webhookId": "bbdf54b1-5b63-4895-b9c9-719e3cd041c5",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+    "subject": "Reservation Update",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Update</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">An update about your reservation request.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">About your request.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('Webhook').item.json.body.user.name }}, we tried to reach <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>, but encountered an issue with the restaurant's communication channel. Our team is already working to resolve it.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">ESTABLISHMENT</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Webhook').item.json.body.restaurant.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">We suggest choosing another establishment with a similar profile &#8212; or message our concierge and we'll find you a table.</p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Find another table</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">We apologize for the inconvenience &#8212; our team is here to help at any time.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    -208,
+    80
+   ],
+   "id": "894bee7b-46c1-46d1-b05d-3854a156ff0b",
+   "name": "Restaurante Sem Email Usuário",
+   "webhookId": "621d1b84-7186-4d87-9ada-ceb414a3e098",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "thekeys.marlon@gmail.com",
+    "subject": "Estabelecimento Sem Email",
+    "message": "=Este estabelecimento não possui email ativo\nNome: {{ $('Webhook').item.json.body.restaurant.name }}\nId: {{ $('Webhook').item.json.body.restaurant.restaurant_id }}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    32,
+    80
+   ],
+   "id": "5db7da49-3cd0-49d2-920b-2d2d9a4905e5",
+   "name": "Restaurante sem Email Estabelecimento",
+   "webhookId": "ab2b123c-d331-48c0-a118-94bd028d28d3",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+    "subject": "=Reservation Status",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Request Received</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">We've received your request for {{ $('Webhook').item.json.body.restaurant.name }} &#8212; {{ $('Code in JavaScript').item.json.formattedDate }}, {{ $('Code in JavaScript').item.json.formattedTime }}.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">Request received.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('Webhook').item.json.body.user.name }}, we've forwarded your request to <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>. This isn't a confirmation yet &#8212; we'll notify you the moment the restaurant responds.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Follow my request</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">Any status change or response from the restaurant appears in your account in real time.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    -16,
+    -128
+   ],
+   "id": "a6161899-a370-4dd4-a692-66618c61b849",
+   "name": "Solicitação Enviada Usuário",
+   "webhookId": "15a4e12b-e012-4242-bf6b-89a26bfd7d22",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $('Webhook').item.json.body.restaurant.email }}",
+    "subject": "=Great news! {{ $('Webhook').item.json.body.restaurant.name }} have a new booking! ",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>New Reservation Request</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <!-- Preheader (hidden) -->\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">\n    New booking request — {{ $('Code in JavaScript').item.json.formattedDate }}, {{ $('Code in JavaScript').item.json.formattedTime }}, {{ $('Code in JavaScript').item.json.formattedPeople }}. Please respond.\n  </div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <!-- Header -->\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <!-- Headline -->\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">\n                A new booking awaits you.\n              </h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">\n                Dear <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>,\n                congratulations — you have just received a new booking request.\n                Please review the details and respond as soon as possible.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Details card -->\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr>\n                  <td style=\"padding:20px 20px;\">\n                    <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\">\n                      <tr>\n                        <td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUEST</td>\n                        <td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Webhook').item.json.body.user.name }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td>\n                      </tr>\n                    </table>\n                    <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">\n                      {{ $('Webhook').item.json.body.reservation.reservation_code }}\n                    </div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n          <!-- Privacy note -->\n          <tr>\n            <td align=\"center\" style=\"padding:16px 24px 0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">\n                For security and data protection, guest contact details are available only through the response page.\n              </p>\n            </td>\n          </tr>\n\n          <!-- CTA -->\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"{{ $('Webhook').item.json.body.management_url }}\" target=\"_blank\"\n                     style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">\n                    Respond to pending requests\n                  </a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:14px 24px 0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;\">\n                Prefer to answer every request from one place, in one tap? The free professional account for <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span> puts your requests, hours and page in your hands.\n                <a href=\"https://manager.theworldkeys.com/register\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:underline; white-space:nowrap;\">Activate my key &rarr;</a>\n              </p>\n              <p style=\"margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;\">PT Ative a conta gratuita da casa &#183; FR Activez le compte gratuit de la maison &#183; ES Active la cuenta gratuita de la casa &#183; IT Attivate l'account gratuito del locale</p>\n            </td>\n          </tr>\n\n<tr>\n            <td align=\"center\" style=\"padding:8px 20px 0 20px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">\n                Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our team on WhatsApp</a>\n              </p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">\n                Accept, decline, or propose a new time — a quick response gives your guest the best possible experience.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;·&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-Élysées, 75008 Paris, France<br/>\n                VAT: FR24901268326 · R.C.S Paris: 901 268 326 · © 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    192,
+    -128
+   ],
+   "id": "456e3b8f-ad71-4d3d-8daa-e2bc809c6e1d",
+   "name": "Solicitação Enviada Estabelecimento",
+   "webhookId": "056eab9b-9b2f-4bdc-afb0-966127f25a4c",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "workflowId": {
+     "__rl": true,
+     "value": "TvyfkENpfds0MpgJ",
+     "mode": "list",
+     "cachedResultUrl": "/workflow/TvyfkENpfds0MpgJ",
+     "cachedResultName": "2 - 6h e 12h pendente (site novo)"
+    },
+    "workflowInputs": {
+     "mappingMode": "defineBelow",
+     "value": {},
+     "matchingColumns": [],
+     "schema": [],
+     "attemptToConvertTypes": false,
+     "convertFieldsToString": true
+    },
+    "options": {
+     "waitForSubWorkflow": false
+    }
+   },
+   "type": "n8n-nodes-base.executeWorkflow",
+   "typeVersion": 1.2,
+   "position": [
+    592,
+    -128
+   ],
+   "name": "6h e 12h pendente",
+   "id": "1b30b71e-b6b0-473c-ae7c-3b496f840ebd"
+  },
+  {
+   "parameters": {
+    "mode": "raw",
+    "jsonOutput": "={\n  \"body\": {{ JSON.stringify($('Webhook').item.json.body) }},\n  \"reservationCode\": \"{{ $('Code in JavaScript').item.json.reservationCode }}\",\n  \"formattedDate\": \"{{ $('Code in JavaScript').item.json.formattedDate }}\",\n  \"formattedTime\": \"{{ $('Code in JavaScript').item.json.formattedTime }}\",\n  \"formattedPeople\": \"{{ $('Code in JavaScript').item.json.formattedPeople }}\",\n  \"formattedDetails\": \"{{ $('Code in JavaScript').item.json.formattedDetails }}\"\n}",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.set",
+   "typeVersion": 3.4,
+   "position": [
+    400,
+    -128
+   ],
+   "id": "04098410-b8b4-4b06-9722-0c228095c8b4",
+   "name": "Preparar Payload Lembrete"
+  },
+  {
+   "parameters": {
+    "operation": "executeQuery",
+    "query": "UPDATE public.reservations\nSET booking_status = 'Accept'\nWHERE reservation_code = '{{ $('Webhook').item.json.body.reservation.reservation_code }}'",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.postgres",
+   "typeVersion": 2.6,
+   "position": [
+    416,
+    -352
+   ],
+   "id": "eae0330f-28c3-4f0b-b279-0db31b01fd9a",
+   "name": "Execute a SQL query",
+   "credentials": {
+    "postgres": {
+     "id": "QSEOM0Wb5DzGkuXy",
+     "name": "Postgres account 2"
+    }
+   }
+  },
+  {
+   "parameters": {
+    "respondWith": "json",
+    "responseBody": "{\n  \"success\": true\n}",
+    "options": {
+     "responseCode": 200
+    }
+   },
+   "type": "n8n-nodes-base.respondToWebhook",
+   "typeVersion": 1.5,
+   "position": [
+    624,
+    -352
+   ],
+   "id": "8f0e449c-65bf-4e34-9526-f0fb8e8b4dbd",
+   "name": "Respond to Webhook"
+  }
+ ],
+ "connections": {
+  "Webhook": {
+   "main": [
+    [
+     {
+      "node": "Respond to Webhook",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Code in JavaScript": {
+   "main": [
+    [
+     {
+      "node": "Tem Email?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Tem Email?": {
+   "main": [
+    [
+     {
+      "node": "Confirmação Automática?",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Restaurante Sem Email Usuário",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Confirmação Automática?": {
+   "main": [
+    [
+     {
+      "node": "Confirmação Automática Usuário",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Solicitação Enviada Usuário",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Confirmação Automática Usuário": {
+   "main": [
+    [
+     {
+      "node": "Confirmação Automática Estabelecimento",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Restaurante Sem Email Usuário": {
+   "main": [
+    [
+     {
+      "node": "Restaurante sem Email Estabelecimento",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Solicitação Enviada Usuário": {
+   "main": [
+    [
+     {
+      "node": "Solicitação Enviada Estabelecimento",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Solicitação Enviada Estabelecimento": {
+   "main": [
+    [
+     {
+      "node": "Preparar Payload Lembrete",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Confirmação Automática Estabelecimento": {
+   "main": [
+    [
+     {
+      "node": "Execute a SQL query",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Restaurante sem Email Estabelecimento": {
+   "main": [
+    []
+   ]
+  },
+  "Preparar Payload Lembrete": {
+   "main": [
+    [
+     {
+      "node": "6h e 12h pendente",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Execute a SQL query": {
+   "main": [
+    []
+   ]
+  },
+  "Respond to Webhook": {
+   "main": [
+    [
+     {
+      "node": "Code in JavaScript",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "callerPolicy": "workflowsFromSameOwner"
+ },
+ "staticData": null,
+ "meta": {
+  "templateCredsSetupCompleted": true
+ },
+ "pinData": {},
+ "versionId": "055bcef8-dc6b-436e-b259-29aeb72828d9",
+ "activeVersionId": "055bcef8-dc6b-436e-b259-29aeb72828d9",
+ "versionCounter": 414,
+ "triggerCount": 1,
+ "shared": [
+  {
+   "updatedAt": "2025-12-31T06:53:33.224Z",
+   "createdAt": "2025-12-31T06:53:33.224Z",
+   "role": "workflow:owner",
+   "workflowId": "ztI9ws9F6BAGJSGr",
+   "projectId": "j3RBnUKpdJnI0HPr",
+   "project": {
+    "updatedAt": "2025-10-09T18:24:30.274Z",
+    "createdAt": "2025-10-09T18:21:52.771Z",
+    "id": "j3RBnUKpdJnI0HPr",
+    "name": "The World keys <thekeys.need@gmail.com>",
+    "type": "personal",
+    "icon": null,
+    "description": null,
+    "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+    "projectRelations": [
+     {
+      "updatedAt": "2025-10-09T18:21:52.771Z",
+      "createdAt": "2025-10-09T18:21:52.771Z",
+      "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "user": {
+       "updatedAt": "2026-09-09T07:00:17.000Z",
+       "createdAt": "2025-10-09T18:21:52.389Z",
+       "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+       "email": "thekeys.need@gmail.com",
+       "firstName": "The World",
+       "lastName": "keys",
+       "personalizationAnswers": {
+        "version": "v4",
+        "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+        "personalization_survey_n8n_version": "1.103.2"
+       },
+       "settings": {
+        "userActivated": true,
+        "easyAIWorkflowOnboarded": true,
+        "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+        "userActivatedAt": 1760038686025,
+        "npsSurvey": {
+         "responded": true,
+         "lastShownAt": 1785180247186
+        }
+       },
+       "disabled": false,
+       "mfaEnabled": false,
+       "lastActiveAt": "2026-09-09",
+       "isPending": false
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "tags": [],
+ "activeVersion": {
+  "updatedAt": "2026-09-03T20:45:09.741Z",
+  "createdAt": "2026-09-03T20:45:09.741Z",
+  "versionId": "055bcef8-dc6b-436e-b259-29aeb72828d9",
+  "workflowId": "ztI9ws9F6BAGJSGr",
+  "nodes": [
+   {
+    "parameters": {
+     "httpMethod": "POST",
+     "path": "nova-reserva",
+     "responseMode": "responseNode",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.webhook",
+    "typeVersion": 2.1,
+    "position": [
+     -784,
+     -160
+    ],
+    "id": "932810f6-2251-47c4-84c7-ad931b250350",
+    "name": "Webhook",
+    "webhookId": "4264f6df-b363-4e70-b857-781856cfc4aa"
+   },
+   {
+    "parameters": {
+     "jsCode": "const input = $input.first()?.json;\nconst body = input?.body || {};\nconst reservation = body?.reservation;\nconst user = body?.user || {};\nconst restaurant = body?.restaurant || {};\n\nif (!reservation) {\n  return [{ json: { error: \"reservation not found in input\", input } }];\n}\n\n// DATE\nconst dateObj = new Date(reservation.date);\nconst safeDate = isNaN(dateObj.getTime()) ? null : dateObj;\nlet formattedDate = \"Invalid date\";\nif (safeDate) {\n  const dateParts = new Intl.DateTimeFormat(\"en-GB\", {\n    weekday: \"short\",\n    day: \"2-digit\",\n    month: \"short\",\n    year: \"numeric\",\n  }).formatToParts(safeDate);\n  const getPart = (type) => dateParts.find((p) => p.type === type)?.value || \"\";\n  formattedDate = `${getPart(\"weekday\")}, ${getPart(\"day\")} ${getPart(\"month\")} ${getPart(\"year\")}`;\n}\n\n// TIME\nlet formattedTime = \"Invalid time\";\nif (reservation.time) {\n  let timeObj;\n  if (typeof reservation.time === \"string\" && /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.time)) {\n    const [h, m] = reservation.time.split(\":\");\n    timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n  } else {\n    timeObj = new Date(reservation.time);\n  }\n  if (!isNaN(timeObj.getTime())) {\n    formattedTime = new Intl.DateTimeFormat(\"en-US\", {\n      hour: \"numeric\",\n      minute: \"2-digit\",\n      hour12: true,\n    }).format(timeObj);\n  }\n}\n\n// PEOPLE\nconst peopleNum = Number(reservation.people);\nconst formattedPeople =\n  Number.isFinite(peopleNum) && peopleNum > 0\n    ? `${peopleNum} ${peopleNum === 1 ? \"guest\" : \"guests\"}`\n    : \"Guests not specified\";\n\n// DETAILS\nconst formattedDetails =\n  reservation.details && String(reservation.details).trim() !== \"\"\n    ? String(reservation.details).trim()\n    : \"No details.\";\n\n// RESERVATION CODE\nconst reservationCode = reservation.reservation_code || \"Code not available\";\n\nreturn [\n  {\n    json: {\n      // Dados formatados\n      formattedDate,\n      formattedTime,\n      formattedPeople,\n      formattedDetails,\n      reservationCode,\n\n      // Usuário\n      userId: user.id,\n      userName: user.name,\n      userEmail: user.email,\n      userPhone: user.phone,\n\n      // Reserva\n      reservationId: reservation.id,\n      reservationDate: reservation.date,\n      reservationTime: reservation.time,\n      reservationPeople: reservation.people,\n      reservationStatus: reservation.status,\n      reservationDetails: reservation.details,\n\n      // Restaurante\n      restaurantId: restaurant.id,\n      restaurantName: restaurant.name,\n      restaurantEmail: restaurant.email,\n      restaurantPhone: restaurant.phone,\n\n      // Management\n      managementUrl: body.management_url,\n    },\n  },\n];"
+    },
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [
+     -592,
+     -160
+    ],
+    "id": "ab0a833e-d53c-4f07-aebc-1f6dfebc43f4",
+    "name": "Code in JavaScript"
+   },
+   {
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "strict",
+       "version": 3
+      },
+      "conditions": [
+       {
+        "id": "4aececdd-d3e9-446e-a2e8-355bffb1c01e",
+        "leftValue": "={{ $('Webhook').item.json.body.restaurant.email }}",
+        "rightValue": "@",
+        "operator": {
+         "type": "string",
+         "operation": "contains"
+        }
+       }
+      ],
+      "combinator": "and"
+     },
+     "options": {}
+    },
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.3,
+    "position": [
+     -416,
+     -160
+    ],
+    "id": "341135a5-948e-411f-b55e-d8b1f2d3183c",
+    "name": "Tem Email?"
+   },
+   {
+    "parameters": {
+     "conditions": {
+      "options": {
+       "caseSensitive": true,
+       "leftValue": "",
+       "typeValidation": "strict",
+       "version": 3
+      },
+      "conditions": [
+       {
+        "id": "23f6e02c-6d5b-4d99-a1de-35c1b9bd91ab",
+        "leftValue": "={{ $('Webhook').item.json.body.restaurant.id }}",
+        "rightValue": "255019",
+        "operator": {
+         "type": "string",
+         "operation": "equals"
+        }
+       }
+      ],
+      "combinator": "and"
+     },
+     "options": {}
+    },
+    "type": "n8n-nodes-base.if",
+    "typeVersion": 2.3,
+    "position": [
+     -208,
+     -240
+    ],
+    "id": "8566649a-63d6-42a0-b608-6871428f9663",
+    "name": "Confirmação Automática?"
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+     "subject": "Reservation Confirmed Successfully!",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Confirmed</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <!-- Preheader (hidden) -->\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">\n    Your table at {{ $('Webhook').item.json.body.restaurant.name }} is confirmed — {{ $('Code in JavaScript').item.json.formattedDate }}, {{ $('Code in JavaScript').item.json.formattedTime }}.\n  </div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <!-- Header: emblema estático + logomarca -->\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">\n                Your table is reserved.\n              </h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">\n                {{ $('Webhook').item.json.body.user.name }}, your reservation at\n                <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>\n                is confirmed. We look forward to welcoming you.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Details card -->\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr>\n                  <td style=\"padding:20px 20px;\">\n                    <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\">\n                      <tr>\n                        <td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td>\n                        <td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td>\n                      </tr>\n                    </table>\n                    <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">\n                      {{ $('Webhook').item.json.body.reservation.reservation_code }}\n                    </div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n          <!-- CTA: cantos retos, padrão do site -->\n          <tr>\n            <td align=\"center\" style=\"padding:28px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\"\n                     style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">\n                    Manage my reservation\n                  </a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:8px 20px 0 20px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">\n                Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a>\n              </p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">\n                Please arrive 10–15 minutes early and give your name on arrival.\n                If your plans change, let us know as soon as possible — we'll be glad to assist.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;·&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-Élysées, 75008 Paris, France<br/>\n                VAT: FR24901268326 · R.C.S Paris: 901 268 326 · © 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     -16,
+     -352
+    ],
+    "id": "86ca9527-8b61-482b-8963-fc89c365e1f2",
+    "name": "Confirmação Automática Usuário",
+    "webhookId": "af2a93e9-5c22-44fe-b2b4-486c0b81282a",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.restaurant.email }}",
+     "subject": "Reservation Successfully Confirmed",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Confirmed</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">A reservation has been confirmed for your establishment.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">The booking is confirmed.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">Dear <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>, a reservation has been confirmed for your establishment. Details below.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUEST</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Webhook').item.json.body.user.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n\n\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">The reservation is live in our system. Please prepare to welcome your guest on the scheduled date.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     208,
+     -352
+    ],
+    "id": "687203ca-4532-4bc9-a5fd-15b06908e776",
+    "name": "Confirmação Automática Estabelecimento",
+    "webhookId": "bbdf54b1-5b63-4895-b9c9-719e3cd041c5",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+     "subject": "Reservation Update",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Update</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">An update about your reservation request.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">About your request.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('Webhook').item.json.body.user.name }}, we tried to reach <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>, but encountered an issue with the restaurant's communication channel. Our team is already working to resolve it.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">ESTABLISHMENT</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Webhook').item.json.body.restaurant.name }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:16px 24px 0 24px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">We suggest choosing another establishment with a similar profile &#8212; or message our concierge and we'll find you a table.</p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Find another table</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">We apologize for the inconvenience &#8212; our team is here to help at any time.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     -208,
+     80
+    ],
+    "id": "894bee7b-46c1-46d1-b05d-3854a156ff0b",
+    "name": "Restaurante Sem Email Usuário",
+    "webhookId": "621d1b84-7186-4d87-9ada-ceb414a3e098",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "thekeys.marlon@gmail.com",
+     "subject": "Estabelecimento Sem Email",
+     "message": "=Este estabelecimento não possui email ativo\nNome: {{ $('Webhook').item.json.body.restaurant.name }}\nId: {{ $('Webhook').item.json.body.restaurant.restaurant_id }}",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     32,
+     80
+    ],
+    "id": "5db7da49-3cd0-49d2-920b-2d2d9a4905e5",
+    "name": "Restaurante sem Email Estabelecimento",
+    "webhookId": "ab2b123c-d331-48c0-a118-94bd028d28d3",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.user.email }}",
+     "subject": "=Reservation Status",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>Reservation Request Received</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">We've received your request for {{ $('Webhook').item.json.body.restaurant.name }} &#8212; {{ $('Code in JavaScript').item.json.formattedDate }}, {{ $('Code in JavaScript').item.json.formattedTime }}.</div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">Request received.</h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">{{ $('Webhook').item.json.body.user.name }}, we've forwarded your request to <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>. This isn't a confirmation yet &#8212; we'll notify you the moment the restaurant responds.</p>\n            </td>\n          </tr>\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr><td style=\"padding:20px 20px;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\"><tr><td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td><td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td><td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>\n                  <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>\n                </td></tr>\n              </table>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"https://theworldkeys.com/users/reservations\" target=\"_blank\" style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">Follow my request</a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr><td align=\"center\" style=\"padding:8px 20px 0 20px;\"><p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p></td></tr>\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">Any status change or response from the restaurant appears in your account in real time.</p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;&#183;&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     -16,
+     -128
+    ],
+    "id": "a6161899-a370-4dd4-a692-66618c61b849",
+    "name": "Solicitação Enviada Usuário",
+    "webhookId": "15a4e12b-e012-4242-bf6b-89a26bfd7d22",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $('Webhook').item.json.body.restaurant.email }}",
+     "subject": "=Great news! {{ $('Webhook').item.json.body.restaurant.name }} have a new booking! ",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"color-scheme\" content=\"dark\" />\n  <title>New Reservation Request</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n\n  <!-- Preheader (hidden) -->\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">\n    New booking request — {{ $('Code in JavaScript').item.json.formattedDate }}, {{ $('Code in JavaScript').item.json.formattedTime }}, {{ $('Code in JavaScript').item.json.formattedPeople }}. Please respond.\n  </div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr>\n      <td align=\"center\" style=\"padding:12px 6px;\">\n\n        <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n\n          <!-- Header -->\n          <tr>\n            <td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n              <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n                <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n                <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;\" border=\"0\" />\n              </a>\n              <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 0 20px;\">\n              <table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td>\n              </tr></table>\n            </td>\n          </tr>\n\n          <!-- Headline -->\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;\">\n                A new booking awaits you.\n              </h1>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;\">\n                Dear <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span>,\n                congratulations — you have just received a new booking request.\n                Please review the details and respond as soon as possible.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Details card -->\n          <tr>\n            <td style=\"padding:28px 16px 0 16px;\">\n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;\">\n                <tr>\n                  <td style=\"padding:20px 20px;\">\n                    <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\">\n                      <tr>\n                        <td style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUEST</td>\n                        <td align=\"right\" style=\"padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Webhook').item.json.body.user.name }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">DATE</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">TIME</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">GUESTS</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;\">NOTES</td>\n                        <td align=\"right\" style=\"padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;\"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td>\n                      </tr>\n                    </table>\n                    <div style=\"padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;\">\n                      {{ $('Webhook').item.json.body.reservation.reservation_code }}\n                    </div>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n          <!-- Privacy note -->\n          <tr>\n            <td align=\"center\" style=\"padding:16px 24px 0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">\n                For security and data protection, guest contact details are available only through the response page.\n              </p>\n            </td>\n          </tr>\n\n          <!-- CTA -->\n          <tr>\n            <td align=\"center\" style=\"padding:24px 20px 8px 20px;\">\n              <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>\n                <td align=\"center\" style=\"background-color:#CE9E3C;\">\n                  <a href=\"{{ $('Webhook').item.json.body.management_url }}\" target=\"_blank\"\n                     style=\"display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;\">\n                    Respond to pending requests\n                  </a>\n                </td>\n              </tr></table>\n            </td>\n          </tr>\n          <tr>\n            <td align=\"center\" style=\"padding:14px 24px 0 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;\">\n                Prefer to answer every request from one place, in one tap? The free professional account for <span style=\"color:#E6C87A;\">{{ $('Webhook').item.json.body.restaurant.name }}</span> puts your requests, hours and page in your hands.\n                <a href=\"https://manager.theworldkeys.com/register\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:underline; white-space:nowrap;\">Activate my key &rarr;</a>\n              </p>\n              <p style=\"margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;\">PT Ative a conta gratuita da casa &#183; FR Activez le compte gratuit de la maison &#183; ES Active la cuenta gratuita de la casa &#183; IT Attivate l'account gratuito del locale</p>\n            </td>\n          </tr>\n\n<tr>\n            <td align=\"center\" style=\"padding:8px 20px 0 20px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">\n                Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our team on WhatsApp</a>\n              </p>\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:24px 24px 32px 24px;\">\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;\">\n                Accept, decline, or propose a new time — a quick response gives your guest the best possible experience.\n              </p>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td align=\"center\" style=\"padding:20px 20px 28px 20px; border-top:1px solid #26200F;\">\n              <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n              <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n                <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a>\n                &nbsp;·&nbsp;\n                <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n                66, Av. des Champs-Élysées, 75008 Paris, France<br/>\n                VAT: FR24901268326 · R.C.S Paris: 901 268 326 · © 2026 The World Keys\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     192,
+     -128
+    ],
+    "id": "456e3b8f-ad71-4d3d-8daa-e2bc809c6e1d",
+    "name": "Solicitação Enviada Estabelecimento",
+    "webhookId": "056eab9b-9b2f-4bdc-afb0-966127f25a4c",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "workflowId": {
+      "__rl": true,
+      "value": "TvyfkENpfds0MpgJ",
+      "mode": "list",
+      "cachedResultUrl": "/workflow/TvyfkENpfds0MpgJ",
+      "cachedResultName": "2 - 6h e 12h pendente (site novo)"
+     },
+     "workflowInputs": {
+      "mappingMode": "defineBelow",
+      "value": {},
+      "matchingColumns": [],
+      "schema": [],
+      "attemptToConvertTypes": false,
+      "convertFieldsToString": true
+     },
+     "options": {
+      "waitForSubWorkflow": false
+     }
+    },
+    "type": "n8n-nodes-base.executeWorkflow",
+    "typeVersion": 1.2,
+    "position": [
+     592,
+     -128
+    ],
+    "name": "6h e 12h pendente",
+    "id": "1b30b71e-b6b0-473c-ae7c-3b496f840ebd"
+   },
+   {
+    "parameters": {
+     "mode": "raw",
+     "jsonOutput": "={\n  \"body\": {{ JSON.stringify($('Webhook').item.json.body) }},\n  \"reservationCode\": \"{{ $('Code in JavaScript').item.json.reservationCode }}\",\n  \"formattedDate\": \"{{ $('Code in JavaScript').item.json.formattedDate }}\",\n  \"formattedTime\": \"{{ $('Code in JavaScript').item.json.formattedTime }}\",\n  \"formattedPeople\": \"{{ $('Code in JavaScript').item.json.formattedPeople }}\",\n  \"formattedDetails\": \"{{ $('Code in JavaScript').item.json.formattedDetails }}\"\n}",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.set",
+    "typeVersion": 3.4,
+    "position": [
+     400,
+     -128
+    ],
+    "id": "04098410-b8b4-4b06-9722-0c228095c8b4",
+    "name": "Preparar Payload Lembrete"
+   },
+   {
+    "parameters": {
+     "operation": "executeQuery",
+     "query": "UPDATE public.reservations\nSET booking_status = 'Accept'\nWHERE reservation_code = '{{ $('Webhook').item.json.body.reservation.reservation_code }}'",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.postgres",
+    "typeVersion": 2.6,
+    "position": [
+     416,
+     -352
+    ],
+    "id": "eae0330f-28c3-4f0b-b279-0db31b01fd9a",
+    "name": "Execute a SQL query",
+    "credentials": {
+     "postgres": {
+      "id": "QSEOM0Wb5DzGkuXy",
+      "name": "Postgres account 2"
+     }
+    }
+   },
+   {
+    "parameters": {
+     "respondWith": "json",
+     "responseBody": "{\n  \"success\": true\n}",
+     "options": {
+      "responseCode": 200
+     }
+    },
+    "type": "n8n-nodes-base.respondToWebhook",
+    "typeVersion": 1.5,
+    "position": [
+     624,
+     -352
+    ],
+    "id": "8f0e449c-65bf-4e34-9526-f0fb8e8b4dbd",
+    "name": "Respond to Webhook"
+   }
+  ],
+  "connections": {
+   "Webhook": {
+    "main": [
+     [
+      {
+       "node": "Respond to Webhook",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Code in JavaScript": {
+    "main": [
+     [
+      {
+       "node": "Tem Email?",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Tem Email?": {
+    "main": [
+     [
+      {
+       "node": "Confirmação Automática?",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "Restaurante Sem Email Usuário",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Confirmação Automática?": {
+    "main": [
+     [
+      {
+       "node": "Confirmação Automática Usuário",
+       "type": "main",
+       "index": 0
+      }
+     ],
+     [
+      {
+       "node": "Solicitação Enviada Usuário",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Confirmação Automática Usuário": {
+    "main": [
+     [
+      {
+       "node": "Confirmação Automática Estabelecimento",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Restaurante Sem Email Usuário": {
+    "main": [
+     [
+      {
+       "node": "Restaurante sem Email Estabelecimento",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Solicitação Enviada Usuário": {
+    "main": [
+     [
+      {
+       "node": "Solicitação Enviada Estabelecimento",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Solicitação Enviada Estabelecimento": {
+    "main": [
+     [
+      {
+       "node": "Preparar Payload Lembrete",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Confirmação Automática Estabelecimento": {
+    "main": [
+     [
+      {
+       "node": "Execute a SQL query",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Restaurante sem Email Estabelecimento": {
+    "main": [
+     []
+    ]
+   },
+   "Preparar Payload Lembrete": {
+    "main": [
+     [
+      {
+       "node": "6h e 12h pendente",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   },
+   "Execute a SQL query": {
+    "main": [
+     []
+    ]
+   },
+   "Respond to Webhook": {
+    "main": [
+     [
+      {
+       "node": "Code in JavaScript",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   }
+  },
+  "authors": "The World keys",
+  "name": null,
+  "description": null,
+  "autosaved": false,
+  "workflowPublishHistory": [
+   {
+    "createdAt": "2026-09-03T20:45:09.830Z",
+    "id": 261,
+    "workflowId": "ztI9ws9F6BAGJSGr",
+    "versionId": "055bcef8-dc6b-436e-b259-29aeb72828d9",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   }
+  ]
+ }
+}

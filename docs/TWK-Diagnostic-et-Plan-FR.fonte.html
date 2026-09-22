@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>TWK — Diagnostic par Système et Plan d'Action</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  /* ============================================================
+     Tokens extraídos do :root de theworldkeys.com (2026-09-01)
+     ============================================================ */
+  :root {
+    --ink:        #070b10;
+    --charcoal:   #0f1218;
+    --warm:       #181c24;
+    --border:     #1e2230;
+    --gold:       #c9a96e;
+    --gold-light: #e4c990;
+    --gold-dark:  #9e7c48;
+    --silver:     #9a97a8;
+    --cream:      #ede9df;
+    --cream-d:    #b8b3a6;
+    --white:      #f7f4ef;
+    --gray:       #585668;
+    --radius:     .2rem;
+
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans:  "Jost", "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  @page { size: A4; margin: 0; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink); }
+
+  body {
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--cream);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---------- página A4 de altura fixa ---------- */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 17mm 17mm 14mm;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+  }
+  .page:last-child { break-after: auto; }
+
+  .p-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 4.5mm;
+    border-bottom: .4pt solid var(--border);
+    margin-bottom: 9mm;
+    flex: 0 0 auto;
+  }
+  .p-head .mark {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 8.4pt;
+    letter-spacing: .5em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .p-head .sec {
+    font-size: 6.8pt;
+    font-weight: 400;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--silver);
+  }
+
+  .p-body { flex: 1 1 auto; min-height: 0; }
+
+  .p-foot {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 4mm;
+    border-top: .4pt solid var(--border);
+    font-size: 6.8pt;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--silver);
+  }
+  .p-foot .folio {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 10.5pt;
+    letter-spacing: .04em;
+    color: var(--gold);
+    text-transform: none;
+  }
+
+  /* ---------- tipografia ---------- */
+  p { margin: 0 0 3.4mm; }
+  p:last-child { margin-bottom: 0; }
+  b, strong { font-weight: 600; color: var(--white); }
+
+  .eyebrow {
+    font-size: 7pt;
+    font-weight: 500;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 4mm;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 42pt;
+    line-height: 1.02;
+    letter-spacing: -.025em;
+    color: var(--white);
+    margin: 0;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 25pt;
+    line-height: 1.08;
+    letter-spacing: -.02em;
+    color: var(--white);
+    margin: 0 0 4.2mm;
+  }
+  h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 11.5pt;
+    line-height: 1.3;
+    letter-spacing: .005em;
+    color: var(--white);
+    margin: 0 0 1.5mm;
+  }
+
+  .lead {
+    font-size: 10.5pt;
+    font-weight: 400;
+    line-height: 1.62;
+    color: var(--cream);
+    max-width: 138mm;
+  }
+  .body-t {
+    font-size: 9.4pt;
+    font-weight: 400;
+    line-height: 1.72;
+    color: var(--cream);
+    max-width: 150mm;
+  }
+
+  /* fio dourado do site */
+  .rule-gold {
+    height: 1.2pt;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+    border: 0;
+    margin: 0;
+  }
+
+  /* ---------- capa ---------- */
+  .cover { justify-content: space-between; padding: 30mm 20mm 18mm; }
+  .cover-top { flex: 0 0 auto; }
+  .cover-mid { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+  .cover .brand {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 11pt;
+    letter-spacing: .52em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 3mm;
+  }
+  .cover .paris {
+    font-size: 7pt;
+    font-weight: 400;
+    letter-spacing: .5em;
+    color: var(--silver);
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .cover h1 { margin: 0 0 7mm; max-width: 150mm; }
+  .cover .deck {
+    font-size: 11.5pt;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--cream);
+    max-width: 128mm;
+    margin: 0;
+  }
+  .cover-foot { flex: 0 0 auto; }
+  .cover-meta {
+    display: flex;
+    gap: 14mm;
+    padding-top: 6mm;
+    border-top: .4pt solid var(--border);
+  }
+  .cover-meta div { flex: 0 0 auto; }
+  .cover-meta .k {
+    display: block;
+    font-size: 6.6pt;
+    font-weight: 400;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 1.2mm;
+  }
+  .cover-meta .v {
+    display: block;
+    font-size: 9pt;
+    font-weight: 500;
+    color: var(--cream);
+  }
+
+  /* ---------- os quatro lugares ---------- */
+  .places {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5mm;
+    margin: 8mm 0;
+  }
+  .place {
+    background: var(--charcoal);
+    border: .4pt solid var(--border);
+    border-radius: var(--radius);
+    padding: 6.5mm 6mm;
+  }
+  .place .pn {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 10pt;
+    color: var(--white);
+    display: block;
+    margin-bottom: 1.6mm;
+  }
+  .place .pd {
+    font-size: 8.6pt;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--cream);
+    display: block;
+  }
+  .place .pd b { color: var(--gold-light); font-weight: 500; }
+
+  /* ---------- as duas perguntas ---------- */
+  .questions {
+    border-left: 1.4pt solid var(--gold);
+    padding: 2mm 0 2mm 6.5mm;
+    margin: 8.5mm 0;
+  }
+  .questions p {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 15pt;
+    line-height: 1.36;
+    color: var(--white);
+    margin: 0 0 2mm;
+  }
+  .questions p:last-child { margin-bottom: 0; }
+
+  /* ---------- cartões de diagnóstico ---------- */
+  .card {
+    background: var(--charcoal);
+    border: .4pt solid var(--border);
+    border-radius: var(--radius);
+    padding: 8mm 8mm 8.5mm;
+    margin-bottom: 6.5mm;
+  }
+  .card:last-child { margin-bottom: 0; }
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    margin-bottom: 2mm;
+  }
+  .card-top h3 { margin: 0; }
+  .card-top .ord {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 13pt;
+    color: var(--gold-dark);
+    line-height: 1;
+  }
+  .card .what {
+    font-size: 8.4pt;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--cream-d);
+    margin: 0 0 5.5mm;
+    padding-bottom: 5mm;
+    border-bottom: .4pt solid var(--border);
+  }
+  .card .what b { color: var(--gold-light); font-weight: 500; }
+  .card ul { margin: 0; padding: 0; list-style: none; }
+  .card li {
+    position: relative;
+    padding-left: 5.5mm;
+    margin-bottom: 3.6mm;
+    font-size: 8.8pt;
+    font-weight: 400;
+    line-height: 1.62;
+    color: var(--cream);
+  }
+  .card li:last-child { margin-bottom: 0; }
+  .card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.5mm;
+    width: 2.4mm;
+    height: .5pt;
+    background: var(--gold);
+  }
+  .card li b { color: var(--white); font-weight: 600; }
+
+  /* ---------- plano de ação ---------- */
+  .move {
+    display: grid;
+    grid-template-columns: 11mm 1fr 30mm;
+    gap: 5mm;
+    padding: 3.1mm 0;
+    border-bottom: .4pt solid var(--border);
+    align-items: start;
+  }
+  .move:first-of-type { border-top: .4pt solid var(--border); }
+  .move .ix {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22pt;
+    line-height: .82;
+    color: var(--gold);
+  }
+  .move .txt p {
+    font-size: 8.8pt;
+    font-weight: 400;
+    line-height: 1.62;
+    color: var(--cream);
+    margin: 0;
+  }
+  .move .owner {
+    font-size: 6.8pt;
+    font-weight: 400;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-align: right;
+    line-height: 1.7;
+    padding-top: 1.5mm;
+  }
+  .move .owner b { color: var(--gold); font-weight: 500; }
+
+  .note {
+    margin-top: 3.5mm;
+    padding: 4mm 5mm;
+    background: var(--warm);
+    border-radius: var(--radius);
+    font-size: 8pt;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--cream-d);
+  }
+  .note b { color: var(--white); font-weight: 600; }
+</style>
+</head><body>
+
+<!-- ============ COUVERTURE ============ -->
+<section class="page cover">
+  <div class="cover-top">
+    <p class="brand">The World Keys</p>
+    <p class="paris">Paris</p>
+  </div>
+
+  <div class="cover-mid">
+    <hr class="rule-gold" style="width:26mm; margin-bottom:8mm;">
+    <h1>Diagnostic<br>par système<br>et plan d’action</h1>
+    <p class="deck">
+      Où l’opération perd le client et où elle échoue à convertir le restaurant —
+      ce qui manque dans chacun des quatre systèmes, et les cinq mouvements
+      dans l’ordre le plus rentable.
+    </p>
+  </div>
+
+  <div class="cover-foot">
+    <div class="cover-meta">
+      <div><span class="k">Date</span><span class="v">1<sup>er</sup> septembre 2026</span></div>
+      <div><span class="k">Diffusion</span><span class="v">Document interne</span></div>
+      <div><span class="k">Méthode</span><span class="v">Lecture seule</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 — OUVERTURE ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Première partie · Diagnostic</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">Première partie</p>
+    <h2>Ce qui manque à chaque endroit</h2>
+
+    <p class="lead">
+      L’opération de TWK ne vit pas dans un seul endroit. Elle est répartie entre quatre
+      systèmes différents, et un client peut être perdu dans n’importe lequel d’entre eux —
+      parfois sans que personne ne s’en aperçoive, car chaque système est géré par une
+      personne différente.
+    </p>
+
+    <p class="body-t" style="margin-top:5mm;">Voici les quatre endroits&nbsp;:</p>
+
+    <div class="places">
+      <div class="place">
+        <span class="pn">Le site</span>
+        <span class="pd">theworldkeys.com — c’est là que le client découvre le restaurant,
+        voit les photos et demande sa table. C’est notre vitrine.</span>
+      </div>
+      <div class="place">
+        <span class="pn">Les notifications automatiques</span>
+        <span class="pd">Un outil appelé n8n. C’est le robot qui envoie chaque e-mail tout
+        seul&nbsp;: «&nbsp;nous avons reçu votre demande&nbsp;», «&nbsp;votre table est
+        confirmée&nbsp;».</span>
+      </div>
+      <div class="place">
+        <span class="pn">La base de données</span>
+        <span class="pd">La mémoire de l’opération. Elle garde qui sont nos clients, quels
+        restaurants nous avons et ce qu’il est advenu de chaque demande de table.</span>
+      </div>
+      <div class="place">
+        <span class="pn">La documentation</span>
+        <span class="pd">Notre Notion. C’est là que l’équipe consigne comment les choses
+        <b>doivent</b> fonctionner — règles, processus, qui fait quoi.</span>
+      </div>
+    </div>
+
+    <p class="body-t">
+      Je suis allé voir chacun des quatre avec exactement les deux mêmes questions en
+      tête&nbsp;:
+    </p>
+
+    <div class="questions">
+      <p>Qu’est-ce qui, ici, pousse le client à nous abandonner&nbsp;?</p>
+      <p>Et qu’est-ce qui, ici, empêche un restaurant de devenir partenaire&nbsp;?</p>
+    </div>
+
+    <p class="body-t">
+      Les quatre fiches qui suivent en sont le résultat. Il ne s’agit pas de défauts de ce
+      qui a été construit — c’est ce qui <b>n’existe tout simplement pas</b> et qui fait
+      défaut. Dans plusieurs cas, la pièce est déjà prête et n’a jamais été activée.
+    </p>
+  </div>
+
+  <footer class="p-foot">
+    <span>Diagnostic par système et plan d’action</span>
+    <span class="folio">02</span>
+  </footer>
+</section>
+
+<!-- ============ PAGE 3 — FICHES 1 et 2 ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Première partie · Fiches 1 et 2 sur 4</span>
+  </header>
+
+  <div class="p-body">
+    <div class="card">
+      <div class="card-top"><span class="ord">01</span><h3>Le site</h3></div>
+      <p class="what">Ce que le client voit et utilise pour demander sa table. <b>C’est ici
+      que se produit la plus grande partie des dégâts</b>, car c’est le seul des quatre que
+      le client voit.</p>
+      <ul>
+        <li><b>Il n’y a aucune porte d’entrée pour les restaurants.</b> Ni lien, ni page, ni un «&nbsp;ce restaurant est le vôtre&nbsp;?&nbsp;» sur les fiches. C’est la cause directe de nos 2 comptes pour 1 548 restaurants publiés.</li>
+        <li><b>Les horaires proposés sont une fiction.</b> Ils sont générés à partir des horaires d’ouverture, sans aucune vérification de table disponible.</li>
+        <li><b>La promesse ne correspond pas au produit.</b> La page d’accueil annonce «&nbsp;confirmation instantanée&nbsp;»&nbsp;; en pratique, chaque demande dépend d’un e-mail auquel le restaurant doit répondre.</li>
+        <li><b>Personne ne dit au client combien de temps attendre.</b> Aucun délai n’est promis, ni aucun avertissement qu’il pourrait n’y avoir aucune réponse.</li>
+        <li><b>Retirer un restaurant du site ne le retire pas vraiment.</b> Il disparaît des listes, mais sa page reste en ligne pour qui possède l’adresse exacte. Un restaurant a déjà exigé un retrait formel pour cette raison.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="ord">02</span><h3>Les notifications automatiques</h3></div>
+      <p class="what">Les e-mails qui partent tout seuls. <b>La bonne nouvelle ici, c’est que
+      presque tout est déjà construit</b> — le problème, c’est ce qui est désactivé ou ce qui
+      n’a jamais été écrit.</p>
+      <ul>
+        <li><b>Il manque le rapport mensuel au restaurant&nbsp;:</b> «&nbsp;vous avez reçu N demandes par notre intermédiaire&nbsp;». C’est l’argument de conversion le plus fort dont nous disposons et aucun flux ne l’envoie.</li>
+        <li><b>La demande d’avis est désactivée.</b> L’e-mail est prêt et actif&nbsp;; l’horloge qui le déclenche est désactivée depuis le 27 août.</li>
+        <li><b>Le rappel de la veille au client est désactivé.</b> Personne ne prévient que le dîner a lieu demain.</li>
+        <li><b>Il n’y a aucune reconquête.</b> Aucun flux ne s’adresse aux 10 397 clients disparus, ni aux restaurants qui ont cessé de répondre.</li>
+        <li><b>Quand le restaurant ne répond pas, nous ne proposons aucune alternative.</b> Le client reçoit un e-mail d’attente, et non une deuxième option de table.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Diagnostic par système et plan d’action</span>
+    <span class="folio">03</span>
+  </footer>
+</section>
+
+<!-- ============ PAGE 4 — FICHES 3 et 4 ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Première partie · Fiches 3 et 4 sur 4</span>
+  </header>
+
+  <div class="p-body">
+    <div class="card">
+      <div class="card-top"><span class="ord">03</span><h3>La base de données</h3></div>
+      <p class="what">La mémoire de l’opération. <b>Le problème ici, c’est
+      l’aveuglement</b>&nbsp;: des choses importantes se produisent sans être enregistrées,
+      si bien que nous ne pouvons ni mesurer ni exiger de comptes.</p>
+      <ul>
+        <li><b>Nous ignorons combien de temps un restaurant met à répondre.</b> Personne ne note le moment où la réponse est arrivée. Sans cela, impossible de promettre un délai au client ni d’en exiger un du restaurant.</li>
+        <li><b>Aucune trace de ce que nous envoyons.</b> Un emplacement est prévu pour noter «&nbsp;rappel envoyé&nbsp;» et «&nbsp;avis demandé&nbsp;» — et rien n’y écrit.</li>
+        <li><b>Aucun registre de consentement</b> pour contacter les établissements, ni d’endroit où noter qui a demandé à ne plus être contacté.</li>
+        <li><b>Favoris et avis sont morts&nbsp;:</b> 11 favoris au total et zéro avis. Aucun signe de relation avec le client.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="ord">04</span><h3>La documentation</h3></div>
+      <p class="what">Le manuel de l’opération. <b>Sans règle écrite, impossible d’exiger
+      quoi que ce soit</b> — ni du restaurant, ni de l’équipe. Et ce qui est écrit
+      aujourd’hui a déjà vieilli.</p>
+      <ul>
+        <li><b>Aucun délai n’est défini</b> pour la réponse du restaurant, ni ce qui se passe s’il ne répond pas.</li>
+        <li><b>Aucun parcours d’intégration.</b> Il existe du matériel de vente et un e-mail d’approbation, mais rien sur les 48 premières heures du partenaire, qui le forme et ce qu’il doit savoir.</li>
+        <li><b>Aucun contrat de partenariat</b> ni base légale documentée pour maintenir en ligne la fiche d’un restaurant qui ne nous a jamais autorisés.</li>
+        <li><b>Aucun plan de fidélisation du client</b> — aucun document ne traite de ce qu’il faut faire après le dîner.</li>
+        <li><b>Le matériel commercial est périmé&nbsp;:</b> les pages de CLAVIS citent encore «&nbsp;84&nbsp;% Pending&nbsp;», un chiffre qui ne correspond plus à la réalité. Toute proposition qui l’utiliserait aujourd’hui serait fausse.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Diagnostic par système et plan d’action</span>
+    <span class="folio">04</span>
+  </footer>
+</section>
+
+<!-- ============ PAGE 5 — PLAN ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Deuxième partie · Plan d’action</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">Deuxième partie</p>
+    <h2>Cinq mouvements, dans l’ordre le plus rentable</h2>
+
+    <p class="lead" style="margin-bottom:5mm;">
+      Classés par retour sur effort, et non par gravité. Les deux premiers agissent sur
+      l’entonnoir de l’établissement, là où l’argent dort — et ce sont les moins coûteux
+      de tous.
+    </p>
+
+    <div class="move">
+      <span class="ix">1</span>
+      <div class="txt">
+        <h3>Ouvrir la porte du restaurant sur le site</h3>
+        <p>Un lien en pied de page, une page expliquant le partenariat et un «&nbsp;ce
+        restaurant est le vôtre&nbsp;?&nbsp;» sur chaque fiche, menant au tableau de bord
+        qui existe déjà. Aujourd’hui le chemin existe mais reste invisible — c’est la raison
+        de nos 2 comptes pour 1 548 restaurants publiés.</p>
+      </div>
+      <span class="owner"><b>Produit</b><br>en jours, pas en semaines</span>
+    </div>
+
+    <div class="move">
+      <span class="ix">2</span>
+      <div class="txt">
+        <h3>Dire à chaque restaurant combien de demandes il a reçues</h3>
+        <p>Un e-mail mensuel automatique&nbsp;: «&nbsp;vous avez reçu 410 demandes de table
+        par notre intermédiaire cette année&nbsp;». Pour les 75 restaurants à demande réelle,
+        c’est le meilleur argument commercial qui existe — et c’est une phrase vraie que nous
+        n’avons jamais prononcée.</p>
+      </div>
+      <span class="owner"><b>Notifications + Commercial</b><br>fort retour</span>
+    </div>
+
+    <div class="move">
+      <span class="ix">3</span>
+      <div class="txt">
+        <h3>Cesser de promettre ce que nous ne livrons pas</h3>
+        <p>Remplacer «&nbsp;confirmation instantanée&nbsp;» par un langage de demande, dire
+        au client combien de temps attendre et cesser d’afficher des horaires que personne
+        n’a confirmés. On perd en éclat de vitrine, on gagne la confiance de celui qui a
+        déjà été déçu une fois.</p>
+      </div>
+      <span class="owner"><b>Produit + Éditorial</b></span>
+    </div>
+
+    <div class="move">
+      <span class="ix">4</span>
+      <div class="txt">
+        <h3>Créer de la vie après le dîner</h3>
+        <p>Activer la demande d’avis et le rappel de la veille — tous deux prêts et
+        désactivés. Ensuite, une invitation à revenir. Aujourd’hui 903 dîners ont eu lieu
+        et rien ne les a suivis&nbsp;; c’est pourquoi même ceux qui ont été bien servis ne
+        reviennent pas.</p>
+      </div>
+      <span class="owner"><b>Notifications automatiques</b><br>vérifier le volume d’abord</span>
+    </div>
+
+    <div class="move">
+      <span class="ix">5</span>
+      <div class="txt">
+        <h3>Choisir où jouer</h3>
+        <p>Se concentrer sur Athènes, Marrakech et Paris, qui fonctionnent&nbsp;; régler
+        Bangkok, qui a la plus forte demande au monde et 0,6&nbsp;% d’acceptation&nbsp;; et
+        retirer ou déprioriser les fiches mortes — 1 032 vitrines qui n’ont pas reçu une
+        seule demande depuis un an.</p>
+      </div>
+      <span class="owner"><b>Décision du fondateur</b></span>
+    </div>
+
+    <div class="note">
+      <b>Comment cette enquête a été menée.</b> Requêtes en lecture seule sur la base de
+      production&nbsp;; navigation réelle sur le site en tant que client, y compris
+      l’ouverture du formulaire de réservation d’un restaurant sans rien envoyer&nbsp;;
+      lecture des 61 flux d’e-mails via l’interface de programmation de n8n&nbsp;; et
+      balayage des 19 pages du Notion. Aucune modification n’a été apportée à aucun des
+      quatre systèmes, et aucune des corrections décrites n’a été appliquée — chacune exige
+      une approbation avant d’être exécutée.
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Diagnostic par système et plan d’action</span>
+    <span class="folio">05</span>
+  </footer>
+</section>
+
+</body>
+</html>

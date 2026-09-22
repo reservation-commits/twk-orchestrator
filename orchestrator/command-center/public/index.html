@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MAESTRO — Central de Comando TWK</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎼</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div id="boot">
+    <div class="b-logo">MAESTRO</div>
+    <div class="b-beam"></div>
+    <div class="b-sub">The World Keys · Orquestração</div>
+  </div>
+
+  <header>
+    <div class="hdr-row">
+      <div class="brand" id="brand" title="Home">
+        <h1>MAESTRO<span class="tick">▮</span></h1>
+        <small id="brand-sub">Orquestrador The World Keys</small>
+      </div>
+      <div class="hdr-spacer"></div>
+      <div class="conn" id="conn"><span class="dot"></span><span>…</span></div>
+      <button class="demo-btn conv" id="conv-btn">⌘ Conversa</button>
+      <button class="demo-btn" id="apr-btn" style="display:none">⛔ Aprovações</button>
+      <button class="demo-btn" id="actions-btn">⚑ Ações</button>
+      <button class="demo-btn" id="missions-btn">◈ Missões</button>
+      <button class="demo-btn" id="demo-btn">Demo</button>
+      <div class="lang" role="group" aria-label="Idioma">
+        <button id="lang-pt">PT</button>
+        <button id="lang-fr">FR</button>
+      </div>
+    </div>
+    <nav class="agent-nav" id="agent-nav" aria-label="Agentes"></nav>
+  </header>
+
+  <div id="ticker" aria-hidden="true"><div class="tk-track" id="tk-track"></div></div>
+
+  <main id="view"></main>
+
+  <footer>MAESTRO · The World Keys · coordena, não executa</footer>
+
+  <div id="tip"></div>
+  <div id="demo-seal"></div>
+
+  <div id="palette">
+    <div class="pal-box">
+      <input id="pal-input" placeholder="Comando… (↑↓ navega · Enter executa · Esc fecha)" autocomplete="off">
+      <div class="pal-list" id="pal-list"></div>
+      <div class="pal-hint">Ctrl/Cmd+K abre esta paleta · atalhos diretos: H centro · 1–5 agentes · M missões</div>
+    </div>
+  </div>
+
+  <div id="gate">
+    <div class="box">
+      <h3 data-i18n="token_title">Chave de acesso</h3>
+      <p data-i18n="token_hint">Esta central é protegida. Informe a chave do operador (CENTER_TOKEN).</p>
+      <input type="password" autocomplete="off" placeholder="CENTER_TOKEN">
+      <button data-i18n="token_go">Entrar</button>
+    </div>
+  </div>
+
+  <script src="/i18n.js"></script>
+  <script src="/chat.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

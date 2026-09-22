@@ -1,0 +1,257 @@
+{
+ "updatedAt": "2026-08-24T18:10:29.533Z",
+ "createdAt": "2026-07-20T22:23:21.567Z",
+ "id": "TkC4zLu3uA6B01Ii",
+ "name": "envia email de confirmação de solicitacao de parceria",
+ "description": null,
+ "active": true,
+ "isArchived": false,
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "request-confirmation",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -112,
+    0
+   ],
+   "id": "ab7537ce-0449-4fc5-8456-d22471c2f4d3",
+   "name": "Webhook",
+   "webhookId": "648f39e4-0f0b-4025-8d34-fd3451a8ffac"
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $json.body.email }}",
+    "subject": "Your Partnership Application Has Been Approved",
+    "message": "=<!doctype html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<meta charset=\"utf-8\"/>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n<meta name=\"color-scheme\" content=\"light\"/>\n<meta name=\"supported-color-schemes\" content=\"light\"/>\n<title>The World Keys</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#ede9df;\">\n<!-- preheader -->\n<div style=\"display:none;max-height:0;overflow:hidden;mso-hide:all;\">\n  Dear {{ $json.body.fullName.split(' ')[0] }}, your partnership application has been approved.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;\n</div>\n\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#ede9df\" style=\"background-color:#ede9df;\">\n<tr><td align=\"center\" style=\"padding:28px 14px;\">\n\n  <table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:100%;\">\n\n    <!-- Header -->\n    <tr><td bgcolor=\"#070b10\" style=\"background-color:#070b10;padding:30px 40px 26px;text-align:center;\">\n      <div style=\"font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-size:27px;font-weight:400;letter-spacing:6px;color:#c9a96e;\">THE&nbsp;WORLD&nbsp;KEYS</div>\n      <div style=\"font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;font-weight:400;letter-spacing:4px;color:#9a97a8;padding-top:9px;\">PARTNERS&nbsp;&amp;&nbsp;RESTAURANTS</div>\n    </td></tr>\n\n    <!-- Gold divider -->\n    <tr><td style=\"height:2px;line-height:2px;font-size:2px;background:linear-gradient(90deg,#9e7c48,#e4c990,#9e7c48);background-color:#c9a96e;\">&nbsp;</td></tr>\n\n    <!-- Body -->\n    <tr><td bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:38px 44px 22px;\">\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        Dear {{ $json.body.fullName.split(' ')[0] }},\n      </p>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        We are pleased to inform you that the partnership application for\n        <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.restaurantName }}</strong>\n        has been <strong style=\"font-weight:600;color:#1d222b;\">approved</strong>.\n      </p>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        You can now access the Partner Dashboard to manage reservations, guests, and your restaurant information.\n      </p>\n\n      <p style=\"margin:0 0 28px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        Sign in using the email address\n        <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.email }}</strong>.\n      </p>\n\n      <!-- CTA -->\n      <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\" style=\"margin:0 auto 28px;\">\n        <tr>\n          <td align=\"center\" bgcolor=\"#070b10\" style=\"background-color:#070b10;border-radius:4px;\">\n            <!--[if mso]>\n            <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" href=\"https://manager.theworldkeys.com/log-in\" style=\"height:48px;v-text-anchor:middle;width:240px;\" arcsize=\"8%\" stroke=\"f\" fillcolor=\"#070b10\">\n              <w:anchorlock/>\n              <center style=\"color:#c9a96e;font-family:Segoe UI, Helvetica, Arial, sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;\">ACCESS DASHBOARD</center>\n            </v:roundrect>\n            <![endif]-->\n            <!--[if !mso]><!-->\n            <a href=\"https://manager.theworldkeys.com/log-in\" target=\"_blank\"\n               style=\"display:inline-block;padding:16px 36px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:13px;font-weight:600;letter-spacing:2.5px;color:#c9a96e;text-decoration:none;background-color:#070b10;border-radius:4px;\">\n              ACCESS DASHBOARD\n            </a>\n            <!--<![endif]-->\n          </td>\n        </tr>\n      </table>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        If the button above doesn't work, copy and paste the following link into your browser:<br/>\n        <a href=\"https://manager.theworldkeys.com/log-in\" target=\"_blank\" style=\"color:#9e7c48;word-break:break-all;\">https://manager.theworldkeys.com/log-in</a>\n      </p>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        Kind regards,<br/>\n        The World Keys<br/>\n        support@theworldkeys.com\n      </p>\n    </td></tr>\n\n  \n\n    <!-- Footer -->\n    <tr><td align=\"center\" style=\"padding:20px 30px 6px;\">\n      <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n        <tr>\n          <td style=\"padding:0 13px;\">\n            <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"text-decoration:none;\">\n              <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/whatsapp.png\" width=\"26\" height=\"26\" alt=\"WhatsApp\" style=\"display:block;border:0;opacity:0.75;\" />\n            </a>\n          </td>\n          <td style=\"padding:0 13px;\">\n            <a href=\"mailto:support@theworldkeys.com\" target=\"_blank\" style=\"text-decoration:none;\">\n              <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/email.png\" width=\"26\" height=\"26\" alt=\"Email\" style=\"display:block;border:0;opacity:0.75;\" />\n            </a>\n          </td>\n          <td style=\"padding:0 13px;\">\n            <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n              <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/site.png\" width=\"26\" height=\"26\" alt=\"Website\" style=\"display:block;border:0;opacity:0.75;\" />\n            </a>\n          </td>\n        </tr>\n      </table>\n    </td></tr>\n\n    <tr><td style=\"padding:14px 30px 8px;text-align:center;\">\n     \n      <p style=\"margin:0;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;letter-spacing:1.5px;color:#9a97a8;\">\n        THE&nbsp;WORLD&nbsp;KEYS&nbsp;&middot;&nbsp;PARIS&nbsp;&middot;&nbsp;2026\n      </p>\n    </td></tr>\n\n  </table>\n</td></tr>\n</table>\n</body>\n</html>",
+    "options": {
+     "appendAttribution": false,
+     "replyToSenderOnly": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    208,
+    0
+   ],
+   "id": "64db0eb4-3397-4d98-bb53-c9b6f3c0b868",
+   "name": "Send a message",
+   "webhookId": "dd750b31-738a-4744-b5a7-be911ccc38c4",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  }
+ ],
+ "connections": {
+  "Webhook": {
+   "main": [
+    [
+     {
+      "node": "Send a message",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "binaryMode": "separate",
+  "availableInMCP": true
+ },
+ "staticData": null,
+ "meta": {
+  "templateCredsSetupCompleted": true
+ },
+ "pinData": {
+  "Webhook": [
+   {
+    "json": {
+     "headers": {
+      "host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "user-agent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8875",
+      "content-length": "374",
+      "content-type": "application/json",
+      "expect": "100-continue",
+      "x-forwarded-for": "192.140.64.63",
+      "x-forwarded-host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https",
+      "x-forwarded-server": "8d89ae07a74e",
+      "x-real-ip": "192.140.64.63",
+      "accept-encoding": "gzip"
+     },
+     "params": {},
+     "query": {},
+     "body": {
+      "fullName": "Marlon Teste",
+      "createdAt": "2026-07-20T22:05:16.6698979Z",
+      "publicListingSlug": null,
+      "jobTitle": "OWNER",
+      "restaurantName": "Restaurante Exemplo",
+      "invitationId": "test-invite-001",
+      "applicationType": "create",
+      "status": "pending",
+      "phone": "+5521999999999",
+      "email": "marlon.teste@example.com"
+     },
+     "webhookUrl": "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/invite",
+     "executionMode": "production"
+    }
+   }
+  ]
+ },
+ "versionId": "17874af9-9c0a-438f-9b35-c51b3df70108",
+ "activeVersionId": "17874af9-9c0a-438f-9b35-c51b3df70108",
+ "versionCounter": 20,
+ "triggerCount": 1,
+ "shared": [
+  {
+   "updatedAt": "2026-07-20T22:23:21.571Z",
+   "createdAt": "2026-07-20T22:23:21.571Z",
+   "role": "workflow:owner",
+   "workflowId": "TkC4zLu3uA6B01Ii",
+   "projectId": "j3RBnUKpdJnI0HPr",
+   "project": {
+    "updatedAt": "2025-10-09T18:24:30.274Z",
+    "createdAt": "2025-10-09T18:21:52.771Z",
+    "id": "j3RBnUKpdJnI0HPr",
+    "name": "The World keys <thekeys.need@gmail.com>",
+    "type": "personal",
+    "icon": null,
+    "description": null,
+    "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+    "projectRelations": [
+     {
+      "updatedAt": "2025-10-09T18:21:52.771Z",
+      "createdAt": "2025-10-09T18:21:52.771Z",
+      "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "user": {
+       "updatedAt": "2026-09-10T07:00:17.000Z",
+       "createdAt": "2025-10-09T18:21:52.389Z",
+       "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+       "email": "thekeys.need@gmail.com",
+       "firstName": "The World",
+       "lastName": "keys",
+       "personalizationAnswers": {
+        "version": "v4",
+        "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+        "personalization_survey_n8n_version": "1.103.2"
+       },
+       "settings": {
+        "userActivated": true,
+        "easyAIWorkflowOnboarded": true,
+        "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+        "userActivatedAt": 1760038686025,
+        "npsSurvey": {
+         "responded": true,
+         "lastShownAt": 1785180247186
+        }
+       },
+       "disabled": false,
+       "mfaEnabled": false,
+       "lastActiveAt": "2026-09-10",
+       "isPending": false
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "tags": [],
+ "activeVersion": {
+  "updatedAt": "2026-07-27T19:24:23.000Z",
+  "createdAt": "2026-07-27T19:24:18.027Z",
+  "versionId": "17874af9-9c0a-438f-9b35-c51b3df70108",
+  "workflowId": "TkC4zLu3uA6B01Ii",
+  "nodes": [
+   {
+    "parameters": {
+     "httpMethod": "POST",
+     "path": "request-confirmation",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.webhook",
+    "typeVersion": 2.1,
+    "position": [
+     -112,
+     0
+    ],
+    "id": "ab7537ce-0449-4fc5-8456-d22471c2f4d3",
+    "name": "Webhook",
+    "webhookId": "648f39e4-0f0b-4025-8d34-fd3451a8ffac"
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $json.body.email }}",
+     "subject": "Your Partnership Application Has Been Approved",
+     "message": "=<!doctype html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<meta charset=\"utf-8\"/>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n<meta name=\"color-scheme\" content=\"light\"/>\n<meta name=\"supported-color-schemes\" content=\"light\"/>\n<title>The World Keys</title>\n</head>\n<body style=\"margin:0;padding:0;background-color:#ede9df;\">\n<!-- preheader -->\n<div style=\"display:none;max-height:0;overflow:hidden;mso-hide:all;\">\n  Dear {{ $json.body.fullName.split(' ')[0] }}, your partnership application has been approved.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;\n</div>\n\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#ede9df\" style=\"background-color:#ede9df;\">\n<tr><td align=\"center\" style=\"padding:28px 14px;\">\n\n  <table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:100%;\">\n\n    <!-- Header -->\n    <tr><td bgcolor=\"#070b10\" style=\"background-color:#070b10;padding:30px 40px 26px;text-align:center;\">\n      <div style=\"font-family:'Cormorant Garamond', Georgia, 'Times New Roman', serif;font-size:27px;font-weight:400;letter-spacing:6px;color:#c9a96e;\">THE&nbsp;WORLD&nbsp;KEYS</div>\n      <div style=\"font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;font-weight:400;letter-spacing:4px;color:#9a97a8;padding-top:9px;\">PARTNERS&nbsp;&amp;&nbsp;RESTAURANTS</div>\n    </td></tr>\n\n    <!-- Gold divider -->\n    <tr><td style=\"height:2px;line-height:2px;font-size:2px;background:linear-gradient(90deg,#9e7c48,#e4c990,#9e7c48);background-color:#c9a96e;\">&nbsp;</td></tr>\n\n    <!-- Body -->\n    <tr><td bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:38px 44px 22px;\">\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        Dear {{ $json.body.fullName.split(' ')[0] }},\n      </p>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        We are pleased to inform you that the partnership application for\n        <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.restaurantName }}</strong>\n        has been <strong style=\"font-weight:600;color:#1d222b;\">approved</strong>.\n      </p>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        You can now access the Partner Dashboard to manage reservations, guests, and your restaurant information.\n      </p>\n\n      <p style=\"margin:0 0 28px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        Sign in using the email address\n        <strong style=\"font-weight:600;color:#1d222b;\">{{ $json.body.email }}</strong>.\n      </p>\n\n      <!-- CTA -->\n      <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\" style=\"margin:0 auto 28px;\">\n        <tr>\n          <td align=\"center\" bgcolor=\"#070b10\" style=\"background-color:#070b10;border-radius:4px;\">\n            <!--[if mso]>\n            <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" href=\"https://manager.theworldkeys.com/log-in\" style=\"height:48px;v-text-anchor:middle;width:240px;\" arcsize=\"8%\" stroke=\"f\" fillcolor=\"#070b10\">\n              <w:anchorlock/>\n              <center style=\"color:#c9a96e;font-family:Segoe UI, Helvetica, Arial, sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;\">ACCESS DASHBOARD</center>\n            </v:roundrect>\n            <![endif]-->\n            <!--[if !mso]><!-->\n            <a href=\"https://manager.theworldkeys.com/log-in\" target=\"_blank\"\n               style=\"display:inline-block;padding:16px 36px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:13px;font-weight:600;letter-spacing:2.5px;color:#c9a96e;text-decoration:none;background-color:#070b10;border-radius:4px;\">\n              ACCESS DASHBOARD\n            </a>\n            <!--<![endif]-->\n          </td>\n        </tr>\n      </table>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        If the button above doesn't work, copy and paste the following link into your browser:<br/>\n        <a href=\"https://manager.theworldkeys.com/log-in\" target=\"_blank\" style=\"color:#9e7c48;word-break:break-all;\">https://manager.theworldkeys.com/log-in</a>\n      </p>\n\n      <p style=\"margin:0 0 18px;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\">\n        Kind regards,<br/>\n        The World Keys<br/>\n        support@theworldkeys.com\n      </p>\n    </td></tr>\n\n  \n\n    <!-- Footer -->\n    <tr><td align=\"center\" style=\"padding:20px 30px 6px;\">\n      <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n        <tr>\n          <td style=\"padding:0 13px;\">\n            <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"text-decoration:none;\">\n              <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/whatsapp.png\" width=\"26\" height=\"26\" alt=\"WhatsApp\" style=\"display:block;border:0;opacity:0.75;\" />\n            </a>\n          </td>\n          <td style=\"padding:0 13px;\">\n            <a href=\"mailto:support@theworldkeys.com\" target=\"_blank\" style=\"text-decoration:none;\">\n              <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/email.png\" width=\"26\" height=\"26\" alt=\"Email\" style=\"display:block;border:0;opacity:0.75;\" />\n            </a>\n          </td>\n          <td style=\"padding:0 13px;\">\n            <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n              <img src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/site.png\" width=\"26\" height=\"26\" alt=\"Website\" style=\"display:block;border:0;opacity:0.75;\" />\n            </a>\n          </td>\n        </tr>\n      </table>\n    </td></tr>\n\n    <tr><td style=\"padding:14px 30px 8px;text-align:center;\">\n     \n      <p style=\"margin:0;font-family:'Jost', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:10.5px;letter-spacing:1.5px;color:#9a97a8;\">\n        THE&nbsp;WORLD&nbsp;KEYS&nbsp;&middot;&nbsp;PARIS&nbsp;&middot;&nbsp;2026\n      </p>\n    </td></tr>\n\n  </table>\n</td></tr>\n</table>\n</body>\n</html>",
+     "options": {
+      "appendAttribution": false,
+      "replyToSenderOnly": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     208,
+     0
+    ],
+    "id": "64db0eb4-3397-4d98-bb53-c9b6f3c0b868",
+    "name": "Send a message",
+    "webhookId": "dd750b31-738a-4744-b5a7-be911ccc38c4",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   }
+  ],
+  "connections": {
+   "Webhook": {
+    "main": [
+     [
+      {
+       "node": "Send a message",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   }
+  },
+  "authors": "The World keys",
+  "name": "Version 17874af9",
+  "description": "",
+  "autosaved": true,
+  "workflowPublishHistory": [
+   {
+    "createdAt": "2026-07-27T19:24:23.660Z",
+    "id": 210,
+    "workflowId": "TkC4zLu3uA6B01Ii",
+    "versionId": "17874af9-9c0a-438f-9b35-c51b3df70108",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   },
+   {
+    "createdAt": "2026-08-24T18:10:29.675Z",
+    "id": 231,
+    "workflowId": "TkC4zLu3uA6B01Ii",
+    "versionId": "17874af9-9c0a-438f-9b35-c51b3df70108",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   }
+  ]
+ }
+}

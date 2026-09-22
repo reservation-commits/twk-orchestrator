@@ -1,0 +1,252 @@
+{
+  "updatedAt": "2026-08-25T21:21:24.517Z",
+  "createdAt": "2026-08-24T21:04:28.940Z",
+  "id": "k5bNbCQSzGd1u3ZK",
+  "name": "envia code para restaurante existente (site novo)",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "listing-otp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -144,
+        -16
+      ],
+      "id": "c7eccc1e-54fd-4a83-9729-0d5164ab2950",
+      "name": "Webhook",
+      "webhookId": "90b9faac-edba-462a-8b93-265c4cefb1ca"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.to }}",
+        "subject": "Your Admin Dashboard Is Ready",
+        "message": "=<!DOCTYPE html>\n<html>\n  <body style=\"margin:0;padding:24px;font-family:Arial,Helvetica,sans-serif;background:#f6f6f6;color:#111;\">\n    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:520px;margin:0 auto;background:#fff;border-radius:8px;padding:32px;\">\n      <tr>\n        <td>\n          <p style=\"margin:0 0 8px;font-size:13px;color:#666;\">The World's Kitchen</p>\n          <h1 style=\"margin:0 0 16px;font-size:20px;font-weight:700;\">\n            Code for {{ $json.body.restaurantName }}\n          </h1>\n          <p style=\"margin:0 0 16px;font-size:15px;line-height:1.5;\">\n            Someone requested access to this listing. Use this code in the partner registration form:\n          </p>\n          <p style=\"margin:0 0 24px;font-size:32px;letter-spacing:6px;font-weight:700;\">\n            {{ $json.body.code }}\n          </p>\n          <p style=\"margin:0;font-size:13px;color:#666;line-height:1.5;\">\n            If you did not request this, you can ignore this email.\n          </p>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        -48
+      ],
+      "id": "2bde6852-64d3-478d-aaf1-ef1869b7adc2",
+      "name": "Send a message",
+      "webhookId": "39263ccd-d2b3-4c8c-a485-0e80012628ad",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hkcgjRyX7AH55iMJ",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "theworldkeys-n8n.xis4ee.easypanel.host",
+            "user-agent": "node",
+            "content-length": "179",
+            "accept": "*/*",
+            "accept-encoding": "br, gzip, deflate",
+            "accept-language": "*",
+            "content-type": "application/json",
+            "sec-fetch-mode": "cors",
+            "x-forwarded-for": "192.140.64.34",
+            "x-forwarded-host": "theworldkeys-n8n.xis4ee.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "8d89ae07a74e",
+            "x-real-ip": "192.140.64.34"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "challengeId": "cmt7qph9f0000tn8on7s2w7xu",
+            "restaurantId": "253542",
+            "restaurantName": "BOTECO BELMONTE",
+            "slug": "boteco-belmonte",
+            "to": "lucaspeixotodacruz@gmail.com",
+            "code": "522215"
+          },
+          "webhookUrl": "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/listing-otp",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "54e199d2-ecde-40ee-8f53-9b021d1b952e",
+  "activeVersionId": "54e199d2-ecde-40ee-8f53-9b021d1b952e",
+  "versionCounter": 18,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-08-24T21:04:28.952Z",
+      "createdAt": "2026-08-24T21:04:28.952Z",
+      "role": "workflow:owner",
+      "workflowId": "k5bNbCQSzGd1u3ZK",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "project": {
+        "updatedAt": "2025-10-09T18:24:30.274Z",
+        "createdAt": "2025-10-09T18:21:52.771Z",
+        "id": "j3RBnUKpdJnI0HPr",
+        "name": "The World keys <thekeys.need@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+        "projectRelations": [
+          {
+            "updatedAt": "2025-10-09T18:21:52.771Z",
+            "createdAt": "2025-10-09T18:21:52.771Z",
+            "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+            "projectId": "j3RBnUKpdJnI0HPr",
+            "user": {
+              "updatedAt": "2026-09-03T07:00:17.000Z",
+              "createdAt": "2025-10-09T18:21:52.389Z",
+              "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+              "email": "thekeys.need@gmail.com",
+              "firstName": "The World",
+              "lastName": "keys",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+                "personalization_survey_n8n_version": "1.103.2"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+                "userActivatedAt": 1760038686025,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1785180247186
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-09-03",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2026-08-24T21:23:45.000Z",
+    "createdAt": "2026-08-24T21:23:40.822Z",
+    "versionId": "54e199d2-ecde-40ee-8f53-9b021d1b952e",
+    "workflowId": "k5bNbCQSzGd1u3ZK",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "listing-otp",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -144,
+          -16
+        ],
+        "id": "c7eccc1e-54fd-4a83-9729-0d5164ab2950",
+        "name": "Webhook",
+        "webhookId": "90b9faac-edba-462a-8b93-265c4cefb1ca"
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ $json.body.to }}",
+          "subject": "Your Admin Dashboard Is Ready",
+          "message": "=<!DOCTYPE html>\n<html>\n  <body style=\"margin:0;padding:24px;font-family:Arial,Helvetica,sans-serif;background:#f6f6f6;color:#111;\">\n    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:520px;margin:0 auto;background:#fff;border-radius:8px;padding:32px;\">\n      <tr>\n        <td>\n          <p style=\"margin:0 0 8px;font-size:13px;color:#666;\">The World's Kitchen</p>\n          <h1 style=\"margin:0 0 16px;font-size:20px;font-weight:700;\">\n            Code for {{ $json.body.restaurantName }}\n          </h1>\n          <p style=\"margin:0 0 16px;font-size:15px;line-height:1.5;\">\n            Someone requested access to this listing. Use this code in the partner registration form:\n          </p>\n          <p style=\"margin:0 0 24px;font-size:32px;letter-spacing:6px;font-weight:700;\">\n            {{ $json.body.code }}\n          </p>\n          <p style=\"margin:0;font-size:13px;color:#666;line-height:1.5;\">\n            If you did not request this, you can ignore this email.\n          </p>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>",
+          "options": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          256,
+          -48
+        ],
+        "id": "2bde6852-64d3-478d-aaf1-ef1869b7adc2",
+        "name": "Send a message",
+        "webhookId": "39263ccd-d2b3-4c8c-a485-0e80012628ad",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "hkcgjRyX7AH55iMJ",
+            "name": "Gmail account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "The World keys",
+    "name": "Version 54e199d2",
+    "description": "",
+    "autosaved": true,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-08-24T21:23:45.401Z",
+        "id": 237,
+        "workflowId": "k5bNbCQSzGd1u3ZK",
+        "versionId": "54e199d2-ecde-40ee-8f53-9b021d1b952e",
+        "event": "activated",
+        "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+      },
+      {
+        "createdAt": "2026-08-25T21:21:24.585Z",
+        "id": 241,
+        "workflowId": "k5bNbCQSzGd1u3ZK",
+        "versionId": "54e199d2-ecde-40ee-8f53-9b021d1b952e",
+        "event": "activated",
+        "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+      }
+    ]
+  }
+}

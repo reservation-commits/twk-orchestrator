@@ -1,0 +1,109 @@
+=<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Reservation Confirmed</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0B0A08;">
+
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">A reservation has been confirmed for your establishment.</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0B0A08; border-collapse:collapse;">
+    <tr>
+      <td align="center" style="padding:12px 6px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;">
+
+          <tr>
+            <td align="center" style="padding:36px 20px 0 20px;">
+              <a href="https://theworldkeys.com/" target="_blank" style="text-decoration:none;">
+                <img src="https://theworldkeys.com/images/twk-logo.gif" width="56" alt="" style="display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0; outline:none; text-decoration:none;" border="0" />
+                <img src="https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png" width="220" alt="THE WORLD KEYS" style="display:block; margin:0 auto; width:220px; height:auto; border:0; outline:none; text-decoration:none;" border="0" />
+              </a>
+              <div style="font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;">PARIS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:20px 20px 0 20px;">
+              <table role="presentation" width="48" cellpadding="0" cellspacing="0" border="0"><tr>
+                <td style="border-top:1px solid #CE9E3C; font-size:0; line-height:0;">&nbsp;</td>
+              </tr></table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:24px 20px 8px 20px;">
+              <h1 style="margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:28px; line-height:1.3; color:#F5EFE3;">The booking is confirmed.</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:0 24px;">
+              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;">Dear <span style="color:#E6C87A;">{{ $('Webhook').item.json.body.restaurant.name }}</span>, a reservation has been confirmed for your establishment. Details below.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 16px 0 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;">
+                <tr><td style="padding:20px 20px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;">GUEST</td><td align="right" style="padding:8px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;"><strong>{{ $('Webhook').item.json.body.user.name }}</strong></td></tr><tr><td style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;">DATE</td><td align="right" style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;"><strong>{{ $('Code in JavaScript').item.json.formattedDate }}</strong></td></tr><tr><td style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;">TIME</td><td align="right" style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;"><strong>{{ $('Code in JavaScript').item.json.formattedTime }}</strong></td></tr><tr><td style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;">GUESTS</td><td align="right" style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;"><strong>{{ $('Code in JavaScript').item.json.formattedPeople }}</strong></td></tr><tr><td style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368;">NOTES</td><td align="right" style="padding:8px 0; border-top:1px solid #26200F; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#F5EFE3;"><strong>{{ $('Code in JavaScript').item.json.formattedDetails }}</strong></td></tr></table>
+                  <div style="padding-top:12px; font-family:'Courier New',Courier,monospace; font-size:11px; color:#8F8368; text-align:center;">{{ $('Webhook').item.json.body.reservation.reservation_code }}</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <!--
+  BLOCO "CONVERTER NO CLIQUE" — inserir nos nós "Establishment (Accept)" e "Establishment (Decline)" do workflow
+  "3 - resposta do restaurante (site novo)" (id YDOdJQ46C8okIIdm), IMEDIATAMENTE ANTES da linha
+  <tr><td align="center" style="padding:8px 20px 0 20px;"><p ...>Need anything? ...
+  Mesma identidade visual dos templates existentes. Expressão n8n preservada: {{ $('Webhook').item.json.body.restaurant.name }}.
+  Link rastreado (opcional): trocar href por {{ $('Webhook').item.json.body.management_url }} … link rastreado pelo /go (c + rid com prefixo r anti-QP) desde 09/09.
+-->
+          <tr>
+            <td style="padding:24px 16px 0 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;">
+                <tr><td style="padding:18px 20px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1A1611; border:1px solid #CE9E3C; border-radius:12px; border-collapse:separate;">
+                <tr><td align="center" style="padding:24px 22px 20px 22px;">
+                  <div style="font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:1.35; color:#F5EFE3; padding-bottom:8px;">You just replied through the link.<br/>Next time, one tap.</div>
+                  <div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#B5AB93; padding-bottom:16px;">The free professional account for <span style="color:#E6C87A;">{{ $('Webhook').item.json.body.restaurant.name }}</span> puts every request in one dashboard, lets you reply from your phone, and makes the hours on your page the ones you actually serve.</div>
+                  <table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr><td align="center" valign="middle" style="background-color:#CE9E3C; border-radius:4px; text-align:center; vertical-align:middle;">
+                    <a href="https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/go?c=resposta-aceite&rid=r{{ $('Webhook').item.json.body.restaurant.restaurant_id }}" target="_blank" style="display:inline-block; padding:14px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center; vertical-align:middle;">Activate my key</a>
+                  </td></tr></table>
+                  <div style="font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#8F8368; padding-top:11px;">Free &middot; two minutes &middot; the code goes to this address</div>
+                  <div style="font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#6E6551; padding-top:7px;">PT Ative a conta gratuita da casa &#183; FR Activez le compte gratuit de la maison &#183; ES Active la cuenta gratuita de la casa &#183; IT Attivate l'account gratuito del locale</div>
+                </td></tr>
+              </table>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+ <a href="https://wa.me/5521967841007" target="_blank" style="color:#E6C87A; text-decoration:none;">Message our concierge on WhatsApp</a></p></td></tr>
+          <tr>
+            <td align="center" style="padding:24px 24px 32px 24px;">
+              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;">The reservation is live in our system. Please prepare to welcome your guest on the scheduled date.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:20px 20px 28px 20px; border-top:1px solid #26200F;">
+              <p style="margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;">THE WORLD KEYS</p>
+              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;">
+                <a href="https://theworldkeys.com/terms-of-use/" style="color:#8F8368; text-decoration:none;">Terms &amp; Conditions</a>
+                &nbsp;&#183;&nbsp;
+                <a href="mailto:support@theworldkeys.com" style="color:#8F8368; text-decoration:none;">support@theworldkeys.com</a><br/>
+                66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>
+                VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

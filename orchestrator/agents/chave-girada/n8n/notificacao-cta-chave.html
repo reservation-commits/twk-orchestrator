@@ -1,0 +1,18 @@
+<!--
+  LINHA "SUA CHAVE" NO E-MAIL DE NOTIFICAÇÃO DE PEDIDO — o e-mail que o restaurante realmente lê e de onde ele clica para responder.
+  Workflow: "1 - nova reserva (site novo)" (id ztI9ws9F6BAGJSGr) → nó "Solicitação Enviada Estabelecimento" → campo Message.
+  ONDE COLAR: logo DEPOIS do </tr> que fecha a linha do botão dourado "Respond to pending requests",
+  e ANTES do <tr> cuja <p> começa com "Need anything?".
+  Discreto de propósito: o botão principal (responder ao pedido) continua sendo a ação nº 1; esta linha é a nº 2.
+  Também vale para o nó "6h (estabelecimento)" do sub-workflow "2 - 6h e 12h pendente", no mesmo ponto, se quiserem.
+  Expressão n8n preservada: {{ $('Webhook').item.json.body.restaurant.name }}
+-->
+          <tr>
+            <td align="center" style="padding:14px 24px 0 24px;">
+              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.6; color:#B5AB93;">
+                Prefer to answer every request from one place, in one tap? The free professional account for <span style="color:#E6C87A;">{{ $('Webhook').item.json.body.restaurant.name }}</span> puts your requests, hours and page in your hands.
+                <a href="https://manager.theworldkeys.com/register" target="_blank" style="color:#E6C87A; text-decoration:underline; white-space:nowrap;">Activate my key &rarr;</a>
+              </p>
+              <p style="margin:6px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.6; color:#8F8368;">PT Ative a conta gratuita da casa &#183; FR Activez le compte gratuit de la maison &#183; ES Active la cuenta gratuita de la casa &#183; IT Attivate l'account gratuito del locale</p>
+            </td>
+          </tr>

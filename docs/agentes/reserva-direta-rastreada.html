@@ -1,0 +1,467 @@
+<title>Reserva Direta Rastreada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #FBFAF7;
+    --surface: #F3F0E8;
+    --ink: #1B1812;
+    --ink-2: #4A443A;
+    --muted: #6E6657;
+    --rule: #E2DCCE;
+    --accent: #8A6512;
+    --accent-soft: #CE9E3C;
+    --silent: #C4572E;
+    --responds: #2A6BB0;
+    --good: #2F7A4A;
+    --bubble: #E4F2E6;
+    --bubble-ink: #17311F;
+    --focus: #2A6BB0;
+    --serif: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #15130F;
+      --surface: #1E1B15;
+      --ink: #EFE9DC;
+      --ink-2: #CFC6B4;
+      --muted: #A39883;
+      --rule: #2F2A21;
+      --accent: #D9AE55;
+      --accent-soft: #CE9E3C;
+      --silent: #D9693D;
+      --responds: #4A8BC4;
+      --good: #6DBB86;
+      --bubble: #1F3326;
+      --bubble-ink: #DDEFE2;
+      --focus: #D9AE55;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #15130F;
+    --surface: #1E1B15;
+    --ink: #EFE9DC;
+    --ink-2: #CFC6B4;
+    --muted: #A39883;
+    --rule: #2F2A21;
+    --accent: #D9AE55;
+    --accent-soft: #CE9E3C;
+    --silent: #D9693D;
+    --responds: #4A8BC4;
+    --good: #6DBB86;
+    --bubble: #1F3326;
+    --bubble-ink: #DDEFE2;
+    --focus: #D9AE55;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-inline: 20px;
+    padding-block: 0 56px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 760px; margin-inline: auto; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  header.doc { padding-block: 48px 28px; border-bottom: 1px solid var(--rule); display: grid; gap: 14px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 6vw, 48px); line-height: 1.08; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  .lede { font-size: 19px; line-height: 1.5; color: var(--ink-2); margin: 0; max-width: 62ch; text-wrap: pretty; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 6px 0 0; padding: 0; list-style: none; }
+  .meta .status { color: var(--accent); }
+
+  section { padding-block: 36px 4px; display: grid; gap: 16px; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: 27px; line-height: 1.2; margin: 0; text-wrap: balance; }
+  h3 { font-family: var(--sans); font-weight: 600; font-size: 15px; margin: 0; }
+  p { margin: 0; max-width: 66ch; text-wrap: pretty; }
+  .note { font-size: 14px; color: var(--muted); }
+  strong { font-weight: 600; }
+  code { font-family: var(--mono); font-size: 0.88em; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+
+  .thesis { font-family: var(--serif); font-size: clamp(24px, 4.2vw, 32px); line-height: 1.22; margin: 0; text-wrap: balance; }
+  .thesis em { font-style: italic; color: var(--silent); }
+  figure.split { margin: 6px 0 0; display: grid; gap: 10px; }
+  .split-caption { font-size: 13px; color: var(--muted); }
+  .bar { display: flex; gap: 2px; height: 30px; position: relative; }
+  .seg { height: 100%; }
+  .seg:first-child { border-radius: 4px 0 0 4px; }
+  .seg:last-child { border-radius: 0 4px 4px 0; }
+  .seg.silent { background: var(--silent); flex: 1276 0 0; }
+  .seg.responds { background: var(--responds); flex: 815 0 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 0; list-style: none; font-size: 14px; }
+  .legend li { display: flex; align-items: baseline; gap: 8px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; transform: translateY(1px); }
+  .swatch.silent { background: var(--silent); }
+  .swatch.responds { background: var(--responds); }
+  .legend b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tip { position: absolute; bottom: calc(100% + 8px); transform: translateX(-50%); background: var(--ink); color: var(--ground); font-size: 13px; line-height: 1.4; padding: 7px 10px; border-radius: 4px; white-space: nowrap; pointer-events: none; }
+
+  dl.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 24px; margin: 10px 0 0; padding-top: 18px; border-top: 1px solid var(--rule); }
+  dl.facts div { display: grid; gap: 2px; align-content: start; }
+  dl.facts dt { font-family: var(--serif); font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
+  dl.facts dd { margin: 0; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+
+  .replies { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+  .replies li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 4px 20px; padding-block: 14px; border-bottom: 1px solid var(--rule); }
+  .from { font-family: var(--mono); font-size: 12px; line-height: 1.5; color: var(--muted); }
+  .from b { display: block; font-weight: 500; color: var(--ink); letter-spacing: 0.02em; }
+  blockquote { margin: 0; font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.45; }
+  .replies .ctx { grid-column: 2; font-size: 13px; color: var(--muted); }
+
+  .models { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .model { border: 1px solid var(--rule); border-radius: 6px; padding: 20px 20px 18px; display: grid; gap: 12px; align-content: start; background: var(--ground); }
+  .model.new { background: var(--surface); border-color: color-mix(in srgb, var(--accent-soft) 45%, var(--rule)); }
+  .model .tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .model.new .tag { color: var(--accent); }
+  .model h3 { font-family: var(--serif); font-weight: 400; font-size: 21px; line-height: 1.2; }
+  .model .for { font-size: 14px; color: var(--ink-2); }
+  .model ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14.5px; line-height: 1.5; }
+  .model ol li::marker { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .model .measures { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 10px; }
+  .btn-sample { justify-self: start; font-family: var(--sans); font-size: 13.5px; font-weight: 600; color: #1B1812; background: var(--accent-soft); border-radius: 4px; padding: 7px 12px; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; line-height: 1.45; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); }
+  th { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; padding-right: 0; white-space: nowrap; }
+  th.num { text-align: right; padding-right: 0; }
+  td.who { white-space: nowrap; color: var(--ink-2); }
+  .pill { display: inline-block; font-family: var(--mono); font-size: 11.5px; line-height: 1.6; padding: 0 7px; border-radius: 999px; border: 1px solid var(--rule); white-space: nowrap; }
+  .pill.m1 { color: var(--responds); border-color: color-mix(in srgb, var(--responds) 40%, var(--rule)); }
+  .pill.m2 { color: var(--accent); border-color: color-mix(in srgb, var(--accent-soft) 55%, var(--rule)); }
+  .pill.none { color: var(--muted); }
+
+  /* ciclo da reserva direta */
+  .cycle { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+  .cycle > li { display: grid; grid-template-columns: 172px minmax(0, 1fr); gap: 6px 20px; padding-block: 14px; border-bottom: 1px solid var(--rule); position: relative; }
+  .cycle > li:first-child { border-top: 1px solid var(--rule); }
+  .state { justify-self: start; align-self: start; font-family: var(--mono); font-size: 12px; line-height: 1.7; padding: 1px 9px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent-soft) 55%, var(--rule)); color: var(--accent); white-space: nowrap; }
+  .state.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, var(--rule)); }
+  .state.alt { color: var(--silent); border-color: color-mix(in srgb, var(--silent) 45%, var(--rule)); }
+  .cycle p { font-size: 14.5px; color: var(--ink-2); }
+  .cycle .branch { grid-column: 2; font-size: 13.5px; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 12px; }
+
+  .bubble-wrap { display: grid; gap: 8px; }
+  .bubble { justify-self: start; max-width: 460px; background: var(--bubble); color: var(--bubble-ink); border-radius: 12px 12px 12px 3px; padding: 10px 13px; font-size: 14.5px; line-height: 1.5; }
+  .bubble .ref { font-family: var(--mono); font-size: 12.5px; }
+  .bubble-cap { font-size: 12.5px; color: var(--muted); }
+
+  .rules { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; }
+  .rules li { display: grid; gap: 3px; font-size: 14.5px; color: var(--ink-2); align-content: start; }
+  .rules b { color: var(--ink); font-weight: 600; font-size: 14.5px; }
+
+  .risks { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+  .risks li { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 4px 24px; padding-block: 12px; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+  .risks .r { color: var(--ink); font-weight: 500; }
+  .risks .a { color: var(--ink-2); }
+
+  .decisions { background: var(--surface); border-radius: 6px; padding: 22px 22px 20px; display: grid; gap: 12px; }
+  .decisions ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .decisions li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; font-size: 15px; }
+  .decisions li::before { content: ""; width: 14px; height: 14px; margin-top: 4px; border: 1.5px solid var(--accent); border-radius: 3px; }
+
+  footer.sources { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12.5px; line-height: 1.6; color: var(--muted); display: grid; gap: 6px; }
+
+  @media (max-width: 640px) {
+    dl.facts { grid-template-columns: 1fr; }
+    .replies li, .cycle > li, .risks li { grid-template-columns: 1fr; }
+    .replies .ctx, .cycle .branch { grid-column: 1; }
+    .models, .rules { grid-template-columns: 1fr; }
+    header.doc { padding-block: 32px 22px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .seg { transition: opacity 120ms ease; }
+    .bar:hover .seg:not(:hover) { opacity: 0.55; }
+  }
+</style>
+
+<div class="page">
+  <header class="doc">
+    <p class="eyebrow">Proposta · Conversão de estabelecimentos</p>
+    <h1>Reserva direta rastreada</h1>
+    <p class="lede">Nas casas que não respondem pelo nosso canal, oferecer ao cliente o botão “Reserve direto com o estabelecimento”, que leva ao meio de reserva da própria casa. A reserva é registrada e acompanhada por nós do começo ao fim, e a recusa ao nosso canal vira o motivo para a casa se aproximar.</p>
+    <ul class="meta">
+      <li>The World Keys</li>
+      <li>14 set 2026</li>
+      <li class="status">Aguarda decisão do fundador</li>
+      <li>trc-reserva-direta-20260914</li>
+    </ul>
+  </header>
+
+  <section aria-labelledby="s-problema">
+    <p class="eyebrow" id="s-problema">O problema</p>
+    <p class="thesis">Em seis meses, <em>61% dos pedidos</em> foram para restaurantes que nunca responderam a nenhum.</p>
+
+    <figure class="split" aria-label="2.091 pedidos em 180 dias: 1.276 em casas que nunca responderam, 815 em casas que respondem">
+      <div class="split-caption">2.091 pedidos de mesa · casas publicadas · últimos 180 dias</div>
+      <div class="bar" id="bar">
+        <div class="seg silent" tabindex="0" data-tip="Casas que nunca responderam: 1.276 pedidos (61%)"></div>
+        <div class="seg responds" tabindex="0" data-tip="Casas que respondem: 815 pedidos (39%), 195 aceitos"></div>
+      </div>
+      <ul class="legend">
+        <li><span class="swatch silent" aria-hidden="true"></span>Casas que nunca responderam <b>1.276</b></li>
+        <li><span class="swatch responds" aria-hidden="true"></span>Casas que respondem <b>815</b></li>
+      </ul>
+    </figure>
+
+    <dl class="facts">
+      <div><dt>311 de 365</dt><dd>casas que receberam pedidos e nunca aceitaram nem recusaram nenhum</dd></div>
+      <div><dt>1.072</dt><dd>pedidos nessas casas que expiraram sem resposta; cada um é um cliente sem mesa</dd></div>
+      <div><dt>148</dt><dd>casas contatadas pela campanha de agosto, com retorno ainda muito lento</dd></div>
+    </dl>
+    <p class="note">Onde a casa participa, o modelo atual funciona: as 54 casas que respondem aceitaram 195 pedidos no mesmo período. O problema não é o pedido pela plataforma. São as 311 casas que não entram nele.</p>
+  </section>
+
+  <section aria-labelledby="s-casas">
+    <p class="eyebrow" id="s-casas">O que as casas nos disseram</p>
+    <h2>Elas não recusam clientes. Recusam o canal.</h2>
+    <ul class="replies">
+      <li>
+        <div class="from"><b>AI MERCANTI</b>Veneza · 17 dez 2024</div>
+        <blockquote>“The only way to book in our restaurant is by following this link”</blockquote>
+        <p class="ctx">O link leva ao sistema de reservas deles, na prenota-web.</p>
+      </li>
+      <li>
+        <div class="from"><b>AROMA</b>Roma · 06 out 2025</div>
+        <blockquote>“We take reservations exclusively through our website.”</blockquote>
+        <p class="ctx">A mesma resposta chegou três vezes. Em 180 dias a casa recebeu 35 pedidos e respondeu a nenhum pela plataforma.</p>
+      </li>
+      <li>
+        <div class="from"><b>GIGI</b>Paris · 2025</div>
+        <blockquote>“Pour toutes demandes de réservations, nous vous invitons à nous contacter par téléphone”</blockquote>
+        <p class="ctx">A casa reserva por telefone. Foram 10 pedidos nossos em 180 dias.</p>
+      </li>
+      <li>
+        <div class="from"><b>BIRDLAND</b>Nova York · 18 abr 2025</div>
+        <blockquote>“We do not accept reservations through third parties.”</blockquote>
+        <p class="ctx">Insistimos no nosso canal e a resposta seguinte foi “We are not interested.”</p>
+      </li>
+      <li>
+        <div class="from"><b>BEYTI</b>Istambul · 24 mar 2025</div>
+        <blockquote>“I created the reservation”</blockquote>
+        <p class="ctx">A casa lançou o nosso cliente no sistema dela. É a reserva direta feita à mão.</p>
+      </li>
+    </ul>
+    <p class="note">Respostas no mesmo sentido também vieram de SHELLONA (SevenRooms, seis vezes), LE PLONGEOIR (Nice), LES OMBRES e LE JULES VERNE (Paris), LASAI (Rio de Janeiro), JUNGSIK (Seul), MOON (Amsterdã), AL COVO (Veneza) e EAT SIGHT STORY DECK (Bangkok, pelo LINE).</p>
+  </section>
+
+  <section aria-labelledby="s-modelos">
+    <p class="eyebrow" id="s-modelos">A proposta</p>
+    <h2>Dois modelos de reserva e uma regra que escolhe entre eles</h2>
+    <div class="models">
+      <article class="model">
+        <span class="tag">Modelo 1 · como é hoje</span>
+        <h3>Pedido pela The World Keys</h3>
+        <p class="for">Para casas que respondem, ou que já têm conta.</p>
+        <ol>
+          <li>O cliente pede a mesa na página do restaurante.</li>
+          <li>A casa aceita ou recusa pelo e-mail ou pela conta.</li>
+          <li>Nós confirmamos e acompanhamos o cliente até a visita.</li>
+        </ol>
+        <p class="measures">Medimos aceite, recusa e tempo de resposta.</p>
+      </article>
+      <article class="model new">
+        <span class="tag">Modelo 2 · novo</span>
+        <h3>Reserva direta com o estabelecimento</h3>
+        <p class="for">Para casas que pediram, ou que nunca respondem, e que têm um meio de reserva verificado.</p>
+        <span class="btn-sample" aria-hidden="true">Reserve direto com o estabelecimento</span>
+        <ol>
+          <li>O cliente escolhe data, horário e pessoas e toca no botão. A reserva ganha um código The World Keys antes de sair da página.</li>
+          <li>Abre o meio de reserva da casa já preenchido: o WhatsApp com mensagem pronta, a página de reservas do site ou a ligação.</li>
+          <li>Acompanhamos até a mesa: perguntamos se a casa confirmou, e o lembrete, a pré-visita e a avaliação seguem conosco.</li>
+        </ol>
+        <p class="measures">Medimos cada reserva direta pelo código: encaminhada, confirmada, concluída.</p>
+      </article>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Situação da casa</th><th>Modelo</th></tr></thead>
+        <tbody>
+          <tr><td>Responde pedidos (4 ou mais em 90 dias, pelo menos metade aceita) ou tem conta</td><td><span class="pill m1">Modelo 1</span></td></tr>
+          <tr><td>Pediu para reservarmos pelo meio dela, com esse meio verificado</td><td><span class="pill m2">Modelo 2</span></td></tr>
+          <tr><td>Nunca respondeu (4 ou mais pedidos em 90 dias, nenhuma resposta), com meio de reserva verificado</td><td><span class="pill m2">Modelo 2</span></td></tr>
+          <tr><td>Nunca respondeu e ainda não tem meio de reserva verificado</td><td><span class="pill m1">Modelo 1</span> com cobrança do Guardião</td></tr>
+          <tr><td>Passou a responder ou ativou a conta</td><td><span class="pill m1">Modelo 1</span>, se quiser</td></tr>
+          <tr><td>Pediu remoção</td><td><span class="pill none">Nenhum</span> página fora do ar</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">A regra é reavaliada toda semana com o mesmo critério que o Guardião da Reserva já usa para saber quem confirma. Quem decide é a regra, não a preferência do momento.</p>
+  </section>
+
+  <section aria-labelledby="s-canais">
+    <p class="eyebrow" id="s-canais">Os meios de reserva</p>
+    <h2>O botão leva ao meio que a própria casa usa</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Meio da casa</th><th>O que o botão abre</th><th>O que vai junto</th><th>Casas que já pediram</th></tr></thead>
+        <tbody>
+          <tr><td>Sistema de reservas ou site</td><td>A página de reservas, já na data e no número de pessoas quando o sistema permite</td><td>Origem The World Keys no link. O site do LES OMBRES já usa <code>ot_source</code> na OpenTable.</td><td>AI MERCANTI, LES OMBRES, SHELLONA, LE PLONGEOIR</td></tr>
+          <tr><td>WhatsApp ou LINE</td><td>A conversa com a casa, com a mensagem pronta no idioma dela</td><td>Nome, data, horário, pessoas e o código da reserva</td><td>EAT SIGHT STORY DECK (LINE)</td></tr>
+          <tr><td>Telefone</td><td>A ligação para a casa</td><td>O código na tela, para o cliente citar</td><td>GIGI</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bubble-wrap">
+      <div class="bubble">Buonasera, vorrei prenotare un tavolo tramite The World Keys: 2 persone, mercoledì 7 ottobre, ore 20:00, a nome Laurent. <span class="ref">Rif. TWK-7K2P9Q</span></div>
+      <p class="bubble-cap">Exemplo de mensagem pronta para uma casa em Veneza. É o próprio cliente quem envia, do celular dele.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-ciclo">
+    <p class="eyebrow" id="s-ciclo">Acompanhamento profissional</p>
+    <h2>O ciclo de uma reserva direta</h2>
+    <ol class="cycle">
+      <li>
+        <span class="state">Encaminhada</span>
+        <p>O cliente escolheu data, horário e pessoas e tocou no botão. A reserva é registrada com código e com o meio usado, e o meio da casa abre preenchido.</p>
+      </li>
+      <li>
+        <span class="state">Com o estabelecimento</span>
+        <p>A conversa acontece entre o cliente e a casa. A reserva não entra na fila de pedidos pendentes: o Guardião não cobra a casa e a Aria sabe que a confirmação vem do restaurante.</p>
+      </li>
+      <li>
+        <span class="state ok">Confirmada</span>
+        <p>O cliente confirma em um toque no e-mail de acompanhamento, ou a casa confirma na conta. Daqui em diante é uma reserva como qualquer outra, com lembrete e pré-visita.</p>
+        <p class="branch"><span class="state alt">Não conseguiu</span> Se o cliente diz que não conseguiu a mesa, oferecemos na hora casas da mesma cidade que confirmam pedidos.</p>
+      </li>
+      <li>
+        <span class="state ok">Concluída</span>
+        <p>Depois da data, perguntamos se o cliente foi e pedimos a avaliação. É esse número que mostramos à casa.</p>
+      </li>
+    </ol>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sinal</th><th>O que prova</th><th>O que dispara</th></tr></thead>
+        <tbody>
+          <tr><td>A casa confirma na conta</td><td>A mesa existe</td><td>Conta como reserva confirmada e entra no extrato da casa</td></tr>
+          <tr><td>O cliente confirma no e-mail</td><td>O cliente tem mesa</td><td>Lembrete e pré-visita</td></tr>
+          <tr><td>O cliente avalia depois da data</td><td>A visita aconteceu</td><td>Prova para a casa e para o catálogo</td></tr>
+          <tr><td>Só o toque no botão</td><td>Intenção</td><td>Mede interesse; sozinho, não vira reserva</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="rules">
+      <li><b>Nenhum dado sai por nós.</b>É o próprio cliente quem envia a mensagem ou faz a ligação. Nada de dados pessoais repassados à casa.</li>
+      <li><b>Sem custo de mensagem.</b>A conversa de WhatsApp é aberta pelo cliente no celular dele. O acompanhamento é por e-mail.</li>
+      <li><b>Meio verificado toda semana.</b>Link quebrado ou número que não atende volta a casa ao Modelo 1, com alerta.</li>
+      <li><b>Nenhuma promessa de mesa.</b>O botão diz que a confirmação vem do restaurante. Nada de “disponível” nem “imediato”.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-conversao">
+    <p class="eyebrow" id="s-conversao">Conversão de estabelecimentos</p>
+    <h2>Por que isso abre a conversa com as casas</h2>
+    <p>Hoje o argumento é “respondam aos nossos pedidos”, e o retorno das 148 casas contatadas em agosto está muito lento. Com a reserva direta, o argumento passa a ser <strong>“fizemos o que vocês pediram: a nossa plataforma leva os clientes ao seu sistema”</strong>. Isso tira a objeção antes de pedir qualquer coisa.</p>
+    <p>Todo mês, cada casa recebe o extrato das reservas diretas: quantos clientes chegaram ao WhatsApp, ao site ou ao telefone dela pela The World Keys, e quantos foram. A conta de gerenciamento deixa de ser mais uma caixa para responder e passa a ser o lugar onde a casa confirma essas reservas e controla o próprio meio de reserva, os horários e os fechamentos.</p>
+    <p>No Programa Fundadores 50, isso vira um segmento novo, <strong>F · Traga o seu sistema</strong>, ao lado dos Extratos das casas que respondem. Nada muda para as 54 casas que já participam.</p>
+  </section>
+
+  <section aria-labelledby="s-produto">
+    <p class="eyebrow" id="s-produto">O que precisa ser feito</p>
+    <h2>O que muda, e quem faz</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Entrega</th><th>Quem</th></tr></thead>
+        <tbody>
+          <tr><td>Botão “Reserve direto com o estabelecimento” na página, usando o mesmo seletor de data, horário e pessoas</td><td class="who">Desenvolvedor</td></tr>
+          <tr><td>Meio de reserva de cada casa no catálogo: tipo (site, WhatsApp, LINE, telefone) e destino. O campo <code>booking_url</code> já existe; falta o tipo.</td><td class="who">Desenvolvedor</td></tr>
+          <tr><td>Registro da reserva direta com código e status próprio antes de abrir o meio da casa, fora da fila de pendentes</td><td class="who">Desenvolvedor</td></tr>
+          <tr><td>Link rastreado que só leva ao destino gravado da própria casa, sem redirecionamento aberto</td><td class="who">Desenvolvedor</td></tr>
+          <tr><td>Mensagens prontas nos idiomas das casas e e-mails de acompanhamento ao cliente</td><td class="who">MAESTRO</td></tr>
+          <tr><td>Verificação semanal dos meios, extrato mensal às casas e números no Despacho diário</td><td class="who">MAESTRO</td></tr>
+          <tr><td>Destino do link dos e-mails às casas corrigido para a tela de cadastro. Hoje ele abre a tela de login.</td><td class="who">Desenvolvedor</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-piloto">
+    <p class="eyebrow" id="s-piloto">Piloto de 30 dias</p>
+    <h2>Começar pelas casas que já pediram</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Casa</th><th>Cidade</th><th>Meio de reserva</th><th class="num">Pedidos 180 d</th></tr></thead>
+        <tbody>
+          <tr><td>BUCA MARIO</td><td>Florença</td><td>site próprio</td><td class="num">21</td></tr>
+          <tr><td>GIGI</td><td>Paris</td><td>telefone</td><td class="num">10</td></tr>
+          <tr><td>LE PLONGEOIR</td><td>Nice</td><td>site próprio</td><td class="num">8</td></tr>
+          <tr><td>AI MERCANTI</td><td>Veneza</td><td>prenota-web</td><td class="num">3</td></tr>
+          <tr><td>JUNGSIK</td><td>Seul</td><td>site próprio</td><td class="num">3</td></tr>
+          <tr><td>LES OMBRES</td><td>Paris</td><td>OpenTable</td><td class="num">2</td></tr>
+          <tr><td>SHELLONA</td><td>Saint-Tropez</td><td>SevenRooms</td><td class="num">1</td></tr>
+          <tr><td>AL COVO</td><td>Veneza</td><td>site próprio</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Os meios foram verificados em 14/09, nos sites das casas e, no caso da GIGI, na resposta dela. A AROMA (Roma, 35 pedidos) entra assim que o meio de reserva dela for confirmado. Na segunda semana o piloto se amplia às <strong>26 casas mudas com 10 ou mais pedidos</strong>, que concentram 675 pedidos, 53% dos que ficaram sem resposta. O meio de cada uma (site, WhatsApp ou telefone) é verificado à mão.</p>
+    <p><strong>O que medimos:</strong> reservas encaminhadas, confirmadas e concluídas; mensagens “sem resposta” à Aria sobre essas casas; respostas das casas e contas abertas. <strong>Critério de encerramento:</strong> se em 30 dias nenhuma reserva direta for confirmada, o botão sai e tudo volta ao Modelo 1.</p>
+  </section>
+
+  <section aria-labelledby="s-riscos">
+    <p class="eyebrow" id="s-riscos">Riscos</p>
+    <h2>O que pode dar errado e como respondemos</h2>
+    <ul class="risks">
+      <li><span class="r">O cliente sai da plataforma e não volta.</span><span class="a">A reserva é registrada antes de ele sair, e o e-mail de acompanhamento retoma o contato pelo código.</span></li>
+      <li><span class="r">A casa estranha a mensagem pronta.</span><span class="a">Curta, no idioma da casa, sem link, e diz de onde o cliente vem.</span></li>
+      <li><span class="r">Casas que respondem podem preferir o botão.</span><span class="a">O Modelo 2 não é oferecido a quem responde. A regra decide.</span></li>
+      <li><span class="r">Reserva direta não gera receita sem acordo com a casa.</span><span class="a">O piloto é gratuito e mede primeiro. A política de cobrança é decisão do fundador, com números na mão.</span></li>
+      <li><span class="r">O meio da casa muda.</span><span class="a">Verificação semanal. Meio que falha volta a casa ao Modelo 1, com alerta.</span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-decisoes">
+    <div class="decisions">
+      <p class="eyebrow" id="s-decisoes">Decisões pedidas</p>
+      <ul>
+        <li><span>Aprovar o piloto de 30 dias com as 8 casas acima, mais a AROMA quando o meio dela for confirmado.</span></li>
+        <li><span>Definir que a reserva direta fica sem cobrança durante o piloto.</span></li>
+        <li><span>Priorizar no desenvolvimento o botão, o meio de reserva por casa, o registro com status próprio e o link rastreado.</span></li>
+        <li><span>Autorizar a gravação dos meios de reserva no catálogo, em um lote, pelo caminho auditado de escrita no banco.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="sources">
+    <span><strong>Fontes.</strong> Banco da plataforma, consulta de 14/09/2026, casas publicadas, pedidos criados nos últimos 180 dias. “Nunca respondeu” significa nenhum pedido aceito ou recusado pela casa no período; cancelamentos feitos pelo cliente não contam como resposta.</span>
+    <span>Respostas das casas: caixa reservation@theworldkeys.com, com a data de cada mensagem. Meios de reserva verificados nos sites das casas em 14/09/2026. Campanha de agosto: registro de envios da campanha. A mensagem pronta mostrada é um exemplo, com nome e código fictícios.</span>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var bar = document.getElementById('bar');
+    if (!bar) return;
+    var tip = null;
+    function show(seg) {
+      hide();
+      tip = document.createElement('div');
+      tip.className = 'tip';
+      tip.setAttribute('role', 'status');
+      tip.textContent = seg.getAttribute('data-tip');
+      bar.appendChild(tip);
+      var left = seg.offsetLeft + seg.offsetWidth / 2, w = tip.offsetWidth, max = bar.offsetWidth;
+      tip.style.left = Math.min(Math.max(left, w / 2), max - w / 2) + 'px';
+    }
+    function hide() { if (tip) { tip.remove(); tip = null; } }
+    bar.querySelectorAll('.seg').forEach(function (seg) {
+      seg.addEventListener('mouseenter', function () { show(seg); });
+      seg.addEventListener('focus', function () { show(seg); });
+      seg.addEventListener('mouseleave', hide);
+      seg.addEventListener('blur', hide);
+    });
+  })();
+</script>

@@ -1,0 +1,71 @@
+<!--
+  Substitui o campo "message" do nó "Send a message" do workflow n8n "envia code para restaurante existente (site novo)" (id k5bNbCQSzGd1u3ZK).
+  Assunto sugerido (campo subject): =Your access code for {{ $json.body.restaurantName }} · The World Keys
+  Expressões n8n preservadas: {{ $json.body.restaurantName }} · {{ $json.body.code }}
+  O payload não traz idioma; por isso EN principal + uma linha em PT/FR/ES/IT. Padrão visual = fluxos 1 e 3 (fundo #0B0A08, dourado #CE9E3C).
+  Correção do vazamento de marca: nenhuma menção à marca antiga (a que não é TWK). APLICADO no n8n pelo fundador em 2026-09-03 20:18 UTC.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Your access code · The World Keys</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0B0A08;">
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">Your code to take over the {{ $json.body.restaurantName }} page on The World Keys.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0B0A08; border-collapse:collapse;">
+    <tr><td align="center" style="padding:12px 6px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;">
+        <tr><td align="center" style="padding:36px 20px 0 20px;">
+          <a href="https://theworldkeys.com/" target="_blank" style="text-decoration:none;">
+            <img src="https://theworldkeys.com/images/twk-logo.gif" width="56" alt="" style="display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0;" border="0" />
+            <img src="https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png" width="220" alt="THE WORLD KEYS" style="display:block; margin:0 auto; width:220px; height:auto; border:0;" border="0" />
+          </a>
+          <div style="font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;">PARIS</div>
+        </td></tr>
+        <tr><td align="center" style="padding:20px 20px 0 20px;"><table role="presentation" width="48" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:1px solid #CE9E3C; font-size:0; line-height:0;">&nbsp;</td></tr></table></td></tr>
+        <tr><td align="center" style="padding:24px 20px 8px 20px;">
+          <h1 style="margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:26px; line-height:1.3; color:#F5EFE3;">Your key to {{ $json.body.restaurantName }}</h1>
+        </td></tr>
+        <tr><td align="center" style="padding:0 24px;">
+          <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.6; color:#B5AB93;">Someone at your restaurant asked to take over the <span style="color:#E6C87A;">{{ $json.body.restaurantName }}</span> page on The World Keys. Enter this code in the registration form to finish. It is free, and it puts your reservations, hours and page details in your hands.</p>
+        </td></tr>
+        <tr><td style="padding:28px 16px 0 16px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1A1611; border:1px solid #2B2415; border-radius:12px; border-collapse:separate;">
+            <tr><td align="center" style="padding:22px 20px;">
+              <div style="font-family:Arial,Helvetica,sans-serif; font-size:11px; letter-spacing:2px; color:#8F8368; padding-bottom:8px;">YOUR CODE</div>
+              <div style="font-family:'Courier New',Courier,monospace; font-size:34px; letter-spacing:8px; color:#F5EFE3;">{{ $json.body.code }}</div>
+            </td></tr>
+          </table>
+        </td></tr>
+        <tr><td align="center" style="padding:24px 20px 8px 20px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color:#CE9E3C;">
+            <a href="https://manager.theworldkeys.com/register" target="_blank" style="display:inline-block; padding:14px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:600; color:#12100C; text-decoration:none;">Back to the registration form</a>
+          </td></tr></table>
+        </td></tr>
+        <tr><td align="center" style="padding:16px 24px 0 24px;">
+          <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.8; color:#8F8368;">
+            PT · Este código conclui a ativação da conta profissional gratuita da sua casa na The World Keys.<br/>
+            FR · Ce code finalise l'activation du compte professionnel gratuit de votre maison sur The World Keys.<br/>
+            ES · Este código completa la activación de la cuenta profesional gratuita de su casa en The World Keys.<br/>
+            IT · Questo codice completa l'attivazione dell'account professionale gratuito del vostro locale su The World Keys.
+          </p>
+        </td></tr>
+        <tr><td align="center" style="padding:20px 24px 28px 24px;">
+          <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.7; color:#8F8368;">If you did not request this, you can ignore this email — nothing changes on your page. Questions? <a href="mailto:reservation@theworldkeys.com" style="color:#E6C87A; text-decoration:none;">reservation@theworldkeys.com</a></p>
+        </td></tr>
+        <tr><td align="center" style="padding:20px 20px 28px 20px; border-top:1px solid #26200F;">
+          <p style="margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;">THE WORLD KEYS</p>
+          <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;">
+            <a href="https://theworldkeys.com/terms-of-use/" style="color:#8F8368; text-decoration:none;">Terms &amp; Conditions</a> &nbsp;&#183;&nbsp; <a href="mailto:support@theworldkeys.com" style="color:#8F8368; text-decoration:none;">support@theworldkeys.com</a><br/>
+            66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>
+            VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>

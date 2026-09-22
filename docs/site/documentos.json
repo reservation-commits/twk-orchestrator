@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "plano-reserva-direta",
+    "fonte": "docs/agentes/plano-reserva-direta.html",
+    "titulo": "Plano Reserva Direta",
+    "titulo_fr": "Plan Réservation Directe",
+    "descricao": "O plano em vigor, do começo ao fim, com exemplos: o botão, o número da reserva, quem recebe, o piloto de 30 dias e as decisões.",
+    "descricao_fr": "Le plan en vigueur, du début à la fin, avec des exemples : le bouton, le numéro de réservation, qui le reçoit, le pilote de 30 jours et les décisions.",
+    "data": "2026-09-14",
+    "estado": "vigente",
+    "grupo": "Planos"
+  },
+  {
+    "slug": "conciergerie-plano-60-dias",
+    "fonte": "docs/agentes/conciergerie-plano-60-dias.html",
+    "titulo": "Conciergerie · Plano de 60 dias",
+    "titulo_fr": "Conciergerie · Plan de 60 jours",
+    "descricao": "Plano de lançamento da Conciergerie World Keys em Paris e na Côte d'Azur: barcos, helicóptero, carros, motoristas e experiências, com painel executivo, cronograma semanal e checklist. Bilíngue, com seletor PT/FR na própria página.",
+    "descricao_fr": "Plan de lancement de la Conciergerie World Keys à Paris et sur la Côte d'Azur : bateaux, hélicoptère, voitures, chauffeurs et expériences, avec tableau de bord, calendrier hebdomadaire et checklist. Bilingue, sélecteur PT/FR intégré.",
+    "data": "2026-09-14",
+    "estado": "vigente",
+    "grupo": "Planos",
+    "bilingue": true
+  },
+  {
+    "slug": "dossie-reserva-direta",
+    "fonte": "docs/agentes/dossie-reserva-direta.html",
+    "titulo": "Dossiê Reserva Direta",
+    "titulo_fr": "Dossier Réservation Directe",
+    "descricao": "A análise por trás do plano: o que Google, OpenTable, Resy, SevenRooms, TheFork e Tabelog fazem, as dez otimizações e o que não copiar.",
+    "descricao_fr": "L’analyse derrière le plan : ce que font Google, OpenTable, Resy, SevenRooms, TheFork et Tabelog, les dix optimisations et ce qu’il ne faut pas copier.",
+    "data": "2026-09-14",
+    "estado": "análise",
+    "grupo": "Análises"
+  },
+  {
+    "slug": "reserva-direta-rastreada",
+    "fonte": "docs/agentes/reserva-direta-rastreada.html",
+    "titulo": "Reserva Direta Rastreada",
+    "titulo_fr": "Réservation Directe Suivie",
+    "descricao": "A proposta inicial, com os números do problema e as respostas dos restaurantes. Superada pela versão final do plano.",
+    "descricao_fr": "La proposition initiale, avec les chiffres du problème et les réponses des restaurants. Remplacée par la version finale du plan.",
+    "data": "2026-09-14",
+    "estado": "superado",
+    "grupo": "Histórico"
+  },
+  {
+    "slug": "chave-girada",
+    "fonte": "docs/agentes/resumo-ceo-cards.html",
+    "titulo": "Chave Girada",
+    "titulo_fr": "Chave Girada",
+    "descricao": "Resumo executivo da campanha de ativação das contas de restaurante.",
+    "descricao_fr": "Résumé exécutif de la campagne d’activation des comptes restaurant.",
+    "data": "2026-09-05",
+    "estado": "referência",
+    "grupo": "Histórico"
+  }
+]

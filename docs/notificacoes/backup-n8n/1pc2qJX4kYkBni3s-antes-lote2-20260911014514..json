@@ -1,0 +1,242 @@
+{
+ "updatedAt": "2026-09-11T01:43:59.173Z",
+ "createdAt": "2025-12-23T14:00:49.880Z",
+ "id": "1pc2qJX4kYkBni3s",
+ "name": "envia email resetar senha",
+ "description": null,
+ "active": true,
+ "isArchived": false,
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "reset-password",
+    "options": {}
+   },
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    -112,
+    0
+   ],
+   "id": "58c54633-148e-4353-b444-1472ef28e1e5",
+   "name": "Webhook",
+   "webhookId": "1e7781b0-73c6-4294-9c4b-7321e64889d5"
+  },
+  {
+   "parameters": {
+    "sendTo": "={{ $json.body.email }}",
+    "subject": "Reset Your Password — The World Keys",
+    "message": "=<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /><meta name=\"color-scheme\" content=\"dark\" /><title>Reset your password.</title></head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">Use the link below to choose a new password for your The World Keys account.</div>\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr><td align=\"center\" style=\"padding:12px 6px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n        <tr><td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n          <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n            <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0;\" border=\"0\" />\n            <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0;\" border=\"0\" />\n          </a>\n          <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n        </td></tr>\n        <tr><td align=\"center\" style=\"padding:20px 20px 0 20px;\"><table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td></tr></table></td></tr>\n        <tr><td align=\"center\" style=\"padding:26px 24px 8px 24px;\">\n          <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:24px; line-height:1.35; color:#F5EFE3;\">Reset your password.</h1>\n        </td></tr>        <tr><td style=\"padding:8px 28px 0 28px;\"><p style=\"margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.65; color:#B5AB93;\">Dear {{ $json.body.name }}, we received a request to reset the password of your The World Keys account. Choose a new one with the button below.</p></td></tr>        <tr><td align=\"center\" style=\"padding:22px 20px 6px 20px;\">\n          <table role=\"presentation\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0 auto;\"><tr><td align=\"center\" valign=\"middle\" style=\"background-color:#CE9E3C; border-radius:4px; text-align:center;\">\n            <a href=\"{{ $json.body.resetUrl.replace(/=([0-9A-Fa-f]{2})/g, '=3D$1') }}\" target=\"_blank\" style=\"display:inline-block; padding:15px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center;\">Choose a new password</a>\n          </td></tr></table>\n        </td></tr>        <tr><td style=\"padding:6px 28px 0 28px;\">\n          <p style=\"margin:0 0 8px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">If the button does not work, copy this address into your browser:</p>\n          <p style=\"margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#CE9E3C; word-break:break-all;\"><a href=\"{{ $json.body.resetUrl.replace(/=([0-9A-Fa-f]{2})/g, '=3D$1') }}\" target=\"_blank\" style=\"color:#CE9E3C; text-decoration:underline; word-break:break-all;\">{{ $json.body.resetUrl.replace(/=([0-9A-Fa-f]{2})/g, '=3D$1') }}</a></p>\n        </td></tr>        <tr><td style=\"padding:8px 28px 0 28px;\"><p style=\"margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#8F8368;\">This link is valid for <span style=\"color:#F5EFE3;\">1 hour</span>. If you did not ask for a new password, you can safely ignore this e-mail — your current password stays unchanged.</p></td></tr>        <tr><td align=\"center\" style=\"padding:18px 20px 0 20px;\">\n          <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p>\n        </td></tr>\n        <tr><td align=\"center\" style=\"padding:22px 20px 0 20px;\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"border-top:1px solid #26200F; font-size:0; line-height:0;\">&nbsp;</td></tr></table></td></tr>\n        <tr><td align=\"center\" style=\"padding:16px 24px 28px 24px;\">\n          <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n          <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n            <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a> &nbsp;&#183;&nbsp; <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n            66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n            VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n          </p>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.2,
+   "position": [
+    128,
+    -16
+   ],
+   "id": "0e2bef7a-9833-4938-9739-6349c5556669",
+   "name": "Send a message",
+   "webhookId": "9c452ee7-8f52-46af-a520-b04005c192bc",
+   "credentials": {
+    "gmailOAuth2": {
+     "id": "hkcgjRyX7AH55iMJ",
+     "name": "Gmail account"
+    }
+   }
+  }
+ ],
+ "connections": {
+  "Webhook": {
+   "main": [
+    [
+     {
+      "node": "Send a message",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "availableInMCP": true,
+  "callerPolicy": "workflowsFromSameOwner"
+ },
+ "staticData": null,
+ "meta": {
+  "templateCredsSetupCompleted": true
+ },
+ "pinData": {
+  "Webhook": [
+   {
+    "json": {
+     "headers": {
+      "host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "user-agent": "node",
+      "content-length": "184",
+      "accept": "*/*",
+      "accept-encoding": "br, gzip, deflate",
+      "accept-language": "*",
+      "content-type": "application/json",
+      "sec-fetch-mode": "cors",
+      "x-forwarded-for": "45.70.52.112",
+      "x-forwarded-host": "theworldkeys-n8n.xis4ee.easypanel.host",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https",
+      "x-forwarded-server": "8976530a2a6d",
+      "x-real-ip": "45.70.52.112"
+     },
+     "params": {},
+     "query": {},
+     "body": {
+      "email": "lucaspeixotodacruz@gmail.com",
+      "name": "lucas peixoto",
+      "resetUrl": "http://localhost:3000/reset-password?token=7366be554943d5a3ea1c902bf566b2cc6d9f0c2f0c5339230c302cada68a9a14"
+     },
+     "webhookUrl": "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/reset-password",
+     "executionMode": "production"
+    }
+   }
+  ]
+ },
+ "versionId": "139d8cbf-1565-4f24-b9e3-2c60314511de",
+ "activeVersionId": "139d8cbf-1565-4f24-b9e3-2c60314511de",
+ "versionCounter": 24,
+ "triggerCount": 1,
+ "shared": [
+  {
+   "updatedAt": "2025-12-23T14:00:49.888Z",
+   "createdAt": "2025-12-23T14:00:49.888Z",
+   "role": "workflow:owner",
+   "workflowId": "1pc2qJX4kYkBni3s",
+   "projectId": "j3RBnUKpdJnI0HPr",
+   "project": {
+    "updatedAt": "2025-10-09T18:24:30.274Z",
+    "createdAt": "2025-10-09T18:21:52.771Z",
+    "id": "j3RBnUKpdJnI0HPr",
+    "name": "The World keys <thekeys.need@gmail.com>",
+    "type": "personal",
+    "icon": null,
+    "description": null,
+    "creatorId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+    "projectRelations": [
+     {
+      "updatedAt": "2025-10-09T18:21:52.771Z",
+      "createdAt": "2025-10-09T18:21:52.771Z",
+      "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+      "projectId": "j3RBnUKpdJnI0HPr",
+      "user": {
+       "updatedAt": "2026-09-10T07:00:17.000Z",
+       "createdAt": "2025-10-09T18:21:52.389Z",
+       "id": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+       "email": "thekeys.need@gmail.com",
+       "firstName": "The World",
+       "lastName": "keys",
+       "personalizationAnswers": {
+        "version": "v4",
+        "personalization_survey_submitted_at": "2025-10-09T18:24:41.538Z",
+        "personalization_survey_n8n_version": "1.103.2"
+       },
+       "settings": {
+        "userActivated": true,
+        "easyAIWorkflowOnboarded": true,
+        "firstSuccessfulWorkflowId": "iczjt9eyILmHEwU7",
+        "userActivatedAt": 1760038686025,
+        "npsSurvey": {
+         "responded": true,
+         "lastShownAt": 1785180247186
+        }
+       },
+       "disabled": false,
+       "mfaEnabled": false,
+       "lastActiveAt": "2026-09-10",
+       "isPending": false
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "tags": [],
+ "activeVersion": {
+  "updatedAt": "2026-09-11T01:43:59.174Z",
+  "createdAt": "2026-09-11T01:43:59.174Z",
+  "versionId": "139d8cbf-1565-4f24-b9e3-2c60314511de",
+  "workflowId": "1pc2qJX4kYkBni3s",
+  "nodes": [
+   {
+    "parameters": {
+     "httpMethod": "POST",
+     "path": "reset-password",
+     "options": {}
+    },
+    "type": "n8n-nodes-base.webhook",
+    "typeVersion": 2.1,
+    "position": [
+     -112,
+     0
+    ],
+    "id": "58c54633-148e-4353-b444-1472ef28e1e5",
+    "name": "Webhook",
+    "webhookId": "1e7781b0-73c6-4294-9c4b-7321e64889d5"
+   },
+   {
+    "parameters": {
+     "sendTo": "={{ $json.body.email }}",
+     "subject": "Reset Your Password — The World Keys",
+     "message": "=<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /><meta name=\"color-scheme\" content=\"dark\" /><title>Reset your password.</title></head>\n<body style=\"margin:0; padding:0; background-color:#0B0A08;\">\n  <div style=\"display:none; max-height:0; overflow:hidden; mso-hide:all;\">Use the link below to choose a new password for your The World Keys account.</div>\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background-color:#0B0A08; border-collapse:collapse;\">\n    <tr><td align=\"center\" style=\"padding:12px 6px;\">\n      <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%; max-width:600px; background-color:#12100C; border:1px solid #26200F; border-radius:16px; border-collapse:separate; overflow:hidden;\">\n        <tr><td align=\"center\" style=\"padding:36px 20px 0 20px;\">\n          <a href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\">\n            <img src=\"https://theworldkeys.com/images/twk-logo.gif\" width=\"56\" alt=\"\" style=\"display:block; margin:0 auto 14px auto; width:56px; height:auto; border:0;\" border=\"0\" />\n            <img src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" width=\"220\" alt=\"THE WORLD KEYS\" style=\"display:block; margin:0 auto; width:220px; height:auto; border:0;\" border=\"0\" />\n          </a>\n          <div style=\"font-family:Arial,Helvetica,sans-serif; font-size:10px; letter-spacing:4px; color:#8F8368; padding-top:10px;\">PARIS</div>\n        </td></tr>\n        <tr><td align=\"center\" style=\"padding:20px 20px 0 20px;\"><table role=\"presentation\" width=\"48\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"border-top:1px solid #CE9E3C; font-size:0; line-height:0;\">&nbsp;</td></tr></table></td></tr>\n        <tr><td align=\"center\" style=\"padding:26px 24px 8px 24px;\">\n          <h1 style=\"margin:0; font-family:Georgia,'Times New Roman',serif; font-weight:normal; font-size:24px; line-height:1.35; color:#F5EFE3;\">Reset your password.</h1>\n        </td></tr>        <tr><td style=\"padding:8px 28px 0 28px;\"><p style=\"margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.65; color:#B5AB93;\">Dear {{ $json.body.name }}, we received a request to reset the password of your The World Keys account. Choose a new one with the button below.</p></td></tr>        <tr><td align=\"center\" style=\"padding:22px 20px 6px 20px;\">\n          <table role=\"presentation\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0 auto;\"><tr><td align=\"center\" valign=\"middle\" style=\"background-color:#CE9E3C; border-radius:4px; text-align:center;\">\n            <a href=\"{{ $json.body.resetUrl.replace(/=([0-9A-Fa-f]{2})/g, '=3D$1') }}\" target=\"_blank\" style=\"display:inline-block; padding:15px 38px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.2; font-weight:700; color:#12100C; text-decoration:none; text-align:center;\">Choose a new password</a>\n          </td></tr></table>\n        </td></tr>        <tr><td style=\"padding:6px 28px 0 28px;\">\n          <p style=\"margin:0 0 8px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#8F8368;\">If the button does not work, copy this address into your browser:</p>\n          <p style=\"margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:1.6; color:#CE9E3C; word-break:break-all;\"><a href=\"{{ $json.body.resetUrl.replace(/=([0-9A-Fa-f]{2})/g, '=3D$1') }}\" target=\"_blank\" style=\"color:#CE9E3C; text-decoration:underline; word-break:break-all;\">{{ $json.body.resetUrl.replace(/=([0-9A-Fa-f]{2})/g, '=3D$1') }}</a></p>\n        </td></tr>        <tr><td style=\"padding:8px 28px 0 28px;\"><p style=\"margin:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:1.65; color:#8F8368;\">This link is valid for <span style=\"color:#F5EFE3;\">1 hour</span>. If you did not ask for a new password, you can safely ignore this e-mail — your current password stays unchanged.</p></td></tr>        <tr><td align=\"center\" style=\"padding:18px 20px 0 20px;\">\n          <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#8F8368;\">Need anything? <a href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"color:#E6C87A; text-decoration:none;\">Message our concierge on WhatsApp</a></p>\n        </td></tr>\n        <tr><td align=\"center\" style=\"padding:22px 20px 0 20px;\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"border-top:1px solid #26200F; font-size:0; line-height:0;\">&nbsp;</td></tr></table></td></tr>\n        <tr><td align=\"center\" style=\"padding:16px 24px 28px 24px;\">\n          <p style=\"margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; letter-spacing:3px; color:#8F8368;\">THE WORLD KEYS</p>\n          <p style=\"margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.8; color:#6E6551;\">\n            <a href=\"https://theworldkeys.com/terms-of-use/\" style=\"color:#8F8368; text-decoration:none;\">Terms &amp; Conditions</a> &nbsp;&#183;&nbsp; <a href=\"mailto:support@theworldkeys.com\" style=\"color:#8F8368; text-decoration:none;\">support@theworldkeys.com</a><br/>\n            66, Av. des Champs-&#201;lys&#233;es, 75008 Paris, France<br/>\n            VAT: FR24901268326 &#183; R.C.S Paris: 901 268 326 &#183; &#169; 2026 The World Keys\n          </p>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>",
+     "options": {
+      "appendAttribution": false
+     }
+    },
+    "type": "n8n-nodes-base.gmail",
+    "typeVersion": 2.2,
+    "position": [
+     128,
+     -16
+    ],
+    "id": "0e2bef7a-9833-4938-9739-6349c5556669",
+    "name": "Send a message",
+    "webhookId": "9c452ee7-8f52-46af-a520-b04005c192bc",
+    "credentials": {
+     "gmailOAuth2": {
+      "id": "hkcgjRyX7AH55iMJ",
+      "name": "Gmail account"
+     }
+    }
+   }
+  ],
+  "connections": {
+   "Webhook": {
+    "main": [
+     [
+      {
+       "node": "Send a message",
+       "type": "main",
+       "index": 0
+      }
+     ]
+    ]
+   }
+  },
+  "authors": "The World keys",
+  "name": null,
+  "description": null,
+  "autosaved": false,
+  "workflowPublishHistory": [
+   {
+    "createdAt": "2026-09-11T01:43:59.244Z",
+    "id": 276,
+    "workflowId": "1pc2qJX4kYkBni3s",
+    "versionId": "139d8cbf-1565-4f24-b9e3-2c60314511de",
+    "event": "activated",
+    "userId": "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+   }
+  ]
+ }
+}

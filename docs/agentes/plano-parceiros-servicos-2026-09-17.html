@@ -1,0 +1,530 @@
+<title>A Última Milha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  :root {
+    --ink:#070b10; --surface:#0f1218; --surface-2:#181c24; --border:#232838;
+    --gold:#c9a96e; --gold-strong:#e4c990;
+    --text:#ede9df; --text-strong:#f7f4ef; --muted:#9a97a8; --muted-2:#6f6d80;
+    --bleed:#c8695c; --ok:#86a985;
+    --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+    --sans:"Jost","Segoe UI",Helvetica,Arial,sans-serif;
+    color-scheme:dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink:#f4f1ea; --surface:#fbf9f4; --surface-2:#ece7db; --border:#d6cfbf;
+      --gold:#9e7c48; --gold-strong:#7d5f34;
+      --text:#1d2029; --text-strong:#0b0e14; --muted:#5f5d6e; --muted-2:#8b889a;
+      --bleed:#a8463a; --ok:#4f7a4f; color-scheme:light;
+    }
+  }
+  :root[data-theme="light"] {
+    --ink:#f4f1ea; --surface:#fbf9f4; --surface-2:#ece7db; --border:#d6cfbf;
+    --gold:#9e7c48; --gold-strong:#7d5f34;
+    --text:#1d2029; --text-strong:#0b0e14; --muted:#5f5d6e; --muted-2:#8b889a;
+    --bleed:#a8463a; --ok:#4f7a4f; color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.6;padding-block:0 4rem;padding-inline:16px}
+  .wrap{max-width:1040px;margin:0 auto}
+  header.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border)}
+  .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.02;margin:.6rem 0 1rem;color:var(--text-strong);text-wrap:balance}
+  h2{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.1;margin:0 0 .4rem;color:var(--text-strong);text-wrap:balance}
+  h3{font-family:var(--sans);font-weight:500;font-size:1.05rem;letter-spacing:.02em;margin:1.6rem 0 .5rem;color:var(--text-strong)}
+  p{max-width:70ch;margin:.5rem 0 1rem}
+  code{font-size:.88em;color:var(--gold-strong)}
+  a{color:var(--gold)}
+  .lede{font-family:var(--serif);font-size:1.35rem;line-height:1.4;max-width:64ch}
+  section{padding:2.6rem 0;border-bottom:1px solid var(--border)}
+  .part{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin:1.6rem 0}
+  .tile{background:var(--surface);padding:1.1rem 1.2rem}
+  .tile .n{font-family:var(--serif);font-size:2.4rem;line-height:1;color:var(--gold-strong);font-variant-numeric:tabular-nums}
+  .tile .l{font-size:.85rem;color:var(--text);margin-top:.35rem}
+  .tile .s{font-size:.78rem;color:var(--muted);margin-top:.25rem}
+  .tag{display:inline-block;font-size:.66rem;letter-spacing:.08em;padding:.05rem .4rem;border:1px solid var(--border);border-radius:2px;color:var(--muted);vertical-align:middle;margin-left:.3rem;font-weight:500}
+  .tag.f{color:var(--ok);border-color:var(--ok)} .tag.s{color:var(--gold);border-color:var(--gold)} .tag.l{color:var(--bleed);border-color:var(--bleed)}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;margin:1rem 0}
+  .tbl{overflow-x:auto}
+  th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--border)}
+  th{font-weight:500;color:var(--muted);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.hl td{background:var(--surface-2)}
+  .callout{border-left:2px solid var(--gold);padding:.7rem 1rem;background:var(--surface);margin:1.2rem 0;max-width:74ch}
+  .callout.warn{border-left-color:var(--bleed)}
+  .callout p{margin:.25rem 0}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem 2.2rem}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:1rem 0}
+  ol.steps>li{counter-increment:s;position:relative;padding:.85rem 0 .85rem 3.1rem;border-top:1px solid var(--border)}
+  ol.steps>li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:.9rem;font-family:var(--serif);font-size:1.6rem;color:var(--gold);line-height:1}
+  ol.steps b{font-weight:500;color:var(--text-strong)}
+  .meta{display:block;font-size:.8rem;color:var(--muted);margin-top:.25rem}
+  ul{padding-left:1.2rem} li{margin:.3rem 0}
+  details{border:1px solid var(--border);background:var(--surface);margin:.8rem 0;padding:.2rem 1rem}
+  details[open]{padding-bottom:.8rem}
+  summary{cursor:pointer;padding:.6rem 0;font-weight:500;color:var(--text-strong)}
+  summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .fr{font-family:var(--serif);font-size:1.08rem;line-height:1.55;white-space:pre-line;color:var(--text)}
+  .dim{color:var(--muted)}
+  .src{font-size:.82rem;color:var(--muted)}
+  .src a{word-break:break-all}
+  footer{padding:2rem 0;font-size:.78rem;color:var(--muted-2)}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">The World Keys · Plano · Parceiros de serviços · Paris e Côte d'Azur · 17 set 2026</div>
+  <h1>A última milha</h1>
+  <p class="lede">Fornecedor de serviço é o lado fácil. Motorista, barco, helicóptero e experiência já pagam comissão a hotéis e concierges, atendem o telefone e querem vender. O lado difícil é mandar cliente. Este plano recruta poucos parceiros, pelo telefone e em francês, com a página já montada para eles aprovarem, e prende cada parceria a uma demanda com data. Paris começa agora. A Riviera começa em 26 de outubro, quando a temporada acaba e os operadores têm tempo para conversar.</p>
+  <div class="tiles">
+    <div class="tile"><div class="n">404</div><div class="l">a página do serviço hoje</div><div class="s">quatro URLs de serviço testadas, incluindo a do cartão do Julien; nenhuma tabela de serviço no banco <span class="tag f">F</span></div></div>
+    <div class="tile"><div class="n">≈5</div><div class="l">jantares confirmados por mês em Paris</div><div class="s">62 mesas aceites em 12 meses; na Riviera, 7 no ano inteiro <span class="tag f">F</span></div></div>
+    <div class="tile"><div class="n">8–25%</div><div class="l">o que fornecedores já pagam</div><div class="s">a agências, concierges e plataformas: Monacair 8%, Marcel 15%, Click&amp;Boat 18%, Uber 25% <span class="tag f">F</span></div></div>
+    <div class="tile"><div class="n">2%</div><div class="l">resposta ao nosso e-mail frio</div><div class="s">148 restaurantes; o plano de 14/09 contava com 15% para parceiros de serviço <span class="tag f">F</span></div></div>
+  </div>
+  <p class="dim" style="font-size:.85rem"><span class="tag f">F</span> fato com origem &nbsp; <span class="tag s">S</span> suposição, a medir &nbsp; <span class="tag l">L</span> lacuna. Nenhum plano é infalível. Este troca sorte por quatro coisas que não dependem dela: a porta pronta antes do convite, o canal que funciona com dono de pequena empresa, uma estrutura jurídica que não explode e um critério de parada com data.</p>
+</header>
+
+<section>
+  <div class="part">Parte I</div>
+  <h2>Onde estamos</h2>
+  <h3>O que já existe e continua valendo</h3>
+  <ul>
+    <li><b>O plano da Conciergerie de 14/09</b> (<code>docs/agentes/conciergerie-plano-60-dias.html</code>): modelo "zéro coût, zéro risque, zéro exclusivité", grade de comissão de 10% a 15% com mínimo de 30 € HT, contrato de 18 artigos, condições de uma página para aceite por e-mail, nove respostas a objeções em francês e a otimização "vender dias, não trajetos". <span class="tag f">F</span></li>
+    <li><b>O protótipo do Private Driver e a conta profissional do motorista</b> (15/09), com o produto Soirée e o painel "você recebe". <span class="tag f">F</span></li>
+    <li><b>Um parceiro real em Paris</b>, Julien Guilloteau, chauffeur de sécurité com Tesla Model X. <span class="tag f">F</span></li>
+  </ul>
+  <h3>O que falta, verificado hoje</h3>
+  <ul>
+    <li>As quatro URLs de serviço respondem 404: <code>/driver</code> (impressa no cartão do Julien), <code>/pt/services/private-driver</code>, <code>/services</code> e <code>/fr/services</code>. <span class="tag f">F</span></li>
+    <li>Não há nenhuma tabela de parceiros, ofertas ou reservas de serviço no banco. <span class="tag f">F</span></li>
+    <li>O checkpoint de 29/09 do plano de 14/09 ("landing no ar e 4 parceiros") não é alcançável com a porta fechada. <span class="tag s">S</span></li>
+  </ul>
+
+  <h3>Três correções ao plano de 14/09</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>O plano dizia</th><th>O que os dados e a pesquisa mostram</th><th>A correção</th></tr></thead>
+    <tbody>
+      <tr><td>60 e-mails por semana, 15% de resposta, 50% de fechamento após ligação</td><td>Nosso e-mail frio a restaurantes teve 2% de resposta e zero contas. Estudo com 7,5 milhões de e-mails: 0,45% de resposta média, 0,72% em empresas de até 10 pessoas. Todas as plataformas estudadas recrutaram oferta pelo telefone, no terreno ou por indicação. <span class="tag f">F</span></td><td><b>Telefone em francês abre a conversa.</b> O e-mail vira seguimento da ligação, nunca o primeiro contato, salvo quem não publica telefone.</td></tr>
+      <tr><td>"Riviera primeiro, a temporada fecha por volta de 15/10"</td><td>Operadores de barco estão no pico até o fim de outubro. A melhor janela para fechar parceria é de fim de outubro a meados de dezembro. A segunda é de janeiro a março, quando definem distribuição e preços para abril. <span class="tag f">F</span> <span class="tag s">S</span></td><td><b>Paris agora, Riviera a partir de 26/10</b>, com assinatura para a temporada de abril de 2027.</td></tr>
+      <tr><td>"Como apporteur d'affaires não precisamos de Atout France"; frais de service de 8% ao cliente; sinal de 30%; motorista vendido pela SAS como serviço próprio</td><td>O artigo L211-1 do Código do Turismo alcança quem vende ou oferece à venda até um único serviço de viagem de terceiros, incluindo transporte, aluguel de veículo e passeios. A TWK só fica fora se o cliente contratar, pagar e receber fatura do fornecedor. <span class="tag f">F</span></td><td><b>Modo A no lançamento</b> (o cliente paga o parceiro) e <b>advogado de turismo antes da primeira reserva paga</b>. Detalhe na Parte III.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>A demanda que a plataforma consegue levar hoje</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Últimos 12 meses</th><th class="num">Paris</th><th class="num">Riviera</th></tr></thead>
+    <tbody>
+      <tr><td>Pedidos de mesa</td><td class="num">217</td><td class="num">220</td></tr>
+      <tr class="hl"><td>Mesas aceites</td><td class="num">62</td><td class="num">7</td></tr>
+      <tr><td>Clientes distintos</td><td class="num">185</td><td class="num">208</td></tr>
+      <tr><td>Pedidos para jantar, 19h ou depois</td><td class="num">173</td><td class="num">171</td></tr>
+      <tr><td>Pedidos para casas de preço alto</td><td class="num">166</td><td class="num">54</td></tr>
+    </tbody>
+  </table></div>
+  <p class="dim" style="font-size:.85rem">Banco <code>twk_auth</code> por papel somente-leitura, 17/09, dedup por cliente, data e hora, casa de teste excluída. A base tem 22.995 clientes cadastrados; 3.917 fizeram algum pedido nos últimos 12 meses. <span class="tag f">F</span></p>
+  <div class="callout warn">
+    <p><b>O que isso significa para a conversa com o parceiro.</b> Em Paris são cerca de cinco jantares confirmados por mês, quase todos em casas de preço alto. Na Riviera o fluxo de restaurantes não leva ninguém. Nenhuma promessa de volume pode ser feita a fornecedor nenhum, e cada parceria precisa nascer presa a um motor de demanda com data: o jantar confirmado em Paris, um evento, um cliente corporativo. Recrutar muitos parceiros sem cliente é a forma mais rápida de queimar a rede antes de ela existir.</p>
+  </div>
+</section>
+
+<section>
+  <div class="part">Parte II</div>
+  <h2>O que o mercado ensina</h2>
+  <p>Como plataformas de transporte premium, barco, helicóptero e experiências recrutaram exatamente este tipo de fornecedor.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Quem</th><th>Como conseguiu os primeiros parceiros</th><th>Comissão</th><th>A lição para nós</th></tr></thead>
+    <tbody>
+      <tr><td><b>Blacklane</b></td><td>Os fundadores passaram 9 meses montando Berlim à mão, com motoristas que já conheciam. Só aceita empresas licenciadas e seguradas. Onboarding remoto: candidatura, documentos, webinar.</td><td>preço líquido, sem percentagem visível</td><td>Começar pelas pessoas que já conhecemos. O Julien é o nosso ponto de partida.</td></tr>
+      <tr><td><b>Welcome Pickups</b></td><td>Só recruta motoristas onde já vende. A demanda vem de 1.500 hotéis e 800 gestores de aluguel.</td><td>percentagem, pagamento semanal</td><td>Demanda antes da oferta. Não assinar um parceiro sem saber de onde vem o primeiro cliente.</td></tr>
+      <tr><td><b>Marcel · Wheely · LeCab</b></td><td>Marcel atraiu motoristas com a comissão mais baixa do mercado. Wheely assinou frotas além de independentes para ter capacidade.</td><td>15% · 20% · 25%</td><td>Os nossos 15% estão no piso do mercado francês. Frotas dão capacidade em semana de evento.</td></tr>
+      <tr><td><b>Click&amp;Boat · SamBoat</b></td><td>Abriram aos profissionais em 2017 com anúncio grátis, calendário e "encha as suas datas livres". 60% das reservas da SamBoat chegam fora do horário comercial.</td><td>18% · 20%</td><td>O argumento para barco é preencher meia-estação e dias de semana, não julho.</td></tr>
+      <tr><td><b>Monacair · Heli Air Monaco</b></td><td>Pagam comissão de um dígito a agências. Heli Air Monaco já vende helicóptero com gastronomia.</td><td>≈8% a agências</td><td>Oferta concentrada: aqui a TWK é canal de venda, não marketplace.</td></tr>
+      <tr><td><b>GetYourGuide · Viator</b></td><td>A GetYourGuide começou com guias estudantes e teve 5 reservas em dois anos. Só cresceu quando assinou operadores profissionais.</td><td>20% a 30%</td><td>Para um produto premium, só profissionais licenciados.</td></tr>
+      <tr><td><b>Les Clefs d'Or France</b></td><td>400+ concierges de hotel. Concede o estatuto de parceiro "com a maior vigilância e parcimônia".</td><td>não documentado</td><td>Fornecedor que já é parceiro dos Clefs d'Or chega pré-verificado. O concierge também disputa o mesmo cliente.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div>
+      <h3>O que se repete</h3>
+      <ul>
+        <li><b>A oferta segue a demanda real.</b> Ninguém recrutou onde não vendia.</li>
+        <li><b>O fornecedor mantém o controle:</b> define preço, aceita trabalho a trabalho, sem mínimo e sem exclusividade.</li>
+        <li><b>Pagamento garantido e previsível é a promessa central.</b> A Zizoo reteve dinheiro de frotas e faliu; a Jayride acumulou queixas de faturas não pagas.</li>
+        <li><b>Onboarding remoto:</b> contrato eletrônico, envio de documentos, uma chamada curta.</li>
+        <li><b>Cerca de 60% dos marketplaces usaram venda direta</b> no início, e um terço usou indicação. A mediana usou só dois canais.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>O que não funciona</h3>
+      <ul>
+        <li>Oferta amadora para um produto premium.</li>
+        <li>Reter o dinheiro do fornecedor ou pagar com atraso.</li>
+        <li>Recrutar onde não há demanda.</li>
+        <li>Comissão escondida que sobe com o tempo.</li>
+        <li>Canal frio ou pago como motor principal: na Uber, anúncios trouxeram metade dos cadastros e um terço das viagens.</li>
+        <li>Pagar vendedor ou indicador por contrato assinado. O que conta é parceiro com primeira reserva paga.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="dim" style="font-size:.85rem">Não encontramos evidência de que "clientela lusófona" ou "pacote com a mesa" convençam fornecedores. São hipóteses a testar nas primeiras ligações, não argumentos centrais. <span class="tag l">L</span></p>
+</section>
+
+<section>
+  <div class="part">Parte III</div>
+  <h2>A linha jurídica, antes da primeira reserva paga</h2>
+  <h3>Como abordar empresas na França sem infringir nada</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Canal</th><th>Pode</th><th>Não pode</th></tr></thead>
+    <tbody>
+      <tr><td><b>Telefone</b></td><td>Ligar sem consentimento prévio para o número comercial publicado, sobre o negócio da empresa. Registrar e respeitar o pedido de não contato. <span class="tag f">F</span></td><td>Ligar para celular pessoal. O Bloctel acabou em 11/08/2026 e ligação a consumidor agora exige consentimento prévio. <span class="tag f">F</span></td></tr>
+      <tr><td><b>E-mail</b></td><td>Escrever a endereço genérico (contact@, info@) ou de domínio da empresa, sobre a atividade dela, com saída gratuita em cada mensagem. <span class="tag f">F</span></td><td>Usar endereço com cara de pessoa física (prenome@gmail) de empresário individual: tratar como consumidor. <span class="tag s">S</span></td></tr>
+      <tr><td><b>WhatsApp</b></td><td>Escrever depois que a empresa respondeu ou deu o número. <span class="tag f">F</span></td><td>Primeira mensagem a frio: viola a política da Meta e arrisca banir o número. <span class="tag f">F</span></td></tr>
+      <tr><td><b>LinkedIn</b></td><td>Mensagem manual e personalizada a quem decide. <span class="tag f">F</span></td><td>Automação ou extração de contatos. A CNIL multou a KASPR em 240 mil euros em 12/2024. <span class="tag f">F</span></td></tr>
+    </tbody>
+  </table></div>
+  <p>Contrato fechado à distância com empresa de até 5 empregados, fora da atividade principal dela, atrai regras de consumidor (L221-3): informação pré-contratual e 14 dias de retratação. Acrescentar as duas ao acordo de parceria custa nada num acordo só de comissão. <span class="tag f">F</span></p>
+
+  <h3>Onde a TWK deixa de ser intermediária e vira vendedora</h3>
+  <div class="grid2">
+    <div class="callout">
+      <p><b>Continua intermediária</b> <span class="tag s">S</span></p>
+      <ul>
+        <li>O cliente contrata com o fornecedor, recebe a fatura dele e paga a ele.</li>
+        <li>O fornecedor paga a comissão da TWK.</li>
+        <li>O site descreve o serviço e faz a mise en relation.</li>
+      </ul>
+    </div>
+    <div class="callout warn">
+      <p><b>Passa a precisar de registro na Atout France</b>, com garantia financeira e seguro <span class="tag f">F</span></p>
+      <ul>
+        <li>Vender em nome próprio ou faturar o viajante.</li>
+        <li>Receber o dinheiro do viajante e repassar; isso também é serviço de pagamento regulado pela ACPR.</li>
+        <li>Vender dois serviços pagos por um preço único.</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Seis pontos dos nossos próprios planos que vão ao advogado de turismo</h3>
+  <ol class="steps">
+    <li><b>O texto do checkout do Private Driver:</b> "Você está a pagar a The World Keys, que reserva e paga o motorista em seu nome". Na leitura literal, é venda em nome próprio.</li>
+    <li><b>Os frais de service de 8% cobrados ao cliente pela TWK</b> (otimização 1 do plano de 14/09).</li>
+    <li><b>O sinal de 30% recebido pela TWK</b> (otimização 5), se não for cobrado pelo próprio fornecedor.</li>
+    <li><b>Pacotes com dois serviços pagos a preço fechado</b>, como motorista mais helicóptero. A Soirée com mesa gratuita não entra, porque o pedido de mesa não é pago.</li>
+    <li><b>"O motorista é vendido pela nossa SAS por ser serviço próprio."</b> Só se sustenta se a THE WORLD KEYS SAS for exploitant VTC registrado; o Julien é parceiro, não empregado. <span class="tag l">L</span></li>
+    <li><b>Declaração como central de reserva de VTC</b> no Código dos Transportes, para quem põe clientes em contato com motoristas. Não verificado nesta pesquisa. <span class="tag l">L</span></li>
+  </ol>
+  <div class="callout">
+    <p><b>Recomendação.</b> Lançar no <b>Modo A</b> do plano de 14/09: o cliente paga o parceiro, o parceiro fatura o cliente, a TWK fatura a comissão ao parceiro. Não exige desenvolvimento e é a forma mais defensável. O Modo B, com Stripe Connect e o fornecedor como vendedor registrado, entra só com o parecer do advogado.</p>
+  </div>
+</section>
+
+<section>
+  <div class="part">Parte IV</div>
+  <h2>O plano</h2>
+  <h3>Quatro princípios</h3>
+  <ol class="steps">
+    <li><b>Poucos e certos.</b> No máximo dois parceiros por categoria em cada cidade, além do Julien. É escassez verdadeira, e é o que a demanda de hoje consegue alimentar.<span class="meta">Paris: 14 empresas a contatar. Riviera: 15. Planilha completa em <code>orchestrator/state/servicos/alvos-servicos-2026-09-17.csv</code>.</span></li>
+    <li><b>Cada parceria nasce presa a uma demanda com data.</b> Motorista de Paris ao jantar confirmado e às semanas de moda; barco e helicóptero da Riviera à abertura de abril, ao Festival de Cannes e ao Grande Prêmio.</li>
+    <li><b>A plataforma monta a página; o parceiro só aprova.</b> Antes da segunda conversa, montamos a prévia da página dele com as informações do próprio site: frota, fotos, idiomas. Na ligação, o pedido é "posso montar e mandar para o senhor aprovar?", não "cadastre-se".</li>
+    <li><b>Telefone em francês abre, e-mail confirma, WhatsApp só depois da resposta.</b></li>
+  </ol>
+
+  <h3>Os canais, em ordem</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Canal</th><th>Para quem</th><th>Regra</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>1</td><td><b>Indicação do Julien</b></td><td>Motoristas, barcos e concierges que ele conhece</td><td>Pedir três nomes. Pagar a ele por parceiro que complete a primeira reserva paga, nunca por assinatura.</td></tr>
+      <tr><td>2</td><td><b>Ligação em francês</b></td><td>Todos os alvos com telefone comercial publicado</td><td>Terça a quinta, 10h às 12h ou 14h às 17h de Paris, que é 9h às 12h de Brasília (10h às 13h a partir de 26/10). Número publicado no site da empresa, nunca celular pessoal.</td></tr>
+      <tr><td>3</td><td><b>E-mail de seguimento, no mesmo dia</b></td><td>Quem atendeu</td><td>"Comme convenu": prévia da página, condições em uma página, pedido de um "OK".</td></tr>
+      <tr><td>4</td><td><b>E-mail curto</b></td><td>Só empresas sem telefone publicado</td><td>Endereço genérico da empresa, menos de 80 palavras, pede o número para uma ligação de 5 minutos, com saída gratuita.</td></tr>
+      <tr><td>5</td><td><b>WhatsApp</b></td><td>Só quem já respondeu</td><td>Para mandar a prévia e receber o "OK".</td></tr>
+      <tr><td>6</td><td><b>LinkedIn manual</b></td><td>Empresas grandes: Chabé, Sixième Étoile</td><td>Opcional. Mensagem escrita à mão para quem cuida de parcerias.</td></tr>
+      <tr><td>7</td><td><b>Presencial</b></td><td>Monaco Yacht Show (23 a 26/09) e Paris Nautic Show (25 a 29/11)</td><td>Só se houver alguém da TWK lá. No Monaco Yacht Show, recolher contatos e não vender: os operadores estão no pico.</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Quem liga.</b> Todas as plataformas estudadas recrutaram com alguém que fala a língua do fornecedor. O plano precisa de uma pessoa que ligue em francês. As opções são o fundador, se for fluente, ou um comercial francófono pago por parceiro ativado, com o Julien abrindo portas entre os motoristas. <span class="tag l">L</span></p>
+
+  <h3>A apresentação</h3>
+  <div class="grid2">
+    <div>
+      <p><b>O que dizer</b></p>
+      <ul>
+        <li>Quem somos, numa frase: plataforma parisiense de reservas em restaurantes de alta gastronomia.</li>
+        <li>O fato que abre a porta: os clientes escolhem conosco mesas em grandes casas, sobretudo para jantar, e queremos organizar a noite em volta da mesa.</li>
+        <li>Sem custo, sem exclusividade, sem mínimo. Os preços e a política de cancelamento são deles.</li>
+        <li>O cliente paga o fornecedor antes do serviço. A comissão incide só sobre serviço prestado e pago.</li>
+        <li>Nós montamos a página; eles aprovam.</li>
+        <li>Limitamos a dois parceiros por categoria na cidade.</li>
+      </ul>
+    </div>
+    <div>
+      <p><b>O que nunca dizer</b></p>
+      <ul>
+        <li>Número de clientes que vamos mandar, ou qualquer promessa de volume.</li>
+        <li>"Somos uma concierge com milhares de clientes." Temos 22.995 cadastros e 3.917 ativos no ano; em serviços, zero.</li>
+        <li>Que vendemos em nome deles.</li>
+        <li>Prazo de resposta de terceiros ao cliente (ADR-015).</li>
+        <li>Nome de outra empresa como parceira antes de ela ter aceitado.</li>
+      </ul>
+      <p><b>A frase de honestidade que desarma a objeção de volume:</b> "Estamos começando e ainda não temos volume neste serviço. É justamente por isso que não custa nada ao senhor."</p>
+    </div>
+  </div>
+
+  <h3>Três ondas, datadas pelo calendário</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Onda</th><th>Quando</th><th>Quem</th><th>Por que agora</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>1 · Paris</b></td><td>22/09 a 23/10</td><td>Motoristas, experiências, barcos do Sena, helicóptero</td><td>Tudo funciona o ano inteiro. Motoristas: ligar de 22 a 25/09 e de 7 a 9/10, fora da Fashion Week (28/09 a 06/10) e do Mondial de l'Auto (12 a 18/10).</td></tr>
+      <tr><td><b>2 · Riviera</b></td><td>26/10 a 11/12</td><td>Barcos com skipper, helicópteros, experiências, motoristas</td><td>A temporada acabou, os resultados estão frescos e há tempo para conversa. Assinatura para abril de 2027. Motorista da Riviera só antes disso se houver um cliente real, por exemplo na MIPCOM (12 a 15/10).</td></tr>
+      <tr><td><b>3 · Fechamento</b></td><td>jan a mar 2027</td><td>Barcos que faltarem; motoristas de Paris</td><td>Operadores definem distribuição para abril. Janeiro e fevereiro são os meses calmos dos motoristas de Paris.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>As empresas, onda 1 · Paris</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Empresa</th><th>Categoria</th><th>Por que ela</th><th>Contato público</th><th>Prioridade</th></tr></thead>
+    <tbody>
+      <tr><td><b>Drivigo</b></td><td>motorista</td><td>Já publica programa de parceiros com até 10%; frota própria; 4,9 com 169 avaliações no site</td><td>formulário drivigo.fr/contact</td><td>P1</td></tr>
+      <tr><td><b>Sixième Étoile</b></td><td>motorista</td><td>Página para DMCs e agências; frota até autocarro, capacidade para eventos</td><td>+33 1 84 25 96 96</td><td>P1</td></tr>
+      <tr><td><b>Kingdom Limousines</b></td><td>motorista</td><td>Página de hotéis (Crillon, George V, Peninsula); cobre Paris e Cannes</td><td>info@kingdom-limousines.com</td><td>P1</td></tr>
+      <tr><td><b>Paris to Versailles Private Tours</b></td><td>experiência</td><td>Programa de comissão para agências</td><td>formulário do site</td><td>P1</td></tr>
+      <tr><td><b>Ô Chateau</b></td><td>experiência</td><td>Dia privado em Champagne com almoço estrelado: casa com o nosso posicionamento</td><td>+33 1 44 73 97 80</td><td>P1</td></tr>
+      <tr><td><b>Un Bateau à Paris</b></td><td>barco no Sena</td><td>Barco íntimo para 6, antes ou depois do jantar; fala português; 4,9 com 78 avaliações</td><td>capitaine@bateau-a-paris.fr</td><td>P1</td></tr>
+      <tr><td><b>Yachts de Paris</b></td><td>barco no Sena</td><td>Seis iates, eventos corporativos</td><td>+33 1 44 54 14 70</td><td>P1</td></tr>
+      <tr><td>Connect Smart Drive · VIP Transit Paris</td><td>motorista</td><td>Páginas de hotel de luxo; VIP Transit fala português e trabalha com concierges de palace</td><td>contact@connect-smartdrive.com · formulário</td><td>P2</td></tr>
+      <tr><td>Best of France Tours · La Cuisine Paris</td><td>experiência</td><td>Dias privados; aula de cozinha com eventos privados</td><td>contact@bestoffrancetours.com · contact@lacuisineparis.com</td><td>P2</td></tr>
+      <tr><td>Paris Yacht Marina · Helifirst</td><td>barco · helicóptero</td><td>Barcos para 8; operador de helicóptero licenciado</td><td>+33 1 40 58 00 00 · contact@helifirst.fr</td><td>P2</td></tr>
+      <tr><td>Chabé</td><td>motorista</td><td>Serve o Plaza Athénée desde 1947; pode não precisar de nós</td><td>+33 1 41 20 95 10</td><td>P3</td></tr>
+    </tbody>
+  </table></div>
+  <p class="dim" style="font-size:.85rem"><b>Fora:</b> Paris Water Way, por avaliação pública relatando reembolso nunca pago. <b>Em espera:</b> ParisLuxuryCar e Americar Prestige declaram a mesma morada na place Vendôme; só depois de verificar Kbis e seguro. <b>Concorrentes:</b> Aeroaffaires, French Side Travel, My Private Paris, Luxury Club.</p>
+
+  <h3>As empresas, onda 2 · Côte d'Azur</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Empresa</th><th>Categoria</th><th>Por que ela</th><th>Contato público</th><th>Prioridade</th></tr></thead>
+    <tbody>
+      <tr><td><b>Azur Limousines</b></td><td>motorista</td><td>Páginas de hotéis de luxo e yachting; Trustpilot 4,9 com 190+ avaliações</td><td>contact@azur-limousines.com</td><td>P1</td></tr>
+      <tr><td><b>Leader Limousines</b></td><td>motorista</td><td>Clientes: hotéis, agências de luxo, yachting</td><td>info@leaderlimousines.com</td><td>P1</td></tr>
+      <tr><td><b>Clapi Boats</b></td><td>barco</td><td>40+ iates em Cannes e Antibes</td><td>formulário do site</td><td>P1</td></tr>
+      <tr><td><b>Yachtside Monaco</b></td><td>barco</td><td>28+ barcos; membro do Cluster Yachting Monaco</td><td>formulário do site</td><td>P1</td></tr>
+      <tr><td><b>Monaco Boat Service</b></td><td>barco</td><td>Concessionário Riva desde 1959, charter diário</td><td>info@riva-mbs.com</td><td>P1</td></tr>
+      <tr><td><b>Héli Air Monaco</b></td><td>helicóptero</td><td>Já vende helicóptero com gastronomia</td><td>booking@heliairmonaco.com</td><td>P1</td></tr>
+      <tr><td><b>Riviera Hélicoptère</b></td><td>helicóptero</td><td>Voa de helipontos de hotel, villa e iate</td><td>+33 9 72 20 19 02</td><td>P1</td></tr>
+      <tr><td><b>Molinard</b></td><td>experiência</td><td>Perfumaria em Grasse com e-mail de turismo e página de eventos</td><td>tourisme@molinard.fr</td><td>P1</td></tr>
+      <tr><td><b>French Riviera Wine Tours</b></td><td>experiência</td><td>Página de parceiros; registrada na Atout France</td><td>formulário do site</td><td>P1</td></tr>
+      <tr><td>Suncap · AliceBoat · Location Bateaux Cannes</td><td>barco</td><td>Frotas médias; Suncap e AliceBoat também montam transfers, concorrência parcial</td><td>formulário · contact@aliceboat.com · contact@location-bateaux-cannes.fr</td><td>P2</td></tr>
+      <tr><td>Green Bees Helico · Tour Azur · Galimard</td><td>helicóptero · experiência</td><td>Operadores menores e ticket mais baixo</td><td>booking@greenbeeshelico.com · +33 4 93 44 88 77 · info@galimard.com</td><td>P2</td></tr>
+    </tbody>
+  </table></div>
+  <p class="dim" style="font-size:.85rem"><b>Concorrentes:</b> Blade (plataforma própria), Talamare, SamBoat, Click&amp;Boat, Excellence Riviera, MC Car Riviera. Contatos checados nos sites das empresas em 17/09; celulares e endereços pessoais foram deixados de fora. Avaliações do Google não foram acessíveis: só aparecem as que as empresas publicam. <span class="tag l">L</span></p>
+
+  <h3>O motor de demanda de cada categoria</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Categoria</th><th>De onde vem o primeiro cliente</th><th>Data</th></tr></thead>
+    <tbody>
+      <tr><td>Motorista, Paris</td><td>A Soirée oferecida em cada jantar confirmado em Paris (cerca de 5 por mês); semanas de moda; Rétromobile</td><td>contínuo · 19 a 24/01 · 25 a 28/01 · 3 a 7/02 · 1 a 9/03/2027</td></tr>
+      <tr><td>Experiência, Paris</td><td>Agentes de viagem brasileiros e portugueses (canal 5 do plano de 14/09); campanha à base de clientes</td><td>feriados BR 12/10 e 2/11</td></tr>
+      <tr><td>Barco no Sena</td><td>A noite em volta do jantar: barco antes ou depois da mesa</td><td>contínuo</td></tr>
+      <tr><td>Motorista, Riviera</td><td>Cliente corporativo em evento, se existir</td><td>MIPCOM 12 a 15/10 · Cannes 11 a 22/05/2027 · GP de Mônaco 4 a 6/06/2027</td></tr>
+      <tr><td>Barco e helicóptero, Riviera</td><td>Abertura da temporada e eventos de maio e junho</td><td>abr a jun 2027 · Top Marques 5 a 9/05/2027</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="part">Parte V</div>
+  <h2>Passo a passo</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Quando</th><th>O quê</th><th>Dono</th><th>Sai com</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><b>17 a 18/09</b></td><td>Decisões da Parte VIII: quem liga em francês, Modo A, advogado. Pedido ao front: página do Julien no ar, <code>/driver</code> redirecionando para ela e página "Devenir partenaire" em francês com as condições de uma página.</td><td>fundador</td><td>decisões registradas</td></tr>
+      <tr><td><b>21 a 25/09</b></td><td>Porta mínima em construção. Advogado recebe os seis pontos. Prévias de página dos 7 alvos P1 de Paris montadas a partir dos sites deles. Primeiras ligações: motoristas (antes da Fashion Week), experiências e barcos. Julien indica três nomes.</td><td>front · quem liga · MAESTRO</td><td>7 prévias; primeiras conversas no registro</td></tr>
+      <tr><td><b>28/09 a 06/10</b></td><td>Fashion Week: nenhuma ligação a motorista. Ligar para experiências, barcos e Helifirst. Mandar prévia e condições a quem disse sim.</td><td>quem liga</td><td>"OK" por e-mail</td></tr>
+      <tr><td><b>07 a 09/10</b></td><td>Segunda ronda de motoristas de Paris. Teste da porta: alguém de fora recebe uma prévia, aceita as condições e envia os documentos sem ajuda.</td><td>quem liga · front</td><td>porta testada</td></tr>
+      <tr><td><b>12 a 18/10</b></td><td>Mondial de l'Auto: nenhuma ligação a motorista de Paris. Ativações: condições aceitas e documentos recebidos. Se houver cliente real na MIPCOM, ligar para Azur ou Leader Limousines com a reserva na mão.</td><td>quem liga</td><td>parceiros ativados</td></tr>
+      <tr class="hl"><td><b>19 a 23/10</b></td><td>Checkpoint de Paris (Parte VI). Parecer do advogado sobre os seis pontos.</td><td>fundador · MAESTRO</td><td>seguir, ajustar ou parar</td></tr>
+      <tr><td><b>26/10 a 11/12</b></td><td>Onda da Riviera: 9 alvos P1 e 6 P2. Abertura: "a temporada acabou, estamos preparando abril". Paris Nautic Show, se houver alguém em Paris.</td><td>quem liga</td><td>parceiros assinados para 2027</td></tr>
+      <tr class="hl"><td><b>30/11</b></td><td>Checkpoint de demanda: parceiros de Paris com pelo menos uma reserva paga.</td><td>MAESTRO</td><td>seguir ou congelar recrutamento</td></tr>
+      <tr><td><b>14/12 a 05/01</b></td><td>Pausa de contatos. Pacotes para Cannes, Top Marques e Grande Prêmio em preparação.</td><td>MAESTRO</td><td>pacotes em rascunho</td></tr>
+      <tr><td><b>jan a mar 2027</b></td><td>Fechar a Riviera para abril; motoristas de Paris nos meses calmos; semanas de moda como demanda.</td><td>quem liga</td><td>páginas prontas antes de 1/04</td></tr>
+      <tr class="hl"><td><b>15/03/2027</b></td><td>Checkpoint da Riviera.</td><td>fundador</td><td>abertura da temporada</td></tr>
+    </tbody>
+  </table></div>
+  <p class="dim" style="font-size:.85rem">Cada ligação vai para <code>orchestrator/state/servicos/ligacoes-servicos.csv</code>: atendeu, falou com quem decide, comissão que já paga, resultado, datas da prévia, do aceite, dos documentos e da primeira reserva paga.</p>
+</section>
+
+<section>
+  <div class="part">Parte VI</div>
+  <h2>Como saberemos</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Indicador</th><th class="num">Meta</th><th>Até</th></tr></thead>
+    <tbody>
+      <tr><td>Empresas de Paris contatadas por telefone</td><td class="num">14</td><td>23/10</td></tr>
+      <tr><td>Conversas com quem decide <span class="tag s">S</span></td><td class="num">≥ 8</td><td>23/10</td></tr>
+      <tr><td>"Sim, monte a minha página" <span class="tag s">S</span></td><td class="num">≥ 5</td><td>23/10</td></tr>
+      <tr><td>Parceiros ativados em Paris, com condições aceitas e documentos</td><td class="num">≥ 3 além do Julien</td><td>23/10</td></tr>
+      <tr class="hl"><td><b>Parceiros com pelo menos uma reserva paga</b></td><td class="num"><b>≥ 3</b></td><td><b>30/11</b></td></tr>
+      <tr><td>Riviera assinados para 2027</td><td class="num">≥ 4</td><td>11/12</td></tr>
+      <tr><td>Riviera com página pronta</td><td class="num">≥ 6</td><td>15/03/2027</td></tr>
+    </tbody>
+  </table></div>
+  <p>A métrica que conta é <b>parceiro com reserva paga</b>. Parceiro assinado sem cliente não conta: foi o erro da Booking com representantes pagos por contrato.</p>
+  <div class="callout warn">
+    <p><b>Critérios de parada</b></p>
+    <ul>
+      <li><b>23/10:</b> menos de 3 parceiros ativados em Paris, com a porta testada e as 14 ligações feitas. O problema é a oferta ou a porta, não o canal. Parar de ligar e rever a proposta.</li>
+      <li><b>30/11:</b> nenhum parceiro de Paris com reserva paga. O problema é demanda. Não abrir a onda da Riviera a quem não tiver cliente em vista; trabalhar demanda antes de somar oferta.</li>
+      <li><b>Parceiro sem reserva em 60 dias:</b> contato honesto, sem cobrança e sem promessa de volume.</li>
+    </ul>
+  </div>
+  <p class="dim" style="font-size:.85rem">As metas de conversa e de "sim" são suposições. Os únicos números publicados para a França vêm de fornecedores de ferramentas de prospecção (entre 25 e 60 ligações por reunião em geral), e estes alvos atendem o próprio telefone de vendas. A primeira semana de ligações calibra as metas. <span class="tag s">S</span></p>
+</section>
+
+<section>
+  <div class="part">Parte VII</div>
+  <h2>Materiais em francês, prontos para usar</h2>
+  <p>Complementam o contrato, as condições de uma página e as nove objeções do plano de 14/09. Os colchetes são preenchidos por empresa. A comissão segue a grade: 15% motorista e experiência, 12% barco, 10% helicóptero e carro.</p>
+
+  <details open>
+    <summary>Roteiro da ligação · 5 minutos</summary>
+    <div class="fr">0:00 — Bonjour, [Prénom] de The World Keys, plateforme parisienne de réservation de restaurants gastronomiques. Je souhaiterais parler à la personne qui s'occupe des partenariats ou des agences : c'est bien vous ?
+
+0:20 — Chaque mois, nos clients choisissent chez nous des tables dans de grandes maisons, surtout pour le dîner. Nous ouvrons un service pour organiser la soirée autour de la table : [chauffeur / bateau / expérience]. À [ville], nous ne retenons que deux partenaires par catégorie.
+
+1:00 — Travaillez-vous déjà avec des conciergeries ou des hôtels ? Comment fonctionne la commission chez vous ? Quelles sont vos conditions d'annulation ?
+
+2:00 — Notre proposition : aucun frais, aucune exclusivité, aucun minimum. Vous gardez vos tarifs et vos conditions. Le client vous règle directement, avant la prestation, et vous nous versez [15 %] uniquement sur les prestations réalisées et payées. Nous préparons nous-mêmes votre page à partir de votre site : vous n'avez qu'à la valider.
+
+3:00 — Je préfère être franc : nous démarrons ce service et nous n'avons pas encore de volume. C'est justement pour cela que ça ne vous coûte rien.
+
+4:00 — Je vous prépare la page et je vous l'envoie cette semaine avec nos conditions sur une page. Quelle est la bonne adresse e-mail ? Puis-je vous rappeler [jour] pour la valider ensemble ?</div>
+  </details>
+
+  <details>
+    <summary>Abertura para a Riviera · a partir de 26/10</summary>
+    <div class="fr">Bonjour, [Prénom] de The World Keys, plateforme parisienne de réservation de restaurants gastronomiques. La saison vient de se terminer, et nous préparons avril 2027 sur la Côte d'Azur : nous cherchons à [ville] deux partenaires [bateau avec skipper / hélicoptère / chauffeur / expérience] pour organiser la journée et la soirée de nos clients autour de la table. Auriez-vous cinq minutes ?</div>
+  </details>
+
+  <details>
+    <summary>E-mail de seguimento · mesmo dia da ligação</summary>
+    <div class="fr">Objet : [Société] × The World Keys — votre page, comme convenu
+
+Bonjour [Prénom],
+
+Merci pour notre échange de ce jour. Comme convenu, voici :
+– l'aperçu de votre page sur The World Keys, préparé à partir de votre site : [lien] ;
+– nos conditions de partenariat, sur une page : [lien].
+
+En résumé : aucun frais, aucune exclusivité, vos tarifs et vos conditions d'annulation. Le client vous règle directement et vous nous versez [15 %] uniquement sur les prestations réalisées et payées.
+
+Un simple « OK » en réponse suffit pour valider, ou indiquez-moi ce qu'il faut corriger. Je vous rappelle [jour] comme prévu.
+
+Bien cordialement,
+[Prénom Nom] · The World Keys · [téléphone]
+
+Vous recevez ce message à la suite de notre échange téléphonique. Pour ne plus être contacté, répondez simplement « STOP ».</div>
+  </details>
+
+  <details>
+    <summary>E-mail curto · só para empresa sem telefone publicado</summary>
+    <div class="fr">Objet : Partenariat [catégorie] à [ville] — sans frais
+
+Bonjour,
+
+The World Keys est une plateforme parisienne de réservation de restaurants gastronomiques. Nous ouvrons à [ville] un service autour de la table (chauffeur, bateau, expériences) et nous cherchons deux partenaires par catégorie. Aucun frais, aucune exclusivité, vos tarifs : une commission uniquement sur les prestations payées.
+
+Puis-je vous appeler cinq minutes cette semaine ? Indiquez-moi simplement le bon numéro.
+
+[Prénom Nom] · The World Keys
+
+Pour ne plus recevoir nos messages, répondez « STOP ».</div>
+  </details>
+
+  <details>
+    <summary>WhatsApp · só depois que a empresa respondeu</summary>
+    <div class="fr">Bonjour [Prénom], c'est [Prénom] de The World Keys, suite à notre échange. Voici l'aperçu de votre page : [lien]. Un simple « OK » ici suffit pour valider, ou dites-moi ce qu'il faut corriger.</div>
+  </details>
+
+  <details>
+    <summary>Quatro objeções novas, além das nove do plano de 14/09</summary>
+    <div class="fr">« Vous êtes une plateforme de restaurants, pas une conciergerie. »
+— Justement : nos clients ont déjà choisi leur table. Nous leur proposons la soirée autour, au moment où ils la décident.
+
+« Combien de clients allez-vous m'envoyer ? »
+— Je ne vous promettrai pas de volume : nous démarrons. C'est pour cela que c'est sans frais et sans exclusivité.
+
+« Je ne veux pas qu'on vende en mon nom. »
+— Nous ne vendons pas en votre nom. Le client vous règle, vous le facturez ; nous faisons la mise en relation.
+
+« Qui me garantit que la commission n'augmentera pas ? »
+— Le taux est écrit dans les conditions, et vous pouvez partir à tout moment avec trente jours de préavis, sans indemnité.</div>
+  </details>
+</section>
+
+<section>
+  <div class="part">Parte VIII</div>
+  <h2>O que só o fundador decide</h2>
+  <ol class="steps">
+    <li><b>Quem liga em francês.</b> O fundador, se for fluente; um comercial francófono pago por parceiro ativado; ou os dois, com o Julien abrindo portas entre motoristas. Sem essa pessoa, o plano volta a ser e-mail.</li>
+    <li><b>A porta mínima na frente da fila do front:</b> página do Julien no ar, <code>/driver</code> redirecionando e "Devenir partenaire" em francês. Disputa os mesmos dois desenvolvedores que a porta dos restaurantes; recomendo fazer as duas, nesta ordem, porque a de serviços é pequena.</li>
+    <li><b>Advogado de turismo antes da primeira reserva paga</b>, com os seis pontos da Parte III.</li>
+    <li><b>Modo A no lançamento.</b> O Modo B só com o parecer.</li>
+    <li><b>Remuneração do Julien por parceiro indicado</b> que complete a primeira reserva paga.</li>
+    <li><b>Monaco Yacht Show</b> (23 a 26/09, a partir de 400 €) só se houver alguém da TWK no local, e só para recolher contatos.</li>
+  </ol>
+  <h3>O que este plano não sabe</h3>
+  <ul>
+    <li>Onde está e quem fala francês na equipe hoje. <span class="tag l">L</span></li>
+    <li>Se a THE WORLD KEYS SAS é exploitant VTC registrada. <span class="tag l">L</span></li>
+    <li>A capacidade real do Julien em semana de evento. <span class="tag l">L</span></li>
+    <li>Se a oferta aos expositores lusófonos da MIPCOM e da TFWA, prevista no plano de 14/09 para até 21/09, chegou a sair. <span class="tag l">L</span></li>
+    <li>As avaliações do Google da maioria dos alvos. <span class="tag l">L</span></li>
+    <li>Taxas de resposta por telefone para estes fornecedores. Só há números genéricos de fornecedores de ferramentas. <span class="tag s">S</span></li>
+  </ul>
+</section>
+
+<section class="src">
+  <div class="part">Origens</div>
+  <h2 style="font-size:1.5rem">De onde vem cada número</h2>
+  <p><b>Dados da TWK:</b> banco <code>twk_auth</code> por <code>twk_ro</code>, 17/09/2026 (<code>reservations</code>, <code>db_restaurants</code>, <code>nextauth."User"</code>, schema público); teste HTTP das URLs de serviço em 17/09; <code>docs/agentes/conciergerie-plano-60-dias.html</code>, <code>servico-private-driver.html</code>, <code>conta-profissional-motorista.html</code>; <code>docs/TWK-Dossie-Chave-na-Mao.html</code>.</p>
+  <p><b>Plataformas:</b>
+    <a href="https://www.blacklane.com/en/partners/">Blacklane partners</a> ·
+    <a href="https://thenextweb.com/news/how-blacklane-went-from-one-city-to-over-250-around-the-world">Blacklane, origem</a> ·
+    <a href="https://partner.welcomepickups.com/driver-partners/">Welcome Pickups</a> ·
+    <a href="https://www.journaldunet.com/economie/transport/1444982-lancement-wheely-vtc-paris/">Wheely Paris</a> ·
+    <a href="https://www.tourmag.com/VTC-Marcel-preleve-la-commission-la-plus-basse-du-marche_a86051.html">Marcel</a> ·
+    <a href="https://lecab.fr/chauffeur/">LeCab</a> ·
+    <a href="https://www.journaldunet.com/retail/1499829-edouard-gorioux-click-boat/">Click&amp;Boat</a> ·
+    <a href="https://www.samboat.com/professional?country=us">SamBoat pro</a> ·
+    <a href="https://www.yacht.de/en/travel-and-charter/germany/zizoo-insolvent-online-agency-sold-those-affected-must-act-quickly/">Zizoo</a> ·
+    <a href="https://www.tourismgarden.com.au/monacos-helicopter-provider-is-now-commissionable-to-travel-agents/">Monacair</a> ·
+    <a href="https://thedelta.io/blog/from-five-bookings-to-a-billion-euro-business-the-getyourguide-story">GetYourGuide</a> ·
+    <a href="https://clefsdor-france.org/partenaires/">Clefs d'Or France</a> ·
+    <a href="https://www.lennysnewsletter.com/p/how-to-kickstart-and-scale-a-marketplace-911">Lenny Rachitsky</a> ·
+    <a href="https://belkins.io/blog/cold-email-response-rates">Belkins 2026</a></p>
+  <p><b>Direito francês:</b>
+    <a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique">CNIL, prospecção por e-mail</a> ·
+    <a href="https://www.inc-conso.fr/content/demarchage-telephonique-vous-pouvez-vous-inscrire-sur-la-liste-dopposition-bloctel">INC, fim do Bloctel</a> ·
+    <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032226882">L221-3 Código do Consumo</a> ·
+    <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000036242695">L211-1 Código do Turismo</a> ·
+    <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000036242744">L211-18</a> ·
+    <a href="https://acpr.banque-france.fr/fr/professionnels/lacpr-vous-accompagne/parcours-fintech/contenus-pedagogiques/de-quel-statut-releve-mon-activite/jencaisse-des-fonds-et-les-reverse-une-tierce-personne">ACPR, receber e repassar fundos</a> ·
+    <a href="https://whatsappbusiness.com/policy/">Política do WhatsApp Business</a> ·
+    <a href="https://www.cnil.fr/fr/aspiration-de-donnees-sanction-de-240-000-euros-lencontre-de-la-societe-kaspr">CNIL, KASPR</a></p>
+  <p><b>Calendário:</b>
+    <a href="https://www.monacoyachtshow.com/en/mys-official-ticketing">Monaco Yacht Show</a> ·
+    <a href="https://www.fhcm.paris/en/upcoming-seasons-and-previous-editions">Paris Fashion Week</a> ·
+    <a href="https://www.mipcom.com/">MIPCOM</a> ·
+    <a href="https://mondial.paris/">Mondial de l'Auto</a> ·
+    <a href="https://www.parisnauticshow.com/">Paris Nautic Show</a> ·
+    <a href="https://www.retromobile.com/en/pratical-info/dates-access-map">Rétromobile</a> ·
+    <a href="https://www.topmarquesmonaco.com/en/">Top Marques</a> ·
+    <a href="https://www.screendaily.com/news/cannes-film-festival-confirms-2027-dates-for-80th-edition/5217448.article">Cannes 2027</a> ·
+    <a href="https://www.motorsport.com/f1/news/f1-announces-2027-calendar-with-monaco-among-10-sprint-races/10856260/">GP de Mônaco 2027</a> ·
+    <a href="https://www.charterworld.com/index.html?sub=french-riviera-yacht-charter">temporada de charter</a></p>
+  <p><b>Empresas-alvo:</b> sites oficiais de cada empresa, consultados em 17/09/2026; lista completa com URLs em <code>orchestrator/state/servicos/alvos-servicos-2026-09-17.csv</code>.</p>
+</section>
+
+<footer>The World Keys · Orquestrador · plano somente; nenhum contato feito, nenhum envio, nenhuma escrita em produção · 17 set 2026 · Europe/Paris</footer>
+</div>

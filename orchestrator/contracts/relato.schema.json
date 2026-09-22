@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://theworldkeys.com/schemas/relato/v1",
+  "title": "TWK Relato v1 — o que todo agente reporta ao MAESTRO",
+  "description": "Contrato de comunicação agente → MAESTRO (ADR-012). Todo agente/coletor produz um relato por ciclo. Sem PII: só ids, códigos, contagens e caminhos. Métrica ausente é lacuna declarada, nunca zero.",
+  "type": "object",
+  "required": ["agente", "ts", "trace_id", "status", "kpis", "achados", "cobertura"],
+  "additionalProperties": false,
+  "properties": {
+    "agente": { "type": "string", "enum": ["comercial", "suporte-concierge", "editorial", "financeiro", "dba", "guardiao-reserva", "registro-optout", "central", "orquestrador"] },
+    "ts": { "type": "string", "format": "date-time" },
+    "trace_id": { "type": "string" },
+    "periodo": { "type": "object", "properties": { "de": { "type": "string" }, "ate": { "type": "string" } } },
+    "status": { "type": "string", "enum": ["ok", "parcial", "sem_credencial", "sem_fonte", "falhou"], "description": "parcial/sem_credencial/sem_fonte/falhou são findings por si — nunca 'ok' silencioso." },
+    "kpis": { "type": "object", "additionalProperties": { "type": ["number", "string", "null", "boolean"] } },
+    "sinais_conversao": { "type": "array", "items": { "$ref": "#/$defs/sinal" }, "description": "Estabelecimento comum → parceiro; usuário → reserva confirmada/retorno. O foco da empresa." },
+    "experiencia": { "type": "array", "items": { "$ref": "#/$defs/sinal" }, "description": "Quem está esperando por nós agora (cliente ou estabelecimento) e há quanto tempo." },
+    "achados": { "type": "array", "items": { "$ref": "#/$defs/achado" } },
+    "acoes_autonomas": { "type": "array", "items": { "type": "object", "required": ["acao", "n"], "properties": { "acao": { "type": "string" }, "n": { "type": "integer" }, "evidencia": { "type": "string" } } }, "description": "O que o agente fez sozinho neste ciclo (AUTONOMO / AUTONOMO_COM_LOG)." },
+    "aprovacoes_pendentes": { "type": "array", "items": { "type": "object", "required": ["id", "titulo"], "properties": { "id": { "type": "string" }, "titulo": { "type": "string" }, "tipo": { "type": "string" }, "desde": { "type": "string" } } } },
+    "custo": { "type": "object", "properties": { "eur_e4": { "type": "integer", "description": "EUR em unidades de 0,0001 — nunca float" }, "tokens": { "type": "integer" } } },
+    "cobertura": { "type": "object", "required": ["fontes", "lacunas"], "properties": { "fontes": { "type": "array", "items": { "type": "string" } }, "lacunas": { "type": "array", "items": { "type": "string" } } } }
+  },
+  "$defs": {
+    "sinal": { "type": "object", "required": ["tipo", "valor"], "properties": { "tipo": { "type": "string" }, "valor": { "type": ["number", "string"] }, "detalhe": { "type": "string" }, "fonte": { "type": "string" } } },
+    "achado": {
+      "type": "object",
+      "required": ["severidade", "titulo", "evidencia", "acao_proposta", "autonomia", "dono"],
+      "properties": {
+        "chave": { "type": "string", "description": "identificador estável para dedup entre ciclos (ex.: guardiao.mesa_hoje_sem_resposta)" },
+        "severidade": { "type": "string", "enum": ["critica", "alta", "media", "info"] },
+        "titulo": { "type": "string", "maxLength": 140 },
+        "evidencia": { "type": "string" },
+        "fonte": { "type": "string" },
+        "acao_proposta": { "type": "string" },
+        "autonomia": { "type": "string", "enum": ["autonomo", "autonomo_com_log", "requer_aprovacao_orquestrador", "requer_aprovacao_humana"] },
+        "dono": { "type": "string" },
+        "prazo": { "type": "string" }
+      }
+    }
+  }
+}

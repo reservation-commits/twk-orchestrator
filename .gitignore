@@ -1,0 +1,31 @@
+# Os quatro agentes com repositório próprio (GitHub reservation-commits) ficam fora deste.
+/Agente Comercial/
+/Agente Editorial/
+/Agente Financeiro/
+/Agente de Suporte e Concierge/
+
+# Dependências e builds
+**/node_modules/
+**/dist/
+**/.next/
+
+# Segredos — nunca. Os reais moram em ~/.twk/ (fora do OneDrive).
+**/.env
+**/.env.*
+!**/.env.example
+**/*.local
+**/*.pem
+**/*.key
+
+# Estado vivo e logs (PII, threads, anexos, auditoria) — ficam na máquina/volume, não no código
+/orchestrator/state/
+/orchestrator/logs/
+/orchestrator/command-center/state/
+/orchestrator/agents/*/state/
+/orchestrator/evals/relatorios/
+
+# Pacotes de deploy e lixo
+**/*.zip
+**/*.log
+.DS_Store
+Thumbs.db

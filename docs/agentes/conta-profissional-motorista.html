@@ -1,0 +1,361 @@
+<title>Conta Profissional do Motorista</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  :root {
+    --ink: #070b10; --charcoal: #0f1218; --warm: #181c24; --border: #1e2230; --border-2: #2a2f40;
+    --gold: #c9a96e; --gold-light: #e4c990; --gold-dark: #9e7c48;
+    --cream: #ede9df; --cream-d: #b8b3a6; --white: #f7f4ef; --silver: #9a97a8; --gray: #585668;
+    --ok: #7fb58a; --warn: #d9b45c; --bleed: #c8695c;
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans: "Jost", "Segoe UI", Helvetica, Arial, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ink); color: var(--cream); font-family: var(--sans); font-size: 15px; line-height: 1.6; padding-block: 0 80px; padding-inline: clamp(16px, 4vw, 40px); }
+  a { color: var(--gold); text-decoration: none; }
+  strong { color: var(--white); font-weight: 500; }
+  p { margin: 0 0 1em; max-width: 68ch; }
+  ul { padding-left: 1.2em; margin: 0 0 1em; max-width: 68ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--gold); }
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; color: var(--white); margin: 0; text-wrap: balance; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .eyebrow { font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .mast { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; padding-block: 26px 18px; border-bottom: 1px solid var(--border); }
+  .brand { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .48em; text-transform: uppercase; color: var(--gold); }
+  .meta { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--silver); }
+  .cover { padding-block: 50px 36px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: clamp(38px, 6vw, 68px); line-height: 1.03; letter-spacing: -.015em; margin: 12px 0 18px; max-width: 16ch; }
+  .lead { font-size: 18px; line-height: 1.55; max-width: 62ch; }
+  section { padding-block: 44px 10px; border-bottom: 1px solid var(--border); }
+  h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 14px; max-width: 26ch; }
+  h3 { font-weight: 500; font-size: 24px; margin: 30px 0 10px; }
+  .note { font-size: 13.5px; color: var(--silver); max-width: 68ch; }
+  .chip { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .12em; padding: 1px 7px; border: 1px solid var(--border-2); border-radius: 3px; color: var(--silver); vertical-align: middle; margin-left: 4px; line-height: 1.6; }
+  .chip.req { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 50%, transparent); }
+  .chip.priv { color: var(--bleed); border-color: color-mix(in srgb, var(--bleed) 50%, transparent); }
+  .chip.ro { color: var(--silver); }
+  .chip.pub { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 12.5px; color: var(--silver); padding-block: 18px 0; }
+
+  .tscroll { overflow-x: auto; margin: 14px 0 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 760px; }
+  th { text-align: left; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--silver); font-weight: 500; padding: 10px 12px 8px 0; border-bottom: 1px solid var(--border); white-space: nowrap; vertical-align: bottom; }
+  td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  td:first-child { color: var(--white); white-space: nowrap; }
+  td.t { color: var(--cream-d); font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; white-space: nowrap; }
+  td.w { color: var(--silver); font-size: 12.5px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 18px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 18px; background: var(--charcoal); }
+  .card .k { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .card h4 { font-weight: 500; font-size: 22px; margin: 0 0 8px; }
+  .card p { font-size: 14px; color: var(--cream-d); margin: 0; }
+  .card ul { font-size: 14px; color: var(--cream-d); margin: 8px 0 0; }
+  .states { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 16px 0; }
+  .states > div { flex: 1 1 150px; border: 1px solid var(--border); background: var(--charcoal); border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+  .states > div b { display: block; font-family: var(--serif); font-size: 19px; color: var(--white); font-weight: 500; margin-bottom: 2px; }
+  .states > div i { font-style: normal; color: var(--silver); font-size: 12px; }
+  .callout { border-left: 2px solid var(--gold); padding: 6px 0 6px 16px; margin: 18px 0; max-width: 68ch; font-size: 14.5px; }
+  .callout b { color: var(--gold); font-weight: 500; }
+  .warn { border-left: 2px solid var(--bleed); padding: 6px 0 6px 16px; margin: 18px 0; max-width: 68ch; font-size: 14.5px; }
+  .warn b { color: var(--bleed); font-weight: 500; }
+
+  /* ---- mock do editor ---- */
+  .editor { display: grid; grid-template-columns: 200px minmax(0, 1fr) minmax(260px, 340px); border: 1px solid var(--border-2); border-radius: 12px; overflow: hidden; background: var(--charcoal); margin-top: 22px; }
+  .ed-nav { border-right: 1px solid var(--border); padding: 16px 0; background: var(--ink); }
+  .ed-nav .who { padding: 0 16px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  .ed-nav .who b { display: block; font-family: var(--serif); font-size: 18px; color: var(--white); font-weight: 500; }
+  .ed-nav .who span { font-size: 11px; color: var(--ok); letter-spacing: .1em; text-transform: uppercase; }
+  .ed-nav a { display: flex; justify-content: space-between; padding: 8px 16px; font-size: 13px; color: var(--cream-d); }
+  .ed-nav a.on { color: var(--white); background: var(--warm); border-right: 2px solid var(--gold); }
+  .ed-nav a em { font-style: normal; font-size: 10px; color: var(--warn); }
+  .ed-main { padding: 20px 22px; }
+  .ed-main h4 { font-weight: 500; font-size: 22px; margin-bottom: 4px; }
+  .ed-main .sub { font-size: 12.5px; color: var(--silver); margin-bottom: 16px; }
+  .f { display: grid; gap: 4px; margin-bottom: 12px; }
+  .f label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--silver); display: flex; justify-content: space-between; }
+  .f label i { font-style: normal; color: var(--gray); letter-spacing: 0; text-transform: none; }
+  .f input, .f textarea, .f select { width: 100%; background: var(--ink); border: 1px solid var(--border-2); border-radius: 8px; color: var(--cream); font-family: var(--sans); font-size: 14px; padding: 9px 12px; }
+  .f textarea { min-height: 84px; resize: vertical; }
+  .r2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-2); color: var(--cream-d); }
+  .tags span.on { border-color: var(--gold); color: var(--white); }
+  .photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .photos div { aspect-ratio: 4/3; border: 1px dashed var(--border-2); border-radius: 6px; display: grid; place-items: center; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--gray); background: var(--ink); }
+  .photos div.has { border-style: solid; background: radial-gradient(ellipse 70% 45% at 50% 92%, rgba(201,169,110,.3), transparent 60%), #05070b; color: var(--cream-d); }
+  .ed-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; font-family: var(--sans); font-weight: 500; font-size: 13px; padding: 10px 16px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; }
+  .btn.gold { background: linear-gradient(180deg, var(--gold-light), var(--gold)); color: var(--ink); }
+  .btn.ghost { background: transparent; color: var(--cream); border-color: var(--border-2); }
+  .ed-prev { border-left: 1px solid var(--border); padding: 20px 18px; background: var(--ink); }
+  .ed-prev .k { font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: var(--silver); margin-bottom: 10px; }
+  .pv { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .pv .img { height: 110px; background: radial-gradient(ellipse 70% 45% at 50% 92%, rgba(201,169,110,.32), transparent 60%), linear-gradient(180deg, #05070b, #0b0e14); }
+  .pv .bd { padding: 12px 14px; }
+  .pv .e { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+  .pv .h { font-family: var(--serif); font-size: 22px; line-height: 1.1; color: var(--white); margin: 4px 0 6px; }
+  .pv .h em { color: var(--gold); }
+  .pv p { font-size: 11.5px; color: var(--cream-d); margin: 0 0 8px; }
+  .pv .tags span { font-size: 9px; padding: 2px 7px; }
+  .pv .pr { font-size: 11px; color: var(--silver); border-top: 1px solid var(--border); margin-top: 10px; padding-top: 8px; display: flex; justify-content: space-between; }
+  .pv .pr b { font-family: var(--serif); font-size: 18px; color: var(--white); font-weight: 400; }
+  .net { margin-top: 12px; font-size: 12px; color: var(--silver); border: 1px dashed var(--border-2); border-radius: 8px; padding: 10px 12px; }
+  .net div { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+  .net .g { color: var(--gold-light); }
+
+  @media (max-width: 900px) { .editor { grid-template-columns: 1fr; } .ed-nav { display: flex; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--border); padding: 8px; } .ed-nav .who { width: 100%; border: 0; margin: 0; } .ed-nav a { padding: 6px 10px; } .ed-prev { border-left: 0; border-top: 1px solid var(--border); } .photos { grid-template-columns: repeat(2, 1fr); } }
+</style>
+
+<div class="wrap">
+  <header class="mast"><div class="brand">The World Keys</div><div class="meta">Especificação · Conta profissional · Motoristas · 15 set 2026</div></header>
+
+  <div class="cover">
+    <p class="eyebrow">Conta profissional · Serviços</p>
+    <h1>O motorista edita a própria página</h1>
+    <p class="lead">Todo parceiro de transporte entra pela mesma porta que os restaurantes, o gestor em <strong>manager.theworldkeys.com</strong>, com o tipo de conta "Motorista". A partir dela edita tudo o que a página pública mostra: identidade, veículo, serviços, preços, disponibilidade e fotos. A The World Keys guarda para si a marca, a comissão, a verificação e a ordem de listagem.</p>
+    <div class="legend">
+      <span><span class="chip req">obrigatório</span> sem ele a página não publica</span>
+      <span><span class="chip pub">público</span> aparece na página do serviço</span>
+      <span><span class="chip priv">privado</span> só no voucher pago ou no back-office</span>
+      <span><span class="chip ro">só leitura</span> definido pela TWK</span>
+    </div>
+  </div>
+
+  <section>
+    <p class="eyebrow">Princípio</p>
+    <h2>Uma conta, oito secções, uma página</h2>
+    <p>Cada secção da conta alimenta uma parte da página pública que já foi desenhada. O parceiro nunca escreve HTML nem escolhe cores: preenche campos, e a página compõe-se sozinha na identidade da TWK. Preço e disponibilidade publicam na hora. Texto e fotos novos publicam na hora, mas passam por revisão editorial em 24 horas, com direito a correção. Documentos vencidos tiram a página do ar automaticamente.</p>
+    <div class="callout"><b>Mesma porta dos restaurantes.</b> Reaproveita-se o convite por e-mail, o código de acesso e o gestor que já existem. Condição prévia, já registada: corrigir a marca "The World's Kitchen" no código e no cadastro antes de convidar o primeiro motorista.</div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 1</p>
+    <h2>Identidade e empresa</h2>
+    <div class="tscroll"><table>
+      <tr><th>Campo</th><th>Tipo</th><th>Visibilidade</th><th>Regra</th></tr>
+      <tr><td>Nome e apelido <span class="chip req">obrigatório</span></td><td class="t">texto</td><td><span class="chip pub">público</span></td><td class="w">Nome exibido na página e no voucher.</td></tr>
+      <tr><td>Fotografia de perfil <span class="chip req">obrigatório</span></td><td class="t">imagem</td><td><span class="chip pub">público</span></td><td class="w">Rosto visível, fundo neutro, mínimo 800 px. Entra no voucher e no lembrete da véspera.</td></tr>
+      <tr><td>Título profissional <span class="chip req">obrigatório</span></td><td class="t">texto ≤ 40</td><td><span class="chip pub">público</span></td><td class="w">Ex.: "Chauffeur de sécurité". Aparece sob o nome.</td></tr>
+      <tr><td>Idiomas falados <span class="chip req">obrigatório</span></td><td class="t">multi-seleção</td><td><span class="chip pub">público</span></td><td class="w">Lista fixa. Define também o idioma em que o parceiro recebe as reservas.</td></tr>
+      <tr><td>E-mail de acesso <span class="chip req">obrigatório</span></td><td class="t">e-mail</td><td><span class="chip priv">privado</span></td><td class="w">Login. Alteração exige código de confirmação.</td></tr>
+      <tr><td>WhatsApp profissional <span class="chip req">obrigatório</span></td><td class="t">telefone</td><td><span class="chip priv">privado</span></td><td class="w">Mostrado ao cliente só depois do pagamento. Antes, o contacto passa pela TWK.</td></tr>
+      <tr><td>Razão social e forma jurídica <span class="chip req">obrigatório</span></td><td class="t">texto</td><td><span class="chip priv">privado</span></td><td class="w">Quem fatura o cliente. Ex.: SASU, EI, SAS.</td></tr>
+      <tr><td>SIREN / SIRET <span class="chip req">obrigatório</span></td><td class="t">número</td><td><span class="chip priv">privado</span></td><td class="w">Validado contra o formato francês; conferência manual no INSEE.</td></tr>
+      <tr><td>IVA intracomunitário</td><td class="t">texto</td><td><span class="chip priv">privado</span></td><td class="w">Vazio se isento (franchise en base). Determina se o preço exibe IVA.</td></tr>
+      <tr><td>Morada da sede <span class="chip req">obrigatório</span></td><td class="t">endereço</td><td><span class="chip priv">privado</span></td><td class="w">Consta no contrato e na fatura de comissão.</td></tr>
+      <tr><td>Apresentação <span class="chip req">obrigatório</span></td><td class="t">texto ≤ 600</td><td><span class="chip pub">público</span></td><td class="w">Vira o parágrafo sob o título. Revisão editorial em 24 h. Sem telefones, links ou preços no texto.</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 2</p>
+    <h2>Documentos e verificação</h2>
+    <p>Cada documento tem ficheiro, data de emissão e data de validade. Trinta dias antes de vencer, o parceiro recebe aviso; no dia do vencimento, a página sai do ar e as reservas futuras ficam protegidas (o cliente é avisado e realocado, ou reembolsado).</p>
+    <div class="tscroll"><table>
+      <tr><th>Documento (França)</th><th>Validade</th><th>Bloqueia publicação?</th></tr>
+      <tr><td>Carte professionnelle VTC <span class="chip req">obrigatório</span></td><td>5 anos</td><td>Sim</td></tr>
+      <tr><td>Inscrição no registo VTC (REVTC) <span class="chip req">obrigatório</span></td><td>5 anos</td><td>Sim</td></tr>
+      <tr><td>Extrait Kbis ou INSEE <span class="chip req">obrigatório</span></td><td>menos de 3 meses na entrega</td><td>Sim</td></tr>
+      <tr><td>Seguro de responsabilidade civil profissional <span class="chip req">obrigatório</span></td><td>anual</td><td>Sim</td></tr>
+      <tr><td>Seguro do veículo com transporte de pessoas a título oneroso <span class="chip req">obrigatório</span></td><td>anual, por veículo</td><td>Sim, o veículo</td></tr>
+      <tr><td>Carte grise do veículo <span class="chip req">obrigatório</span></td><td>—</td><td>Sim, o veículo</td></tr>
+      <tr><td>Carta de condução</td><td>—</td><td>Não, mas exigido para o selo verificado</td></tr>
+      <tr><td>Certificado de formação em segurança (chauffeur de sécurité)</td><td>conforme emissor</td><td>Não. Habilita a etiqueta "chauffeur de sécurité"</td></tr>
+    </table></div>
+    <p class="note">Fora de França a lista muda por país; a conta mostra a lista do país da sede. Os ficheiros ficam fora do OneDrive e fora do banco principal, com acesso registado no audit.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 3</p>
+    <h2>Página pública</h2>
+    <div class="tscroll"><table>
+      <tr><th>Campo</th><th>Tipo</th><th>Onde aparece</th><th>Regra</th></tr>
+      <tr><td>Endereço da página <span class="chip ro">só leitura</span></td><td class="t">slug</td><td>URL</td><td class="w">Gerado do nome e da cidade: <code>/services/private-driver/paris/julien-guilloteau</code>. Um pedido de mudança por ano.</td></tr>
+      <tr><td>Frase de destaque <span class="chip req">obrigatório</span></td><td class="t">texto ≤ 60</td><td>Título grande da página</td><td class="w">Ex.: "Chegue como convidado de honra." A palavra em itálico dourado é a última oração. Revisão editorial.</td></tr>
+      <tr><td>Foto de capa <span class="chip req">obrigatório</span></td><td class="t">imagem</td><td>Palco do veículo</td><td class="w">Fundo escuro obrigatório; a plataforma aplica a luz de piso e o filete dourado. Mínimo 1600 px. Sem texto na imagem.</td></tr>
+      <tr><td>Galeria</td><td class="t">até 8 imagens</td><td>Secção "O veículo e o motorista"</td><td class="w">Interior, exterior, detalhes. Sem clientes identificáveis.</td></tr>
+      <tr><td>Comodidades <span class="chip req">obrigatório</span></td><td class="t">multi-seleção + 3 livres</td><td>Chips sob o título e ficha do veículo</td><td class="w">Lista fixa: Wi-Fi, ecrãs, céu estrelado, águas, doçaria, cadeira de criança, carregador, imprensa, capacidade para cadeira de rodas. Livres passam por revisão.</td></tr>
+      <tr><td>Zona de atuação <span class="chip req">obrigatório</span></td><td class="t">cidade + raio ou lista de zonas</td><td>Ficha "Disponibilidade"; filtra a cidade onde a página é oferecida</td><td class="w">Ex.: Paris, Île-de-France, aeroportos CDG, Orly, Le Bourget.</td></tr>
+      <tr><td>Horário de serviço <span class="chip req">obrigatório</span></td><td class="t">dias × faixas</td><td>Ficha "Disponibilidade"</td><td class="w">"Dia e noite" quando cobre 24 h. Feriados marcados à parte.</td></tr>
+      <tr><td>Perguntas frequentes</td><td class="t">até 6 pares</td><td>Secção FAQ</td><td class="w">As 4 da TWK (preço, cancelamento, quem leva, voo atrasado) são fixas; o parceiro acrescenta até 6.</td></tr>
+      <tr><td>Selo "Parceiro verificado" <span class="chip ro">só leitura</span></td><td class="t">estado</td><td>Cartão do parceiro</td><td class="w">Atribuído pela TWK: documentos válidos + carta de condução + 5 serviços concluídos sem incidente.</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 4</p>
+    <h2>Veículos</h2>
+    <p>Um parceiro pode ter vários veículos; um deles é o principal e dá a foto de capa. Cada serviço pode ser ligado a um veículo específico.</p>
+    <div class="tscroll"><table>
+      <tr><th>Campo</th><th>Tipo</th><th>Visibilidade</th><th>Regra</th></tr>
+      <tr><td>Marca, modelo, ano <span class="chip req">obrigatório</span></td><td class="t">texto + ano</td><td><span class="chip pub">público</span></td><td class="w">Ex.: Tesla Model X 2024.</td></tr>
+      <tr><td>Categoria <span class="chip req">obrigatório</span></td><td class="t">seleção</td><td><span class="chip pub">público</span></td><td class="w">Berlina, SUV, van, limusina. Filtro futuro na página da cidade.</td></tr>
+      <tr><td>Cor</td><td class="t">seleção</td><td><span class="chip pub">público</span></td><td class="w">Entra no voucher: "Tesla Model X preto".</td></tr>
+      <tr><td>Lugares para passageiros <span class="chip req">obrigatório</span></td><td class="t">1 a 8</td><td><span class="chip pub">público</span></td><td class="w">Limita o seletor "Passageiros" do cartão de reserva.</td></tr>
+      <tr><td>Bagagem</td><td class="t">malas grandes / cabine</td><td><span class="chip pub">público</span></td><td class="w">Ex.: 4 grandes + 2 cabine.</td></tr>
+      <tr><td>Elétrico / híbrido</td><td class="t">sim/não</td><td><span class="chip pub">público</span></td><td class="w">Etiqueta "100% elétrico".</td></tr>
+      <tr><td>Matrícula <span class="chip req">obrigatório</span></td><td class="t">texto</td><td><span class="chip priv">privado</span></td><td class="w">Só no lembrete da véspera e no voucher. Nunca na página.</td></tr>
+      <tr><td>Comodidades a bordo</td><td class="t">multi-seleção</td><td><span class="chip pub">público</span></td><td class="w">Herdadas pela página se o veículo for o principal.</td></tr>
+      <tr><td>Fotos do veículo</td><td class="t">até 6</td><td><span class="chip pub">público</span></td><td class="w">Uma delas pode ser promovida a capa.</td></tr>
+      <tr><td>Seguro e carte grise <span class="chip req">obrigatório</span></td><td class="t">documentos</td><td><span class="chip priv">privado</span></td><td class="w">Ver secção 2. Veículo sem seguro válido não pode ser ligado a serviços.</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 5</p>
+    <h2>Serviços e tarifas</h2>
+    <p>O parceiro cria ofertas a partir de quatro moldes da TWK. O molde garante que o cartão de reserva e o cálculo de preço funcionam sem código novo. Preços em cêntimos, moeda da sede. O painel mostra sempre ao lado do preço o valor líquido que o parceiro recebe.</p>
+    <div class="tscroll"><table>
+      <tr><th>Campo</th><th>Tipo</th><th>Regra</th></tr>
+      <tr><td>Molde <span class="chip req">obrigatório</span></td><td class="t">seleção</td><td class="w">Transfer em cidade · Transfer aeroporto · À disposição por hora · Soirée (ida, espera e regresso). "Personalizado" só sob pedido de cotação, sem preço fixo.</td></tr>
+      <tr><td>Nome exibido</td><td class="t">texto ≤ 30</td><td class="w">Por defeito o nome do molde. Ex.: "Soirée Paris".</td></tr>
+      <tr><td>Veículo</td><td class="t">seleção</td><td class="w">Um dos veículos com seguro válido, ou "qualquer".</td></tr>
+      <tr><td>Preço <span class="chip req">obrigatório</span></td><td class="t">cêntimos</td><td class="w">Preço ao cliente, IVA incluído se aplicável. A plataforma não impõe mínimo, mas alerta se ficar 40% abaixo da média da cidade.</td></tr>
+      <tr><td>Preço por hora e mínimo de horas</td><td class="t">cêntimos · 1 a 12</td><td class="w">Só no molde "À disposição".</td></tr>
+      <tr><td>Espera incluída e hora extra</td><td class="t">horas · cêntimos</td><td class="w">Só no molde "Soirée". Ex.: 4 h incluídas, 85 € a extra.</td></tr>
+      <tr><td>Espera na chegada do voo</td><td class="t">minutos</td><td class="w">Só no molde "Transfer aeroporto". Ex.: 60 min.</td></tr>
+      <tr><td>Suplemento noturno</td><td class="t">% e faixa horária</td><td class="w">Ex.: 15% entre 22h e 6h. Aparece sempre antes do pagamento.</td></tr>
+      <tr><td>Outros suplementos</td><td class="t">lista</td><td class="w">Feriado, animal, cadeira de criança, paragem extra. Cada um com preço fixo em cêntimos.</td></tr>
+      <tr><td>Zonas cobertas</td><td class="t">seleção</td><td class="w">Subconjunto da zona de atuação. Ex.: Transfer em cidade só Paris intramuros.</td></tr>
+      <tr><td>Antecedência mínima <span class="chip req">obrigatório</span></td><td class="t">horas</td><td class="w">Ex.: 3 h. Antes disso, o cartão pede contacto à TWK.</td></tr>
+      <tr><td>Política de cancelamento <span class="chip req">obrigatório</span></td><td class="t">escolha entre 3</td><td class="w">Flexível (grátis até 6 h), Padrão (grátis até 24 h, 50% até 6 h), Estrita (grátis até 48 h). Texto legal é da TWK; o parceiro só escolhe.</td></tr>
+      <tr><td>Ativo</td><td class="t">sim/não</td><td class="w">Desativar retira da página sem apagar reservas já pagas.</td></tr>
+      <tr><td>Comissão <span class="chip ro">só leitura</span></td><td class="t">%</td><td class="w">Definida no contrato. Exibida como "você recebe" ao lado de cada preço.</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 6</p>
+    <h2>Disponibilidade e reservas</h2>
+    <div class="grid">
+      <div class="card"><div class="k">Calendário</div><h4>Bloqueios</h4><p>Dias ou faixas indisponíveis. Reserva paga bloqueia automaticamente o intervalo mais a margem de deslocação.</p></div>
+      <div class="card"><div class="k">Aceitação</div><h4>Automática ou manual</h4><p>Automática: o pagamento confirma. Manual: o parceiro tem 2 horas para aceitar; passado o prazo, a TWK assume e o cliente é avisado. Por defeito, automática.</p></div>
+      <div class="card"><div class="k">Reservas</div><h4>Lista e detalhe</h4><p>Próximas, concluídas, canceladas. Dados do cliente só após pagamento. Botões: aceitar, contactar pelo WhatsApp, marcar como concluída, reportar incidente.</p></div>
+      <div class="card"><div class="k">Cancelamento pelo parceiro</div><h4>Com penalidade</h4><p>Reembolso integral ao cliente e nota no desempenho. Três em 90 dias suspendem a página até revisão.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 7</p>
+    <h2>Pagamentos</h2>
+    <div class="grid">
+      <div class="card"><div class="k">Stripe Connect Express</div><h4>Onboarding fora da TWK</h4><p>Botão "Configurar recebimentos" abre o Stripe. Identidade, IBAN e dados fiscais ficam lá. A conta mostra só o estado: pendente, em verificação, ativa, restrita.</p></div>
+      <div class="card"><div class="k">Repasses</div><h4>Extrato</h4><p>Cada serviço concluído: valor pago pelo cliente, comissão, taxa de pagamento, líquido, data prevista do repasse (dia seguinte ao serviço). Exportável em CSV.</p></div>
+      <div class="card"><div class="k">Faturação</div><h4>Quem emite o quê</h4><p>O parceiro fatura o cliente pelo serviço (a TWK gera o rascunho com os dados da conta). A TWK fatura o parceiro pela comissão, mensalmente.</p></div>
+      <div class="card"><div class="k">Reembolsos</div><h4>Automáticos pela política</h4><p>Cancelamento dentro do prazo devolve ao cliente e reverte a comissão. Fora do prazo, o líquido fica com o parceiro.</p></div>
+    </div>
+    <div class="warn"><b>Nunca na TWK:</b> IBAN, documento de identidade para o Stripe, dados de cartão do cliente. Esses campos não existem no gestor; existem no Stripe.</div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Secção 8</p>
+    <h2>Desempenho, avaliações e preferências</h2>
+    <div class="tscroll"><table>
+      <tr><th>Campo</th><th>Quem preenche</th><th>Efeito</th></tr>
+      <tr><td>Taxa de aceitação e tempo de resposta <span class="chip ro">só leitura</span></td><td>Sistema</td><td class="w">Abaixo de 80% em 30 dias: aviso; abaixo de 60%: desce na listagem.</td></tr>
+      <tr><td>Avaliações de clientes <span class="chip ro">só leitura</span></td><td>Cliente, após o serviço</td><td class="w">Nota de 1 a 5 e comentário; publicadas após revisão. Resposta pública do parceiro permitida, uma por avaliação.</td></tr>
+      <tr><td>Incidentes</td><td>Parceiro ou cliente</td><td class="w">Atraso, no-show, dano. Tratados pela Aria e pelo MAESTRO; qualquer valor ao cliente sobe ao fundador.</td></tr>
+      <tr><td>Notificações</td><td>Parceiro</td><td class="w">E-mail e WhatsApp, por tipo de evento; horário de silêncio.</td></tr>
+      <tr><td>Idioma da interface</td><td>Parceiro</td><td class="w">FR, EN, PT, ES, IT. Independente dos idiomas falados.</td></tr>
+      <tr><td>Férias</td><td>Parceiro</td><td class="w">Página fica visível com "indisponível até {data}" e sem botão de reserva.</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Ciclo de vida</p>
+    <h2>Estados da conta</h2>
+    <div class="states">
+      <div><b>Convidada</b><i>a TWK envia o convite com código; a página já existe como rascunho pré-preenchido pelo Comercial</i></div>
+      <div><b>Em preenchimento</b><i>o parceiro completa identidade, documentos, veículo e um serviço</i></div>
+      <div><b>Em verificação</b><i>documentos conferidos em 2 dias úteis; Stripe ativo</i></div>
+      <div><b>Publicada</b><i>página no ar, aparece na cidade; verificação editorial do texto em 24 h</i></div>
+      <div><b>Verificada</b><i>selo dourado após 5 serviços sem incidente</i></div>
+      <div><b>Suspensa</b><i>documento vencido, 3 cancelamentos ou incidente grave; reservas pagas protegidas</i></div>
+    </div>
+    <div class="callout"><b>Como nasce a primeira conta.</b> A página do Julien Guilloteau já está desenhada com os dados do cartão. O Comercial cria o rascunho, envia o convite, e o parceiro só confere, carrega os documentos e liga o Stripe. É o mesmo princípio da mudança de rota dos restaurantes: a plataforma faz o cadastro, o parceiro aprova.</div>
+  </section>
+
+  <section>
+    <p class="eyebrow">O que o parceiro não edita</p>
+    <h2>Reservado à The World Keys</h2>
+    <ul>
+      <li><strong>Marca e identidade visual:</strong> cores, tipografia, cabeçalho, rodapé, luz de piso do palco.</li>
+      <li><strong>Comissão, textos legais e as três políticas de cancelamento.</strong></li>
+      <li><strong>Selo verificado, ordem de listagem e a cidade onde a página é oferecida</strong> (só cidades com o serviço ativo).</li>
+      <li><strong>As quatro perguntas frequentes fixas</strong> e a frase "Pagamento seguro por Stripe".</li>
+      <li><strong>Contacto direto antes do pagamento:</strong> o WhatsApp do parceiro só é revelado ao cliente com reserva paga.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="eyebrow">Exemplo</p>
+    <h2>O ecrã de edição da página pública</h2>
+    <p>Formulário à esquerda, pré-visualização ao vivo à direita. O que o parceiro escreve aparece na hora como o cliente verá.</p>
+    <div class="editor">
+      <nav class="ed-nav">
+        <div class="who"><b>Julien Guilloteau</b><span>publicada · verificada</span></div>
+        <a href="#">Identidade</a>
+        <a href="#">Documentos <em>1 vence em 30 d</em></a>
+        <a href="#" class="on">Página pública</a>
+        <a href="#">Veículos</a>
+        <a href="#">Serviços e tarifas</a>
+        <a href="#">Disponibilidade</a>
+        <a href="#">Reservas <em>2 novas</em></a>
+        <a href="#">Pagamentos</a>
+        <a href="#">Desempenho</a>
+      </nav>
+      <div class="ed-main">
+        <h4>Página pública</h4>
+        <div class="sub">Endereço: theworldkeys.com/services/private-driver/paris/julien-guilloteau · última publicação há 3 dias</div>
+        <div class="f"><label>Frase de destaque <i>52 / 60</i></label><input type="text" value="Chegue como convidado de honra."></div>
+        <div class="f"><label>Apresentação <i>318 / 600 · revisão editorial em 24 h</i></label><textarea>Chauffeur de sécurité, Tesla Model X, até 6 passageiros, dia e noite. Transfers privados, horas à disposição e a noite completa: ida, espera durante o jantar e regresso.</textarea></div>
+        <div class="f"><label>Comodidades</label><div class="tags"><span class="on">Wi-Fi</span><span class="on">Ecrãs</span><span class="on">Céu estrelado</span><span class="on">Águas minerais</span><span class="on">Doçaria</span><span>Cadeira de criança</span><span>Carregador</span><span>Imprensa</span><span>+ adicionar</span></div></div>
+        <div class="r2">
+          <div class="f"><label>Zona de atuação</label><select><option>Paris · Île-de-France · aeroportos</option></select></div>
+          <div class="f"><label>Horário</label><select><option>Dia e noite, todos os dias</option></select></div>
+        </div>
+        <div class="f"><label>Foto de capa e galeria <i>fundo escuro · mín. 1600 px</i></label><div class="photos"><div class="has">capa</div><div class="has">interior</div><div class="has">portas</div><div>+ foto</div></div></div>
+        <div class="ed-actions"><button class="btn gold" type="button">Publicar alterações</button><button class="btn ghost" type="button">Pré-visualizar como cliente</button><button class="btn ghost" type="button">Guardar rascunho</button></div>
+      </div>
+      <aside class="ed-prev">
+        <div class="k">Pré-visualização · Paris</div>
+        <div class="pv">
+          <div class="img"></div>
+          <div class="bd">
+            <div class="e">Private Driver · Paris</div>
+            <div class="h">Chegue como <em>convidado de honra.</em></div>
+            <p>Chauffeur de sécurité, Tesla Model X, até 6 passageiros, dia e noite…</p>
+            <div class="tags"><span>Wi-Fi</span><span>Ecrãs</span><span>Céu estrelado</span><span>Águas</span><span>Doçaria</span></div>
+            <div class="pr"><span>Soirée · a partir de</span><b>390,00 €</b></div>
+          </div>
+        </div>
+        <div class="net">
+          <div><span>Cliente paga (Soirée)</span><span>390,00 €</span></div>
+          <div><span>Comissão TWK 25%</span><span>97,50 €</span></div>
+          <div><span>Taxa de pagamento (estim.)</span><span>6,10 €</span></div>
+          <div class="g"><span>Você recebe</span><span>286,40 €</span></div>
+        </div>
+      </aside>
+    </div>
+    <p class="note" style="margin-top:14px">Percentual e tarifas são exemplos. O extrato "você recebe" é a peça que mais convence um parceiro a fixar preço na plataforma: ele vê o líquido antes de publicar.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Para os devs</p>
+    <h2>Modelo de dados</h2>
+    <div class="tscroll"><table>
+      <tr><th>Tabela</th><th>Campos principais</th></tr>
+      <tr><td class="t">service_partners</td><td class="w">id, user_id, type (driver), display_name, title, bio, photo_url, languages[], company_name, legal_form, siret, vat_number, address, whatsapp, city_id, service_area, hours, slug, status, verified_at, stripe_account_id, stripe_status, commission_bps, cancellation_policy, auto_accept, min_lead_hours, created_at</td></tr>
+      <tr><td class="t">service_partner_documents</td><td class="w">id, partner_id, vehicle_id?, kind, file_ref, issued_at, expires_at, status (pending, valid, rejected, expired), reviewed_by, reviewed_at</td></tr>
+      <tr><td class="t">service_vehicles</td><td class="w">id, partner_id, make, model, year, category, color, seats, luggage, electric, plate (cifrada), amenities[], photos[], is_primary, insurance_doc_id, registration_doc_id</td></tr>
+      <tr><td class="t">service_offers</td><td class="w">id, partner_id, vehicle_id?, template (city_transfer, airport_transfer, hourly, soiree), name, price_cents, currency, hourly_cents, min_hours, included_wait_h, extra_hour_cents, airport_wait_min, night_pct, night_from, night_to, surcharges[], zones[], active</td></tr>
+      <tr><td class="t">service_availability</td><td class="w">id, partner_id, starts_at, ends_at, reason (block, booking, vacation)</td></tr>
+      <tr><td class="t">service_bookings</td><td class="w">id, code, partner_id, offer_id, customer_id, reservation_id?, pickup, dropoff, starts_at, pax, note, amount_cents, fee_cents, stripe_fee_cents, net_cents, currency, stripe_payment_intent, status, accepted_at, completed_at, cancelled_by, trace_id</td></tr>
+      <tr><td class="t">service_reviews</td><td class="w">id, booking_id, rating, text, status, partner_reply</td></tr>
+      <tr><td class="t">service_ledger</td><td class="w">append-only: booking_id, kind (charge, fee, stripe_fee, transfer, refund, fee_reversal), amount_cents, currency, stripe_ref, at</td></tr>
+    </table></div>
+    <p class="note">Toda escrita passa pela porta de escrita com aprovação (ADR-013) e pelo audit com trace_id. Documentos e matrícula cifrados; acesso registado. O dono do catálogo de parceiros é o Comercial; do dinheiro, o Financeiro; da revisão de texto, o Editorial; do atendimento a incidentes, a Aria com o MAESTRO.</p>
+  </section>
+</div>

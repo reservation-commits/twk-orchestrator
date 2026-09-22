@@ -1,0 +1,383 @@
+<title>A Chave na Mão</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  :root {
+    --ink:#070b10; --surface:#0f1218; --surface-2:#181c24; --border:#232838;
+    --gold:#c9a96e; --gold-strong:#e4c990; --gold-deep:#9e7c48;
+    --text:#ede9df; --text-strong:#f7f4ef; --muted:#9a97a8; --muted-2:#6f6d80;
+    --bleed:#c8695c; --ok:#86a985; --bar:#c9a96e; --bar-dim:#2a2f3c;
+    --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+    --sans:"Jost","Segoe UI",Helvetica,Arial,sans-serif;
+    color-scheme:dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink:#f4f1ea; --surface:#fbf9f4; --surface-2:#ece7db; --border:#d6cfbf;
+      --gold:#9e7c48; --gold-strong:#7d5f34; --gold-deep:#c9a96e;
+      --text:#1d2029; --text-strong:#0b0e14; --muted:#5f5d6e; --muted-2:#8b889a;
+      --bleed:#a8463a; --ok:#4f7a4f; --bar:#9e7c48; --bar-dim:#dfd7c6;
+      color-scheme:light;
+    }
+  }
+  :root[data-theme="light"] {
+    --ink:#f4f1ea; --surface:#fbf9f4; --surface-2:#ece7db; --border:#d6cfbf;
+    --gold:#9e7c48; --gold-strong:#7d5f34; --gold-deep:#c9a96e;
+    --text:#1d2029; --text-strong:#0b0e14; --muted:#5f5d6e; --muted-2:#8b889a;
+    --bleed:#a8463a; --ok:#4f7a4f; --bar:#9e7c48; --bar-dim:#dfd7c6;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.6;padding-block:0 4rem;padding-inline:16px}
+  .wrap{max-width:1040px;margin:0 auto}
+  header.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border)}
+  .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.02;margin:.6rem 0 1rem;color:var(--text-strong);text-wrap:balance}
+  h2{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.1;margin:0 0 .4rem;color:var(--text-strong);text-wrap:balance}
+  h3{font-family:var(--sans);font-weight:500;font-size:1.05rem;letter-spacing:.02em;margin:1.6rem 0 .5rem;color:var(--text-strong)}
+  p{max-width:68ch;margin:.5rem 0 1rem}
+  code{font-size:.88em;color:var(--gold-strong)}
+  .lede{font-family:var(--serif);font-size:1.35rem;line-height:1.4;color:var(--text);max-width:62ch}
+  section{padding:2.6rem 0;border-bottom:1px solid var(--border)}
+  .part{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin:1.6rem 0}
+  .tile{background:var(--surface);padding:1.1rem 1.2rem}
+  .tile .n{font-family:var(--serif);font-size:2.6rem;line-height:1;color:var(--gold-strong);font-variant-numeric:tabular-nums}
+  .tile .l{font-size:.82rem;color:var(--muted);margin-top:.35rem}
+  .tile .s{font-size:.78rem;color:var(--muted-2);margin-top:.25rem}
+  .tag{display:inline-block;font-size:.66rem;letter-spacing:.08em;padding:.05rem .4rem;border:1px solid var(--border);border-radius:2px;color:var(--muted);vertical-align:middle;margin-left:.3rem;font-weight:500}
+  .tag.f{color:var(--ok);border-color:var(--ok)}
+  .tag.s{color:var(--gold);border-color:var(--gold)}
+  .tag.l{color:var(--bleed);border-color:var(--bleed)}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;margin:1rem 0}
+  .tbl{overflow-x:auto}
+  th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--border)}
+  th{font-weight:500;color:var(--muted);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.hl td{background:var(--surface-2)}
+  .bars{display:grid;grid-template-columns:minmax(140px,220px) 1fr minmax(60px,auto);gap:.35rem .8rem;align-items:center;font-size:.9rem;margin:1rem 0}
+  .bars .lab{color:var(--text)}
+  .bars .bar{height:10px;background:var(--bar-dim);position:relative}
+  .bars .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:0 3px 3px 0}
+  .bars .bar i.dim{background:var(--muted-2)}
+  .bars .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .callout{border-left:2px solid var(--gold);padding:.6rem 1rem;background:var(--surface);margin:1.2rem 0;max-width:72ch}
+  .callout.warn{border-left-color:var(--bleed)}
+  .callout p{margin:.2rem 0}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem 2.2rem}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:1rem 0}
+  ol.steps>li{counter-increment:s;position:relative;padding:.9rem 0 .9rem 3.2rem;border-top:1px solid var(--border)}
+  ol.steps>li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:.95rem;font-family:var(--serif);font-size:1.6rem;color:var(--gold);line-height:1}
+  ol.steps b{font-weight:500;color:var(--text-strong)}
+  ol.steps .meta{display:block;font-size:.8rem;color:var(--muted);margin-top:.25rem}
+  ul{padding-left:1.2rem}li{margin:.3rem 0}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0}
+  .kpi div{background:var(--surface);border:1px solid var(--border);padding:.9rem 1rem}
+  .kpi .k{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .kpi .v{font-family:var(--serif);font-size:1.8rem;color:var(--gold-strong);line-height:1.1;margin:.2rem 0}
+  .kpi .d{font-size:.82rem;color:var(--muted)}
+  svg text{font-family:var(--sans);font-size:11px;fill:var(--muted)}
+  .chart{overflow-x:auto;margin:1rem 0}
+  .src{font-size:.82rem;color:var(--muted)}
+  .src ol{padding-left:1.4rem}
+  .src a{color:var(--gold);text-decoration:none;word-break:break-all}
+  .src a:hover,.src a:focus{text-decoration:underline}
+  footer{padding:2rem 0;font-size:.78rem;color:var(--muted-2)}
+  .dim{color:var(--muted)}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">The World Keys · Dossiê · Conversão de conta profissional · 15 set 2026, noite · Paris</div>
+  <h1>A chave na mão</h1>
+  <p class="lede">Cinco semanas de campanha aos estabelecimentos: 185 e-mails, 148 casas, 3 respostas, 1 candidatura, 0 contas. A pesquisa mundial diz que esse resultado era o esperado para o canal escolhido, e que nenhuma plataforma de reservas, entrega ou hospedagem conquistou a oferta por e-mail. Todas fizeram o mesmo: uma cidade, o fundador na porta, o cadastro feito pela plataforma, a ferramenta útil sozinha. Os nossos dados apontam a cidade, a lista de casas e a data-limite. É Lagos, são 26 casas, e a temporada fecha em outubro.</p>
+  <div class="tiles">
+    <div class="tile"><div class="n">0</div><div class="l">contas de restaurante</div><div class="s">banco lido às 22h03 UTC de 15/09 · papel somente-leitura <span class="tag f">F</span></div></div>
+    <div class="tile"><div class="n">2%</div><div class="l">respostas humanas ao e-mail</div><div class="s">3 em 148 casas · faixa mundial de e-mail frio a caixa genérica: menos de 1% a 3,5% <span class="tag f">F</span></div></div>
+    <div class="tile"><div class="n">30%</div><div class="l">da demanda vai para Lagos</div><div class="s">272 de 916 pedidos em 90 dias · 22 casas · 5 delas nunca responderam <span class="tag f">F</span></div></div>
+    <div class="tile"><div class="n">36%</div><div class="l">dos pedidos são para o mesmo dia</div><div class="s">347 de 967 · e-mail ao restaurante não chega a tempo <span class="tag f">F</span></div></div>
+  </div>
+  <p class="dim" style="font-size:.85rem"><span class="tag f">F</span> fato com origem verificável &nbsp; <span class="tag s">S</span> suposição ou estimativa &nbsp; <span class="tag l">L</span> lacuna: não medido. Origens completas no fim.</p>
+</header>
+
+<section>
+  <div class="part">Parte I</div>
+  <h2>Os números, sem maquiagem</h2>
+  <p>A campanha "Círculo de Fundadores" correu de 21 de agosto a 5 de setembro, só por e-mail, em cinco idiomas. Abaixo, cada degrau com o número que existe e o que não existe. O universo é o catálogo publicado lido no banco hoje.</p>
+  <div class="bars" role="table" aria-label="Funil da campanha">
+    <div class="lab">Publicados</div><div class="bar"><i style="width:100%"></i></div><div class="val">1.546</div>
+    <div class="lab">Casas tocadas</div><div class="bar"><i style="width:9.6%"></i></div><div class="val">148 · 185 e-mails</div>
+    <div class="lab">Entregues</div><div class="bar"><i style="width:9.3%"></i></div><div class="val">≈144 · 4 devolvidos</div>
+    <div class="lab">Abertos</div><div class="bar"><i class="dim" style="width:9.3%"></i></div><div class="val">não medido</div>
+    <div class="lab">Responderam (humano)</div><div class="bar"><i style="width:1.2%;min-width:3px"></i></div><div class="val">3</div>
+    <div class="lab">Candidatura</div><div class="bar"><i style="width:.5%;min-width:2px"></i></div><div class="val">1 · ELEOS</div>
+    <div class="lab">Conta criada</div><div class="bar"></div><div class="val">0</div>
+  </div>
+  <p class="dim" style="font-size:.85rem">Barras em escala linear sobre 1.546; os últimos degraus são traços. Fontes: ledger de envios, funil de 31/08, <code>restaurant_invitations</code>, <code>restaurant_users</code>. <span class="tag f">F</span></p>
+
+  <div class="grid2">
+    <div>
+      <h3>Onde sangra, em duas camadas</h3>
+      <p><b>Camada 1, o canal.</b> 98% de silêncio entre e-mail entregue e reação humana. O benchmark mundial de 2026 para e-mail frio é 3,4% de resposta na média das plataformas e 0,45% quando se conta resposta por e-mail enviado; retirar os endereços genéricos (info@, reservas@) de uma lista multiplicou a taxa por 4,5. O nosso catálogo tem quase só endereços genéricos. O resultado de 2% não é falha de texto; é a taxa do canal. <span class="tag f">F</span></p>
+      <p><b>Camada 2, a porta.</b> A única mensagem que converteu (Extrato aos 11 confirmadores, 1 candidatura em 13 horas, 9%) morreu no produto: aprovação sem e-mail de senha, link corrompido, prazo vencido. Hoje, 15 de setembro às 22h UTC, o cadastro em <code>manager.theworldkeys.com/register</code> ainda diz <i>"Claim a listing already on The World's Kitchen"</i>; a landing do gestor ainda diz <i>"Trusted by hundreds of restaurants"</i>; o site do cliente não tem uma única entrada para restaurantes (nem no rodapé, nem na ficha); o convite do ELEOS venceu há 8 dias e continua vencido. <span class="tag f">F</span></p>
+    </div>
+    <div>
+      <h3>O que a demanda diz sobre o produto</h3>
+      <p>Em 90 dias: 916 pedidos, 103 aceites (11%). Casas com acordo aceitam 48% (25 de 52); casas listadas sem acordo aceitam 9% (78 de 864). Há 681 pedidos que simplesmente venceram. <span class="tag f">F</span></p>
+      <p>36% dos pedidos são para o mesmo dia e 53% são mesas de duas pessoas. Um pedido de mesa para hoje à noite, enviado por e-mail a uma caixa genérica, não é respondido a tempo por nenhum restaurante do mundo. A ferramenta que o restaurante precisa não é "um painel": é o pedido chegando no telefone, respondido num toque. <span class="tag f">F</span> <span class="tag s">S</span></p>
+      <p>Em toda a história da plataforma houve <b>uma</b> tentativa real de cadastro. O funil não vaza no meio: quase ninguém entra nele, porque o convite nunca apareceu onde o dono olha. <span class="tag f">F</span></p>
+    </div>
+  </div>
+
+  <h3>A demanda tem endereço: Lagos</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Cidade · 90 dias</th><th class="num">Pedidos</th><th class="num">Casas</th><th class="num">Aceites</th><th class="num">Casas que respondem</th><th>Leitura</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>Lagos, Portugal</td><td class="num">272</td><td class="num">22</td><td class="num">18</td><td class="num">8</td><td>30% de toda a demanda. 26 publicadas, 0 com acordo. Português.</td></tr>
+      <tr><td>Bangkok</td><td class="num">100</td><td class="num">10</td><td class="num">4</td><td class="num">3</td><td>SRI TRAT recusa 74 vezes em nome próprio; caso à parte.</td></tr>
+      <tr><td>Roma</td><td class="num">63</td><td class="num">17</td><td class="num">5</td><td class="num">3</td><td>Segundo cluster europeu; italiano.</td></tr>
+      <tr><td>Nice</td><td class="num">53</td><td class="num">9</td><td class="num">3</td><td class="num">2</td><td>Com Cannes e Sainte-Maxime: 90 pedidos, 15 casas.</td></tr>
+      <tr><td>Paris</td><td class="num">47</td><td class="num">12</td><td class="num">21</td><td class="num">3</td><td>Sede. Demanda modesta, mas ano inteiro e a pé.</td></tr>
+      <tr><td>Atenas</td><td class="num">32</td><td class="num">5</td><td class="num">17</td><td class="num">2</td><td>ATHÉNÉE aceita tudo o que vê.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="dim" style="font-size:.85rem"><code>reservations</code> dedup por cliente + data + hora, casa de teste excluída, banco 15/09. <span class="tag f">F</span></p>
+
+  <div class="grid2">
+    <div>
+      <h3>As cinco casas mais silenciosas da plataforma são de Lagos</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Casa · 180 dias</th><th class="num">Pedidos</th><th class="num">Respostas</th><th class="num">Vencidos</th></tr></thead>
+        <tbody>
+          <tr><td>CASA DO PREGO</td><td class="num">87</td><td class="num">0</td><td class="num">79</td></tr>
+          <tr><td>O ANTÓNIO</td><td class="num">61</td><td class="num">0</td><td class="num">56</td></tr>
+          <tr><td>MY SUSHI</td><td class="num">56</td><td class="num">1</td><td class="num">48</td></tr>
+          <tr><td>DON SEBASTIÃO <span class="dim">(Michelin)</span></td><td class="num">50</td><td class="num">0</td><td class="num">42</td></tr>
+          <tr><td>A PETISQUEIRA</td><td class="num">37</td><td class="num">0</td><td class="num">33</td></tr>
+          <tr class="hl"><td>Soma</td><td class="num">291</td><td class="num">1</td><td class="num">258</td></tr>
+        </tbody>
+      </table></div>
+      <p>258 clientes escolheram uma dessas cinco casas e ficaram sem resposta. Todas têm telefone no catálogo; o plano de reserva direta de 14/09 já constatou que as casas de Lagos reservam por WhatsApp. Ao lado delas, seis casas de Lagos já respondem em nome próprio: SCARTUCCIO (9 de 14), LUCA'S, REPOLHO, DOM VINHO, VENEZA, MY SUSHI. <span class="tag f">F</span></p>
+    </div>
+    <div>
+      <h3>A janela fecha em outubro</h3>
+      <div class="chart"><svg viewBox="0 0 520 190" width="100%" role="img" aria-label="Pedidos por mês em Lagos, set 2025 a set 2026">
+        <g id="lagos-bars"></g>
+        <line x1="34" y1="150" x2="510" y2="150" stroke="currentColor" stroke-opacity=".25"/>
+      </svg></div>
+      <p>Pedidos por mês em Lagos: 118 em julho, 89 em agosto, 36 na primeira quinzena de setembro. No ano passado: 68 em setembro, 29 em outubro, 5 em novembro, 4 em janeiro. <b>Uma casa de Lagos convertida em outubro sente o valor na hora; convertida em novembro, só sente em abril.</b> A demanda total da plataforma também caiu: 547 pedidos em maio, 290 em agosto. <span class="tag f">F</span></p>
+      <p class="dim" style="font-size:.85rem">Setembro é quinzena parcial (barra mais clara).</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="part">Parte II</div>
+  <h2>O que o mundo fez com o lado difícil</h2>
+  <p>Pesquisa em fontes primárias e secundárias sobre como plataformas de reservas, entrega, hospedagem e software para restaurantes conquistaram os primeiros estabelecimentos, e como diretórios levaram donos a assumir páginas já criadas. Os casos de origem da OpenTable, TheFork, Resy e Tock estão no dossiê da manhã; aqui entra o que faltava.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Quem</th><th>O que fizeram com os primeiros restaurantes</th><th>Número</th><th>Para nós</th></tr></thead>
+    <tbody>
+      <tr><td><b>Toast</b> <span class="dim">POS, EUA</span></td><td>80% dos negócios fechados presencialmente; representantes por território; 2/3 das novas casas vêm de inbound e 1 em 5 de indicação de outro restaurante quando a cidade passa de 20% de penetração. Bônus de indicação de 500 a 1.000 dólares pago no 30º dia.</td><td>Reunião presencial fecha ≈3× mais que virtual (Brex: 15–20% × 45–60%)</td><td>Indicação entre casas da mesma cidade só existe com densidade. Pagar no 30º dia, nunca no cadastro.</td></tr>
+      <tr><td><b>Deliveroo</b> <span class="dim">Londres, 2013</span></td><td>O fundador assinou os 3 primeiros pessoalmente (o primeiro "porque eu morava em cima"); entregou ele mesmo por um ano; cresceu bairro a bairro porque só a densidade fecha a conta. Os restaurantes "começaram a falar uns com os outros".</td><td>3 casas à mão</td><td>A prova social nasce da vizinhança, não de uma frase na landing.</td></tr>
+      <tr><td><b>Wolt</b> <span class="dim">Helsinque, 2015</span></td><td>Nasceu só com retirada no balcão (ferramenta que vale sozinha); entrega veio em 2016. Frankfurt abriu com ~20 restaurantes. O cardápio é montado por especialistas da Wolt, com sessão de fotos gratuita de até 2h30; meta: no ar em 5 dias úteis.</td><td>20 casas · 5 dias</td><td>É o padrão de "nós fazemos o cadastro": a plataforma monta, a casa aprova.</td></tr>
+      <tr><td><b>Airbnb</b> <span class="dim">NY, 2009</span></td><td>Alugou uma câmera e fotografou anúncios porta a porta. Anúncios com foto profissional eram 2,5× mais reservados. Número mágico por cidade: 300 anúncios com 100 avaliados.</td><td>2–3× reservas</td><td>O trabalho que a casa não faz sozinha (fotos, horários) é o presente de entrada.</td></tr>
+      <tr><td><b>DoorDash · Zomato</b></td><td>DoorDash publicou 8 cardápios em PDF e os fundadores entregaram os primeiros 200 pedidos; depois assinaram 50 casas porta a porta. Zomato visitava 30 a 40 restaurantes por dia para escanear cardápios.</td><td>30–40 visitas/dia</td><td>Demanda real antes de pedir esforço. Já temos isso: 916 pedidos em 90 dias.</td></tr>
+      <tr><td><b>Google · Yelp · TripAdvisor</b> <span class="dim">assumir página</span></td><td>A página existe e ranqueia antes de o dono agir; o link "É o dono deste negócio?" fica na própria página pública; a verificação é contra o telefone ou e-mail <i>já na listagem</i> (SMS, ligação automática com código); senha depois. TripAdvisor vende com número: página assumida tem 2,5× visitas e 50% mais avaliações. Yelp: 8,39 milhões de páginas assumidas, +8% ao ano; página volta a "não assumida" após 90 dias sem login.</td><td>Foursquare cobra 20 dólares para assumir: adoção irrelevante</td><td>Nosso site não tem o link. Nossa verificação manda código para caixa que muitas vezes está morta. Cobrar ou complicar o "assumir" mata a adoção.</td></tr>
+      <tr><td><b>Stripe Connect</b> <span class="dim">onboarding</span></td><td>Redesenho com dados pré-preenchidos, barra de progresso, campos de celular e idioma local: +5,3% de conclusão na média, +17% num cliente. Cortar um formulário de 7 para 3 campos reduziu o abandono em 44,7% (UXCam, 3,9 milhões de sessões).</td><td>+5% a +17%</td><td>Tudo o que já sabemos da casa (nome, endereço, telefone, horários) entra preenchido; ela só confirma.</td></tr>
+      <tr><td><b>TheFork · Zenchef · Superb · OpenTable</b> <span class="dim">Europa hoje</span></td><td>Nenhuma opera "assuma sua página grátis". Todas vendem por demonstração e <b>a plataforma faz a configuração</b>: chamada de 30 minutos, migração de reservas e clientes, treinamento incluído. Zenchef vende "€0 de comissão por couvert"; TheFork cobra comissão por couvert.</td><td>"nós configuramos"</td><td>Uma conta grátis que exige que o dono se cadastre sozinho é mais cara para ele do que uma paga que alguém configura.</td></tr>
+      <tr><td><b>Quandoo</b> <span class="dim">Berlim</span></td><td>Encerramento anunciado em 24/03/2026: reservas até 30/09/2026, infraestrutura desligada em 31/12/2026.</td><td>milhares de casas órfãs em DE, IT, AT, UK</td><td>Um bolsão datado de restaurantes que precisam de um canal novo. Segundo ciclo, não agora.</td></tr>
+      <tr><td><b>Booking · Just Eat</b></td><td>Booking começou com 5% de comissão e representantes "de carro pela Europa assinando contratos"; o erro foi pagar por contrato assinado e descobrir hotéis que nunca carregaram inventário. Just Eat manteve as casas por 3–4 anos de poucos pedidos por trabalho de vendas, não de produto.</td><td>—</td><td>Conta criada e abandonada é fracasso. Medir "primeira resposta pelo painel", nunca "cadastro".</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>O que se repete em todas, e onde estamos</h3>
+  <div class="grid2">
+    <div>
+      <p><b>1 · Uma cidade, o fundador na porta.</b> 16 de 17 marketplaces estudados por Lenny Rachitsky restringiram geografia; 80% cuidaram da oferta primeiro; venda direta em 60%, indicação em 33%. Toast fecha 80% em campo. <span class="tag f">F</span><br><span class="dim">TWK: 1.546 casas em 40 países, zero visitas, zero ligações.</span></p>
+      <p><b>2 · A plataforma faz o cadastro; a casa só aprova.</b> Wolt monta o cardápio e fotografa; Airbnb fotografa; Stripe pré-preenche; Google e Yelp verificam contra o telefone da listagem. <span class="tag f">F</span><br><span class="dim">TWK: código de 6 dígitos para caixa genérica, revisão manual, senha, tudo em inglês.</span></p>
+      <p><b>3 · Ferramenta que vale sozinha.</b> 34 dos 100 maiores marketplaces nasceram "single-player" e tiveram 10× mais receita por dólar captado. Wolt nasceu como retirada; OpenTable como caderno eletrônico. <span class="tag f">F</span><br><span class="dim">TWK: a frase do que a casa ganha sem clientes nossos ainda não existe. Proposta na Parte IV.</span></p>
+    </div>
+    <div>
+      <p><b>4 · Demanda real como argumento.</b> DoorDash entregou 200 pedidos antes de assinar; TripAdvisor vende "2,5× visitas". <span class="tag f">F</span><br><span class="dim">TWK: é o único padrão em que estamos à frente. O Extrato foi a única mensagem que converteu.</span></p>
+      <p><b>5 · Convite onde o dono já olha.</b> "É o dono?" na página pública; e-mail de notificação de pedido; página que ranqueia antes de o dono agir. <span class="tag f">F</span><br><span class="dim">TWK: o site do cliente não tem nenhuma porta para restaurantes; o botão nos e-mails de pedido existe desde 03/09 e é a única.</span></p>
+      <p><b>6 · Nutrição por 30 a 90 dias.</b> Glovo "incuba" 30 dias; Just Eat segurou casas por anos; 5 interações no primeiro mês elevam a retenção em 20%. <span class="tag f">F</span><br><span class="dim">TWK: nada preparado para o primeiro acesso ao painel.</span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="part">Parte III</div>
+  <h2>Canais: o que chega ao dono de restaurante</h2>
+  <p>Benchmarks de 2024 a 2026, quase todos de fornecedores de ferramentas de prospecção, portanto direcionais. O único corte específico de restaurantes é o de "Food &amp; Beverage" da Belkins, que é o setor com maior resposta a e-mail frio (3,47%) e mesmo assim é uma ordem de grandeza abaixo do presencial.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Canal</th><th>Resposta ou conversão esperada</th><th>Condição</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>1</td><td><b>Visita presencial, 14h–16h30, com a página pronta no celular</b></td><td>≈3× o remoto; OpenTable fechava 1 em 3,2 visitas</td><td>Só compensa com rota agrupada (8 a 12 casas por dia). Lagos e Paris cabem nisso.</td></tr>
+      <tr><td>2</td><td><b>Telefone no idioma da casa, entre serviços</b></td><td>10–15% de ligação para reunião nos melhores times de PME; 2–5% na média</td><td>Terça a quinta, 14h30–17h no sul da Europa. Nunca 12h–14h nem 19h em diante.</td></tr>
+      <tr><td>3</td><td><b>WhatsApp Business (app, manual), personalizado, como 2º ou 3º toque</b></td><td>8–15% semi-aquecido; 15–20% em PT, ES, IT, BR com personalização</td><td>Responder em menos de 90 segundos dobra a taxa. Bloqueio acima de 2–3% derruba o número.</td></tr>
+      <tr><td>4</td><td>E-mail a pessoa nomeada, lote &lt; 50, idioma local, &lt; 80 palavras</td><td>4–6%</td><td>Um follow-up eleva respostas em 66%.</td></tr>
+      <tr><td>5</td><td>E-mail a info@ / reservas@</td><td>&lt; 1%</td><td>Foi a campanha de agosto: 2%.</td></tr>
+      <tr><td>6</td><td>Template de WhatsApp via API, frio</td><td>não viável</td><td>Meta exige opt-in documentado para template de marketing; template "utility" não pode ter conteúdo promocional; contas são encerradas por spam. Desde out/2025 há teto de mensagens a contatos que nunca respondem.</td></tr>
+      <tr><td>7</td><td>SMS frio a celular</td><td>não viável em FR, IT, GR, PT</td><td>Celular é pessoa física na maioria dos regimes; sem benchmark.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn">
+    <p><b>Correção a planos anteriores.</b> O plano "Sem voz" de 06/09 apostava no template da Meta para a Aria iniciar conversas com restaurantes. A pesquisa mostra que o template frio é o canal de maior risco de bloqueio da conta de WhatsApp da TWK, que é também o canal de atendimento ao cliente. O caminho é o app WhatsApp Business num número dedicado, manual, depois de um primeiro contato por outro canal ou depois que a casa responde. A API entra só quando a casa deu opt-in na ativação, para receber os pedidos. <span class="tag f">F</span> <span class="tag s">S</span></p>
+  </div>
+  <p>Duas alavancas de reforço com evidência: um vídeo curto do próprio painel elevou respostas em 19% na Intercom; conteúdo no idioma do comprador é pré-condição (55% dos compradores B2B só compram em idioma nativo, CSA Research). <span class="tag f">F</span></p>
+</section>
+
+<section>
+  <div class="part">Parte IV</div>
+  <h2>A solução de maior impacto: Lagos, na mão, em três semanas</h2>
+  <p class="lede">Fechar a porta em cinco dias úteis. Ir a Lagos na semana seguinte com 26 páginas prontas e ativar as contas no celular do dono, na porta do restaurante, em português. Meta: 8 casas ativas com pedido respondido pelo painel até 15 de outubro. Custo: uma viagem.</p>
+
+  <h3>Por que Lagos, e não Paris primeiro</h3>
+  <ul>
+    <li><b>Demanda:</b> 30% de tudo, 272 pedidos em 90 dias, num raio de poucos quilômetros. Paris tem 47. <span class="tag f">F</span></li>
+    <li><b>Idioma:</b> as 26 casas falam a língua do fundador. É a única cidade onde o time dispensa tradução. <span class="tag f">F</span></li>
+    <li><b>Densidade atingível:</b> 26 casas publicadas; 8 ativas já são 30% da cidade, o limiar em que a Toast vê indicações começarem. Lagos é pequena o bastante para visitar todas em três dias. <span class="tag f">F</span> <span class="tag s">S</span></li>
+    <li><b>Prova social verdadeira:</b> SCARTUCCIO, LUCA'S e REPOLHO já respondem em nome próprio. "Os seus vizinhos já usam" é a frase que a Deliveroo viu funcionar, e aqui ela é verdadeira. <span class="tag f">F</span></li>
+    <li><b>Prazo real:</b> outubro ainda tem demanda (29 pedidos em out/2025); novembro tem 5. A urgência não é retórica. <span class="tag f">F</span></li>
+    <li><b>Argumento honesto e concreto por casa:</b> "87 clientes pediram mesa na Casa do Prego este verão e 79 ficaram sem resposta". Não acusa; mostra. É o Extrato, que foi a única coisa que converteu. <span class="tag f">F</span></li>
+  </ul>
+  <p>Paris entra no segundo ciclo, a pé, como território de sede e demanda o ano inteiro. Nice, Cannes e Sainte-Maxime (90 pedidos, 15 casas) são a alternativa de maior demanda a Paris; decisão do fundador.</p>
+
+  <h3>A frase da ferramenta que vale sozinha</h3>
+  <div class="callout">
+    <p><b>"Cada pedido de mesa chega no seu WhatsApp, já no seu idioma, com nome, pessoas e hora. Você responde com um toque. A página mostra os seus horários reais e fecha sozinha nos dias em que a casa fecha. Sem taxa, sem contrato, e os clientes são seus."</b></p>
+    <p class="dim" style="font-size:.9rem">Cabe numa frase, responde ao dado de 36% de pedidos para o mesmo dia, é executável com o que existe (n8n + template utility com opt-in dado na ativação) e não promete disponibilidade nem confirmação imediata ao cliente. É a resposta à decisão 5 pendente do dossiê da manhã. <span class="tag s">S</span></p>
+  </div>
+
+  <h3>A porta, antes de qualquer viagem</h3>
+  <p>Sete correções, do maior ao menor impacto, cada uma com o teste que a dá por pronta. Sem elas, a visita entrega o dono a um cadastro que se apresenta como outra empresa.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Correção</th><th>Por quê (evidência)</th><th>Quem · esforço</th><th>Pronto quando</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>Link pré-verificado por casa</b>: <code>/register?claim=&lt;token&gt;</code> a partir de <code>restaurant_invitations</code>, já com "meu restaurante já está no site" escolhido, nome e e-mail preenchidos; código só se o e-mail for confiável; senha por último.</td><td>Google, Yelp, Stripe: pré-preencher e verificar contra o que já está na listagem; senha depois. Formulário de 7 para 3 campos: −44,7% de abandono.</td><td>front · 1–2 dias</td><td>Um token da ATHÉNÉE abre um formulário onde só falta confirmar.</td></tr>
+      <tr><td>2</td><td><b>Verificação por WhatsApp do número da listagem</b> como alternativa ao código por e-mail (a casa manda "sim" do número que está no catálogo e no Google).</td><td>26 casas com e-mail morto; 262 com e-mail gratuito. Yelp verifica pelo telefone da listagem. Também fecha a falha dos 19 domínios compráveis.</td><td>processo + registro em <code>restaurant_invitations</code> · 0,5 dia</td><td>Uma casa sem e-mail válido conclui sem código.</td></tr>
+      <tr><td>3</td><td><b>Marca e verdade</b>: "The World's Kitchen" → "The World Keys" no cadastro; retirar "Trusted by hundreds"; cadastro no idioma da casa (PT primeiro).</td><td>Marca do remetente, do link e da página idênticas ou o convite parece phishing; 55% dos compradores B2B só compram em idioma nativo.</td><td>front · 2 strings + i18n PT · 0,5 dia</td><td>grep sem "World's Kitchen"; página em PT.</td></tr>
+      <tr><td>4</td><td><b>Primeira tela = os dados da casa</b>: "Seus 90 dias na The World Keys: X pedidos, Y confirmados, Z sem resposta", com os pedidos vivos em cima.</td><td>84% abandonam um painel vazio na primeira sessão. Os dados já existem.</td><td>front · 1 dia</td><td>Ao entrar, a Casa do Prego vê 87 / 0 / 79 e os 2 pedidos vivos.</td></tr>
+      <tr><td>5</td><td><b>Aprovação sem beco</b>: quem prova posse (código ou WhatsApp) entra na hora; e-mail de senha automático já existe desde 06/09, confirmar com teste ponta a ponta; reemitir o convite do ELEOS com pedido de desculpas em uma frase.</td><td>Gate manual sem prazo comunicado é a causa documentada de abandono em marketplaces. O único candidato real está vencido há 8 dias.</td><td>backoffice + envio (aprovação do fundador) · 0,5 dia</td><td>Dono fictício chega ao painel em menos de 5 minutos sem ajuda.</td></tr>
+      <tr><td>6</td><td><b>Porta no site do cliente</b>: "É o dono deste estabelecimento?" em cada ficha e "Para restaurantes" no rodapé.</td><td>É o mecanismo que fez o Google e o Yelp: o link fica onde o dono já se procura.</td><td>front · 0,5 dia</td><td>Ficha da Casa do Prego mostra o link e o clique é registrado.</td></tr>
+      <tr><td>7</td><td><b>Segurança do <code>/r/</code></b>: reserva vencida só leitura, contato do cliente só após aceite.</td><td>Dado pessoal exposto sem login (GDPR art. 32). Não é conversão; é anterior a ela.</td><td>front · 1 dia</td><td>GET de reserva vencida sem botões nem contato.</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Prova de aceite da porta:</b> uma pessoa de fora, a partir de um link de WhatsApp, chega ao painel com a página pronta e os próprios números, em português, em menos de cinco minutos, sem ninguém ajudar. Enquanto isso não passar, ninguém viaja e nenhum e-mail sai.</p>
+
+  <h3>O protocolo da visita (modelo OpenTable, 35 minutos, contrato de uma página)</h3>
+  <ol class="steps">
+    <li><b>Antes de sair de Paris</b>: 26 páginas prontas (como o preview do AI MERCANTI de 14/09), Extrato impresso por casa com os números dela, link pré-verificado por casa em QR, vídeo de 30 segundos do painel sem narração, uma folha "Acordo de página gratuita" em português com o que a casa ganha e como sai (opt-out em um clique). Número de WhatsApp Business dedicado, português, com foto e nome da TWK.<span class="meta">Registro de opt-out consultado para as 26 antes de qualquer contato; casas com opt-out ficam fora.</span></li>
+    <li><b>Terça a quinta, 14h30–17h</b>: rota a pé, 8 a 10 casas por tarde, começando pelas 5 silenciosas de maior demanda e pelas 3 que já respondem. Abertura: quem cuida das reservas. Mostrar a página da casa no celular, os números, o vídeo. Perguntar como recebem reservas hoje (WhatsApp, telefone, sistema). Não vender; oferecer resolver.<span class="meta">Se o decisor não está: nome, melhor horário, WhatsApp; voltar no dia seguinte.</span></li>
+    <li><b>Ativar na porta</b>: abrir o link pré-verificado no celular do dono, confirmar horários reais e dias fechados, ligar "receber pedidos no WhatsApp" (opt-in gravado), fotografar a fachada e o salão se as fotos atuais forem fracas. Sair com a conta ativa e o primeiro pedido vivo respondido, quando houver.<span class="meta">Meta por visita: conta ativa em 5 minutos. O que não fechar na hora recebe o link por WhatsApp no mesmo dia.</span></li>
+    <li><b>Casas que reservam pelo próprio sistema ou só por WhatsApp</b>: oferecer o botão "Reserve direto com o estabelecimento" (plano de 14/09) e confirmar o meio. Contam como ativas se confirmarem reservas pelo código.<span class="meta">Não brigar com o sistema que a casa já usa.</span></li>
+    <li><b>Ao terceiro "sim" em Lagos</b>: pedir uma frase para a página "Restaurantes de Lagos que confirmam" e perguntar "quem mais aqui deveria ter isso?". A indicação é o canal que a Toast diz valer 1 em 5.<span class="meta">Só com permissão escrita; nunca inventar prova social.</span></li>
+    <li><b>Nutrição, dias 1 a 30</b>: mensagem de WhatsApp a cada pedido respondido na primeira semana; lembrete humano se um pedido ficar 6 horas sem resposta; extrato no dia 30 ("14 clientes chegaram, 9 reservaram, 7 foram"). Cinco interações no primeiro mês, que é o número que segura retenção.<span class="meta">Compromissos com data vão para <code>compromissos.jsonl</code>; nada é prometido ao cliente final.</span></li>
+  </ol>
+
+  <h3>Como saber se funcionou</h3>
+  <div class="kpi">
+    <div><div class="k">Meta em 30 dias</div><div class="v">8 casas ativas</div><div class="d">em Lagos, com ≥1 pedido respondido pelo painel ou WhatsApp. Na taxa da OpenTable (1 em 3,2 visitas) 26 visitas dão 8. <span class="tag s">S</span></div></div>
+    <div><div class="k">Sinal cedo, dia 10</div><div class="v">3 ativas</div><div class="d">Se ao fim da semana em Lagos houver menos de 3, revisar a oferta antes de voltar.</div></div>
+    <div><div class="k">Critério de morte</div><div class="v">&lt; 3 em 30 dias</div><div class="d">com porta testada e 20 conversas presenciais feitas: a oferta de "página gratuita" não vale sozinha; a Parte II, padrão 3, vira o trabalho.</div></div>
+    <div><div class="k">Indicador de saúde</div><div class="v">taxa de aceite em Lagos</div><div class="d">hoje 7% (18 de 272). Meta: acima de 40% nas casas ativas, como as parceiras (48%).</div></div>
+  </div>
+  <p><b>Custo.</b> Voo Paris–Faro ida e volta, três noites em Lagos, transporte: entre 400 e 700 euros. <span class="tag s">S</span> Alternativa sem viagem: um freelancer português local por 10 horas na semana, 20 a 35 euros a hora, com o mesmo kit; converte menos que o fundador na porta, mas mais que qualquer e-mail. As sessões de desenvolvimento custaram cerca de 5.200 dólares desde agosto. <span class="tag f">F</span> <span class="tag l">L</span></p>
+</section>
+
+<section>
+  <div class="part">Parte V</div>
+  <h2>Passo a passo, do dia 1 ao dia 30</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Quando</th><th>O quê</th><th>Dono</th><th>Sai com</th></tr></thead>
+    <tbody>
+      <tr><td><b>Dia 1–2</b> <span class="dim">16–17 set</span></td><td>Decisões do fundador (Parte VI). Reemitir convite do ELEOS. Bloquear cadastro das 26 casas com e-mail morto. Congelar todas as coortes frias.</td><td>fundador · orquestrador</td><td>ELEOS com link válido; nenhum e-mail novo sai.</td></tr>
+      <tr><td><b>Dia 2–6</b> <span class="dim">17–22 set</span></td><td>Porta: correções 1 a 7. Teste ponta a ponta por pessoa de fora. Gerar as 26 páginas prontas, 26 Extratos, 26 links, vídeo de 30 s, folha de acordo em PT, número de WhatsApp Business dedicado.</td><td>front · orquestrador · fundador</td><td>Porta aprovada; kit de Lagos impresso e no celular.</td></tr>
+      <tr><td><b>Dia 7</b> <span class="dim">22 set</span></td><td>Consulta ao Registro de Opt-out das 26. Mensagem de WhatsApp às 6 casas que já respondem: "estarei em Lagos terça; posso passar às 15h?". É contato aquecido: elas já respondem aos nossos pedidos.</td><td>fundador (envio externo, aprovação sua)</td><td>Agenda da semana.</td></tr>
+      <tr><td><b>Dia 8–10</b> <span class="dim">23–25 set, ter–qui</span></td><td>Lagos, a pé, 14h30–17h. Ordem: 5 silenciosas de maior demanda, 6 que respondem, depois as 15 restantes. Ativar na porta. Fotografar. Confirmar meio de reserva das que não vão usar o painel.</td><td>fundador · MAESTRO à distância para o que precisar de dado</td><td>3 a 8 contas ativas; horários reais das 26; fotos.</td></tr>
+      <tr><td><b>Dia 11–13</b></td><td>Link por WhatsApp às que não fecharam na porta (mesmo link, sem passo novo). Frase e indicação das primeiras 3. Página "Lagos: casas que confirmam" no ar.</td><td>fundador · editorial</td><td>Recuperação de 10–15% dos que abriram e não concluíram <span class="tag s">S</span></td></tr>
+      <tr><td><b>Dia 14–30</b></td><td>Nutrição: 5 toques por casa; Guardião cobra pendências das ativas por WhatsApp com opt-in; extrato do dia 30. Relatório de Lagos ao fundador no dia 15 e no dia 30.</td><td>Aria · Guardião · MAESTRO</td><td>Casas ativas com pedido respondido; taxa de aceite de Lagos.</td></tr>
+      <tr><td><b>Dia 30</b> <span class="dim">15 out</span></td><td>Leitura contra o critério de morte. Se ≥ 3: repetir o protocolo em Paris (12 casas, a pé, sem viagem) ou Côte d'Azur (15 casas) em outubro; Roma e Atenas por telefone e WhatsApp com os confirmadores. Se &lt; 3: parar de escrever e trabalhar a ferramenta.</td><td>fundador</td><td>Decisão de segundo ciclo com dado.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>O que não fazer nos próximos 30 dias</h3>
+  <ul>
+    <li>Nenhuma onda de e-mail a casa que nunca respondeu. 110 e-mails a coortes frias deram zero respostas. <span class="tag f">F</span></li>
+    <li>Nenhum template frio de WhatsApp via API. Risco de bloqueio do número que atende clientes. <span class="tag f">F</span></li>
+    <li>Nenhuma escassez inventada. "42 vagas de fundador" não moveu ninguém; "as 8 primeiras casas de Lagos", com nomes, é escassez verdadeira e verificável. <span class="tag f">F</span> <span class="tag s">S</span></li>
+    <li>Nenhuma frase de prova social que o banco não sustente. "Trusted by hundreds" com zero contas é o oposto de confiança, e nos EUA já é infração.</li>
+    <li>Nenhum pagamento ou meta por "cadastro". Só conta "pedido respondido pelo painel" (lição da Booking).</li>
+    <li>Nenhuma voz por IA. Casas de Lagos falam português; o resto espera o segundo ciclo.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="part">Parte VI</div>
+  <h2>O que só o fundador decide</h2>
+  <ol class="steps">
+    <li><b>Lagos como cidade-prova, presencialmente, na semana de 22 de setembro.</b> Ou o freelancer local como substituto. Sem uma das duas, o plano volta a ser e-mail.</li>
+    <li><b>Prioridade do desenvolvimento nesta ordem:</b> link pré-verificado, verificação por WhatsApp, marca e idioma, primeira tela com os dados da casa, segurança do <code>/r/</code>, porta no site do cliente.</li>
+    <li><b>A frase da ferramenta</b> (Parte IV) como oferta oficial, incluindo "receber pedidos no WhatsApp" com opt-in na ativação. Isso é um fluxo orquestrado novo e exige a sua aprovação.</li>
+    <li><b>Congelar as coortes frias e o template de marketing da Meta.</b> A Aria só escreve a restaurante que já escreveu para nós ou que deu opt-in.</li>
+    <li><b>Segunda cidade</b>: Paris (sede, ano inteiro) ou Côte d'Azur (maior demanda). Decidir no dia 30, com o resultado de Lagos.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="part">Parte VII</div>
+  <h2>O que este dossiê não sabe</h2>
+  <ul>
+    <li>Quantas das 148 casas abriram o e-mail. Não há pixel. <span class="tag l">L</span></li>
+    <li>Se as duas contas internas de 08/09 foram removidas por alguém: o log de auditoria não tem nenhuma linha para <code>restaurant_users</code>. <span class="tag l">L</span></li>
+    <li>Quanto o fundador pode viajar. O plano assume três dias em Lagos. <span class="tag s">S</span></li>
+    <li>Se as casas de Lagos que reservam por WhatsApp aceitam receber pedidos por lá. É a hipótese central da ferramenta; a visita responde. <span class="tag s">S</span></li>
+    <li>O custo real das sessões de desenvolvimento vem de transcrições, não de fatura. <span class="tag l">L</span></li>
+    <li>Benchmarks de canal vêm de fornecedores de prospecção; não há estudo controlado para restaurantes. Os números são ordens de grandeza, não previsões. <span class="tag s">S</span></li>
+  </ul>
+</section>
+
+<section class="src">
+  <div class="part">Origens</div>
+  <h2 style="font-size:1.5rem">De onde vem cada número</h2>
+  <h3>Dados da TWK</h3>
+  <ol>
+    <li>Banco <code>twk_auth</code> via papel <code>twk_ro</code>, 15 set 2026 22:03 UTC: <code>db_restaurants</code>, <code>restaurant_users</code>, <code>restaurant_invitations</code>, <code>reservations</code> (90 e 180 dias, dedup por cliente + data + hora, casa de teste 253542 excluída), <code>listing_consent</code>, <code>aria_contact_consent</code>, <code>agent_audit_log</code>.</li>
+    <li><code>orchestrator/state/envios-fundadores-2026-08.csv</code> (188 linhas) · <code>funil-campanha-fundadores-2026-08-31.csv</code> · <code>chave-girada/alvos-2026-09-03.csv</code>.</li>
+    <li><code>docs/agentes/PLANO-CHAVE-GIRADA.md</code>, <code>PLANO-FUNDADORES-50.md</code>, <code>RELATORIO-2026-09-04.md</code>, <code>AUDITORIA-CADASTRO-RESTAURANTE.md</code>, <code>LEVANTAMENTO-ASSUMIR-PAGINA.md</code>, <code>SEM-VOZ-ALTERNATIVAS.md</code>, <code>plano-reserva-direta.html</code>, <code>TWK-Dossie-Mudanca-de-Rota.html</code> (15/09, manhã).</li>
+    <li><code>orchestrator/logs/2026-09-07-analise-conversao-fundadores.md</code> · Despacho de 15/09.</li>
+    <li>Páginas ao vivo em 15/09 22h UTC: <code>manager.theworldkeys.com</code>, <code>/register</code>, <code>theworldkeys.com</code>.</li>
+  </ol>
+  <h3>Pesquisa externa</h3>
+  <ol>
+    <li>Toast: <a href="https://cloud.substack.com/p/in-person-sales-generate-3x-higher">Cloud Ratings, painel de CROs (80% em campo; Brex 3×)</a> · <a href="https://www.twonaturalcap.com/p/toast-recession-hedges-and-the-flywheel">Two Natural Cap (2/3 inbound, 1 em 5 indicação, flywheel a 20%)</a> · <a href="https://pos.toasttab.com/contact/refer-a-restaurant">programa de indicação</a> · <a href="https://support.toasttab.com/en/article/Services-Rates-and-Fees">tarifas de onboarding</a>.</li>
+    <li>Deliveroo: <a href="https://www.deciphr.ai/podcast/20vc-deliveroo-founder-will-shu-on-the-ipo-this-year-the-rise-of-quick-commerce-and-the-fierce-competition-with-uber-eats">Will Shu, 20VC</a>. Wolt: <a href="https://merchant.wolt.com/en/deu/faq">FAQ de parceiros (cardápio, fotos, 5 dias)</a> · <a href="https://en.wikipedia.org/wiki/Wolt">histórico</a>. Glovo: <a href="https://bird.com/en-us/customers/glovo">onboarding por WhatsApp 4× mais rápido</a>. Uber Eats: <a href="https://table.skift.com/2018/10/23/uber-eats-growth-strategy-speed-suburbs-and-self-service/">Skift</a>. Just Eat: <a href="https://klausnyengaard.com/the-just-eat-story-revisited-and-the-way-forward/">Nyengaard</a>.</li>
+    <li>Playbook: <a href="https://www.lennysnewsletter.com/p/how-to-kickstart-and-scale-a-marketplace-911">Lenny Rachitsky, parte 3</a> · <a href="https://andrewchen.com/grow-marketplace-supply/">Andrew Chen / Rachitsky sobre oferta</a> · <a href="https://blog.elichait.com/2018/04/09/how-the-100-largest-marketplaces-solve-the-chicken-and-egg-problem/">Eli Chait, 100 maiores marketplaces</a> · <a href="https://cdixon.org/2015/01/31/come-for-the-tool-stay-for-the-network">Chris Dixon</a> · <a href="https://startupspells.com/p/airbnb-pro-photo-program-growth-strategy">Airbnb fotógrafos</a> · <a href="https://buildd.co/startup/founder-stories/deepinder-goyal">Zomato</a> · <a href="https://skift.com/oral-history-of-booking-acquisition/">Booking, história oral</a>.</li>
+    <li>Assumir página: <a href="https://support.google.com/business/answer/2911778">Google, reivindicar perfil</a> · <a href="https://support.google.com/business/answer/7107242">métodos de verificação</a> · <a href="https://business.yelp.com/resources/articles/ultimate-guide-to-claiming-your-yelp-page/">Yelp, guia de claim</a> · <a href="https://www.sec.gov/Archives/edgar/data/1345016/000134501626000019/yelp-20251231.htm">Yelp 10-K 2025</a> · <a href="https://www.tripadvisor.com/business/claim-restaurant-listing-free">TripAdvisor, claim</a> · <a href="https://support.foursquare.com/hc/en-us/articles/14902466076188-How-do-I-claim-my-listing">Foursquare</a>.</li>
+    <li>Plataformas europeias: <a href="https://www.theforkmanager.com/en/restaurant-software-price">TheFork Manager</a> · <a href="https://www.zenchef.com/pricing">Zenchef</a> · <a href="https://www.superbexperience.com/pricing">Superb</a> · <a href="https://www.tablein.com/pricing">Tablein</a> · <a href="https://www.verdictfoodservice.com/news/quandoo-to-shut-restaurant-booking-platform-by-end-of-2026/">Quandoo encerra</a> · <a href="https://mozrest.com/en-gb/solutions-for-booking-channels/">Mozrest</a> · <a href="https://developers.google.com/actions-center/verticals/reservations/e2e/overview">Reserve with Google, requisitos</a>.</li>
+    <li>Ativação: <a href="https://www.lennysnewsletter.com/p/what-is-a-good-activation-rate">Lenny, taxa de ativação</a> · <a href="https://userpilot.com/blog/user-activation-rate-benchmark-report-2024/">Userpilot 2025</a> · <a href="https://uxcam.com/blog/drop-off-rates/">UXCam 2026</a> · <a href="https://stripe.com/blog/connect-express-onboarding">Stripe Connect Express</a> · <a href="https://www.chameleon.io/blog/onboarding-ux-patterns">Chameleon, estado vazio</a> · <a href="https://tipalti.com/blog/marketplace-onboarding/">Tipalti, gargalo de aprovação</a> · <a href="https://www.saasemailmarketing.net/articles/signup-abandonment-emails-increase-trial-signups/">Drip, recuperação em 3h</a> · <a href="https://martech.org/report-key-to-smb-advertiser-retention-is-onboarding-engagement-and-early-upselling/">retenção PME, 5 interações</a> · <a href="https://csa-research.com/Featured-Content/For-Global-Enterprises/Global-Growth/CRWB-Series/CRWB-B2B">CSA Research, idioma B2B</a> · <a href="https://www.digitalapplied.com/blog/social-proof-trust-signals-2026-conversion-placement-framework">regra FTC sobre prova social falsa</a>.</li>
+    <li>Canais: <a href="https://belkins.io/blog/cold-email-response-rates">Belkins 2026 (F&amp;B 3,47%)</a> · <a href="https://instantly.ai/cold-email-benchmark-report-2026">Instantly 2026</a> · <a href="https://woodpecker.co/blog/cold-email-statistics/">Woodpecker</a> · <a href="https://mailcop.net/blog/role-based-emails-cold-outreach-reply-rate">caixas genéricas, 4,5×</a> · <a href="https://sbl.so/whatsapp/whatsapp-cold-outreach-reply-rates/">WhatsApp, taxas</a> · <a href="https://developers.facebook.com/docs/whatsapp/pricing">Meta, preços e regras</a> · <a href="https://techcrunch.com/2025/10/17/whatsapp-will-curb-the-number-of-messages-people-and-businesses-can-send-without-a-response">teto de mensagens sem resposta</a> · <a href="https://www.cleverly.co/blog/cold-calling-statistics">ligação fria</a> · <a href="https://www.leadbeam.ai/blog/restaurant-tech-sales">vendas de campo a restaurantes (horários, 8–12 visitas)</a> · <a href="https://www.dlapiperdataprotection.com/?t=electronic-marketing&amp;c=PT">DLA Piper, marketing eletrônico por país</a> · <a href="https://www.loom.com/customers/intercom">Loom + Intercom</a>.</li>
+  </ol>
+</section>
+
+<footer>The World Keys · Orquestrador · somente leitura, nenhum envio realizado, nenhuma escrita em produção · 15 set 2026, 22h Europe/Paris</footer>
+</div>
+
+<script>
+(function(){
+  var data=[["set 25",68],["out",29],["nov",5],["dez",7],["jan 26",4],["fev",4],["mar",12],["abr",36],["mai",88],["jun",85],["jul",118],["ago",89],["set*",36]];
+  var g=document.getElementById('lagos-bars');if(!g)return;
+  var max=120,x0=34,w=476,bw=w/data.length,h=130,base=150;
+  var svgns='http://www.w3.org/2000/svg';
+  data.forEach(function(d,i){
+    var bh=Math.round(d[1]/max*h);
+    var r=document.createElementNS(svgns,'rect');
+    r.setAttribute('x',x0+i*bw+4);r.setAttribute('y',base-bh);r.setAttribute('width',bw-8);r.setAttribute('height',bh);
+    r.setAttribute('fill',i===data.length-1?'var(--muted-2)':'var(--bar)');r.setAttribute('rx','2');
+    var t=document.createElementNS(svgns,'title');t.textContent=d[0]+': '+d[1]+' pedidos';r.appendChild(t);
+    g.appendChild(r);
+    var l=document.createElementNS(svgns,'text');l.setAttribute('x',x0+i*bw+bw/2);l.setAttribute('y',168);l.setAttribute('text-anchor','middle');l.textContent=d[0];g.appendChild(l);
+    if(d[1]>=29||i===data.length-1){var v=document.createElementNS(svgns,'text');v.setAttribute('x',x0+i*bw+bw/2);v.setAttribute('y',base-bh-4);v.setAttribute('text-anchor','middle');v.textContent=d[1];g.appendChild(v);}
+  });
+})();
+</script>

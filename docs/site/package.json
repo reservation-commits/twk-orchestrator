@@ -1,0 +1,9 @@
+{
+  "name": "twk-biblioteca",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Biblioteca The World Keys: site dos planos e documentos, com senha",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,655 @@
+﻿{
+    "updatedAt":  "2026-08-24T18:05:20.208Z",
+    "createdAt":  "2026-01-26T15:38:33.218Z",
+    "id":  "8sKe89Lz5Vzpy3a5",
+    "name":  "4 - resposta ao reagendamento (site novo)",
+    "description":  null,
+    "active":  true,
+    "isArchived":  false,
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "reschedule-response",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2.1,
+                      "position":  [
+                                       -656,
+                                       0
+                                   ],
+                      "id":  "9ab366bf-a70e-466a-919e-67ca4dfb1cc7",
+                      "name":  "Webhook",
+                      "webhookId":  "fc83a7f9-0184-439b-9052-9cc2f3d3f13c"
+                  },
+                  {
+                      "parameters":  {
+                                         "jsCode":  "const reservation = $input.first().json.body.reservation;\n\n// -------- DATE -\u003e \"Thu, 17 Aug 2025\" (ordem garantida)\nconst dateObj = new Date(reservation.date);\n\nconst dateParts = new Intl.DateTimeFormat(\u0027en-GB\u0027, {\n  weekday: \u0027short\u0027,\n  day: \u00272-digit\u0027,\n  month: \u0027short\u0027,\n  year: \u0027numeric\u0027,\n}).formatToParts(dateObj);\n\nconst getPart = (type) =\u003e dateParts.find(p =\u003e p.type === type)?.value || \u0027\u0027;\n\nconst formattedDate = `${getPart(\u0027weekday\u0027)}, ${getPart(\u0027day\u0027)} ${getPart(\u0027month\u0027)} ${getPart(\u0027year\u0027)}`;\n\n// -------- TIME -\u003e \"9:00 PM\"\nlet timeObj;\nif (typeof reservation.time === \u0027string\u0027 \u0026\u0026 /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.time)) {\n  const [h, m] = reservation.time.split(\u0027:\u0027);\n  timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n} else {\n  timeObj = new Date(reservation.time);\n}\n\nconst formattedTime = new Intl.DateTimeFormat(\u0027en-US\u0027, {\n  hour: \u0027numeric\u0027,\n  minute: \u00272-digit\u0027,\n  hour12: true,\n}).format(timeObj);\n\n// -------- PROPOSED TIME -\u003e \"9:00 PM\" (mesmo formato do TIME)\nlet proposedTimeObj;\nif (typeof reservation.proposed_time === \u0027string\u0027 \u0026\u0026 /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.proposed_time)) {\n  const [h, m] = reservation.proposed_time.split(\u0027:\u0027);\n  proposedTimeObj = new Date(2000, 0, 1, Number(h), Number(m));\n} else {\n  proposedTimeObj = new Date(reservation.proposed_time);\n}\n\nconst formattedProposedTime = new Intl.DateTimeFormat(\u0027en-US\u0027, {\n  hour: \u0027numeric\u0027,\n  minute: \u00272-digit\u0027,\n  hour12: true,\n}).format(proposedTimeObj);\n\n// -------- PEOPLE -\u003e \"1 guest\" / \"4 guests\"\nconst people = Number(reservation.people);\nconst formattedPeople = `${people} ${people === 1 ? \u0027guest\u0027 : \u0027guests\u0027}`;\n\n// -------- DETAILS -\u003e default \"No details.\"\nconst formattedDetails =\n  reservation.details \u0026\u0026 String(reservation.details).trim() !== \u0027\u0027\n    ? String(reservation.details).trim()\n    : \u0027No details.\u0027;\n\nreturn [\n  {\n    json: {\n      formattedDate,\n      formattedTime,\n      formattedProposedTime,\n      formattedPeople,\n      formattedDetails,\n    },\n  },\n];\n"
+                                     },
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -464,
+                                       0
+                                   ],
+                      "id":  "3b1f6515-3f08-41b1-8f80-f74ff7b069cc",
+                      "name":  "Code in JavaScript"
+                  },
+                  {
+                      "parameters":  {
+                                         "conditions":  {
+                                                            "options":  {
+                                                                            "caseSensitive":  true,
+                                                                            "leftValue":  "",
+                                                                            "typeValidation":  "strict",
+                                                                            "version":  3
+                                                                        },
+                                                            "conditions":  [
+                                                                               {
+                                                                                   "id":  "3adb6595-406c-48d5-a343-376628dbaf45",
+                                                                                   "leftValue":  "={{ $(\u0027Webhook\u0027).item.json.body.action }}",
+                                                                                   "rightValue":  "accept",
+                                                                                   "operator":  {
+                                                                                                    "type":  "string",
+                                                                                                    "operation":  "equals"
+                                                                                                }
+                                                                               }
+                                                                           ],
+                                                            "combinator":  "and"
+                                                        },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.if",
+                      "typeVersion":  2.3,
+                      "position":  [
+                                       -256,
+                                       0
+                                   ],
+                      "id":  "1800a814-3eee-4eba-a1b4-fdc93a948ca7",
+                      "name":  "If"
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.user.email }}",
+                                         "subject":  "Your Rescheduled Reservation is Confirmed",
+                                         "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eReservation Rescheduled\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n  \u003cstyle type=\"text/css\"\u003e\n    @media only screen and (max-width: 600px) {\n      .cta-col {\n        display: block !important;\n        width: 100% !important;\n        text-align: center !important;\n      }\n\n      .cta-col a {\n        display: block !important;\n        width: 100% !important;\n        max-width: 450px !important;\n        margin: 8px auto !important;\n        box-sizing: border-box !important;\n      }\n    }\n  \u003c/style\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg\n              style=\"width: 100%; display: block; margin: 0 auto;\"\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n              alt=\"Header Image\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003e\n            Your Rescheduled Reservation is Confirmed\n          \u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003e\n            Hi \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e, your acceptance of the proposed new time has been successfully processed.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Progress Bar Placeholder --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 1rem 2rem 0 2rem;\"\u003e\n          \u003c!-- Progress Bar --\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Info --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eReservation Details\u003c/h3\u003e\n            \u003cp style=\"color: #ccc; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eRestaurant:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $json.formattedPeople }}\u003cbr /\u003e\n              \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $json.formattedDetails }}\n              \u003ci style=\"font-size: 9px; color: #ccc; margin-top: 4px; display: block;\"\u003e\n                ID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\n              \u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Info Block --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n          \u003cdiv style=\"margin-top: 0rem;\"\u003e\n            \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003eUseful Information\u003c/h4\u003e\n            \u003cul style=\"margin: 0; padding-left: 0; color: #fff; font-size: 11px; line-height: 1.5; text-align: center; list-style-position: inside;\"\u003e\n              \u003cli\u003ePlease arrive on time to enjoy the best experience.\u003c/li\u003e\n              \u003cli\u003eEmergency cancellations are available via your control panel.\u003c/li\u003e\n              \u003cli\u003eOur support team remains available for any assistance.\u003c/li\u003e\n            \u003c/ul\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Section --\u003e\n      \u003ctr\u003e\n        \u003ctd align=\"center\" style=\"padding: 1rem 2rem 2rem 2rem;\"\u003e\n          \u003ctable role=\"presentation\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"max-width: 450px; width: 100%;\"\u003e\n            \u003ctr\u003e\n              \u003c!-- Button 1 --\u003e\n              \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n                \u003ca\n                  href=\"https://theworldkeys.com/account\"\n                  style=\"background-color: #ce9e3c; border-radius: 50px; color: #fff; font-size: 11px; padding: 9px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\n                \u003e\n                  Manage My Reservation\n                \u003c/a\u003e\n              \u003c/td\u003e\n\n              \u003c!-- Button 2 --\u003e\n              \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n                \u003ca\n                  href=\"https://wa.me/33781937270\"\n                  target=\"_blank\"\n                  style=\"border: 1px solid #CE9E3C; border-radius: 50px; color: #fff; font-size: 11px; padding: 9px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\n                \u003e\n                  Whatsapp Support\n                  \u003cimg\n                    src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                    alt=\"WhatsApp Icon\"\n                    style=\"vertical-align: middle; margin-left: 6px; width: 16px; height: 16px;\"\n                  /\u003e\n                \u003c/a\u003e\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem; font-size: 11px;\"\u003e\n          \u003cstrong style=\"display: block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n          \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e\n              66, Av. des Champs-Élysées, 75008 Paris, France\n            \u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003cimg\n              style=\"width: 7rem; margin: -0.3rem;\"\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\"\n              alt=\"Company Logo\"\n            /\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n            \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       -80,
+                                       -128
+                                   ],
+                      "id":  "234cffaa-55ca-4652-839b-079e8028b1f1",
+                      "name":  "Confirmado - Cliente",
+                      "webhookId":  "4d2bcefa-e754-4e6d-8984-029d3136ed2d",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.restaurant.email }}",
+                                         "subject":  "Reschedule Confirmed by Client",
+                                         "message":  "=\u003c/tr\u003e\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Accepted Reschedule\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003eReschedule Confirmed by Client\u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003eDear \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e, the client has accepted your proposed new date and time. The reservation is now officially confirmed.\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Progress Bar --\u003e\n      \u003ctr\u003e\n  \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n\n      \u003c!-- Reservation Details --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eReservation Details\u003c/h3\u003e\n            \u003cp style=\"color: #ccc; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eClient:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedPeople }}\u003cbr /\u003e\n              \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDetails }}\u003cbr /\u003e\n             \u003ci style=\"font-size:9px; color:#fff; margin-top:4px; display:block;\"\u003eID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Guidance --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n          \u003cdiv style=\"margin-top: 0rem;\"\u003e\n          \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003eNext Steps\u003c/h4\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0 auto; max-width: 550px;\"\u003e\n            We kindly invite your team to update your internal table plan and be ready to welcome the guest as expected. Our support team remains at your disposal for any last-minute coordination.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n      \n      \u003c!-- Botão --\u003e\n      \u003ctr\u003e\n  \u003ctd style=\"padding: 2rem;\"\u003e\n    \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n       style=\"border: 1px solid #ce9e3c; border-radius: 150px; color: #fff; font-size: 11px; padding: 10px 20px; text-decoration: none; display: inline-block; font-weight: bold;\"\u003e\n      Whatsapp Support\n      \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n           alt=\"WhatsApp Icon\"\n           style=\"vertical-align: text-top; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n    \u003c/a\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n      \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n        \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n          \u003cstrong\u003eGLOBAL EXPERIENCE PREMIUM\u003c/strong\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       288,
+                                       -128
+                                   ],
+                      "id":  "51e34bc0-9dd1-44a0-bc85-c1ae0c78bbb7",
+                      "name":  "Confirmado - Estabelecimento",
+                      "webhookId":  "099fd127-cad3-4500-9f91-fcd7c8a31bdf",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.user.email }}",
+                                         "subject":  "Reschedule Declined",
+                                         "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eReservation Not Confirmed\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003eRescheduling Refused\u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003eHi \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e, we’ve received your response and noted that you’ve declined the restaurant\u0027s reschedule proposal.\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n      \u003c!-- Reschedule Info --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eProposal That Was Declined\u003c/h3\u003e\n            \u003cp style=\"color: #fff; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eRestaurant:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $json.formattedPeople }}\u003cbr /\u003e\n             \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $json.formattedDetails }}\n             \u003ci style=\"font-size:9px; color:#fff; margin-top:4px; display:block;\"\u003eID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Alternatives Block --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n          \u003cdiv style=\"margin-top: 0rem;\"\u003e\n          \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003eWhat Can You Do Next?\u003c/h4\u003e\n          \u003cul style=\"color: #fff; font-size: 11px; line-height: 1.6; list-style-position: inside; padding-left: 0; margin: 0;\"\u003e\n            \n  \u003cli\u003e\u003cstrong\u003eExplore new opportunities\u003c/strong\u003e — our team can recommend similar premium restaurants available for instant confirmation.\u003c/li\u003e\n  \u003cli\u003e\u003cstrong\u003eRequest concierge assistance\u003c/strong\u003e — reach out to our concierge team, and we’ll manage the coordination on your behalf.\u003c/li\u003e\n          \u003c/ul\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Section --\u003e\n\u003ctr\u003e\n  \u003ctd align=\"center\" style=\"padding: 1rem 2rem 2rem 2rem;\"\u003e\n    \u003ctable role=\"presentation\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"max-width: 450px; width: 100%;\"\u003e\n      \u003ctr\u003e\n        \u003c!-- Botão 1 --\u003e\n        \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/hospitality/\"\n             style=\"background-color: #ce9e3c; border-radius: 50px; color: #fff; font-size: 11px; padding: 8px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\u003e\n            Explore More Options\n          \u003c/a\u003e\n        \u003c/td\u003e\n\n        \u003c!-- Botão 2 --\u003e\n        \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n             style=\"border: 1px solid #CE9E3C; border-radius: 50px; color: #fff; font-size: 11px; padding: 8px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\u003e\n            whatsapp Support\n            \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                 alt=\"WhatsApp Icon\"\n                 style=\"vertical-align: middle; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n    \u003c/table\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n\n\u003c!-- CSS Responsivo --\u003e\n\u003cstyle type=\"text/css\"\u003e\n@media only screen and (max-width: 600px) {\n  .cta-col {\n    display: block !important;\n    width: 100% !important;\n    text-align: center !important;\n  }\n  .cta-col a {\n    display: block !important;\n    width: 100% !important;           /* ocupa toda a largura do container */\n    max-width: 450px !important;      /* igual à caixa de dados */\n    margin: 8px auto !important;\n    box-sizing: border-box !important;\n  }\n}\n\u003c/style\u003e\n\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n      \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n        \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n          \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       -80,
+                                       80
+                                   ],
+                      "id":  "31d4b7fd-c3f9-43ce-b8d4-7dcf78b56f20",
+                      "name":  "Recusado - Cliente",
+                      "webhookId":  "4d2bcefa-e754-4e6d-8984-029d3136ed2d",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.restaurant.email }}",
+                                         "subject":  "Reschedule Declined by Client",
+                                         "message":  "=Dear \u003cstrong\u003eMonak Paris\u003c/strong\u003e\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Declined Reschedule\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003eReschedule Declined by Client\u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003eDear \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e.\u003cbr\u003eUnfortunately, the customer declined the new proposed schedule. Therefore, we are informing you that this request is being closed in our system.\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Status Bar --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem; \"\u003e\n          \n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Details --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eReservation Details\u003c/h3\u003e\n            \u003cp style=\"color: #fff; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eClient:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedPeople }}\u003cbr /\u003e\n             \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDetails }} \n            \u003ci style=\"font-size:9px; color:#ccc; margin-top:4px; display:block;\"\u003eID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Guidance --\u003e\n\u003ctr\u003e\n  \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n    \u003cdiv\u003e\n      \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003e\n        Important Information\n      \u003c/h4\u003e\n      \u003cul style=\"color: #fff; font-size: 11px; line-height: 1.7; list-style-position: inside; padding-left: 0; margin: 0;\"\u003e\n        \u003cli\u003e\n          \u003cstrong\u003eNo further action is required\u003c/strong\u003e — the guest has declined the proposed alternative time, and this reservation request is now closed.\n        \u003c/li\u003e\n        \u003cli\u003e\n          \u003cstrong\u003eStay available if needed\u003c/strong\u003e — should the guest reach out again, you may propose a new availability directly or contact our support team for assistance.\n        \u003c/li\u003e\n      \u003c/ul\u003e\n    \u003c/div\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n\n      \u003c!-- Botão WhatsApp --\u003e\n      \u003ctr\u003e\n        \u003ctd align=\"center\" style=\"padding: 0 2rem 2rem 2rem;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n             style=\"border: 1px solid #CE9E3C; border-radius: 50px; color: #fff; font-size: 11px; padding: 8px 15px; text-decoration: none; display: inline-block; font-weight: 600;\"\u003e\n            Whatsapp Support\n            \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                 alt=\"WhatsApp Icon\"\n                 style=\"vertical-align: text-top; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n      \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n        \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n          \u003cstrong\u003eGLOBAL EXPERIENCE PREMIUM\u003c/strong\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       288,
+                                       80
+                                   ],
+                      "id":  "515591c3-3ca9-44ff-b72f-e9353be9ccda",
+                      "name":  "Recusado - Estabelecimento",
+                      "webhookId":  "099fd127-cad3-4500-9f91-fcd7c8a31bdf",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  }
+              ],
+    "connections":  {
+                        "Webhook":  {
+                                        "main":  [
+                                                     [
+                                                         {
+                                                             "node":  "Code in JavaScript",
+                                                             "type":  "main",
+                                                             "index":  0
+                                                         }
+                                                     ]
+                                                 ]
+                                    },
+                        "Code in JavaScript":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "If",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "If":  {
+                                   "main":  [
+                                                [
+                                                    {
+                                                        "node":  "Confirmado - Cliente",
+                                                        "type":  "main",
+                                                        "index":  0
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "node":  "Recusado - Cliente",
+                                                        "type":  "main",
+                                                        "index":  0
+                                                    }
+                                                ]
+                                            ]
+                               },
+                        "Confirmado - Cliente":  {
+                                                     "main":  [
+                                                                  [
+                                                                      {
+                                                                          "node":  "Confirmado - Estabelecimento",
+                                                                          "type":  "main",
+                                                                          "index":  0
+                                                                      }
+                                                                  ]
+                                                              ]
+                                                 },
+                        "Recusado - Cliente":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Recusado - Estabelecimento",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "Confirmado - Estabelecimento":  {
+                                                             "main":  [
+                                                                          [
+
+                                                                          ]
+                                                                      ]
+                                                         },
+                        "Recusado - Estabelecimento":  {
+                                                           "main":  [
+                                                                        [
+
+                                                                        ]
+                                                                    ]
+                                                       }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "availableInMCP":  true
+                 },
+    "staticData":  null,
+    "meta":  {
+                 "templateCredsSetupCompleted":  true
+             },
+    "pinData":  {
+                    "Webhook":  [
+                                    {
+                                        "json":  {
+                                                     "headers":  {
+                                                                     "host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "user-agent":  "node",
+                                                                     "content-length":  "488",
+                                                                     "accept":  "*/*",
+                                                                     "accept-encoding":  "br, gzip, deflate",
+                                                                     "accept-language":  "*",
+                                                                     "content-type":  "application/json",
+                                                                     "sec-fetch-mode":  "cors",
+                                                                     "x-forwarded-for":  "45.70.52.83",
+                                                                     "x-forwarded-host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "x-forwarded-port":  "443",
+                                                                     "x-forwarded-proto":  "https",
+                                                                     "x-forwarded-server":  "8976530a2a6d",
+                                                                     "x-real-ip":  "45.70.52.83"
+                                                                 },
+                                                     "params":  {
+
+                                                                },
+                                                     "query":  {
+
+                                                               },
+                                                     "body":  {
+                                                                  "action":  "decline",
+                                                                  "reservation":  {
+                                                                                      "id":  "31e9bc44-8837-4b66-88ea-63bc3797e0ef",
+                                                                                      "reservation_code":  "PEP0RE",
+                                                                                      "date":  "2026-02-04",
+                                                                                      "time":  "08:00",
+                                                                                      "proposed_time":  "12:55",
+                                                                                      "people":  2,
+                                                                                      "status":  "Accept",
+                                                                                      "details":  "testes teste"
+                                                                                  },
+                                                                  "restaurant":  {
+                                                                                     "restaurant_id":  "253542",
+                                                                                     "name":  "BOTECO BELMONTE",
+                                                                                     "email":  "costa.marlon08@gmail.com",
+                                                                                     "phone":  " +55 21 2267 9909"
+                                                                                 },
+                                                                  "user":  {
+                                                                               "id":  "b41e2a22-3d69-4b22-ae30-b74d72a872d0",
+                                                                               "name":  "lucas peixoto",
+                                                                               "email":  "lucaspeixotodacruz@gmail.com",
+                                                                               "phone":  "+5521995681995"
+                                                                           }
+                                                              },
+                                                     "webhookUrl":  "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/reschedule-response",
+                                                     "executionMode":  "production"
+                                                 }
+                                    }
+                                ]
+                },
+    "versionId":  "3ed2fd7e-dad1-4462-905f-a50fd64a58e7",
+    "activeVersionId":  "da1854d2-9bce-4b47-9648-af507266de59",
+    "versionCounter":  63,
+    "triggerCount":  1,
+    "shared":  [
+                   {
+                       "updatedAt":  "2026-01-26T15:38:33.221Z",
+                       "createdAt":  "2026-01-26T15:38:33.221Z",
+                       "role":  "workflow:owner",
+                       "workflowId":  "8sKe89Lz5Vzpy3a5",
+                       "projectId":  "j3RBnUKpdJnI0HPr",
+                       "project":  {
+                                       "updatedAt":  "2025-10-09T18:24:30.274Z",
+                                       "createdAt":  "2025-10-09T18:21:52.771Z",
+                                       "id":  "j3RBnUKpdJnI0HPr",
+                                       "name":  "The World keys \u003cthekeys.need@gmail.com\u003e",
+                                       "type":  "personal",
+                                       "icon":  null,
+                                       "description":  null,
+                                       "creatorId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                       "projectRelations":  [
+                                                                {
+                                                                    "updatedAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "createdAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                    "projectId":  "j3RBnUKpdJnI0HPr",
+                                                                    "user":  {
+                                                                                 "updatedAt":  "2026-08-26T07:00:16.000Z",
+                                                                                 "createdAt":  "2025-10-09T18:21:52.389Z",
+                                                                                 "id":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                                 "email":  "thekeys.need@gmail.com",
+                                                                                 "firstName":  "The World",
+                                                                                 "lastName":  "keys",
+                                                                                 "personalizationAnswers":  {
+                                                                                                                "version":  "v4",
+                                                                                                                "personalization_survey_submitted_at":  "2025-10-09T18:24:41.538Z",
+                                                                                                                "personalization_survey_n8n_version":  "1.103.2"
+                                                                                                            },
+                                                                                 "settings":  {
+                                                                                                  "userActivated":  true,
+                                                                                                  "easyAIWorkflowOnboarded":  true,
+                                                                                                  "firstSuccessfulWorkflowId":  "iczjt9eyILmHEwU7",
+                                                                                                  "userActivatedAt":  1760038686025,
+                                                                                                  "npsSurvey":  {
+                                                                                                                    "responded":  true,
+                                                                                                                    "lastShownAt":  1785180247186
+                                                                                                                }
+                                                                                              },
+                                                                                 "disabled":  false,
+                                                                                 "mfaEnabled":  false,
+                                                                                 "lastActiveAt":  "2026-08-26",
+                                                                                 "isPending":  false
+                                                                             }
+                                                                }
+                                                            ]
+                                   }
+                   }
+               ],
+    "tags":  [
+
+             ],
+    "activeVersion":  {
+                          "updatedAt":  "2026-03-09T16:15:17.000Z",
+                          "createdAt":  "2026-03-09T16:15:13.185Z",
+                          "versionId":  "da1854d2-9bce-4b47-9648-af507266de59",
+                          "workflowId":  "8sKe89Lz5Vzpy3a5",
+                          "nodes":  [
+                                        {
+                                            "parameters":  {
+                                                               "httpMethod":  "POST",
+                                                               "path":  "reschedule-response",
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.webhook",
+                                            "typeVersion":  2.1,
+                                            "position":  [
+                                                             -656,
+                                                             0
+                                                         ],
+                                            "id":  "9ab366bf-a70e-466a-919e-67ca4dfb1cc7",
+                                            "name":  "Webhook",
+                                            "webhookId":  "fc83a7f9-0184-439b-9052-9cc2f3d3f13c"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "jsCode":  "const reservation = $input.first().json.body.reservation;\n\n// -------- DATE -\u003e \"Thu, 17 Aug 2025\" (ordem garantida)\nconst dateObj = new Date(reservation.date);\n\nconst dateParts = new Intl.DateTimeFormat(\u0027en-GB\u0027, {\n  weekday: \u0027short\u0027,\n  day: \u00272-digit\u0027,\n  month: \u0027short\u0027,\n  year: \u0027numeric\u0027,\n}).formatToParts(dateObj);\n\nconst getPart = (type) =\u003e dateParts.find(p =\u003e p.type === type)?.value || \u0027\u0027;\n\nconst formattedDate = `${getPart(\u0027weekday\u0027)}, ${getPart(\u0027day\u0027)} ${getPart(\u0027month\u0027)} ${getPart(\u0027year\u0027)}`;\n\n// -------- TIME -\u003e \"9:00 PM\"\nlet timeObj;\nif (typeof reservation.time === \u0027string\u0027 \u0026\u0026 /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.time)) {\n  const [h, m] = reservation.time.split(\u0027:\u0027);\n  timeObj = new Date(2000, 0, 1, Number(h), Number(m));\n} else {\n  timeObj = new Date(reservation.time);\n}\n\nconst formattedTime = new Intl.DateTimeFormat(\u0027en-US\u0027, {\n  hour: \u0027numeric\u0027,\n  minute: \u00272-digit\u0027,\n  hour12: true,\n}).format(timeObj);\n\n// -------- PROPOSED TIME -\u003e \"9:00 PM\" (mesmo formato do TIME)\nlet proposedTimeObj;\nif (typeof reservation.proposed_time === \u0027string\u0027 \u0026\u0026 /^\\d{1,2}:\\d{2}(:\\d{2})?$/.test(reservation.proposed_time)) {\n  const [h, m] = reservation.proposed_time.split(\u0027:\u0027);\n  proposedTimeObj = new Date(2000, 0, 1, Number(h), Number(m));\n} else {\n  proposedTimeObj = new Date(reservation.proposed_time);\n}\n\nconst formattedProposedTime = new Intl.DateTimeFormat(\u0027en-US\u0027, {\n  hour: \u0027numeric\u0027,\n  minute: \u00272-digit\u0027,\n  hour12: true,\n}).format(proposedTimeObj);\n\n// -------- PEOPLE -\u003e \"1 guest\" / \"4 guests\"\nconst people = Number(reservation.people);\nconst formattedPeople = `${people} ${people === 1 ? \u0027guest\u0027 : \u0027guests\u0027}`;\n\n// -------- DETAILS -\u003e default \"No details.\"\nconst formattedDetails =\n  reservation.details \u0026\u0026 String(reservation.details).trim() !== \u0027\u0027\n    ? String(reservation.details).trim()\n    : \u0027No details.\u0027;\n\nreturn [\n  {\n    json: {\n      formattedDate,\n      formattedTime,\n      formattedProposedTime,\n      formattedPeople,\n      formattedDetails,\n    },\n  },\n];\n"
+                                                           },
+                                            "type":  "n8n-nodes-base.code",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             -464,
+                                                             0
+                                                         ],
+                                            "id":  "3b1f6515-3f08-41b1-8f80-f74ff7b069cc",
+                                            "name":  "Code in JavaScript"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "conditions":  {
+                                                                                  "options":  {
+                                                                                                  "caseSensitive":  true,
+                                                                                                  "leftValue":  "",
+                                                                                                  "typeValidation":  "loose",
+                                                                                                  "version":  3
+                                                                                              },
+                                                                                  "conditions":  [
+                                                                                                     {
+                                                                                                         "id":  "3adb6595-406c-48d5-a343-376628dbaf45",
+                                                                                                         "leftValue":  "={{ $(\u0027Webhook\u0027).item.json.body.action }}",
+                                                                                                         "rightValue":  "accept",
+                                                                                                         "operator":  {
+                                                                                                                          "type":  "string",
+                                                                                                                          "operation":  "equals"
+                                                                                                                      }
+                                                                                                     }
+                                                                                                 ],
+                                                                                  "combinator":  "and"
+                                                                              },
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.if",
+                                            "typeVersion":  2.3,
+                                            "position":  [
+                                                             -256,
+                                                             0
+                                                         ],
+                                            "id":  "1800a814-3eee-4eba-a1b4-fdc93a948ca7",
+                                            "name":  "If"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.user.email }}",
+                                                               "subject":  "Your Rescheduled Reservation is Confirmed",
+                                                               "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eReservation Rescheduled\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n  \u003cstyle type=\"text/css\"\u003e\n    @media only screen and (max-width: 600px) {\n      .cta-col {\n        display: block !important;\n        width: 100% !important;\n        text-align: center !important;\n      }\n\n      .cta-col a {\n        display: block !important;\n        width: 100% !important;\n        max-width: 450px !important;\n        margin: 8px auto !important;\n        box-sizing: border-box !important;\n      }\n    }\n  \u003c/style\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg\n              style=\"width: 100%; display: block; margin: 0 auto;\"\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\"\n              alt=\"Header Image\"\n            /\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003e\n            Your Rescheduled Reservation is Confirmed\n          \u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003e\n            Hi \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e, your acceptance of the proposed new time has been successfully processed.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Progress Bar Placeholder --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 1rem 2rem 0 2rem;\"\u003e\n          \u003c!-- Progress Bar --\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Info --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eReservation Details\u003c/h3\u003e\n            \u003cp style=\"color: #ccc; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eRestaurant:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $json.formattedPeople }}\u003cbr /\u003e\n              \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $json.formattedDetails }}\n              \u003ci style=\"font-size: 9px; color: #ccc; margin-top: 4px; display: block;\"\u003e\n                ID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\n              \u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Info Block --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n          \u003cdiv style=\"margin-top: 0rem;\"\u003e\n            \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003eUseful Information\u003c/h4\u003e\n            \u003cul style=\"margin: 0; padding-left: 0; color: #fff; font-size: 11px; line-height: 1.5; text-align: center; list-style-position: inside;\"\u003e\n              \u003cli\u003ePlease arrive on time to enjoy the best experience.\u003c/li\u003e\n              \u003cli\u003eEmergency cancellations are available via your control panel.\u003c/li\u003e\n              \u003cli\u003eOur support team remains available for any assistance.\u003c/li\u003e\n            \u003c/ul\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Section --\u003e\n      \u003ctr\u003e\n        \u003ctd align=\"center\" style=\"padding: 1rem 2rem 2rem 2rem;\"\u003e\n          \u003ctable role=\"presentation\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"max-width: 450px; width: 100%;\"\u003e\n            \u003ctr\u003e\n              \u003c!-- Button 1 --\u003e\n              \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n                \u003ca\n                  href=\"https://theworldkeys.com/account\"\n                  style=\"background-color: #ce9e3c; border-radius: 50px; color: #fff; font-size: 11px; padding: 9px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\n                \u003e\n                  Manage My Reservation\n                \u003c/a\u003e\n              \u003c/td\u003e\n\n              \u003c!-- Button 2 --\u003e\n              \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n                \u003ca\n                  href=\"https://wa.me/33781937270\"\n                  target=\"_blank\"\n                  style=\"border: 1px solid #CE9E3C; border-radius: 50px; color: #fff; font-size: 11px; padding: 9px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\n                \u003e\n                  Whatsapp Support\n                  \u003cimg\n                    src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                    alt=\"WhatsApp Icon\"\n                    style=\"vertical-align: middle; margin-left: 6px; width: 16px; height: 16px;\"\n                  /\u003e\n                \u003c/a\u003e\n              \u003c/td\u003e\n            \u003c/tr\u003e\n          \u003c/table\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem; font-size: 11px;\"\u003e\n          \u003cstrong style=\"display: block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n          \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n            \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e\n              66, Av. des Champs-Élysées, 75008 Paris, France\n            \u003c/a\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003e\n            \u003cimg\n              style=\"width: 7rem; margin: -0.3rem;\"\n              src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\"\n              alt=\"Company Logo\"\n            /\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n            \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n          \u003c/p\u003e\n          \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             -80,
+                                                             -128
+                                                         ],
+                                            "id":  "234cffaa-55ca-4652-839b-079e8028b1f1",
+                                            "name":  "Confirmado - Cliente",
+                                            "webhookId":  "4d2bcefa-e754-4e6d-8984-029d3136ed2d",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.restaurant.email }}",
+                                                               "subject":  "Reschedule Confirmed by Client",
+                                                               "message":  "=\u003c/tr\u003e\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Accepted Reschedule\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003eReschedule Confirmed by Client\u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003eDear \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e, the client has accepted your proposed new date and time. The reservation is now officially confirmed.\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Progress Bar --\u003e\n      \u003ctr\u003e\n  \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n\n      \u003c!-- Reservation Details --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eReservation Details\u003c/h3\u003e\n            \u003cp style=\"color: #ccc; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eClient:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedPeople }}\u003cbr /\u003e\n              \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDetails }}\u003cbr /\u003e\n             \u003ci style=\"font-size:9px; color:#fff; margin-top:4px; display:block;\"\u003eID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Guidance --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n          \u003cdiv style=\"margin-top: 0rem;\"\u003e\n          \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003eNext Steps\u003c/h4\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0 auto; max-width: 550px;\"\u003e\n            We kindly invite your team to update your internal table plan and be ready to welcome the guest as expected. Our support team remains at your disposal for any last-minute coordination.\n          \u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n      \n      \u003c!-- Botão --\u003e\n      \u003ctr\u003e\n  \u003ctd style=\"padding: 2rem;\"\u003e\n    \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n       style=\"border: 1px solid #ce9e3c; border-radius: 150px; color: #fff; font-size: 11px; padding: 10px 20px; text-decoration: none; display: inline-block; font-weight: bold;\"\u003e\n      Whatsapp Support\n      \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n           alt=\"WhatsApp Icon\"\n           style=\"vertical-align: text-top; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n    \u003c/a\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n      \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n        \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n          \u003cstrong\u003eGLOBAL EXPERIENCE PREMIUM\u003c/strong\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             288,
+                                                             -128
+                                                         ],
+                                            "id":  "51e34bc0-9dd1-44a0-bc85-c1ae0c78bbb7",
+                                            "name":  "Confirmado - Estabelecimento",
+                                            "webhookId":  "099fd127-cad3-4500-9f91-fcd7c8a31bdf",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.user.email }}",
+                                                               "subject":  "Reschedule Declined",
+                                                               "message":  "=\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eReservation Not Confirmed\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003eRescheduling Refused\u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003eHi \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003c/strong\u003e, we’ve received your response and noted that you’ve declined the restaurant\u0027s reschedule proposal.\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n      \u003c!-- Reschedule Info --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eProposal That Was Declined\u003c/h3\u003e\n            \u003cp style=\"color: #fff; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eRestaurant:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $json.formattedPeople }}\u003cbr /\u003e\n             \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $json.formattedDetails }}\n             \u003ci style=\"font-size:9px; color:#fff; margin-top:4px; display:block;\"\u003eID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Alternatives Block --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem;\"\u003e\n          \u003cdiv style=\"margin-top: 0rem;\"\u003e\n          \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003eWhat Can You Do Next?\u003c/h4\u003e\n          \u003cul style=\"color: #fff; font-size: 11px; line-height: 1.6; list-style-position: inside; padding-left: 0; margin: 0;\"\u003e\n            \n  \u003cli\u003e\u003cstrong\u003eExplore new opportunities\u003c/strong\u003e — our team can recommend similar premium restaurants available for instant confirmation.\u003c/li\u003e\n  \u003cli\u003e\u003cstrong\u003eRequest concierge assistance\u003c/strong\u003e — reach out to our concierge team, and we’ll manage the coordination on your behalf.\u003c/li\u003e\n          \u003c/ul\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- CTA Section --\u003e\n\u003ctr\u003e\n  \u003ctd align=\"center\" style=\"padding: 1rem 2rem 2rem 2rem;\"\u003e\n    \u003ctable role=\"presentation\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"max-width: 450px; width: 100%;\"\u003e\n      \u003ctr\u003e\n        \u003c!-- Botão 1 --\u003e\n        \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/hospitality/\"\n             style=\"background-color: #ce9e3c; border-radius: 50px; color: #fff; font-size: 11px; padding: 8px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\u003e\n            Explore More Options\n          \u003c/a\u003e\n        \u003c/td\u003e\n\n        \u003c!-- Botão 2 --\u003e\n        \u003ctd class=\"cta-col\" align=\"center\" style=\"padding: 5px;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n             style=\"border: 1px solid #CE9E3C; border-radius: 50px; color: #fff; font-size: 11px; padding: 8px 25px; text-decoration: none; display: inline-block; font-weight: 600; white-space: nowrap;\"\u003e\n            whatsapp Support\n            \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                 alt=\"WhatsApp Icon\"\n                 style=\"vertical-align: middle; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n    \u003c/table\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n\n\u003c!-- CSS Responsivo --\u003e\n\u003cstyle type=\"text/css\"\u003e\n@media only screen and (max-width: 600px) {\n  .cta-col {\n    display: block !important;\n    width: 100% !important;\n    text-align: center !important;\n  }\n  .cta-col a {\n    display: block !important;\n    width: 100% !important;           /* ocupa toda a largura do container */\n    max-width: 450px !important;      /* igual à caixa de dados */\n    margin: 8px auto !important;\n    box-sizing: border-box !important;\n  }\n}\n\u003c/style\u003e\n\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n      \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n        \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n          \u003cstrong\u003eGLOBAL PREMIUM EXPERIENCE\u003c/strong\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             -80,
+                                                             80
+                                                         ],
+                                            "id":  "31d4b7fd-c3f9-43ce-b8d4-7dcf78b56f20",
+                                            "name":  "Recusado - Cliente",
+                                            "webhookId":  "4d2bcefa-e754-4e6d-8984-029d3136ed2d",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $(\u0027Webhook\u0027).item.json.body.restaurant.email }}",
+                                                               "subject":  "Reschedule Declined by Client",
+                                                               "message":  "=Dear \u003cstrong\u003eMonak Paris\u003c/strong\u003e\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n  \u003cmeta charset=\"UTF-8\" /\u003e\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n  \u003ctitle\u003eClient Declined Reschedule\u003c/title\u003e\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700\u0026display=swap\" rel=\"stylesheet\" /\u003e\n\u003c/head\u003e\n\n\u003cbody style=\"margin: 0; padding: 0; font-family: \u0027Hind\u0027, Arial, sans-serif; background-color: #000; display: block;\"\u003e\n  \u003ctable style=\"width: 100%; max-width: 900px; margin: 0 auto; color: #fff; text-align: center; background-color: #000;\" cellspacing=\"0\" cellpadding=\"0\"\u003e\n    \u003ctbody\u003e\n\n      \u003c!-- Header --\u003e\n      \u003ctr\u003e\n        \u003ctd\u003e\n          \u003ca href=\"https://theworldkeys.com/\"\u003e\n            \u003cimg style=\"width: 100%; display: block; margin: 0 auto;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/6613dc1c9475332809dc0b54.png\" alt=\"Header Image\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Title --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 2rem 2rem 1rem 2rem;\"\u003e\n          \u003ch2 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 0.5rem 0;\"\u003eReschedule Declined by Client\u003c/h2\u003e\n          \u003cp style=\"font-size: 11px; color: #fff; margin: 0;\"\u003eDear \u003cstrong\u003e{{ $(\u0027Webhook\u0027).item.json.body.restaurant.name }}\u003c/strong\u003e.\u003cbr\u003eUnfortunately, the customer declined the new proposed schedule. Therefore, we are informing you that this request is being closed in our system.\u003c/p\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Status Bar --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 0 2rem; \"\u003e\n          \n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Reservation Details --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n          \u003cdiv style=\"background-color: #111; border: 1px solid #222; border-radius: 8px; padding: 16px;\"\u003e\n            \u003ch3 style=\"color: #ce9e3c; font-size: 13px; margin: 0 0 8px 0;\"\u003eReservation Details\u003c/h3\u003e\n            \u003cp style=\"color: #fff; font-size: 11px; line-height: 1.7; margin: 0;\"\u003e\n              \u003cstrong\u003eClient:\u003c/strong\u003e {{ $(\u0027Webhook\u0027).item.json.body.user.name }}\u003cbr /\u003e\n              \u003cstrong\u003eDate:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDate }}\u003cbr /\u003e\n              \u003cstrong\u003eNew Time:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedProposedTime }}\u003cbr /\u003e\n              \u003cstrong\u003eGuests:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedPeople }}\u003cbr /\u003e\n             \u003cstrong\u003eNotes:\u003c/strong\u003e {{ $(\u0027Code in JavaScript\u0027).item.json.formattedDetails }} \n            \u003ci style=\"font-size:9px; color:#ccc; margin-top:4px; display:block;\"\u003eID: {{ $(\u0027Webhook\u0027).item.json.body.reservation.reservation_code }}\u003c/i\u003e\n            \u003c/p\u003e\n          \u003c/div\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Guidance --\u003e\n\u003ctr\u003e\n  \u003ctd style=\"padding: 0 2rem 1rem 2rem;\"\u003e\n    \u003cdiv\u003e\n      \u003ch4 style=\"color: #ce9e3c; font-size: 13px; margin-bottom: 0.75rem;\"\u003e\n        Important Information\n      \u003c/h4\u003e\n      \u003cul style=\"color: #fff; font-size: 11px; line-height: 1.7; list-style-position: inside; padding-left: 0; margin: 0;\"\u003e\n        \u003cli\u003e\n          \u003cstrong\u003eNo further action is required\u003c/strong\u003e — the guest has declined the proposed alternative time, and this reservation request is now closed.\n        \u003c/li\u003e\n        \u003cli\u003e\n          \u003cstrong\u003eStay available if needed\u003c/strong\u003e — should the guest reach out again, you may propose a new availability directly or contact our support team for assistance.\n        \u003c/li\u003e\n      \u003c/ul\u003e\n    \u003c/div\u003e\n  \u003c/td\u003e\n\u003c/tr\u003e\n\n      \u003c!-- Botão WhatsApp --\u003e\n      \u003ctr\u003e\n        \u003ctd align=\"center\" style=\"padding: 0 2rem 2rem 2rem;\"\u003e\n          \u003ca href=\"https://wa.me/33781937270\" target=\"_blank\"\n             style=\"border: 1px solid #CE9E3C; border-radius: 50px; color: #fff; font-size: 11px; padding: 8px 15px; text-decoration: none; display: inline-block; font-weight: 600;\"\u003e\n            Whatsapp Support\n            \u003cimg src=\"https://img.icons8.com/color/24/000000/whatsapp--v1.png\"\n                 alt=\"WhatsApp Icon\"\n                 style=\"vertical-align: text-top; margin-left: 6px; width: 16px; height: 16px;\"\u003e\n          \u003c/a\u003e\n        \u003c/td\u003e\n      \u003c!-- Pré-Footer --\u003e\n      \u003ctr\u003e\n        \u003ctd style=\"padding:0 2rem 1rem 2rem; font-size:11px;\"\u003e\n          \u003cstrong style=\"display:block;\"\u003eTheWorldKeys.com\u003c/strong\u003e\n          \u003ci\u003eYour trusted partner for premium experiences\u003c/i\u003e\n        \u003c/td\u003e\n      \u003c/tr\u003e\n\n      \u003c!-- Footer --\u003e\n      \u003ctr\u003e\n      \u003ctd style=\"text-align: center; background-color: #1b1b1a; border-radius: 12px 12px 0 0; padding: 10px 0; color: #fff; font-size: 0.5rem;\"\u003e\n        \u003cp style=\"font-size: 12px; margin-top: 0px; color: #a8a8a8;\"\u003e\u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c;\"\u003e\n          \u003ca href=\"https://theworldkeys.com/terms-of-use/\" style=\"text-decoration: none; color: #ce9e3c;\"\u003eTerms \u0026amp; Conditions\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"mailto:support@theworldkeys.com\" style=\"text-decoration: none; color: #fff;\"\u003esupport@theworldkeys.com\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003ca href=\"https://www.google.com/maps/place/66+Av.+des+Champs-%C3%89lys%C3%A9es,+75008+Paris,+France\" style=\"text-decoration: none; color: #fff;\"\u003e66, Av. des Champs-Élysées, 75008 Paris, France\u003c/a\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eVAT: FR24901268326 - R.C.S Paris: 901 268 326\u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003e\n          \u003cimg style=\"width: 7rem; margin: -0.3rem;\" src=\"https://img.mailinblue.com/6331555/images/content_library/original/661430b29475332809dc25ad.png\" alt=\"Company Logo\"\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0; color: #ce9e3c; font-size: 8px;\"\u003e\n          \u003cstrong\u003eGLOBAL EXPERIENCE PREMIUM\u003c/strong\u003e\n        \u003c/p\u003e\n        \u003cp style=\"margin: 0;\"\u003eCopyright ©2026 all rights reserved\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003c/tbody\u003e\n  \u003c/table\u003e\n\u003c/body\u003e\n\u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             288,
+                                                             80
+                                                         ],
+                                            "id":  "515591c3-3ca9-44ff-b72f-e9353be9ccda",
+                                            "name":  "Recusado - Estabelecimento",
+                                            "webhookId":  "099fd127-cad3-4500-9f91-fcd7c8a31bdf",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        }
+                                    ],
+                          "connections":  {
+                                              "Webhook":  {
+                                                              "main":  [
+                                                                           [
+                                                                               {
+                                                                                   "node":  "Code in JavaScript",
+                                                                                   "type":  "main",
+                                                                                   "index":  0
+                                                                               }
+                                                                           ]
+                                                                       ]
+                                                          },
+                                              "Code in JavaScript":  {
+                                                                         "main":  [
+                                                                                      [
+                                                                                          {
+                                                                                              "node":  "If",
+                                                                                              "type":  "main",
+                                                                                              "index":  0
+                                                                                          }
+                                                                                      ]
+                                                                                  ]
+                                                                     },
+                                              "If":  {
+                                                         "main":  [
+                                                                      [
+                                                                          {
+                                                                              "node":  "Confirmado - Cliente",
+                                                                              "type":  "main",
+                                                                              "index":  0
+                                                                          }
+                                                                      ],
+                                                                      [
+                                                                          {
+                                                                              "node":  "Recusado - Cliente",
+                                                                              "type":  "main",
+                                                                              "index":  0
+                                                                          }
+                                                                      ]
+                                                                  ]
+                                                     },
+                                              "Confirmado - Cliente":  {
+                                                                           "main":  [
+                                                                                        [
+                                                                                            {
+                                                                                                "node":  "Confirmado - Estabelecimento",
+                                                                                                "type":  "main",
+                                                                                                "index":  0
+                                                                                            }
+                                                                                        ]
+                                                                                    ]
+                                                                       },
+                                              "Recusado - Cliente":  {
+                                                                         "main":  [
+                                                                                      [
+                                                                                          {
+                                                                                              "node":  "Recusado - Estabelecimento",
+                                                                                              "type":  "main",
+                                                                                              "index":  0
+                                                                                          }
+                                                                                      ]
+                                                                                  ]
+                                                                     },
+                                              "Confirmado - Estabelecimento":  {
+                                                                                   "main":  [
+                                                                                                [
+
+                                                                                                ]
+                                                                                            ]
+                                                                               },
+                                              "Recusado - Estabelecimento":  {
+                                                                                 "main":  [
+                                                                                              [
+
+                                                                                              ]
+                                                                                          ]
+                                                                             }
+                                          },
+                          "authors":  "The World keys",
+                          "name":  "Version da1854d2",
+                          "description":  "",
+                          "autosaved":  true,
+                          "workflowPublishHistory":  [
+                                                         {
+                                                             "createdAt":  "2026-03-09T16:15:17.219Z",
+                                                             "id":  141,
+                                                             "workflowId":  "8sKe89Lz5Vzpy3a5",
+                                                             "versionId":  "da1854d2-9bce-4b47-9648-af507266de59",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         },
+                                                         {
+                                                             "createdAt":  "2026-08-24T18:05:20.348Z",
+                                                             "id":  224,
+                                                             "workflowId":  "8sKe89Lz5Vzpy3a5",
+                                                             "versionId":  "da1854d2-9bce-4b47-9648-af507266de59",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         }
+                                                     ]
+                      }
+}

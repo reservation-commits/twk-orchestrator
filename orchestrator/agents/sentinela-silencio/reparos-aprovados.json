@@ -1,0 +1,4 @@
+{
+  "_doc": "Reparos que o orquestrador pode executar SOZINHO quando a Sentinela de Silêncio acusar. true = aprovado pelo fundador (uma vez, vale sempre). Tudo nasce false.",
+  "rerodar_tarefa_agendada": false
+}

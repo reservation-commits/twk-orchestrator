@@ -1,0 +1,350 @@
+<title>Dossiê Reserva Direta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #FBFAF7; --surface: #F3F0E8; --ink: #1B1812; --ink-2: #4A443A; --muted: #6E6657; --rule: #E2DCCE;
+    --accent: #8A6512; --accent-soft: #CE9E3C; --silent: #C4572E; --responds: #2A6BB0; --good: #2F7A4A; --focus: #2A6BB0;
+    --serif: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #15130F; --surface: #1E1B15; --ink: #EFE9DC; --ink-2: #CFC6B4; --muted: #A39883; --rule: #2F2A21;
+      --accent: #D9AE55; --accent-soft: #CE9E3C; --silent: #D9693D; --responds: #4A8BC4; --good: #6DBB86; --focus: #D9AE55;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #15130F; --surface: #1E1B15; --ink: #EFE9DC; --ink-2: #CFC6B4; --muted: #A39883; --rule: #2F2A21;
+    --accent: #D9AE55; --accent-soft: #CE9E3C; --silent: #D9693D; --responds: #4A8BC4; --good: #6DBB86; --focus: #D9AE55;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; padding-inline: 20px; padding-block: 0 56px; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 760px; margin-inline: auto; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  header.doc { padding-block: 48px 28px; border-bottom: 1px solid var(--rule); display: grid; gap: 14px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 6vw, 48px); line-height: 1.08; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  .lede { font-size: 19px; line-height: 1.5; color: var(--ink-2); margin: 0; max-width: 62ch; text-wrap: pretty; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 6px 0 0; padding: 0; list-style: none; }
+  .meta .status { color: var(--accent); }
+  section { padding-block: 36px 4px; display: grid; gap: 16px; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: 27px; line-height: 1.2; margin: 0; text-wrap: balance; }
+  h3 { font-family: var(--sans); font-weight: 600; font-size: 15px; margin: 0; }
+  p { margin: 0; max-width: 66ch; text-wrap: pretty; }
+  .note { font-size: 14px; color: var(--muted); }
+  strong { font-weight: 600; }
+  code { font-family: var(--mono); font-size: 0.88em; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+  .thesis { font-family: var(--serif); font-size: clamp(22px, 4vw, 30px); line-height: 1.25; margin: 0; text-wrap: balance; }
+  .thesis em { font-style: italic; color: var(--silent); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .tags li { font-family: var(--mono); font-size: 12px; padding: 2px 9px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-2); }
+  .tags li.fact { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, var(--rule)); }
+  .tags li.gap { color: var(--silent); border-color: color-mix(in srgb, var(--silent) 45%, var(--rule)); }
+
+  .verdict { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .verdict article { border-top: 2px solid var(--rule); padding-top: 12px; display: grid; gap: 8px; align-content: start; }
+  .verdict article.strong { border-top-color: var(--good); }
+  .verdict article.weak { border-top-color: var(--silent); }
+  .verdict h3 { font-family: var(--serif); font-weight: 400; font-size: 19px; }
+  .verdict ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; color: var(--ink-2); }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; line-height: 1.45; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); }
+  th { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; padding-right: 0; white-space: nowrap; }
+  td.k { font-weight: 600; white-space: nowrap; }
+  td.take { color: var(--ink-2); }
+
+  .opts { margin: 0; padding: 0; list-style: none; counter-reset: opt; }
+  .opts > li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 14px; padding-block: 16px; border-bottom: 1px solid var(--rule); counter-increment: opt; }
+  .opts > li:first-child { border-top: 1px solid var(--rule); }
+  .opts > li::before { content: counter(opt, decimal-leading-zero); font-family: var(--mono); font-size: 13px; color: var(--accent); padding-top: 3px; }
+  .opts h3 { font-family: var(--serif); font-weight: 400; font-size: 19px; line-height: 1.25; }
+  .ba { grid-column: 2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; font-size: 14px; }
+  .ba div { display: grid; gap: 2px; }
+  .ba span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .ba .after span { color: var(--accent); }
+  .opts .why { grid-column: 2; font-size: 14px; color: var(--muted); }
+
+  .bars { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .bars li { display: grid; grid-template-columns: 110px minmax(0, 1fr) 64px; gap: 12px; align-items: center; font-size: 14px; }
+  .bars .track { height: 18px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+  .bars .fill { height: 100%; background: var(--silent); border-radius: 4px; }
+  .bars .v { font-variant-numeric: tabular-nums; text-align: right; color: var(--ink-2); }
+  .bars .s { color: var(--muted); font-size: 12.5px; }
+
+  .cycle { margin: 0; padding: 0; list-style: none; }
+  .cycle > li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 6px 20px; padding-block: 12px; border-bottom: 1px solid var(--rule); }
+  .cycle > li:first-child { border-top: 1px solid var(--rule); }
+  .when { font-family: var(--mono); font-size: 12.5px; color: var(--accent); padding-top: 3px; white-space: nowrap; }
+  .cycle p { font-size: 14.5px; color: var(--ink-2); }
+
+  .layers { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .layers li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; align-items: start; font-size: 14.5px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 6px; }
+  .layers li:first-child { background: var(--surface); border-color: color-mix(in srgb, var(--accent-soft) 45%, var(--rule)); }
+  .layers .n { font-family: var(--mono); font-size: 12px; color: var(--accent); padding-top: 3px; }
+  .layers b { display: block; font-weight: 600; }
+  .layers small { display: block; color: var(--muted); font-size: 13px; }
+
+  .kill { background: var(--surface); border-radius: 6px; padding: 20px 22px; display: grid; gap: 10px; }
+  .kill dl { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 20px; }
+  .kill dt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .kill dd { margin: 2px 0 0; font-size: 14.5px; }
+  .kill dd b { font-family: var(--serif); font-size: 22px; font-weight: 400; display: block; line-height: 1.1; font-variant-numeric: tabular-nums; }
+
+  .dont { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 14.5px; }
+  .dont li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; color: var(--ink-2); }
+  .dont li::before { content: "×"; color: var(--silent); font-weight: 600; }
+
+  .decisions { background: var(--surface); border-radius: 6px; padding: 22px 22px 20px; display: grid; gap: 12px; }
+  .decisions ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .decisions li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; font-size: 15px; }
+  .decisions li::before { content: ""; width: 14px; height: 14px; margin-top: 4px; border: 1.5px solid var(--accent); border-radius: 3px; }
+
+  footer.sources { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12.5px; line-height: 1.6; color: var(--muted); display: grid; gap: 6px; }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .verdict, .ba, .kill dl { grid-template-columns: 1fr; }
+    .cycle > li { grid-template-columns: 1fr; }
+    .bars li { grid-template-columns: 90px minmax(0, 1fr) 56px; }
+    header.doc { padding-block: 32px 22px; }
+  }
+</style>
+
+<div class="page">
+  <header class="doc">
+    <p class="eyebrow">Análise e plano otimizado · Reserva direta</p>
+    <h1>Dossiê Reserva Direta</h1>
+    <p class="lede">O que o plano de 14/09 tem de certo, o que os sistemas líderes fazem diferente, e as dez mudanças que o deixam medível, reversível e defensável. Nenhum plano é infalível. Este é falseável: cada meta tem número, cada número tem fonte, e o botão desliga com um comando.</p>
+    <ul class="meta">
+      <li>The World Keys</li>
+      <li>14 set 2026</li>
+      <li class="status">Aguarda decisão do fundador</li>
+      <li>trc-reserva-direta-20260914</li>
+    </ul>
+  </header>
+
+  <section aria-labelledby="s-veredito">
+    <p class="eyebrow" id="s-veredito">Veredito</p>
+    <p class="thesis">O plano ataca o problema certo. O que falta é <em>prova</em>: uma confirmação forte, um grupo de controle e uma unidade de cobrança definida antes de existir cobrança.</p>
+    <ul class="tags" aria-label="Legenda">
+      <li class="fact">fato = medido no banco ou na caixa de e-mail</li>
+      <li>suposição = referência de mercado, a calibrar</li>
+      <li class="gap">lacuna = o que não sabemos ainda</li>
+    </ul>
+    <div class="verdict">
+      <article class="strong">
+        <h3>O que já está certo</h3>
+        <ul>
+          <li><strong>O alvo.</strong> 61% dos pedidos vão a casas que nunca respondem. Fato.</li>
+          <li><strong>A leitura do mercado.</strong> Elas recusam o canal, não o cliente. Onze casas escreveram isso.</li>
+          <li><strong>O botão leva ao meio da casa</strong>, como o Google faz: quem não tem parceiro integrado recebe "ligar" e "site". Roteamento, não posse.</li>
+          <li><strong>A regra decide</strong>, com o mesmo critério do Guardião. Sem preferência do momento.</li>
+          <li><strong>A frase às casas</strong>: "fizemos o que vocês pediram: a nossa plataforma leva os clientes ao seu sistema".</li>
+        </ul>
+      </article>
+      <article class="weak">
+        <h3>O que ainda é fraco</h3>
+        <ul>
+          <li><strong>Confirmação só pelo cliente.</strong> Um toque no e-mail é o sinal mais fraco que existe. Os líderes cobram por cliente sentado, verificado pelo sistema da casa.</li>
+          <li><strong>Sem grupo de controle.</strong> Sem ele, "melhorou" não se distingue de "mudou o mês".</li>
+          <li><strong>Sem unidade de cobrança.</strong> OpenTable, TheFork e Tabelog definiram a unidade antes de cobrar: cliente sentado, nunca clique.</li>
+          <li><strong>Verificação manual e semanal</strong> dos meios. Um link morto por seis dias é uma semana de clientes perdidos.</li>
+          <li><strong>Conversão das casas ainda por e-mail</strong>, com retorno muito lento. As 26 casas que concentram 53% da demanda sem resposta têm telefone no catálogo. Todas.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-lideres">
+    <p class="eyebrow" id="s-lideres">O que os líderes fazem</p>
+    <h2>Sete práticas, e o que levamos de cada uma</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sistema</th><th>Prática</th><th>O que levamos</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Google (Reserve with Google)</td><td>Não opera reservas. Roteia para o parceiro que gere a disponibilidade da casa; onde não há parceiro, mostra "ligar" e "site". Gratuito.</td><td class="take">Roteamento por meio da casa. Quatro níveis de meio, do sistema integrado ao telefone.</td></tr>
+          <tr><td class="k">OpenTable</td><td>Cobra por <strong>cliente sentado</strong>: US$ 1 a 1,50 quando vem da rede, US$ 0,25 quando vem do site da casa. Afiliados também recebem por cliente sentado.</td><td class="take">A unidade cobrável é a reserva concluída. Clique nunca vale dinheiro. Afiliação como receita sem integração.</td></tr>
+          <tr><td class="k">Tabelog (Japão)</td><td>Plano mensal mais ¥100 (almoço) ou ¥200 (jantar) por pessoa, cobrados <strong>só se o cliente comparece</strong>. No-show não paga.</td><td class="take">A visita é o evento que fecha a reserva. Sem visita, sem cobrança e sem conta no extrato da casa.</td></tr>
+          <tr><td class="k">Resy</td><td>Mensalidade fixa, sem taxa por cliente. <strong>Notify</strong>: quando não há mesa, o cliente entra numa lista e é avisado se abrir vaga.</td><td class="take">Quando a reserva direta falha, alternativas na hora e lista de aviso. Mensalidade fixa como opção para fundadores.</td></tr>
+          <tr><td class="k">SevenRooms</td><td>Sem marketplace. A casa é dona dos dados do cliente e recebe reservas de Google e de terceiros dentro do próprio sistema.</td><td class="take">O argumento à casa: os clientes entram no sistema de vocês, os dados são de vocês.</td></tr>
+          <tr><td class="k">TheFork e Quandoo</td><td>Comissão por cliente sentado, programa de afiliados por reserva, fidelidade ao cliente que reserva pela plataforma.</td><td class="take">Segunda fonte de receita por afiliação. Fidelidade fica para depois do piloto.</td></tr>
+          <tr><td class="k">Concierge premium (Amex Centurion, Quintessentially)</td><td>Uma pessoa liga para a casa, reserva em nome do cliente e confirma por escrito. É o que o cliente corporativo espera.</td><td class="take">Faixa assistida: o Guardião confirma por telefone as reservas de alto valor.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Valores de OpenTable e Tabelog são públicos e citados nas fontes. Condições dos programas de afiliados variam por país e precisam de confirmação antes de qualquer projeção de receita.</p>
+  </section>
+
+  <section aria-labelledby="s-otimizacoes">
+    <p class="eyebrow" id="s-otimizacoes">As dez otimizações</p>
+    <h2>O que muda no plano, e por quê</h2>
+    <ol class="opts">
+      <li>
+        <h3>Confirmação em quatro camadas, da mais forte à mais fraca</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>O cliente confirma em um toque no e-mail.</div>
+          <div class="after"><span>Depois</span>1. Sistema da casa ou rede de afiliados registra a reserva. 2. A casa confirma na conta. 3. O cliente confirma no e-mail. 4. O cliente avalia depois da visita.</div>
+        </div>
+        <p class="why">Uma reserva só conta como concluída com a camada 1, 2 ou 4. A camada 3 sozinha vale como "mesa provável" e dispara o lembrete, nada mais.</p>
+      </li>
+      <li>
+        <h3>Unidade cobrável definida agora: reserva concluída</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Receita indefinida; piloto gratuito.</div>
+          <div class="after"><span>Depois</span>Piloto continua gratuito, mas a unidade já existe: cliente sentado, confirmado pela camada 1, 2 ou 4. Afiliação com OpenTable, TheFork e Quandoo onde a casa usa esses sistemas. Fundadores: comissão zero para sempre, se o fundador decidir.</div>
+        </div>
+        <p class="why">Cobrar por clique irrita a casa e não prova nada. Todos os líderes cobram pelo cliente que sentou.</p>
+      </li>
+      <li>
+        <h3>Grupo de controle aleatório</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Comparar antes e depois.</div>
+          <div class="after"><span>Depois</span>Entre as casas mudas com meio verificado que <em>não</em> pediram, metade recebe o botão e metade fica no Modelo 1 por 30 dias. Quem pediu recebe o botão sem sorteio.</div>
+        </div>
+        <p class="why">Base de comparação já medida: 8% de aceite nas casas sem conta. Com 110 pedidos por mês nas 26 casas, o resultado é direcional, não estatístico. Mesmo assim separa efeito de coincidência.</p>
+      </li>
+      <li>
+        <h3>Quatro níveis de meio, com verificação automática diária</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>"Link verificado", checado toda semana à mão.</div>
+          <div class="after"><span>Depois</span>A: sistema integrado com link pré-preenchido (OpenTable, SevenRooms, TheFork, prenota-web). B: página de reservas do site. C: WhatsApp ou LINE com mensagem pronta. D: telefone. Robô testa A e B todo dia; C e D são confirmados com a casa por telefone a cada 30 dias.</div>
+        </div>
+        <p class="why">Meio que falha volta a casa ao Modelo 1 na hora, com alerta na Regência. Lacuna: os parâmetros de pré-preenchimento de cada sistema precisam ser testados um a um na primeira semana.</p>
+      </li>
+      <li>
+        <h3>Roteador com histerese</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Regra reavaliada toda semana.</div>
+          <div class="after"><span>Depois</span>Entra no Modelo 2 com 4 ou mais pedidos em 90 dias, zero respostas e meio verificado, ou com pedido explícito da casa. Sai depois de 2 respostas em 30 dias ou conta ativada. Calculado todo dia, aplicado às segundas.</div>
+        </div>
+        <p class="why">Sem histerese, uma casa oscila entre os modelos e o cliente vê dois botões diferentes na mesma semana.</p>
+      </li>
+      <li>
+        <h3>Nenhum dado pessoal em link</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Mensagem pronta com o nome do cliente.</div>
+          <div class="after"><span>Depois</span>O link e a mensagem pronta levam data, horário, pessoas, origem The World Keys e o código. O nome, o cliente digita. Nada de e-mail ou telefone em nenhum endereço.</div>
+        </div>
+        <p class="why">Links passam por servidores de terceiros e ficam em históricos. Regra de proteção de dados, e também de reputação.</p>
+      </li>
+      <li>
+        <h3>Quando falha, alternativa na hora e lista de aviso</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>"Não conseguiu" leva a alternativas.</div>
+          <div class="after"><span>Depois</span>Alternativas só de casas que confirmam pedidos, na mesma cidade, com link pronto. E "avise-me se abrir": o cliente entra numa lista por casa e data, e é avisado se a casa aceitar um pedido para aquele dia.</div>
+        </div>
+        <p class="why">É o Notify da Resy. Transforma a recusa em segunda chance sem prometer mesa. A lista de aviso é fase 2, depende de desenvolvimento.</p>
+      </li>
+      <li>
+        <h3>Faixa assistida para reservas de alto valor</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Todas as reservas diretas seguem o mesmo fluxo.</div>
+          <div class="after"><span>Depois</span>Seis ou mais pessoas, cliente corporativo ou casa premiada: o Guardião liga ou escreve à casa e confirma em nome do cliente. Prazo interno de 4 horas úteis, medido na Regência e <strong>nunca prometido ao cliente</strong>.</div>
+        </div>
+        <p class="why">É o que o cliente da BASF esperava. Exige capacidade humana: hoje é o fundador. Decidir quem atende antes de ligar o fluxo.</p>
+      </li>
+      <li>
+        <h3>Conversão das casas por telefone, começando pelas 26</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Extrato por e-mail; retorno muito lento.</div>
+          <div class="after"><span>Depois</span>As 26 casas mudas com 10 ou mais pedidos concentram 675 pedidos, 53% de tudo que ficou sem resposta. Todas têm telefone no catálogo; 8 nem sequer têm site. Ligação em primeiro lugar, com a frase oficial; e-mail com o extrato de reservas diretas 48 horas depois; conta como painel para confirmar.</div>
+        </div>
+        <p class="why">OpenTable cresceu instalando o sistema casa a casa, cidade a cidade. Frio por e-mail converte 1 a 3%; contato quente por telefone, 30 a 50%. Suposição de mercado, a calibrar em Lagos.</p>
+      </li>
+      <li>
+        <h3>Operação como serviço, não como campanha</h3>
+        <div class="ba">
+          <div class="before"><span>Antes</span>Números no Despacho; verificação semanal.</div>
+          <div class="after"><span>Depois</span>Cada evento com código e rastro. Painel diário: encaminhadas, com o estabelecimento, confirmadas, concluídas, meios com falha. Meta de serviço: meio verificado em 99% dos dias. Critério de morte registrado antes de ligar. Desligar leva um comando: o botão some e as casas voltam ao Modelo 1.</div>
+        </div>
+        <p class="why">Se não está no log, não aconteceu. Vale para reservas que não passam por nós ainda mais do que para as outras.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="s-onde">
+    <p class="eyebrow" id="s-onde">Onde começar</p>
+    <h2>Cinco cidades concentram a demanda sem resposta</h2>
+    <ul class="bars" aria-label="Pedidos sem resposta por cidade, últimos 180 dias">
+      <li><span>Lagos <span class="s">13 casas</span></span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v">286</span></li>
+      <li><span>Roma <span class="s">18 casas</span></span><div class="track"><div class="fill" style="width:45%"></div></div><span class="v">130</span></li>
+      <li><span>Nice <span class="s">7 casas</span></span><div class="track"><div class="fill" style="width:31%"></div></div><span class="v">89</span></li>
+      <li><span>Paris <span class="s">17 casas</span></span><div class="track"><div class="fill" style="width:17%"></div></div><span class="v">50</span></li>
+      <li><span>Gammarth <span class="s">1 casa</span></span><div class="track"><div class="fill" style="width:17%"></div></div><span class="v">49</span></li>
+    </ul>
+    <p class="note">Pedidos criados nos últimos 180 dias em casas publicadas que nunca responderam. Lagos sozinha é 22% de tudo que ficou sem resposta, em casas que reservam por telefone e WhatsApp: o nível C e D do botão, e a cidade-prova que o plano já escolheu.</p>
+  </section>
+
+  <section aria-labelledby="s-ciclo">
+    <p class="eyebrow" id="s-ciclo">Acompanhamento</p>
+    <h2>A linha do tempo de uma reserva direta</h2>
+    <ol class="cycle">
+      <li><span class="when">T+0</span><p>O cliente escolhe data, horário e pessoas e toca em "Reserve direto com o estabelecimento". A reserva ganha código e o meio da casa abre preenchido. E-mail imediato: "abrimos o WhatsApp da casa para você; assim que ela confirmar, toque aqui".</p></li>
+      <li><span class="when">T+24 h</span><p>Sem resposta do cliente nem da casa: um lembrete, só um. Sem resposta depois disso, a reserva fica como "com o estabelecimento" e não gera mais mensagem.</p></li>
+      <li><span class="when">Ao "não"</span><p>Alternativas de casas que confirmam, na mesma cidade, com link pronto. E a lista de aviso para aquela casa e data.</p></li>
+      <li><span class="when">D-1</span><p>Só para reservas confirmadas: lembrete com endereço, horário e o código, no idioma do cliente.</p></li>
+      <li><span class="when">D+1</span><p>"Você foi?" e a avaliação. A resposta fecha a reserva como concluída e entra no extrato mensal da casa.</p></li>
+    </ol>
+    <ul class="layers" aria-label="Camadas de confirmação">
+      <li><span class="n">1</span><div><b>Sistema da casa ou rede de afiliados</b><small>Registro automático, sem depender de ninguém. Só nos meios de nível A. É a camada que os líderes usam para cobrar.</small></div></li>
+      <li><span class="n">2</span><div><b>A casa confirma na conta</b><small>O código The World Keys aparece na lista da casa; um toque confirma. É o motivo de abrir a conta.</small></div></li>
+      <li><span class="n">3</span><div><b>O cliente confirma no e-mail</b><small>Vale como mesa provável: dispara lembrete e pré-visita, não fecha a reserva.</small></div></li>
+      <li><span class="n">4</span><div><b>O cliente avalia depois da visita</b><small>Prova de que a visita aconteceu. Fecha a reserva e conta no extrato da casa.</small></div></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-metas">
+    <p class="eyebrow" id="s-metas">Metas e critério de morte</p>
+    <h2>Registrados antes de ligar o botão</h2>
+    <div class="kill">
+      <dl>
+        <div><dt>Base de comparação</dt><dd><b>8%</b>de aceite hoje nas casas sem conta (Modelo 1, últimos 30 dias)</dd></div>
+        <div><dt>Meta em 30 dias</dt><dd><b>≥ 25%</b>das reservas diretas confirmadas pela camada 1, 2 ou 4</dd></div>
+        <div><dt>Morte</dt><dd><b>&lt; 8%</b>confirmadas, ou nenhuma concluída: o botão sai e tudo volta ao Modelo 1</dd></div>
+        <div><dt>Reclamações</dt><dd><b>−50%</b>de mensagens "sem resposta" à Aria sobre as casas do piloto</dd></div>
+        <div><dt>Casas</dt><dd><b>≥ 3 de 26</b>abrem a conta em 30 dias, começando por Lagos</dd></div>
+        <div><dt>Serviço</dt><dd><b>99%</b>dos dias com todos os meios do piloto verificados e funcionando</dd></div>
+      </dl>
+      <p class="note">As metas são suposições calibráveis; a base de 8% e a regra de morte são fixas. Na segunda semana, os números da primeira semana ajustam as metas, nunca a regra de morte.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-nao">
+    <p class="eyebrow" id="s-nao">O que não copiar</p>
+    <h2>Erros que os líderes já pagaram</h2>
+    <ul class="dont">
+      <li>Cobrar por clique, como TripAdvisor e Yelp fazem com "leads". As casas passam a desconfiar de cada visita.</li>
+      <li>Mostrar disponibilidade que não vem do sistema da casa. Uma mesa falsa custa mais do que dez pedidos sem resposta.</li>
+      <li>Dizer ou sugerir parceria com OpenTable, SevenRooms ou TheFork. Usamos o link público deles, e só isso.</li>
+      <li>Enviar mensagem à casa em nome do cliente. Quem envia é o cliente, do celular dele.</li>
+      <li>Comissão sem contrato. Antes de qualquer cobrança, acordo escrito com a casa ou programa de afiliados assinado.</li>
+      <li>Prometer prazo ao cliente. O prazo da faixa assistida é interno.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-decisoes">
+    <div class="decisions">
+      <p class="eyebrow" id="s-decisoes">Decisões pedidas</p>
+      <ul>
+        <li><span>Aprovar o piloto de 30 dias com grupo de controle, começando por Lagos e pelas 8 casas que já pediram.</span></li>
+        <li><span>Confirmar a unidade cobrável como reserva concluída, e piloto sem cobrança.</span></li>
+        <li><span>Decidir a oferta aos fundadores: comissão zero para sempre, ou mensalidade fixa, ou nenhuma das duas por enquanto.</span></li>
+        <li><span>Definir quem atende a faixa assistida antes de ela existir.</span></li>
+        <li><span>Priorizar no desenvolvimento: botão com seletor, meio por casa com tipo, registro com status próprio, link rastreado e verificação diária.</span></li>
+        <li><span>Autorizar a gravação dos meios de reserva e a criação dos campos novos no banco.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="sources">
+    <span><strong>Dados internos.</strong> Banco da plataforma, consulta de 14/09/2026, casas publicadas, pedidos criados nos últimos 180 dias. Base de 8% de aceite: snapshot da Regência citado no Programa Fundadores 50. Telefones das 26 casas: coluna de telefone do catálogo.</span>
+    <span><strong>Referências externas.</strong> <a href="https://restaurant.eatapp.co/blog/opentable-pricing">OpenTable: planos e taxas por cliente sentado</a> · <a href="https://uppromote.com/affiliate-directory/opentable/">OpenTable: programa de afiliados</a> · <a href="https://developers.google.com/actions-center/verticals/reservations/e2e/overview">Reserve with Google: visão geral</a> · <a href="https://blog.resy.com/2021/09/notify/">Resy: Notify</a> · <a href="https://restauranttools.ai/tools/resyos">Resy: mensalidade fixa</a> · <a href="https://note.com/infla_inbound/n/na033aff64fcf?hl=en">Tabelog: taxa por pessoa só com comparecimento</a> · <a href="https://affi.io/m/thefork">TheFork: programa de afiliados</a>. Condições comerciais mudam; confirmar antes de citar externamente.</span>
+  </footer>
+</div>

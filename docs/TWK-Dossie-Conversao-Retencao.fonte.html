@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>TWK — Dossiê de Conversão e Retenção</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500;600&display=swap">
+<style>
+  /* Tokens extraídos do :root de theworldkeys.com (2026-09-01) */
+  :root {
+    --ink:        #070b10;
+    --charcoal:   #0f1218;
+    --warm:       #181c24;
+    --border:     #1e2230;
+    --gold:       #c9a96e;
+    --gold-light: #e4c990;
+    --gold-dark:  #9e7c48;
+    --silver:     #9a97a8;
+    --cream:      #ede9df;
+    --cream-d:    #b8b3a6;
+    --white:      #f7f4ef;
+    --gray:       #585668;
+    --radius:     .2rem;
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans:  "Jost", "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink); }
+  body {
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--cream);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm; height: 297mm;
+    padding: 16mm 17mm 13mm;
+    background: var(--ink);
+    position: relative; overflow: hidden;
+    break-after: page;
+    display: flex; flex-direction: column;
+  }
+  .page:last-child { break-after: auto; }
+
+  .p-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 4mm; border-bottom: .4pt solid var(--border);
+    margin-bottom: 7.5mm; flex: 0 0 auto;
+  }
+  .p-head .mark {
+    font-family: var(--serif); font-weight: 500; font-size: 8.4pt;
+    letter-spacing: .5em; text-transform: uppercase; color: var(--gold);
+  }
+  .p-head .sec {
+    font-size: 6.8pt; font-weight: 400; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--silver);
+  }
+
+  .p-body { flex: 1 1 auto; min-height: 0; }
+
+  .p-foot {
+    flex: 0 0 auto;
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: 3.5mm; border-top: .4pt solid var(--border);
+    font-size: 6.8pt; font-weight: 400; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--silver);
+  }
+  .p-foot .folio {
+    font-family: var(--serif); font-weight: 500; font-size: 10.5pt;
+    color: var(--gold); text-transform: none;
+  }
+
+  p { margin: 0 0 3.2mm; }
+  p:last-child { margin-bottom: 0; }
+  b, strong { font-weight: 600; color: var(--white); }
+
+  .eyebrow {
+    font-size: 7pt; font-weight: 500; letter-spacing: .42em;
+    text-transform: uppercase; color: var(--gold); margin: 0 0 3.5mm;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 400; font-size: 40pt;
+    line-height: 1.04; letter-spacing: -.02em; color: var(--white); margin: 0;
+  }
+  h2 {
+    font-family: var(--serif); font-weight: 400; font-size: 23pt;
+    line-height: 1.08; letter-spacing: -.015em; color: var(--white); margin: 0 0 4mm;
+  }
+  .lead {
+    font-size: 10.2pt; font-weight: 400; line-height: 1.6;
+    color: var(--cream); max-width: 150mm;
+  }
+  .rule-gold {
+    height: 1.2pt; border: 0; margin: 0;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+  }
+
+  /* ---------- capa ---------- */
+  .cover { justify-content: space-between; padding: 28mm 20mm 16mm; }
+  .cover .brand {
+    font-family: var(--serif); font-weight: 500; font-size: 11pt;
+    letter-spacing: .52em; text-transform: uppercase; color: var(--gold); margin: 0 0 2.5mm;
+  }
+  .cover .paris {
+    font-size: 7pt; font-weight: 400; letter-spacing: .5em;
+    color: var(--silver); text-transform: uppercase; margin: 0;
+  }
+  .cover-mid { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+  .cover h1 { margin: 0 0 7mm; max-width: 158mm; }
+  .cover .deck {
+    font-size: 11.5pt; font-weight: 400; line-height: 1.6;
+    color: var(--cream); max-width: 136mm; margin: 0;
+  }
+  .cover-meta {
+    display: flex; gap: 13mm; padding-top: 5.5mm; border-top: .4pt solid var(--border);
+  }
+  .cover-meta .k {
+    display: block; font-size: 6.6pt; font-weight: 400; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--silver); margin-bottom: 1.2mm;
+  }
+  .cover-meta .v { display: block; font-size: 9pt; font-weight: 500; color: var(--cream); }
+
+  /* ---------- números-síntese ---------- */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 5.5mm 0 6.5mm;
+  }
+  .stat {
+    background: var(--charcoal); border: .4pt solid var(--border);
+    border-radius: var(--radius); padding: 4.8mm 4.5mm 4.2mm;
+  }
+  .stat .n {
+    font-family: var(--serif); font-weight: 500; font-size: 20pt;
+    line-height: 1; color: var(--gold-light); display: block; margin-bottom: 1.8mm;
+  }
+  .stat .d { font-size: 7.4pt; line-height: 1.45; color: var(--cream-d); display: block; }
+
+  /* ---------- citação ---------- */
+  .quote {
+    background: var(--charcoal); border: .4pt solid var(--border);
+    border-left: 1.4pt solid var(--gold);
+    border-radius: var(--radius); padding: 5.5mm 6.5mm; margin: 5mm 0;
+  }
+  .quote .q {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: 12.5pt; line-height: 1.42; color: var(--white); margin: 0 0 2.5mm;
+  }
+  .quote .a {
+    font-size: 7pt; font-weight: 500; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--gold); margin: 0;
+  }
+
+  /* ---------- achados ---------- */
+  .find {
+    display: grid; grid-template-columns: 10mm 1fr; gap: 4mm;
+    padding: 4.6mm 0; border-bottom: .4pt solid var(--border);
+  }
+  .find:first-of-type { border-top: .4pt solid var(--border); }
+  .find .ix {
+    font-family: var(--serif); font-weight: 500; font-size: 16pt;
+    line-height: .9; color: var(--gold);
+  }
+  .find .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 4mm; margin-bottom: 1.6mm;
+  }
+  .find h3 {
+    font-family: var(--sans); font-weight: 600; font-size: 10.6pt;
+    line-height: 1.3; color: var(--white); margin: 0;
+  }
+  .chips { display: flex; gap: 1.6mm; flex: 0 0 auto; }
+  .chip {
+    font-size: 6pt; font-weight: 500; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--silver);
+    border: .4pt solid var(--border); border-radius: var(--radius);
+    padding: .8mm 1.8mm; white-space: nowrap;
+  }
+  .chip.gold { color: var(--gold-light); border-color: var(--gold-dark); }
+  .find .txt { font-size: 8.7pt; font-weight: 400; line-height: 1.58; color: var(--cream); margin: 0 0 1.6mm; }
+  .find .fix { font-size: 8.7pt; font-weight: 400; line-height: 1.55; color: var(--cream-d); margin: 0; }
+  .find .fix .lab { font-weight: 600; color: var(--gold-light); }
+
+  /* ---------- sequência ---------- */
+  .seq {
+    display: grid; grid-template-columns: 26mm 1fr; gap: 5mm;
+    padding: 4.4mm 0; border-bottom: .4pt solid var(--border);
+  }
+  .seq:first-of-type { border-top: .4pt solid var(--border); }
+  .seq .when {
+    font-size: 7pt; font-weight: 500; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold); line-height: 1.6; padding-top: 1mm;
+  }
+  .seq h3 {
+    font-family: var(--sans); font-weight: 600; font-size: 10.4pt;
+    color: var(--white); margin: 0 0 1.2mm;
+  }
+  .seq p { font-size: 8.7pt; line-height: 1.56; color: var(--cream-d); margin: 0; }
+
+  .note {
+    margin-top: 5.5mm; padding: 4.8mm 5.5mm;
+    background: var(--warm); border-radius: var(--radius);
+    font-size: 8pt; font-weight: 400; line-height: 1.62; color: var(--cream-d);
+  }
+  .note b { color: var(--white); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<section class="page cover">
+  <div>
+    <p class="brand">The World Keys</p>
+    <p class="paris">Paris</p>
+  </div>
+
+  <div class="cover-mid">
+    <hr class="rule-gold" style="width:26mm; margin-bottom:8mm;">
+    <h1>Dossiê de<br>Conversão e Retenção</h1>
+    <p class="deck">
+      Os atritos que impedem um restaurante de virar parceiro e um cliente de voltar —
+      reunidos de duas auditorias independentes, verificados um a um e ordenados
+      pela sequência que rende mais.
+    </p>
+  </div>
+
+  <div>
+    <div class="cover-meta">
+      <div><span class="k">Data</span><span class="v">2 de setembro de 2026</span></div>
+      <div><span class="k">Fontes</span><span class="v">Auditoria de sistemas · Auditoria de atrito</span></div>
+      <div><span class="k">Verificação</span><span class="v">Cruzada, em produção</span></div>
+      <div><span class="k">Circulação</span><span class="v">Documento interno</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PÁGINA 2 — O ESSENCIAL ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">O essencial</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">O essencial</p>
+    <h2>Um problema só, visto de quatro ângulos</h2>
+
+    <p class="lead">
+      O site promete o que a operação não entrega: confirmação instantânea e horários
+      livres. Na prática, quase todo pedido nasce pendente e morre sem resposta —
+      o cliente aparece sem mesa, o restaurante descobre a plataforma por um cliente
+      irritado, e nenhum dos dois volta. Todo o resto deste dossiê deriva daí.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><span class="n">6<span style="font-size:11pt;"> /100</span></span>
+        <span class="d">pedidos de mesa viram reserva confirmada</span></div>
+      <div class="stat"><span class="n">2<span style="font-size:11pt;"> /1.548</span></span>
+        <span class="d">restaurantes publicados têm acesso ao próprio painel</span></div>
+      <div class="stat"><span class="n">0,8%</span>
+        <span class="d">dos clientes voltam a pedir — mesmo entre os que conseguiram a mesa</span></div>
+      <div class="stat"><span class="n">12.299</span>
+        <span class="d">páginas do site expostas a punição do Google por nota falsa</span></div>
+    </div>
+
+    <p class="lead" style="font-size:9.4pt; color:var(--cream-d);">
+      Isso não é teoria: o primeiro restaurante que nos escreveu espontaneamente,
+      escreveu para sair — pelo motivo exato que este dossiê corrige.
+    </p>
+
+    <div class="quote">
+      <p class="q">“We have not given our consent to be included… the available
+      timeslots and days do not match our actual availability. This causes confusion
+      for our customers when reservations cannot be honored.”</p>
+      <p class="a">Bar Cañete · Barcelona · pedido formal de remoção</p>
+    </div>
+
+    <p class="lead" style="font-size:9.4pt; color:var(--cream-d);">
+      A leitura correta desse e-mail: ele não reclamou de estar listado — reclamou da
+      <b>agenda vendida errada</b> e do cliente sem mesa na porta. Um pedido de remoção é
+      o contato mais qualificado que recebemos: o dono viu a plataforma, viu demanda e se
+      importou o suficiente para escrever. Hoje isso termina em exclusão manual; deveria
+      terminar em conversa comercial, com o número de pedidos dele na mão.
+    </p>
+
+    <div class="note">
+      <b>Como este dossiê foi feito.</b> Duas auditorias independentes — uma dos sistemas
+      (banco de dados, avisos automáticos, documentação) e uma do site em produção, feita
+      por outra fonte — foram somadas e cada achado foi verificado de novo, direto na
+      fonte, antes de entrar aqui. O que não se confirmou ficou de fora; o que já foi
+      corrigido também.
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Dossiê de Conversão e Retenção</span>
+    <span class="folio">02</span>
+  </footer>
+</section>
+
+<!-- ============ PÁGINA 3 — PRIORIDADE 1 ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Prioridade 1 · Esta semana</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">Prioridade 1 · Esta semana</p>
+    <h2>Parar de prometer o que não entregamos</h2>
+    <p class="lead" style="margin-bottom:5mm;">
+      Nenhum item aqui exige construir nada novo. São promessas escritas no site que a
+      operação não cumpre — e cada uma delas fabrica o cliente frustrado e o restaurante
+      hostil que travam as duas pontas do negócio.
+    </p>
+
+    <div class="find">
+      <span class="ix">01</span>
+      <div>
+        <div class="head"><h3>O site diz ao Google que os restaurantes têm nota de clientes — que não existe</h3>
+          <div class="chips"><span class="chip gold">risco máximo</span><span class="chip">minutos</span></div></div>
+        <p class="txt">O código de cada ficha informa ao Google “nota 3, 1 avaliação”. O “3” são
+        as estrelas Michelin do Pierre Gagnaire convertidas em nota — e a plataforma tem
+        <b>zero avaliações reais</b>. Isso viola as regras do Google e pode custar o destaque
+        das 12.299 páginas na busca, de uma vez.</p>
+        <p class="fix"><span class="lab">Fazer:</span> remover essa marcação do código hoje. Só
+        voltar a emitir nota quando houver avaliações verdadeiras na página.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">02</span>
+      <div>
+        <div class="head"><h3>“Confirmação instantânea” prometida — toda reserva nasce pendente</h3>
+          <div class="chips"><span class="chip gold">ambos</span><span class="chip">dias</span></div></div>
+        <p class="txt">Para as ~1.540 casas que nem sabem que estão na plataforma, ninguém aceita o
+        pedido. O cliente acha que tem mesa, aparece e não tem. Foi exatamente essa a
+        reclamação escrita do Bar Cañete.</p>
+        <p class="fix"><span class="lab">Fazer:</span> dois textos. Parceiro: “confirmação
+        imediata”. Não-parceiro: “solicitamos sua mesa — confirmamos em até X horas”.
+        Trocar FAQ, benefícios e o botão de reserva.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">03</span>
+      <div>
+        <div class="head"><h3>Os horários oferecidos são inventados</h3>
+          <div class="chips"><span class="chip gold">ambos</span><span class="chip">dias</span></div></div>
+        <p class="txt">O sistema fatia o horário de funcionamento em blocos de 30 minutos e os vende
+        como vagas. O Pierre Gagnaire — três estrelas, agenda cheia — aparece sempre livre
+        às 12:00, 12:30, 19:30… e duas pessoas podem “reservar” o mesmo horário. Qualquer
+        dono que abra a própria ficha vê a agenda dele sendo vendida errada.</p>
+        <p class="fix"><span class="lab">Fazer:</span> enquanto não houver integração, pedir
+        <b>preferência</b> (“almoço”, “jantar” ou horário desejado) — nunca exibir como vaga
+        garantida.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">04</span>
+      <div>
+        <div class="head"><h3>A página de contato pede um formulário que não existe</h3>
+          <div class="chips"><span class="chip gold">ambos</span><span class="chip">horas</span></div></div>
+        <p class="txt">O texto diz “use o formulário abaixo” — e não há formulário nenhum, só
+        WhatsApp e e-mail. É o único canal de entrada do site, inclusive para um restaurante
+        interessado em ser parceiro.</p>
+        <p class="fix"><span class="lab">Fazer:</span> publicar o formulário, com a opção
+        “sou um restaurante” encaminhada direto ao comercial.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Dossiê de Conversão e Retenção</span>
+    <span class="folio">03</span>
+  </footer>
+</section>
+
+<!-- ============ PÁGINA 4 — PRIORIDADE 2 ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Prioridade 2 · Semanas 2 e 3</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">Prioridade 2 · Semanas 2 e 3</p>
+    <h2>Abrir a porta do restaurante</h2>
+    <p class="lead" style="margin-bottom:5mm;">
+      O produto para o restaurante existe e funciona — painel, cadastro, convite por
+      código. O que não existe é o caminho até ele. É por isso que a conversão de
+      estabelecimentos está parada no menor número possível.
+    </p>
+
+    <div class="find">
+      <span class="ix">05</span>
+      <div>
+        <div class="head"><h3>O restaurante não tem por onde entrar</h3>
+          <div class="chips"><span class="chip gold">conversão</span><span class="chip">1–2 semanas</span></div></div>
+        <p class="txt">Nenhum link no site leva ao painel do parceiro, e todos os endereços que um
+        dono tentaria (/para-restaurantes, /partners…) dão “página não encontrada”.
+        Resultado: <b>2 contas em 1.548 restaurantes publicados</b>, e o convite de acesso foi
+        usado 9 vezes na história — porque 9 foi quantas pessoas alguém levou até lá à mão.</p>
+        <p class="fix"><span class="lab">Fazer:</span> página “Para restaurantes” no site, link no
+        rodapé, e um <b>“É o dono deste estabelecimento?”</b> em cada ficha — com três opções,
+        nesta ordem: assumir o perfil, corrigir informações, pedir remoção.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">06</span>
+      <div>
+        <div class="head"><h3>Nunca contamos ao dono quantos clientes mandamos para ele</h3>
+          <div class="chips"><span class="chip gold">conversão</span><span class="chip">1 semana</span></div></div>
+        <p class="txt">O SRI TRAT, em Bangkok, recebeu <b>410 pedidos de mesa em um ano</b> — e nunca
+        soube. É o argumento comercial mais forte que temos, é uma frase verdadeira, e nunca
+        foi dita a ninguém.</p>
+        <p class="fix"><span class="lab">Fazer:</span> e-mail mensal automático — “você recebeu N
+        pedidos pela The World Keys” — começando pelos 75 restaurantes com demanda real.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">07</span>
+      <div>
+        <div class="head"><h3>Quem pediu para sair pode voltar ao ar sem querer</h3>
+          <div class="chips"><span class="chip gold">jurídico</span><span class="chip">meia hora</span></div></div>
+        <p class="txt">A ficha do Cañete saiu do ar na mão, sem registro do motivo. O cadastro só tem
+        um interruptor “publicado/rascunho” — a próxima importação de dados pode recriar a
+        ficha de quem exigiu remoção por escrito. É o caminho mais curto para um problema
+        jurídico.</p>
+        <p class="fix"><span class="lab">Fazer:</span> uma marca “não listar de novo”, com data e
+        motivo, respeitada pelo importador e pelo botão de publicar. E uma resposta-padrão de
+        remoção em 24h que, no mesmo texto, mostre a demanda dos últimos 30 dias — remoção
+        virando conversa.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">08</span>
+      <div>
+        <div class="head"><h3>Os parceiros reais são invisíveis</h3>
+          <div class="chips"><span class="chip gold">conversão</span><span class="chip">horas</span></div></div>
+        <p class="txt">Há 14 parceiros marcados no cadastro, mas o selo de parceiro está travado em
+        “falso” no código do site — quem assinou aparece exatamente igual a quem nunca foi
+        consultado.</p>
+        <p class="fix"><span class="lab">Fazer:</span> corrigir a exibição e transformar o selo em
+        argumento: <b>parceiro = confirmação imediata</b>. É a recompensa visível por assinar.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Dossiê de Conversão e Retenção</span>
+    <span class="folio">04</span>
+  </footer>
+</section>
+
+<!-- ============ PÁGINA 5 — PRIORIDADE 3 ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">Prioridade 3 · Primeiro mês</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">Prioridade 3 · Primeiro mês</p>
+    <h2>Fazer o cliente voltar</h2>
+    <p class="lead" style="margin-bottom:5mm;">
+      Hoje ninguém volta — nem quem foi bem atendido. Dos 13.962 clientes que já pediram
+      mesa, 10.397 pediram uma vez, ficaram sem resposta e sumiram. E não é mistério:
+      depois do jantar, o silêncio é total.
+    </p>
+
+    <div class="find">
+      <span class="ix">09</span>
+      <div>
+        <div class="head"><h3>Não existe vida depois do jantar</h3>
+          <div class="chips"><span class="chip gold">retenção</span><span class="chip">interruptor</span></div></div>
+        <p class="txt">903 jantares confirmados já aconteceram: zero avaliações, zero lembretes de
+        véspera, zero convites para voltar. O convite de avaliação <b>está pronto e
+        construído</b> — o relógio que o dispara está desligado desde 27 de agosto. O lembrete
+        de véspera, idem.</p>
+        <p class="fix"><span class="lab">Fazer:</span> medir o volume represado (há 925 reservas
+        confirmadas no histórico — ninguém quer 900 e-mails no mesmo minuto) e ligar os dois.
+        Depois, um convite de retorno.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">10</span>
+      <div>
+        <div class="head"><h3>Um muro de cadastro no último passo da reserva</h3>
+          <div class="chips"><span class="chip gold">retenção</span><span class="chip">1 semana</span></div></div>
+        <p class="txt">Depois de escolher data e horário, o site exige criar conta — sem opção de
+        seguir como convidado. É o ponto de abandono mais caro do funil: a pessoa já tinha
+        decidido reservar.</p>
+        <p class="fix"><span class="lab">Fazer:</span> aceitar nome, e-mail e telefone para
+        concluir; oferecer a conta <b>depois</b> da reserva feita.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">11</span>
+      <div>
+        <div class="head"><h3>O calendário cobre o botão de confirmar</h3>
+          <div class="chips"><span class="chip gold">retenção</span><span class="chip">horas</span></div></div>
+        <p class="txt">O seletor de data não fecha depois da escolha, e a lista de horários fica por
+        cima do botão “Continuar”. É um defeito literalmente em cima do botão que gera
+        receita.</p>
+        <p class="fix"><span class="lab">Fazer:</span> fechar ao selecionar — e também com Esc e
+        clique fora. Ajuste de horas, ganho imediato.</p>
+      </div>
+    </div>
+
+    <div class="find">
+      <span class="ix">12</span>
+      <div>
+        <div class="head"><h3>Entregamos de graça o contato pelo qual pagamos</h3>
+          <div class="chips"><span class="chip gold">ambos</span><span class="chip">horas</span></div></div>
+        <p class="txt">Telefone e site do restaurante aparecem em destaque acima do botão de
+        reserva. O cliente liga direto, a reserva acontece fora da plataforma — e a demanda
+        deixa de ser nossa, levando junto o número que sustentaria a conversa comercial.</p>
+        <p class="fix"><span class="lab">Fazer:</span> nas fichas não-parceiras, manter endereço e
+        mapa; telefone e site só depois da reserva concluída.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Dossiê de Conversão e Retenção</span>
+    <span class="folio">05</span>
+  </footer>
+</section>
+
+<!-- ============ PÁGINA 6 — SEQUÊNCIA ============ -->
+<section class="page">
+  <header class="p-head">
+    <span class="mark">The World Keys</span>
+    <span class="sec">A sequência</span>
+  </header>
+
+  <div class="p-body">
+    <p class="eyebrow">A sequência</p>
+    <h2>Cinco passos, na ordem que protege e rende</h2>
+    <p class="lead" style="margin-bottom:5mm;">
+      A ordem importa: abrir a porta do restaurante <b>antes</b> de corrigir as promessas
+      facilitaria a saída sem remover o motivo dela. Primeiro a verdade, depois a porta,
+      depois a volta.
+    </p>
+
+    <div class="seq">
+      <span class="when">Esta semana</span>
+      <div>
+        <h3>Parar de prometer</h3>
+        <p>Tirar a nota falsa do código do Google · reescrever “confirmação instantânea” e
+        os horários como preferência · publicar o formulário de contato. Menor esforço do
+        dossiê, maior risco evitado.</p>
+      </div>
+    </div>
+
+    <div class="seq">
+      <span class="when">Semanas 2–3</span>
+      <div>
+        <h3>Abrir a porta</h3>
+        <p>Página “Para restaurantes” + “é o dono?” nas fichas · primeiro e-mail de demanda
+        aos 75 com movimento real · caminho de saída digno com trava “não listar de novo” ·
+        selo de parceiro funcionando.</p>
+      </div>
+    </div>
+
+    <div class="seq">
+      <span class="when">Primeiro mês</span>
+      <div>
+        <h3>Fazer voltar</h3>
+        <p>Ligar avaliação e lembrete de véspera (medindo o represado antes) · reserva como
+        convidado · consertar o calendário · recolher telefone e site das fichas
+        não-parceiras.</p>
+      </div>
+    </div>
+
+    <div class="seq">
+      <span class="when">Contínuo</span>
+      <div>
+        <h3>Entregar de verdade</h3>
+        <p>Concierge fechando por telefone os pedidos das cidades que funcionam — Atenas,
+        Marrakech, Paris — e resolvendo Bangkok, a maior demanda do mundo com 699 pedidos e
+        4 aceites. Cada mesa entregue vira o argumento de venda.</p>
+      </div>
+    </div>
+
+    <div class="seq">
+      <span class="when">Segundo mês</span>
+      <div>
+        <h3>Concentrar o catálogo</h3>
+        <p>Unificar as 25 cidades duplicadas (“nyc-2”, “lisboa/lisbon”) · esconder as 160
+        cidades com menos de 10 casas · investigar por que a vitrine mostra 1 restaurante em
+        Londres quando o catálogo tem 31 — profundidade em poucas cidades vale mais do que
+        203 rasas.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>O que a verificação mudou.</b> Três itens da auditoria de atrito foram ajustados
+      antes de entrar aqui: Londres tem 31 casas no catálogo (o defeito é a vitrine, não o
+      acervo); a frase “trusted by hundreds of restaurants” já saiu do ar; e as avaliações
+      não são um projeto de meses — são um interruptor desligado. Nenhuma correção deste
+      dossiê foi aplicada ainda: cada uma exige aprovação antes de ser executada.
+    </div>
+  </div>
+
+  <footer class="p-foot">
+    <span>Dossiê de Conversão e Retenção</span>
+    <span class="folio">06</span>
+  </footer>
+</section>
+
+</body>
+</html>

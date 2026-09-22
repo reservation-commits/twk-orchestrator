@@ -1,0 +1,265 @@
+﻿{
+    "updatedAt":  "2026-08-24T18:10:34.211Z",
+    "createdAt":  "2026-07-20T22:01:51.297Z",
+    "id":  "6ONkRN-zDsy0qpvXBn6NH",
+    "name":  "envia email de resposta a solicitacao de parceria",
+    "description":  null,
+    "active":  true,
+    "isArchived":  false,
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "invite",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2.1,
+                      "position":  [
+                                       -112,
+                                       0
+                                   ],
+                      "id":  "895852bb-4113-4056-947f-ce61c2590dd0",
+                      "name":  "Webhook",
+                      "webhookId":  "d9dd54b7-f972-4b57-86ca-ab4c4511b187"
+                  },
+                  {
+                      "parameters":  {
+                                         "sendTo":  "={{ $json.body.email }}",
+                                         "subject":  "We\u0027ve Received Your Partnership Application",
+                                         "message":  "=\u003c!doctype html\u003e \u003chtml lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"\u003e \u003chead\u003e \u003cmeta charset=\"utf-8\"/\u003e \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/\u003e \u003cmeta name=\"color-scheme\" content=\"light\"/\u003e \u003cmeta name=\"supported-color-schemes\" content=\"light\"/\u003e \u003ctitle\u003eThe World Keys\u003c/title\u003e \u003c/head\u003e \u003cbody style=\"margin:0;padding:0;background-color:#ede9df;\"\u003e \u003c!-- preheader --\u003e \u003cdiv style=\"display:none;max-height:0;overflow:hidden;mso-hide:all;\"\u003e   Dear {{ $json.body.fullName.split(\u0027 \u0027)[0] }}, we have received your partnership request.\u0026nbsp;\u0026zwnj;\u0026nbsp;\u0026zwnj;\u0026nbsp;\u0026zwnj;\u0026nbsp;\u0026zwnj; \u003c/div\u003e  \u003ctable role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#ede9df\" style=\"background-color:#ede9df;\"\u003e \u003ctr\u003e\u003ctd align=\"center\" style=\"padding:28px 14px;\"\u003e    \u003ctable role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:100%;\"\u003e      \u003c!-- Header --\u003e     \u003ctr\u003e\u003ctd bgcolor=\"#070b10\" style=\"background-color:#070b10;padding:30px 40px 26px;text-align:center;\"\u003e       \u003cdiv style=\"font-family:\u0027Cormorant Garamond\u0027, Georgia, \u0027Times New Roman\u0027, serif;font-size:27px;font-weight:400;letter-spacing:6px;color:#c9a96e;\"\u003eTHE\u0026nbsp;WORLD\u0026nbsp;KEYS\u003c/div\u003e       \u003cdiv style=\"font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:10.5px;font-weight:400;letter-spacing:4px;color:#9a97a8;padding-top:9px;\"\u003ePARTNERS\u0026nbsp;\u0026amp;\u0026nbsp;RESTAURANTS\u003c/div\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003c!-- Gold divider --\u003e     \u003ctr\u003e\u003ctd style=\"height:2px;line-height:2px;font-size:2px;background:linear-gradient(90deg,#9e7c48,#e4c990,#9e7c48);background-color:#c9a96e;\"\u003e\u0026nbsp;\u003c/td\u003e\u003c/tr\u003e      \u003c!-- Body --\u003e     \u003ctr\u003e\u003ctd bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:38px 44px 22px;\"\u003e       \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         Dear {{ $json.body.fullName.split(\u0027 \u0027)[0] }},       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         We have received the partnership request for         \u003cstrong style=\"font-weight:600;color:#1d222b;\"\u003e{{ $json.body.restaurantName || $json.body.publicListingSlug }}\u003c/strong\u003e         and our team is currently reviewing the submitted information.       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         We will contact you shortly via         \u003cstrong style=\"font-weight:600;color:#1d222b;\"\u003e{{ $json.body.email }}\u003c/strong\u003e         or         \u003cstrong style=\"font-weight:600;color:#1d222b;\"\u003e{{ $json.body.phone }}\u003c/strong\u003e         to continue the process.       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         In the meantime, no further action is required. We will notify you as soon as the review has been completed.       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         Kind regards,\u003cbr/\u003e         The World Keys\u003cbr/\u003e        \u003c/p\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003c!-- Application Summary --\u003e     \u003ctr\u003e\u003ctd bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:0 44px 28px;\"\u003e       \u003ctable role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border:1px solid #ddd6c6;\"\u003e         \u003ctr\u003e           \u003ctd style=\"padding:16px 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:11px;letter-spacing:2px;color:#6e6a5e;border-bottom:1px solid #ddd6c6;\"\u003e             APPLICATION SUMMARY           \u003c/td\u003e         \u003c/tr\u003e         \u003ctr\u003e           \u003ctd style=\"padding:14px 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:14px;line-height:1.7;color:#1d222b;\"\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003eName:\u003c/span\u003e {{ $json.body.fullName }}\u003c/div\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003ePosition:\u003c/span\u003e {{ $json.body.jobTitle }}\u003c/div\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003eRestaurant:\u003c/span\u003e {{ $json.body.restaurantName || $json.body.publicListingSlug }}\u003c/div\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003eApplication Type:\u003c/span\u003e {{ $json.body.applicationType === \u0027link\u0027 ? \u0027Link Existing Listing\u0027 : \u0027New Restaurant\u0027 }}\u003c/div\u003e           \u003c/td\u003e         \u003c/tr\u003e       \u003c/table\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003c!-- Signature --\u003e           \u003c!-- Footer --\u003e     \u003ctr\u003e\u003ctd align=\"center\" style=\"padding:20px 30px 6px;\"\u003e       \u003ctable role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"\u003e         \u003ctr\u003e           \u003ctd style=\"padding:0 13px;\"\u003e             \u003ca href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"text-decoration:none;\"\u003e               \u003cimg src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/whatsapp.png\" width=\"26\" height=\"26\" alt=\"WhatsApp\" style=\"display:block;border:0;opacity:0.75;\" /\u003e             \u003c/a\u003e           \u003c/td\u003e           \u003ctd style=\"padding:0 13px;\"\u003e             \u003ca href=\"mailto:support@theworldkeys.com\" target=\"_blank\" style=\"text-decoration:none;\"\u003e               \u003cimg src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/email.png\" width=\"26\" height=\"26\" alt=\"Email\" style=\"display:block;border:0;opacity:0.75;\" /\u003e             \u003c/a\u003e           \u003c/td\u003e           \u003ctd style=\"padding:0 13px;\"\u003e             \u003ca href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\"\u003e               \u003cimg src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/site.png\" width=\"26\" height=\"26\" alt=\"Website\" style=\"display:block;border:0;opacity:0.75;\" /\u003e             \u003c/a\u003e           \u003c/td\u003e         \u003c/tr\u003e       \u003c/table\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003ctr\u003e\u003ctd style=\"padding:14px 30px 8px;text-align:center;\"\u003e             \u003cp style=\"margin:0;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:10.5px;letter-spacing:1.5px;color:#9a97a8;\"\u003e         THE\u0026nbsp;WORLD\u0026nbsp;KEYS\u0026nbsp;\u0026middot;\u0026nbsp;PARIS\u0026nbsp;\u0026middot;\u0026nbsp;2026       \u003c/p\u003e     \u003c/td\u003e\u003c/tr\u003e    \u003c/table\u003e \u003c/td\u003e\u003c/tr\u003e \u003c/table\u003e \u003c/body\u003e \u003c/html\u003e",
+                                         "options":  {
+                                                         "appendAttribution":  false
+                                                     }
+                                     },
+                      "type":  "n8n-nodes-base.gmail",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       208,
+                                       0
+                                   ],
+                      "id":  "c5425e58-bb3b-4b41-86ed-a03ab727a6f8",
+                      "name":  "Send a message",
+                      "webhookId":  "fe2257f9-c6ec-49ca-9ff2-a732ec919b1e",
+                      "credentials":  {
+                                          "gmailOAuth2":  {
+                                                              "id":  "hkcgjRyX7AH55iMJ",
+                                                              "name":  "Gmail account"
+                                                          }
+                                      }
+                  }
+              ],
+    "connections":  {
+                        "Webhook":  {
+                                        "main":  [
+                                                     [
+                                                         {
+                                                             "node":  "Send a message",
+                                                             "type":  "main",
+                                                             "index":  0
+                                                         }
+                                                     ]
+                                                 ]
+                                    }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "binaryMode":  "separate",
+                     "availableInMCP":  true
+                 },
+    "staticData":  null,
+    "meta":  {
+                 "templateCredsSetupCompleted":  true
+             },
+    "pinData":  {
+                    "Webhook":  [
+                                    {
+                                        "json":  {
+                                                     "headers":  {
+                                                                     "host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "user-agent":  "Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowerShell/5.1.26100.8875",
+                                                                     "content-length":  "374",
+                                                                     "content-type":  "application/json",
+                                                                     "expect":  "100-continue",
+                                                                     "x-forwarded-for":  "192.140.64.63",
+                                                                     "x-forwarded-host":  "theworldkeys-n8n.xis4ee.easypanel.host",
+                                                                     "x-forwarded-port":  "443",
+                                                                     "x-forwarded-proto":  "https",
+                                                                     "x-forwarded-server":  "8d89ae07a74e",
+                                                                     "x-real-ip":  "192.140.64.63",
+                                                                     "accept-encoding":  "gzip"
+                                                                 },
+                                                     "params":  {
+
+                                                                },
+                                                     "query":  {
+
+                                                               },
+                                                     "body":  {
+                                                                  "fullName":  "Marlon Teste",
+                                                                  "createdAt":  "2026-07-20T22:05:16.6698979Z",
+                                                                  "publicListingSlug":  null,
+                                                                  "jobTitle":  "OWNER",
+                                                                  "restaurantName":  "Restaurante Exemplo",
+                                                                  "invitationId":  "test-invite-001",
+                                                                  "applicationType":  "create",
+                                                                  "status":  "pending",
+                                                                  "phone":  "+5521999999999",
+                                                                  "email":  "marlon.teste@example.com"
+                                                              },
+                                                     "webhookUrl":  "https://theworldkeys-n8n.xis4ee.easypanel.host/webhook/invite",
+                                                     "executionMode":  "production"
+                                                 }
+                                    }
+                                ]
+                },
+    "versionId":  "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+    "activeVersionId":  "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+    "versionCounter":  37,
+    "triggerCount":  1,
+    "shared":  [
+                   {
+                       "updatedAt":  "2026-07-20T22:01:51.302Z",
+                       "createdAt":  "2026-07-20T22:01:51.302Z",
+                       "role":  "workflow:owner",
+                       "workflowId":  "6ONkRN-zDsy0qpvXBn6NH",
+                       "projectId":  "j3RBnUKpdJnI0HPr",
+                       "project":  {
+                                       "updatedAt":  "2025-10-09T18:24:30.274Z",
+                                       "createdAt":  "2025-10-09T18:21:52.771Z",
+                                       "id":  "j3RBnUKpdJnI0HPr",
+                                       "name":  "The World keys \u003cthekeys.need@gmail.com\u003e",
+                                       "type":  "personal",
+                                       "icon":  null,
+                                       "description":  null,
+                                       "creatorId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                       "projectRelations":  [
+                                                                {
+                                                                    "updatedAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "createdAt":  "2025-10-09T18:21:52.771Z",
+                                                                    "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                    "projectId":  "j3RBnUKpdJnI0HPr",
+                                                                    "user":  {
+                                                                                 "updatedAt":  "2026-08-26T07:00:16.000Z",
+                                                                                 "createdAt":  "2025-10-09T18:21:52.389Z",
+                                                                                 "id":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511",
+                                                                                 "email":  "thekeys.need@gmail.com",
+                                                                                 "firstName":  "The World",
+                                                                                 "lastName":  "keys",
+                                                                                 "personalizationAnswers":  {
+                                                                                                                "version":  "v4",
+                                                                                                                "personalization_survey_submitted_at":  "2025-10-09T18:24:41.538Z",
+                                                                                                                "personalization_survey_n8n_version":  "1.103.2"
+                                                                                                            },
+                                                                                 "settings":  {
+                                                                                                  "userActivated":  true,
+                                                                                                  "easyAIWorkflowOnboarded":  true,
+                                                                                                  "firstSuccessfulWorkflowId":  "iczjt9eyILmHEwU7",
+                                                                                                  "userActivatedAt":  1760038686025,
+                                                                                                  "npsSurvey":  {
+                                                                                                                    "responded":  true,
+                                                                                                                    "lastShownAt":  1785180247186
+                                                                                                                }
+                                                                                              },
+                                                                                 "disabled":  false,
+                                                                                 "mfaEnabled":  false,
+                                                                                 "lastActiveAt":  "2026-08-26",
+                                                                                 "isPending":  false
+                                                                             }
+                                                                }
+                                                            ]
+                                   }
+                   }
+               ],
+    "tags":  [
+
+             ],
+    "activeVersion":  {
+                          "updatedAt":  "2026-07-27T19:24:43.000Z",
+                          "createdAt":  "2026-07-27T19:24:39.815Z",
+                          "versionId":  "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+                          "workflowId":  "6ONkRN-zDsy0qpvXBn6NH",
+                          "nodes":  [
+                                        {
+                                            "parameters":  {
+                                                               "httpMethod":  "POST",
+                                                               "path":  "invite",
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.webhook",
+                                            "typeVersion":  2.1,
+                                            "position":  [
+                                                             -112,
+                                                             0
+                                                         ],
+                                            "id":  "895852bb-4113-4056-947f-ce61c2590dd0",
+                                            "name":  "Webhook",
+                                            "webhookId":  "d9dd54b7-f972-4b57-86ca-ab4c4511b187"
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "sendTo":  "={{ $json.body.email }}",
+                                                               "subject":  "We\u0027ve Received Your Partnership Application",
+                                                               "message":  "=\u003c!doctype html\u003e \u003chtml lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"\u003e \u003chead\u003e \u003cmeta charset=\"utf-8\"/\u003e \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/\u003e \u003cmeta name=\"color-scheme\" content=\"light\"/\u003e \u003cmeta name=\"supported-color-schemes\" content=\"light\"/\u003e \u003ctitle\u003eThe World Keys\u003c/title\u003e \u003c/head\u003e \u003cbody style=\"margin:0;padding:0;background-color:#ede9df;\"\u003e \u003c!-- preheader --\u003e \u003cdiv style=\"display:none;max-height:0;overflow:hidden;mso-hide:all;\"\u003e   Dear {{ $json.body.fullName.split(\u0027 \u0027)[0] }}, we have received your partnership request.\u0026nbsp;\u0026zwnj;\u0026nbsp;\u0026zwnj;\u0026nbsp;\u0026zwnj;\u0026nbsp;\u0026zwnj; \u003c/div\u003e  \u003ctable role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" bgcolor=\"#ede9df\" style=\"background-color:#ede9df;\"\u003e \u003ctr\u003e\u003ctd align=\"center\" style=\"padding:28px 14px;\"\u003e    \u003ctable role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:600px;max-width:100%;\"\u003e      \u003c!-- Header --\u003e     \u003ctr\u003e\u003ctd bgcolor=\"#070b10\" style=\"background-color:#070b10;padding:30px 40px 26px;text-align:center;\"\u003e       \u003cdiv style=\"font-family:\u0027Cormorant Garamond\u0027, Georgia, \u0027Times New Roman\u0027, serif;font-size:27px;font-weight:400;letter-spacing:6px;color:#c9a96e;\"\u003eTHE\u0026nbsp;WORLD\u0026nbsp;KEYS\u003c/div\u003e       \u003cdiv style=\"font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:10.5px;font-weight:400;letter-spacing:4px;color:#9a97a8;padding-top:9px;\"\u003ePARTNERS\u0026nbsp;\u0026amp;\u0026nbsp;RESTAURANTS\u003c/div\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003c!-- Gold divider --\u003e     \u003ctr\u003e\u003ctd style=\"height:2px;line-height:2px;font-size:2px;background:linear-gradient(90deg,#9e7c48,#e4c990,#9e7c48);background-color:#c9a96e;\"\u003e\u0026nbsp;\u003c/td\u003e\u003c/tr\u003e      \u003c!-- Body --\u003e     \u003ctr\u003e\u003ctd bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:38px 44px 22px;\"\u003e       \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         Dear {{ $json.body.fullName.split(\u0027 \u0027)[0] }},       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         We have received the partnership request for         \u003cstrong style=\"font-weight:600;color:#1d222b;\"\u003e{{ $json.body.restaurantName || $json.body.publicListingSlug }}\u003c/strong\u003e         and our team is currently reviewing the submitted information.       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         We will contact you shortly via         \u003cstrong style=\"font-weight:600;color:#1d222b;\"\u003e{{ $json.body.email }}\u003c/strong\u003e         or         \u003cstrong style=\"font-weight:600;color:#1d222b;\"\u003e{{ $json.body.phone }}\u003c/strong\u003e         to continue the process.       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         In the meantime, no further action is required. We will notify you as soon as the review has been completed.       \u003c/p\u003e        \u003cp style=\"margin:0 0 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:15.5px;line-height:1.75;color:#1d222b;\"\u003e         Kind regards,\u003cbr/\u003e         The World Keys\u003cbr/\u003e        \u003c/p\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003c!-- Application Summary --\u003e     \u003ctr\u003e\u003ctd bgcolor=\"#f7f4ef\" style=\"background-color:#f7f4ef;padding:0 44px 28px;\"\u003e       \u003ctable role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"border:1px solid #ddd6c6;\"\u003e         \u003ctr\u003e           \u003ctd style=\"padding:16px 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:11px;letter-spacing:2px;color:#6e6a5e;border-bottom:1px solid #ddd6c6;\"\u003e             APPLICATION SUMMARY           \u003c/td\u003e         \u003c/tr\u003e         \u003ctr\u003e           \u003ctd style=\"padding:14px 18px;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:14px;line-height:1.7;color:#1d222b;\"\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003eName:\u003c/span\u003e {{ $json.body.fullName }}\u003c/div\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003ePosition:\u003c/span\u003e {{ $json.body.jobTitle }}\u003c/div\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003eRestaurant:\u003c/span\u003e {{ $json.body.restaurantName || $json.body.publicListingSlug }}\u003c/div\u003e             \u003cdiv\u003e\u003cspan style=\"color:#6e6a5e;\"\u003eApplication Type:\u003c/span\u003e {{ $json.body.applicationType === \u0027link\u0027 ? \u0027Link Existing Listing\u0027 : \u0027New Restaurant\u0027 }}\u003c/div\u003e           \u003c/td\u003e         \u003c/tr\u003e       \u003c/table\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003c!-- Signature --\u003e           \u003c!-- Footer --\u003e     \u003ctr\u003e\u003ctd align=\"center\" style=\"padding:20px 30px 6px;\"\u003e       \u003ctable role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"\u003e         \u003ctr\u003e           \u003ctd style=\"padding:0 13px;\"\u003e             \u003ca href=\"https://wa.me/5521967841007\" target=\"_blank\" style=\"text-decoration:none;\"\u003e               \u003cimg src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/whatsapp.png\" width=\"26\" height=\"26\" alt=\"WhatsApp\" style=\"display:block;border:0;opacity:0.75;\" /\u003e             \u003c/a\u003e           \u003c/td\u003e           \u003ctd style=\"padding:0 13px;\"\u003e             \u003ca href=\"mailto:support@theworldkeys.com\" target=\"_blank\" style=\"text-decoration:none;\"\u003e               \u003cimg src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/email.png\" width=\"26\" height=\"26\" alt=\"Email\" style=\"display:block;border:0;opacity:0.75;\" /\u003e             \u003c/a\u003e           \u003c/td\u003e           \u003ctd style=\"padding:0 13px;\"\u003e             \u003ca href=\"https://theworldkeys.com/\" target=\"_blank\" style=\"text-decoration:none;\"\u003e               \u003cimg src=\"https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/icons/site.png\" width=\"26\" height=\"26\" alt=\"Website\" style=\"display:block;border:0;opacity:0.75;\" /\u003e             \u003c/a\u003e           \u003c/td\u003e         \u003c/tr\u003e       \u003c/table\u003e     \u003c/td\u003e\u003c/tr\u003e      \u003ctr\u003e\u003ctd style=\"padding:14px 30px 8px;text-align:center;\"\u003e             \u003cp style=\"margin:0;font-family:\u0027Jost\u0027, \u0027Segoe UI\u0027, \u0027Helvetica Neue\u0027, Helvetica, Arial, sans-serif;font-size:10.5px;letter-spacing:1.5px;color:#9a97a8;\"\u003e         THE\u0026nbsp;WORLD\u0026nbsp;KEYS\u0026nbsp;\u0026middot;\u0026nbsp;PARIS\u0026nbsp;\u0026middot;\u0026nbsp;2026       \u003c/p\u003e     \u003c/td\u003e\u003c/tr\u003e    \u003c/table\u003e \u003c/td\u003e\u003c/tr\u003e \u003c/table\u003e \u003c/body\u003e \u003c/html\u003e",
+                                                               "options":  {
+                                                                               "appendAttribution":  false
+                                                                           }
+                                                           },
+                                            "type":  "n8n-nodes-base.gmail",
+                                            "typeVersion":  2.2,
+                                            "position":  [
+                                                             208,
+                                                             0
+                                                         ],
+                                            "id":  "c5425e58-bb3b-4b41-86ed-a03ab727a6f8",
+                                            "name":  "Send a message",
+                                            "webhookId":  "fe2257f9-c6ec-49ca-9ff2-a732ec919b1e",
+                                            "credentials":  {
+                                                                "gmailOAuth2":  {
+                                                                                    "id":  "hkcgjRyX7AH55iMJ",
+                                                                                    "name":  "Gmail account"
+                                                                                }
+                                                            }
+                                        }
+                                    ],
+                          "connections":  {
+                                              "Webhook":  {
+                                                              "main":  [
+                                                                           [
+                                                                               {
+                                                                                   "node":  "Send a message",
+                                                                                   "type":  "main",
+                                                                                   "index":  0
+                                                                               }
+                                                                           ]
+                                                                       ]
+                                                          }
+                                          },
+                          "authors":  "The World keys",
+                          "name":  "Version c9e23460",
+                          "description":  "",
+                          "autosaved":  true,
+                          "workflowPublishHistory":  [
+                                                         {
+                                                             "createdAt":  "2026-07-27T19:24:43.104Z",
+                                                             "id":  211,
+                                                             "workflowId":  "6ONkRN-zDsy0qpvXBn6NH",
+                                                             "versionId":  "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         },
+                                                         {
+                                                             "createdAt":  "2026-08-24T18:10:34.302Z",
+                                                             "id":  232,
+                                                             "workflowId":  "6ONkRN-zDsy0qpvXBn6NH",
+                                                             "versionId":  "c9e23460-b790-4b3b-a5e9-4ae06a2a8181",
+                                                             "event":  "activated",
+                                                             "userId":  "37bc5ae6-6aa6-4127-be0e-7dc2eba5a511"
+                                                         }
+                                                     ]
+                      }
+}
