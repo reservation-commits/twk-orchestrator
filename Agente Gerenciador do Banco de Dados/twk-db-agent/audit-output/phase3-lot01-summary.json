@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-06-09T17:21:30.677Z",
+  "target_count": 636,
+  "proposals_ok": 636,
+  "errors": 0,
+  "confidence": {
+    "HIGH": 628,
+    "MEDIUM": 0,
+    "CONFLICT": 8
+  },
+  "elapsed_seconds": 309,
+  "files": {
+    "proposals": "audit-output\\phase3-lot01-coordinates-proposals.csv",
+    "errors": "audit-output\\phase3-lot01-coordinates-errors.csv"
+  }
+}

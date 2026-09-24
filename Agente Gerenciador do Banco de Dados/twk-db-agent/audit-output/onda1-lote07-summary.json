@@ -1,0 +1,12 @@
+{
+  "mode": "propose",
+  "generated_at": "2026-06-10T17:05:59.895Z",
+  "target_count": 3,
+  "found": 0,
+  "errors": 3,
+  "confidence": {
+    "HIGH": 0,
+    "MEDIUM": 0
+  },
+  "elapsed_seconds": 9
+}

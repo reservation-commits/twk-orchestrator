@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-06-09T20:13:34.471Z",
+  "aliases_inserted": 23,
+  "central_america_resolutions": [
+    {
+      "id": "90888",
+      "name": "FURCA",
+      "city": "San jose",
+      "true_country": "Costa Rica",
+      "true_code": "CR",
+      "formatted": "Bbdiagonal al banco Lafise, WVRQ+4C9, Nunciatura 200 metros oeste del Scotiabank San José Nunciatura, San José, Sabana Nte, 10108, Costa Rica"
+    },
+    {
+      "id": "90892",
+      "name": "D BAR",
+      "city": "San jose",
+      "true_country": "Costa Rica",
+      "true_code": "CR",
+      "formatted": "PARKING LOT, MultiPlaza Escazú, San José, 10203, Costa Rica"
+    }
+  ],
+  "apply": {
+    "ok": 2198,
+    "err": 0,
+    "skipped": 0,
+    "err_sample": []
+  }
+}

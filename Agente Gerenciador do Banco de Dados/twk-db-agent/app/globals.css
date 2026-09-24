@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-twk-bg: #0a0a0f;
+  --color-gold: #c9a96e;
+  --font-cormorant: var(--font-cormorant);
+  --font-dm-sans: var(--font-dm-sans);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: #0a0a0f;
+  color: #e5e5e5;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 169, 110, 0.15);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 169, 110, 0.3);
+}
+
+/* Hide scrollbar but keep scrolling */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Monaco editor dark theme override */
+.monaco-editor .margin {
+  background: transparent !important;
+}
+
+/* Font utilities */
+.font-cormorant {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+}
+.font-dm-sans {
+  font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+}
+
+/* Gold color utility */
+.text-gold { color: #c9a96e; }
+.bg-gold { background-color: #c9a96e; }
+.border-gold { border-color: #c9a96e; }
+.bg-twk-bg { background-color: #0a0a0f; }

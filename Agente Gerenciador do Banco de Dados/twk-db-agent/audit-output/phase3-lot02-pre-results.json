@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-06-09T19:08:10.804Z",
+  "total": 12,
+  "ok": 12,
+  "err": 0,
+  "results": [
+    {
+      "id": "12086",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "14570",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "253049",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "255019",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "28719",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "34419",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "81583",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "83050",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "83522",
+      "field": "telephone_of_the_establishment",
+      "status": "ok"
+    },
+    {
+      "id": "14424",
+      "field": "site_url",
+      "status": "ok"
+    },
+    {
+      "id": "262192",
+      "field": "site_url",
+      "status": "ok"
+    },
+    {
+      "id": "57214",
+      "field": "site_url",
+      "status": "ok"
+    }
+  ]
+}

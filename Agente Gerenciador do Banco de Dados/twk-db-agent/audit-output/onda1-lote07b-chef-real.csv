@@ -1,0 +1,59 @@
+restaurant_id,name,city,country,award,proposed_chef,occurrences
+13069,LE REFUGE,Megève,France,michelin_guide_listed,Roméo Garcia,2
+13298,L'ETOILE,Rio de janeiro,Brazil,michelin_guide_listed,Juan José Molina,3
+14478,L'AMBROISIE,Paris,France,3,Shintaro Awa,
+14480,L'OISEAU BLANC,Paris,France,2,David Bizet,2
+14506,LE CINQ,Paris,France,3,Michael Bartocetti,2
+14518,LE 39V,Paris,France,michelin_guide_listed,Frédéric Vardon,1
+14536,LE TAILLEVENT,Paris,France,2,Giuliano Sperandio,1
+14540,LE CLARENCE,Paris,France,2,Andrea Capasso,2
+14568,ARPÈGE,Paris,France,3,Alain Passard,3
+14586,BRASSERIE DU LOUVRE BOCUSE,Paris,France,michelin_guide_listed,Denis Bellon,1
+14634,Carbone,NYC,United States,michelin_guide_listed,Mario Carbone,2
+15089,Senses,Amsterdam,Netherlands,michelin_guide_listed,Renaud Goigoux,1
+16035,CAPA,Orlando,United States,1,Rabii Saber,1
+16067,ISHIKAWA,Tokyo,Japan,3,Yugo Ishikawa,1
+16808,CAPRICE,Hong kong,China,3,Guillaume Galliot,2
+16830,8½ OTTO E MEZZO BOMBANA,Hong kong,China,3,Umberto BOMBANA,1
+16926,OFÍCIO,Lisbon,Portugal,michelin_guide_listed,Maurício Varela,1
+17053,AROMA,Rome,Italy,1,Giuseppe Di Iorio,2
+17993,28 POSTI,Milan,Italy,michelin_guide_listed,Franco Salvatorescopri,1
+19061,LA TABLE DU CLARANCE,Lille,France,1,Gaëtan Citerne,1
+19358,METS MOTS,Bordeaux,France,michelin_guide_listed,Léo Forget,1
+19391,L'OISEAU BLEU,Bordeaux,France,1,François Sauvêtre,2
+19504,CENT 33,Bordeaux,France,michelin_guide_listed,Fabien Beaufour,1
+19516,ISHIKAWA,Bordeaux,France,michelin_guide_listed,Yugo Ishikawa,1
+19525,LE QUATRIEME MUR,Bordeaux,France,1,Philippe Etchebest,1
+20298,BURGUNDY,Lyon,France,1,Matthieu Girardon,2
+20302,LE NEUVIEME ART,Lyon,France,2,Christophe ROURE,2
+20314,LE SUPREME,Lyon,France,michelin_guide_listed,Grégory Stawowy,1
+20320,LA MERE BRAZIER,Lyon,France,2,Mathieu Viannay,2
+20367,LES TERRASSES,Lyon,France,1,Henri Carlier,3
+21592,GAVROCHE,Strasbourg,France,michelin_guide_listed,Frédéric Colin,1
+21621,LES FUNAMBULES,Strasbourg,France,1,Guillaume Besson,3
+21641,LE JARDIN SECRET,Strasbourg,France,1,Gilles Leininger,2
+21710,SEPIA,Marseille,France,michelin_guide_listed,Kyle Cottle,1
+21724,LES TROIS FORTS,Marseille,France,michelin_guide_listed,Localisation Réserver,1
+21762,TABI,Marseille,France,michelin_guide_listed,Ippei Uemura,3
+21845,LA GRAPPE D'OR,Lausanne,Switzerland,michelin_guide_listed,Théotime Bioret,1
+22078,ROBUCHON AU DOME,Macau,China,3,Julien Tongourian,2
+22092,JADE DRAGON,Macau,China,3,Au Yeung,2
+22118,WING LEI PALACE,Macau,China,1,Tam Kwok Fung,1
+22245,LE ART,Aix en provence,France,1,Matthieu Derible,1
+22265,La Taula Gallici,Aix en provence,France,michelin_guide_listed,Christophe GAVOT,1
+22307,MANOIR DE LA REGATE,Nantes,France,1,Mathieu Pérou Enfant,1
+22417,LE FARÇON,Courchevel,France,1,Julien Machet,1
+23328,SIR ELLY'S,Shangai,China,1,Eugenio Cannoni,1
+24790,ORA D'ARIA,Florence,Italy,michelin_guide_listed,Marco Stabile,1
+262177,L'ABYSSE,Paris,France,2,Yannick Alléno,1
+27764,ARIA,Naples,Italy,1,Austin Goetzman,1
+28122,ROTE BAR,Vienna,Austria,michelin_guide_listed,Anton Pozeg,2
+28209,AMADOR,Vienna,Austria,3,Amador Fernández Van Vlijmen,1
+29821,TOUR D’ARGENT,Paris,France,1,Yannick Franques,1
+78990,L'AROMATE,Nice,France,1,Mickaël Gracieux,1
+86990,LA ROTONDE DES TRÉSOMS,Annecy,France,1,Eric Prowalski,1
+87662,BRASSERIE LE JARDIN,Reims,France,michelin_guide_listed,Meetings Gallery Packages Discovery,1
+88457,HIÉLY LUCULLUS,Avignon,France,michelin_guide_listed,Gérald Azoulay,1
+91153,JÉRÔME NUTILE,Nîmes,France,1,Jérôme Nutile,3
+91188,VINCENT CROIZARD,Nîmes,France,michelin_guide_listed,Vincent Croizard,1
+91879,ALEXANDRE - MICHEL KAYSER,Nîmes,France,2,Michel Kayser,1

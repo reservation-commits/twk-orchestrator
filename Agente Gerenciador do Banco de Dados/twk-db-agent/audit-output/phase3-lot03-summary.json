@@ -1,0 +1,17 @@
+{
+  "mode": "execute",
+  "generated_at": "2026-06-09T19:56:34.062Z",
+  "target_count": 528,
+  "api_ok": 528,
+  "api_err": 0,
+  "proposed": {
+    "phone": 19,
+    "site": 432,
+    "price": 30
+  },
+  "closed": {
+    "permanent": 4,
+    "temporary": 4
+  },
+  "elapsed_seconds": 232
+}

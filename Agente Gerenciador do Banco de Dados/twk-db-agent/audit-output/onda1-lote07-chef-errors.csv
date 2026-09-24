@@ -1,0 +1,33 @@
+restaurant_id,name,site_url,reason
+100082,LA MÈRE POULARD,https://lamerepoulard.com/en/home2/,no chef found
+100102,AVANZARE,https://www.avanzareitaliandining.com/,no chef found
+10316,TWIGA,https://twigaworld.com/montecarlo/,HTTP 404
+103871,AL SAHAR,http://sahara.restaurantwebexperts.com/,no chef found
+104250,BRUGAROL,https://www.brugarolbarcelona.com/,no chef found
+10446,CHRYSTIE,https://www.chrystie.fr/,no chef found
+10447,BISOUS BISOUS,https://www.instagram.com/bisousbisousclub/?hl=fr,no chef found
+10449,LA MÔME,https://lamomecannes.com/,no chef found
+10450,LA MÔME PLAGE,https://lamomeplage.com/,no chef found
+10452,MIRAMAR,https://miramarplage.fr/en/,no chef found
+10453,PLAGE DU FESTIVAL,https://www.plagedufestival.com,no chef found
+10454,C BEACH,https://www.cannesbeach.eu/,fetch: ERR_TLS_CERT_ALTNAME_INVALID
+10458,PALAIS STÉPHANIE,https://www.jwmarriottcannes-restaurants.com/palais-stephanie-beach,no chef found
+10459,MADEMOISELLE GRAY,https://www.hotelsbarriere.com/fr/cannes/le-gray-d-albion/restaurants-et-bars/restaurant-de-la-plage-privee.html,no chef found
+10460,BIJOU,https://plagebijou.com/fr/,no chef found
+10462,ONDINE PLAGE,https://www.ondineplage.com/,fetch: ECONNABORTED
+104622,MOLINO DE PEZ,https://www.molinodepez.com/,no chef found
+10463,LA MANDALA,https://www.lamandala-cannes.com/,no chef found
+10464,PLAGE GOÉLAND,https://www.plagegoeland.com/,no chef found
+10466,CARLTON CANNES,https://carltoncannes-thebeachclub.com/welcome/,HTTP 404
+10468,LA PLAGE DU MARTINEZ,https://www.hyattrestaurants.com/fr/cannes/restaurant/la-plage-du-martinez,no chef found
+10470,LA PETITE PLAGE,https://www.lapetiteplagegolfe.fr/,no chef found
+10475,VIP ROOM,https://www.instagram.com/viproomofficial/?hl=en,no chef found
+10481,NEPTUNE,https://www.neptunemonaco.com/,no chef found
+10482,LA NOTE BLEUE,https://lanotebleue.mc/,no chef found
+10483,MIAMI PLAGE,https://www.miami-plage-monaco.com/fr/,no chef found
+10484,MARCO LA ROSE DES VENTS,https://www.marcolarosedesvents.com/,HTTP 404
+10492,OPÉRA PLAGE,https://www.operaplage-nice.fr/en/opera-plage-english/,fetch: ERR_TLS_CERT_ALTNAME_INVALID
+10496,MOOREA,https://www.mooreaplage.fr/,no chef found
+10497,LES GRANIERS,https://lesgraniers-sainttropez.com/,no chef found
+10498,LE GOLFE AZUR,https://golfeazur.com/,no chef found
+10499,JARDIN TROPEZINA,https://www.jardin-tropezina.fr,fetch: ERR_TLS_CERT_ALTNAME_INVALID

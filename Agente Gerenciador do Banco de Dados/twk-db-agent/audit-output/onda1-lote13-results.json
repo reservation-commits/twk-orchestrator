@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-06-10T11:54:44.892Z",
+  "results": [
+    {
+      "constraint": "db_restaurants_phone_e164ish_chk",
+      "status": "valid",
+      "ms": 2161
+    },
+    {
+      "constraint": "db_restaurants_email_format_chk",
+      "status": "valid",
+      "ms": 156
+    },
+    {
+      "constraint": "db_restaurants_site_url_format_chk",
+      "status": "valid",
+      "ms": 325
+    },
+    {
+      "constraint": "db_restaurants_coords_range_chk",
+      "status": "valid",
+      "ms": 150
+    }
+  ],
+  "final_state": [
+    {
+      "conname": "db_restaurants_coords_range_chk",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_email_format_chk",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_phone_e164ish_chk",
+      "convalidated": true
+    },
+    {
+      "conname": "db_restaurants_site_url_format_chk",
+      "convalidated": true
+    }
+  ]
+}

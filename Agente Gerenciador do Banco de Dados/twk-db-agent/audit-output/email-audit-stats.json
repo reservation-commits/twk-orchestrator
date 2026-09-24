@@ -1,0 +1,196 @@
+{
+  "total": 2207,
+  "published_total": 2006,
+  "by_category": {
+    "empty": 548,
+    "invalid": 0,
+    "free_provider": 334,
+    "mismatch": 432,
+    "no_site": 38,
+    "match": 0,
+    "match_generic": 612,
+    "match_personal": 243,
+    "different_subdomain": 0
+  },
+  "by_category_published": {
+    "empty": 470,
+    "invalid": 0,
+    "free_provider": 303,
+    "mismatch": 405,
+    "no_site": 9,
+    "match": 0,
+    "match_generic": 588,
+    "match_personal": 231,
+    "different_subdomain": 0
+  },
+  "has_any_contact": 1984,
+  "no_contact_at_all": 22,
+  "examples": {
+    "mismatch": [
+      {
+        "id": "16182",
+        "name": "MISHIGUENE",
+        "email": "reservas@mishiguene.com",
+        "site": "https://instagram.com/mishigueneba?igshid=YTQwZjQ0NmI0OA=="
+      },
+      {
+        "id": "10517",
+        "name": "LA PETITE PLAGE",
+        "email": "sainttropez@restaurant-lapetiteplage.com",
+        "site": "https://www.lapetiteplagegolfe.fr/"
+      },
+      {
+        "id": "16280",
+        "name": "R+D Kitchen",
+        "email": "guestservices@hillstone.com",
+        "site": "https://rd-kitchen.com/"
+      },
+      {
+        "id": "87426",
+        "name": "Les Cocottes Saint Louis",
+        "email": "restaurant@cslavignon.com",
+        "site": "https://www.hotel-cloitre-saintlouis-avignon.fr/"
+      },
+      {
+        "id": "68021",
+        "name": "37 GRILL & BAR",
+        "email": "Conradseoul_37grill@hilton.com",
+        "site": "https://www.instagram.com/37grill_seoul/"
+      },
+      {
+        "id": "10946",
+        "name": "L'ARC",
+        "email": "veronica@larc-paris.com",
+        "site": "https://www.instagram.com/larcparis/?hl=fr"
+      },
+      {
+        "id": "22423",
+        "name": "BEEFBAR",
+        "email": "beefbar@lecoucoumeribel.com",
+        "site": "https://beefbar.com/mykonos/"
+      },
+      {
+        "id": "16992",
+        "name": "PANDELI",
+        "email": "info@pandeli.com.tr",
+        "site": "https://www.instagram.com/pandeliistanbul/?hl=pt"
+      }
+    ],
+    "free_provider": [
+      {
+        "id": "296066",
+        "name": "WOO TENDER",
+        "email": "wootender@gmail.com"
+      },
+      {
+        "id": "91048",
+        "name": "CLOS SÉMÉRIA",
+        "email": "clossemeria1@gmail.com"
+      },
+      {
+        "id": "87520",
+        "name": "NODOGURO",
+        "email": "nodoguropdx@gmail.com"
+      },
+      {
+        "id": "58460",
+        "name": "SYMPOSIO",
+        "email": "symposio.rest@gmail.com"
+      },
+      {
+        "id": "270118",
+        "name": "TERRA",
+        "email": "terra.marais@gmail.com"
+      },
+      {
+        "id": "38101",
+        "name": "KITA",
+        "email": "austkitakafe@gmail.com"
+      },
+      {
+        "id": "21732",
+        "name": "LA VILLA",
+        "email": "restaurantlavilla@gmail.com"
+      },
+      {
+        "id": "254416",
+        "name": "SALAMA",
+        "email": "restaurantsalama83@gmail.com"
+      }
+    ],
+    "no_site_no_email": [
+      {
+        "id": "87614",
+        "name": "ANNA-S",
+        "city": "Reims"
+      },
+      {
+        "id": "80948",
+        "name": "MAIZON",
+        "city": "Nice"
+      },
+      {
+        "id": "27382",
+        "name": "Ônix Wine",
+        "city": "Fortaleza"
+      },
+      {
+        "id": "17653",
+        "name": "The Drawing Room",
+        "city": "Doha"
+      },
+      {
+        "id": "44755",
+        "name": "IL FERRO E IL FUOCO",
+        "city": "Rome"
+      },
+      {
+        "id": "47850",
+        "name": "BOTANICA",
+        "city": "London"
+      },
+      {
+        "id": "16871",
+        "name": "ALESSIA",
+        "city": "Playa del carmen"
+      },
+      {
+        "id": "294041",
+        "name": "L'ÉCRIN",
+        "city": "Paris"
+      }
+    ],
+    "match_personal": [
+      {
+        "id": "42202",
+        "name": "SALT HOUSE",
+        "email": "greatviews@salthouse.com.au",
+        "site": "https://www.salthouse.com.au/"
+      },
+      {
+        "id": "35087",
+        "name": "EAT SIGHT STORY DECK",
+        "email": "service@salaarun.com",
+        "site": "https://www.salaarun.com/"
+      },
+      {
+        "id": "98706",
+        "name": "GUEULETON",
+        "email": "larochelle@gueuleton.fr",
+        "site": "https://www.gueuleton.fr/gueuleton-la-Rochelle/"
+      },
+      {
+        "id": "16895",
+        "name": "PATEO",
+        "email": "geral@pateorestaurante.pt",
+        "site": "https://www.pateorestaurante.pt"
+      },
+      {
+        "id": "270135",
+        "name": "SUGAAR",
+        "email": "sugaar@sugaarparis.com",
+        "site": "https://www.sugaarparis.com/"
+      }
+    ]
+  }
+}

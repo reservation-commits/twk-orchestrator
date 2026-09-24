@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "twk-db-agent",
+      "runtimeExecutable": "C:\\Users\\bianc\\AppData\\Local\\nodejs-portable\\node-v24.15.0-win-x64\\npm.cmd",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    }
+  ]
+}

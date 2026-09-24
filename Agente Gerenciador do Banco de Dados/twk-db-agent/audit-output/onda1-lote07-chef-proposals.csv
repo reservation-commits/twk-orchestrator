@@ -1,0 +1,2 @@
+restaurant_id,name,city,country,site_url,proposed_chef,confidence,method,occurrences,jobTitle
+10455,L'ECRIN PLAGE,Cannes,France,https://www.ecrinplage.com/,Christophe Bachi,MEDIUM,text-pattern,1,

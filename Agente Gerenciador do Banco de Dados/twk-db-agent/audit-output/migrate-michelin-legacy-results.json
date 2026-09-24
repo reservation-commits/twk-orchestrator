@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-06-10T16:52:26.962Z",
+  "total": 432,
+  "applied": 432,
+  "skipped": 0,
+  "errors": 0,
+  "err_sample": [],
+  "final_counts": [
+    {
+      "award_code": "michelin_guide_listed",
+      "level": null,
+      "n": 228
+    },
+    {
+      "award_code": "michelin_star",
+      "level": 1,
+      "n": 123
+    },
+    {
+      "award_code": "michelin_star",
+      "level": 2,
+      "n": 50
+    },
+    {
+      "award_code": "michelin_star",
+      "level": 3,
+      "n": 31
+    }
+  ]
+}

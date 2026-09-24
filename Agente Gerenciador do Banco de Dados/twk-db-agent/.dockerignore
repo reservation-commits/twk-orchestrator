@@ -1,0 +1,10 @@
+node_modules
+.next
+.env*
+*.tsbuildinfo
+.git
+.claude
+start.bat
+AGENTS.md
+CLAUDE.md
+README.md

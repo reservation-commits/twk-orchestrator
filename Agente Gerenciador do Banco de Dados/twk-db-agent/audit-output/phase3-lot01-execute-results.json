@@ -1,0 +1,3202 @@
+{
+  "mode": "execute",
+  "generated_at": "2026-06-09T18:25:21.043Z",
+  "summary": {
+    "high_ok": 627,
+    "high_err": 1,
+    "conflict_ok": 8,
+    "conflict_err": 0
+  },
+  "high": [
+    {
+      "restaurant_id": "100102",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "103871",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "107349",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "108371",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "108416",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "109110",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "109460",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11041",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "111274",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11269",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11275",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11309",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11329",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11460",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11485",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11661",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11739",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11745",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11796",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11863",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11873",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11885",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "11977",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12104",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12106",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12112",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12150",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12196",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12401",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12448",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "12454",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "13061",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "13246",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "13254",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "13256",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "13258",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "13266",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "16558",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "16560",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "16965",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17019",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17252",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17278",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17361",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17404",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17406",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17419",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17490",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17518",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17535",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17582",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17586",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17612",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17624",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17653",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17793",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17795",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17807",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17827",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17871",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17887",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17901",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17914",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17954",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17986",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17995",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "17997",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18002",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18025",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18038",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18054",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18522",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18524",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18811",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "18813",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19061",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19294",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19434",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19535",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19615",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19650",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19956",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "19980",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20029",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20046",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20066",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20086",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20104",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20201",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20359",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20451",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20461",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20481",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20485",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20493",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20503",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20568",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20653",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20695",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20723",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20812",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20864",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "20992",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21041",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21053",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21117",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21184",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21282",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21306",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21506",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "21520",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22090",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22118",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22340",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22350",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22352",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22399",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22460",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22697",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "22751",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23244",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23258",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23291",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23328",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23336",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23454",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23458",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "23468",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24122",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24382",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24389",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24445",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24480",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24620",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24775",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24780",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24854",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24860",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24952",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24979",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "24993",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25027",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25124",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25142",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25188",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25215",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25308",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "25336",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254098",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254136",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254151",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254182",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254230",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254333",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254632",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "254759",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "255627",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "257058",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "258725",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "259218",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "259356",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "259412",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "260894",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "262754",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26376",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26573",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26592",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26668",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26678",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26684",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26689",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26698",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26731",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26843",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "268782",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26909",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26919",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26931",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26935",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "26953",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "270246",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "270262",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27034",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "270903",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "271040",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27107",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27115",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27345",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27385",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27486",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27496",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27505",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27603",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27605",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27613",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27668",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27764",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "27792",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28084",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28091",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28122",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28139",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28185",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28198",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28203",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28209",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28219",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28230",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28234",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28243",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28251",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28270",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28275",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28284",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28334",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28340",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28377",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28517",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28598",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28663",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28666",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28700",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28714",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28764",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "287795",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28786",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28834",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28937",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28956",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "28963",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29005",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29013",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29119",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29200",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29329",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29348",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29362",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29497",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29499",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29530",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "296066",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29609",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29615",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29617",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29625",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29629",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29636",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29659",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29661",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "298865",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29910",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29936",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29963",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "29965",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30019",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30027",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30046",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30078",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30097",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "301020",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30104",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30128",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30148",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30184",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30190",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30191",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30197",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30200",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30223",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30257",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30348",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30409",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30444",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30454",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30463",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30471",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30477",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30479",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30488",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30492",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30502",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30508",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30570",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30703",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30735",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "30878",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "314147",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "314196",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31607",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31642",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31705",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31749",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31801",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "318343",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31837",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31892",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "31906",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32108",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32131",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32134",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32140",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32142",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32197",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32200",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32246",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32263",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32279",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32396",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32500",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32694",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32866",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32876",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "32886",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "33000",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "33052",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "33095",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "33956",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34009",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34146",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34175",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34313",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34396",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34411",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34704",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "34802",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "35855",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "36589",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "36755",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "36759",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "36825",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "36907",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "36954",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37065",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37071",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37115",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37308",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37528",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37839",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37892",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37923",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37957",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "37991",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38059",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38101",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38162",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38202",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38310",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38368",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38452",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38546",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38580",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38611",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38628",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38655",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38849",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38859",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38906",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "38953",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39056",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39060",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39086",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39089",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39125",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39138",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39187",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39191",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39199",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39243",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39252",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39273",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39305",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39461",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39493",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39499",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39503",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39511",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39707",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39712",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39715",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39741",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39752",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39799",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39911",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "39948",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40721",
+      "status": "error",
+      "error": "new row for relation \"db_restaurants\" violates check constraint \"db_restaurants_email_format_chk\""
+    },
+    {
+      "restaurant_id": "40749",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40755",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40772",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40781",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40815",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40821",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40884",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40888",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "40943",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "41014",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "41063",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "41456",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "41475",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "41507",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "41547",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42020",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42027",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42030",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42075",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42182",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42202",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42243",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42252",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42295",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42370",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42384",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42563",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42643",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42667",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42820",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42823",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42875",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42978",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42984",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "42987",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43035",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43043",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43160",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43184",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43204",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43268",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43298",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43399",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43401",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43407",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43415",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43890",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "43967",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44027",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44141",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44149",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44359",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44490",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44585",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44586",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44599",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44630",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44641",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44717",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44755",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "44782",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "45387",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "46765",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47461",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47667",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47697",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47749",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47775",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47899",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "47938",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48079",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48153",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48246",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48257",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48278",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48290",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48324",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48350",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48390",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48402",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "48516",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "49644",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "50978",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "51860",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "53393",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "53395",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "53533",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "53545",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "53601",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "54596",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "54764",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "54779",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "55173",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "55209",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "57186",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "57640",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "57996",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "58167",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "58391",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "58631",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "58649",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "58657",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "58659",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "59512",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "59745",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "59974",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "59998",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "60775",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "60988",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "61349",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "61507",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "62148",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "62212",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "62274",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "62288",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "62744",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "62825",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "63001",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "63018",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "63021",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "67862",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "67909",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "67950",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68019",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68021",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68078",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68099",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68673",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68698",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68719",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68723",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68787",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "68956",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69299",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69359",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69382",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69843",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69945",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69947",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69949",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69977",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69979",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "69996",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70017",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70033",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70059",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70081",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70087",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70101",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70105",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70345",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70401",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70428",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70432",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70434",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70461",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70503",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70535",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70549",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70567",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70578",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70622",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70648",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "70821",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "72323",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "72339",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "72885",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "72901",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "72906",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "72932",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "73496",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "76597",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "76620",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "76821",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "76993",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "77532",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "77575",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "78090",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "78217",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "78819",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "79023",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "79444",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "80795",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "80851",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "80945",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "81117",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "81159",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "81355",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "83040",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "83064",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "83534",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "83615",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "83626",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "84666",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "84668",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "84703",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "84710",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "84994",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "86285",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "86553",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "86583",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "86614",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "86627",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "86735",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "87280",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "87520",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "87523",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "87857",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "87866",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "87885",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "88141",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "88148",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "88801",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "88827",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "88879",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "88928",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "89715",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "89912",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "90338",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "90470",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "90513",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "90555",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "90892",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "94199",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "94362",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "94405",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "94706",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "94736",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "94852",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "95394",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "95426",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "95915",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "96004",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "96093",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "96114",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "98642",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "98779",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "98806",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "98854",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "99366",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "99579",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "99851",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "99879",
+      "status": "ok",
+      "fields_changed": 3
+    }
+  ],
+  "conflict": [
+    {
+      "restaurant_id": "12120",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "temporarily_closed"
+    },
+    {
+      "restaurant_id": "22348",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "23254",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "37534",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "40358",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "43932",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "44002",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "58442",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "temporarily_closed"
+    }
+  ]
+}

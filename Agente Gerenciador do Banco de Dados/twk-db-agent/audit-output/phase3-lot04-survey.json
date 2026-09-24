@@ -1,0 +1,347 @@
+{
+  "canonical_match": [
+    {
+      "country": "France",
+      "total": 916,
+      "published_n": 803,
+      "already_has_code": 0,
+      "code": "FR"
+    },
+    {
+      "country": "Italy",
+      "total": 124,
+      "published_n": 119,
+      "already_has_code": 0,
+      "code": "IT"
+    },
+    {
+      "country": "Brazil",
+      "total": 82,
+      "published_n": 78,
+      "already_has_code": 0,
+      "code": "BR"
+    },
+    {
+      "country": "Germany",
+      "total": 71,
+      "published_n": 68,
+      "already_has_code": 0,
+      "code": "DE"
+    },
+    {
+      "country": "Portugal",
+      "total": 61,
+      "published_n": 57,
+      "already_has_code": 0,
+      "code": "PT"
+    },
+    {
+      "country": "Thailand",
+      "total": 54,
+      "published_n": 52,
+      "already_has_code": 0,
+      "code": "TH"
+    },
+    {
+      "country": "Australia",
+      "total": 50,
+      "published_n": 44,
+      "already_has_code": 0,
+      "code": "AU"
+    },
+    {
+      "country": "Spain",
+      "total": 50,
+      "published_n": 45,
+      "already_has_code": 0,
+      "code": "ES"
+    },
+    {
+      "country": "Malaysia",
+      "total": 43,
+      "published_n": 40,
+      "already_has_code": 0,
+      "code": "MY"
+    },
+    {
+      "country": "Japan",
+      "total": 41,
+      "published_n": 40,
+      "already_has_code": 0,
+      "code": "JP"
+    },
+    {
+      "country": "Mexico",
+      "total": 32,
+      "published_n": 31,
+      "already_has_code": 0,
+      "code": "MX"
+    },
+    {
+      "country": "China",
+      "total": 32,
+      "published_n": 24,
+      "already_has_code": 0,
+      "code": "CN"
+    },
+    {
+      "country": "South Korea",
+      "total": 32,
+      "published_n": 31,
+      "already_has_code": 0,
+      "code": "KR"
+    },
+    {
+      "country": "Greece",
+      "total": 26,
+      "published_n": 22,
+      "already_has_code": 0,
+      "code": "GR"
+    },
+    {
+      "country": "Colombia",
+      "total": 26,
+      "published_n": 24,
+      "already_has_code": 0,
+      "code": "CO"
+    },
+    {
+      "country": "Argentina",
+      "total": 23,
+      "published_n": 23,
+      "already_has_code": 0,
+      "code": "AR"
+    },
+    {
+      "country": "Austria",
+      "total": 22,
+      "published_n": 22,
+      "already_has_code": 0,
+      "code": "AT"
+    },
+    {
+      "country": "Canada",
+      "total": 19,
+      "published_n": 18,
+      "already_has_code": 0,
+      "code": "CA"
+    },
+    {
+      "country": "Israel",
+      "total": 19,
+      "published_n": 18,
+      "already_has_code": 0,
+      "code": "IL"
+    }
+  ],
+  "rename": [
+    {
+      "country": "USA",
+      "total": 165,
+      "published_n": 159,
+      "already_has_code": 0,
+      "canonical": "United States",
+      "code": "US",
+      "notes": "Padronizar para nome oficial"
+    },
+    {
+      "country": "England",
+      "total": 50,
+      "published_n": 48,
+      "already_has_code": 0,
+      "canonical": "United Kingdom",
+      "code": "GB",
+      "notes": "England != UK; padronizar como UK"
+    },
+    {
+      "country": "UAE",
+      "total": 29,
+      "published_n": 28,
+      "already_has_code": 0,
+      "canonical": "United Arab Emirates",
+      "code": "AE",
+      "notes": null
+    },
+    {
+      "country": "Morrocco",
+      "total": 20,
+      "published_n": 19,
+      "already_has_code": 0,
+      "canonical": "Morocco",
+      "code": "MA",
+      "notes": "TYPO corrigido: Morrocco -> Morocco"
+    },
+    {
+      "country": "Turkey",
+      "total": 20,
+      "published_n": 17,
+      "already_has_code": 0,
+      "canonical": "Türkiye",
+      "code": "TR",
+      "notes": "Nome oficial atual: Türkiye"
+    },
+    {
+      "country": "Holland",
+      "total": 18,
+      "published_n": 16,
+      "already_has_code": 0,
+      "canonical": "Netherlands",
+      "code": "NL",
+      "notes": "Holland != Netherlands; padronizar"
+    }
+  ],
+  "unmapped": [
+    {
+      "country": "West Indies",
+      "total": 17,
+      "published_n": 12,
+      "already_has_code": 0
+    },
+    {
+      "country": "Sweden",
+      "total": 16,
+      "published_n": 15,
+      "already_has_code": 0
+    },
+    {
+      "country": "Switzerland",
+      "total": 16,
+      "published_n": 16,
+      "already_has_code": 0
+    },
+    {
+      "country": "Russia",
+      "total": 15,
+      "published_n": 15,
+      "already_has_code": 0
+    },
+    {
+      "country": "Belgium",
+      "total": 15,
+      "published_n": 13,
+      "already_has_code": 0
+    },
+    {
+      "country": "South Africa",
+      "total": 15,
+      "published_n": 15,
+      "already_has_code": 0
+    },
+    {
+      "country": "Qatar",
+      "total": 14,
+      "published_n": 14,
+      "already_has_code": 0
+    },
+    {
+      "country": "Quebec",
+      "total": 14,
+      "published_n": 12,
+      "already_has_code": 0
+    },
+    {
+      "country": "Monaco",
+      "total": 9,
+      "published_n": 9,
+      "already_has_code": 0
+    },
+    {
+      "country": "Egypt",
+      "total": 8,
+      "published_n": 8,
+      "already_has_code": 0
+    },
+    {
+      "country": "Norway",
+      "total": 6,
+      "published_n": 5,
+      "already_has_code": 0
+    },
+    {
+      "country": "Tunisia",
+      "total": 5,
+      "published_n": 5,
+      "already_has_code": 0
+    },
+    {
+      "country": "Denmark",
+      "total": 4,
+      "published_n": 4,
+      "already_has_code": 0
+    },
+    {
+      "country": "Maldives",
+      "total": 4,
+      "published_n": 4,
+      "already_has_code": 0
+    },
+    {
+      "country": "French Polynesia",
+      "total": 3,
+      "published_n": 3,
+      "already_has_code": 0
+    },
+    {
+      "country": "Central America",
+      "total": 2,
+      "published_n": 2,
+      "already_has_code": 0
+    },
+    {
+      "country": "Brasil",
+      "total": 2,
+      "published_n": 2,
+      "already_has_code": 0
+    },
+    {
+      "country": "Ireland",
+      "total": 2,
+      "published_n": 2,
+      "already_has_code": 0
+    },
+    {
+      "country": "Usa",
+      "total": 1,
+      "published_n": 1,
+      "already_has_code": 0
+    },
+    {
+      "country": "United Kingdom",
+      "total": 1,
+      "published_n": 1,
+      "already_has_code": 0
+    },
+    {
+      "country": "Morroco",
+      "total": 1,
+      "published_n": 0,
+      "already_has_code": 0
+    },
+    {
+      "country": "Luxembourg",
+      "total": 1,
+      "published_n": 1,
+      "already_has_code": 0
+    },
+    {
+      "country": "South korea",
+      "total": 1,
+      "published_n": 0,
+      "already_has_code": 0
+    },
+    {
+      "country": "Israël",
+      "total": 1,
+      "published_n": 1,
+      "already_has_code": 0
+    }
+  ],
+  "null_country": [
+    {
+      "country": null,
+      "total": 9,
+      "published_n": 0,
+      "already_has_code": 0
+    }
+  ]
+}

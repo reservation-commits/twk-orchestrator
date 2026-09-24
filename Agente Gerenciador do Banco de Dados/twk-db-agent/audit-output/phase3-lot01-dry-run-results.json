@@ -1,0 +1,87 @@
+{
+  "mode": "dry-run",
+  "generated_at": "2026-06-09T18:09:28.098Z",
+  "summary": {
+    "high_ok": 5,
+    "high_err": 0,
+    "conflict_ok": 8,
+    "conflict_err": 0
+  },
+  "high": [
+    {
+      "restaurant_id": "100102",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "103871",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "107349",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "108371",
+      "status": "ok",
+      "fields_changed": 3
+    },
+    {
+      "restaurant_id": "108416",
+      "status": "ok",
+      "fields_changed": 3
+    }
+  ],
+  "conflict": [
+    {
+      "restaurant_id": "12120",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "temporarily_closed"
+    },
+    {
+      "restaurant_id": "22348",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "23254",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "37534",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "40358",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "43932",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "44002",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "closed_permanently"
+    },
+    {
+      "restaurant_id": "58442",
+      "status": "ok",
+      "fields_changed": 2,
+      "op_status": "temporarily_closed"
+    }
+  ]
+}
