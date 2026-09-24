@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
-import { query, queryReadOnly, queryWrite, withTransaction, listTables, getTableSchema, getRowCount, logUpdateEvent } from './db';
+import { query, queryReadOnly, queryWriteAudited, withTransaction, listTables, getTableSchema, getRowCount, logUpdateEvent } from './db';
 import { safeIdent, safeColumn } from './sql-guard';
 import { searchRestaurantsByCity, getPlaceDetails, enrichFromMichelinGuide, mapPlaceToDBSchema } from './places';
 import { webSearch, fetchUrl, findSocialMedia } from './scraper';
@@ -664,19 +664,20 @@ async function executeToolInternal(
     }
 
     case 'execute_mutation': {
-      // Todas as camadas de segurança vivem em queryWrite: statement único, operação
-      // declarada == real, DDL bloqueado, WHERE obrigatório, rollback por blast-radius.
-      const result = await queryWrite(input.sql as string, {
-        params: input.params as unknown[] | undefined,
-        operation: input.operation as string,
-        maxAffectedRows: (input.max_affected_rows as number) ?? undefined,
-        allowFullTable: (input.allow_full_table as boolean) ?? false,
-      });
-      await logUpdateEvent({
-        table_name: input.table as string,
-        operation: result.operation,
-        new_data: { sql: input.sql, params: input.params, rows_affected: result.rowCount },
-      });
+      // Todas as camadas de segurança vivem em queryWriteAudited: statement único,
+      // operação declarada == real, DDL bloqueado, allowlist de tabelas, WHERE
+      // obrigatório, rollback por blast-radius e auditoria (com old_data) gravada
+      // NA MESMA transação — se o log falhar, nada é escrito.
+      const result = await queryWriteAudited(
+        input.sql as string,
+        input.params as unknown[] | undefined,
+        {
+          operation: input.operation as string,
+          maxAffectedRows: (input.max_affected_rows as number) ?? undefined,
+          allowFullTable: (input.allow_full_table as boolean) ?? false,
+          table: input.table as string,
+        }
+      );
       return { rowCount: result.rowCount, operation: result.operation };
     }
 
@@ -1110,7 +1111,7 @@ async function executeToolInternal(
       const schema = await buildRestaurantSchema(input.restaurant_id as string);
       if (!schema) return { error: 'Restaurante não encontrado', restaurant_id: input.restaurant_id };
       if (input.apply) {
-        await query(`ALTER TABLE public.db_restaurants ADD COLUMN IF NOT EXISTS structured_data_json jsonb`);
+        // A coluna structured_data_json é versionada pela migration 0003 — sem DDL em runtime.
         await query(`UPDATE public.db_restaurants SET structured_data_json = $1::jsonb WHERE restaurant_id = $2`, [JSON.stringify(schema), input.restaurant_id]);
         await logUpdateEvent({ table_name: 'public.db_restaurants', operation: 'UPDATE', record_id: String(input.restaurant_id), new_data: { structured_data_json: 'schema.org Restaurant' } });
       }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { query } from '@/lib/db';
+import { query, queryWrite } from '@/lib/db';
 import { auditRows, scoreRowCompleteness, findDuplicateGroups, validateValue } from '@/lib/validator';
 import { batchCheckEmails, batchCheckUrls, checkPhoneReality, checkPlacesFreshness, validateGeoCoords } from '@/lib/reality-checker';
 import { detectNumericOutliers, detectDateAnomalies, detectPlaceholders, detectOverRepetition, detectGeofenceViolations } from '@/lib/outlier-detector';
@@ -239,9 +239,10 @@ export async function POST(req: NextRequest) {
         );
         const old_value = before.rows[0]?.[column];
 
-        await query(
+        // queryWrite: allowlist de tabelas, WHERE obrigatório, blast-radius, timeout.
+        await queryWrite(
           `UPDATE ${tbl} SET ${col} = $1 WHERE ${idCol} = $2`,
-          [new_value, id_value]
+          { params: [new_value, id_value], operation: 'UPDATE' }
         );
 
         await query(
@@ -260,7 +261,7 @@ export async function POST(req: NextRequest) {
         const { fixes } = z.object({
           fixes: z.array(z.object({
             table:     z.string(),
-            id_column: z.string().default('id'),
+            id_column: z.string().optional(),
             id_value:  z.unknown(),
             column:    z.string(),
             new_value: z.unknown(),
@@ -273,9 +274,12 @@ export async function POST(req: NextRequest) {
 
         for (const fix of fixes) {
           try {
-            await query(
-              `UPDATE ${safeIdent(fix.table)} SET ${safeColumn(fix.column)} = $1 WHERE ${safeColumn(fix.id_column)} = $2`,
-              [fix.new_value, fix.id_value]
+            // Default de PK sensível à tabela: db_restaurants usa restaurant_id, não id.
+            const idColumn = fix.id_column ?? (fix.table.includes('db_restaurants') ? 'restaurant_id' : 'id');
+            // queryWrite: allowlist de tabelas, WHERE obrigatório, blast-radius, timeout.
+            await queryWrite(
+              `UPDATE ${safeIdent(fix.table)} SET ${safeColumn(fix.column)} = $1 WHERE ${safeColumn(idColumn)} = $2`,
+              { params: [fix.new_value, fix.id_value], operation: 'UPDATE' }
             );
             await query(
               `INSERT INTO public.agent_audit_log (table_name, operation, record_id, new_data, agent, created_at)
@@ -558,9 +562,10 @@ export async function POST(req: NextRequest) {
         for (const fix of eligible) {
           try {
             const idColumn = fix.id_column ?? await pkFor(fix.table);
-            await query(
+            // queryWrite: allowlist de tabelas, WHERE obrigatório, blast-radius, timeout.
+            await queryWrite(
               `UPDATE ${safeIdent(fix.table)} SET ${safeColumn(fix.column)} = $1 WHERE ${safeColumn(idColumn)} = $2`,
-              [fix.new_value, fix.row_id]
+              { params: [fix.new_value, fix.row_id], operation: 'UPDATE' }
             );
             await query(
               `INSERT INTO public.agent_audit_log (table_name, operation, record_id, new_data, agent, created_at)
@@ -664,14 +669,16 @@ export async function POST(req: NextRequest) {
         );
 
         let applied = 0;
+        const applyErrors: string[] = [];
         if (apply) {
           for (const f of found) {
             // Mesmo gate do agente: só aplica automaticamente com score alto E domínio batendo.
             if (f.best && f.best.score >= 80 && f.best.domain_match) {
               try {
-                await query(
+                // queryWrite: allowlist de tabelas, WHERE obrigatório, blast-radius, timeout.
+                await queryWrite(
                   `UPDATE public.db_restaurants SET email_for_reservations = $1 WHERE restaurant_id = $2`,
-                  [f.best.email, f.id]
+                  { params: [f.best.email, f.id], operation: 'UPDATE' }
                 );
                 await query(
                   `INSERT INTO public.agent_audit_log (table_name, operation, record_id, new_data, agent, created_at)
@@ -684,7 +691,10 @@ export async function POST(req: NextRequest) {
                    })]
                 );
                 applied++;
-              } catch { /* ignore */ }
+              } catch (err) {
+                // Nada de engolir falha (inclusive de auditoria): acumula e devolve.
+                applyErrors.push(`${f.id}: ${String(err)}`);
+              }
             }
           }
         }
@@ -694,6 +704,7 @@ export async function POST(req: NextRequest) {
           total_scanned: found.length,
           found_with_email: withEmail.length,
           applied,
+          errors: applyErrors,
           success_rate: found.length ? Math.round((withEmail.length / found.length) * 100) : 0,
           results: found,
         });

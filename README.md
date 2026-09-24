@@ -45,18 +45,14 @@ Abra [http://localhost:3000](http://localhost:3000).
 
 ## Tabela de auditoria (necessária para logs)
 
-```sql
-CREATE TABLE IF NOT EXISTS public.update_events (
-  id          SERIAL PRIMARY KEY,
-  table_name  TEXT NOT NULL,
-  operation   TEXT NOT NULL,
-  record_id   TEXT,
-  old_data    JSONB,
-  new_data    JSONB,
-  agent       TEXT DEFAULT 'db-architect',
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
-```
+O log de auditoria real é **`public.agent_audit_log`**, criado pela migration
+`migrations/0001_audit_log_append_only.sql` (tabela + trigger append-only que
+bloqueia UPDATE/DELETE por qualquer caminho SQL). Execute a migration antes de
+usar o app.
+
+> Atenção: `public.update_events` é uma tabela de **negócio** já existente no
+> banco (ações de representantes de vendas) com outro schema — não a use para
+> auditoria nem a recrie.
 
 ---
 

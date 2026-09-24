@@ -4,7 +4,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import {
   query,
   queryReadOnly,
-  queryWrite,
+  queryWriteAudited,
   withTransaction,
   listTables,
   getTableSchema,
@@ -271,15 +271,15 @@ export async function POST(req: NextRequest) {
         bus.emit('tool.call.start', { id: corr, tool: `db:${operation.toLowerCase()}`, input: { table } }, 'sql-console');
         const mutStarted = Date.now();
         try {
-          // queryWrite: statement único, operação declarada == real, sem DDL, WHERE
-          // obrigatório (salvo confirmação explícita), rollback por blast-radius.
-          const result = await queryWrite(sql, {
-            params: params as unknown[],
+          // queryWriteAudited: statement único, operação declarada == real, sem DDL,
+          // allowlist de tabelas, WHERE obrigatório (salvo confirmação explícita),
+          // rollback por blast-radius e trilha de auditoria (com old_data) gravada
+          // NA MESMA transação — fail-closed: sem log, nenhuma escrita persiste.
+          const result = await queryWriteAudited(sql, params as unknown[], {
             operation,
             allowFullTable: confirmed === true,
+            table,
           });
-          // Fail-closed: se a trilha de auditoria falhar, a resposta é erro (500 abaixo).
-          await logUpdateEvent({ table_name: table, operation, new_data: { sql, params } });
           bus.emit(
             'tool.call.end',
             { id: corr, tool: `db:${operation.toLowerCase()}`, input: { table }, result_summary: `${result.rowCount} linha(s)` },

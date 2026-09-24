@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import { query, logUpdateEvent } from '@/lib/db';
 import { storageStatus } from '@/lib/storage';
 
 export const runtime = 'nodejs';
@@ -81,16 +81,29 @@ export async function POST(req: NextRequest) {
     if (body.action !== 'set-published' || !body.restaurant_id || typeof body.published !== 'boolean') {
       return NextResponse.json({ error: 'payload inválido' }, { status: 400 });
     }
-    const log = JSON.stringify([{ field: 'published', action: body.published ? 'republished_manual' : 'unpublished_manual', at: new Date().toISOString() }]);
-    const res = await query(
-      `UPDATE public.db_restaurants
+    const logAction = body.published ? 'republished_manual' : 'unpublished_manual';
+    const log = JSON.stringify([{ field: 'published', action: logAction, at: new Date().toISOString() }]);
+    // O subselect `old` lê published/images_json ANTES do UPDATE, na mesma operação,
+    // para alimentar o old_data da trilha de auditoria.
+    const res = await query<{ old_published: boolean | null; old_images_json: unknown }>(
+      `UPDATE public.db_restaurants d
          SET published = $1,
-             ready_pending_photo = CASE WHEN $1 THEN false ELSE ready_pending_photo END,
-             enrichment_log = COALESCE(enrichment_log,'[]'::jsonb) || $2::jsonb
-       WHERE restaurant_id = $3`,
+             ready_pending_photo = CASE WHEN $1 THEN false ELSE d.ready_pending_photo END,
+             enrichment_log = COALESCE(d.enrichment_log,'[]'::jsonb) || $2::jsonb
+        FROM (SELECT restaurant_id, published, images_json FROM public.db_restaurants WHERE restaurant_id = $3) old
+       WHERE d.restaurant_id = old.restaurant_id
+       RETURNING old.published AS old_published, old.images_json AS old_images_json`,
       [body.published, log, body.restaurant_id]
     );
     if (!res.rowCount) return NextResponse.json({ error: 'restaurante não encontrado' }, { status: 404 });
+    // Fail-closed: se a trilha de auditoria falhar, a resposta vira erro (catch abaixo).
+    await logUpdateEvent({
+      table_name: 'public.db_restaurants',
+      operation: 'UPDATE',
+      record_id: body.restaurant_id,
+      old_data: { published: res.rows[0].old_published, images_json: res.rows[0].old_images_json },
+      new_data: { published: body.published, action: logAction, via: 'photo-studio' },
+    });
     return NextResponse.json({ ok: true, restaurant_id: body.restaurant_id, published: body.published });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
