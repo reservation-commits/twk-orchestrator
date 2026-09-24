@@ -14,9 +14,9 @@ $nomes = @('TWK MAESTRO Regencia (diario)', 'TWK MAESTRO Regencia (horario)', 'T
 if ($Remover) { foreach ($n in $nomes) { Unregister-ScheduledTask -TaskName $n -Confirm:$false -ErrorAction SilentlyContinue }; Write-Output 'Tarefas removidas.'; exit 0 }
 
 # Wrapper: cmd /c "node <script> <args> >> <log> 2>&1" - registra tudo o que o processo imprime.
-function Acao($script, $args, $logName) {
+function Acao($script, $argumentos, $logName) {
   $log = Join-Path $logDir ($logName + '-%DATE:~-4%%DATE:~3,2%%DATE:~0,2%.log')
-  $cmd = '/c ""' + $node + '" "' + $script + '" ' + $args + ' >> "' + $log + '" 2>&1"'
+  $cmd = '/c ""' + $node + '" "' + $script + '" ' + $argumentos + ' >> "' + $log + '" 2>&1"'
   New-ScheduledTaskAction -Execute 'cmd.exe' -Argument $cmd -WorkingDirectory $repo
 }
 $regencia = Join-Path $repo 'orchestrator\command-center\regencia\run.js'
