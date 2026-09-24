@@ -54,7 +54,11 @@ function limpar(t) {
     .replace(/\/delegar dba: rodar \S+ em lote com proposta e aprovação/gi, 'conferir esses horários com o Google e corrigir em lote, com a sua aprovação')
     .replace(/Guardião em canário \(lote do degrau 1\) — aprovar na Central/gi, 'liberar a cobrança automática para mais restaurantes')
     .replace(/Lote do degrau 1 pronto: (\d+) casas \/ (\d+) reservas aguardam aprovação/gi, '$1 restaurantes com $2 pedidos de mesa parados: posso cobrá-los por e-mail?')
-    .replace(/aprovar na Central \(canário[^)]*\)\s*→\s*run\.js[^·]*/gi, 'responda "pode cobrar" e eu envio')
+    .replace(/aprovar na Central \(canário[^)]*\)\s*→\s*run\.js[^·]*/gi, 'aprovar o lote em Aprovações na Central; o envio sai na hora')
+    // 2026-09-24: ninguém lê respostas por e-mail — toda decisão é botão na Central.
+    .replace(/responda\s+`?pode cobrar`?\s+e eu envio[^)]*\)?/gi, 'aprovar o lote em Aprovações na Central; o envio sai na hora')
+    .replace(/responder sim ou não a este e-mail/gi, 'aprovar ou negar em Aprovações na Central')
+    .replace(/respond(?:a|er)\s+(?:a\s+)?este e-mail/gi, 'decidir na Central')
     .replace(/npm run build \+ redeploy no EasyPanel/gi, 'publicar a nova versão do atendimento')
     .replace(/Aria em produção sem FLUXO 6\/7 \(redeploy pendente\)/gi, 'Atendimento em produção sem as instruções novas')
     .replace(/telefone humano ao restaurante agora/gi, 'mandar a mensagem pronta no WhatsApp')
@@ -63,7 +67,6 @@ function limpar(t) {
     .replace(/cliente avisado com alternativa \(Aria, aprovação unitária\)/gi, 'avisamos o cliente e oferecemos outra casa, com a sua aprovação')
     .replace(/degrau 4/gi, 'aviso ao cliente').replace(/degrau 1/gi, 'cobrança por e-mail')
     .replace(/Pergunta bloqueante sem resposta:/gi, 'Pergunta esperando sua resposta:')
-    .replace(/responder na Conversa da Central/gi, 'responda a este e-mail')
     .replace(/\bcanário\b/gi, 'teste controlado').replace(/\bledger\b/gi, 'registro')
     .replace(/\b[\w.-]+\.(js|ts|json|csv|md|jsonl)\b/g, '')
     .replace(/\bQ-\d{4}-\d{2}-\d{2}-\d+\b/g, '')
@@ -75,11 +78,29 @@ function limpar(t) {
     .replace(/\s*·\s*(·\s*)+/g, ' · ').replace(/\s{2,}/g, ' ').replace(/^[\s·,;—-]+/, '').replace(/[\s·,;]+$/, '').trim();
 }
 
+const DIVIDA_DIAS = Number(process.env.REGENCIA_DIVIDA_DIAS || 3);
+const fmtDia = (iso) => { const d = new Date(iso + 'T12:00:00Z'); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'UTC' }); };
+
+/**
+ * Onde o fundador decide. Sem "responda este e-mail": ninguém lê a resposta. Com MAESTRO_CENTRAL_URL o texto vira link.
+ */
+function ondeDecidir(meta = {}) {
+  const url = meta.centralUrl || process.env.MAESTRO_CENTRAL_URL || '';
+  return url ? `na Central (${url}) — Aprovações e Ações` : 'na Central, em Aprovações e Ações';
+}
+
 function corpo(est, meta = {}) {
   const md = [];
-  const criticos = est.para_fundador.filter((d) => d.severidade === 'critica');
-  const importantes = est.para_fundador.filter((d) => d.severidade === 'alta');
-  const resto = est.para_fundador.filter((d) => !['critica', 'alta'].includes(d.severidade));
+  // 2026-09-24: separar o novo do crônico. Item que já aparece há mais de DIVIDA_DIAS dias vira "dívida":
+  // listado uma vez, com a data desde quando espera, fora de "Urgente". Sem idade conhecida = novo.
+  const idades = meta.idades || {}; const desde = meta.desde || {};
+  const dividaDias = meta.dividaDias ?? DIVIDA_DIAS;
+  const idade = (d) => (d.chave && Number.isFinite(idades[d.chave]) ? idades[d.chave] : 0);
+  const novos = est.para_fundador.filter((d) => idade(d) <= dividaDias);
+  const dividas = est.para_fundador.filter((d) => idade(d) > dividaDias).sort((a, b) => idade(b) - idade(a));
+  const criticos = novos.filter((d) => d.severidade === 'critica');
+  const importantes = novos.filter((d) => d.severidade === 'alta');
+  const resto = novos.filter((d) => !['critica', 'alta'].includes(d.severidade));
   const exp = Object.fromEntries(est.experiencia.map((s) => [s.tipo, s]));
   const sinal = (t) => (est.sinais.find((s) => s.tipo === t) || {}).valor;
   const dataBr = new Date(est.ts).toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
@@ -98,6 +119,7 @@ function corpo(est, meta = {}) {
 
   md.push('', '## O que precisa de você');
   if (!est.para_fundador.length) md.push('Nada hoje. Pode tocar o dia.');
+  else if (!novos.length) md.push(`Nada novo hoje. As decisões pendentes estão em "Esperando decisão" abaixo.`);
   let n = 0;
   const item = (d) => {
     const prazo = d.prazo ? ` **(${PRAZO[d.prazo] || d.prazo})**` : '';
@@ -107,6 +129,18 @@ function corpo(est, meta = {}) {
   if (criticos.length) { md.push('', '### Urgente'); criticos.forEach((d) => md.push(item(d))); }
   if (importantes.length) { md.push('', '### Importante'); importantes.forEach((d) => md.push(item(d))); }
   if (resto.length) { md.push('', '### Quando puder'); resto.forEach((d) => md.push(`- ${limpar(d.titulo)} — ${limpar(d.acao_proposta)}.`)); }
+
+  if (dividas.length) {
+    md.push('', `### Esperando decisão há mais de ${dividaDias} dias (${dividas.length})`);
+    md.push('_Já apareceram em Despachos anteriores. Ficam aqui, uma vez, até serem decididos ou resolvidos._');
+    dividas.forEach((d) => md.push(`- **${limpar(d.titulo)}** — desde ${fmtDia(desde[d.chave] || '')} (${idade(d)} dias) · ${limpar(d.acao_proposta)}.`));
+  }
+
+  const resolvidos = (meta.resolvidos && meta.resolvidos.itens) || [];
+  if (resolvidos.length) {
+    md.push('', `### Resolvido desde o último Despacho${meta.resolvidos.desde ? ` (${fmtDia(meta.resolvidos.desde)})` : ''}`);
+    resolvidos.slice(0, 10).forEach((r) => md.push(`- ${limpar(r.titulo)}`));
+  }
 
   if (est.aprovacoes.length) {
     md.push('', `### Esperando o seu "sim" (${est.aprovacoes.length})`);
@@ -143,7 +177,23 @@ function corpo(est, meta = {}) {
     est.cegos.forEach((c) => md.push(`- **${AGENTE[c.agente] || c.agente}**: ${limpar(c.lacunas.join('; ')) || 'sem acesso aos dados'}.`));
   }
 
-  md.push('', '---', '_Todos os números vêm dos nossos sistemas; nenhum foi estimado. Nada foi enviado nem alterado sem a sua autorização. Para decidir qualquer item, basta responder este e-mail._');
+  md.push('', '---', `_Todos os números vêm dos nossos sistemas; nenhum foi estimado. Nada foi enviado nem alterado sem a sua autorização. Para decidir qualquer item, ${ondeDecidir(meta)}._`);
+  return md.join('\n');
+}
+
+/**
+ * Alerta curto por e-mail (a única coisa que ainda pode ir para a caixa do fundador, 2026-09-24):
+ * só os itens críticos NOVOS, o que fazer, e onde decidir. O Despacho completo fica na Central.
+ */
+function alerta(novos, meta = {}) {
+  const md = ['# Alerta do MAESTRO', `_${new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })}_`, ''];
+  md.push(`${novos.length === 1 ? 'Um item crítico novo' : `${novos.length} itens críticos novos`} desde o último aviso:`, '');
+  novos.forEach((d, i) => {
+    const prazo = d.prazo ? ` **(${PRAZO[d.prazo] || d.prazo})**` : '';
+    const porque = limpar(d.evidencia);
+    md.push(`${i + 1}. **${limpar(d.titulo)}**${prazo}  \n   O que fazer: ${limpar(d.acao_proposta)}.${porque ? ` _Por quê: ${porque}._` : ''}`);
+  });
+  md.push('', '---', `_Para decidir, ${ondeDecidir(meta)}. O Despacho completo do dia está em Missões. Este aviso sai no máximo uma vez por dia e só para item novo._`);
   return md.join('\n');
 }
 
@@ -176,9 +226,9 @@ OUTRAS REGRAS: (1) use SOMENTE números que estejam nos dados recebidos; nunca i
   return { texto, modelo: resp.model, tokens: { in: resp.usage.input_tokens, out: resp.usage.output_tokens }, custo_eur_e4: Math.round(usd_e4 * 10000 / USD_POR_EUR_E4) };
 }
 
-async function gerar(est) {
+async function gerar(est, meta = {}) {
   const v = await voz(est);
-  const meta = v && !v.erro ? { custo_voz_e4: v.custo_eur_e4, modelo: v.modelo } : {};
+  if (v && !v.erro) Object.assign(meta, { custo_voz_e4: v.custo_eur_e4, modelo: v.modelo });
   let md = corpo(est, meta);
   // A voz entra como abertura, sem anunciar modelo nem erro técnico ao leitor.
   if (v && v.texto) md = md.replace('## Em três linhas', `## O essencial\n\n${v.texto}\n\n## Em três linhas`);
@@ -219,4 +269,4 @@ ${out.join('\n')}
   }
 }
 
-module.exports = { corpo, gerar, html, escolherModelo, limpar, MODEL, MODEL_COMPLEX };
+module.exports = { corpo, alerta, gerar, html, escolherModelo, limpar, ondeDecidir, MODEL, MODEL_COMPLEX, DIVIDA_DIAS };

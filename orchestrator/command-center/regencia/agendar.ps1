@@ -34,8 +34,8 @@ $gatH.Repetition = (New-ScheduledTaskTrigger -Once -At 08:30 -RepetitionInterval
 $gatG = New-ScheduledTaskTrigger -Daily -At 09:00
 $gatC = New-ScheduledTaskTrigger -Daily -At 09:15
 
-Register-ScheduledTask -TaskName $nomes[0] -Action (Acao $regencia '' 'regencia-diario') -Trigger $gatD -Settings $cfg -Description 'Despacho diario do MAESTRO ao fundador (Regencia TWK) - com log' -Force | Out-Null
-Register-ScheduledTask -TaskName $nomes[1] -Action (Acao $regencia '--modo horario' 'regencia-horario') -Trigger $gatH -Settings $cfg -Description 'Ciclo horario da Regencia: alerta critico novo (TWK) - com log' -Force | Out-Null
+Register-ScheduledTask -TaskName $nomes[0] -Action (Acao $regencia '' 'regencia-diario') -Trigger $gatD -Settings $cfg -Description 'Despacho diario do MAESTRO na Central (Regencia TWK) - sem e-mail desde 2026-09-24 - com log' -Force | Out-Null
+Register-ScheduledTask -TaskName $nomes[1] -Action (Acao $regencia '--modo horario' 'regencia-horario') -Trigger $gatH -Settings $cfg -Description 'Ciclo horario da Regencia: so critico novo, dedup 7 dias, e-mail so com MAESTRO_ALERTA_EMAIL=on e no maximo 1/dia (TWK) - com log' -Force | Out-Null
 Register-ScheduledTask -TaskName $nomes[2] -Action (Acao $guardiao '--gate --canario "Paris,Athens,Marrakesh" --max-emails 20' 'guardiao-gate') -Trigger $gatG -Settings $cfg -Description 'Guardiao da Reserva: lote do canario para aprovacao na Central (TWK) - com log' -Force | Out-Null
 Register-ScheduledTask -TaskName $nomes[3] -Action (Acao $ciclo $ciclOk 'ciclo-cliente') -Trigger $gatC -Settings $cfg -Description 'Ciclo do cliente: vespera, pos-visita e boas-vindas (TWK) - com log' -Force | Out-Null
 Write-Output ('Tarefas registradas (v2, com log em ' + $logDir + '): Regencia diario 08:00 - horario 08:30-21:30 - Guardiao gate 09:00 - Ciclo do cliente 09:15. Ver: Get-ScheduledTask | ? TaskName -like "TWK *"')

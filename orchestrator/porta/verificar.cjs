@@ -30,6 +30,7 @@ const ETAPAS = [
   { chave: "atlas", nome: "Atlas — typecheck + testes", dir: "Agente Financeiro", cmds: ["npx tsc --noEmit", "npx vitest run"] },
   { chave: "quill", nome: "Quill — testes (shared + jobs)", dir: "Agente Editorial", cmds: ["npm test"] },
   { chave: "dba", nome: "TWK DB Architect — testes", dir: "Agente Gerenciador do Banco de Dados/twk-db-agent", cmds: ["npm test"] },
+  { chave: "regencia", nome: "Regência — testes do Despacho (pull, alerta, dívidas)", dir: "orchestrator/command-center", cmds: ["node --test regencia/test/despacho.test.js"] },
   { chave: "evals", nome: "Orquestrador — evals (6 suítes)", dir: ".", cmds: ["node orchestrator/evals/run.js"] },
   { chave: "hooks", nome: "Guardrails — hooks (15 casos)", dir: ".", cmds: ['powershell -NoProfile -ExecutionPolicy Bypass -File "orchestrator/tests/test-guards.ps1"'], lento: true },
 ];
