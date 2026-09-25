@@ -1,4 +1,4 @@
-# Templates de WhatsApp para a Meta — 8 mensagens × 6 idiomas (25/09/2026)
+# Templates de WhatsApp para a Meta — 8 mensagens × 6 idiomas (25/09/2026, revisão v8: número de pessoas)
 
 Contrato técnico: a ordem das variáveis `{{n}}` é a que o código envia (`eventFormat.ts` e `reminders.ts`). Não mudar a ordem nem o número de variáveis. Todos em categoria **UTILITY** (transacional). Nenhum botão: o código só envia o corpo. Rodapé fixo em todos, no idioma da mensagem.
 
@@ -8,16 +8,18 @@ Regra dos nomes: **o mesmo nome em todos os idiomas** (na Meta, idioma é uma "t
 
 | # | Nome na Meta | Quem dispara | Variáveis |
 |---|---|---|---|
-| 1 | `twk_reservation_received` | evento `pedido_recebido` | 1 nome · 2 restaurante · 3 data · 4 hora |
-| 2 | `twk_reservation_accepted` | evento `aceito` | 1 nome · 2 restaurante · 3 data · 4 hora |
+| 1 | `twk_reservation_received` | evento `pedido_recebido` | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
+| 2 | `twk_reservation_accepted` | evento `aceito` | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
 | 3 | `twk_reservation_declined` | evento `recusado` | 1 nome · 2 restaurante · 3 data |
 | 4 | `twk_reservation_cancelled` | evento `cancelado` | 1 nome · 2 restaurante · 3 data |
 | 5 | `twk_reschedule_proposed` | evento `reagendamento_proposto` | 1 nome · 2 restaurante · 3 nova data · 4 nova hora — **não submeter ainda** (a plataforma não grava a proposta; ver fase 2) |
 | 6 | `lembrete_reserva_2h` *(já existe em pt_BR)* | lembrete 2 h antes | 1 nome · 2 restaurante · 3 hora |
-| 7 | `twk_eve_briefing` | véspera (~24 h antes) | 1 nome · 2 restaurante · 3 data · 4 hora |
+| 7 | `twk_eve_briefing` | véspera (~24 h antes) | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
 | 8 | `avaliacao_experiencia_6h` *(já existe em pt_BR)* | 6 h depois | 1 nome · 2 restaurante |
 
-Exemplos para o campo "amostra" da Meta (obrigatório): `{{1}}` = Anna · `{{2}}` = Le Tobsil · `{{3}}` = 3 Oct 2026 · `{{4}}` = 8:00 PM.
+Exemplos para o campo "amostra" da Meta (obrigatório): `{{1}}` = Anna · `{{2}}` = Le Tobsil · `{{3}}` = 3 Oct 2026 · `{{4}}` = 8:00 PM · `{{5}}` = 2.
+
+**Número de pessoas (v8, 25/09):** entra como `{{5}}` nos templates 1, 2 e 7, sempre na forma "mesa para {{5}}" — funciona para 1 e para 8. Se o banco não tiver um número plausível (1 a 20), a mensagem **não sai** e vira finding: número errado é pior que nenhum. O lembrete de 2 h fica sem pessoas de propósito, porque já existe aprovado em português com 3 variáveis; acrescentar uma quarta obrigaria a recriar o template.
 
 ## Rodapé (um por idioma, igual em todos os templates)
 
@@ -37,42 +39,42 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 ## 1. `twk_reservation_received` — pedido recebido
 
 **en**
-> Hello {{1}}, we have your request for {{2}} on {{3}} at {{4}} and we're working on it now. There's nothing you need to do — I'll write to you here as soon as I have news. If anything changes on your side, just reply to this message.
+> Hello {{1}}, we have your request for a table for {{5}} at {{2}} on {{3}} at {{4}}, and we're working on it now. There's nothing you need to do — I'll write to you here as soon as I have news. If anything changes on your side, just reply to this message.
 
 **pt_BR**
-> Olá {{1}}, recebemos o seu pedido para o {{2}} em {{3}} às {{4}} e já estamos cuidando dele. Você não precisa fazer nada — escrevo aqui assim que tiver novidades. Se algo mudar do seu lado, é só responder a esta mensagem.
+> Olá {{1}}, recebemos o seu pedido de mesa para {{5}} no {{2}} em {{3}} às {{4}}, e já estamos cuidando dele. Você não precisa fazer nada — escrevo aqui assim que tiver novidades. Se algo mudar do seu lado, é só responder a esta mensagem.
 
 **fr**
-> Bonjour {{1}}, nous avons bien reçu votre demande pour {{2}} le {{3}} à {{4}} et nous nous en occupons dès maintenant. Vous n'avez rien à faire — je vous écris ici dès que j'ai du nouveau. Si quelque chose change de votre côté, répondez simplement à ce message.
+> Bonjour {{1}}, nous avons bien reçu votre demande de table pour {{5}} chez {{2}} le {{3}} à {{4}}, et nous nous en occupons dès maintenant. Vous n'avez rien à faire — je vous écris ici dès que j'ai du nouveau. Si quelque chose change de votre côté, répondez simplement à ce message.
 
 **es**
-> Hola {{1}}, tenemos su solicitud para {{2}} el {{3}} a las {{4}} y ya estamos trabajando en ella. No necesita hacer nada — le escribo aquí en cuanto tenga novedades. Si algo cambia por su parte, responda a este mensaje.
+> Hola {{1}}, tenemos su solicitud de mesa para {{5}} en {{2}} el {{3}} a las {{4}}, y ya estamos trabajando en ella. No necesita hacer nada — le escribo aquí en cuanto tenga novedades. Si algo cambia por su parte, responda a este mensaje.
 
 **it**
-> Buongiorno {{1}}, abbiamo ricevuto la sua richiesta per {{2}} il {{3}} alle {{4}} e ce ne stiamo già occupando. Non deve fare nulla — le scrivo qui appena ho novità. Se qualcosa cambia da parte sua, risponda pure a questo messaggio.
+> Buongiorno {{1}}, abbiamo ricevuto la sua richiesta di un tavolo per {{5}} da {{2}} il {{3}} alle {{4}}, e ce ne stiamo già occupando. Non deve fare nulla — le scrivo qui appena ho novità. Se qualcosa cambia da parte sua, risponda pure a questo messaggio.
 
 **de**
-> Guten Tag {{1}}, wir haben Ihre Anfrage für {{2}} am {{3}} um {{4}} erhalten und kümmern uns bereits darum. Sie müssen nichts weiter tun — ich schreibe Ihnen hier, sobald es Neuigkeiten gibt. Falls sich bei Ihnen etwas ändert, antworten Sie einfach auf diese Nachricht.
+> Guten Tag {{1}}, wir haben Ihre Anfrage für einen Tisch für {{5}} im {{2}} am {{3}} um {{4}} erhalten und kümmern uns bereits darum. Sie müssen nichts weiter tun — ich schreibe Ihnen hier, sobald es Neuigkeiten gibt. Falls sich bei Ihnen etwas ändert, antworten Sie einfach auf diese Nachricht.
 
 ## 2. `twk_reservation_accepted` — aceito
 
 **en**
-> Wonderful news, {{1}} — your table at {{2}} is confirmed for {{3}} at {{4}}. Everything is arranged. If you need to change the time, the date or the number of guests, just reply to this message.
+> Wonderful news, {{1}} — your table for {{5}} at {{2}} is confirmed for {{3}} at {{4}}. Everything is arranged. If you need to change the time, the date or the number of guests, just reply to this message.
 
 **pt_BR**
-> Ótima notícia, {{1}} — a sua mesa no {{2}} está confirmada para {{3}} às {{4}}. Está tudo organizado. Se precisar mudar o horário, a data ou o número de pessoas, é só responder a esta mensagem.
+> Ótima notícia, {{1}} — a sua mesa para {{5}} no {{2}} está confirmada para {{3}} às {{4}}. Está tudo organizado. Se precisar mudar o horário, a data ou o número de pessoas, é só responder a esta mensagem.
 
 **fr**
-> Excellente nouvelle, {{1}} — votre table chez {{2}} est confirmée pour le {{3}} à {{4}}. Tout est en place. Pour modifier l'heure, la date ou le nombre de convives, répondez simplement à ce message.
+> Excellente nouvelle, {{1}} — votre table pour {{5}} chez {{2}} est confirmée pour le {{3}} à {{4}}. Tout est en place. Pour modifier l'heure, la date ou le nombre de convives, répondez simplement à ce message.
 
 **es**
-> Excelente noticia, {{1}} — su mesa en {{2}} está confirmada para el {{3}} a las {{4}}. Todo está organizado. Si necesita cambiar la hora, la fecha o el número de personas, responda a este mensaje.
+> Excelente noticia, {{1}} — su mesa para {{5}} en {{2}} está confirmada para el {{3}} a las {{4}}. Todo está organizado. Si necesita cambiar la hora, la fecha o el número de personas, responda a este mensaje.
 
 **it**
-> Ottime notizie, {{1}} — il suo tavolo da {{2}} è confermato per il {{3}} alle {{4}}. È tutto organizzato. Se ha bisogno di cambiare orario, data o numero di persone, risponda pure a questo messaggio.
+> Ottime notizie, {{1}} — il suo tavolo per {{5}} da {{2}} è confermato per il {{3}} alle {{4}}. È tutto organizzato. Se ha bisogno di cambiare orario, data o numero di persone, risponda pure a questo messaggio.
 
 **de**
-> Gute Nachrichten, {{1}} — Ihr Tisch im {{2}} ist für den {{3}} um {{4}} bestätigt. Alles ist organisiert. Wenn Sie Uhrzeit, Datum oder Personenzahl ändern möchten, antworten Sie einfach auf diese Nachricht.
+> Gute Nachrichten, {{1}} — Ihr Tisch für {{5}} im {{2}} ist für den {{3}} um {{4}} bestätigt. Alles ist organisiert. Wenn Sie Uhrzeit, Datum oder Personenzahl ändern möchten, antworten Sie einfach auf diese Nachricht.
 
 ## 3. `twk_reservation_declined` — recusado
 
@@ -157,22 +159,22 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 ## 7. `twk_eve_briefing` — véspera
 
 **en**
-> {{1}}, tomorrow is {{2}} — {{3}} at {{4}}. If you'd like directions, a suggested time to leave, or have any request for the evening, just reply here and I'll arrange it.
+> {{1}}, tomorrow is {{2}} — {{3}} at {{4}}, table for {{5}}. If you'd like directions, a suggested time to leave, or have any request for the evening, just reply here and I'll arrange it.
 
 **pt_BR**
-> {{1}}, amanhã é o {{2}} — {{3}} às {{4}}. Se quiser o caminho, uma sugestão de horário para sair, ou tiver algum pedido para a noite, é só responder aqui que eu organizo.
+> {{1}}, amanhã é o {{2}} — {{3}} às {{4}}, mesa para {{5}}. Se quiser o caminho, uma sugestão de horário para sair, ou tiver algum pedido para a noite, é só responder aqui que eu organizo.
 
 **fr**
-> {{1}}, demain c'est {{2}} — le {{3}} à {{4}}. Si vous souhaitez l'itinéraire, une heure de départ conseillée, ou avez une demande pour la soirée, répondez ici et je m'en charge.
+> {{1}}, demain c'est {{2}} — le {{3}} à {{4}}, table pour {{5}}. Si vous souhaitez l'itinéraire, une heure de départ conseillée, ou avez une demande pour la soirée, répondez ici et je m'en charge.
 
 **es**
-> {{1}}, mañana es {{2}} — el {{3}} a las {{4}}. Si desea indicaciones, una hora sugerida para salir, o tiene alguna petición para la noche, responda aquí y lo organizo.
+> {{1}}, mañana es {{2}} — el {{3}} a las {{4}}, mesa para {{5}}. Si desea indicaciones, una hora sugerida para salir, o tiene alguna petición para la noche, responda aquí y lo organizo.
 
 **it**
-> {{1}}, domani è {{2}} — il {{3}} alle {{4}}. Se desidera le indicazioni, un orario consigliato per partire, o ha qualche richiesta per la serata, risponda qui e me ne occupo io.
+> {{1}}, domani è {{2}} — il {{3}} alle {{4}}, tavolo per {{5}}. Se desidera le indicazioni, un orario consigliato per partire, o ha qualche richiesta per la serata, risponda qui e me ne occupo io.
 
 **de**
-> {{1}}, morgen ist es soweit: {{2}} — am {{3}} um {{4}}. Wenn Sie eine Wegbeschreibung, eine empfohlene Abfahrtszeit oder einen Wunsch für den Abend haben, antworten Sie einfach hier, und ich kümmere mich darum.
+> {{1}}, morgen ist es soweit: {{2}} — am {{3}} um {{4}}, Tisch für {{5}}. Wenn Sie eine Wegbeschreibung, eine empfohlene Abfahrtszeit oder einen Wunsch für den Abend haben, antworten Sie einfach hier, und ich kümmere mich darum.
 
 ## 8. `avaliacao_experiencia_6h` — convite de avaliação
 
@@ -254,6 +256,6 @@ Os lembretes (2 h, véspera, avaliação) não precisam de n8n: a Aria varre o b
 
 ### E. Conferir
 
-- `/health` da Aria → build `2026-09-25-v7-…`.
+- `/health` da Aria → build `2026-09-25-v8-…`.
 - Tabela `aria_outbound_log`: cada tentativa com desfecho (`enviado`, `sem_opt_in`, `telefone_nao_enviavel`, `falha_envio` …). `falha_envio` com template certo e idioma listado = a Meta recusou; olhar o status do template no Manager.
 - Meta → Qualidade do número: precisa ficar **Alta**/verde. Se cair para Baixa, parar (`RESERVATION_EVENTS_ENABLED=false`).
