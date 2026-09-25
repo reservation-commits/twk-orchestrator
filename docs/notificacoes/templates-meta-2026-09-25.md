@@ -1,4 +1,4 @@
-# Templates de WhatsApp para a Meta — 8 mensagens × 6 idiomas (25/09/2026, revisão v8: número de pessoas)
+# Templates de WhatsApp para a Meta — 11 mensagens × 6 idiomas (25/09/2026, revisão v9: etapas do estabelecimento)
 
 Contrato técnico: a ordem das variáveis `{{n}}` é a que o código envia (`eventFormat.ts` e `reminders.ts`). Não mudar a ordem nem o número de variáveis. Todos em categoria **UTILITY** (transacional). Nenhum botão: o código só envia o corpo. Rodapé fixo em todos, no idioma da mensagem.
 
@@ -16,6 +16,9 @@ Regra dos nomes: **o mesmo nome em todos os idiomas** (na Meta, idioma é uma "t
 | 6 | `lembrete_reserva_2h` *(já existe em pt_BR)* | lembrete 2 h antes | 1 nome · 2 restaurante · 3 hora |
 | 7 | `twk_eve_briefing` | véspera (~24 h antes) | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
 | 8 | `avaliacao_experiencia_6h` *(já existe em pt_BR)* | 6 h depois | 1 nome · 2 restaurante |
+| 9 | `twk_venue_new_request` | **casa** — evento `pedido_recebido` | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente · **botão de URL** `https://theworldkeys.com/r/{{1}}` (código da reserva) |
+| 10 | `twk_venue_cancelled` | **casa** — evento `cancelado` | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente |
+| 11 | `twk_venue_eve_briefing` | **casa** — véspera (~24 h) | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente |
 
 Exemplos para o campo "amostra" da Meta (obrigatório): `{{1}}` = Anna · `{{2}}` = Le Tobsil · `{{3}}` = 3 Oct 2026 · `{{4}}` = 8:00 PM · `{{5}}` = 2.
 
@@ -198,6 +201,92 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 
 ---
 
+# Etapas do ESTABELECIMENTO (v9)
+
+Só recebe a casa que estiver marcada no identificador com `tipo = 'estabelecimento'` e o `restaurant_id` dela (até 3 números por casa — o gerente, o maître…). O número pode ser diferente do telefone fixo da ficha: é o WhatsApp de quem atende. Idioma: o marcado na linha, senão o do país do número.
+
+A Aria **não aceita nem recusa** pela casa: reservas são da plataforma. O botão leva à mesma página `/r/<código>` em que a casa já responde pelo e-mail. Amostras para a Meta: `{{1}}` = Le Tobsil · `{{2}}` = 3 Oct 2026 · `{{3}}` = 8:00 PM · `{{4}}` = 2 · `{{5}}` = Anna Lee · botão = 6DSPZXQ7.
+
+## 9. `twk_venue_new_request` — chegou um pedido (com botão de URL)
+
+Botão: tipo **Acessar site**, URL **dinâmica** `https://theworldkeys.com/r/{{1}}`. Texto do botão por idioma: en "Accept or decline" · pt_BR "Aceitar ou recusar" · fr "Accepter ou refuser" · es "Aceptar o rechazar" · it "Accetta o rifiuta" · de "Annehmen oder ablehnen".
+
+**en**
+> New request via The World Keys for {{1}}: table for {{4}} on {{2}} at {{3}}, in the name of {{5}}. Please accept or decline using the button below — the guest is notified automatically.
+
+**pt_BR**
+> Novo pedido pela The World Keys para o {{1}}: mesa para {{4}} em {{2}} às {{3}}, em nome de {{5}}. Aceite ou recuse pelo botão abaixo — o cliente é avisado automaticamente.
+
+**fr**
+> Nouvelle demande via The World Keys pour {{1}} : table pour {{4}} le {{2}} à {{3}}, au nom de {{5}}. Acceptez ou refusez avec le bouton ci-dessous — le client est prévenu automatiquement.
+
+**es**
+> Nueva solicitud a través de The World Keys para {{1}}: mesa para {{4}} el {{2}} a las {{3}}, a nombre de {{5}}. Acepte o rechace con el botón de abajo — el cliente recibe el aviso automáticamente.
+
+**it**
+> Nuova richiesta tramite The World Keys per {{1}}: tavolo per {{4}} il {{2}} alle {{3}}, a nome di {{5}}. Accetti o rifiuti con il pulsante qui sotto — il cliente viene avvisato automaticamente.
+
+**de**
+> Neue Anfrage über The World Keys für {{1}}: Tisch für {{4}} am {{2}} um {{3}}, auf den Namen {{5}}. Bitte über die Schaltfläche unten annehmen oder ablehnen — der Gast wird automatisch benachrichtigt.
+
+## 10. `twk_venue_cancelled` — o cliente cancelou
+
+**en**
+> Cancellation via The World Keys for {{1}}: the table for {{4}} on {{2}} at {{3}}, in the name of {{5}}, has been cancelled by the guest. Nothing further is needed from you.
+
+**pt_BR**
+> Cancelamento pela The World Keys para o {{1}}: a mesa para {{4}} em {{2}} às {{3}}, em nome de {{5}}, foi cancelada pelo cliente. Não é preciso fazer mais nada.
+
+**fr**
+> Annulation via The World Keys pour {{1}} : la table pour {{4}} le {{2}} à {{3}}, au nom de {{5}}, a été annulée par le client. Vous n'avez rien d'autre à faire.
+
+**es**
+> Cancelación a través de The World Keys para {{1}}: la mesa para {{4}} el {{2}} a las {{3}}, a nombre de {{5}}, ha sido cancelada por el cliente. No necesita hacer nada más.
+
+**it**
+> Cancellazione tramite The World Keys per {{1}}: il tavolo per {{4}} il {{2}} alle {{3}}, a nome di {{5}}, è stato annullato dal cliente. Non deve fare altro.
+
+**de**
+> Stornierung über The World Keys für {{1}}: der Tisch für {{4}} am {{2}} um {{3}}, auf den Namen {{5}}, wurde vom Gast storniert. Sie müssen nichts weiter tun.
+
+## 11. `twk_venue_eve_briefing` — véspera para a casa
+
+**en**
+> Reminder from The World Keys for {{1}}: tomorrow, {{2}} at {{3}}, table for {{4}} in the name of {{5}}. If anything needs adjusting, reply to this message.
+
+**pt_BR**
+> Lembrete da The World Keys para o {{1}}: amanhã, {{2}} às {{3}}, mesa para {{4}} em nome de {{5}}. Se algo precisar de ajuste, responda a esta mensagem.
+
+**fr**
+> Rappel de The World Keys pour {{1}} : demain, le {{2}} à {{3}}, table pour {{4}} au nom de {{5}}. Si quelque chose doit être ajusté, répondez à ce message.
+
+**es**
+> Recordatorio de The World Keys para {{1}}: mañana, el {{2}} a las {{3}}, mesa para {{4}} a nombre de {{5}}. Si hay que ajustar algo, responda a este mensaje.
+
+**it**
+> Promemoria da The World Keys per {{1}}: domani, il {{2}} alle {{3}}, tavolo per {{4}} a nome di {{5}}. Se c'è qualcosa da sistemare, risponda a questo messaggio.
+
+**de**
+> Erinnerung von The World Keys für {{1}}: morgen, am {{2}} um {{3}}, Tisch für {{4}} auf den Namen {{5}}. Falls etwas angepasst werden muss, antworten Sie auf diese Nachricht.
+
+### Variáveis da casa (Easypanel da Aria)
+
+```
+RESERVATION_EVENT_TEMPLATE_VENUE_RECEBIDO=twk_venue_new_request
+RESERVATION_EVENT_TEMPLATE_VENUE_CANCELADO=twk_venue_cancelled
+VENUE_BRIEFING_ENABLED=true
+VENUE_BRIEFING_TEMPLATE=twk_venue_eve_briefing
+VENUE_BRIEFING_HOURS_BEFORE=24
+```
+
+Vazio = etapa da casa desligada (sem finding). O gatilho é o mesmo nó do n8n: a resposta do webhook passa a trazer também `estabelecimento: { acao, detalhe }`.
+
+### Marcar uma casa
+
+No arquivo `whatsapp-optin.sql`: linha com `tipo = 'estabelecimento'`, o `restaurant_id` da ficha e o WhatsApp de quem atende (E.164). Até 3 linhas por casa.
+
+---
+
 ## Como configurar
 
 ### A. Na Meta (WhatsApp Manager) — por template
@@ -256,6 +345,6 @@ Os lembretes (2 h, véspera, avaliação) não precisam de n8n: a Aria varre o b
 
 ### E. Conferir
 
-- `/health` da Aria → build `2026-09-25-v8-…`.
+- `/health` da Aria → build `2026-09-25-v9-…`.
 - Tabela `aria_outbound_log`: cada tentativa com desfecho (`enviado`, `sem_opt_in`, `telefone_nao_enviavel`, `falha_envio` …). `falha_envio` com template certo e idioma listado = a Meta recusou; olhar o status do template no Manager.
 - Meta → Qualidade do número: precisa ficar **Alta**/verde. Se cair para Baixa, parar (`RESERVATION_EVENTS_ENABLED=false`).

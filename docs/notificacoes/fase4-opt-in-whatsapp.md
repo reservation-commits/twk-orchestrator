@@ -26,10 +26,10 @@ A regra é uma função só (`src/consentRegra.ts`), usada pelos dois remetentes
 
 ## O que falta para começar de vez (em ordem)
 
-1. **Subir a v7** (`aria_agent_whatsapp-2026-09-25-v7.zip`, que já inclui a v6). Ela cria as colunas no boot — subir é a aprovação do `ADD COLUMN`.
+1. **Subir a v9** (`aria_agent_whatsapp-2026-09-25-v9.zip`, que inclui v6–v8). Ela cria as colunas no boot — subir é a aprovação do `ADD COLUMN`.
 2. **Templates na Meta — em cada idioma.** Idioma por pessoa já funciona no código (v7). O que decide é a tradução aprovada: comece por `en`, depois `pt_BR` e `fr`, depois `es` e `it`. Cada idioma aprovado entra em `REMINDERS_LOCALES` (ex.: `en,pt_BR,fr`).
    Detalhe original: Só um template envia hoje (`avaliacao_experiencia_6h` em `pt_BR`). O `lembrete_reserva_2h` foi recusado 3 vezes pela Cloud API nos últimos 14 dias, e os 5 templates de evento em `en` (`fase2-templates-whatsapp.md`) nunca foram confirmados como aprovados. Sem template aprovado, marcar alguém não muda nada.
 3. **Variáveis no Easypanel da Aria:** `RESERVATION_EVENTS_ENABLED=true`, `RESERVATION_EVENTS_SECRET=<segredo forte>`, `RESERVATION_EVENTS_DAILY_CAP=25`, e `RESERVATION_EVENT_TEMPLATE_<evento>` só para os templates aprovados.
 4. **Marcar a primeira leva** (canário): 10 a 20 números, pelo arquivo SQL acima.
 5. **n8n:** um nó HTTP no workflow "nova reserva" chamando `POST /webhook/reservation-event` com o segredo — depois de fechar o `/webhook/nova-reserva` aberto (pré-requisito do plano canário).
-6. **Estabelecimentos:** o interruptor já aceita `tipo = estabelecimento`, mas o envio para a casa ("chegou um pedido") ainda não existe — é um template novo e um evento novo, depois do canário com clientes.
+6. **Estabelecimentos (v9, 25/09):** três etapas prontas — "chegou um pedido" (com botão para `/r/<código>`), "o cliente cancelou" e véspera. Só para casas marcadas (`tipo = estabelecimento` + `restaurant_id`, até 3 números). Templates 9–11 em `templates-meta-2026-09-25.md`; variáveis `RESERVATION_EVENT_TEMPLATE_VENUE_*` e `VENUE_BRIEFING_*`.
