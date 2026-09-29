@@ -1,4 +1,4 @@
-# Aria v10 — nenhuma resposta sai sem duas revisões (29/09/2026)
+# Aria v10 e v11 — nenhuma resposta sai sem duas revisões; a data prometida é cumprida (29/09/2026)
 
 Pedido do fundador: *"transforme a Aria em um agente perfeito segundo suas funções, ferramentas e poderes. Não permita erros."*
 
@@ -36,10 +36,22 @@ Uma chamada extra ao modelo barato por resposta (≈ 1–2 segundos, centavos po
 
 ## O que ainda NÃO é "perfeito" e depende de decisão
 
-1. **Compromisso com data.** O ADR-015 permite "a data em que nós voltamos com alternativas" só com processo que a cumpra. A Aria hospedada não tem esse processo; por isso hoje a data é **proibida** (fail-closed). Construir o processo (tabela de compromissos + a própria Aria voltar ao cliente na data) é o próximo passo, com sua aprovação.
+1. ~~Compromisso com data~~ — **resolvido na v11** (abaixo).
 2. **Quatro números sob controle humano até 2027** — a Aria fica muda com eles por decisão de configuração, não por erro.
 3. **Papel de banco da Aria** (`aria_service`): ela ainda entra como dono. É DDL, exclusivamente humano.
 
 ## Variáveis
 
 `REVISAO_PRE_ENVIO=false` desliga só a leitura semântica (emergência). As regras nunca se desligam.
+
+## v11 — a Aria cumpre a data que promete
+
+Antes: a data de retorno era proibida porque nada garantia o retorno. Agora existe o processo do ADR-015:
+
+1. Na carta, a Aria só pode dizer "volto a você até sexta" se chamar a ferramenta `registrar_compromisso` na mesma resposta (data de hoje a 7 dias, o que vai trazer, código da reserva). Sem o registro, a porta barra a data como antes. Prazo de terceiro (resposta do restaurante) continua proibido.
+2. O compromisso fica em `aria_commitments`, com o contexto da thread de e-mail.
+3. No dia, a Aria abre a conversa sozinha, consulta a reserva pelas ferramentas e escreve ao cliente com o que existe: confirmação, alternativas em casas que confirmam pedidos, ou o que já está feito. A carta passa pelas mesmas duas revisões.
+4. E-mail: responde na mesma thread. WhatsApp: só com a janela de 24 h aberta; fechada, vira escalação ALTA para envio humano (não existe template de "voltei a você").
+5. Retida na revisão, ou envio falhou → escalação ALTA. A Sentinela acusa compromisso vencido não cumprido como **crítico**.
+
+Efeito na satisfação: o cliente que ficou sem resposta do restaurante deixa de ficar no vácuo. Recebe uma data, e na data recebe a Aria — mesmo que a notícia seja "ainda nada, aqui estão duas alternativas".
