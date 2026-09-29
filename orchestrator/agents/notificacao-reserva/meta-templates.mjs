@@ -52,6 +52,7 @@ const VARIAVEIS = {
   twk_reminder_2h: ["nome", "casa", "hora"],
   twk_eve_briefing: ["nome", "casa", "data", "hora", "pessoas"],
   avaliacao_experiencia_6h: ["nome", "casa"],
+  twk_review_invite: ["nome", "casa"],
   twk_venue_new_request: ["casa", "data", "hora", "pessoas", "cliente"],
   twk_venue_cancelled: ["casa", "data", "hora", "pessoas", "cliente"],
   twk_venue_eve_briefing: ["casa", "data", "hora", "pessoas", "cliente"],

@@ -15,7 +15,7 @@ Regra dos nomes: **o mesmo nome em todos os idiomas** (na Meta, idioma é uma "t
 | 5 | `twk_reschedule_proposed` | evento `reagendamento_proposto` | 1 nome · 2 restaurante · 3 nova data · 4 nova hora — **não submeter ainda** (a plataforma não grava a proposta; ver fase 2) |
 | 6 | `twk_reminder_2h` *(o nome antigo ficou travado na Meta por 4 semanas)* | lembrete 2 h antes | 1 nome · 2 restaurante · 3 hora |
 | 7 | `twk_eve_briefing` | véspera (~24 h antes) | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
-| 8 | `avaliacao_experiencia_6h` | 6 h depois | 1 nome · 2 restaurante |
+| 8 | `twk_review_invite` *(o nome antigo ficou travado na Meta por 4 semanas)* | 6 h depois | 1 nome · 2 restaurante |
 | 9 | `twk_venue_new_request` | **casa** — evento `pedido_recebido` | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente · **botão de URL** `https://theworldkeys.com/r/{{1}}` (código da reserva) |
 | 10 | `twk_venue_cancelled` | **casa** — evento `cancelado` | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente |
 | 11 | `twk_venue_eve_briefing` | **casa** — véspera (~24 h) | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente |
@@ -179,7 +179,7 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 **de**
 > Guten Tag {{1}}, morgen ist es soweit: {{2}} — am {{3}} um {{4}}, Tisch für {{5}}. Wenn Sie eine Wegbeschreibung, eine empfohlene Abfahrtszeit oder einen Wunsch für den Abend haben, antworten Sie einfach hier, und ich kümmere mich darum.
 
-## 8. `avaliacao_experiencia_6h` — convite de avaliação
+## 8. `twk_review_invite` — convite de avaliação
 
 **en**
 > Hello {{1}}, how was {{2}}? A word from you helps us choose the right tables for you next time — just reply here with a few lines.
@@ -319,7 +319,7 @@ RESERVATION_EVENT_TEMPLATE_REAGENDAMENTO=
 
 REMINDERS_TEMPLATE=twk_reminder_2h
 BRIEFING_TEMPLATE=twk_eve_briefing
-REVIEW_TEMPLATE=avaliacao_experiencia_6h
+REVIEW_TEMPLATE=twk_review_invite
 
 REMINDERS_DEFAULT_LOCALE=en
 REMINDERS_LOCALES=en
