@@ -30,10 +30,10 @@ Exemplos para o campo "amostra" da Meta (obrigatório): `{{1}}` = Anna · `{{2}}
 |---|---|
 | en | Reply STOP to stop receiving reservation updates. |
 | pt_BR | Responda PARAR para não receber mais avisos de reserva. |
-| fr | Répondez STOP pour ne plus recevoir de nouvelles de vos réservations. |
+| fr | Répondez STOP pour ne plus recevoir ces messages. |
 | es | Responda STOP para dejar de recibir avisos de reserva. |
-| it | Rispondi STOP per non ricevere più aggiornamenti sulle prenotazioni. |
-| de | Antworten Sie mit STOP, um keine Reservierungs-Updates mehr zu erhalten. |
+| it | Rispondi STOP per non ricevere più questi messaggi. |
+| de | Antworten Sie mit STOP, um keine Updates mehr zu erhalten. |
 
 O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer idioma.
 
@@ -82,122 +82,122 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 ## 3. `twk_reservation_declined` — recusado
 
 **en**
-> {{1}}, I'm sorry — {{2}} isn't able to host you on {{3}}. I know that's a disappointment. Reply to this message and I'll look for an equally special table for the same evening.
+> Hello {{1}}, I'm sorry — {{2}} isn't able to host you on {{3}}. I know that's a disappointment. Reply to this message and I'll look for an equally special table for the same evening.
 
 **pt_BR**
-> {{1}}, sinto muito — o {{2}} não poderá recebê-lo em {{3}}. Sei que é uma pena. Responda a esta mensagem e eu procuro uma mesa igualmente especial para a mesma noite.
+> Olá {{1}}, sinto muito — o {{2}} não poderá recebê-lo em {{3}}. Sei que é uma pena. Responda a esta mensagem e eu procuro uma mesa igualmente especial para a mesma noite.
 
 **fr**
-> {{1}}, je suis désolée — {{2}} ne peut pas vous recevoir le {{3}}. Je sais que c'est une déception. Répondez à ce message et je chercherai une table tout aussi spéciale pour le même soir.
+> Bonjour {{1}}, je suis désolée — {{2}} ne peut pas vous recevoir le {{3}}. Je sais que c'est une déception. Répondez à ce message et je chercherai une table tout aussi spéciale pour le même soir.
 
 **es**
-> {{1}}, lo siento — {{2}} no puede recibirle el {{3}}. Sé que es una decepción. Responda a este mensaje y buscaré una mesa igual de especial para la misma noche.
+> Hola {{1}}, lo siento — {{2}} no puede recibirle el {{3}}. Sé que es una decepción. Responda a este mensaje y buscaré una mesa igual de especial para la misma noche.
 
 **it**
-> {{1}}, mi dispiace — {{2}} non può accoglierla il {{3}}. So che è una delusione. Risponda a questo messaggio e cercherò un tavolo altrettanto speciale per la stessa sera.
+> Buongiorno {{1}}, mi dispiace — {{2}} non può accoglierla il {{3}}. So che è una delusione. Risponda a questo messaggio e cercherò un tavolo altrettanto speciale per la stessa sera.
 
 **de**
-> {{1}}, es tut mir leid — {{2}} kann Sie am {{3}} nicht empfangen. Ich weiß, das ist enttäuschend. Antworten Sie auf diese Nachricht, und ich suche einen ebenso besonderen Tisch für denselben Abend.
+> Guten Tag {{1}}, es tut mir leid — {{2}} kann Sie am {{3}} nicht empfangen. Ich weiß, das ist enttäuschend. Antworten Sie auf diese Nachricht, und ich suche einen ebenso besonderen Tisch für denselben Abend.
 
 ## 4. `twk_reservation_cancelled` — cancelado
 
 **en**
-> {{1}}, your reservation at {{2}} on {{3}} has been cancelled. Nothing further is needed from you. Whenever you'd like another evening, just reply to this message.
+> Hello {{1}}, your reservation at {{2}} on {{3}} has been cancelled. Nothing further is needed from you. Whenever you'd like another evening, just reply to this message.
 
 **pt_BR**
-> {{1}}, a sua reserva no {{2}} em {{3}} foi cancelada. Você não precisa fazer mais nada. Quando quiser outra noite, é só responder a esta mensagem.
+> Olá {{1}}, a sua reserva no {{2}} em {{3}} foi cancelada. Você não precisa fazer mais nada. Quando quiser outra noite, é só responder a esta mensagem.
 
 **fr**
-> {{1}}, votre réservation chez {{2}} le {{3}} a été annulée. Vous n'avez rien d'autre à faire. Pour une autre soirée, quand vous le souhaitez, répondez simplement à ce message.
+> Bonjour {{1}}, votre réservation chez {{2}} le {{3}} a été annulée. Vous n'avez rien d'autre à faire. Pour une autre soirée, quand vous le souhaitez, répondez simplement à ce message.
 
 **es**
-> {{1}}, su reserva en {{2}} el {{3}} ha sido cancelada. No necesita hacer nada más. Cuando desee otra noche, responda a este mensaje.
+> Hola {{1}}, su reserva en {{2}} el {{3}} ha sido cancelada. No necesita hacer nada más. Cuando desee otra noche, responda a este mensaje.
 
 **it**
-> {{1}}, la sua prenotazione da {{2}} per il {{3}} è stata annullata. Non deve fare altro. Quando vorrà un'altra serata, risponda pure a questo messaggio.
+> Buongiorno {{1}}, la sua prenotazione da {{2}} per il {{3}} è stata annullata. Non deve fare altro. Quando vorrà un'altra serata, risponda pure a questo messaggio.
 
 **de**
-> {{1}}, Ihre Reservierung im {{2}} am {{3}} wurde storniert. Sie müssen nichts weiter tun. Wann immer Sie einen anderen Abend wünschen, antworten Sie einfach auf diese Nachricht.
+> Guten Tag {{1}}, Ihre Reservierung im {{2}} am {{3}} wurde storniert. Sie müssen nichts weiter tun. Wann immer Sie einen anderen Abend wünschen, antworten Sie einfach auf diese Nachricht.
 
 ## 5. `twk_reschedule_proposed` — nova data proposta (NÃO submeter ainda)
 
 **en**
-> {{1}}, {{2}} can offer you {{3}} at {{4}} instead. Reply YES to take it, or tell me what would suit you better and I'll see what I can do.
+> Hello {{1}}, {{2}} can offer you {{3}} at {{4}} instead. Reply YES to take it, or tell me what would suit you better and I'll see what I can do.
 
 **pt_BR**
-> {{1}}, o {{2}} pode recebê-lo em {{3}} às {{4}}. Responda SIM para aceitar, ou me diga o que fica melhor para você e eu vejo o que consigo.
+> Olá {{1}}, o {{2}} pode recebê-lo em {{3}} às {{4}}. Responda SIM para aceitar, ou me diga o que fica melhor para você e eu vejo o que consigo.
 
 **fr**
-> {{1}}, {{2}} peut vous proposer le {{3}} à {{4}} à la place. Répondez OUI pour accepter, ou dites-moi ce qui vous conviendrait mieux et je verrai ce que je peux faire.
+> Bonjour {{1}}, {{2}} peut vous proposer le {{3}} à {{4}} à la place. Répondez OUI pour accepter, ou dites-moi ce qui vous conviendrait mieux et je verrai ce que je peux faire.
 
 **es**
-> {{1}}, {{2}} puede ofrecerle el {{3}} a las {{4}} en su lugar. Responda SÍ para aceptar, o dígame qué le vendría mejor y veré qué puedo hacer.
+> Hola {{1}}, {{2}} puede ofrecerle el {{3}} a las {{4}} en su lugar. Responda SÍ para aceptar, o dígame qué le vendría mejor y veré qué puedo hacer.
 
 **it**
-> {{1}}, {{2}} può proporle il {{3}} alle {{4}} in alternativa. Risponda SÌ per accettare, oppure mi dica cosa preferirebbe e vedrò cosa posso fare.
+> Buongiorno {{1}}, {{2}} può proporle il {{3}} alle {{4}} in alternativa. Risponda SÌ per accettare, oppure mi dica cosa preferirebbe e vedrò cosa posso fare.
 
 **de**
-> {{1}}, {{2}} kann Ihnen stattdessen den {{3}} um {{4}} anbieten. Antworten Sie mit JA, um anzunehmen, oder sagen Sie mir, was Ihnen besser passt, und ich sehe, was ich tun kann.
+> Guten Tag {{1}}, {{2}} kann Ihnen stattdessen den {{3}} um {{4}} anbieten. Antworten Sie mit JA, um anzunehmen, oder sagen Sie mir, was Ihnen besser passt, und ich sehe, was ich tun kann.
 
 ## 6. `lembrete_reserva_2h` — lembrete 2 horas antes
 
 **en**
-> {{1}}, your table at {{2}} is at {{3}} today. If you're running late or your plans change, just reply to this message — I'll take care of it. Enjoy your evening.
+> Hello {{1}}, your table at {{2}} is at {{3}} today. If you're running late or your plans change, just reply to this message — I'll take care of it. Enjoy your evening.
 
 **pt_BR** *(conferir se o texto já aprovado é este; se for diferente, manter o aprovado)*
-> {{1}}, a sua mesa no {{2}} é hoje às {{3}}. Se estiver atrasado ou os planos mudarem, é só responder a esta mensagem — eu cuido disso. Boa noite e bom jantar.
+> Olá {{1}}, a sua mesa no {{2}} é hoje às {{3}}. Se estiver atrasado ou os planos mudarem, é só responder a esta mensagem — eu cuido disso. Boa noite e bom jantar.
 
 **fr**
-> {{1}}, votre table chez {{2}} est à {{3}} aujourd'hui. En cas de retard ou de changement de programme, répondez simplement à ce message — je m'en occupe. Très belle soirée.
+> Bonjour {{1}}, votre table chez {{2}} est à {{3}} aujourd'hui. En cas de retard ou de changement de programme, répondez simplement à ce message — je m'en occupe. Très belle soirée.
 
 **es**
-> {{1}}, su mesa en {{2}} es hoy a las {{3}}. Si va con retraso o cambian sus planes, responda a este mensaje — yo me encargo. Que disfrute la velada.
+> Hola {{1}}, su mesa en {{2}} es hoy a las {{3}}. Si va con retraso o cambian sus planes, responda a este mensaje — yo me encargo. Que disfrute la velada.
 
 **it**
-> {{1}}, il suo tavolo da {{2}} è oggi alle {{3}}. Se è in ritardo o cambiano i programmi, risponda pure a questo messaggio — me ne occupo io. Buona serata.
+> Buongiorno {{1}}, il suo tavolo da {{2}} è oggi alle {{3}}. Se è in ritardo o cambiano i programmi, risponda pure a questo messaggio — me ne occupo io. Buona serata.
 
 **de**
-> {{1}}, Ihr Tisch im {{2}} ist heute um {{3}}. Falls Sie sich verspäten oder sich Ihre Pläne ändern, antworten Sie einfach auf diese Nachricht — ich kümmere mich darum. Einen schönen Abend.
+> Guten Tag {{1}}, Ihr Tisch im {{2}} ist heute um {{3}}. Falls Sie sich verspäten oder sich Ihre Pläne ändern, antworten Sie einfach auf diese Nachricht — ich kümmere mich darum. Einen schönen Abend.
 
 ## 7. `twk_eve_briefing` — véspera
 
 **en**
-> {{1}}, tomorrow is {{2}} — {{3}} at {{4}}, table for {{5}}. If you'd like directions, a suggested time to leave, or have any request for the evening, just reply here and I'll arrange it.
+> Hello {{1}}, tomorrow is {{2}} — {{3}} at {{4}}, table for {{5}}. If you'd like directions, a suggested time to leave, or have any request for the evening, just reply here and I'll arrange it.
 
 **pt_BR**
-> {{1}}, amanhã é o {{2}} — {{3}} às {{4}}, mesa para {{5}}. Se quiser o caminho, uma sugestão de horário para sair, ou tiver algum pedido para a noite, é só responder aqui que eu organizo.
+> Olá {{1}}, amanhã é o {{2}} — {{3}} às {{4}}, mesa para {{5}}. Se quiser o caminho, uma sugestão de horário para sair, ou tiver algum pedido para a noite, é só responder aqui que eu organizo.
 
 **fr**
-> {{1}}, demain c'est {{2}} — le {{3}} à {{4}}, table pour {{5}}. Si vous souhaitez l'itinéraire, une heure de départ conseillée, ou avez une demande pour la soirée, répondez ici et je m'en charge.
+> Bonjour {{1}}, demain c'est {{2}} — le {{3}} à {{4}}, table pour {{5}}. Si vous souhaitez l'itinéraire, une heure de départ conseillée, ou avez une demande pour la soirée, répondez ici et je m'en charge.
 
 **es**
-> {{1}}, mañana es {{2}} — el {{3}} a las {{4}}, mesa para {{5}}. Si desea indicaciones, una hora sugerida para salir, o tiene alguna petición para la noche, responda aquí y lo organizo.
+> Hola {{1}}, mañana es {{2}} — el {{3}} a las {{4}}, mesa para {{5}}. Si desea indicaciones, una hora sugerida para salir, o tiene alguna petición para la noche, responda aquí y lo organizo.
 
 **it**
-> {{1}}, domani è {{2}} — il {{3}} alle {{4}}, tavolo per {{5}}. Se desidera le indicazioni, un orario consigliato per partire, o ha qualche richiesta per la serata, risponda qui e me ne occupo io.
+> Buongiorno {{1}}, domani è {{2}} — il {{3}} alle {{4}}, tavolo per {{5}}. Se desidera le indicazioni, un orario consigliato per partire, o ha qualche richiesta per la serata, risponda qui e me ne occupo io.
 
 **de**
-> {{1}}, morgen ist es soweit: {{2}} — am {{3}} um {{4}}, Tisch für {{5}}. Wenn Sie eine Wegbeschreibung, eine empfohlene Abfahrtszeit oder einen Wunsch für den Abend haben, antworten Sie einfach hier, und ich kümmere mich darum.
+> Guten Tag {{1}}, morgen ist es soweit: {{2}} — am {{3}} um {{4}}, Tisch für {{5}}. Wenn Sie eine Wegbeschreibung, eine empfohlene Abfahrtszeit oder einen Wunsch für den Abend haben, antworten Sie einfach hier, und ich kümmere mich darum.
 
 ## 8. `avaliacao_experiencia_6h` — convite de avaliação
 
 **en**
-> {{1}}, how was {{2}}? A word from you helps us choose the right tables for you next time — just reply here with a few lines.
+> Hello {{1}}, how was {{2}}? A word from you helps us choose the right tables for you next time — just reply here with a few lines.
 
 **pt_BR** *(já aprovado — não mexer)*
-> {{1}}, como foi no {{2}}? Uma palavra sua nos ajuda a escolher as mesas certas para você da próxima vez — é só responder aqui com algumas linhas.
+> Olá {{1}}, como foi no {{2}}? Uma palavra sua nos ajuda a escolher as mesas certas para você da próxima vez — é só responder aqui com algumas linhas.
 
 **fr**
-> {{1}}, comment était {{2}} ? Un mot de votre part nous aide à choisir les bonnes tables pour vous la prochaine fois — répondez simplement ici en quelques lignes.
+> Bonjour {{1}}, comment était {{2}} ? Un mot de votre part nous aide à choisir les bonnes tables pour vous la prochaine fois — répondez simplement ici en quelques lignes.
 
 **es**
-> {{1}}, ¿qué tal en {{2}}? Unas palabras suyas nos ayudan a elegir las mesas adecuadas para usted la próxima vez — responda aquí con unas líneas.
+> Hola {{1}}, ¿qué tal en {{2}}? Unas palabras suyas nos ayudan a elegir las mesas adecuadas para usted la próxima vez — responda aquí con unas líneas.
 
 **it**
-> {{1}}, com'è andata da {{2}}? Due righe da parte sua ci aiutano a scegliere i tavoli giusti per lei la prossima volta — risponda pure qui.
+> Buongiorno {{1}}, com'è andata da {{2}}? Due righe da parte sua ci aiutano a scegliere i tavoli giusti per lei la prossima volta — risponda pure qui.
 
 **de**
-> {{1}}, wie war es im {{2}}? Ein paar Worte von Ihnen helfen uns, beim nächsten Mal die richtigen Tische für Sie zu wählen — antworten Sie einfach hier mit ein paar Zeilen.
+> Guten Tag {{1}}, wie war es im {{2}}? Ein paar Worte von Ihnen helfen uns, beim nächsten Mal die richtigen Tische für Sie zu wählen — antworten Sie einfach hier mit ein paar Zeilen.
 
 ---
 
