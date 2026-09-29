@@ -4,18 +4,18 @@ Contrato técnico: a ordem das variáveis `{{n}}` é a que o código envia (`eve
 
 Conformidade ADR-015: nenhum texto promete prazo, disponibilidade nem confirmação que não exista; nenhum expõe processo; a data sai por extenso no idioma do cliente (o código formata).
 
-Regra dos nomes: **o mesmo nome em todos os idiomas** (na Meta, idioma é uma "tradução" do mesmo template). Dois já existem em `pt_BR` e mantêm o nome antigo.
+Regra dos nomes: **o mesmo nome em todos os idiomas** (na Meta, idioma é uma "tradução" do mesmo template). Conferido na conta em 29/09: os templates antigos em português foram apagados; todos entram como novos.
 
 | # | Nome na Meta | Quem dispara | Variáveis |
 |---|---|---|---|
 | 1 | `twk_reservation_received` | evento `pedido_recebido` | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
 | 2 | `twk_reservation_accepted` | evento `aceito` | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
-| 3 | `twk_reservation_declined` | evento `recusado` | 1 nome · 2 restaurante · 3 data |
+| 3 | `twk_reservation_declined_v2` *(o nome antigo ficou preso em MARKETING)* | evento `recusado` | 1 nome · 2 restaurante · 3 data |
 | 4 | `twk_reservation_cancelled` | evento `cancelado` | 1 nome · 2 restaurante · 3 data |
 | 5 | `twk_reschedule_proposed` | evento `reagendamento_proposto` | 1 nome · 2 restaurante · 3 nova data · 4 nova hora — **não submeter ainda** (a plataforma não grava a proposta; ver fase 2) |
-| 6 | `lembrete_reserva_2h` *(já existe em pt_BR)* | lembrete 2 h antes | 1 nome · 2 restaurante · 3 hora |
+| 6 | `twk_reminder_2h` *(o nome antigo ficou travado na Meta por 4 semanas)* | lembrete 2 h antes | 1 nome · 2 restaurante · 3 hora |
 | 7 | `twk_eve_briefing` | véspera (~24 h antes) | 1 nome · 2 restaurante · 3 data · 4 hora · **5 pessoas** |
-| 8 | `avaliacao_experiencia_6h` *(já existe em pt_BR)* | 6 h depois | 1 nome · 2 restaurante |
+| 8 | `avaliacao_experiencia_6h` | 6 h depois | 1 nome · 2 restaurante |
 | 9 | `twk_venue_new_request` | **casa** — evento `pedido_recebido` | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente · **botão de URL** `https://theworldkeys.com/r/{{1}}` (código da reserva) |
 | 10 | `twk_venue_cancelled` | **casa** — evento `cancelado` | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente |
 | 11 | `twk_venue_eve_briefing` | **casa** — véspera (~24 h) | 1 restaurante · 2 data · 3 hora · 4 pessoas · 5 nome do cliente |
@@ -79,25 +79,25 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 **de**
 > Gute Nachrichten, {{1}} — Ihr Tisch für {{5}} im {{2}} ist für den {{3}} um {{4}} bestätigt. Alles ist organisiert. Wenn Sie Uhrzeit, Datum oder Personenzahl ändern möchten, antworten Sie einfach auf diese Nachricht.
 
-## 3. `twk_reservation_declined` — recusado
+## 3. `twk_reservation_declined_v2` — recusado (texto seco, para a Meta manter UTILITY)
 
 **en**
-> Hello {{1}}, I'm sorry — {{2}} isn't able to host you on {{3}}. I know that's a disappointment. Reply to this message and I'll look for an equally special table for the same evening.
+> Hello {{1}}, {{2}} is unable to host you on {{3}}, so this request is now closed. If you would like us to look for another table for the same evening, reply to this message.
 
 **pt_BR**
-> Olá {{1}}, sinto muito — o {{2}} não poderá recebê-lo em {{3}}. Sei que é uma pena. Responda a esta mensagem e eu procuro uma mesa igualmente especial para a mesma noite.
+> Olá {{1}}, o {{2}} não poderá recebê-lo em {{3}}, e este pedido foi encerrado. Se quiser que procuremos outra mesa para a mesma noite, responda a esta mensagem.
 
 **fr**
-> Bonjour {{1}}, je suis désolée — {{2}} ne peut pas vous recevoir le {{3}}. Je sais que c'est une déception. Répondez à ce message et je chercherai une table tout aussi spéciale pour le même soir.
+> Bonjour {{1}}, {{2}} ne peut pas vous recevoir le {{3}} ; cette demande est donc close. Si vous souhaitez que nous cherchions une autre table pour le même soir, répondez à ce message.
 
 **es**
-> Hola {{1}}, lo siento — {{2}} no puede recibirle el {{3}}. Sé que es una decepción. Responda a este mensaje y buscaré una mesa igual de especial para la misma noche.
+> Hola {{1}}, {{2}} no puede recibirle el {{3}}, por lo que esta solicitud queda cerrada. Si desea que busquemos otra mesa para la misma noche, responda a este mensaje.
 
 **it**
-> Buongiorno {{1}}, mi dispiace — {{2}} non può accoglierla il {{3}}. So che è una delusione. Risponda a questo messaggio e cercherò un tavolo altrettanto speciale per la stessa sera.
+> Buongiorno {{1}}, {{2}} non può accoglierla il {{3}}, quindi questa richiesta è chiusa. Se desidera che cerchiamo un altro tavolo per la stessa sera, risponda a questo messaggio.
 
 **de**
-> Guten Tag {{1}}, es tut mir leid — {{2}} kann Sie am {{3}} nicht empfangen. Ich weiß, das ist enttäuschend. Antworten Sie auf diese Nachricht, und ich suche einen ebenso besonderen Tisch für denselben Abend.
+> Guten Tag {{1}}, {{2}} kann Sie am {{3}} nicht empfangen; diese Anfrage ist damit abgeschlossen. Wenn wir einen anderen Tisch für denselben Abend suchen sollen, antworten Sie auf diese Nachricht.
 
 ## 4. `twk_reservation_cancelled` — cancelado
 
@@ -139,12 +139,12 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 **de**
 > Guten Tag {{1}}, {{2}} kann Ihnen stattdessen den {{3}} um {{4}} anbieten. Antworten Sie mit JA, um anzunehmen, oder sagen Sie mir, was Ihnen besser passt, und ich sehe, was ich tun kann.
 
-## 6. `lembrete_reserva_2h` — lembrete 2 horas antes
+## 6. `twk_reminder_2h` — lembrete 2 horas antes
 
 **en**
 > Hello {{1}}, your table at {{2}} is at {{3}} today. If you're running late or your plans change, just reply to this message — I'll take care of it. Enjoy your evening.
 
-**pt_BR** *(conferir se o texto já aprovado é este; se for diferente, manter o aprovado)*
+**pt_BR**
 > Olá {{1}}, a sua mesa no {{2}} é hoje às {{3}}. Se estiver atrasado ou os planos mudarem, é só responder a esta mensagem — eu cuido disso. Boa noite e bom jantar.
 
 **fr**
@@ -184,7 +184,7 @@ O código reconhece STOP, PARAR, SAIR, BAJA, ARRETER e UNSUBSCRIBE em qualquer i
 **en**
 > Hello {{1}}, how was {{2}}? A word from you helps us choose the right tables for you next time — just reply here with a few lines.
 
-**pt_BR** *(já aprovado — não mexer)*
+**pt_BR**
 > Olá {{1}}, como foi no {{2}}? Uma palavra sua nos ajuda a escolher as mesas certas para você da próxima vez — é só responder aqui com algumas linhas.
 
 **fr**
@@ -298,7 +298,7 @@ No arquivo `whatsapp-optin.sql`: linha com `tipo = 'estabelecimento'`, o `restau
 5. **Amostras**: preencher com os exemplos (Anna / Le Tobsil / 3 Oct 2026 / 8:00 PM). Sem amostra a Meta recusa.
 6. Enviar. Aprovação costuma levar de minutos a 24 h. Status **Ativo** = pode usar.
 7. Para os outros idiomas: abrir o mesmo template → **Adicionar idioma** (ou "Add translation") → escolher Portuguese (BR), French, Spanish, Italian, German → repetir corpo, rodapé e amostra. O nome não muda.
-8. Os dois que já existem (`lembrete_reserva_2h` e `avaliacao_experiencia_6h`): abrir o existente e **adicionar idiomas**. Conferir por que o `lembrete_reserva_2h` foi recusado 3 vezes na semana passada: no Manager, o status dele deve estar diferente de Ativo (pausado, rejeitado ou "qualidade baixa").
+8. Criação pela API: `docs/runbooks/meta-templates-por-api.md`.
 
 Ordem sugerida pela base de clientes: **en** primeiro (maioria), depois **pt_BR** e **fr**, depois **es**, **it**, **de**.
 
@@ -313,11 +313,11 @@ RESERVATION_EVENTS_DAILY_CAP=25
 
 RESERVATION_EVENT_TEMPLATE_RECEBIDO=twk_reservation_received
 RESERVATION_EVENT_TEMPLATE_ACEITO=twk_reservation_accepted
-RESERVATION_EVENT_TEMPLATE_RECUSADO=twk_reservation_declined
+RESERVATION_EVENT_TEMPLATE_RECUSADO=twk_reservation_declined_v2
 RESERVATION_EVENT_TEMPLATE_CANCELADO=twk_reservation_cancelled
 RESERVATION_EVENT_TEMPLATE_REAGENDAMENTO=
 
-REMINDERS_TEMPLATE=lembrete_reserva_2h
+REMINDERS_TEMPLATE=twk_reminder_2h
 BRIEFING_TEMPLATE=twk_eve_briefing
 REVIEW_TEMPLATE=avaliacao_experiencia_6h
 

@@ -8,6 +8,7 @@
  *   node .../meta-templates.mjs --list                                          # o que já existe na conta (nome, idioma, status)
  *   node .../meta-templates.mjs --apply [--only nome] [--lang en,pt_BR]         # cria o que falta
  *   node .../meta-templates.mjs --status                                        # status atual dos templates do documento
+ *   --categoria MARKETING   quando a Meta já prendeu o nome nessa categoria (ex.: convite de avaliação)
  *
  * Segredos em ~/.twk/meta.env (FORA do OneDrive, nunca no chat):
  *   META_WABA_ID=<ID da conta do WhatsApp Business>
@@ -44,9 +45,11 @@ const VARIAVEIS = {
   twk_reservation_received: ["nome", "casa", "data", "hora", "pessoas"],
   twk_reservation_accepted: ["nome", "casa", "data", "hora", "pessoas"],
   twk_reservation_declined: ["nome", "casa", "data"],
+  twk_reservation_declined_v2: ["nome", "casa", "data"],
   twk_reservation_cancelled: ["nome", "casa", "data"],
   twk_reschedule_proposed: ["nome", "casa", "data", "hora"],
   lembrete_reserva_2h: ["nome", "casa", "hora"],
+  twk_reminder_2h: ["nome", "casa", "hora"],
   twk_eve_briefing: ["nome", "casa", "data", "hora", "pessoas"],
   avaliacao_experiencia_6h: ["nome", "casa"],
   twk_venue_new_request: ["casa", "data", "hora", "pessoas", "cliente"],
@@ -99,7 +102,7 @@ export function validar(t, idioma, corpo, rodape) {
   return erros;
 }
 
-export function montarPayload(t, idioma, corpo, rodape) {
+export function montarPayload(t, idioma, corpo, rodape, categoria = "UTILITY") {
   const a = AMOSTRA[idioma];
   const exemplo = (VARIAVEIS[t.nome] || []).map((k) => a[k]);
   const components = [
@@ -109,7 +112,7 @@ export function montarPayload(t, idioma, corpo, rodape) {
   if (t.botao && BOTAO_URL[t.nome]) {
     components.push({ type: "BUTTONS", buttons: [{ type: "URL", text: t.botao[idioma], url: BOTAO_URL[t.nome].url, example: [BOTAO_URL[t.nome].exemplo] }] });
   }
-  return { name: t.nome, language: idioma, category: "UTILITY", allow_category_change: false, components };
+  return { name: t.nome, language: idioma, category: categoria, allow_category_change: false, components };
 }
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
@@ -194,7 +197,7 @@ async function main() {
     if (p.acao !== "criar") continue;
     if (existentes.some((x) => x.name === p.nome && x.language === p.idioma)) { pulados++; console.log(`= ${p.nome}/${p.idioma} já existe — mantido como está`); continue; }
     const t = templates.find((x) => x.nome === p.nome);
-    const payload = montarPayload(t, p.idioma, t.corpos[p.idioma], rodape[p.idioma]);
+    const payload = montarPayload(t, p.idioma, t.corpos[p.idioma], rodape[p.idioma], (opt("--categoria") || "UTILITY").toUpperCase());
     try {
       const r = await graph(env, "POST", `${env.META_WABA_ID}/message_templates`, payload);
       criados++;
