@@ -25,6 +25,10 @@ function envDe(rel) {
 (async () => {
   const { Client } = require(path.join(RAIZ, 'Agente de Suporte e Concierge', 'node_modules', 'pg'));
   const { avaliarTelefone } = require(path.join(RAIZ, 'Agente de Suporte e Concierge', 'dist', 'phoneQuality.js'));
+  const { parsePhoneNumberFromString } = require(path.join(RAIZ, 'Agente de Suporte e Concierge', 'node_modules', 'libphonenumber-js', 'max'));
+  const ISO = { Portugal: 'PT', Brazil: 'BR', France: 'FR', Belgium: 'BE', Morocco: 'MA', Tunisia: 'TN', Monaco: 'MC', Italy: 'IT', Spain: 'ES', Argentina: 'AR', Colombia: 'CO', Mexico: 'MX', Chile: 'CL', Germany: 'DE', Austria: 'AT', Thailand: 'TH', Greece: 'GR', Türkiye: 'TR', Turkey: 'TR', China: 'CN', 'United Kingdom': 'GB', 'United States': 'US', Israel: 'IL', Qatar: 'QA', Malaysia: 'MY', 'South Korea': 'KR', Maldives: 'MV', Egypt: 'EG', Japan: 'JP', Singapore: 'SG' };
+  // Número ambíguo (lido sem país parece brasileiro): a casa está no catálogo COM o país — desempata por ele.
+  const desambiguar = (tel, pais) => { try { const p = parsePhoneNumberFromString('+' + String(tel ?? '').replace(/\D/g, '')); if (!p || !p.isValid() || !ISO[pais] || p.country !== ISO[pais]) return null; const t = p.getType() ?? ''; return { e164: p.number, qualidade: t === 'MOBILE' || t === 'FIXED_LINE_OR_MOBILE' ? 'ENVIAVEL' : 'ENVIAVEL_NAO_MOVEL' }; } catch { return null; } };
   const c = new Client({ connectionString: envDe('Agente Gerenciador do Banco de Dados/twk-db-agent/.env.readonly.local').DATABASE_URL_RO, ssl: { rejectUnauthorized: false } });
   await c.connect();
   const { rows } = await c.query(`
@@ -37,7 +41,8 @@ function envDe(rel) {
   const linhas = [];
   const fora = [];
   for (const r of rows) {
-    const a = avaliarTelefone(r.tel);
+    let a = avaliarTelefone(r.tel);
+    if (a.qualidade === 'AMBIGUO_BR') { const d = desambiguar(r.tel, r.country); if (d) a = { ...a, ...d, motivo: 'desambiguado pelo país do catálogo' }; }
     const ok = a.qualidade === 'ENVIAVEL' || (!SO_MOVEL && a.qualidade === 'ENVIAVEL_NAO_MOVEL');
     if (!ok || !a.e164) { fora.push(`${r.name} (${r.city}): telefone ${a.qualidade}`); continue; }
     const idioma = IDIOMA[r.country] || 'en';
