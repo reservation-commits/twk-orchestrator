@@ -46,3 +46,16 @@ Tudo fica registrado em `orchestrator/logs/meta-templates-<data>.jsonl` (sem o t
 
 ## Se algo for recusado
 A Meta devolve o motivo (`rejected_reason`). Os casos comuns: texto com cara de marketing (mudar uma frase), variável no começo ou no fim do corpo, amostra faltando. Eu ajusto o documento e reenvio só aquele template com `--only <nome> --lang <idioma>`.
+
+
+## v2 — edição em lote (30/09/2026)
+
+O documento vigente é `docs/notificacoes/templates-meta-v2-2026-09-30.md` (formato de ficha: linha `Cabeçalho:` por idioma e corpo em bloco `> …` de várias linhas). O script agora edita templates existentes:
+
+```
+node orchestrator/agents/notificacao-reserva/meta-templates.mjs --edit            # dry-run: mostra o que editaria
+node orchestrator/agents/notificacao-reserva/meta-templates.mjs --apply --edit    # edita (POST /{id} com os componentes)
+node orchestrator/agents/notificacao-reserva/meta-templates.mjs --status          # acompanha a nova revisão
+```
+
+Regras da Meta: template aprovado aceita 1 edição por dia e 10 por mês; a edição devolve o template a PENDING e, enquanto pendente, aquele idioma não envia. Por isso: preview aprovado pelo fundador antes de aplicar. O v1 continua legível com `--doc docs/notificacoes/templates-meta-2026-09-25.md`.

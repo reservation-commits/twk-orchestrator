@@ -123,12 +123,16 @@ casos.push({
 });
 
 casos.push({
-  nome: 'quem não pode receber não expõe destino (e164 nulo)',
+  // v12 (2026-09-30): o fixo válido passou a carregar e164, porque a CASA marcada pode
+  // ter WhatsApp no número fixo do catálogo. A porta do CLIENTE continua exigindo ENVIAVEL.
+  nome: 'quem não pode receber não expõe destino (e164 nulo); fixo carrega e164 só para a casa',
   run: () => {
     const falhas = [];
     for (const n of ['+551133334444', '21967841007', '+6532345678', '12345']) {
       const a = phoneQuality.avaliarTelefone(n);
-      if (a.e164 !== null) falhas.push(`${a.qualidade} expôs e164`);
+      const podeTerE164 = a.qualidade === 'ENVIAVEL' || a.qualidade === 'ENVIAVEL_NAO_MOVEL';
+      if (!podeTerE164 && a.e164 !== null) falhas.push(`${a.qualidade} expôs e164`);
+      if (a.qualidade === 'ENVIAVEL_NAO_MOVEL' && phoneQuality.podeReceberWhatsApp(a)) falhas.push('fixo passou na porta do cliente');
     }
     return falhas;
   },
@@ -229,6 +233,7 @@ const DADOS = {
   restaurant_name: 'Le Bernardin',
   booking_date: '2026-04-03',
   reservation_time: '20:00:00',
+  people: 2, // v8 (2026-09-25): {{5}} = pessoas em recebido/aceito; sem número plausível o template não sai
   reschedule_proposed_date: '2026-04-10',
   reschedule_proposed_time: '21:30:00',
 };

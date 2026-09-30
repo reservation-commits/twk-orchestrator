@@ -17,7 +17,10 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
 const RAIZ = path.resolve(__dirname, '../../..');
-const ALVO = path.join(RAIZ, 'orchestrator/agents/notificacao-reserva/templates.js');
+// Desde 2026-09-30 os textos vivem no documento v2 (o mesmo que vai para a Meta); o
+// contrato (evento, params, bloqueio) continua em templates.js.
+const ALVO = path.join(RAIZ, 'docs/notificacoes/templates-meta-v2-2026-09-30.md');
+const CONTRATO = path.join(RAIZ, 'orchestrator/agents/notificacao-reserva/templates.js');
 const GUARDA = path.join(RAIZ, 'Agente de Suporte e Concierge/dist/webhookAuth.js');
 
 /**
@@ -40,26 +43,30 @@ const MUTACOES_GUARDA = [
 /** [nome, trecho original, trecho mutado] — cada um viola uma regra do ADR-015. */
 const MUTACOES = [
   ['promete prazo de 24h',
-    "I'll write to you here as soon as I have news",
-    "I'll write to you here within 24 hours"],
+    'I will write to you here as soon as I have news',
+    'I will write to you here within 24 hours'],
   ['promete disponibilidade',
-    "isn't able to host you on {{3}}",
-    'has no availability on {{3}}, but we guarantee a table'],
+    'If you would like us to look for another table for the same evening',
+    'We guarantee you another table for the same evening'],
   ['vaza vocabulário interno',
-    "we're working on it now",
+    'we have received your request and are already taking care of it',
     'our internal workflow is processing the ticket'],
   ['relata ação em primeira pessoa',
-    "There's nothing you need to do",
+    'There is nothing you need to do',
     'I escalated your request to the team'],
   ['remove o opt-out do rodapé',
-    'Reply STOP to stop receiving reservation updates.',
-    'Thank you for choosing us.'],
+    '| en | Reply STOP to stop receiving reservation updates. |',
+    '| en | Thank you for choosing us. |'],
   ['afirma mesa num template que não confirma',
-    'your reservation at {{2}} on {{3}} has been cancelled',
-    'your table at {{2}} is confirmed for {{3}}'],
+    'Hello {{1}}, your reservation has been cancelled.',
+    'Hello {{1}}, your table at {{2}} is confirmed for {{3}}.'],
   ['quebra o contrato de placeholders',
-    "on {{3}} at {{4}} and we're working",
-    "on {{3}} at {{4}} with {{7}} and we're working"],
+    '> *Guests:* {{5}}',
+    '> *Guests:* {{7}}'],
+];
+
+/** Mutação no contrato (templates.js), não no texto. */
+const MUTACOES_CONTRATO = [
   ['desbloqueia o reagendamento sem fonte de dados',
     "bloqueado: 'sem fonte de dados",
     "desativado: 'sem fonte de dados"],
@@ -81,11 +88,13 @@ let sobreviventes = 0;
 let naoAplicadas = 0;
 
 const original = fs.readFileSync(ALVO, 'utf8');
+const originalContrato = fs.readFileSync(CONTRATO, 'utf8');
 const temGuarda = fs.existsSync(GUARDA);
 const originalGuarda = temGuarda ? fs.readFileSync(GUARDA, 'utf8') : null;
 
 function restaurar() {
   fs.writeFileSync(ALVO, original, 'utf8');
+  fs.writeFileSync(CONTRATO, originalContrato, 'utf8');
   if (temGuarda) fs.writeFileSync(GUARDA, originalGuarda, 'utf8');
 }
 
@@ -111,6 +120,7 @@ try {
   if (base !== 'APROVADO') sobreviventes++; // linha de base quebrada invalida tudo
 
   rodarMutacoes(ALVO, original, MUTACOES);
+  rodarMutacoes(CONTRATO, originalContrato, MUTACOES_CONTRATO);
 
   if (!temGuarda) {
     linhas.push([false, 'NÃO APLICADA', 'guarda do webhook — dist ausente, rode "npm run build"']);

@@ -1,4 +1,4 @@
-# Templates de WhatsApp v2 — estrutura profissional (30/09/2026, aguardando o OK do fundador)
+# Templates de WhatsApp v2 — estrutura profissional (30/09/2026 — **aprovado pelo fundador e aplicado na Meta às 14:33 UTC**: 60 templates editados, 0 falhas; Aria v15 gerada)
 
 Motivo: o fundador recebeu o teste do template da casa em 30/09 e achou a mensagem corrida e pouco profissional ("não me parece uma msg profissional, organizada e impecável"). Esta versão troca o parágrafo único por uma **ficha**: título, uma frase de contexto, os dados da mesa um por linha com rótulo em negrito, e o que fazer. Mesmos nomes, mesma ordem de variáveis, mesmos rodapés já aprovados — só o texto muda. A troca é feita por **edição** dos templates existentes na Meta (`meta-templates.mjs --apply --edit`), o que os devolve à revisão por minutos a 24 h. Nada está ligado a ninguém ainda, então não há impacto.
 

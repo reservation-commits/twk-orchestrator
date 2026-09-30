@@ -1,74 +1,81 @@
 'use strict';
 /**
- * Fonte única dos textos dos templates de WhatsApp da notificação de reserva.
+ * Fonte única dos textos dos templates de WhatsApp da notificação de reserva — para o eval.
  *
- * Estavam em prosa no markdown. Viraram dado por um motivo: o eval
- * (orchestrator/evals/notificacao-reserva) checa cada frase contra o ADR-015 a
- * cada rodada. Um texto editado para prometer prazo, disponibilidade ou
- * confirmação inexistente REPROVA a suíte antes de chegar ao cliente.
+ * Desde 2026-09-30 os textos NÃO vivem mais aqui: vêm do documento aprovado pelo fundador
+ * (docs/notificacoes/templates-meta-v2-2026-09-30.md), o mesmo que o meta-templates.mjs
+ * manda para a Meta. Uma cópia aqui divergia em silêncio (ficou três versões atrás: sem
+ * pessoas, sem cabeçalho, nome antigo do "recusado"). O eval
+ * (orchestrator/evals/notificacao-reserva) checa cada frase inglesa contra o ADR-015 a
+ * cada rodada: um texto editado para prometer prazo, disponibilidade ou confirmação
+ * inexistente REPROVA a suíte antes de chegar ao cliente.
  *
  * `params` é o contrato com montarParametros() em
  * "Agente de Suporte e Concierge/src/eventFormat.ts" — a ordem aqui é a ordem
  * de {{1}}, {{2}}… lá. O eval cruza os dois.
  *
- * Idioma: inglês primeiro, pela distribuição real dos telefones entregáveis
+ * Idioma do eval: inglês, pela distribuição real dos telefones entregáveis
  * (US 3.938 · GB 1.713 · SG 1.215 · CA 722 · AU 709 · HK 648). Ver
  * docs/notificacoes/fase0-validacao-telefones.md.
  */
 
-/** Rodapé comum. A promessa é cumprida por src/consent.ts, que reconhece "stop". */
-const RODAPE_EN = 'Reply STOP to stop receiving reservation updates.';
+const fs = require('node:fs');
+const path = require('node:path');
 
-const TEMPLATES = [
-  {
-    nome: 'twk_reservation_received',
+const DOC = path.resolve(__dirname, '../../../docs/notificacoes/templates-meta-v2-2026-09-30.md');
+// require(esm): Node ≥ 22.12 carrega .mjs sem top-level await de forma síncrona.
+const { lerDocumento } = require('./meta-templates.mjs');
+const documento = lerDocumento(fs.readFileSync(DOC, 'utf8'));
+
+/** Rodapé comum (inglês). A promessa é cumprida por src/consent.ts, que reconhece "stop". */
+const RODAPE_EN = documento.rodape.en;
+
+/** O que o documento não sabe: evento, contrato de params e se o texto pode afirmar mesa. */
+const CONTRATO = {
+  twk_reservation_received: {
     evento: 'pedido_recebido',
-    categoria: 'UTILITY',
-    idioma: 'en',
-    params: ['primeiro_nome', 'restaurante', 'data', 'hora'],
-    corpo:
-      "Hello {{1}}, we have your request for {{2}} on {{3}} at {{4}} and we're working on it now. " +
-      "There's nothing you need to do — I'll write to you here as soon as I have news. " +
-      'If anything changes on your side, just reply to this message.',
-    rodape: RODAPE_EN,
+    params: ['primeiro_nome', 'restaurante', 'data', 'hora', 'pessoas'],
     // Não afirma mesa. Não promete prazo. Diz o que ele recebe e como agir.
     confirmaMesa: false,
   },
-  {
-    nome: 'twk_reservation_accepted',
+  twk_reservation_accepted: {
     evento: 'aceito',
-    categoria: 'UTILITY',
-    idioma: 'en',
-    params: ['primeiro_nome', 'restaurante', 'data', 'hora'],
-    corpo:
-      'Wonderful news, {{1}} — your table at {{2}} is confirmed for {{3}} at {{4}}. ' +
-      'Everything is arranged. If you need to change the time, the date or the number of guests, ' +
-      'just reply to this message.',
-    rodape: RODAPE_EN,
+    params: ['primeiro_nome', 'restaurante', 'data', 'hora', 'pessoas'],
     // ÚNICO template que pode afirmar mesa: o restaurante confirmou de fato.
     confirmaMesa: true,
   },
-  {
-    nome: 'twk_reservation_declined',
+  twk_reservation_declined_v2: {
     evento: 'recusado',
-    categoria: 'UTILITY',
-    idioma: 'en',
     params: ['primeiro_nome', 'restaurante', 'data'],
-    corpo:
-      "{{1}}, I'm sorry — {{2}} isn't able to host you on {{3}}. I know that's a disappointment. " +
-      "Reply to this message and I'll look for an equally special table for the same evening.",
-    rodape: RODAPE_EN,
     // "look for", nunca "find": não se promete disponibilidade.
     confirmaMesa: false,
   },
+  twk_reservation_cancelled: {
+    evento: 'cancelado',
+    params: ['primeiro_nome', 'restaurante', 'data'],
+    confirmaMesa: false,
+  },
+};
+
+function doDocumento(nome) {
+  const t = documento.templates.find((x) => x.nome === nome);
+  if (!t || !t.corpos.en) throw new Error(`template ${nome} (en) não está em ${path.basename(DOC)}`);
+  return { nome, categoria: 'UTILITY', idioma: 'en', cabecalho: t.cabecalhos?.en ?? null, corpo: t.corpos.en, rodape: RODAPE_EN, ...CONTRATO[nome] };
+}
+
+const TEMPLATES = [
+  doDocumento('twk_reservation_received'),
+  doDocumento('twk_reservation_accepted'),
+  doDocumento('twk_reservation_declined_v2'),
   {
+    // Fora do documento v2 de propósito: não foi submetido à Meta.
     nome: 'twk_reschedule_proposed',
     evento: 'reagendamento_proposto',
     categoria: 'UTILITY',
     idioma: 'en',
     params: ['primeiro_nome', 'restaurante', 'data_proposta', 'hora_proposta'],
     corpo:
-      '{{1}}, {{2}} can offer you {{3}} at {{4}} instead. Reply YES to take it, ' +
+      'Hello {{1}}, {{2}} can offer you {{3}} at {{4}} instead. Reply YES to take it, ' +
       "or tell me what would suit you better and I'll see what I can do.",
     rodape: RODAPE_EN,
     confirmaMesa: false,
@@ -77,19 +84,7 @@ const TEMPLATES = [
     // descobrir onde a plataforma guarda a proposta de reagendamento.
     bloqueado: 'sem fonte de dados: reschedule_proposed_date vazia em toda a tabela',
   },
-  {
-    nome: 'twk_reservation_cancelled',
-    evento: 'cancelado',
-    categoria: 'UTILITY',
-    idioma: 'en',
-    params: ['primeiro_nome', 'restaurante', 'data'],
-    corpo:
-      '{{1}}, your reservation at {{2}} on {{3}} has been cancelled. ' +
-      "Nothing further is needed from you. Whenever you'd like another evening, " +
-      'just reply to this message.',
-    rodape: RODAPE_EN,
-    confirmaMesa: false,
-  },
+  doDocumento('twk_reservation_cancelled'),
 ];
 
 /** Quantos {{n}} distintos o corpo declara. */
@@ -108,4 +103,4 @@ function placeholdersContiguos(corpo) {
 
 const porEvento = (evento) => TEMPLATES.find((t) => t.evento === evento) || null;
 
-module.exports = { TEMPLATES, RODAPE_EN, contarPlaceholders, placeholdersContiguos, porEvento };
+module.exports = { TEMPLATES, RODAPE_EN, DOC, contarPlaceholders, placeholdersContiguos, porEvento };
