@@ -87,6 +87,26 @@ const TEMPLATES = [
   doDocumento('twk_reservation_cancelled'),
 ];
 
+// ─── v3 (30/09/2026): as cinco mensagens novas ─────────────────────────────
+// Não têm evento em eventFormat (saem por varredura), então o eval aplica só as regras de TEXTO
+// e o contrato de placeholders. Fonte: o documento v3, o mesmo enviado à Meta.
+const DOC_V3 = path.resolve(__dirname, '../../../docs/notificacoes/templates-meta-v3-novas-2026-09-30.md');
+const VARS_V3 = {
+  twk_request_in_progress: ['primeiro_nome', 'restaurante', 'data', 'hora'],
+  twk_request_unconfirmed: ['primeiro_nome', 'restaurante', 'data', 'hora'],
+  twk_venue_request_reminder: ['restaurante', 'data', 'hora', 'pessoas', 'cliente'],
+  twk_eve_briefing_map: ['primeiro_nome', 'restaurante', 'data', 'hora', 'pessoas', 'endereco'],
+  twk_venue_agenda: ['restaurante', 'data', 'quantidade', 'lista'],
+};
+const documentoV3 = fs.existsSync(DOC_V3) ? lerDocumento(fs.readFileSync(DOC_V3, 'utf8')) : { rodape: {}, templates: [] };
+const TEXTOS_V3 = documentoV3.templates
+  .filter((t) => t.corpos.en && VARS_V3[t.nome])
+  .map((t) => ({
+    nome: t.nome, categoria: 'UTILITY', idioma: 'en', cabecalho: t.cabecalhos?.en ?? null,
+    corpo: t.corpos.en, rodape: documentoV3.rodape.en, confirmaMesa: false, params: VARS_V3[t.nome],
+    respostas: t.respostas?.en ?? null,
+  }));
+
 /** Quantos {{n}} distintos o corpo declara. */
 function contarPlaceholders(corpo) {
   const achados = new Set();
@@ -103,4 +123,4 @@ function placeholdersContiguos(corpo) {
 
 const porEvento = (evento) => TEMPLATES.find((t) => t.evento === evento) || null;
 
-module.exports = { TEMPLATES, RODAPE_EN, DOC, contarPlaceholders, placeholdersContiguos, porEvento };
+module.exports = { TEMPLATES, TEXTOS_V3, RODAPE_EN, DOC, DOC_V3, contarPlaceholders, placeholdersContiguos, porEvento };

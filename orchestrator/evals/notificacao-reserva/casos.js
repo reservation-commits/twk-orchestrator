@@ -32,7 +32,7 @@ try {
   erroCarga = e.message;
 }
 
-const { TEMPLATES, contarPlaceholders, placeholdersContiguos, porEvento } = require('../../agents/notificacao-reserva/templates');
+const { TEMPLATES, TEXTOS_V3, contarPlaceholders, placeholdersContiguos, porEvento } = require('../../agents/notificacao-reserva/templates');
 
 // ─── Vocabulário proibido ao cliente (ADR-015 + constituição) ────────────────
 
@@ -204,6 +204,33 @@ for (const t of TEMPLATES) {
       const n = contarPlaceholders(t.corpo);
       return esperar(n === t.params.length, `corpo tem ${n} placeholders, contrato declara ${t.params.length}`);
     },
+  });
+}
+
+// ── 2b. Os textos v3 (30/09/2026) — mesmas regras de texto; saem por varredura, não por evento ──
+
+for (const t of TEXTOS_V3) {
+  const texto = `${t.corpo} ${t.rodape}`;
+  casos.push({
+    nome: `${t.nome} (v3): ADR-015 — sem vocabulário interno, relato, prazo ou promessa de mesa`,
+    run: () => [
+      ...esperar(bate(texto, VOCABULARIO_INTERNO).length === 0, `termos internos: ${bate(texto, VOCABULARIO_INTERNO).join(', ')}`),
+      ...esperar(bate(texto, RELATO_INTERNO).length === 0, 'relata ação interna ao cliente'),
+      ...esperar(bate(texto, PROMESSA_DE_PRAZO).length === 0, `promete prazo: ${bate(texto, PROMESSA_DE_PRAZO).join(', ')}`),
+      ...esperar(bate(texto, PROMESSA_DE_MESA).length === 0, `promete mesa: ${bate(texto, PROMESSA_DE_MESA).join(', ')}`),
+      ...esperar(!/\bis confirmed\b|\byour table at\b/i.test(t.corpo), 'afirma mesa sem ser o template de aceite'),
+    ],
+  });
+  casos.push({
+    nome: `${t.nome} (v3): forma — rodapé de opt-out, UTILITY, cabeçalho ≤ 60 sem variável, {{n}} contíguos e no contrato`,
+    run: () => [
+      ...esperar(/\bstop\b/i.test(t.rodape), 'rodapé sem instrução de opt-out'),
+      ...esperar(t.categoria === 'UTILITY', `categoria=${t.categoria}`),
+      ...esperar(!!t.cabecalho && t.cabecalho.length <= 60 && !/\{\{|\*/.test(t.cabecalho), `cabeçalho inválido: ${t.cabecalho}`),
+      ...esperar(placeholdersContiguos(t.corpo), 'numeração de {{n}} com buraco ou fora de ordem'),
+      ...esperar(contarPlaceholders(t.corpo) === t.params.length, `corpo tem ${contarPlaceholders(t.corpo)} placeholders, contrato declara ${t.params.length}`),
+      ...esperar(!t.respostas || t.respostas.every((x) => x.length > 0 && x.length <= 25), 'botão de resposta vazio ou > 25 caracteres'),
+    ],
   });
 }
 

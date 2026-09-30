@@ -71,3 +71,22 @@ Depois de colar: **Redeploy**. Nos primeiros 2 minutos o vigia fotografa as rese
 - **Pelo botão da mensagem.** O template "chegou um pedido" leva o botão *Aceitar ou recusar* com o link `https://theworldkeys.com/r/<código>` — a **mesma página** que o e-mail da plataforma abre (botão *Respond to Your Pending Requests*). A página é pública, sem senha, com Aceitar / Recusar / Propor outro horário. Conferido em 30/09 com um pedido pendente real.
 - **Por texto no WhatsApp.** A Aria reconhece o número como estabelecimento marcado e entra no papel de parceiro: agradece, não oferece mesas nem alternativas, e envia o link do pedido certo para a casa confirmar com um toque. Ela **nunca aceita ou recusa pela casa** (reservas são da plataforma).
 - Pendência conhecida da página `/r/` (cadrage de 03/09, ainda aberta no front): mostra e-mail do cliente antes do aceite.
+
+
+## v16 (30/09/2026) — as mensagens que faltavam
+
+Templates criados na Meta em 30/09 (documento `templates-meta-v3-novas-2026-09-30.md`). Acrescentar no Easypanel da Aria, só depois de cada template aparecer como APROVADO no `--status`:
+
+```
+PENDING_NUDGE_TEMPLATE=twk_request_in_progress
+PENDING_NUDGE_HOURS=24
+PENDING_CLOSE_TEMPLATE=twk_request_unconfirmed
+PENDING_CLOSE_HOURS_BEFORE=20
+VENUE_NUDGE_TEMPLATE=twk_venue_request_reminder
+VENUE_NUDGE_HOURS=24
+BRIEFING_TEMPLATE_MAP=twk_eve_briefing_map
+VENUE_AGENDA_TEMPLATE=twk_venue_agenda
+VENUE_AGENDA_LOCAL_HOUR=10
+```
+
+Vazio = etapa desligada. No primeiro dia, os 76 pedidos pendentes há mais de 24 h entram na fila do "seu pedido segue conosco" e do lembrete à casa; o teto `RESERVATION_EVENTS_DAILY_CAP` (25/dia) segura o volume.

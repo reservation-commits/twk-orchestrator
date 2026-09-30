@@ -37,13 +37,14 @@ const opt = (f) => (args.includes(f) ? args[args.indexOf(f) + 1] : null);
 const DOC = opt("--doc") ? path.resolve(opt("--doc")) : path.join(RAIZ, "docs/notificacoes/templates-meta-v2-2026-09-30.md");
 
 // Amostras por idioma (a Meta exige exemplo para cada variável). Data como a Aria v15 formata (dia da semana + mês por extenso).
+const COMUM = { endereco: "1 Derb Abdellah Ben Hessaien, Bab Ksour, Marrakech", quantidade: "3", lista: "19:30 Anna Lee (2) · 20:00 Marc Dupont (4) · 21:00 Sofia Rossi (3)" };
 const AMOSTRA = {
-  en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee" },
-  pt_BR: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de outubro de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  fr: { nome: "Anna", casa: "Le Tobsil", data: "Samedi 3 octobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  es: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de octubre de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  it: { nome: "Anna", casa: "Le Tobsil", data: "Sabato 3 ottobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  de: { nome: "Anna", casa: "Le Tobsil", data: "Samstag, 3. Oktober 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
+  en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  pt_BR: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de outubro de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  fr: { nome: "Anna", casa: "Le Tobsil", data: "Samedi 3 octobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  es: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de octubre de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  it: { nome: "Anna", casa: "Le Tobsil", data: "Sabato 3 ottobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  de: { nome: "Anna", casa: "Le Tobsil", data: "Samstag, 3. Oktober 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
 };
 // Ordem das variáveis por template (contrato com o código da Aria).
 const VARIAVEIS = {
@@ -61,8 +62,18 @@ const VARIAVEIS = {
   twk_venue_new_request: ["casa", "data", "hora", "pessoas", "cliente"],
   twk_venue_cancelled: ["casa", "data", "hora", "pessoas", "cliente"],
   twk_venue_eve_briefing: ["casa", "data", "hora", "pessoas", "cliente"],
+  // v3 (30/09/2026): as cinco que faltavam
+  twk_request_in_progress: ["nome", "casa", "data", "hora"],
+  twk_request_unconfirmed: ["nome", "casa", "data", "hora"],
+  twk_venue_request_reminder: ["casa", "data", "hora", "pessoas", "cliente"],
+  twk_eve_briefing_map: ["nome", "casa", "data", "hora", "pessoas", "endereco"],
+  twk_venue_agenda: ["casa", "data", "quantidade", "lista"],
 };
-const BOTAO_URL = { twk_venue_new_request: { url: "https://theworldkeys.com/r/{{1}}", exemplo: "https://theworldkeys.com/r/6DSPZXQ7" } };
+const BOTAO_URL = {
+  twk_venue_new_request: { url: "https://theworldkeys.com/r/{{1}}", exemplo: "https://theworldkeys.com/r/6DSPZXQ7" },
+  twk_venue_request_reminder: { url: "https://theworldkeys.com/r/{{1}}", exemplo: "https://theworldkeys.com/r/6DSPZXQ7" },
+  twk_eve_briefing_map: { url: "https://www.google.com/maps/search/?api=1&query={{1}}", exemplo: "https://www.google.com/maps/search/?api=1&query=Le%20Tobsil%20Marrakesh" },
+};
 
 // ─── Parser do documento ──────────────────────────────────────────────────────
 export function lerDocumento(md) {
@@ -98,6 +109,13 @@ export function lerDocumento(md) {
       for (const m of b[1].matchAll(/(en|pt_BR|fr|es|it|de) "([^"]+)"/g)) atual.botao[m[1]] = m[2];
       continue;
     }
+    // v3: botões de resposta rápida — `Botões de resposta: en "A" + "B" · pt_BR "A" + "B" …`
+    const q = l.match(/^Botões de resposta: (.+)$/);
+    if (q) {
+      atual.respostas = {};
+      for (const m of q[1].matchAll(/(en|pt_BR|fr|es|it|de) "([^"]+)" \+ "([^"]+)"/g)) atual.respostas[m[1]] = [m[2], m[3]];
+      continue;
+    }
     const li = l.match(/^\*\*(en|pt_BR|fr|es|it|de)\*\*/);
     if (li) { idioma = li[1]; continue; }
     const cab = l.match(/^Cabeçalho:\s*(.+)$/);
@@ -128,6 +146,8 @@ export function validar(t, idioma, corpo, rodape) {
   if (/^\{\{\d+\}\}/.test(corpo) || /\{\{\d+\}\}[.!?]?$/.test(corpo)) erros.push("aviso: corpo começa ou termina com variável (a Meta pode recusar)");
   if (t.botao && !t.botao[idioma]) erros.push("sem texto do botão para o idioma");
   if (t.botao && t.botao[idioma] && t.botao[idioma].length > 25) erros.push("texto do botão > 25 caracteres");
+  if (t.respostas && !t.respostas[idioma]) erros.push("sem botões de resposta para o idioma");
+  if (t.respostas && t.respostas[idioma] && t.respostas[idioma].some((x) => !x || x.length > 25)) erros.push("botão de resposta vazio ou > 25 caracteres");
   return erros;
 }
 
@@ -140,9 +160,10 @@ export function montarPayload(t, idioma, corpo, rodape, categoria = "UTILITY") {
     { type: "BODY", text: corpo, example: { body_text: [exemplo] } },
     { type: "FOOTER", text: rodape },
   ];
-  if (t.botao && BOTAO_URL[t.nome]) {
-    components.push({ type: "BUTTONS", buttons: [{ type: "URL", text: t.botao[idioma], url: BOTAO_URL[t.nome].url, example: [BOTAO_URL[t.nome].exemplo] }] });
-  }
+  const buttons = [];
+  if (t.botao && BOTAO_URL[t.nome]) buttons.push({ type: "URL", text: t.botao[idioma], url: BOTAO_URL[t.nome].url, example: [BOTAO_URL[t.nome].exemplo] });
+  if (t.respostas?.[idioma]) for (const texto of t.respostas[idioma]) buttons.push({ type: "QUICK_REPLY", text: texto });
+  if (buttons.length) components.push({ type: "BUTTONS", buttons });
   return { name: t.nome, language: idioma, category: categoria, allow_category_change: false, components };
 }
 
@@ -215,7 +236,7 @@ async function main() {
       const graves = erros.filter((e) => !e.startsWith("aviso:"));
       if (graves.length) comErro++;
       const cab = t.cabecalhos?.[idioma];
-      plano.push({ nome: t.nome, idioma, acao: graves.length ? "ERRO" : "criar", detalhe: erros.join("; ") || `${cab ? "cabeçalho + " : ""}${corpo.length} chars, ${VARIAVEIS[t.nome].length} variáveis${t.botao ? ", botão URL" : ""}` });
+      plano.push({ nome: t.nome, idioma, acao: graves.length ? "ERRO" : "criar", detalhe: erros.join("; ") || `${cab ? "cabeçalho + " : ""}${corpo.length} chars, ${VARIAVEIS[t.nome].length} variáveis${t.botao ? ", botão URL" : ""}${t.respostas ? ", 2 respostas rápidas" : ""}` });
     }
   }
   console.table(plano);
