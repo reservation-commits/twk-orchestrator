@@ -26,7 +26,7 @@ A regra é uma função só (`src/consentRegra.ts`), usada pelos dois remetentes
 
 ## O que falta para começar de vez (em ordem)
 
-1. **Subir a v12** (`aria_agent_whatsapp-2026-09-30-v12.zip`). Ela cria as colunas no boot — subir é a aprovação do `ADD COLUMN`.
+1. **Subir a v13** (`aria_agent_whatsapp-2026-09-30-v13.zip`, inclui a v12). Ela cria as colunas no boot — subir é a aprovação do `ADD COLUMN`.
 2. **Templates na Meta — CONCLUÍDO em 30/09:** 10 mensagens × 6 idiomas aprovadas (64 templates, 0 pendentes, 0 rejeitados). `REMINDERS_LOCALES=en,pt_BR,fr,es,it,de`.
 3. **Variáveis no Easypanel da Aria:** `RESERVATION_EVENTS_ENABLED=true`, `RESERVATION_EVENTS_SECRET=<segredo forte>`, `RESERVATION_EVENTS_DAILY_CAP=25`, e `RESERVATION_EVENT_TEMPLATE_<evento>` só para os templates aprovados.
 4. **Marcar a primeira leva** (canário): 10 a 20 números, pelo arquivo SQL acima.
@@ -65,3 +65,9 @@ REMINDERS_LOCALES=en,pt_BR,fr,es,it,de
 ```
 
 Depois de colar: **Redeploy**. Nos primeiros 2 minutos o vigia fotografa as reservas e só anuncia pedidos das últimas 6 horas — nada do passado é reenviado. Ninguém recebe sem estar marcado no opt-in.
+
+## Como a casa responde (v13, 30/09)
+
+- **Pelo botão da mensagem.** O template "chegou um pedido" leva o botão *Aceitar ou recusar* com o link `https://theworldkeys.com/r/<código>` — a **mesma página** que o e-mail da plataforma abre (botão *Respond to Your Pending Requests*). A página é pública, sem senha, com Aceitar / Recusar / Propor outro horário. Conferido em 30/09 com um pedido pendente real.
+- **Por texto no WhatsApp.** A Aria reconhece o número como estabelecimento marcado e entra no papel de parceiro: agradece, não oferece mesas nem alternativas, e envia o link do pedido certo para a casa confirmar com um toque. Ela **nunca aceita ou recusa pela casa** (reservas são da plataforma).
+- Pendência conhecida da página `/r/` (cadrage de 03/09, ainda aberta no front): mostra e-mail do cliente antes do aceite.
