@@ -1,22 +1,27 @@
 #!/usr/bin/env node
 /**
- * meta-templates.mjs — cria e confere os templates de WhatsApp na conta da TWK pela
+ * meta-templates.mjs — cria, edita e confere os templates de WhatsApp na conta da TWK pela
  * API de gerenciamento da Meta, a partir do documento aprovado pelo fundador:
- *   docs/notificacoes/templates-meta-2026-09-25.md  (fonte única de verdade)
+ *   docs/notificacoes/templates-meta-v2-2026-09-30.md  (fonte única de verdade; v1 = templates-meta-2026-09-25.md)
  *
- *   node orchestrator/agents/notificacao-reserva/meta-templates.mjs            # dry-run: valida e mostra o que criaria
+ *   node orchestrator/agents/notificacao-reserva/meta-templates.mjs            # dry-run: valida e mostra o que criaria/editaria
  *   node .../meta-templates.mjs --list                                          # o que já existe na conta (nome, idioma, status)
  *   node .../meta-templates.mjs --apply [--only nome] [--lang en,pt_BR]         # cria o que falta
+ *   node .../meta-templates.mjs --apply --edit                                  # v2: EDITA os que já existem (mesmo nome+idioma)
  *   node .../meta-templates.mjs --status                                        # status atual dos templates do documento
  *   --categoria MARKETING   quando a Meta já prendeu o nome nessa categoria (ex.: convite de avaliação)
+ *   --doc <caminho>         outro documento (ex.: o v1)
  *
  * Segredos em ~/.twk/meta.env (FORA do OneDrive, nunca no chat):
  *   META_WABA_ID=<ID da conta do WhatsApp Business>
  *   META_TOKEN=<token de usuário do sistema com whatsapp_business_management>
  *
- * Regras: nunca apaga nem edita template existente (nome+idioma já na conta = pula);
- * o de reagendamento só entra com --incluir-reagendamento; todo resultado vai para
- * orchestrator/logs/meta-templates-<data>.jsonl (sem token).
+ * Formato do documento (v2): sob cada `**idioma**`, uma linha opcional `Cabeçalho: …` e o corpo
+ * em bloco de citação (`> …`, várias linhas; `>` vazio = linha em branco).
+ *
+ * Regras: nunca apaga; só edita com --edit explícito (a Meta permite 1 edição/dia e 10/mês por
+ * template aprovado, e devolve o template à revisão); o de reagendamento só entra com
+ * --incluir-reagendamento; todo resultado vai para orchestrator/logs/meta-templates-<data>.jsonl (sem token).
  */
 import { readFileSync, appendFileSync, mkdirSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
@@ -24,21 +29,21 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const DOC = path.join(RAIZ, "docs/notificacoes/templates-meta-2026-09-25.md");
 const GRAPH = process.env.WHATSAPP_GRAPH_VERSION || "v21.0";
 const IDIOMAS = ["en", "pt_BR", "fr", "es", "it", "de"];
 const args = process.argv.slice(2);
 const flag = (f) => args.includes(f);
 const opt = (f) => (args.includes(f) ? args[args.indexOf(f) + 1] : null);
+const DOC = opt("--doc") ? path.resolve(opt("--doc")) : path.join(RAIZ, "docs/notificacoes/templates-meta-v2-2026-09-30.md");
 
-// Amostras por idioma (a Meta exige exemplo para cada variável).
+// Amostras por idioma (a Meta exige exemplo para cada variável). Data como a Aria v15 formata (dia da semana + mês por extenso).
 const AMOSTRA = {
-  en: { nome: "Anna", casa: "Le Tobsil", data: "3 Oct 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee" },
-  pt_BR: { nome: "Anna", casa: "Le Tobsil", data: "3 de out. de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  fr: { nome: "Anna", casa: "Le Tobsil", data: "3 oct. 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  es: { nome: "Anna", casa: "Le Tobsil", data: "3 oct 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  it: { nome: "Anna", casa: "Le Tobsil", data: "3 ott 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
-  de: { nome: "Anna", casa: "Le Tobsil", data: "3. Okt. 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
+  en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee" },
+  pt_BR: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de outubro de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
+  fr: { nome: "Anna", casa: "Le Tobsil", data: "Samedi 3 octobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
+  es: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de octubre de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
+  it: { nome: "Anna", casa: "Le Tobsil", data: "Sabato 3 ottobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
+  de: { nome: "Anna", casa: "Le Tobsil", data: "Samstag, 3. Oktober 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee" },
 };
 // Ordem das variáveis por template (contrato com o código da Aria).
 const VARIAVEIS = {
@@ -64,15 +69,28 @@ export function lerDocumento(md) {
   const linhas = md.split(/\r?\n/);
   const rodape = {};
   for (const l of linhas) {
-    const m = l.match(/^\| (en|pt_BR|fr|es|it|de) \| (.+?) \|$/);
-    if (m) rodape[m[1]] = m[2].trim();
+    // Só linhas de DUAS colunas (idioma | rodapé): a tabela de rótulos do v2 também começa pelo idioma.
+    const m = l.match(/^\| (en|pt_BR|fr|es|it|de) \| ([^|]+?) \|$/);
+    if (m && !rodape[m[1]]) rodape[m[1]] = m[2].trim();
   }
   const templates = [];
-  let atual = null, idioma = null;
+  let atual = null, idioma = null, bloco = null;
+  // Corpo em bloco de citação: várias linhas `> …`; `>` sozinho = linha em branco. Fecha no primeiro
+  // não-`>` (compatível com o v1, que tinha uma linha só).
+  const fecharBloco = () => {
+    if (atual && idioma && bloco) atual.corpos[idioma] = bloco.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    if (bloco) idioma = null;
+    bloco = null;
+  };
   for (let i = 0; i < linhas.length; i++) {
     const l = linhas[i];
+    if (l.startsWith(">")) {
+      if (atual && idioma) (bloco ??= []).push(l.replace(/^>\s?/, "").trimEnd());
+      continue;
+    }
+    fecharBloco();
     const h = l.match(/^## \d+\. `([a-z0-9_]+)`/);
-    if (h) { atual = { nome: h[1], corpos: {}, botao: null }; templates.push(atual); idioma = null; continue; }
+    if (h) { atual = { nome: h[1], corpos: {}, cabecalhos: {}, botao: null }; templates.push(atual); idioma = null; continue; }
     if (!atual) continue;
     const b = l.match(/^Botão: .*Texto do botão por idioma: (.+)$/);
     if (b) {
@@ -82,8 +100,10 @@ export function lerDocumento(md) {
     }
     const li = l.match(/^\*\*(en|pt_BR|fr|es|it|de)\*\*/);
     if (li) { idioma = li[1]; continue; }
-    if (idioma && l.startsWith("> ")) { atual.corpos[idioma] = l.slice(2).trim(); idioma = null; }
+    const cab = l.match(/^Cabeçalho:\s*(.+)$/);
+    if (cab && idioma) { atual.cabecalhos[idioma] = cab[1].trim(); continue; }
   }
+  fecharBloco();
   return { rodape, templates };
 }
 
@@ -95,6 +115,14 @@ export function validar(t, idioma, corpo, rodape) {
   if (!esperadas) erros.push("template fora do contrato (VARIAVEIS)");
   if (distintas.length !== esperadas || distintas.some((v, i) => v !== i + 1)) erros.push(`variáveis ${JSON.stringify(distintas)} ≠ esperado 1..${esperadas}`);
   if (corpo.length > 1024) erros.push(`corpo com ${corpo.length} caracteres (máx. 1024)`);
+  if (/\n{3,}/.test(corpo) || /^\s|\s$/.test(corpo)) erros.push("corpo com linhas em branco seguidas ou espaço nas pontas");
+  if (/\t|[ ]{5,}/.test(corpo)) erros.push("corpo com tabulação ou 5+ espaços seguidos (a Meta recusa)");
+  const cab = t.cabecalhos?.[idioma];
+  if (cab !== undefined) {
+    if (!cab) erros.push("cabeçalho vazio");
+    else if (cab.length > 60) erros.push(`cabeçalho com ${cab.length} caracteres (máx. 60)`);
+    else if (/\{\{|\*|_|~|\n/.test(cab)) erros.push("cabeçalho com variável, formatação ou quebra de linha (a Meta recusa)");
+  }
   if (!rodape) erros.push("sem rodapé para o idioma");
   else if (rodape.length > 60) erros.push(`rodapé com ${rodape.length} caracteres (máx. 60)`);
   if (/^\{\{\d+\}\}/.test(corpo) || /\{\{\d+\}\}[.!?]?$/.test(corpo)) erros.push("aviso: corpo começa ou termina com variável (a Meta pode recusar)");
@@ -106,7 +134,9 @@ export function validar(t, idioma, corpo, rodape) {
 export function montarPayload(t, idioma, corpo, rodape, categoria = "UTILITY") {
   const a = AMOSTRA[idioma];
   const exemplo = (VARIAVEIS[t.nome] || []).map((k) => a[k]);
+  const cab = t.cabecalhos?.[idioma];
   const components = [
+    ...(cab ? [{ type: "HEADER", format: "TEXT", text: cab }] : []),
     { type: "BODY", text: corpo, example: { body_text: [exemplo] } },
     { type: "FOOTER", text: rodape },
   ];
@@ -137,7 +167,7 @@ async function graph(env, metodo, caminho, body) {
 }
 async function listar(env) {
   const out = [];
-  let url = `${env.META_WABA_ID}/message_templates?fields=name,language,status,category,rejected_reason,quality_score&limit=200`;
+  let url = `${env.META_WABA_ID}/message_templates?fields=id,name,language,status,category,rejected_reason,quality_score&limit=200`;
   while (url) {
     const j = await graph(env, "GET", url);
     out.push(...(j.data || []));
@@ -184,26 +214,40 @@ async function main() {
       const erros = validar(t, idioma, corpo, rodape[idioma]);
       const graves = erros.filter((e) => !e.startsWith("aviso:"));
       if (graves.length) comErro++;
-      plano.push({ nome: t.nome, idioma, acao: graves.length ? "ERRO" : "criar", detalhe: erros.join("; ") || `${corpo.length} chars, ${VARIAVEIS[t.nome].length} variáveis${t.botao ? ", botão URL" : ""}` });
+      const cab = t.cabecalhos?.[idioma];
+      plano.push({ nome: t.nome, idioma, acao: graves.length ? "ERRO" : "criar", detalhe: erros.join("; ") || `${cab ? "cabeçalho + " : ""}${corpo.length} chars, ${VARIAVEIS[t.nome].length} variáveis${t.botao ? ", botão URL" : ""}` });
     }
   }
   console.table(plano);
   if (comErro) { console.error(`\n${comErro} item(ns) com erro — corrigir o documento antes de aplicar.`); process.exit(1); }
-  if (!flag("--apply")) { console.log(`\nDry-run: ${plano.filter((p) => p.acao === "criar").length} template(s)/idioma(s) seriam criados. Use --apply para criar.`); return; }
+  const editar = flag("--edit");
+  if (!flag("--apply")) { console.log(`\nDry-run: ${plano.filter((p) => p.acao === "criar").length} template(s)/idioma(s) seriam ${editar ? "criados ou editados" : "criados"}. Use --apply${editar ? " --edit" : ""} para valer.`); return; }
 
   const env = segredos();
   const existentes = await listar(env);
-  let criados = 0, pulados = 0, falhas = 0;
+  let criados = 0, editados = 0, pulados = 0, falhas = 0;
   for (const p of plano) {
     if (p.acao !== "criar") continue;
-    if (existentes.some((x) => x.name === p.nome && x.language === p.idioma)) { pulados++; console.log(`= ${p.nome}/${p.idioma} já existe — mantido como está`); continue; }
+    const existente = existentes.find((x) => x.name === p.nome && x.language === p.idioma);
+    if (existente && !editar) { pulados++; console.log(`= ${p.nome}/${p.idioma} já existe — mantido como está (use --edit para trocar o texto)`); continue; }
     const t = templates.find((x) => x.nome === p.nome);
-    const payload = montarPayload(t, p.idioma, t.corpos[p.idioma], rodape[p.idioma], (opt("--categoria") || "UTILITY").toUpperCase());
+    const categoria = (opt("--categoria") || existente?.category || "UTILITY").toUpperCase();
+    const payload = montarPayload(t, p.idioma, t.corpos[p.idioma], rodape[p.idioma], categoria);
     try {
-      const r = await graph(env, "POST", `${env.META_WABA_ID}/message_templates`, payload);
-      criados++;
-      console.log(`+ ${p.nome}/${p.idioma} criado (id ${r.id}, status ${r.status || "PENDING"})`);
-      registrar({ acao: "criado", nome: p.nome, idioma: p.idioma, id: r.id, status: r.status || "PENDING" });
+      if (existente) {
+        // Edição: POST /{id} só com os componentes — nome, idioma e categoria ficam como estão.
+        // A Meta devolve o template à revisão (PENDING) e limita a 1 edição/dia, 10/mês.
+        if (!["APPROVED", "REJECTED", "PAUSED"].includes(existente.status)) throw new Error(`status ${existente.status} não permite edição`);
+        await graph(env, "POST", `${existente.id}`, { components: payload.components });
+        editados++;
+        console.log(`~ ${p.nome}/${p.idioma} editado (id ${existente.id}) — volta à revisão`);
+        registrar({ acao: "editado", nome: p.nome, idioma: p.idioma, id: existente.id, status_anterior: existente.status });
+      } else {
+        const r = await graph(env, "POST", `${env.META_WABA_ID}/message_templates`, payload);
+        criados++;
+        console.log(`+ ${p.nome}/${p.idioma} criado (id ${r.id}, status ${r.status || "PENDING"})`);
+        registrar({ acao: "criado", nome: p.nome, idioma: p.idioma, id: r.id, status: r.status || "PENDING" });
+      }
     } catch (e) {
       falhas++;
       console.error(`x ${p.nome}/${p.idioma}: ${e.message}`);
@@ -211,7 +255,7 @@ async function main() {
     }
     await new Promise((r) => setTimeout(r, 400)); // gentileza com o rate limit
   }
-  console.log(`\nCriados ${criados} · já existiam ${pulados} · falhas ${falhas}. Aprovação da Meta leva de minutos a 24h — conferir com --status.`);
+  console.log(`\nCriados ${criados} · editados ${editados} · mantidos ${pulados} · falhas ${falhas}. Aprovação da Meta leva de minutos a 24h — conferir com --status.`);
   if (falhas) process.exit(1);
 }
 
