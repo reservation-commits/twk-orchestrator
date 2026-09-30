@@ -92,7 +92,7 @@ async function main() {
   }
 
   // ── banco ──
-  const { Client } = require(path.join(RAIZ, 'Agente Gerenciador do Banco de Dados', 'twk-db-agent', 'node_modules', 'pg'));
+  const { Client } = (() => { for (const p of [["Agente Gerenciador do Banco de Dados","twk-db-agent","node_modules","pg"],["Agente de Suporte e Concierge","node_modules","pg"],["Agente Comercial","service","node_modules","pg"],["orchestrator","command-center","node_modules","pg"]]) { try { return require(path.join(RAIZ, ...p)); } catch {} } throw new Error("biblioteca pg não encontrada em nenhum agente — rode npm install na Aria"); })();
   const c = new Client({ connectionString: urlRo(), ssl: { rejectUnauthorized: false } });
   await c.connect();
   const ro = await c.query('show default_transaction_read_only');

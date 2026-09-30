@@ -28,7 +28,7 @@ const FLUXOS = {
   console.log('FOTO ·', new Date().toISOString(), '\n');
 
   // ---- banco (twk_ro): candidaturas + contas — horários convertidos no SQL, nunca pelo driver
-  const { Client } = require(path.join(RAIZ, 'Agente Comercial', 'service', 'node_modules', 'pg'));
+  const { Client } = (() => { for (const p of [["Agente Gerenciador do Banco de Dados","twk-db-agent","node_modules","pg"],["Agente de Suporte e Concierge","node_modules","pg"],["Agente Comercial","service","node_modules","pg"],["orchestrator","command-center","node_modules","pg"]]) { try { return require(path.join(RAIZ, ...p)); } catch {} } throw new Error("biblioteca pg não encontrada em nenhum agente — rode npm install na Aria"); })();
   const c = new Client({ connectionString: envDe('Agente Gerenciador do Banco de Dados/twk-db-agent/.env.readonly.local').DATABASE_URL_RO, ssl: { rejectUnauthorized: false } });
   await c.connect();
   const cand = await c.query(`select restaurant_name, full_name, status,
