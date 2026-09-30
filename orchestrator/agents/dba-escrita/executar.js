@@ -127,7 +127,9 @@ async function main() {
   } else if (!aprovacao || aprovacao.length < 10) falha('--apply exige --aprovacao com a frase/registro do fundador (mín. 10 caracteres) — ou --autonomo para escrita reversível');
   const tetoAutonomo = Number(envDba.TWK_AUTONOMIA_MAX_LINHAS || 200);
 
-  const { Client } = require(path.join(RAIZ, 'Agente Comercial', 'service', 'node_modules', 'pg'));
+  // A biblioteca pg vem de qualquer agente que a tenha instalada (a do CLAVIS sumiu na limpeza de 24/09;
+  // a porta ficou muda até 30/09 — mesmo resolvedor da Sentinela).
+  const { Client } = (() => { for (const p of [['Agente de Suporte e Concierge', 'node_modules', 'pg'], ['Agente Gerenciador do Banco de Dados', 'twk-db-agent', 'node_modules', 'pg'], ['Agente Comercial', 'service', 'node_modules', 'pg'], ['orchestrator', 'command-center', 'node_modules', 'pg']]) { try { return require(path.join(RAIZ, ...p)); } catch {} } throw new Error('biblioteca pg não encontrada em nenhum agente — rode npm install na Aria'); })();
   const c = new Client({ connectionString: url, ssl: { rejectUnauthorized: false } });
   await c.connect();
 

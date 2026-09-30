@@ -107,7 +107,8 @@ async function main() {
   try { for (const l of fs.readFileSync(path.join(TWK_DIR, 'dba.env'), 'utf8').split(/[\r\n]+/)) { const m = l.match(/^TWK_DBA_URL=(.+)$/); if (m) url = m[1].trim(); } } catch {}
   if (!url) { console.error('credencial twk_dba ausente em ~/.twk/dba.env'); process.exit(3); }
 
-  const { Client } = require(path.join(RAIZ, 'Agente Comercial', 'service', 'node_modules', 'pg'));
+  // Mesmo resolvedor do executar.js: a pg vem de qualquer agente que a tenha instalada.
+  const { Client } = (() => { for (const p of [['Agente de Suporte e Concierge', 'node_modules', 'pg'], ['Agente Gerenciador do Banco de Dados', 'twk-db-agent', 'node_modules', 'pg'], ['Agente Comercial', 'service', 'node_modules', 'pg'], ['orchestrator', 'command-center', 'node_modules', 'pg']]) { try { return require(path.join(RAIZ, ...p)); } catch {} } throw new Error('biblioteca pg não encontrada em nenhum agente — rode npm install na Aria'); })();
   const c = new Client({ connectionString: url, ssl: { rejectUnauthorized: false } });
   await c.connect();
   const feitos = [];

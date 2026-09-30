@@ -47,9 +47,11 @@ function envDe(rel) {
     if (!ok || !a.e164) { fora.push(`${r.name} (${r.city}): telefone ${a.qualidade}`); continue; }
     const idioma = IDIOMA[r.country] || 'en';
     const motivo = `${r.p90} pedidos/90d · ${a.qualidade === 'ENVIAVEL' ? 'celular' : 'fixo'} do catálogo`;
-    linhas.push(`  ('${a.e164}', true, 'estabelecimento', '${String(r.restaurant_id).replace(/'/g, "''")}', 'fundador', '${motivo.replace(/'/g, "''")}', '${idioma}', NOW())  -- ${r.name.replace(/[\r\n]/g, ' ')} · ${r.city}`);
+    // A vírgula entre as linhas vai ANTES do comentário "--": depois dele, vira parte do comentário e o SQL quebra
+    // (aconteceu na leva 1 de 30/09 — corrigido antes de rodar).
+    linhas.push({ e164: a.e164, tupla: `('${a.e164}', true, 'estabelecimento', '${String(r.restaurant_id).replace(/'/g, "''")}', 'fundador', '${motivo.replace(/'/g, "''")}', '${idioma}', NOW())`, comentario: `${r.name.replace(/[\r\n]/g, ' ')} · ${r.city}` });
   }
-  const telefones = linhas.map((l) => l.match(/\('(\+\d+)'/)[1]);
+  const telefones = linhas.map((l) => l.e164);
   const sql = [
     `-- Opt-in de ESTABELECIMENTOS para receber pedidos de mesa no WhatsApp (gerado ${new Date().toISOString().slice(0, 10)}).`,
     '-- Revise a lista: apague as linhas que não quiser. Depois:',
@@ -60,7 +62,7 @@ function envDe(rel) {
     'BEGIN;',
     'INSERT INTO public.aria_contact_consent (phone, whatsapp_reservas, tipo, restaurant_id, source, motivo, idioma, updated_at)',
     'VALUES',
-    linhas.join(',\n'),
+    linhas.map((l, i) => `  ${l.tupla}${i < linhas.length - 1 ? ',' : ''}  -- ${l.comentario}`).join('\n'),
     'ON CONFLICT (phone) DO UPDATE',
     '  SET whatsapp_reservas = EXCLUDED.whatsapp_reservas,',
     '      tipo              = EXCLUDED.tipo,',
