@@ -59,3 +59,7 @@ node orchestrator/agents/notificacao-reserva/meta-templates.mjs --status        
 ```
 
 Regras da Meta: template aprovado aceita 1 edição por dia e 10 por mês; a edição devolve o template a PENDING e, enquanto pendente, aquele idioma não envia. Por isso: preview aprovado pelo fundador antes de aplicar. O v1 continua legível com `--doc docs/notificacoes/templates-meta-2026-09-25.md`.
+
+## v3 e a fase de estabelecimentos (01/10/2026)
+
+`--status` lê o documento v2 por padrão e **não mostra os 30 da v3**: use `--status --doc docs/notificacoes/templates-meta-v3-novas-2026-09-30.md`. `--list` mostra a conta inteira, inclusive as 4 sobras fora de documento (`avaliacao_experiencia_6h`, `twk_reschedule_proposed`, `twk_reservation_declined` v1, `hello_world`). Estado medido, achados e checklist do Easypanel em `docs/notificacoes/fase-estabelecimentos-v18-2026-10-01.md`. Atenção: `twk_request_unconfirmed` foi aprovado como MARKETING em de/it/fr — reescrever a frase final e reenviar com nome novo nesses idiomas.
