@@ -80,7 +80,7 @@ function envDe(rel) {
   const sql = [
     `-- Opt-in de CLIENTES — canário de ${linhas.length} (gerado ${HOJE}). Decisão do fundador: canário pequeno antes da caixa no formulário.`,
     '-- Revise a lista: apague as linhas que não quiser. Depois:',
-    '--   node orchestrator/agents/dba-escrita/executar.js orchestrator/state/ativacao/optin-clientes-canario.sql --apply --autonomo',
+    '--   node orchestrator/agents/dba-escrita/executar.js --sql orchestrator/state/ativacao/optin-clientes-canario.sql --apply --autonomo',
     `-- backup: public.aria_contact_consent where phone in (${telefones.map((t) => `'${t}'`).join(', ') || "''"})`,
     `-- Fora: ${Object.entries(fora).map(([k, v]) => `${k}=${v}`).join(', ') || 'nenhum'} (de ${rows.length} pedidos pendentes vivos com telefone)`,
     'BEGIN;',

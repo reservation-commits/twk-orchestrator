@@ -65,7 +65,7 @@ function envDe(rel) {
   const sql = [
     `-- Opt-in de ESTABELECIMENTOS para receber pedidos de mesa no WhatsApp (gerado ${new Date().toISOString().slice(0, 10)}).`,
     '-- Revise a lista: apague as linhas que não quiser. Depois:',
-    '--   node orchestrator/agents/dba-escrita/executar.js orchestrator/state/ativacao/optin-estabelecimentos.sql --apply --autonomo',
+    '--   node orchestrator/agents/dba-escrita/executar.js --sql orchestrator/state/ativacao/optin-estabelecimentos.sql --apply --autonomo',
     `-- backup: public.aria_contact_consent where phone in (${telefones.map((t) => `'${t}'`).join(', ') || "''"})`,
     '--',
     `-- Fora da lista (telefone inválido/ambíguo): ${fora.length ? fora.join('; ') : 'nenhum'}`,
