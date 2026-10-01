@@ -17,6 +17,9 @@ const RAIZ = path.resolve(__dirname, '..', '..', '..', '..');
 const args = process.argv.slice(2);
 const N = args.includes('--n') ? Number(args[args.indexOf('--n') + 1]) : 40;
 const SO_MOVEL = args.includes('--so-movel');
+// --so-novas (01/10/2026, leva 2): deixa de fora as casas que JÁ têm linha de opt-in — o UPSERT
+// delas reescreveria origem/motivo/updated_at sem necessidade e misturaria as levas no audit.
+const SO_NOVAS = args.includes('--so-novas');
 const OUT = path.join(RAIZ, 'orchestrator', 'state', 'ativacao', 'optin-estabelecimentos.sql');
 const IDIOMA = { Portugal: 'pt', Brazil: 'pt', France: 'fr', Belgium: 'fr', Morocco: 'fr', Tunisia: 'fr', Monaco: 'fr', Italy: 'it', Spain: 'es', Argentina: 'es', Colombia: 'es', Mexico: 'es', Chile: 'es', Germany: 'de', Austria: 'de' };
 function envDe(rel) {
@@ -37,10 +40,17 @@ function envDe(rel) {
       FROM db_restaurants r JOIN reservations v ON v.restaurant_id = r.restaurant_id
      WHERE r.published AND NOT EXISTS (SELECT 1 FROM v_listing_consent_atual o WHERE o.restaurant_id = r.restaurant_id)
      GROUP BY 1,2,3,4,5 ORDER BY p90 DESC LIMIT $1`, [N]);
+  let jaMarcadas = new Set();
+  if (SO_NOVAS) {
+    const r2 = await c.query(`SELECT DISTINCT restaurant_id FROM aria_contact_consent WHERE tipo = 'estabelecimento' AND restaurant_id IS NOT NULL`);
+    jaMarcadas = new Set(r2.rows.map((x) => String(x.restaurant_id)));
+  }
   await c.end();
   const linhas = [];
   const fora = [];
+  let puladas = 0;
   for (const r of rows) {
+    if (SO_NOVAS && jaMarcadas.has(String(r.restaurant_id))) { puladas++; continue; }
     let a = avaliarTelefone(r.tel);
     if (a.qualidade === 'AMBIGUO_BR') { const d = desambiguar(r.tel, r.country); if (d) a = { ...a, ...d, motivo: 'desambiguado pelo país do catálogo' }; }
     const ok = a.qualidade === 'ENVIAVEL' || (!SO_MOVEL && a.qualidade === 'ENVIAVEL_NAO_MOVEL');
@@ -76,5 +86,6 @@ function envDe(rel) {
   ].join('\n');
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, sql, 'utf8');
-  console.log(`casas incluídas: ${linhas.length} · fora: ${fora.length} → ${path.relative(RAIZ, OUT)}`);
+  console.log(`casas incluídas: ${linhas.length} · fora: ${fora.length}${SO_NOVAS ? ` · já marcadas (puladas): ${puladas}` : ''} → ${path.relative(RAIZ, OUT)}`);
+  for (const l of linhas) console.log(`  + ${l.comentario}`);
 })().catch((e) => { console.error('ERRO', e.message); process.exit(1); });
