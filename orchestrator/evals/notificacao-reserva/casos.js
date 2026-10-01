@@ -104,7 +104,13 @@ casos.push(
   casoTelefone('celular FR bem formatado envia', '+33612345678', 'ENVIAVEL', true),
   casoTelefone('fixo NÃO envia (não existe WhatsApp em linha fixa)', '+551133334444', 'ENVIAVEL_NAO_MOVEL', false),
   casoTelefone('BR sem código do país NÃO envia (+21 seria o Egito)', '21967841007', 'CORRIGIVEL_BR', false),
-  casoTelefone('duas leituras válidas NÃO envia (entregaria a um estranho)', '+6532345678', 'AMBIGUO_BR', false),
+  // v18 (2026-10-01): sem o "+", duas leituras válidas continuam em quarentena. COM o "+", o país está
+  // declarado e a dúvida brasileira não existe: La Cucina (+33 9…) e Sri Trat (+66 2…) ficaram 57 vezes
+  // em "ambíguo" porque o avaliador descartava o sinal.
+  casoTelefone('duas leituras válidas SEM "+" NÃO envia (entregaria a um estranho)', '6532345678', 'AMBIGUO_BR', false),
+  casoTelefone('v18: o "+" declara o país — +33 9… é França, não DDD 33 (La Cucina)', '+33987654321', 'ENVIAVEL_NAO_MOVEL', false),
+  casoTelefone('v18: o "+" declara o país — +66 2… é Bangkok, não DDD 66 (Sri Trat)', '+6620123456', 'ENVIAVEL_NAO_MOVEL', false),
+  casoTelefone('v18: "+" na frente de celular BR sem o 55 cai em inválido, não no Egito', '+21967841007', 'INVALIDO', false),
   casoTelefone('prefixo de tronco nacional NÃO envia', '021967841007', 'INVALIDO', false),
   casoTelefone('comprimento impossível NÃO envia', '1234567890123456789', 'INVALIDO', false),
   casoTelefone('vazio NÃO envia', '', 'VAZIO', false),
@@ -113,7 +119,7 @@ casos.push(
 casos.push({
   nome: 'nenhum veredito além de ENVIAVEL abre a porta',
   run: () => {
-    const amostras = ['+551133334444', '21967841007', '+6532345678', '021967841007', '12345', '', 'abc'];
+    const amostras = ['+551133334444', '21967841007', '6532345678', '+33987654321', '+21967841007', '021967841007', '12345', '', 'abc'];
     const vazaram = amostras.filter((n) => {
       const a = phoneQuality.avaliarTelefone(n);
       return a.qualidade !== 'ENVIAVEL' && phoneQuality.podeReceberWhatsApp(a);
@@ -128,7 +134,7 @@ casos.push({
   nome: 'quem não pode receber não expõe destino (e164 nulo); fixo carrega e164 só para a casa',
   run: () => {
     const falhas = [];
-    for (const n of ['+551133334444', '21967841007', '+6532345678', '12345']) {
+    for (const n of ['+551133334444', '21967841007', '6532345678', '+21967841007', '12345']) {
       const a = phoneQuality.avaliarTelefone(n);
       const podeTerE164 = a.qualidade === 'ENVIAVEL' || a.qualidade === 'ENVIAVEL_NAO_MOVEL';
       if (!podeTerE164 && a.e164 !== null) falhas.push(`${a.qualidade} expôs e164`);
