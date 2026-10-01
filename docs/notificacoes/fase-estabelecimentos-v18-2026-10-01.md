@@ -57,6 +57,31 @@ SELECT d.destinatario, d.template, d.locale, d.status, count(*), max(d.status_at
   FROM aria_delivery_status d WHERE d.sent_at >= now() - interval '7 days' GROUP BY 1,2,3,4 ORDER BY 1,2,3,4;
 ```
 
+## Pós-deploy da v18 e a v19 (01/10, 13:40–14:30 UTC)
+
+A v18 subiu às 13:40 UTC. Na primeira varredura (13:42) La Cucina e Sri Trat receberam o lembrete — a Cloud API aceitou — e **3 segundos depois a Meta devolveu `failed` com "Message undeliverable" (código 131026)**: os dois números não têm conta de WhatsApp (um VoIP francês, um fixo de Bangkok). Até a v17 isso teria ficado como "enviado". Os 6 envios de 30/09 saíram antes do rastreio: não se sabe se chegaram.
+
+Decisão do fundador (01/10): **lista de bloqueio**. "À medida que as indisponibilidades forem surgindo, marcar para não enviar. Até os que não querem receber via WhatsApp que responderem para parar entram nessa lista."
+
+**v19** (`2026-10-01-v19-lista-de-bloqueio-undeliverable`, 223 testes):
+
+| Onde | O quê |
+|---|---|
+| `aria_contact_consent` | colunas `whatsapp_indisponivel`, `indisponivel_motivo`, `indisponivel_em` (migration no boot). A lista de bloqueio = `outbound_opted_out` (PARAR) **ou** `whatsapp_indisponivel`. |
+| `webhook.ts` | o status de falha traz o código da Meta. |
+| `deliveryStatus.ts` | `motivoBloqueio`: só o **131026** bloqueia o número. Janela de 24 h, limite de marketing, template reprovado e experimento da Meta são falhas do envio, não do número. |
+| `index.ts` | `failed` + 131026 → `marcarWhatsAppIndisponivel(+recipient)`, linha `bloqueado_indisponivel` em `aria_outbound_log` com a reserva e o template de origem. Quem **nos escreve** sai do bloqueio por indisponibilidade (tem WhatsApp); o PARAR nunca é limpo por isso. |
+| `consentRegra.ts`, `db.ts`, `venueEvents.ts` | os três portões (cliente por evento, cliente por tempo, casa) recusam número bloqueado com motivo `indisponivel`. |
+| painel `/api/reminders` | `indisponivel_count`. |
+
+Para tirar um número da lista à mão (porta única, reversível): `UPDATE aria_contact_consent SET whatsapp_indisponivel=false, indisponivel_motivo=NULL, indisponivel_em=NULL WHERE phone='+…'` — ou trocar o `phone` por um celular com WhatsApp. Consulta da lista:
+
+```sql
+SELECT c.phone, c.tipo, d.name, c.outbound_opted_out AS parar, c.whatsapp_indisponivel AS sem_whatsapp, c.indisponivel_motivo, c.indisponivel_em
+  FROM aria_contact_consent c LEFT JOIN db_restaurants d ON d.restaurant_id = c.restaurant_id
+ WHERE c.outbound_opted_out OR c.whatsapp_indisponivel ORDER BY c.updated_at DESC;
+```
+
 ## Lacunas declaradas
 
 - Não vi as variáveis de produção (sem acesso ao Easypanel): o `REMINDERS_LOCALES=en` é inferido dos 6 envios em inglês.
