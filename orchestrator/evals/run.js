@@ -16,6 +16,10 @@ const SUITES = {
   'notificacao-reserva': './notificacao-reserva/casos.js',
   'dba-escrita': './dba-escrita/casos.js',
   'central': './central/casos.js',
+  'politicas': './politicas/casos.js',
+  'medidor-autonomia': './medidor-autonomia/casos.js',
+  'juizes': './juizes/casos.js',
+  'auditor': './auditor/casos.js',
 };
 const alvo = process.argv[2];
 const nomes = alvo ? [alvo] : Object.keys(SUITES);

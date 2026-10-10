@@ -1,0 +1,99 @@
+{
+  "id": "guardiao", "grupo": "Agentes", "titulo": "Guardião da Reserva", "sub": "pedidos sem resposta", "tipo": "agente", "agenteId": "guardiao", "cor": "s7",
+  "kicker": "Guardião da Reserva · o dono do pedido que ficou parado",
+  "h1": "Guardião da Reserva",
+  "lede": "Quando um cliente pede uma mesa e o restaurante não responde, alguém precisa cuidar desse pedido até o fim. O Guardião olha todos os pedidos parados, todos os dias, e decide o próximo passo de cada um: cobrar a casa por e-mail, colocar na fila de telefone ou avisar o cliente com honestidade. Ele propõe; o envio só acontece com aprovação registrada.",
+  "resumo": [
+    { "ref": "guardiao_cobranca.pendentes", "t": "Pedidos parados" },
+    { "ref": "guardiao_cobranca.mesa_em_3_dias", "t": "Mesa em 3 dias" },
+    { "ref": "guardiao_cobranca.casas", "t": "Casas devendo" }
+  ],
+  "agente": {
+    "codinome": "Guardião", "papel": "Pedidos sem resposta",
+    "resumo": "Acompanha cada pedido de mesa sem resposta e propõe o próximo passo, da cobrança à casa ao aviso ao cliente.",
+    "funcoes": [
+      { "nome": "Varredura diária dos pedidos parados", "descricao_leiga": "Lê todos os pedidos vivos (com a data ainda por vir e sem resposta) e classifica cada um pela urgência: há quanto tempo foi feito e quanto falta para a mesa.", "como_roda": "diária às 9h", "arquivo": "orchestrator/agents/guardiao-reserva/run.js" },
+      { "nome": "Degrau 1 — cobrar a casa por e-mail", "descricao_leiga": "Prepara um e-mail ao restaurante com o pedido e o botão de responder. O lote só é enviado depois de aprovado.", "como_roda": "proposta diária · envio com aprovação", "arquivo": "orchestrator/agents/guardiao-reserva/engine.js" },
+      { "nome": "Degrau 2 — fila de WhatsApp e telefone", "descricao_leiga": "Para as casas que não respondem ao e-mail, monta a lista de quem deve ser procurado por WhatsApp ou telefone, com o motivo e o idioma.", "como_roda": "proposta diária", "arquivo": "orchestrator/agents/guardiao-reserva/engine.js" },
+      { "nome": "Degrau 4 — aviso honesto ao cliente", "descricao_leiga": "Quando a mesa está perto e a resposta não veio, prepara o aviso ao cliente. Quem fala com o cliente é sempre a Aria.", "como_roda": "proposta diária · envio pela Aria", "arquivo": "orchestrator/agents/guardiao-reserva/engine.js" },
+      { "nome": "Respeito a quem pediu para sair", "descricao_leiga": "Antes de qualquer contato, consulta a lista de restaurantes que pediram para não ser contatados. Casa despublicada ou que pediu para sair nunca é procurada.", "como_roda": "a cada decisão", "arquivo": "orchestrator/state/listing-consent.jsonl" },
+      { "nome": "Critério de casa que confirma", "descricao_leiga": "Mantém a régua de quais casas realmente confirmam pedidos (pelo menos 4 pedidos em 90 dias e metade aceitos). Só essas podem ser oferecidas como alternativa a um cliente.", "como_roda": "a cada varredura", "arquivo": "orchestrator/agents/guardiao-reserva/engine.js" },
+      { "nome": "Relatório do dia", "descricao_leiga": "Grava o que decidiu para cada pedido e um relatório legível, para o MAESTRO e para a auditoria.", "como_roda": "a cada varredura", "arquivo": "orchestrator/agents/guardiao-reserva/state/" }
+    ],
+    "ferramentas": [
+      { "nome": "Motor de decisão sem IA", "tipo": "regra fixa", "descricao": "As decisões saem de regras determinísticas, as mesmas para todos os pedidos. Não há modelo de linguagem escolhendo quem contatar." },
+      { "nome": "Bateria de 49 cenários", "tipo": "avaliação", "descricao": "Antes de qualquer mudança, o motor é conferido em 49 situações de risco (casa que pediu para sair, pedido vencido, horário impróprio)." },
+      { "nome": "Leitura do banco", "tipo": "integração", "descricao": "Lê reservas e catálogo com a credencial somente leitura." },
+      { "nome": "Modo canário", "tipo": "trava", "descricao": "Começa por poucas cidades e com teto de e-mails por execução, antes de valer para todas." }
+    ],
+    "dados": [
+      { "onde": "Decisões do dia", "o_que": "Um arquivo por dia com o pedido, a casa, o degrau, a ação proposta, o canal e o motivo." },
+      { "onde": "Propostas de envio", "o_que": "A prévia completa de cada lote, que o fundador aprova ou nega na Central." },
+      { "onde": "Trilha de auditoria", "o_que": "Uma linha por execução, com as contagens." }
+    ],
+    "autonomia": {
+      "teto": "Avalia todos os pedidos e prepara as propostas sozinho. Não envia nada por conta própria.",
+      "exige_aprovacao": [
+        "Todo envio de e-mail a restaurante (aprovado por lote)",
+        "Todo aviso a cliente (enviado pela Aria)",
+        "Ampliar as cidades do canário"
+      ]
+    },
+    "sinais_de_vida": [
+      { "nome": "Rodou hoje", "como_ver": "Existe o relatório do dia e a linha de execução na trilha de auditoria." },
+      { "nome": "A tarefa agendada terminou bem", "como_ver": "A Sentinela lê o código de saída da tarefa no Windows, não só a existência do arquivo." }
+    ],
+    "lacunas": [
+      "Hoje o Guardião roda em ensaio: decide e registra, mas nenhum lote novo de cobrança foi aprovado desde setembro.",
+      "A cobrança automática ao restaurante nunca existiu na plataforma: nenhum pedido parado tem registro de cobrança enviada.",
+      "As decisões são geradas na máquina do Orquestrador; na Central hospedada só aparecem depois de sincronizadas."
+    ]
+  },
+  "blocos": [
+    {
+      "titulo": "Os pedidos parados",
+      "texto": "Clientes que pediram mesa para hoje em diante e ainda não tiveram resposta do restaurante.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "guardiao_cobranca.pendentes", "t": "Pedidos sem resposta", "destaque": true, "e": "Vivos neste momento." },
+          { "ref": "guardiao_cobranca.mesa_em_3_dias", "t": "Com mesa em até 3 dias", "e": "Os que precisam de ação agora." },
+          { "ref": "guardiao_cobranca.casas", "t": "Casas devendo resposta", "e": "Restaurantes diferentes com pedido parado." },
+          { "ref": "guardiao_cobranca.sem_cobranca", "t": "Sem nenhuma cobrança registrada", "e": "Pedidos em que a plataforma nunca cobrou a casa. É a lacuna que o Guardião existe para fechar." }
+        ] },
+        { "tipo": "dupla", "itens": [
+          { "tipo": "ranking", "id": "eco_pendencias_idade", "titulo": "Há quanto tempo esperam", "texto": "Os pedidos parados, pela idade.", "cor": "s7", "rotuloTitulo": "Idade do pedido", "valorTitulo": "Pedidos" },
+          { "tipo": "ranking", "id": "guardiao_casas_pendentes", "titulo": "Casas com mais pedidos parados", "texto": "Onde uma única conversa resolve vários clientes.", "cor": "s7", "rotuloTitulo": "Casa", "valorTitulo": "Pedidos" }
+        ] }
+      ]
+    },
+    {
+      "titulo": "O que o Guardião decidiu na última varredura",
+      "texto": "Para cada pedido parado, uma decisão. Nada disso é enviado sem aprovação.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "guardiao_execucao.avaliadas", "t": "Pedidos avaliados", "e": "Na varredura mais recente." },
+          { "ref": "guardiao_execucao.cobrar_casa", "t": "Propostas de cobrar a casa", "e": "Por e-mail, WhatsApp ou telefone." },
+          { "ref": "guardiao_execucao.avisar_cliente", "t": "Propostas de avisar o cliente", "e": "A mesa está perto e a resposta não veio." },
+          { "ref": "guardiao_execucao.dia", "t": "Última varredura", "f": "dia", "e": "A varredura roda todos os dias às 9h." }
+        ] },
+        { "tipo": "ranking", "id": "guardiao_decisoes", "titulo": "As decisões, por tipo", "texto": "O próximo passo proposto para cada pedido.", "cor": "s7", "rotuloTitulo": "Próximo passo", "valorTitulo": "Pedidos" }
+      ]
+    },
+    {
+      "titulo": "O que se perde sem resposta",
+      "texto": "Pedido que passa da data sem resposta é marcado como expirado. É a medida do problema que o Guardião ataca.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "guardiao_expiradas.expiradas_30d", "t": "Pedidos que expiraram em 30 dias", "e": "Passaram da data sem que a casa respondesse." },
+          { "ref": "guardiao_expiradas.expiradas_total", "t": "Expirados desde o início", "e": "Todo o histórico da plataforma." },
+          { "ref": "eco_casas_confirmam.confirmam", "t": "Casas que confirmam", "e": "As que respondem de verdade: pelo menos 4 pedidos em 90 dias e metade aceitos." },
+          { "ref": "eco_funil_30.taxa_resposta", "t": "Pedidos com resposta, 30 dias", "f": "pct", "e": "A casa disse sim ou não." }
+        ] }
+      ]
+    },
+    { "titulo": "O que o Guardião faz", "itens": [ { "tipo": "funcoes" } ] },
+    { "titulo": "As ferramentas", "itens": [ { "tipo": "ferramentas" } ] },
+    { "titulo": "O que pode fazer sozinho", "itens": [ { "tipo": "autonomia" } ] },
+    { "titulo": "O que ainda não está redondo", "itens": [ { "tipo": "lacunas" } ] }
+  ]
+}

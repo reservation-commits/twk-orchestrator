@@ -21,10 +21,11 @@ const { kpisFor } = require('./kpis.js');
 const metrics = require('./metrics.js');
 const sentinels = require('./sentinels.js');
 const analyst = require('./analyst.js');
+const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da frota (somente leitura)
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.4.0-durabilidade-20260819';
+const BUILD = '4.6.0-guardiao-na-central-20261010';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -47,7 +48,11 @@ const AGENTS = [
   { id: 'editorial', nome: 'QUILL', env: 'QUILL', url: process.env.AGENT_QUILL_URL || '' },
   { id: 'financeiro', nome: 'ATLAS', env: 'ATLAS', url: process.env.AGENT_ATLAS_URL || '' },
   { id: 'dba', nome: 'DB ARCHITECT', env: 'DBA', url: process.env.AGENT_DBA_URL || '' },
+  // v4.6: o Guardião da Reserva é agente de primeira classe da Central, mas é LOCAL — não tem URL.
+  // Saúde e KPIs vêm dos arquivos de estado dele (guardiao.js), nunca de HTTP.
+  { id: 'guardiao', nome: 'GUARDIÃO', env: 'GUARDIAO', url: '', local: true },
 ];
+const guardiao = require('./guardiao.js');
 
 // ---------- util ----------
 function timingSafeEq(a, b) {
@@ -128,6 +133,8 @@ async function probe(base, p) {
   } finally { clearTimeout(to); }
 }
 async function pollAgent(a) {
+  // Agente local (Guardião): "vivo" = varredura recente e não pausado, lido dos arquivos de estado.
+  if (a.local) { try { healthCache.set(a.id, guardiao.saude({ stateDir: STATE_DIR })); } catch (e) { healthCache.set(a.id, { configured: true, ok: false, local: true, error: String((e && e.message) || e).slice(0, 120) }); } return; }
   if (!a.url) { healthCache.set(a.id, { configured: false }); return; }
   const started = Date.now();
   const custom = process.env[`AGENT_${a.env}_HEALTH_PATH`];
@@ -233,6 +240,20 @@ function handleIngest(req, res) {
         fs.writeFileSync(path.join(LOGS_DIR, `audit-${payload.log_date}.jsonl`), payload.log_jsonl, 'utf8');
       }
       if (typeof payload.conhecimento_md === 'string') fs.writeFileSync(path.join(STATE_DIR, 'conhecimento.md'), payload.conhecimento_md, 'utf8');
+      // Panorama: métricas que só nascem na máquina do Orquestrador (porta, avaliações, sentinela, Guardião, convites)
+      if (payload.plataforma_local && typeof payload.plataforma_local === 'object' && payload.plataforma_local.metricas) {
+        fs.writeFileSync(path.join(STATE_DIR, 'plataforma-local.json'), JSON.stringify(payload.plataforma_local), 'utf8');
+      }
+      // Guardião da Reserva (v4.6): a última varredura, compacta (contagens, lote, fila, clientes a avisar,
+      // livro-razão e relatório) — calculada na máquina do Orquestrador por `node guardiao.js --exportar`.
+      if (payload.guardiao && typeof payload.guardiao === 'object' && payload.guardiao.snapshot && payload.guardiao.snapshot.status === 'ok') {
+        fs.writeFileSync(path.join(STATE_DIR, guardiao.ARQ_SINC), JSON.stringify(payload.guardiao), 'utf8');
+      }
+      // Casas de teste (fundador, 2026-09-06): a lista mora no repositório do Orquestrador; aqui é a cópia
+      // que regencia/db.js usa para tirar as casas de teste de TODA contagem (v4.5.2)
+      if (payload.excluidos_teste && typeof payload.excluidos_teste === 'object' && Array.isArray(payload.excluidos_teste.restaurantes)) {
+        fs.writeFileSync(path.join(STATE_DIR, 'excluidos-teste.json'), JSON.stringify(payload.excluidos_teste, null, 2), 'utf8');
+      }
       if (payload.missoes && typeof payload.missoes === 'object') {
         const mdir = path.join(STATE_DIR, 'missoes');
         fs.mkdirSync(mdir, { recursive: true });
@@ -304,7 +325,7 @@ const server = http.createServer(async (req, res) => {
         return { seed: SEED_DIR ? 'on' : 'off (dev)', conversas_salvas: conversas, aviso: semVolumeProvavel ? undefined : 'monte um VOLUME persistente em /app/state no EasyPanel, senão as conversas somem no redeploy' };
       })(),
       auth: CENTER_TOKEN ? 'token' : (IS_PROD ? 'FAIL-CLOSED (sem token em producao)' : 'dev-aberto'),
-      agents_configurados: AGENTS.filter((a) => a.url).length,
+      agents_configurados: AGENTS.filter((a) => a.url || (a.local && (healthCache.get(a.id) || {}).configured)).length,
       brain: brain.brainEnabled() ? `on (${brain.MODEL_STANDARD} / complexo: ${brain.MODEL_COMPLEX})` : 'off',
       conversa: chat.enabled() ? 'on' : 'off (mensagens caem na fila do Orquestrador local)',
       ferramentas_frota: process.env.MAESTRO_TOOLS !== 'off' ? 'on (leitura: kpis, api dos agentes, estado, especialista)' : 'off',
@@ -457,6 +478,12 @@ const server = http.createServer(async (req, res) => {
       try { return json(res, 200, { file: f, content: fs.readFileSync(path.join(STATE_DIR, 'missoes', f), 'utf8') }); }
       catch { return json(res, 404, { error: 'missao nao encontrada' }); }
     }
+    // Guardião (v4.6): o relatório legível da última varredura (markdown) — página do agente e ler_estado
+    if (u.pathname === '/api/guardiao/relatorio') {
+      const r = guardiao.relatorio({ stateDir: STATE_DIR });
+      if (!r.content) return json(res, 404, { error: 'relatório do Guardião indisponível nesta Central', hint: 'rode push-state.ps1 na máquina do Orquestrador' });
+      return json(res, 200, r);
+    }
     if (u.pathname === '/api/kpis') {
       // KPIs REAIS dos agentes. Busca server-to-server (os agentes têm CORS fechado
       // e as credenciais nunca podem chegar ao navegador). Cache de 60s no módulo.
@@ -599,15 +626,30 @@ const server = http.createServer(async (req, res) => {
       });
       return;
     }
+    // ---------- Panorama: plataforma de leitura de todo o sistema (somente leitura, com cache) ----------
+    if (u.pathname === '/api/plataforma/registro') {
+      try { return json(res, 200, plataforma.registro()); }
+      catch (e) { return json(res, 500, { error: 'plataforma: ' + String((e && e.message) || e).slice(0, 200) }); }
+    }
+    if (u.pathname === '/api/plataforma') {
+      try { return json(res, 200, await plataforma.snapshot({ stateDir: STATE_DIR, agents: AGENTS, kpisFor, fresco: u.searchParams.get('fresco') === '1' })); }
+      catch (e) { return json(res, 500, { error: 'plataforma: ' + String((e && e.message) || e).slice(0, 200) }); }
+    }
     if (u.pathname === '/api/agents') {
       return json(res, 200, {
-        agents: AGENTS.map((a) => ({ id: a.id, nome: a.nome, configured: !!a.url, health: healthCache.get(a.id) || null })),
+        // agente local (Guardião): "configurado" = o estado dele é legível aqui (repositório ou sincronizado)
+        agents: AGENTS.map((a) => ({ id: a.id, nome: a.nome, local: !!a.local, configured: a.local ? !!(healthCache.get(a.id) || {}).configured : !!a.url, health: healthCache.get(a.id) || null })),
       });
     }
     return json(res, 404, { error: 'rota desconhecida' });
   }
+  // Panorama: /plataforma abre a página da plataforma (não o cockpit, que é o fallback de SPA).
+  if (u.pathname === '/plataforma' || u.pathname === '/plataforma/') { req.url = '/plataforma/index.html'; }
   serveStatic(req, res);
 });
+
+// Panorama: a primeira leitura leva ~20 s; começa já na subida para a página abrir com números.
+plataforma.manterQuente({ stateDir: STATE_DIR, agents: AGENTS, kpisFor });
 
 server.listen(PORT, () => {
   console.log(`[maestro] Command Center em :${PORT} · state=${STATE_DIR} · auth=${CENTER_TOKEN ? 'token' : (IS_PROD ? 'FAIL-CLOSED' : 'dev')}`);

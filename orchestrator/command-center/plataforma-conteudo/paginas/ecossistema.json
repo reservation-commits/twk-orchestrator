@@ -1,0 +1,435 @@
+{
+ "id": "ecossistema",
+ "grupo": "Início",
+ "titulo": "O negócio em números",
+ "sub": "restaurantes, clientes, pedidos",
+ "tipo": "pagina",
+ "kicker": "Ecossistema The World Keys",
+ "h1": "O negócio em números",
+ "lede": "A plataforma liga três grupos: restaurantes selecionados, clientes que querem uma mesa e os pedidos entre os dois. Aqui está o tamanho de cada um e, principalmente, o caminho de um pedido até virar mesa confirmada.",
+ "blocos": [
+  {
+   "titulo": "Os restaurantes",
+   "texto": "O catálogo é o conjunto de casas que a plataforma conhece. Só as publicadas aparecem no site.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_catalogo.publicados",
+       "t": "Publicados no site",
+       "destaque": true,
+       "e": "Casas com página no ar."
+      },
+      {
+       "ref": "eco_catalogo.total",
+       "t": "No catálogo",
+       "e": "Todas as casas cadastradas, publicadas ou não."
+      },
+      {
+       "ref": "eco_catalogo.paises",
+       "t": "Países",
+       "e": "Países com pelo menos uma casa publicada."
+      },
+      {
+       "ref": "eco_catalogo.cidades",
+       "t": "Cidades",
+       "e": "Cidades com pelo menos uma casa publicada."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "eco_top_paises",
+       "titulo": "Onde estão as casas — por país",
+       "texto": "Os 15 países com mais restaurantes publicados.",
+       "cor": "s1",
+       "rotuloTitulo": "País",
+       "valorTitulo": "Casas"
+      },
+      {
+       "tipo": "ranking",
+       "id": "eco_top_cidades",
+       "titulo": "Onde estão as casas — por cidade",
+       "texto": "As 15 cidades com mais restaurantes publicados.",
+       "cor": "s1",
+       "rotuloTitulo": "Cidade",
+       "valorTitulo": "Casas"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Os clientes",
+   "texto": "Quem cria conta para pedir mesa. Os números são contagens; nenhum dado pessoal aparece nesta plataforma.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_clientes.total",
+       "t": "Clientes cadastrados",
+       "destaque": true,
+       "e": "Contas ativas."
+      },
+      {
+       "ref": "eco_clientes.novos_30d",
+       "t": "Novos em 30 dias",
+       "e": "Contas criadas no último mês."
+      },
+      {
+       "ref": "eco_clientes.novos_7d",
+       "t": "Novos em 7 dias",
+       "e": "Contas criadas na última semana."
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "eco_clientes_mes",
+     "titulo": "Novos clientes por mês",
+     "texto": "Quantas contas foram criadas em cada mês.",
+     "x": "periodo",
+     "series": [
+      {
+       "campo": "valor",
+       "rotulo": "Novos clientes",
+       "cor": "s3"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Os pedidos de mesa",
+   "texto": "Um cliente escolhe a casa, a data e a hora, e envia um pedido. O restaurante aceita, recusa ou não responde. O gráfico mostra quantos pedidos chegaram e quantos foram aceitos.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_total_pedidos.pedidos",
+       "t": "Pedidos desde o início",
+       "e": "Todos os pedidos já feitos pela plataforma."
+      },
+      {
+       "ref": "eco_total_pedidos.aceitos",
+       "t": "Mesas confirmadas desde o início",
+       "e": "Pedidos que o restaurante aceitou."
+      },
+      {
+       "ref": "eco_funil_365.pedidos",
+       "t": "Pedidos em 12 meses",
+       "e": "O volume do último ano."
+      },
+      {
+       "ref": "eco_funil_365.aceitos",
+       "t": "Mesas confirmadas em 12 meses",
+       "e": "As que viraram jantar."
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "eco_pedidos_mes",
+     "titulo": "Pedidos e mesas confirmadas, por mês",
+     "texto": "A distância entre as duas linhas é o que se perde: pedidos que não viraram mesa.",
+     "x": "periodo",
+     "series": [
+      {
+       "campo": "pedidos",
+       "rotulo": "Pedidos",
+       "cor": "s1"
+      },
+      {
+       "campo": "aceitos",
+       "rotulo": "Aceitos",
+       "cor": "s3"
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "eco_pedidos_dia",
+     "titulo": "Os últimos 30 dias, dia a dia",
+     "texto": "O movimento recente.",
+     "x": "periodo",
+     "series": [
+      {
+       "campo": "pedidos",
+       "rotulo": "Pedidos",
+       "cor": "s1"
+      },
+      {
+       "campo": "aceitos",
+       "rotulo": "Aceitos",
+       "cor": "s3"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "O caminho de um pedido",
+   "texto": "De cada grupo de pedidos, quantos foram aceitos, recusados, cancelados pelo cliente ou ficaram sem resposta. Pedido sem resposta é o maior desperdício da plataforma: um cliente quis jantar e ninguém respondeu.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_funil_30.taxa_aceite",
+       "t": "Aceite em 30 dias",
+       "f": "pct",
+       "destaque": true,
+       "e": "Pedidos aceitos a cada 100."
+      },
+      {
+       "ref": "eco_funil_90.taxa_aceite",
+       "t": "Aceite em 90 dias",
+       "f": "pct",
+       "e": "O mesmo número, numa janela maior."
+      },
+      {
+       "ref": "eco_funil_365.taxa_aceite",
+       "t": "Aceite em 12 meses",
+       "f": "pct",
+       "e": "A referência do último ano."
+      },
+      {
+       "ref": "eco_funil_30.taxa_resposta",
+       "t": "Pedidos com resposta, 30 dias",
+       "f": "pct",
+       "e": "A casa disse sim ou não. O resto ficou no silêncio."
+      }
+     ]
+    },
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_tempo_resposta.mediana_horas",
+       "t": "Tempo típico de resposta da casa",
+       "f": "horas",
+       "e": "Entre o pedido e o sim ou o não do restaurante, quando ele responde."
+      },
+      {
+       "ref": "eco_tempo_resposta.respostas",
+       "t": "Respostas medidas",
+       "e": "A medição começou em 30/09/2026; a amostra ainda é pequena."
+      },
+      {
+       "ref": "eco_funil_30.sem_resposta",
+       "t": "Pedidos que venceram sem resposta",
+       "u": "em 30 dias",
+       "e": "A data passou e a casa não disse nada."
+      },
+      {
+       "ref": "eco_funil_30.aguardando",
+       "t": "Ainda aguardando",
+       "u": "dos últimos 30 dias",
+       "e": "Pedidos recentes em que ainda dá tempo de responder."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "funil",
+       "id": "eco_funil_30",
+       "titulo": "O que aconteceu com os pedidos — 30 dias",
+       "texto": "Cada barra é um destino possível do pedido.",
+       "passos": [
+        {
+         "campo": "pedidos",
+         "rotulo": "Pedidos feitos",
+         "cor": "s1"
+        },
+        {
+         "campo": "aceitos",
+         "rotulo": "Aceitos pela casa",
+         "nota": "viraram mesa",
+         "cor": "s3"
+        },
+        {
+         "campo": "recusados",
+         "rotulo": "Recusados pela casa",
+         "cor": "s2"
+        },
+        {
+         "campo": "cancelados",
+         "rotulo": "Cancelados pelo cliente",
+         "cor": "s4"
+        },
+        {
+         "campo": "aguardando",
+         "rotulo": "Aguardando resposta",
+         "nota": "ainda dá tempo",
+         "cor": "s7"
+        },
+        {
+         "campo": "sem_resposta",
+         "rotulo": "Ficaram sem resposta",
+         "nota": "a data passou",
+         "cor": "s5"
+        }
+       ]
+      },
+      {
+       "tipo": "funil",
+       "id": "eco_funil_365",
+       "titulo": "O que aconteceu com os pedidos — 12 meses",
+       "texto": "A mesma leitura para o ano inteiro.",
+       "passos": [
+        {
+         "campo": "pedidos",
+         "rotulo": "Pedidos feitos",
+         "cor": "s1"
+        },
+        {
+         "campo": "aceitos",
+         "rotulo": "Aceitos pela casa",
+         "nota": "viraram mesa",
+         "cor": "s3"
+        },
+        {
+         "campo": "recusados",
+         "rotulo": "Recusados pela casa",
+         "cor": "s2"
+        },
+        {
+         "campo": "cancelados",
+         "rotulo": "Cancelados pelo cliente",
+         "cor": "s4"
+        },
+        {
+         "campo": "aguardando",
+         "rotulo": "Aguardando resposta",
+         "nota": "ainda dá tempo",
+         "cor": "s7"
+        },
+        {
+         "campo": "sem_resposta",
+         "rotulo": "Ficaram sem resposta",
+         "nota": "a data passou",
+         "cor": "s5"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Onde está a procura",
+   "texto": "As casas e as cidades que mais receberam pedidos nos últimos 90 dias, com quantos foram aceitos.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_casas_confirmam.casas_com_pedido",
+       "t": "Casas que receberam pedido",
+       "u": "em 90 dias",
+       "e": "Restaurantes diferentes procurados por clientes."
+      },
+      {
+       "ref": "eco_casas_confirmam.confirmam",
+       "t": "Casas que confirmam",
+       "destaque": true,
+       "e": "Receberam pelo menos 4 pedidos e aceitaram a metade ou mais. São as únicas que a Aria pode oferecer como alternativa."
+      },
+      {
+       "ref": "eco_casas_confirmam.nunca_aceitaram",
+       "t": "Casas que não aceitaram nenhum",
+       "e": "Receberam pedido em 90 dias e não aceitaram nenhum."
+      },
+      {
+       "ref": "eco_contas_casas.codigos_verificados",
+       "t": "Donos que confirmaram a página",
+       "e": "Responsáveis que validaram por código que a casa é deles."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "eco_top_casas",
+       "titulo": "Casas mais pedidas — 90 dias",
+       "texto": "Pedidos recebidos e, ao lado, quantos foram aceitos.",
+       "cor": "s1",
+       "rotuloTitulo": "Casa",
+       "valorTitulo": "Pedidos",
+       "extra": {
+        "campo": "aceitos",
+        "rotulo": "aceitos",
+        "f": "int"
+       }
+      },
+      {
+       "tipo": "ranking",
+       "id": "eco_cidades_demanda",
+       "titulo": "Cidades mais pedidas — 90 dias",
+       "texto": "Onde os clientes querem jantar.",
+       "cor": "s1",
+       "rotuloTitulo": "Cidade",
+       "valorTitulo": "Pedidos",
+       "extra": {
+        "campo": "aceitos",
+        "rotulo": "aceitos",
+        "f": "int"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Pedidos esperando resposta agora",
+   "texto": "Pedidos para hoje em diante em que o restaurante ainda não disse sim nem não. Quanto mais antigo, maior a chance de o cliente desistir.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_pendencias.vivas",
+       "t": "Esperando resposta",
+       "destaque": true,
+       "e": "Pedidos vivos neste momento."
+      },
+      {
+       "ref": "eco_pendencias.casas",
+       "t": "Casas devendo resposta",
+       "e": "Restaurantes com pelo menos um pedido parado."
+      },
+      {
+       "ref": "eco_pendencias.mesa_hoje",
+       "t": "Com mesa para hoje",
+       "e": "Se a casa não responder hoje, o cliente fica sem saber."
+      },
+      {
+       "ref": "eco_pendencias.mesa_7d",
+       "t": "Com mesa nos próximos 7 dias",
+       "e": "A janela em que ainda vale cobrar a casa."
+      }
+     ]
+    },
+    {
+     "tipo": "ranking",
+     "id": "eco_pendencias_idade",
+     "titulo": "Há quanto tempo esperam",
+     "texto": "Os pedidos vivos, pela idade do pedido.",
+     "cor": "s7",
+     "rotuloTitulo": "Idade do pedido",
+     "valorTitulo": "Pedidos"
+    }
+   ]
+  }
+ ]
+}

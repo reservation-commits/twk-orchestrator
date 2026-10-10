@@ -131,6 +131,14 @@ async function main() {
   }
   await c.end();
 
+  // ── WhatsApp: o que a Aria está configurada para enviar × o que a Meta tem aprovado (v20) ──
+  try {
+    const t = await require('./templates-meta').conferirTemplatesMeta();
+    for (const a of t.achados) achados.push({ fonte: 'sentinela-silencio', autonomia: 'requer_aprovacao_humana', dono: 'fundador', tarefa: null, ...a });
+    lacunas.push(...t.lacunas);
+    ok.push(...t.ok);
+  } catch (e) { lacunas.push(`templates × Meta: checagem falhou (${String(e.message).slice(0, 80)}) — NÃO rodou`); }
+
   // ── compromissos com data vencida (ADR-015: promessa ao cliente é compromisso) ──
   try {
     const linhas = fs.readFileSync(path.join(RAIZ, 'orchestrator', 'state', 'compromissos.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean);
@@ -140,7 +148,7 @@ async function main() {
   } catch { lacunas.push('compromissos.jsonl ilegível'); }
 
   const criticos = achados.filter((a) => a.severidade === 'critica').length;
-  if (process.argv.includes('--json')) { console.log(JSON.stringify({ achados, lacunas, ok })); process.exit(criticos ? 1 : 0); }
+  if (process.argv.includes('--json')) { console.log(JSON.stringify({ achados, lacunas, ok })); process.exitCode = criticos ? 1 : 0; return; }
 
   console.log(`\nSentinela de Silêncio · ${hoje()} · ${achados.length} achado(s), ${criticos} crítico(s) · ${ok.length} fonte(s) viva(s) · ${lacunas.length} lacuna(s)`);
   for (const a of achados) console.log(`  [${a.severidade}] ${a.titulo} — ${a.evidencia}\n      → ${a.acao_proposta}`);
@@ -158,7 +166,8 @@ async function main() {
     fs.writeFileSync(f, JSON.stringify(relato, null, 1), 'utf8');
     console.log(`\nrelato: ${path.relative(RAIZ, f)}`);
   }
-  process.exit(criticos ? 1 : 0);
+  // exitCode, não exit(): a checagem da Meta usa fetch e sair com sockets fechando derruba o Node no Windows.
+  process.exitCode = criticos ? 1 : 0;
 }
 
 main().catch((e) => { console.error('FALHA:', e.message); process.exit(2); });

@@ -23,8 +23,10 @@ const AGENTS = {
   editorial: { env: 'QUILL' },
   financeiro: { env: 'ATLAS' },
   dba: { env: 'DBA' },
+  guardiao: { env: 'GUARDIAO', local: true }, // v4.6: agente local (arquivos), sem API web
 };
-const baseUrl = (id) => process.env[`AGENT_${AGENTS[id].env}_URL`] || '';
+const baseUrl = (id) => (AGENTS[id] && AGENTS[id].local ? '' : process.env[`AGENT_${AGENTS[id].env}_URL`] || '');
+const agentRef = (id) => ({ id, env: AGENTS[id].env, url: baseUrl(id), local: !!AGENTS[id].local });
 
 // Autenticação por agente — o MESMO mapeamento do proxy de KPIs (kpis.js).
 function authHeaders(id) {
@@ -108,7 +110,7 @@ const TOOL_DEFS = [
   },
   {
     name: 'ler_estado',
-    description: 'Lê o estado real do Orquestrador: "conhecimento" (memória da operação), "tasks" (tarefas), "missoes" (lista de relatórios), "missao:<arquivo>.md" (um relatório), "frota" (registro de capacidades e endpoints dos agentes).',
+    description: 'Lê o estado real do Orquestrador: "conhecimento" (memória da operação), "tasks" (tarefas), "missoes" (lista de relatórios), "missao:<arquivo>.md" (um relatório), "frota" (registro de capacidades e endpoints dos agentes), "guardiao" (o relatório da última varredura do Guardião da Reserva: decisões, lote de e-mails, fila e clientes a avisar).',
     input_schema: {
       type: 'object',
       properties: { arquivo: { type: 'string' } },
@@ -157,20 +159,24 @@ function lerEstado(S, arquivo) {
   if (arquivo === 'conhecimento') return safe(path.join(S, 'conhecimento.md')) || '(conhecimento.md vazio ou ausente)';
   if (arquivo === 'tasks') return safe(path.join(S, 'tasks.jsonl'), 30_000) || '(tasks.jsonl vazio ou ausente)';
   if (arquivo === 'frota') return safe(path.join(S, 'frota.md')) || '(state/frota.md ausente — registro de capacidades não sincronizado)';
+  if (arquivo === 'guardiao') {
+    const r = require('./guardiao.js').relatorio({ stateDir: S });
+    return r.content ? `(relatório do Guardião da Reserva · varredura ${r.dia} · fonte: ${r.fonte})\n\n${r.content}` : '(relatório do Guardião indisponível nesta Central — rode push-state.ps1 na máquina do Orquestrador)';
+  }
   if (arquivo === 'missoes') {
     try { return fs.readdirSync(path.join(S, 'missoes')).filter((f) => f.endsWith('.md')).join('\n') || '(nenhum relatório)'; }
     catch { return '(nenhum relatório)'; }
   }
   const m = String(arquivo).match(/^missao:([A-Za-z0-9._-]+\.md)$/);
   if (m) return safe(path.join(S, 'missoes', m[1])) || `(relatório ${m[1]} não encontrado)`;
-  return `arquivo inválido: "${arquivo}" — use conhecimento | tasks | missoes | missao:<arquivo>.md | frota`;
+  return `arquivo inválido: "${arquivo}" — use conhecimento | tasks | missoes | missao:<arquivo>.md | frota | guardiao`;
 }
 
 // sub-consulta a um especialista (agente-como-ferramenta; sem ferramentas próprias, 1 nível)
 async function consultarEspecialista(S, Anthropic, model, agente, pergunta) {
   const persona = PERSONAS[agente];
   if (!persona) return { erro: `agente desconhecido: ${agente}` };
-  const kpis = await kpisFor({ id: agente, env: AGENTS[agente].env, url: baseUrl(agente) }).catch(() => null);
+  const kpis = await kpisFor(agentRef(agente)).catch(() => null);
   const client = new Anthropic();
   const resp = await client.messages.create({
     model,
@@ -196,12 +202,13 @@ async function executar(S, deps, name, input) {
   try {
     if (name === 'frota_kpis') {
       const ids = input && input.agente ? [input.agente] : Object.keys(AGENTS);
-      const pares = await Promise.all(ids.map(async (id) => [id, await kpisFor({ id, env: AGENTS[id].env, url: baseUrl(id) })]));
+      const pares = await Promise.all(ids.map(async (id) => [id, await kpisFor(agentRef(id))]));
       return { resultado: JSON.stringify(Object.fromEntries(pares)), resumo: `KPIs · ${ids.join(', ')}` };
     }
     if (name === 'consultar_api_agente') {
       const { agente, caminho } = input || {};
       if (!AGENTS[agente]) return { resultado: JSON.stringify({ erro: `agente inválido: ${agente}` }), resumo: `API · agente inválido` };
+      if (AGENTS[agente].local) return { resultado: JSON.stringify({ erro: `o agente ${agente} é local (sem API web): use frota_kpis(agente="${agente}") para os números e ler_estado("${agente}") para o relatório da última varredura` }), resumo: `API · ${agente} é local` };
       if (!/^\//.test(String(caminho || ''))) return { resultado: JSON.stringify({ erro: 'caminho deve começar com /' }), resumo: `API · caminho inválido` };
       if (CAMINHOS_PROIBIDOS.some((p) => String(caminho).includes(p))) {
         return { resultado: JSON.stringify({ erro: `caminho bloqueado (${caminho}) — grava dados; ferramentas são somente leitura` }), resumo: `API · bloqueado ${caminho}` };

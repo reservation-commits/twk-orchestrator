@@ -1,0 +1,136 @@
+{
+  "id": "comercial", "grupo": "Agentes", "titulo": "CLAVIS", "sub": "comercial", "tipo": "agente", "agenteId": "comercial", "cor": "s1",
+  "kicker": "CLAVIS · comercial",
+  "h1": "CLAVIS",
+  "lede": "O CLAVIS é o analista comercial. Ele descobre quais restaurantes recebem pedidos de mesa sem ter conta na plataforma, prepara o convite para que assumam a própria página e mede quantos chegaram até o fim. O objetivo é um só: que a casa crie conta e passe a responder aos clientes. Nada é enviado sem aprovação de uma pessoa.",
+  "resumo": [
+    { "ref": "convites_resumo.envios", "t": "Convites enviados" },
+    { "ref": "clavis_funil.verificaram", "t": "Donos confirmados" },
+    { "ref": "clavis_funil.criaram_conta", "t": "Contas criadas" }
+  ],
+  "agente": {
+    "codinome": "CLAVIS", "papel": "Comercial",
+    "resumo": "Encontra os restaurantes certos, prepara o convite e mede o caminho até a casa criar conta.",
+    "funcoes": [
+      { "nome": "Análise e plano do funil", "descricao_leiga": "Responde perguntas sobre a operação comercial, faz o raio-X do funil e propõe um plano. Um segundo leitor confere os números antes da resposta.", "como_roda": "sob demanda", "arquivo": "service/src/brain/agent.ts" },
+      { "nome": "Prospecção", "descricao_leiga": "Escolhe as casas que mais importam — as que receberam 5 ou mais pedidos em 90 dias — e monta o e-mail de convite e até dois lembretes. Tudo fica à espera de aprovação.", "como_roda": "sob demanda", "arquivo": "service/src/outreach/tierA.ts · composer.ts · cadence.ts" },
+      { "nome": "Leitura das respostas", "descricao_leiga": "Classifica a resposta de um restaurante (interessado, dúvida, não quer) e rascunha a réplica.", "como_roda": "a cada resposta recebida", "arquivo": "service/src/outreach/inbox.ts" },
+      { "nome": "Cobrança de pedidos parados em parceiras", "descricao_leiga": "Encontra casas parceiras com pedido sem resposta há mais de 6 horas e propõe um lembrete.", "como_roda": "sob demanda", "arquivo": "service/src/fulfillment.ts" },
+      { "nome": "Vigia, resumo do dia e aprendizado", "descricao_leiga": "Compara o funil com a linha de base, resume o dia e mede se cada contato virou conta.", "como_roda": "na partida e sob demanda", "arquivo": "service/src/proactive.ts · briefing.ts · learn.ts" },
+      { "nome": "Lista de quem pediu para sair e portão de aprovação", "descricao_leiga": "Bloqueia o contato com quem pediu para sair. Toda ação — enviar, agendar, gravar — só acontece depois de aprovada.", "como_roda": "a cada ação", "arquivo": "service/src/outreach/suppression.ts · actions/executors.ts" },
+      { "nome": "Chave Girada: o extrato de resposta", "descricao_leiga": "Um e-mail para cada casa com os números dela — quantos clientes pediram mesa, quantos ficaram sem resposta — e o convite para criar conta.", "como_roda": "manual, com aprovação", "arquivo": "orchestrator/agents/chave-girada/" },
+      { "nome": "Operação Lagos", "descricao_leiga": "Uma sequência de três e-mails, um kit de visita presencial e um painel para as casas de Lagos, a cidade com mais procura.", "como_roda": "manual, com aprovação", "arquivo": "orchestrator/agents/chave-girada/sequencia-lagos.js" },
+      { "nome": "Ativação de contas", "descricao_leiga": "Fichas e mensagens prontas para as 40 casas mais quentes e a conferência de quem completou o cadastro.", "como_roda": "manual", "arquivo": "orchestrator/agents/chave-girada/ativacao/" }
+    ],
+    "ferramentas": [
+      { "nome": "Consulta ao banco", "tipo": "ferramenta do modelo", "descricao": "Leitura apenas, até 200 linhas, com dados pessoais ocultados." },
+      { "nome": "Dossiê da casa", "tipo": "ferramenta do modelo", "descricao": "A memória de cada restaurante: procura, contatos feitos, respostas, pedido de saída." },
+      { "nome": "Buscas e visitas do site", "tipo": "ferramenta do modelo", "descricao": "Lê o Search Console e o Analytics." },
+      { "nome": "Propor ação", "tipo": "ferramenta do modelo", "descricao": "Cria uma proposta no portão de aprovação: gravar no banco, enviar e-mail ou WhatsApp, agendar um fluxo." },
+      { "nome": "Painel do CLAVIS", "tipo": "painel", "descricao": "46 rotas: retrato do funil, perguntas, análise, plano, lotes, ações, resumo do dia, dossiês." },
+      { "nome": "Envio de e-mail pelo Gmail (via n8n)", "tipo": "fluxo", "descricao": "O único canal de e-mail. Os cliques nos links são rastreados." },
+      { "nome": "Modelo de IA", "tipo": "integração", "descricao": "Um modelo principal para análise e um menor para tarefas de apoio." }
+    ],
+    "dados": [
+      { "onde": "Livro dos envios", "o_que": "O registro único de cada convite que saiu de verdade: casa, campanha, data e a aprovação que o liberou." },
+      { "onde": "Estado próprio", "o_que": "Lotes preparados, ações propostas, lista de quem pediu para sair, caixa de respostas." },
+      { "onde": "Banco da plataforma", "o_que": "Só leitura: restaurantes, pedidos, contas de restaurante, convites e códigos de confirmação. O CLAVIS não é dono de nenhuma tabela." }
+    ],
+    "autonomia": {
+      "teto": "Lê e analisa sozinho. Prepara lotes, rascunhos e lembretes sozinho, com registro — e eles ficam no portão. Nunca envia nem grava por conta própria.",
+      "exige_aprovacao": [
+        "Enviar e-mail ou WhatsApp",
+        "Agendar ou disparar um fluxo de envio",
+        "Gravar no banco",
+        "Bloquear um contato com base em classificação da IA",
+        "Sair do modo de teste"
+      ]
+    },
+    "sinais_de_vida": [
+      { "nome": "O serviço responde", "como_ver": "A página de saúde informa as capacidades ligadas e o orçamento." },
+      { "nome": "Último convite enviado", "como_ver": "A data mais recente no livro dos envios." },
+      { "nome": "Os testes passam", "como_ver": "24 testes aprovados na última rodada da Porta de Qualidade." }
+    ],
+    "lacunas": [
+      "O resultado até aqui: 210 convites para 159 casas renderam 16 casas com clique, 5 donos confirmados e nenhuma conta criada. O caminho trava entre confirmar a página e criar a conta.",
+      "O serviço do CLAVIS está em modo de teste e nunca enviou a um restaurante; os convites reais saíram por rotinas manuais do Orquestrador, e estão parados desde 17/09/2026.",
+      "Aberturas de e-mail e respostas dos restaurantes não são medidas: as respostas vivem na caixa de e-mail.",
+      "O banco registra os convites só até 01/09 (148 casas); os 44 envios posteriores existem apenas no livro dos envios.",
+      "O serviço do CLAVIS consulta a própria lista de quem pediu para sair, não a lista central; as rotinas do Orquestrador consultam a central.",
+      "A cobrança de pedidos parados em parceiras não descarta os pedidos já vencidos.",
+      "A Sentinela de Silêncio não vigia o Comercial: se ele parar, nada avisa.",
+      "A Central ainda não lê o painel do CLAVIS: falta a credencial de leitura."
+    ]
+  },
+  "blocos": [
+    {
+      "titulo": "O funil até a conta",
+      "texto": "O caminho de um restaurante: é convidado, clica, confirma que a página é dele e cria a conta. Cada etapa perde gente; a última é a que conta.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "convites_resumo.envios", "t": "Convites enviados", "e": "E-mails que saíram de verdade, com aprovação." },
+          { "ref": "convites_resumo.casas", "t": "Casas convidadas", "e": "Restaurantes diferentes que receberam convite." },
+          { "ref": "clavis_funil.verificaram", "t": "Donos que confirmaram a página", "e": "Validaram por código que a casa é deles." },
+          { "ref": "clavis_funil.criaram_conta", "t": "Contas criadas", "destaque": true, "e": "O fim do funil. É o número que a operação comercial persegue." }
+        ] },
+        { "tipo": "dupla", "itens": [
+          { "tipo": "funil", "id": "clavis_funil", "titulo": "De convidada a conta criada", "texto": "Casas diferentes em cada etapa, segundo o banco da plataforma.", "passos": [
+            { "campo": "contatadas", "rotulo": "Convidadas", "nota": "registradas no banco", "cor": "s1" },
+            { "campo": "clicaram", "rotulo": "Clicaram no convite", "cor": "s1" },
+            { "campo": "pediram_codigo", "rotulo": "Pediram o código da página", "cor": "s1" },
+            { "campo": "verificaram", "rotulo": "Confirmaram que são donos", "cor": "s1" },
+            { "campo": "criaram_conta", "rotulo": "Criaram conta", "cor": "s3" }
+          ] },
+          { "tipo": "ranking", "id": "convites_campanhas", "titulo": "Convites por campanha", "texto": "O que saiu em cada frente.", "cor": "s1", "rotuloTitulo": "Campanha", "valorTitulo": "Convites" }
+        ] },
+        { "tipo": "nota", "s": "atencao", "titulo": "Onde o caminho trava.", "texto": "Donos confirmaram a página e nenhum criou conta. A investigação de 30/09 mostrou que o passo seguinte do site não cria a conta do restaurante; a correção depende do desenvolvedor da plataforma." }
+      ]
+    },
+    {
+      "titulo": "O ritmo dos convites",
+      "texto": "Quando os convites saíram.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "convites_resumo.ultimo", "t": "Último convite", "f": "dia", "e": "Depois dessa data não houve novo envio." },
+          { "ref": "clavis_campanhas.cliques", "t": "Cliques nos convites", "e": "Toques nos links rastreados." },
+          { "ref": "clavis_campanhas.devolvidos", "t": "E-mails devolvidos", "e": "Endereços que não existem mais." },
+          { "ref": "clavis_saida.casas", "t": "Casas que pediram para sair", "e": "Não podem ser contatadas por ninguém." }
+        ] },
+        { "tipo": "linha", "id": "convites_mes", "titulo": "Convites enviados por mês", "texto": "Do livro único dos envios.", "x": "periodo", "series": [ { "campo": "envios", "rotulo": "Convites", "cor": "s1" } ] }
+      ]
+    },
+    {
+      "titulo": "Quem vale a pena convidar",
+      "texto": "O CLAVIS trabalha a partir da procura real: as casas que os clientes já estão pedindo.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "clavis_resposta.casas_com_pedido", "t": "Casas com pedido em 90 dias", "e": "Restaurantes procurados por clientes." },
+          { "ref": "clavis_resposta.casas_prioritarias", "t": "Casas prioritárias", "destaque": true, "e": "Receberam 5 ou mais pedidos: é onde uma conta nova resolve mais clientes." },
+          { "ref": "clavis_resposta.casas_que_respondem", "t": "Casas que respondem", "e": "Aceitaram ou recusaram ao menos um pedido." },
+          { "ref": "eco_casas_confirmam.confirmam", "t": "Casas que confirmam", "e": "Pelo menos 4 pedidos e metade aceitos." }
+        ] },
+        { "tipo": "dupla", "itens": [
+          { "tipo": "ranking", "id": "eco_top_casas", "titulo": "Casas mais pedidas — 90 dias", "texto": "Pedidos e, ao lado, quantos foram aceitos.", "cor": "s1", "rotuloTitulo": "Casa", "valorTitulo": "Pedidos", "extra": { "campo": "aceitos", "rotulo": "aceitos", "f": "int" } },
+          { "tipo": "ranking", "id": "clavis_negociacao", "titulo": "Situação comercial das casas", "texto": "Como cada casa está classificada na relação com a plataforma.", "cor": "s1", "rotuloTitulo": "Situação", "valorTitulo": "Casas" }
+        ] }
+      ]
+    },
+    {
+      "titulo": "Parceiras e as outras",
+      "texto": "A diferença que um acordo faz: de cada 100 pedidos, quantos são aceitos numa casa parceira e numa casa sem acordo.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "clavis_parceiros.aceite_parceiras", "t": "Aceite nas parceiras", "f": "pct", "destaque": true, "e": "Pedidos aceitos a cada 100, em 30 dias." },
+          { "ref": "clavis_parceiros.aceite_outras", "t": "Aceite nas outras casas", "f": "pct", "e": "O mesmo número, sem acordo." },
+          { "ref": "clavis_parceiros.pedidos_parceiras", "t": "Pedidos a parceiras", "u": "em 30 dias", "e": "Volume que foi para casas com acordo." },
+          { "ref": "clavis_parceiros.pedidos_outras", "t": "Pedidos às outras", "u": "em 30 dias", "e": "Volume que foi para casas sem acordo." }
+        ] }
+      ]
+    },
+    { "titulo": "O que o CLAVIS faz", "itens": [ { "tipo": "funcoes" } ] },
+    { "titulo": "As ferramentas", "itens": [ { "tipo": "ferramentas" } ] },
+    { "titulo": "O que pode fazer sozinho", "itens": [ { "tipo": "autonomia" } ] },
+    { "titulo": "Onde guarda os dados", "itens": [ { "tipo": "dados" } ] },
+    { "titulo": "O que ainda não está redondo", "itens": [ { "tipo": "lacunas" } ] }
+  ]
+}

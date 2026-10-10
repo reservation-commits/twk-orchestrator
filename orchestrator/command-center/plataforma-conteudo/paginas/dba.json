@@ -1,0 +1,125 @@
+{
+  "id": "dba", "grupo": "Agentes", "titulo": "DB Architect", "sub": "banco de dados", "tipo": "agente", "agenteId": "dba", "cor": "s2",
+  "kicker": "TWK DB Architect · o zelador do banco",
+  "h1": "DB Architect",
+  "lede": "Tudo o que a plataforma sabe mora num banco de dados: os restaurantes, as reservas, os clientes. O DB Architect cuida para que cada ficha de restaurante esteja completa e correta — foto, horário, telefone, endereço — e é o guardião de qualquer alteração: nada muda no banco sem cópia de segurança e sem registro.",
+  "resumo": [
+    { "ref": "eco_catalogo.publicados", "t": "Casas no ar" },
+    { "ref": "dba_fila_foto.aguardando_foto", "t": "Esperando foto" },
+    { "ref": "dba_auditoria_resumo.total", "t": "Alterações auditadas" }
+  ],
+  "agente": {
+    "codinome": "DB Architect", "papel": "Banco de dados",
+    "resumo": "Mantém o catálogo de restaurantes completo e correto e controla toda alteração no banco.",
+    "funcoes": [
+      { "nome": "Qualidade dos dados", "descricao_leiga": "Mede quais fichas estão incompletas, duplicadas ou incoerentes e dá uma nota ao catálogo.", "como_roda": "sob demanda ou pelo chat do painel", "arquivo": "audit_db.js · score_published.js" },
+      { "nome": "Enriquecimento", "descricao_leiga": "Busca o que falta numa ficha — telefone, e-mail, site, faixa de preço — em fontes públicas e no site do próprio restaurante.", "como_roda": "sob demanda · grava só com confirmação", "arquivo": "enrich_emails.js · harvest_phone.js · fill_contact.js · price_fill.js" },
+      { "nome": "Fotos", "descricao_leiga": "Coleta fotos oficiais de cada casa, descarta as ruins e escolhe a de capa.", "como_roda": "sob demanda (usa IA paga)", "arquivo": "enrich_photos_v2.js · lib/photo-curator.ts" },
+      { "nome": "Horários de funcionamento", "descricao_leiga": "Preenche e padroniza os horários de cada casa.", "como_roda": "sob demanda · grava só com confirmação", "arquivo": "fill_hours_places.js · convert_hours.js" },
+      { "nome": "Controle do que aparece no site", "descricao_leiga": "Tira das listas a casa que não tem foto e a devolve quando a foto chega. Publicar ou republicar sempre pede o sim do fundador.", "como_roda": "sob demanda", "arquivo": "unpublish_no_photo.js · republish_no_photo.js" },
+      { "nome": "Vencimento de pedidos sem resposta", "descricao_leiga": "Todo dia marca como vencido o pedido de mesa cuja data já passou sem resposta, para que ele não fique contando como pendência.", "como_roda": "diária, dentro do próprio banco", "arquivo": "expire_stale_pendings.js" },
+      { "nome": "Registro do antes e do depois", "descricao_leiga": "Guarda como estava e como ficou cada linha alterada. O registro não pode ser apagado.", "como_roda": "junto com cada alteração", "arquivo": "db-audited.js" },
+      { "nome": "Porta única de escrita, com desfazer", "descricao_leiga": "O único caminho para alterar a produção: confere o comando, copia as linhas antes e restaura tudo com um comando se for preciso.", "como_roda": "a cada alteração", "arquivo": "orchestrator/agents/dba-escrita/" },
+      { "nome": "Zelador de privilégios", "descricao_leiga": "Acusa quando um agente está usando uma credencial mais forte do que deveria.", "como_roda": "sob demanda · só leitura", "arquivo": "orchestrator/agents/zelador-privilegios/" },
+      { "nome": "Mudanças de estrutura", "descricao_leiga": "Criar tabela ou coluna segue um livro numerado de mudanças. Só uma pessoa aplica.", "como_roda": "manual", "arquivo": "twk-db-agent/scripts/migrate.mjs" },
+      { "nome": "Painel e chat", "descricao_leiga": "Um aplicativo para ver as tabelas, conferir a qualidade e pedir tarefas ao agente em linguagem natural.", "como_roda": "sob demanda, com senha", "arquivo": "twk-db-agent/app" }
+    ],
+    "ferramentas": [
+      { "nome": "48 ferramentas do agente", "tipo": "ferramenta do modelo", "descricao": "O que o agente pode fazer pelo chat: consultar tabelas, pré-visualizar alterações, auditar, buscar fotos e dados externos." },
+      { "nome": "Rotas do painel", "tipo": "painel", "descricao": "Dados com pré-visualização, auditoria, contatos, fotos, busca externa, SEO e saúde." },
+      { "nome": "87 scripts", "tipo": "script", "descricao": "Rotinas de auditoria, enriquecimento e correção em lote." },
+      { "nome": "Credencial somente leitura", "tipo": "acesso ao banco", "descricao": "Usada em todo diagnóstico. O próprio servidor impede a escrita." },
+      { "nome": "Credencial de escrita com trava", "tipo": "acesso ao banco", "descricao": "Altera dados só nas tabelas do negócio; não muda estrutura nem toca nas contas de clientes." },
+      { "nome": "Cópias de segurança", "tipo": "proteção", "descricao": "As linhas são copiadas antes de cada alteração, fora da pasta sincronizada." },
+      { "nome": "Trava de comandos destrutivos", "tipo": "proteção", "descricao": "Barra apagar tabela e alterar ou apagar sem filtro." },
+      { "nome": "Google Places · busca na web · armazenamento de fotos · modelo de IA", "tipo": "integração", "descricao": "Fontes externas usadas para completar as fichas." }
+    ],
+    "dados": [
+      { "onde": "Restaurantes", "o_que": "A ficha de cada casa: endereço, contato, fotos, textos, fuso horário e se está publicada. O DB Architect é o dono desta informação." },
+      { "onde": "Horários de funcionamento", "o_que": "Abertura e fechamento por dia da semana." },
+      { "onde": "Reservas e clientes", "o_que": "Só leitura e só em contagens. Ninguém além da própria plataforma escreve em reservas." },
+      { "onde": "Registro de alterações", "o_que": "O antes e o depois de cada linha alterada, com quem alterou e quando." }
+    ],
+    "autonomia": {
+      "teto": "Altera dados sozinho quando a mudança é reversível: pela porta única, com cópia declarada das linhas, até 200 linhas por tabela e sem tocar nas contas de clientes. Cada execução fica registrada e pode ser desfeita com um comando.",
+      "exige_aprovacao": [
+        "Apagar tabela, esvaziar tabela, mudar estrutura, restaurar cópia, mexer em permissões",
+        "Qualquer coisa nas contas de clientes",
+        "Criar tabela ou coluna",
+        "Alterar ou apagar sem cópia declarada, ou acima de 200 linhas",
+        "Publicar ou republicar um restaurante; despublicar sem pedido da própria casa"
+      ]
+    },
+    "sinais_de_vida": [
+      { "nome": "O vencimento diário rodou", "como_ver": "O registro de alterações recebe uma linha do agendador do banco todos os dias." },
+      { "nome": "A porta de escrita está em uso", "como_ver": "Cada execução deixa uma linha na trilha de auditoria e uma pasta de cópia de segurança." },
+      { "nome": "O painel responde", "como_ver": "O serviço do agente responde na internet." }
+    ],
+    "lacunas": [
+      "O registro de alterações do banco não mostra tudo: a porta única grava a trilha em arquivo, e nove scripts antigos escrevem sem passar pelo registro.",
+      "A plataforma não guarda a hora em que o restaurante respondeu a um pedido; o tempo de resposta mostrado é uma aproximação, medida desde 30/09/2026.",
+      "A medição periódica de qualidade do catálogo está parada: a última nota gravada é de 1º de julho.",
+      "O Zelador de privilégios não roda desde 22/09.",
+      "Estar preenchido não prova estar certo: 412 casas publicadas têm o mesmo horário todos os dias, sinal de horário genérico."
+    ]
+  },
+  "blocos": [
+    {
+      "titulo": "O catálogo",
+      "texto": "Quantas casas a plataforma conhece e quantas estão no ar.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "eco_catalogo.publicados", "t": "Publicadas no site", "destaque": true, "e": "Casas com página no ar." },
+          { "ref": "dba_fila_foto.fora_do_site", "t": "Fora do site", "e": "Cadastradas e não publicadas." },
+          { "ref": "dba_fila_foto.aguardando_foto", "t": "Prontas, esperando foto", "e": "Só falta uma foto boa para voltarem ao site." },
+          { "ref": "dba_fila_foto.nao_relistar", "t": "Pediram para sair", "e": "Casas que não devem voltar ao site." }
+        ] },
+        { "tipo": "dupla", "itens": [
+          { "tipo": "ranking", "id": "eco_top_paises", "titulo": "Casas publicadas por país", "texto": "Os 15 países com mais casas.", "cor": "s2", "rotuloTitulo": "País", "valorTitulo": "Casas" },
+          { "tipo": "ranking", "id": "eco_top_cidades", "titulo": "Casas publicadas por cidade", "texto": "As 15 cidades com mais casas.", "cor": "s2", "rotuloTitulo": "Cidade", "valorTitulo": "Casas" }
+        ] }
+      ]
+    },
+    {
+      "titulo": "A completude das fichas",
+      "texto": "De cada 100 casas publicadas, quantas têm cada informação essencial. Uma ficha sem horário ou sem contato atrapalha o cliente e impede o aviso ao restaurante.",
+      "itens": [
+        { "tipo": "ranking", "id": "dba_completude", "titulo": "Fichas publicadas com cada informação", "texto": "100% = todas as casas publicadas têm o campo preenchido.", "cor": "s2", "f": "pct", "rotuloTitulo": "Informação", "valorTitulo": "Preenchido" },
+        { "tipo": "numeros", "tiles": [
+          { "ref": "dba_frescor.horarios_genericos", "t": "Casas com horário genérico", "e": "O mesmo horário todos os dias da semana: provavelmente não foi conferido." },
+          { "ref": "dba_frescor.verificados_90d", "t": "Fichas conferidas em 90 dias", "e": "Casas cujos dados foram verificados recentemente." },
+          { "ref": "dba_frescor.verificados_30d", "t": "Conferidas em 30 dias", "e": "O ritmo recente de verificação." }
+        ] },
+        { "tipo": "nota", "titulo": "Preenchido não é o mesmo que certo.", "texto": "Estes números dizem que o campo existe, não que o telefone atende ou que o horário está em dia. É por isso que a verificação periódica e o horário genérico aparecem ao lado." }
+      ]
+    },
+    {
+      "titulo": "As alterações no banco",
+      "texto": "Toda mudança de dado fica registrada com o antes e o depois. Ler é livre; escrever passa por uma única porta.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "dba_auditoria_resumo.alteracoes_30d", "t": "Alterações em 30 dias", "e": "Linhas alteradas com registro no próprio banco." },
+          { "ref": "dba_auditoria_resumo.total", "t": "Alterações desde o início", "e": "Todo o histórico auditado." },
+          { "ref": "dba_auditoria_resumo.ultima", "t": "Última alteração registrada", "f": "idade", "e": "Inclui o vencimento diário de pedidos." },
+          { "ref": "auditoria_resumo.escritas_banco", "t": "Execuções pela porta única", "u": "em 7 dias", "e": "Cada uma com cópia de segurança e botão de desfazer." }
+        ] },
+        { "tipo": "dupla", "itens": [
+          { "tipo": "ranking", "id": "dba_auditoria", "titulo": "Quem alterou o banco — 30 dias", "texto": "Alterações registradas, por origem.", "cor": "s2", "rotuloTitulo": "Origem", "valorTitulo": "Alterações" },
+          { "tipo": "tabela", "id": "dba_papeis", "titulo": "Quem consegue escrever no banco", "texto": "Cada credencial e em quantas tabelas ela consegue alterar dados — lido das permissões reais do servidor.", "colunas": [ { "campo": "papel", "rotulo": "Credencial", "f": "texto" }, { "campo": "para_que", "rotulo": "Para quê", "f": "texto" }, { "campo": "tabelas_que_altera", "rotulo": "Tabelas", "f": "int" }, { "campo": "altera_contas_de_cliente", "rotulo": "Contas de cliente", "f": "texto" } ] }
+        ] }
+      ]
+    },
+    {
+      "titulo": "O tamanho do banco",
+      "texto": "Onde está o volume de dados.",
+      "itens": [
+        { "tipo": "ranking", "id": "dba_tabelas", "titulo": "As maiores tabelas", "texto": "Número de linhas e, ao lado, o espaço ocupado.", "cor": "s2", "rotuloTitulo": "Tabela", "valorTitulo": "Linhas", "extra": { "campo": "tamanho", "rotulo": "", "f": "texto" } }
+      ]
+    },
+    { "titulo": "O que o DB Architect faz", "itens": [ { "tipo": "funcoes" } ] },
+    { "titulo": "As ferramentas", "itens": [ { "tipo": "ferramentas" } ] },
+    { "titulo": "O que pode fazer sozinho", "itens": [ { "tipo": "autonomia" } ] },
+    { "titulo": "Onde guarda os dados", "itens": [ { "tipo": "dados" } ] },
+    { "titulo": "O que ainda não está redondo", "itens": [ { "tipo": "lacunas" } ] }
+  ]
+}

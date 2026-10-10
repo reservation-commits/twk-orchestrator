@@ -72,6 +72,42 @@ const MUTACOES_CONTRATO = [
     "desativado: 'sem fonte de dados"],
 ];
 
+/**
+ * v20 (2026-10-05) — mutações nas três regras novas, aplicadas no `dist` de cada módulo:
+ * opt-in pedido pelo cliente, alerta ao operador e aceite antes da primeira foto.
+ * [arquivo do dist, nome, trecho original, trecho mutado]
+ */
+const DIST = path.join(RAIZ, 'Agente de Suporte e Concierge/dist');
+const MUTACOES_V20 = [
+  ['optInRegra.js', 'opt-in: a confirmação passa a prometer prazo',
+    'Done. From now on, updates on your request will arrive here.',
+    'Done. You will hear from us within 24 hours.'],
+  ['optInRegra.js', 'opt-in: a confirmação passa a afirmar mesa',
+    'Pronto. A partir de agora, as atualizações do seu pedido chegam por aqui.',
+    'Pronto. Sua mesa está confirmada e as atualizações chegam por aqui.'],
+  ['optInRegra.js', 'opt-in: some a instrução de como parar',
+    'sair: "Para parar, escreva PARAR."',
+    'sair: "Até breve."'],
+  ['optInRegra.js', 'opt-in: qualquer mensagem com código vira opt-in (sem citar o WhatsApp)',
+    'if (!/whats\\s?app/i.test(t))',
+    'if (false)'],
+  ['optInRegra.js', 'opt-in: mensagem com dois códigos passa',
+    'if (codigos.length !== 1)',
+    'if (codigos.length < 1)'],
+  ['alertaRegra.js', 'alerta: um timeout isolado já acorda o operador',
+    'if (falhasSeguidas >= opts.falhasParaAbrir)',
+    'if (falhasSeguidas >= 1)'],
+  ['alertaRegra.js', 'alerta: a volta nunca é avisada',
+    'estado.ultimoAviso !== null ? "avisar_volta" : "nada"',
+    'estado.ultimoAviso !== null ? "nada" : "nada"'],
+  ['alertaRegra.js', 'alerta: a queda longa nunca é repetida',
+    'if (opts.repetirMs > 0 && agora - estado.ultimoAviso >= opts.repetirMs) {',
+    'if (false) {'],
+  ['watchRegra.js', 'vigia: reserva nova já aceita volta a não avisar ninguém',
+    'if (b === "accept")\n            return "aceito";\n        if (b === "decline")',
+    'if (b === "accept")\n            return null;\n        if (b === "decline")'],
+];
+
 function rodarEval() {
   try {
     execFileSync('node', ['orchestrator/evals/run.js', 'notificacao-reserva'], {
@@ -127,6 +163,22 @@ try {
     naoAplicadas++;
   } else {
     rodarMutacoes(GUARDA, originalGuarda, MUTACOES_GUARDA);
+  }
+
+  // v20: cada arquivo do dist é lido, mutado e devolvido aqui mesmo (rodarMutacoes restaura a cada mutante).
+  for (const arquivo of [...new Set(MUTACOES_V20.map((m) => m[0]))]) {
+    const alvo = path.join(DIST, arquivo);
+    if (!fs.existsSync(alvo)) {
+      linhas.push([false, 'NÃO APLICADA', `${arquivo} — dist ausente, rode "npm run build"`]);
+      naoAplicadas++;
+      continue;
+    }
+    const conteudo = fs.readFileSync(alvo, 'utf8');
+    try {
+      rodarMutacoes(alvo, conteudo, MUTACOES_V20.filter((m) => m[0] === arquivo).map((m) => m.slice(1)));
+    } finally {
+      fs.writeFileSync(alvo, conteudo, 'utf8');
+    }
   }
 } finally {
   restaurar();

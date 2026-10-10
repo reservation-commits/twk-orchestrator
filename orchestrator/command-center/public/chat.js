@@ -11,8 +11,11 @@
     { id: 'editorial', nome: 'QUILL', hue: '#d55181', hex: '#d55181' },
     { id: 'financeiro', nome: 'ATLAS', hue: '#c98500', hex: '#c98500' },
     { id: 'dba', nome: 'DB ARCHITECT', hue: '#d95926', hex: '#d95926' },
+    { id: 'guardiao', nome: 'GUARDIÃO', hue: '#9085e9', hex: '#9085e9' },
   ];
-  const AG = (id) => AGENTES.find((a) => a.id === id) || AGENTES[0];
+  // Os cartões do Guardião e os handoffs à Aria chegam com os ids do contrato de handoff; mapeia para a frota da Central.
+  const ALIAS = { 'guardiao-reserva': 'guardiao', 'suporte-concierge': 'suporte' };
+  const AG = (id) => AGENTES.find((a) => a.id === (ALIAS[id] || id)) || AGENTES[0];
 
   // estado local da conversa (sobrevive a re-render do router, não ao reload)
   const CS = {

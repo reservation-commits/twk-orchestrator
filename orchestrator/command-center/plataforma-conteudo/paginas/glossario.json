@@ -1,0 +1,9 @@
+{
+  "id": "glossario", "grupo": "Sistema", "titulo": "Glossário", "sub": "as palavras desta plataforma", "tipo": "pagina",
+  "kicker": "Para ler sem tropeçar",
+  "h1": "Glossário",
+  "lede": "As palavras que aparecem nesta plataforma, explicadas sem jargão. Se um termo de qualquer página não estiver claro, ele deve estar aqui.",
+  "blocos": [
+    { "titulo": "Os termos", "texto": "Digite na busca para encontrar uma palavra.", "itens": [ { "tipo": "glossario" } ] }
+  ]
+}

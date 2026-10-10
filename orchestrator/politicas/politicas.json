@@ -1,0 +1,122 @@
+{
+  "_doc": "Tabela de escalonamento do CLAUDE.md como código (08/10/2026). Cada política cobre UMA classe de ação. status=ativa é o que já foi aprovado em ADR; status=proposta é o que o fundador ainda não aprovou — o motor NUNCA aplica uma proposta: devolve requer_aprovacao_humana e nomeia a proposta que cobriria. As classes em CLASSES_SEMPRE_HUMANO (em avaliar.js) não aceitam política nenhuma. condicoes: atributo ausente = condição não atendida (falhar alto). orcamento_mensal = execuções por mês civil (Europe/Paris) acima das quais a decisão cai para requer_aprovacao_orquestrador.",
+  "versao": "2026-10-08",
+  "politicas": [
+    {
+      "id": "POL-001",
+      "classe": "escrita_reversivel",
+      "status": "ativa",
+      "fundamento": "ADR-017 (2026-09-22)",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "backup_declarado": true, "linhas_max_por_tabela": { "max": 200 }, "toca_nextauth": false, "ddl": false, "porta_unica": true },
+      "desfazer": "node orchestrator/agents/dba-escrita/desfazer.js --ultimo --apply --motivo \"…\"",
+      "orcamento_mensal": 400
+    },
+    {
+      "id": "POL-002",
+      "classe": "reparo_deterministico",
+      "status": "ativa",
+      "fundamento": "ADR-017 (2026-09-22) — procedimento em sentinela-silencio/reparos-aprovados.json",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "procedimento_aprovado": true },
+      "desfazer": "o próprio procedimento declara (religar/desligar)",
+      "orcamento_mensal": 60
+    },
+    {
+      "id": "POL-003",
+      "classe": "despublicar_a_pedido",
+      "status": "ativa",
+      "fundamento": "ADR-016 (2026-09-11) — delegado ao MAESTRO",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "pedido_do_proprio_estabelecimento": true, "motivo_gravado": true, "dossie": true, "zera_ready_pending_photo": true },
+      "desfazer": "UPDATE published=true pela porta única com -- backup (republicar exige aprovação humana)",
+      "orcamento_mensal": 30
+    },
+    {
+      "id": "POL-004",
+      "classe": "atendimento_cliente",
+      "status": "ativa",
+      "fundamento": "ADR-014 (2026-09-10) e ADR-015 (2026-09-11)",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "valor_ao_cliente_cents": { "max": 0 }, "promete_prazo_de_terceiro": false, "idioma_do_cliente": true, "passou_outbound_gate": true, "juridico": false, "imprensa": false },
+      "desfazer": "não há (mensagem enviada); correção = nova mensagem pelo mesmo canal",
+      "orcamento_mensal": 2000
+    },
+    {
+      "id": "POL-005",
+      "classe": "atendimento_estabelecimento",
+      "status": "ativa",
+      "fundamento": "ADR-016 (2026-09-11) — MAESTRO resolve ponta a ponta",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "opt_out_consultado": true, "opt_out_ativo": false, "idioma_da_casa": true, "promete_prazo_de_terceiro": false, "valor_ao_cliente_cents": { "max": 0 } },
+      "desfazer": "não há; correção = nova mensagem",
+      "orcamento_mensal": 1000
+    },
+    {
+      "id": "POL-006",
+      "classe": "tarefa_orcamento",
+      "status": "ativa",
+      "fundamento": "CLAUDE.md — tarefa que estoure orçamento (>€10 ou >8 passos) tem revisão antes de continuar",
+      "decisao": "autonomo",
+      "condicoes": { "custo_estimado_cents": { "max": 1000 }, "passos": { "max": 8 } },
+      "fallback": "requer_aprovacao_orquestrador",
+      "desfazer": "n/a",
+      "orcamento_mensal": 100000
+    },
+    {
+      "id": "PROP-101",
+      "classe": "republicar_apos_correcao",
+      "status": "proposta",
+      "fundamento": "proposta 08/10/2026 — hoje 'republicar' é sempre humano",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "motivo_despublicacao": { "in": ["dado_errado", "horario_generico", "contato_morto", "sem_foto"] }, "pedido_de_remocao_do_estabelecimento": false, "opt_out_ativo": false, "juiz_catalogo_nota": { "min": 8 }, "backup_declarado": true },
+      "desfazer": "despublicar pela porta única (POL-003 ou humano)",
+      "orcamento_mensal": 50,
+      "frase_de_aprovacao": "Aprovo PROP-101"
+    },
+    {
+      "id": "PROP-102",
+      "classe": "envio_casa_opt_in",
+      "status": "proposta",
+      "fundamento": "proposta 08/10/2026 — envio a estabelecimento com opt-in registrado, template aprovado e idioma da casa",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "opt_out_consultado": true, "opt_out_ativo": false, "opt_in_registrado": true, "template_aprovado": true, "idioma_da_casa": true, "promete_prazo_de_terceiro": false, "juiz_comercial_nota": { "min": 8 }, "envios_para_mesma_casa_7d": { "max": 2 } },
+      "desfazer": "não há; lista de bloqueio por casa em aria_contact_consent",
+      "orcamento_mensal": 300,
+      "frase_de_aprovacao": "Aprovo PROP-102"
+    },
+    {
+      "id": "PROP-103",
+      "classe": "publicacao_editorial",
+      "status": "proposta",
+      "fundamento": "proposta 08/10/2026 — Quill publica ficha/cidade quando o Juiz Editorial aprova e a versão anterior fica preservada",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "juiz_editorial_nota": { "min": 8 }, "versao_anterior_preservada": true, "rating_sem_review": false, "idioma_igual_locale": true },
+      "desfazer": "restaurar versão anterior no banco do Quill (versionado)",
+      "orcamento_mensal": 500,
+      "frase_de_aprovacao": "Aprovo PROP-103"
+    },
+    {
+      "id": "PROP-104",
+      "classe": "correcao_front_com_teste",
+      "status": "proposta",
+      "fundamento": "proposta 08/10/2026 — Agente de Produto: correção no front com teste e preview; merge em produção continua humano até existir rollback automático",
+      "decisao": "autonomo_com_log",
+      "condicoes": { "testes_verdes": true, "preview_verificado": true, "pr_aberto": true, "merge_em_producao": false },
+      "desfazer": "fechar o PR / reverter o commit",
+      "orcamento_mensal": 100,
+      "frase_de_aprovacao": "Aprovo PROP-104"
+    },
+    {
+      "id": "PROP-105",
+      "classe": "ligacao_voz_casa",
+      "status": "proposta",
+      "fundamento": "proposta 08/10/2026 — Telefonista: canário de 5 casas, gravação obrigatória, aprovação por casa; revê a decisão 'sempre por escrito' de 06/09",
+      "decisao": "requer_aprovacao_humana",
+      "condicoes": { "casa_no_canario": true, "opt_out_ativo": false, "gravacao_obrigatoria": true, "nao_fala_com_cliente": true },
+      "desfazer": "n/a",
+      "orcamento_mensal": 100,
+      "frase_de_aprovacao": "Aprovo PROP-105"
+    }
+  ]
+}

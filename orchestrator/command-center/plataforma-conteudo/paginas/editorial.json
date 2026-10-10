@@ -1,0 +1,121 @@
+{
+  "id": "editorial", "grupo": "Agentes", "titulo": "Quill", "sub": "editorial e Google", "tipo": "agente", "agenteId": "editorial", "cor": "s5",
+  "kicker": "Quill · editorial",
+  "h1": "Quill",
+  "lede": "O Quill é a redação da The World Keys. Ele avalia o texto de cada página de restaurante e de cidade, propõe versões melhores e títulos para o Google, e mede depois, pelos cliques, se a mudança funcionou. Nada do que o Quill escreve vai ao site sem que uma pessoa leia e aprove. O motor está pronto; o texto que está no ar ainda é, em grande parte, o antigo.",
+  "resumo": [
+    { "ref": "quill_padrao.no_padrao", "t": "Fichas no padrão" },
+    { "ref": "quill_textos.com_meta_completa", "t": "Com título Google" },
+    { "ref": "quill_cidades.com_texto", "t": "Cidades com texto" }
+  ],
+  "agente": {
+    "codinome": "Quill", "papel": "Editorial e Google",
+    "resumo": "Avalia e reescreve os textos das páginas, propõe títulos para o Google e mede o efeito nos cliques.",
+    "funcoes": [
+      { "nome": "Auditoria e priorização", "descricao_leiga": "Dá nota ao texto de cada restaurante e de cada cidade e ordena a fila pelo retorno esperado: primeiro o que mais traz visitas.", "como_roda": "mensal e semanal", "arquivo": "apps/jobs/src/audit/scan.ts · strategy/roi-rank.ts" },
+      { "nome": "Reescrita da ficha", "descricao_leiga": "Redige uma nova descrição usando só os fatos do catálogo; um segundo modelo critica o rascunho antes de ele ir para a fila de revisão.", "como_roda": "sob comando, um a um ou em lote", "arquivo": "apps/jobs/src/creation/rewrite.ts" },
+      { "nome": "Páginas de cidade e matérias", "descricao_leiga": "Escreve a apresentação da cidade, os bairros e as perguntas frequentes; redige matérias de blog.", "como_roda": "sob comando", "arquivo": "apps/jobs/src/creation/rewrite-city.ts · write-blog.ts" },
+      { "nome": "Títulos e descrições para o Google", "descricao_leiga": "Propõe o título e o resumo que aparecem no resultado da busca e testa variantes para ver qual atrai mais cliques.", "como_roda": "sob comando · viram rascunho", "arquivo": "apps/jobs/src/creation/meta-title.ts" },
+      { "nome": "Revisão e publicação", "descricao_leiga": "Uma pessoa aprova, rejeita ou pede outra versão. Só a aprovação grava no site, e cada decisão fica num registro que não se apaga.", "como_roda": "no painel, por uma pessoa", "arquivo": "apps/admin/lib/actions.ts" },
+      { "nome": "Medição e aprendizado", "descricao_leiga": "Baixa os cliques do Google todos os dias e, 28 dias depois de cada publicação, mede o efeito e ensina o redator com o resultado.", "como_roda": "diário · semanal", "arquivo": "apps/jobs/src/gsc/ingest.ts · attribution/compute.ts" },
+      { "nome": "Vigias de busca", "descricao_leiga": "Acusa páginas que disputam a mesma busca entre si e quedas de cliques, sugere ligações entre páginas e confere se assistentes de IA citam a The World Keys.", "como_roda": "sob comando", "arquivo": "apps/jobs/src/seo/ · geo/citation-check.ts" },
+      { "nome": "Fila de comandos e correio", "descricao_leiga": "Os botões do painel viram ordens numa fila, com pausa geral; redige e-mails que uma pessoa envia.", "como_roda": "a cada 5 min", "arquivo": "apps/jobs/src/commands/worker.ts" }
+    ],
+    "ferramentas": [
+      { "nome": "Modelo de IA", "tipo": "integração", "descricao": "Um modelo para redigir e outro, menor, para criticar. Teto de gasto: 30 dólares por dia e 250 por mês." },
+      { "nome": "Google Search Console", "tipo": "integração", "descricao": "Leitura dos cliques, das impressões e da posição no Google." },
+      { "nome": "Busca na web", "tipo": "ferramenta do modelo", "descricao": "Usada só para conferir se assistentes de IA citam a marca." },
+      { "nome": "Redigir e-mail", "tipo": "ferramenta do modelo", "descricao": "Prepara o texto; o envio é de uma pessoa." },
+      { "nome": "Painel do Quill", "tipo": "painel", "descricao": "A fila de revisão, os títulos em teste e as métricas, com senha." },
+      { "nome": "Rotinas agendadas", "tipo": "rotina", "descricao": "Coleta de cliques, auditoria, priorização, medição de efeito, vigia de páginas concorrentes, aprendizado, fila de comandos." },
+      { "nome": "Credencial de escrita restrita", "tipo": "acesso ao banco", "descricao": "Só consegue alterar o texto, o título e a descrição de um restaurante e o texto de uma cidade — e só depois da aprovação." }
+    ],
+    "dados": [
+      { "onde": "Banco próprio do Quill", "o_que": "As notas de auditoria, a fila de trabalho, cada versão de cada texto, as decisões de aprovação, os cliques do Google, os títulos em teste e o que foi aprendido." },
+      { "onde": "Banco da plataforma — leitura", "o_que": "Restaurantes, cidades, países, categorias e distinções." },
+      { "onde": "Banco da plataforma — escrita", "o_que": "Apenas o texto de apresentação, o título e a descrição para o Google de um restaurante, e o texto de uma cidade." }
+    ],
+    "autonomia": {
+      "teto": "Lê, mede e gera rascunhos sozinho. Enfileira lotes sozinho, com registro. Nunca publica.",
+      "exige_aprovacao": [
+        "Publicar qualquer texto no site: sempre o clique de uma pessoa no painel",
+        "Lote acima de 50 fichas",
+        "Mudança na estrutura do banco",
+        "Mudança no guia de estilo",
+        "E-mail a pessoas de fora"
+      ]
+    },
+    "sinais_de_vida": [
+      { "nome": "O painel responde", "como_ver": "A página de saúde informa a versão da estrutura do banco." },
+      { "nome": "A fila de comandos anda", "como_ver": "O painel informa se o processador está ativo e há quantos dias os cliques do Google estão atrasados." },
+      { "nome": "O Search Console responde", "como_ver": "A leitura de teste respondeu em 05/10/2026." }
+    ],
+    "lacunas": [
+      "O texto no ar ainda é o antigo: nenhuma ficha tem título ou descrição para o Google gravados, e o site ainda não usa esses campos.",
+      "72% das fichas publicadas usam ao menos uma das 16 expressões que o guia de estilo proíbe, e só 29% têm o tamanho do padrão.",
+      "Não há versões em português, inglês e francês separadas: o texto está em inglês e não existe fluxo de tradução.",
+      "A Central ainda não lê o painel do Quill: falta a credencial de leitura. Fila de revisão, custo do mês e cliques aparecem como \"sem leitura\".",
+      "Os cliques medidos pelo Search Console em 28 dias (577, de 04/09 a 02/10) vêm de uma leitura avulsa, não do painel.",
+      "O que o Quill publica não entra no registro de alterações do banco.",
+      "As análises de páginas concorrentes e de oportunidades ainda rodam sobre dados de exemplo.",
+      "Não existe calendário editorial nem destino para as matérias de blog no site.",
+      "Desfazer no painel do Quill não desfaz o texto no site, e a Sentinela de Silêncio não vigia as rotinas do Quill."
+    ]
+  },
+  "blocos": [
+    {
+      "titulo": "O texto que está no ar",
+      "texto": "Cada restaurante publicado tem um texto de apresentação. A pergunta do Quill é se esse texto está no padrão da casa: tamanho certo, sem clichês, fiel aos fatos.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "quill_textos.fichas_com_texto", "t": "Fichas com texto", "e": "Todas as publicadas têm apresentação." },
+          { "ref": "quill_padrao.pct_no_padrao", "t": "No tamanho do padrão", "f": "pct", "destaque": true, "e": "Entre 150 e 320 palavras, a faixa do guia de estilo." },
+          { "ref": "quill_cliches.pct_com_cliche", "t": "Com expressões proibidas", "f": "pct", "e": "Clichês que o guia veta: \"joia escondida\", \"no coração de\", \"de tirar o fôlego\" e outros 13." },
+          { "ref": "quill_padrao.mediana_palavras", "t": "Tamanho típico", "u": "palavras", "e": "Metade das fichas tem menos que isso." }
+        ] },
+        { "tipo": "numeros", "tiles": [
+          { "ref": "quill_padrao.no_padrao", "t": "Fichas no padrão de tamanho", "e": "Entre 150 e 320 palavras." },
+          { "ref": "quill_padrao.curtas", "t": "Fichas curtas", "e": "Menos de 150 palavras." },
+          { "ref": "quill_cliches.com_cliche", "t": "Fichas com clichê", "e": "Candidatas a reescrita." },
+          { "ref": "quill_cliches.michelin_sem_registro", "t": "Citam Michelin sem registro", "e": "O texto fala em Michelin e o catálogo não tem a distinção: é o tipo de afirmação que precisa de conferência." }
+        ] }
+      ]
+    },
+    {
+      "titulo": "Como as páginas aparecem no Google",
+      "texto": "Além do texto, cada página pode ter um título e um resumo feitos para o resultado da busca, e versões por idioma.",
+      "itens": [
+        { "tipo": "ranking", "id": "quill_cobertura", "titulo": "Fichas publicadas com cada elemento", "texto": "De cada 100 casas no ar, quantas têm cada item preenchido.", "cor": "s5", "f": "pct", "rotuloTitulo": "Elemento", "valorTitulo": "Preenchido" },
+        { "tipo": "numeros", "tiles": [
+          { "ref": "quill_textos.com_meta_completa", "t": "Fichas com título e resumo para o Google", "destaque": true, "e": "Escritos pelo Quill e aprovados." },
+          { "ref": "quill_cidades.com_texto", "t": "Cidades com texto", "e": "Páginas de cidade com apresentação." },
+          { "ref": "quill_cidades.cidades", "t": "Cidades cadastradas", "e": "Todas as cidades do catálogo." },
+          { "ref": "quill_cidades.pct_com_texto", "t": "Cobertura das cidades", "f": "pct", "e": "Parte das cidades que tem texto." }
+        ] }
+      ]
+    },
+    {
+      "titulo": "Os cliques",
+      "texto": "A meta do Quill é uma só: mais pessoas chegando ao site pelo Google. Estes números vêm do painel do próprio Quill.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "api_editorial.clicks28d", "t": "Cliques vindos do Google", "u": "em 28 dias", "destaque": true, "e": "Pessoas que chegaram ao site pela busca.", "fonte": "painel do Quill" },
+          { "ref": "api_editorial.impressoes28d", "t": "Vezes em que o site apareceu", "u": "em 28 dias", "e": "Aparições nos resultados da busca.", "fonte": "painel do Quill" },
+          { "ref": "api_editorial.posicao28d", "t": "Posição média", "f": "dec1", "e": "Em que lugar do resultado o site costuma aparecer. Menor é melhor.", "fonte": "painel do Quill" },
+          { "ref": "api_editorial.metaMensal", "t": "Meta de cliques por mês", "e": "O objetivo definido para o Quill.", "fonte": "painel do Quill" }
+        ] },
+        { "tipo": "numeros", "tiles": [
+          { "ref": "api_editorial.filaAguardando", "t": "Textos esperando revisão", "e": "Rascunhos prontos, à espera de uma pessoa.", "fonte": "painel do Quill" },
+          { "ref": "api_editorial.custoMesUsd", "t": "Gasto com IA no mês", "f": "usd", "e": "Contra o teto de 250 dólares.", "fonte": "painel do Quill" },
+          { "ref": "api_editorial.gscAtrasoDias", "t": "Atraso dos dados do Google", "u": "dias", "e": "Há quantos dias chegou a última leitura de cliques.", "fonte": "painel do Quill" }
+        ] },
+        { "tipo": "nota", "titulo": "A última leitura avulsa.", "texto": "Enquanto a Central não tem a credencial do painel do Quill, a referência é a leitura direta do Search Console feita em 05/10/2026: 577 cliques e 60.587 aparições em 28 dias (de 4 de setembro a 2 de outubro), posição média 13,2. A linha de base era 888 cliques por mês e a meta é 4.500." }
+      ]
+    },
+    { "titulo": "O que o Quill faz", "itens": [ { "tipo": "funcoes" } ] },
+    { "titulo": "As ferramentas", "itens": [ { "tipo": "ferramentas" } ] },
+    { "titulo": "O que pode fazer sozinho", "itens": [ { "tipo": "autonomia" } ] },
+    { "titulo": "Onde guarda os dados", "itens": [ { "tipo": "dados" } ] },
+    { "titulo": "O que ainda não está redondo", "itens": [ { "tipo": "lacunas" } ] }
+  ]
+}

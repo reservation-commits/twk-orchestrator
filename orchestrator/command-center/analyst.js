@@ -21,7 +21,7 @@ const MODEL = process.env.MAESTRO_ANALYST_MODEL || process.env.MAESTRO_MODEL_COM
 const MODEL_FALLBACK = process.env.MAESTRO_MODEL || 'claude-opus-4-8';
 const EFFORT = process.env.MAESTRO_EFFORT || 'high';
 const MAX_PER_DAY = Number(process.env.ANALYST_MAX_PER_DAY || 2);
-const AGENT_IDS = ['comercial', 'suporte', 'editorial', 'financeiro', 'dba', 'operacao'];
+const AGENT_IDS = ['comercial', 'suporte', 'editorial', 'financeiro', 'dba', 'guardiao', 'operacao'];
 
 function enabled() {
   return !!(Anthropic && process.env.ANTHROPIC_API_KEY && process.env.MAESTRO_ANALYST !== 'off');
@@ -50,6 +50,7 @@ const PERSONA = `Você é o núcleo analítico do MAESTRO, Orquestrador da The W
 - SEO e operação editorial (Quill/editorial): GSC, fila de revisão, custo por página, worker.
 - Operações financeiras SaaS (Atlas/financeiro): MRR, aging, reconciliação, propostas.
 - Engenharia de dados (DB Architect/dba): catálogo, completude, publicados, integridade.
+- Fulfillment de reservas (Guardião da Reserva/guardiao): pedidos sem resposta, degraus de cobrança à casa, clientes a avisar, lotes parados em aprovação, varredura atrasada ou pausada.
 - E "operacao" para o que atravessa agentes (processo, instrumentação, custo agregado).
 
 SUA ÚNICA SAÍDA É O QUE PRECISA DE CORREÇÃO OU OTIMIZAÇÃO. Nada de elogios, nada de "está tudo bem" — se nada precisa de correção, devolva a lista vazia (isso é sinal de saúde, não de preguiça).
@@ -61,7 +62,7 @@ REGRAS INEGOCIÁVEIS:
 4. Máximo 12 itens por ciclo, ordenados por severidade. Prefira 3 itens certeiros a 12 genéricos.
 
 FORMATO DE SAÍDA — APENAS este JSON, sem texto fora dele, sem cercas de código:
-{"acoes":[{"agente":"comercial|suporte|editorial|financeiro|dba|operacao","titulo":"<=90 chars, imperativo","severidade":"critica|alta|media","diagnostico":"o que está errado, com o número citado","causa_provavel":"hipótese mais provável","correcao":"a correção concreta, pronta para virar tarefa","impacto_estimado":"o que melhora se corrigir","dono":"agente responsável ou humano","requer_aprovacao_humana":true|false}]}`;
+{"acoes":[{"agente":"comercial|suporte|editorial|financeiro|dba|guardiao|operacao","titulo":"<=90 chars, imperativo","severidade":"critica|alta|media","diagnostico":"o que está errado, com o número citado","causa_provavel":"hipótese mais provável","correcao":"a correção concreta, pronta para virar tarefa","impacto_estimado":"o que melhora se corrigir","dono":"agente responsável ou humano","requer_aprovacao_humana":true|false}]}`;
 
 function buildUser(stateDir) {
   const serie = metrics.dailySeries(stateDir, 7);

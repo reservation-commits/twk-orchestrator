@@ -451,4 +451,187 @@ casos.push({
   },
 });
 
+// ── v20 (2026-10-05): opt-in pedido pelo cliente, aceite antes da primeira foto, alerta ao operador ──
+//
+// Em 05/10 nenhum cliente tinha opt-in, nenhuma mensagem tinha entrega confirmada e a Aria tinha
+// ficado 70 horas muda com 76 escalações do mesmo fato. Estes casos exercitam as três regras novas.
+
+const carregar = (nome) => {
+  try { return require(path.join(ARIA, nome)); } catch (e) { return { __erro: e.message }; }
+};
+const optIn = carregar('optInRegra.js');
+const alerta = carregar('alertaRegra.js');
+const vigia = carregar('watchRegra.js');
+const porta = carregar('format.js');
+
+const IDIOMAS_OPTIN = ['pt', 'en', 'es', 'fr', 'it', 'de'];
+const CODIGO = 'BCW4FKAW';
+
+/** Promessa que a confirmação do opt-in não pode fazer, nos seis idiomas (ADR-015). */
+const PROMESSA_NO_OPTIN = [
+  /\bconfirm/i, /\bgarant/i, /\bguarant/i, /\bassur/i,
+  /\b(mesa|table|tavolo|tisch)\b/i,
+  /\b\d+\s*(h|horas?|hours?|heures?|ore|stunden|min|dias?|days?|jours?|giorni|tage)\b/i,
+  /\b(amanh[ãa]|tomorrow|demain|ma[ñn]ana|domani|morgen)\b/i,
+  /\b(em breve|soon|bient[ôo]t|pronto lo|presto|bald)\b/i,
+];
+
+casos.push({
+  nome: 'v20: módulos do opt-in, do alerta e do vigia carregam do build',
+  run: () => [optIn, alerta, vigia, porta].flatMap((m, i) =>
+    esperar(!m.__erro, `dist/${['optInRegra', 'alertaRegra', 'watchRegra', 'format'][i]}.js não carregou: ${m.__erro} — rode "npm run build"`)),
+});
+
+casos.push({
+  nome: 'v20 opt-in: a mensagem pronta de cada idioma vira opt-in com o código e o idioma certos',
+  run: () => IDIOMAS_OPTIN.flatMap((l) => {
+    const r = optIn.detectarPedidoAcompanhamento(optIn.mensagemProntaOptIn(l, CODIGO));
+    return esperar(r && r.codigo === CODIGO && r.idioma === l, `${l}: detectou ${JSON.stringify(r)}`);
+  }),
+});
+
+casos.push({
+  nome: 'v20 opt-in: conversa de atendimento NÃO é sequestrada (sem WhatsApp, sem código, dois códigos, PARAR)',
+  run: () => [
+    'Olá! Quero acompanhar meu pedido BCW4FKAW.',
+    'Olá! Quero acompanhar meu pedido pelo WhatsApp.',
+    'Pedidos BCW4FKAW e 9R8NRF48 pelo WhatsApp',
+    'QUERO ACOMPANHAR PELO WHATSAPP',
+    'PARAR',
+    'Hello, can I change my booking BCW4FKAW to 9pm and add two guests? Also is there parking and do you take children, we arrive late from the airport and would like a quiet table on the terrace please, thank you so much WhatsApp',
+  ].flatMap((t) => esperar(optIn.detectarPedidoAcompanhamento(t) === null, `tratou como opt-in: "${t.slice(0, 60)}"`)),
+});
+
+casos.push({
+  nome: 'v20 opt-in: a confirmação passa pela porta de saída, no idioma do cliente, sem prometer nada',
+  run: () => IDIOMAS_OPTIN.flatMap((l) => {
+    const entrada = optIn.mensagemProntaOptIn(l, CODIGO);
+    const texto = optIn.confirmacaoOptIn(l, 'MONAK');
+    const p = porta.outboundGate(texto, entrada);
+    return [
+      ...esperar(p.ok === true, `${l}: a porta barrou — ${p.motivo}`),
+      ...esperar(bate(texto, PROMESSA_NO_OPTIN).length === 0, `${l}: promessa na confirmação ${bate(texto, PROMESSA_NO_OPTIN)}`),
+      ...esperar(bate(texto, VOCABULARIO_INTERNO).length === 0, `${l}: vocabulário interno ${bate(texto, VOCABULARIO_INTERNO)}`),
+      ...esperar(bate(texto, RELATO_INTERNO).length === 0, `${l}: relato de ação`),
+      ...esperar(texto.includes('MONAK'), `${l}: não cita a casa`),
+    ];
+  }),
+});
+
+casos.push({
+  nome: 'v20 opt-in: a saída anunciada na confirmação funciona (a palavra é reconhecida como opt-out)',
+  run: () => IDIOMAS_OPTIN.flatMap((l) => {
+    const m = optIn.confirmacaoOptIn(l, 'MONAK').match(/\b(PARAR|STOP|BAJA)\b/);
+    return [
+      ...esperar(!!m, `${l}: a confirmação não diz como parar`),
+      ...esperar(!m || consent.detectConsentIntent(m[1]) === 'opt_out', `${l}: "${m && m[1]}" não é reconhecida como pedido de parada`),
+    ];
+  }),
+});
+
+casos.push({
+  nome: 'v20 vigia: reserva vista pela primeira vez já aceita ou recusada avisa o desfecho; cancelada pelo cliente, não',
+  run: () => [
+    ...esperar(vigia.eventoPorStatus(null, 'Accept') === 'aceito', 'linha nova já aceita não gera "aceito" (caso de 02/10: aceite em menos de 2 min sem aviso)'),
+    ...esperar(vigia.eventoPorStatus(null, 'Decline') === 'recusado', 'linha nova já recusada não gera "recusado"'),
+    ...esperar(vigia.eventoPorStatus(null, 'Pending') === 'pedido_recebido', 'linha nova pendente deixou de ser pedido recebido'),
+    ...esperar(vigia.eventoPorStatus(null, 'Declined (client)') === null, 'cancelamento do cliente antes da primeira foto gerou evento'),
+    ...esperar(vigia.eventoPorStatus('accept', 'accept') === null, 'status igual gerou evento'),
+  ],
+});
+
+/** Checagens a cada 5 min (true = ok): devolve as ações do alerta ao operador. */
+const rodarAlerta = (checagens, repetirH = 12) => {
+  let estado = alerta.estadoInicial();
+  return checagens.map((ok, i) => {
+    const r = alerta.decidirAlertaIncidente(estado, ok, i * 300000, { falhasParaAbrir: 2, repetirMs: repetirH * 3600000 });
+    estado = r.estado;
+    return r.acao;
+  });
+};
+const contar = (lista, a) => lista.filter((x) => x === a).length;
+
+casos.push({
+  nome: 'v20 alerta: um timeout isolado não acorda o operador; duas falhas seguidas avisam uma vez',
+  run: () => {
+    const isolado = rodarAlerta([true, false, true, true]);
+    const queda = rodarAlerta([true, false, false, false, false]);
+    return [
+      ...esperar(isolado.every((a) => a === 'nada'), `timeout isolado gerou ${isolado.join(',')}`),
+      ...esperar(contar(queda, 'avisar_queda') === 1, `queda avisada ${contar(queda, 'avisar_queda')}x`),
+      ...esperar(queda[2] === 'avisar_queda', 'o aviso não saiu na segunda falha seguida'),
+    ];
+  },
+});
+
+casos.push({
+  nome: 'v20 alerta: as 70 horas de 02 a 05/10 dão 1 aviso de queda, 5 repetições e 1 de volta — nunca 76',
+  run: () => {
+    const acoes = rodarAlerta([...Array(70 * 12).fill(false), true]);
+    return [
+      ...esperar(contar(acoes, 'avisar_queda') === 1, `quedas: ${contar(acoes, 'avisar_queda')}`),
+      ...esperar(contar(acoes, 'repetir_queda') === 5, `repetições: ${contar(acoes, 'repetir_queda')}`),
+      ...esperar(contar(acoes, 'avisar_volta') === 1, `voltas: ${contar(acoes, 'avisar_volta')}`),
+      ...esperar(acoes[acoes.length - 1] === 'avisar_volta', 'a volta não foi avisada na primeira checagem boa'),
+    ];
+  },
+});
+
+// A Sentinela compara o que a Aria carregou (/health) com o que a Meta tem aprovado.
+const { compararTemplates } = require('../../agents/sentinela-silencio/templates-meta');
+const metaDe = (nome, idiomas, extra = {}) => idiomas.map((language) => ({ name: nome, language, status: 'APPROVED', category: 'UTILITY', ...extra }));
+const SEIS = ['en', 'pt_BR', 'fr', 'it', 'es', 'de'];
+const healthCom = (templates, etapas = { alertaOperador: true }) => ({ build: 'v20', etapas, notificacoes: { idiomas: SEIS, idiomaPadrao: 'en', tetoDiario: 50, templates } });
+
+casos.push({
+  nome: 'v20 sentinela: o erro real de 05/10 — recusa apontando para template que só existe em francês — vira achado',
+  run: () => {
+    const r = compararTemplates(
+      healthCom({ recusado: 'twk_reservation_declined', aceito: 'twk_reservation_accepted' }),
+      [...metaDe('twk_reservation_declined', ['fr'], { category: 'MARKETING' }), ...metaDe('twk_reservation_accepted', SEIS)],
+    );
+    const a = r.achados.find((x) => x.chave === 'silencio.wa_template.recusado');
+    return [
+      ...esperar(!!a, 'template aprovado só em fr com seis idiomas ligados passou sem achado'),
+      ...esperar(!a || /en, pt_BR, it, es, de/.test(a.titulo), `o achado não diz quais idiomas faltam: ${a && a.titulo}`),
+      ...esperar(!r.achados.some((x) => x.chave === 'silencio.wa_template.aceito'), 'template completo virou achado'),
+      ...esperar(r.ok.length === 0, 'declarou "ok" com achado de template aberto'),
+    ];
+  },
+});
+
+casos.push({
+  nome: 'v20 sentinela: template inexistente é crítico; etapa desligada (nome vazio) não é achado; tudo certo dá ok',
+  run: () => {
+    const inexistente = compararTemplates(healthCom({ avaliacao: 'avaliacao_experiencia_6h', vespera: '' }), metaDe('twk_review_invite', SEIS));
+    const certo = compararTemplates(healthCom({ avaliacao: 'twk_review_invite', vespera: '' }), metaDe('twk_review_invite', SEIS));
+    const pendente = compararTemplates(healthCom({ aceito: 'twk_reservation_accepted' }), metaDe('twk_reservation_accepted', SEIS, { status: 'PENDING' }));
+    return [
+      ...esperar(inexistente.achados.some((a) => a.severidade === 'critica' && a.chave === 'silencio.wa_template.avaliacao'), 'template que não existe na Meta não é crítico'),
+      ...esperar(!inexistente.achados.some((a) => a.chave === 'silencio.wa_template.vespera'), 'etapa desligada virou achado'),
+      ...esperar(certo.achados.length === 0 && certo.ok.length === 1, `configuração correta: ${certo.achados.length} achado(s), ${certo.ok.length} ok`),
+      ...esperar(pendente.achados.length === 1, 'template ainda em revisão (PENDING) contou como aprovado'),
+    ];
+  },
+});
+
+casos.push({
+  nome: 'v20 sentinela: /health sem a seção de templates é lacuna (não rodou), nunca "ok"; alerta desligado é achado',
+  run: () => {
+    const velho = compararTemplates({ build: 'v19', etapas: {} }, []);
+    const semAlerta = compararTemplates(healthCom({ aceito: 'twk_reservation_accepted' }, { alertaOperador: false }), metaDe('twk_reservation_accepted', SEIS));
+    const alertaUmIdioma = compararTemplates(healthCom({ alertaOperador: 'twk_ops_alert' }), metaDe('twk_ops_alert', ['pt_BR']));
+    return [
+      ...esperar(velho.lacunas.length === 1 && velho.ok.length === 0 && velho.achados.length === 0, 'health antigo não virou lacuna'),
+      ...esperar(semAlerta.achados.some((a) => a.chave === 'silencio.wa_alerta_operador_desligado'), 'alerta ao operador desligado passou em silêncio'),
+      ...esperar(alertaUmIdioma.achados.length === 0, 'o template do alerta (um idioma só, de propósito) foi cobrado nos seis'),
+    ];
+  },
+});
+
+casos.push({
+  nome: 'v20 alerta: volta só é avisada se a queda foi avisada',
+  run: () => esperar(rodarAlerta([false, true]).every((a) => a === 'nada'), 'avisou a volta de uma queda que não avisou'),
+});
+
 module.exports = { casos };

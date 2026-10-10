@@ -26,7 +26,14 @@ function disponivel() { return !!(urlRo() && pg()); }
  * é melhor o relatório não sair do que sair inflado por casas de teste.
  */
 function idsTeste() {
-  const f = path.resolve(__dirname, '..', '..', '..', 'orchestrator', 'state', 'excluidos-teste.json');
+  // Na máquina do Orquestrador a fonte é o repositório; na Central hospedada é a cópia que o
+  // push-state.ps1 sincroniza para STATE_DIR (v4.5.2). Sem nenhuma das duas, falha alto.
+  const candidatos = [
+    path.resolve(__dirname, '..', '..', '..', 'orchestrator', 'state', 'excluidos-teste.json'),
+    path.join(process.env.STATE_DIR || path.resolve(__dirname, '..', 'state'), 'excluidos-teste.json'),
+  ];
+  const f = candidatos.find((p) => fs.existsSync(p));
+  if (!f) throw new Error('excluidos-teste.json ausente (repositório e STATE_DIR) — contagens não podem sair sem a lista de casas de teste');
   const j = JSON.parse(fs.readFileSync(f, 'utf8'));
   return (j.restaurantes || []).map((r) => String(r.restaurant_id));
 }
@@ -97,4 +104,4 @@ async function slugs(ids) {
   });
 }
 
-module.exports = { disponivel, comCliente, snapshot, slugs };
+module.exports = { disponivel, comCliente, snapshot, slugs, sqlExcluidos };

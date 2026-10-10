@@ -1,0 +1,906 @@
+{
+ "id": "suporte",
+ "grupo": "Agentes",
+ "titulo": "Aria",
+ "sub": "suporte e concierge",
+ "tipo": "agente",
+ "agenteId": "suporte",
+ "cor": "s3",
+ "kicker": "Aria · suporte e concierge",
+ "h1": "Aria",
+ "lede": "A Aria é a voz da The World Keys. Ela conversa com clientes e restaurantes por WhatsApp e por e-mail, no idioma de cada um: encontra reservas, sugere casas, calcula o caminho até o restaurante e envia os avisos de cada etapa da reserva. Antes de qualquer resposta sair, ela é revisada; o que a Aria não pode resolver sobe para uma pessoa.",
+ "resumo": [
+  {
+   "ref": "aria_pulso.recebidas_24h",
+   "t": "Mensagens em 24 h"
+  },
+  {
+   "ref": "aria_pulso.escalacoes_abertas",
+   "t": "Casos com humano"
+  },
+  {
+   "ref": "aria_saude.pct_ok",
+   "t": "Disponível, 30 d",
+   "f": "pct0"
+  }
+ ],
+ "agente": {
+  "codinome": "Aria",
+  "papel": "Suporte e concierge",
+  "resumo": "Atende clientes e restaurantes por WhatsApp e e-mail e envia os avisos de reserva.",
+  "funcoes": [
+   {
+    "nome": "Atendimento por WhatsApp",
+    "descricao_leiga": "Responde quem escreve ao número da The World Keys — texto, áudio ou imagem: localiza reservas, tira dúvidas, sugere restaurantes e orienta o próximo passo. A Aria não cria nem cancela a reserva de um cliente: encaminha ao site.",
+    "como_roda": "a cada mensagem",
+    "arquivo": "src/index.ts · src/claude.ts"
+   },
+   {
+    "nome": "Atendimento por e-mail",
+    "descricao_leiga": "Lê os e-mails recebidos, ignora propaganda e relatórios automáticos e responde clientes e restaurantes na mesma conversa.",
+    "como_roda": "a cada e-mail",
+    "arquivo": "src/emailChannel.ts"
+   },
+   {
+    "nome": "Concierge",
+    "descricao_leiga": "Sugere casas pelo que o cliente descreve (uma ocasião, um clima, uma cozinha), mostra o que há perto dele, calcula o tempo de viagem e a hora de sair, e lembra preferências e restrições alimentares de conversas anteriores.",
+    "como_roda": "a cada conversa",
+    "arquivo": "src/tools.ts · src/maps.ts"
+   },
+   {
+    "nome": "Avisos de reserva ao cliente",
+    "descricao_leiga": "Avisa pelo WhatsApp quando o pedido foi recebido, aceito, recusado ou cancelado; lembra 2 horas antes; dá notícia quando o pedido segue sem resposta; convida a avaliar depois da visita. Só para quem pediu para receber.",
+    "como_roda": "a cada mudança da reserva · varredura a cada 20 min",
+    "arquivo": "src/reservationEvents.ts · src/reminders.ts"
+   },
+   {
+    "nome": "Avisos de reserva ao restaurante",
+    "descricao_leiga": "Avisa a casa de um pedido novo (com botão para aceitar ou recusar), lembra de pedido sem resposta, avisa cancelamentos e envia a agenda da véspera. Só para casas marcadas.",
+    "como_roda": "a cada mudança da reserva · varredura a cada 20 min",
+    "arquivo": "src/venueEvents.ts"
+   },
+   {
+    "nome": "Vigia de reservas",
+    "descricao_leiga": "A cada 2 minutos compara as reservas com a última foto e descobre sozinha o que mudou, sem depender de outro sistema avisar.",
+    "como_roda": "a cada 2 min",
+    "arquivo": "src/watcher.ts"
+   },
+   {
+    "nome": "Pedido de acompanhamento pelo cliente",
+    "descricao_leiga": "O cliente toca num botão do e-mail e envia uma mensagem com o código da reserva; a Aria registra o consentimento naquele número e passa a enviar os avisos ali. Funciona mesmo com o modelo de IA fora do ar.",
+    "como_roda": "a cada pedido",
+    "arquivo": "src/optIn.ts"
+   },
+   {
+    "nome": "Parar e voltar",
+    "descricao_leiga": "Quem escreve PARAR deixa de receber avisos na hora; VOLTAR reativa. Números sem WhatsApp entram numa lista de bloqueio.",
+    "como_roda": "a cada mensagem",
+    "arquivo": "src/consent.ts"
+   },
+   {
+    "nome": "Revisão antes de enviar",
+    "descricao_leiga": "Toda resposta passa por uma revisão: regras fixas e uma segunda leitura. Se reprovar, a Aria reescreve uma vez; se reprovar de novo, a resposta é retida e o caso sobe para uma pessoa.",
+    "como_roda": "a cada resposta",
+    "arquivo": "src/revisao.ts · src/entrega.ts"
+   },
+   {
+    "nome": "Porta única de saída",
+    "descricao_leiga": "A última barreira dos dois canais: barra anotação interna, vocabulário de bastidor, promessa de prazo de terceiros, resposta vazia e resposta em idioma diferente do cliente.",
+    "como_roda": "a cada resposta",
+    "arquivo": "src/format.ts"
+   },
+   {
+    "nome": "Juiz de Conversa",
+    "descricao_leiga": "Todo dia relê as respostas enviadas e dá nota em seis critérios. Resposta reprovada vira um caso para revisão.",
+    "como_roda": "diário",
+    "arquivo": "src/juiz.ts"
+   },
+   {
+    "nome": "Monitor de saúde",
+    "descricao_leiga": "A cada 5 minutos confere o banco, o WhatsApp e o modelo de IA, e acusa ferramenta que passou a falhar.",
+    "como_roda": "a cada 5 min",
+    "arquivo": "src/monitor.ts"
+   },
+   {
+    "nome": "Alerta no celular do operador",
+    "descricao_leiga": "Quando o modelo de IA cai, avisa por WhatsApp quem opera; repete a cada 12 horas e avisa quando volta. A cada versão nova, envia uma mensagem de teste.",
+    "como_roda": "na queda, na volta e a cada versão",
+    "arquivo": "src/alertaOperador.ts"
+   },
+   {
+    "nome": "Fila de reenvio",
+    "descricao_leiga": "Mensagem que chegou enquanto o modelo estava fora não se perde: fica guardada e é respondida quando ele volta.",
+    "como_roda": "a cada 10 min",
+    "arquivo": "src/index.ts"
+   },
+   {
+    "nome": "Compromisso de retorno",
+    "descricao_leiga": "Quando a Aria diz que volta numa data, isso vira um compromisso registrado, e ela volta ao cliente naquele dia.",
+    "como_roda": "a cada promessa · conferência diária",
+    "arquivo": "src/compromissos.ts"
+   },
+   {
+    "nome": "Escalação a uma pessoa",
+    "descricao_leiga": "Casos de dinheiro, jurídicos, de imprensa ou graves para a marca sobem para uma pessoa, com a gravidade indicada. Um operador pode assumir a conversa e a Aria fica em silêncio.",
+    "como_roda": "quando necessário",
+    "arquivo": "src/handoff.ts"
+   },
+   {
+    "nome": "Controle de custo",
+    "descricao_leiga": "Um teto diário de gasto com o modelo de IA; perto do teto, passa a usar um modelo mais barato.",
+    "como_roda": "contínuo",
+    "arquivo": "src/costGuard.ts"
+   },
+   {
+    "nome": "Autoteste e analista",
+    "descricao_leiga": "Uma bateria diária de 10 testes confere se as partes essenciais respondem, e um analista semanal propõe melhorias a partir das conversas.",
+    "como_roda": "diário · semanal",
+    "arquivo": "src/tester.ts · src/analyst.ts"
+   },
+   {
+    "nome": "Resposta do restaurante por e-mail",
+    "descricao_leiga": "Quando a casa responde ao e-mail de um pedido dizendo que aceita, recusa ou propõe outro horário, a Aria aplica a decisão pela plataforma, como se a casa tivesse tocado no botão.",
+    "como_roda": "a cada e-mail de restaurante",
+    "arquivo": "src/platformReservation.ts"
+   }
+  ],
+  "ferramentas": [
+   {
+    "nome": "Buscar reserva pelo código",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Localiza uma reserva pelo código que o cliente recebeu."
+   },
+   {
+    "nome": "Buscar reservas por e-mail ou telefone",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Lista as reservas de quem está falando, pelo contato confirmado."
+   },
+   {
+    "nome": "Pesquisar reservas",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Busca reservas por casa, data ou situação."
+   },
+   {
+    "nome": "Informações e horários do restaurante",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Lê os dados públicos e o horário de funcionamento de uma casa."
+   },
+   {
+    "nome": "Pesquisar restaurantes",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Busca casas por nome, cidade ou cozinha."
+   },
+   {
+    "nome": "Descobrir restaurantes pelo clima",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Encontra casas pelo que o cliente descreve: romântico, com vista, animado, para família."
+   },
+   {
+    "nome": "Restaurantes perto de mim",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Lista casas próximas da localização que o cliente compartilhou."
+   },
+   {
+    "nome": "Localização e rota até o restaurante",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Distância, tempo de viagem e a hora de sair para chegar no horário."
+   },
+   {
+    "nome": "Link oficial de reserva",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Entrega o endereço oficial da página da casa — sempre lido do banco, nunca montado à mão."
+   },
+   {
+    "nome": "Botão Reservar, opções e respostas rápidas",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Envia botões e listas nativas do WhatsApp em vez de texto corrido."
+   },
+   {
+    "nome": "Enviar a localização no mapa",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Manda o ponto do restaurante para abrir no mapa do celular."
+   },
+   {
+    "nome": "Perfil do cliente",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Lê e atualiza preferências, alergias e restrições informadas pelo próprio cliente."
+   },
+   {
+    "nome": "Encontrar usuário",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Confere se quem escreve tem conta na plataforma."
+   },
+   {
+    "nome": "Registrar compromisso de retorno",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Grava a data em que a Aria prometeu voltar."
+   },
+   {
+    "nome": "Registrar opção de receber ou parar",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Liga ou desliga os avisos para aquele contato, a pedido dele."
+   },
+   {
+    "nome": "Guardar avaliação da experiência",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Registra a nota e o comentário do cliente depois da visita."
+   },
+   {
+    "nome": "Aplicar a resposta do restaurante",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Só por e-mail e só quando é a casa respondendo a um pedido: aceita, recusa ou propõe outro horário pela plataforma."
+   },
+   {
+    "nome": "Consulta livre de leitura",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Uma consulta de leitura ao banco quando as outras ferramentas não bastam. Não consegue alterar nada."
+   },
+   {
+    "nome": "Nota de atendimento",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Registra o que foi feito, para auditoria."
+   },
+   {
+    "nome": "Subir o caso a uma pessoa",
+    "tipo": "ferramenta do modelo",
+    "descricao": "Abre uma escalação com a gravidade e o resumo, sem dados pessoais além do necessário."
+   },
+   {
+    "nome": "WhatsApp (Meta)",
+    "tipo": "integração",
+    "descricao": "Recebe e envia mensagens, modelos aprovados e confirmações de entrega e leitura."
+   },
+   {
+    "nome": "Modelo de IA (Anthropic)",
+    "tipo": "integração",
+    "descricao": "Lê a conversa e escreve a resposta; um modelo menor faz a triagem e a revisão."
+   },
+   {
+    "nome": "E-mail (Gmail, via n8n)",
+    "tipo": "integração",
+    "descricao": "Entrada e saída do canal de e-mail."
+   },
+   {
+    "nome": "Mapas (Google)",
+    "tipo": "integração",
+    "descricao": "Rotas, distâncias e pontos no mapa."
+   },
+   {
+    "nome": "Painel da Aria",
+    "tipo": "painel",
+    "descricao": "Conversas, escalações, qualidade do catálogo, custos e eventos ao vivo, com acesso por senha."
+   },
+   {
+    "nome": "Modelos de mensagem aprovados pela Meta",
+    "tipo": "integração",
+    "descricao": "Quinze avisos de reserva, cada um em seis idiomas, mais o alerta ao operador."
+   }
+  ],
+  "dados": [
+   {
+    "onde": "Conversas",
+    "o_que": "Cada mensagem recebida e enviada, com o canal."
+   },
+   {
+    "onde": "Consentimento",
+    "o_que": "Quem pediu para receber avisos, quem pediu para parar e quais números não têm WhatsApp. A Aria é a dona desta lista; os outros agentes consultam."
+   },
+   {
+    "onde": "Escalações",
+    "o_que": "Os casos que subiram a uma pessoa, com a gravidade, a situação e a resolução."
+   },
+   {
+    "onde": "Registro de avisos",
+    "o_que": "Cada aviso de reserva e o desfecho: enviado, sem opt-in, telefone inválido, recusado."
+   },
+   {
+    "onde": "Entrega",
+    "o_que": "O status que a Meta devolve para cada aviso: aceito, entregue, lido ou falhou."
+   },
+   {
+    "onde": "Qualidade",
+    "o_que": "As notas do Juiz, as revisões antes do envio e as respostas barradas."
+   },
+   {
+    "onde": "Saúde e uso",
+    "o_que": "As checagens a cada 5 minutos, as chamadas de ferramenta e o consumo do modelo de IA."
+   },
+   {
+    "onde": "Memória do cliente",
+    "o_que": "Preferências e restrições que o cliente contou, para não perguntar de novo."
+   }
+  ],
+  "autonomia": {
+   "teto": "Resolve do começo ao fim, com registro: dúvidas, localização de reserva, sugestões, avisos de reserva, má notícia simples (atraso, recusa, pedido de desculpas, alternativa sem custo).",
+   "exige_aprovacao": [
+    "Qualquer valor ao cliente: reembolso, desconto, compensação, cortesia",
+    "Assuntos jurídicos e de imprensa",
+    "O que for grave para a marca ou para a segurança de alguém",
+    "Prometer prazo de restaurante ou de uma pessoa da equipe — é proibido, não só restrito",
+    "Afirmar mesa, confirmação ou disponibilidade que não existam"
+   ]
+  },
+  "sinais_de_vida": [
+   {
+    "nome": "A página de saúde responde",
+    "como_ver": "Diz a versão no ar, há quanto tempo subiu e quais etapas de aviso estão ligadas."
+   },
+   {
+    "nome": "A checagem a cada 5 minutos passa",
+    "como_ver": "Banco, WhatsApp e modelo de IA de pé; uma queda do modelo abre um caso urgente e avisa o operador."
+   },
+   {
+    "nome": "Mensagem recebida tem resposta",
+    "como_ver": "A Sentinela acusa cliente esperando há mais de 2 horas."
+   }
+  ],
+  "lacunas": [
+   "Nenhum aviso de WhatsApp teve entrega confirmada até 05/10/2026: os enviados a restaurantes foram para números fixos, sem WhatsApp.",
+   "Nenhum cliente pediu ainda para receber avisos: o botão do e-mail está pronto e espera aprovação para entrar.",
+   "De 2 a 5 de outubro a Aria ficou 70 horas sem o modelo de IA (crédito do provedor). A recarga automática foi ligada e o alerta no celular entrou na versão 21; o modelo de mensagem do alerta ainda está em análise na Meta.",
+   "O alerta ao operador ainda não chegou ao celular: o modelo de mensagem está em análise na Meta desde 05/10 e cada tentativa é recusada. Há um caso aberto no painel por isso.",
+   "A ferramenta de nota de atendimento falhou em 6 de 7 usos nos últimos 30 dias.",
+   "A Aria nunca registrou um compromisso de retorno e não há avaliações de experiência: essas duas funções existem e ainda não foram usadas.",
+   "O custo em dinheiro do modelo de IA não é gravado, só o consumo em tokens.",
+   "As notas de avaliação da experiência ainda não têm volume: nenhuma avaliação foi registrada."
+  ]
+ },
+ "blocos": [
+  {
+   "titulo": "O pulso do atendimento",
+   "texto": "Quanta gente escreveu, quanto a Aria respondeu e se há alguém esperando.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_pulso.recebidas_24h",
+       "t": "Mensagens recebidas",
+       "u": "em 24 h",
+       "destaque": true,
+       "e": "De clientes e restaurantes, por WhatsApp e e-mail."
+      },
+      {
+       "ref": "aria_pulso.enviadas_24h",
+       "t": "Respostas enviadas",
+       "u": "em 24 h",
+       "e": "Parte do que chega é propaganda ou relatório automático, que a Aria ignora de propósito."
+      },
+      {
+       "ref": "aria_pulso.conversas_30d",
+       "t": "Conversas em 30 dias",
+       "e": "Pessoas ou empresas diferentes que falaram com a Aria."
+      },
+      {
+       "ref": "aria_pulso.fila_de_reenvio",
+       "t": "Mensagens esperando reenvio",
+       "e": "Chegaram com o modelo fora do ar e serão respondidas. O normal é zero."
+      }
+     ]
+    },
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_primeira_resposta.conversas",
+       "t": "Conversas iniciadas",
+       "u": "em 30 dias",
+       "e": "Pessoas ou sistemas que escreveram primeiro."
+      },
+      {
+       "ref": "aria_primeira_resposta.respondidas",
+       "t": "Conversas respondidas",
+       "e": "As demais são, na maioria, e-mails automáticos e propaganda, ignorados de propósito, ou conversas assumidas por uma pessoa."
+      },
+      {
+       "ref": "aria_primeira_resposta.mediana_segundos",
+       "t": "Tempo típico até a primeira resposta",
+       "u": "segundos",
+       "destaque": true,
+       "e": "Metade das conversas respondidas recebeu a primeira resposta em menos que isso."
+      },
+      {
+       "ref": "aria_memoria.conversas_com_humano",
+       "t": "Conversas com uma pessoa",
+       "e": "Assumidas por um operador; a Aria fica em silêncio nelas."
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "aria_mensagens_dia",
+     "titulo": "Mensagens recebidas e enviadas, por dia",
+     "texto": "Os últimos 30 dias.",
+     "x": "periodo",
+     "series": [
+      {
+       "campo": "recebidas",
+       "rotulo": "Recebidas",
+       "cor": "s1"
+      },
+      {
+       "campo": "enviadas",
+       "rotulo": "Enviadas",
+       "cor": "s3"
+      }
+     ]
+    },
+    {
+     "tipo": "ranking",
+     "id": "aria_canais",
+     "titulo": "Por onde as pessoas falam",
+     "texto": "Conversas diferentes em 90 dias, por canal.",
+     "cor": "s3",
+     "rotuloTitulo": "Canal",
+     "valorTitulo": "Conversas",
+     "extra": {
+      "campo": "mensagens",
+      "rotulo": "mensagens",
+      "f": "int"
+     }
+    }
+   ]
+  },
+  {
+   "titulo": "Os casos que sobem a uma pessoa",
+   "texto": "O que a Aria não pode ou não deve resolver sozinha: dinheiro, pedidos de remoção, falhas do próprio sistema.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_escalacoes.abertas",
+       "t": "Casos abertos",
+       "destaque": true,
+       "e": "Esperando uma pessoa agora."
+      },
+      {
+       "ref": "aria_escalacoes.mais_antiga_horas",
+       "t": "O mais antigo espera há",
+       "f": "horas",
+       "e": "Quanto tempo o caso aberto mais antigo está na fila."
+      },
+      {
+       "ref": "aria_escalacoes.novas_7d",
+       "t": "Novos em 7 dias",
+       "e": "Casos abertos na última semana."
+      },
+      {
+       "ref": "aria_escalacoes.resolvidas_30d",
+       "t": "Resolvidos em 30 dias",
+       "e": "Casos fechados no último mês."
+      }
+     ]
+    },
+    {
+     "tipo": "ranking",
+     "id": "aria_escalacoes_tag",
+     "titulo": "Casos por gravidade ou assunto — 90 dias",
+     "texto": "Quantos casos de cada tipo e, ao lado, quantos seguem abertos.",
+     "cor": "s3",
+     "rotuloTitulo": "Tipo",
+     "valorTitulo": "Casos",
+     "extra": {
+      "campo": "abertas",
+      "rotulo": "abertos",
+      "f": "int"
+     }
+    }
+   ]
+  },
+  {
+   "titulo": "Os avisos de reserva pelo WhatsApp",
+   "texto": "Cada mudança numa reserva pode virar um aviso. O sistema só envia a quem pediu para receber e a número que seja um celular válido — e mede se a mensagem chegou de fato.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_optin.clientes",
+       "t": "Clientes que pediram avisos",
+       "e": "O consentimento é do cliente: ele envia a primeira mensagem."
+      },
+      {
+       "ref": "aria_optin.casas",
+       "t": "Restaurantes marcados",
+       "e": "Casas que recebem os pedidos também pelo WhatsApp."
+      },
+      {
+       "ref": "aria_entrega.entregues",
+       "t": "Avisos com entrega confirmada",
+       "u": "em 30 dias",
+       "destaque": true,
+       "e": "A Meta confirmou que chegaram ao celular."
+      },
+      {
+       "ref": "aria_optin.numeros_sem_whatsapp",
+       "t": "Números sem WhatsApp",
+       "e": "Bloqueados automaticamente depois que a Meta devolveu a mensagem."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "aria_notificacoes",
+       "titulo": "O que aconteceu com cada aviso — 30 dias",
+       "texto": "Todo aviso tem um desfecho registrado, inclusive os que não saíram e o motivo.",
+       "cor": "s3",
+       "rotuloTitulo": "Desfecho",
+       "valorTitulo": "Avisos"
+      },
+      {
+       "tipo": "funil",
+       "id": "aria_entrega",
+       "titulo": "Do envio à leitura — 30 dias",
+       "texto": "\"Aceito pela Meta\" não prova entrega; só o status de entrega prova.",
+       "passos": [
+        {
+         "campo": "aceitas_pela_meta",
+         "rotulo": "Aceitos pela Meta",
+         "cor": "s1"
+        },
+        {
+         "campo": "entregues",
+         "rotulo": "Entregues no celular",
+         "cor": "s3"
+        },
+        {
+         "campo": "lidas",
+         "rotulo": "Lidos",
+         "cor": "s3"
+        },
+        {
+         "campo": "falharam",
+         "rotulo": "Falharam",
+         "nota": "número sem WhatsApp",
+         "cor": "s2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_servico.etapas_ligadas",
+       "t": "Etapas de aviso ligadas",
+       "e": "Cada etapa (pedido recebido, aceito, lembrete, véspera…) liga e desliga separadamente."
+      },
+      {
+       "ref": "aria_servico.idiomas",
+       "t": "Idiomas dos avisos",
+       "e": "Inglês, português, francês, italiano, espanhol e alemão."
+      },
+      {
+       "ref": "aria_servico.teto_diario",
+       "t": "Teto de avisos por dia",
+       "e": "Uma rede de segurança contra envio em massa por engano."
+      },
+      {
+       "ref": "aria_servico.alerta_operador",
+       "t": "Alerta ao operador",
+       "f": "texto",
+       "e": "Avisa no celular quando a Aria fica muda."
+      }
+     ]
+    },
+    {
+     "tipo": "tabela",
+     "id": "aria_etapas",
+     "titulo": "As etapas de aviso, uma a uma",
+     "texto": "Lido agora da própria Aria: cada etapa liga e desliga separadamente.",
+     "colunas": [
+      {
+       "campo": "etapa",
+       "rotulo": "Etapa",
+       "f": "texto"
+      },
+      {
+       "campo": "estado",
+       "rotulo": "Estado",
+       "f": "texto"
+      }
+     ],
+     "max": 20
+    }
+   ]
+  },
+  {
+   "titulo": "A qualidade das respostas",
+   "texto": "Nenhuma resposta sai sem revisão, e um juiz relê as conversas do dia. Os critérios vêm de uma regra da casa: discrição, idioma do cliente, não prometer prazo de terceiros, tom da marca, resolver agora e não usar vocabulário interno.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_juiz.julgadas",
+       "t": "Respostas julgadas",
+       "u": "em 30 dias",
+       "e": "Releitura diária do que foi enviado."
+      },
+      {
+       "ref": "aria_juiz.nota_media",
+       "t": "Nota média",
+       "f": "dec1",
+       "u": "de 6",
+       "destaque": true,
+       "e": "Um ponto por critério cumprido."
+      },
+      {
+       "ref": "aria_juiz.reprovadas",
+       "t": "Reprovadas",
+       "e": "Abaixo de 5: viram um caso para revisão."
+      },
+      {
+       "ref": "aria_escopo.bloqueios_30d",
+       "t": "Mensagens fora de escopo ignoradas",
+       "u": "em 30 dias",
+       "e": "Propaganda, relatórios automáticos e e-mails em massa, que não merecem resposta."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "aria_juiz_criterios",
+       "titulo": "Critério por critério — 90 dias",
+       "texto": "De cada 100 respostas julgadas, quantas cumpriram cada critério. O critério mais baixo é o primeiro a corrigir.",
+       "cor": "s3",
+       "f": "pct0",
+       "rotuloTitulo": "Critério",
+       "valorTitulo": "Cumprido"
+      },
+      {
+       "tipo": "funil",
+       "id": "aria_revisao",
+       "titulo": "A revisão antes do envio — 30 dias",
+       "texto": "O que a revisão fez com as respostas que examinou.",
+       "passos": [
+        {
+         "campo": "revisadas",
+         "rotulo": "Respostas revisadas",
+         "cor": "s1"
+        },
+        {
+         "campo": "aprovadas_de_primeira",
+         "rotulo": "Aprovadas de primeira",
+         "cor": "s3"
+        },
+        {
+         "campo": "corrigidas",
+         "rotulo": "Corrigidas e enviadas",
+         "cor": "s4"
+        },
+        {
+         "campo": "retidas",
+         "rotulo": "Retidas",
+         "nota": "subiram a uma pessoa",
+         "cor": "s2"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "A saúde do serviço",
+   "texto": "A Aria depende de três coisas de pé: o banco, o WhatsApp e o modelo de IA. Sem o modelo, ela recebe as mensagens e não consegue responder.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_saude.pct_ok",
+       "t": "Disponibilidade em 30 dias",
+       "f": "pct",
+       "destaque": true,
+       "e": "Parte do tempo com os três de pé."
+      },
+      {
+       "ref": "aria_saude.minutos_sem_modelo",
+       "t": "Tempo sem o modelo de IA",
+       "f": "min",
+       "u": "em 30 dias",
+       "e": "O período em que a Aria ficou muda."
+      },
+      {
+       "ref": "aria_servico.no_ar_horas",
+       "t": "No ar sem reiniciar há",
+       "f": "horas",
+       "e": "Desde a última versão publicada."
+      },
+      {
+       "ref": "aria_servico.build",
+       "t": "Versão no ar",
+       "f": "texto",
+       "e": "A etiqueta da versão publicada."
+      }
+     ]
+    },
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_servico.alerta_operador",
+       "t": "Alerta no celular do operador",
+       "f": "texto",
+       "e": "Avisa por WhatsApp quando a Aria fica sem o modelo e quando volta."
+      },
+      {
+       "ref": "aria_alerta.enviados",
+       "t": "Alertas enviados",
+       "e": "Inclui a mensagem de teste que sai a cada versão nova."
+      },
+      {
+       "ref": "aria_alerta.falharam",
+       "t": "Tentativas de alerta que falharam",
+       "e": "O modelo de mensagem do alerta ainda está em análise na Meta; a Aria tenta de novo a cada 30 minutos."
+      },
+      {
+       "ref": "aria_saude.minutos_sem_whatsapp",
+       "t": "Tempo sem o WhatsApp",
+       "f": "min",
+       "u": "em 30 dias",
+       "e": "Quedas da ligação com a Meta."
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "aria_saude_dia",
+     "titulo": "Disponibilidade, dia a dia",
+     "texto": "100% = todas as checagens do dia passaram.",
+     "x": "periodo",
+     "f": "pct",
+     "series": [
+      {
+       "campo": "disponibilidade",
+       "rotulo": "Disponibilidade",
+       "cor": "s3"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "O trabalho do modelo de IA",
+   "texto": "Cada resposta exige que o modelo leia a conversa e use ferramentas para buscar dados reais. Aqui está quanto ele trabalhou.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_llm.chamadas",
+       "t": "Chamadas ao modelo",
+       "u": "em 30 dias",
+       "e": "Cada raciocínio do modelo é uma chamada."
+      },
+      {
+       "ref": "aria_llm.milhoes_tokens_lidos",
+       "t": "Texto lido pelo modelo",
+       "f": "dec2",
+       "u": "milhões de tokens",
+       "e": "O custo de uso é proporcional a isto."
+      },
+      {
+       "ref": "aria_custo.usd_30d",
+       "t": "Custo estimado do modelo",
+       "f": "usd",
+       "u": "em 30 dias",
+       "e": "Estimativa pela tabela de preços do painel. Não inclui a revisão, o Juiz e os resumos, que não gravam o uso."
+      },
+      {
+       "ref": "aria_tools.pct_sucesso",
+       "t": "Ferramentas que funcionaram",
+       "f": "pct",
+       "e": "Uma ferramenta falhando faz a Aria responder sem o dado; o monitor acusa."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "aria_tools_rank",
+       "titulo": "Ferramentas mais usadas — 30 dias",
+       "texto": "E, ao lado, a taxa de sucesso de cada uma.",
+       "cor": "s3",
+       "rotuloTitulo": "Ferramenta",
+       "valorTitulo": "Usos",
+       "extra": {
+        "campo": "sucesso",
+        "rotulo": "% de sucesso",
+        "f": "int"
+       }
+      },
+      {
+       "tipo": "ranking",
+       "id": "aria_llm_modelo",
+       "titulo": "Chamadas por modelo — 30 dias",
+       "texto": "O modelo principal responde; um menor faz triagem e revisão.",
+       "cor": "s3",
+       "rotuloTitulo": "Modelo",
+       "valorTitulo": "Chamadas"
+      }
+     ]
+    },
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_memoria.perfis",
+       "t": "Clientes com preferências guardadas",
+       "e": "Alergias, restrições e gostos contados pelo próprio cliente."
+      },
+      {
+       "ref": "aria_tools.chamadas",
+       "t": "Usos de ferramenta",
+       "u": "em 30 dias",
+       "e": "Buscas no banco, rotas, botões enviados."
+      },
+      {
+       "ref": "aria_compromissos.abertos",
+       "t": "Retornos prometidos em aberto",
+       "e": "Datas em que a Aria se comprometeu a voltar."
+      },
+      {
+       "ref": "aria_testes.passaram",
+       "t": "Autotestes aprovados",
+       "e": "Na última rodada diária."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "O que a Aria faz",
+   "texto": "Todas as funções, em linguagem direta.",
+   "itens": [
+    {
+     "tipo": "funcoes"
+    }
+   ]
+  },
+  {
+   "titulo": "As ferramentas",
+   "texto": "O que a Aria tem à mão numa conversa e os serviços a que está ligada.",
+   "itens": [
+    {
+     "tipo": "ferramentas"
+    }
+   ]
+  },
+  {
+   "titulo": "O que pode fazer sozinha",
+   "itens": [
+    {
+     "tipo": "autonomia"
+    }
+   ]
+  },
+  {
+   "titulo": "Onde guarda os dados",
+   "itens": [
+    {
+     "tipo": "dados"
+    }
+   ]
+  },
+  {
+   "titulo": "O que ainda não está redondo",
+   "itens": [
+    {
+     "tipo": "lacunas"
+    }
+   ]
+  }
+ ]
+}

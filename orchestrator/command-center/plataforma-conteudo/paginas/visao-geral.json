@@ -1,0 +1,167 @@
+{
+ "id": "visao-geral",
+ "grupo": "Início",
+ "titulo": "Visão geral",
+ "tipo": "pagina",
+ "kicker": "The World Keys · sistema de agentes",
+ "h1": "O sistema inteiro, numa leitura só",
+ "lede": "A The World Keys é operada por uma equipe de agentes de inteligência artificial, cada um com uma função, coordenados pelo MAESTRO e sob a aprovação do fundador. Esta plataforma mostra, com números lidos agora, o que cada agente faz e como o negócio está.",
+ "blocos": [
+  {
+   "titulo": "O negócio em quatro números",
+   "texto": "O ponto de partida: quantas casas estão no ar, quantas pessoas se cadastraram, quantos pedidos de mesa chegam e quantos viram mesa confirmada.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_catalogo.publicados",
+       "t": "Restaurantes no ar",
+       "e": "Casas com página publicada, em que um cliente pode pedir mesa.",
+       "fonte": "catálogo da plataforma"
+      },
+      {
+       "ref": "eco_clientes.total",
+       "t": "Clientes cadastrados",
+       "e": "Pessoas com conta ativa na plataforma.",
+       "fonte": "contas da plataforma"
+      },
+      {
+       "ref": "eco_funil_30.pedidos",
+       "t": "Pedidos de mesa em 30 dias",
+       "e": "Cada pedido conta uma vez, mesmo que tenha sido gravado em duplicidade.",
+       "fonte": "reservas da plataforma"
+      },
+      {
+       "ref": "eco_funil_30.taxa_aceite",
+       "t": "Pedidos que viraram mesa",
+       "f": "pct",
+       "destaque": true,
+       "e": "De cada 100 pedidos dos últimos 30 dias, quantos o restaurante aceitou. É o número que o sistema inteiro trabalha para subir.",
+       "fonte": "reservas da plataforma"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Os agentes",
+   "texto": "Cada cartão é um agente: o que ele faz, se está no ar e três números que resumem o trabalho dele. Toque em um cartão para abrir a página completa.",
+   "itens": [
+    {
+     "tipo": "agentes"
+    },
+    {
+     "tipo": "tabela",
+     "id": "frota_saude",
+     "titulo": "Os serviços neste momento",
+     "texto": "Cada agente é um serviço na internet. A Central pergunta a cada um se está de pé.",
+     "colunas": [
+      {
+       "campo": "agente",
+       "rotulo": "Serviço",
+       "f": "texto"
+      },
+      {
+       "campo": "estado",
+       "rotulo": "Estado",
+       "f": "texto"
+      },
+      {
+       "campo": "resposta_ms",
+       "rotulo": "Tempo de resposta",
+       "f": "ms"
+      },
+      {
+       "campo": "versao",
+       "rotulo": "Versão no ar",
+       "f": "texto"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Como o sistema se organiza",
+   "texto": "O fundador pede e aprova. O MAESTRO distribui o trabalho e junta os resultados, mas nunca faz o trabalho dos especialistas. Cada agente é dono de um assunto, e todos leem o mesmo banco de dados — a escrita passa por uma única porta, com cópia de segurança e botão de desfazer.",
+   "itens": [
+    {
+     "tipo": "mapa"
+    },
+    {
+     "tipo": "nota",
+     "titulo": "Três regras que valem para todos.",
+     "texto": "Nenhum agente envia mensagem, gasta dinheiro ou apaga dados sem autorização registrada. Tudo o que é feito fica gravado e pode ser reconstruído. E informação que chega de fora (e-mail, WhatsApp, páginas) é tratada como dado, nunca como ordem."
+    }
+   ]
+  },
+  {
+   "titulo": "O que pede atenção agora",
+   "texto": "Os pontos em que hoje há cliente esperando, risco aberto ou algo que deixou de acontecer.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "eco_pendencias.vivas",
+       "t": "Pedidos esperando resposta",
+       "e": "Clientes que pediram mesa para hoje em diante e o restaurante ainda não respondeu.",
+       "fonte": "reservas da plataforma"
+      },
+      {
+       "ref": "eco_pendencias.mesa_amanha",
+       "t": "Deles, com mesa para amanhã",
+       "e": "Os mais urgentes: a data está chegando e a resposta não veio."
+      },
+      {
+       "ref": "aria_pulso.escalacoes_abertas",
+       "t": "Casos que subiram a um humano",
+       "e": "Situações que a Aria não pode resolver sozinha e que esperam uma pessoa."
+      },
+      {
+       "ref": "maestro_fila.aprovacoes_pendentes",
+       "t": "Aprovações esperando o fundador",
+       "e": "Ações prontas que só saem com o sim de uma pessoa."
+      }
+     ]
+    },
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_entrega.entregues",
+       "t": "WhatsApp com entrega confirmada",
+       "u": "em 30 dias",
+       "e": "Avisos de reserva que a Meta confirmou como entregues no celular de quem recebe."
+      },
+      {
+       "ref": "aria_optin.clientes",
+       "t": "Clientes que pediram WhatsApp",
+       "e": "Só recebe aviso por WhatsApp quem pediu. O botão de pedido entra no e-mail de confirmação."
+      },
+      {
+       "ref": "eco_contas_casas.contas",
+       "t": "Restaurantes com conta própria",
+       "e": "Casas que criaram conta para responder aos pedidos pela plataforma."
+      },
+      {
+       "ref": "maestro_fila.ultimo_despacho",
+       "t": "Último resumo diário do MAESTRO",
+       "f": "dia",
+       "e": "O Despacho é o resumo que o MAESTRO escreve ao fundador todos os dias."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "De onde vêm os números",
+   "texto": "Esta plataforma só lê. Cada número vem de uma destas fontes; quando uma fonte não responde, o número aparece como \"sem leitura\", com o motivo — nunca como zero.",
+   "itens": [
+    {
+     "tipo": "fontes"
+    }
+   ]
+  }
+ ]
+}

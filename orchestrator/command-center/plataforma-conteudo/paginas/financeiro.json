@@ -1,0 +1,119 @@
+{
+  "id": "financeiro", "grupo": "Agentes", "titulo": "Atlas", "sub": "financeiro", "tipo": "agente", "agenteId": "financeiro", "cor": "s4",
+  "kicker": "Atlas · financeiro",
+  "h1": "Atlas",
+  "lede": "O Atlas é o contador automático da The World Keys. Ele copia a conta de pagamentos (Stripe) para um banco próprio, calcula a receita recorrente, os atrasos e as previsões com contas exatas, e mostra a prova de cada número. O Atlas nunca movimenta dinheiro: toda ação vira uma proposta, que uma pessoa aprova ou nega. Hoje ele está no ar e pronto, mas ainda sem dados: nenhum pagamento real passou pela plataforma.",
+  "resumo": [
+    { "ref": "atlas_assinaturas.ativas", "t": "Assinaturas ativas" },
+    { "ref": "atlas_eventos.reais", "t": "Pagamentos reais" },
+    { "ref": "atlas_parceiras.parceiras", "t": "Casas parceiras" }
+  ],
+  "agente": {
+    "codinome": "Atlas", "papel": "Financeiro",
+    "resumo": "Mede a receita, confere os pagamentos e aponta anomalias. Só propõe; nunca movimenta dinheiro.",
+    "funcoes": [
+      { "nome": "Espelho da conta de pagamentos", "descricao_leiga": "Mantém uma cópia local de clientes, assinaturas, faturas e cobranças, atualizada a cada evento.", "como_roda": "a cada evento do Stripe", "arquivo": "src/sync/ · src/stripe/backfill.ts" },
+      { "nome": "Livro-caixa que não se apaga", "descricao_leiga": "Um registro contábil que só aceita lançamentos novos: nada pode ser alterado nem removido depois.", "como_roda": "a cada lançamento", "arquivo": "src/sync/ledger.ts" },
+      { "nome": "Métricas de receita", "descricao_leiga": "Receita recorrente por mês e por ano, receita média por cliente, clientes perdidos e receita mantida. Dinheiro sempre em centavos inteiros, nunca arredondado, e em euros.", "como_roda": "sob demanda e no fechamento diário", "arquivo": "src/metrics/engine.ts" },
+      { "nome": "Fechamento diário", "descricao_leiga": "Fotografa os números do dia, confere e envia um resumo.", "como_roda": "diário, por agendamento", "arquivo": "src/jobs/daily-close.ts" },
+      { "nome": "Reconciliação", "descricao_leiga": "Confere se o que está na conta de pagamentos bate com o que está no banco.", "como_roda": "sob demanda e no fechamento", "arquivo": "src/reconciliation/" },
+      { "nome": "Detecção de anomalias", "descricao_leiga": "Avisa quando há um pico de pagamentos recusados ou de reembolsos.", "como_roda": "contínua · janela de 30 dias", "arquivo": "src/anomalies/detector.ts" },
+      { "nome": "Previsão e simulação", "descricao_leiga": "Projeta a receita em três cenários, mede o próprio erro e simula mudanças de preço ou de cancelamentos.", "como_roda": "sob demanda", "arquivo": "src/forecast/ · src/whatif/" },
+      { "nome": "Cobrança de faturas vencidas", "descricao_leiga": "Lista as faturas em atraso e sugere a ação para cada uma. A nova tentativa de cobrança vira proposta.", "como_roda": "sob demanda", "arquivo": "src/dunning/engine.ts" },
+      { "nome": "Fila de aprovação", "descricao_leiga": "O agente propõe (reembolso, cancelamento, pausa); uma pessoa identificada decide. Quem propõe não confirma, e a proposta vence em 72 horas.", "como_roda": "a cada proposta", "arquivo": "src/actions/" },
+      { "nome": "Resumo diário e chat com prova", "descricao_leiga": "Um briefing do dia e respostas a perguntas, cada uma com a consulta que gerou o número.", "como_roda": "diário · sob demanda", "arquivo": "src/briefing/ · src/agent/" }
+    ],
+    "ferramentas": [
+      { "nome": "Métricas, movimento de receita, previsão, simulação, fila de recuperação", "tipo": "ferramenta do modelo", "descricao": "Dez ferramentas de leitura e cálculo, todas com acesso somente leitura ao banco." },
+      { "nome": "Propor ação no Stripe", "tipo": "ferramenta do modelo", "descricao": "Só registra a proposta de reembolso, cancelamento ou pausa. Não executa." },
+      { "nome": "Painel do Atlas", "tipo": "painel", "descricao": "Visão geral, receita, previsão, anomalias, reconciliação, ações e console." },
+      { "nome": "Confirmar ou rejeitar uma ação", "tipo": "painel", "descricao": "O único caminho que escreve na conta de pagamentos — sempre por uma pessoa." },
+      { "nome": "52 cenários de avaliação e 140 testes", "tipo": "avaliação", "descricao": "Conferem as contas e as travas antes de cada versão." },
+      { "nome": "Stripe · modelo de IA · n8n · banco próprio", "tipo": "integração", "descricao": "Pagamentos, leitura e escrita de texto, agendamentos e alertas, armazenamento." }
+    ],
+    "dados": [
+      { "onde": "Espelho do Stripe (banco próprio)", "o_que": "Clientes, assinaturas, faturas, cobranças, reembolsos, disputas e repasses." },
+      { "onde": "Contabilidade (banco próprio)", "o_que": "O livro-caixa, as cotações de moeda, as fotografias diárias das métricas, as previsões e as reconciliações." },
+      { "onde": "Registro de ações", "o_que": "Cada proposta, quem decidiu e o resultado." },
+      { "onde": "Banco da plataforma", "o_que": "Os depósitos de garantia de reserva e as regras de depósito, gravados pelo site." }
+    ],
+    "autonomia": {
+      "teto": "Lê, calcula, prevê e propõe. Nunca executa uma ação na conta de pagamentos.",
+      "exige_aprovacao": [
+        "Reembolso",
+        "Cancelamento ou pausa de assinatura",
+        "Nova tentativa de cobrança",
+        "Reembolso total ou acima de 500 euros: exige um segundo aprovador",
+        "Quem propõe não pode ser quem confirma"
+      ]
+    },
+    "sinais_de_vida": [
+      { "nome": "O serviço responde", "como_ver": "A página de saúde informa o banco e a fila de eventos de pagamento." },
+      { "nome": "Os testes passam", "como_ver": "140 testes aprovados na última rodada da Porta de Qualidade." },
+      { "nome": "O fechamento diário roda", "como_ver": "Uma fotografia de métricas por dia. Hoje não há nenhuma." }
+    ],
+    "lacunas": [
+      "O espelho da conta de pagamentos está vazio: nenhum evento real chegou e a carga inicial não foi feita. Por isso a receita não pode ser calculada — é ausência de dado, não receita zero.",
+      "O fechamento diário e a reconciliação nunca rodaram; o agendamento não foi comprovado.",
+      "Os pagamentos registrados pelo site até hoje são de teste, todos de 27/05/2026: 10 eventos, nenhum real.",
+      "A chave de pagamento configurada no ambiente local do Atlas é do tipo errado; a configuração de produção não pôde ser verificada daqui.",
+      "Com um único operador cadastrado, a regra de que quem propõe não confirma bloquearia toda confirmação.",
+      "A Central ainda não lê o painel do Atlas: falta a credencial de leitura. Os números de receita desta página aparecem como \"sem leitura\" até ela ser configurada.",
+      "Há 19 tabelas antigas do Atlas, vazias, dentro do banco da plataforma; removê-las é uma mudança de estrutura, que só uma pessoa faz."
+    ]
+  },
+  "blocos": [
+    {
+      "titulo": "A receita",
+      "texto": "Os números que o Atlas calcula quando há pagamentos: quanto entra por mês em assinaturas, quantos clientes pagam e quanto há em caixa. Eles vêm do painel do próprio Atlas.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "api_financeiro.mrr", "t": "Receita recorrente mensal", "f": "eur", "destaque": true, "e": "Quanto entra por mês em assinaturas ativas.", "fonte": "painel do Atlas" },
+          { "ref": "api_financeiro.arr", "t": "Receita recorrente anual", "f": "eur", "e": "A mesma receita, projetada para 12 meses.", "fonte": "painel do Atlas" },
+          { "ref": "api_financeiro.assinantes", "t": "Assinantes", "e": "Clientes com assinatura ativa.", "fonte": "painel do Atlas" },
+          { "ref": "api_financeiro.saldoDisponivel", "t": "Saldo disponível", "f": "eur", "e": "Dinheiro livre na conta de pagamentos.", "fonte": "painel do Atlas" }
+        ] },
+        { "tipo": "nota", "s": "atencao", "titulo": "Por que estes números estão sem leitura.", "texto": "Duas razões, uma depois da outra. Primeiro, a Central ainda não tem a credencial de leitura do painel do Atlas. Segundo, mesmo com ela, o Atlas não tem o que calcular: nenhum pagamento real passou pela plataforma e a cópia da conta de pagamentos está vazia. Quando o primeiro pagamento real entrar, estes quadros se preenchem sozinhos." }
+      ]
+    },
+    {
+      "titulo": "O que já existe sobre pagamentos",
+      "texto": "O que o site gravou no banco da plataforma até hoje. É o retrato fiel do estágio do negócio: a estrutura de cobrança existe e foi testada, e ainda não cobrou ninguém de verdade.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "atlas_eventos.reais", "t": "Pagamentos reais registrados", "destaque": true, "e": "Eventos de pagamento em modo de produção." },
+          { "ref": "atlas_eventos.eventos", "t": "Eventos de pagamento de teste", "e": "Registrados durante os testes da cobrança." },
+          { "ref": "atlas_depositos.depositos", "t": "Depósitos de garantia", "e": "Reservas com depósito, todas em modo de teste." },
+          { "ref": "atlas_assinaturas.ativas", "t": "Assinaturas ativas", "e": "Restaurantes ou clientes pagando um plano." }
+        ] },
+        { "tipo": "numeros", "tiles": [
+          { "ref": "atlas_parceiras.parceiras", "t": "Casas parceiras", "e": "Restaurantes com acordo comercial." },
+          { "ref": "atlas_parceiras.com_comissao_definida", "t": "Parceiras com comissão definida", "e": "Casas em que o valor por pessoa está registrado." },
+          { "ref": "atlas_depositos.regras", "t": "Regras de depósito configuradas", "e": "Casas que definiram quando cobrar garantia." },
+          { "ref": "atlas_eventos.ultimo", "t": "Último evento de pagamento", "f": "idade", "e": "Quando o site registrou um pagamento pela última vez." }
+        ] }
+      ]
+    },
+    {
+      "titulo": "A saúde do serviço",
+      "texto": "O Atlas está no ar e pronto para receber os eventos de pagamento.",
+      "itens": [
+        { "tipo": "numeros", "tiles": [
+          { "ref": "atlas_servico.banco", "t": "Banco do Atlas", "f": "texto", "e": "A conexão com o banco próprio." },
+          { "ref": "atlas_servico.fila_pendente", "t": "Eventos esperando processamento", "e": "O normal é zero." },
+          { "ref": "atlas_servico.fila_falhou", "t": "Eventos com falha", "e": "Tentados de novo automaticamente." },
+          { "ref": "atlas_servico.fila_morta", "t": "Eventos abandonados", "e": "Falharam todas as tentativas e esperam uma pessoa." }
+        ] },
+        { "tipo": "numeros", "tiles": [
+          { "ref": "api_financeiro.healthScore", "t": "Nota de saúde financeira", "u": "de 100", "e": "Desconta eventos perdidos, divergências e faturas em atraso.", "fonte": "painel do Atlas" },
+          { "ref": "api_financeiro.propostasPendentes", "t": "Ações esperando decisão", "e": "Propostas na fila de uma pessoa.", "fonte": "painel do Atlas" }
+        ] }
+      ]
+    },
+    { "titulo": "O que o Atlas faz", "itens": [ { "tipo": "funcoes" } ] },
+    { "titulo": "As ferramentas", "itens": [ { "tipo": "ferramentas" } ] },
+    { "titulo": "O que pode fazer sozinho", "itens": [ { "tipo": "autonomia" } ] },
+    { "titulo": "Onde guarda os dados", "itens": [ { "tipo": "dados" } ] },
+    { "titulo": "O que ainda não está redondo", "itens": [ { "tipo": "lacunas" } ] }
+  ]
+}

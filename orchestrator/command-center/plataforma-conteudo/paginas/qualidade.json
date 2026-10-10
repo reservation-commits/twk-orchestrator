@@ -1,0 +1,356 @@
+{
+ "id": "qualidade",
+ "grupo": "Sistema",
+ "titulo": "Qualidade e segurança",
+ "sub": "testes, travas, vigias",
+ "tipo": "pagina",
+ "kicker": "Como o sistema se protege",
+ "h1": "Qualidade e segurança",
+ "lede": "Um sistema de agentes só merece confiança se não depender da boa vontade de ninguém. Aqui a segurança é código: testes que rodam antes de cada entrega, travas que barram comandos perigosos, uma única porta para alterar o banco e vigias que avisam quando algo para de acontecer.",
+ "blocos": [
+  {
+   "titulo": "A Porta de Qualidade",
+   "texto": "Antes de qualquer versão nova, uma rodada única executa todos os testes de todos os agentes. Se uma parte falha, a porta fica vermelha e nada é entregue.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "porta.situacao",
+       "t": "Situação da última rodada",
+       "f": "texto",
+       "destaque": true,
+       "e": "Verde = todos os testes de todas as partes passaram."
+      },
+      {
+       "ref": "porta.checagens_ok",
+       "t": "Testes aprovados",
+       "e": "Somando todos os agentes, as avaliações e as travas."
+      },
+      {
+       "ref": "porta.rodou_em",
+       "t": "Quando rodou",
+       "f": "idade",
+       "e": "A porta roda antes de cada entrega."
+      },
+      {
+       "ref": "porta.duracao_min",
+       "t": "Duração",
+       "f": "dec1",
+       "u": "min",
+       "e": "Tempo da rodada completa."
+      }
+     ]
+    },
+    {
+     "tipo": "ranking",
+     "id": "porta_etapas",
+     "titulo": "Testes aprovados, por parte do sistema",
+     "texto": "Cada barra é uma parte; o número é a quantidade de testes que passaram na última rodada.",
+     "cor": "s3",
+     "rotuloTitulo": "Parte",
+     "valorTitulo": "Testes aprovados"
+    }
+   ]
+  },
+  {
+   "titulo": "Cenários de risco, conferidos sem IA",
+   "texto": "Além dos testes comuns, seis baterias conferem por regras fixas as situações que mais machucam: mandar mensagem ao número errado, prometer o que não existe, contatar quem pediu para sair, escrever no banco sem cópia. E cada bateria é provada: defeitos são plantados de propósito para confirmar que ela reprova.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "avaliacoes_resumo.casos",
+       "t": "Cenários conferidos",
+       "e": "Somando as baterias."
+      },
+      {
+       "ref": "avaliacoes_resumo.suites",
+       "t": "Baterias",
+       "e": "Uma por área de risco."
+      },
+      {
+       "ref": "avaliacoes_resumo.aprovadas",
+       "t": "Baterias aprovadas",
+       "destaque": true,
+       "e": "Na rodada mais recente de cada uma."
+      }
+     ]
+    },
+    {
+     "tipo": "tabela",
+     "id": "avaliacoes",
+     "titulo": "As baterias",
+     "texto": "O resultado mais recente de cada uma.",
+     "colunas": [
+      {
+       "campo": "rotulo",
+       "rotulo": "Bateria",
+       "f": "texto"
+      },
+      {
+       "campo": "valor",
+       "rotulo": "Cenários",
+       "f": "int"
+      },
+      {
+       "campo": "situacao",
+       "rotulo": "Resultado",
+       "f": "texto"
+      },
+      {
+       "campo": "quando",
+       "rotulo": "Rodou em",
+       "f": "texto"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "As travas",
+   "texto": "Três travas automáticas atuam em toda ação do Orquestrador. Elas não dependem de instrução: um comando perigoso é barrado mesmo que alguém peça.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "auditoria_resumo.eventos",
+       "t": "Ações registradas",
+       "u": "em 7 dias de trabalho",
+       "e": "Cada comando executado deixa uma linha."
+      },
+      {
+       "ref": "auditoria_resumo.bloqueios",
+       "t": "Comandos barrados",
+       "u": "em 7 dias",
+       "e": "Inclui os testes das próprias travas (30 a cada rodada da porta)."
+      },
+      {
+       "ref": "auditoria_resumo.escritas_banco",
+       "t": "Alterações no banco",
+       "u": "em 7 dias",
+       "e": "Todas pela porta única."
+      },
+      {
+       "ref": "documentos.decisoes",
+       "t": "Decisões de arquitetura escritas",
+       "e": "Cada regra do sistema tem um documento com o motivo."
+      }
+     ]
+    },
+    {
+     "tipo": "nota",
+     "titulo": "O que as travas barram.",
+     "texto": "Apagar tabela ou esvaziá-la; apagar ou alterar linhas sem filtro; dar poder total a um usuário do banco; restaurar uma cópia por cima dos dados; apagar pastas inteiras do computador. Cada bloqueio fica gravado com o comando que foi tentado."
+    }
+   ]
+  },
+  {
+   "titulo": "A porta única de escrita",
+   "texto": "Ler o banco é livre e não oferece risco: a credencial de leitura não consegue escrever. Alterar o banco só acontece por um caminho, que confere o comando, faz a cópia de segurança antes e permite desfazer com um único comando.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "dba_auditoria_resumo.alteracoes_30d",
+       "t": "Alterações em 30 dias",
+       "e": "Registradas pelo próprio banco, que não deixa apagar o registro."
+      },
+      {
+       "ref": "dba_auditoria_resumo.total",
+       "t": "Alterações desde o início",
+       "e": "Todo o histórico auditado."
+      },
+      {
+       "ref": "dba_auditoria_resumo.ultima",
+       "t": "Última alteração",
+       "f": "idade",
+       "e": "Quando o banco foi alterado pela última vez por um agente."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "dba_auditoria",
+       "titulo": "Quem alterou o banco — 30 dias",
+       "texto": "Alterações por origem.",
+       "cor": "s2",
+       "rotuloTitulo": "Origem",
+       "valorTitulo": "Alterações"
+      },
+      {
+       "tipo": "tabela",
+       "id": "dba_papeis",
+       "titulo": "Quem consegue escrever no banco",
+       "texto": "Cada credencial e em quantas tabelas ela consegue alterar dados — lido das permissões reais do servidor.",
+       "colunas": [
+        {
+         "campo": "papel",
+         "rotulo": "Credencial",
+         "f": "texto"
+        },
+        {
+         "campo": "para_que",
+         "rotulo": "Para quê",
+         "f": "texto"
+        },
+        {
+         "campo": "tabelas_que_altera",
+         "rotulo": "Tabelas",
+         "f": "int"
+        },
+        {
+         "campo": "altera_contas_de_cliente",
+         "rotulo": "Contas de cliente",
+         "f": "texto"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "Os vigias",
+   "texto": "Erro costuma fazer barulho; o perigo maior é o que deixa de acontecer em silêncio. A Sentinela acompanha 24 sinais (tarefas que deveriam rodar, mensagens que deveriam sair, entregas que deveriam ser confirmadas) e o Zelador confere os poderes de cada agente sobre o banco.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "sentinela.achados",
+       "t": "Achados da Sentinela",
+       "e": "No último relato gravado."
+      },
+      {
+       "ref": "sentinela.fontes_vivas",
+       "t": "Sinais com vida",
+       "e": "Fontes que deram sinal dentro do prazo esperado."
+      },
+      {
+       "ref": "sentinela.quando",
+       "t": "Último relato da Sentinela",
+       "f": "idade",
+       "e": "A Sentinela roda quando é chamada."
+      },
+      {
+       "ref": "zelador.achados",
+       "t": "Achados do Zelador",
+       "e": "Poderes fora do esperado, no último relato."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "tabela",
+       "id": "sentinela_achados",
+       "titulo": "O que a Sentinela acusou",
+       "texto": "No último relato gravado.",
+       "vazio": "O último relato gravado não tem achados listados.",
+       "colunas": [
+        {
+         "campo": "severidade",
+         "rotulo": "Gravidade",
+         "f": "texto"
+        },
+        {
+         "campo": "titulo",
+         "rotulo": "Achado",
+         "f": "texto"
+        },
+        {
+         "campo": "evidencia",
+         "rotulo": "Evidência",
+         "f": "texto"
+        }
+       ]
+      },
+      {
+       "tipo": "tabela",
+       "id": "zelador_achados",
+       "titulo": "O que o Zelador acusou",
+       "texto": "No último relato gravado.",
+       "vazio": "Nenhum achado no último relato.",
+       "colunas": [
+        {
+         "campo": "severidade",
+         "rotulo": "Gravidade",
+         "f": "texto"
+        },
+        {
+         "campo": "titulo",
+         "rotulo": "Achado",
+         "f": "texto"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tipo": "nota",
+     "s": "atencao",
+     "titulo": "Os vigias ainda dependem de alguém chamar.",
+     "texto": "A Sentinela e o Zelador não rodam sozinhos todos os dias: as tarefas agendadas no computador do Orquestrador foram desligadas em 24/09. Enquanto a Regência não rodar dentro da Central hospedada, um silêncio pode durar dias sem aviso — foi o que aconteceu de 2 a 5 de outubro, quando a Aria ficou 70 horas sem responder."
+    }
+   ]
+  },
+  {
+   "titulo": "A Aria se vigia",
+   "texto": "O agente que fala com clientes tem a própria camada de controle: confere a saúde a cada 5 minutos, revisa cada resposta antes de enviar e tem um juiz que relê as conversas do dia.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "aria_saude.pct_ok",
+       "t": "Disponibilidade em 30 dias",
+       "f": "pct",
+       "e": "Parte do tempo em que banco, WhatsApp e modelo de IA estavam os três de pé."
+      },
+      {
+       "ref": "aria_saude.minutos_sem_modelo",
+       "t": "Tempo sem o modelo de IA",
+       "f": "min",
+       "u": "em 30 dias",
+       "e": "Sem o modelo, a Aria não responde ninguém."
+      },
+      {
+       "ref": "aria_testes.passaram",
+       "t": "Testes automáticos aprovados",
+       "e": "Na última rodada diária de autoteste."
+      },
+      {
+       "ref": "aria_servico.alerta_operador",
+       "t": "Alerta no celular do operador",
+       "f": "texto",
+       "e": "Avisa quando a Aria fica sem o modelo e quando volta."
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "aria_saude_dia",
+     "titulo": "Disponibilidade da Aria, dia a dia",
+     "texto": "100% = todas as checagens do dia passaram. As quedas de 2 a 5 de outubro são as 70 horas sem crédito no provedor do modelo.",
+     "x": "periodo",
+     "f": "pct",
+     "series": [
+      {
+       "campo": "disponibilidade",
+       "rotulo": "Disponibilidade",
+       "cor": "s3"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

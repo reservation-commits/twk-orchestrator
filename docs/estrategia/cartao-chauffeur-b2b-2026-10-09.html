@@ -1,0 +1,202 @@
+<title>Carte Chauffeur Privé TWK</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Deux volets DL (99 × 210 mm) côte à côte, identité TWK : encre, or, crème. Thème unique, sombre par choix. */
+:root{
+  --ink:#070b10; --panel:#0c1016; --line:#2a2416;
+  --gold:#c9a96e; --gold-2:#e4c990; --gold-3:#9e7c48;
+  --cream:#ede9df; --silver:#a09c92; --white:#f7f4ef;
+  --display:"Cormorant Garamond","Cormorant",Georgia,"Times New Roman",serif;
+  --ui:"Jost","Futura","Avenir Next","Segoe UI",Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--cream);font-family:var(--ui);font-weight:300;padding-block:24px;padding-inline:16px}
+.bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.bar button{font:500 11px/1 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold-3);padding:9px 14px;cursor:pointer}
+.bar button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.bar button:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+.sheet{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.panel{width:99mm;height:210mm;background:var(--panel);padding:7mm 6mm;position:relative;flex:0 0 auto;display:flex;flex-direction:column}
+.panel::before{content:"";position:absolute;inset:3.5mm;border:.35mm solid var(--gold-3);pointer-events:none}
+.brand{text-align:center}
+.brand svg{width:13mm;height:13mm;display:block;margin:0 auto 1.5mm}
+.brand .name{font:400 4.1mm/1 var(--ui);letter-spacing:.32em;color:var(--white)}
+.brand .sub{font:300 2.5mm/1 var(--ui);letter-spacing:.18em;color:var(--gold);margin-top:1.4mm}
+h1{font:300 10.5mm/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--white);text-align:center;margin:7mm 0 1.6mm;text-wrap:balance}
+.tag{font:400 2.9mm/1.4 var(--ui);color:var(--gold);text-align:center;letter-spacing:.04em}
+.tag em{font:italic 500 3.3mm/1.3 var(--display);color:var(--white)}
+.photo{margin:4.5mm 1mm 3mm;height:34mm;border:.25mm solid var(--line);display:flex;align-items:center;justify-content:center;font:300 2.4mm/1.4 var(--ui);color:var(--silver);letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:2mm}
+.specs{display:flex;justify-content:center;gap:4mm;font:400 2.5mm/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+.specs span::before{content:"◆ ";color:var(--gold);font-size:1.8mm;vertical-align:.3mm}
+.k{font:400 3.2mm/1 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--white);text-align:center}
+.k small{display:block;font:300 2.6mm/1.4 var(--ui);letter-spacing:.03em;text-transform:none;color:var(--gold);margin-top:1.4mm}
+table{width:100%;border-collapse:collapse;margin-top:2.6mm;font-variant-numeric:tabular-nums}
+td{padding:1.65mm 0;border-bottom:.2mm solid var(--line);vertical-align:top}
+td.n{font:400 2.75mm/1.3 var(--ui);color:var(--white);letter-spacing:.02em}
+td.n i{display:block;font:300 2.3mm/1.3 var(--ui);color:var(--silver);font-style:normal}
+td.p{text-align:right;white-space:nowrap;font:500 3.6mm/1.1 var(--display);color:var(--gold-2);padding-left:3mm}
+.note{font:300 2.25mm/1.45 var(--ui);color:var(--silver);margin-top:2mm;text-align:center}
+.cta{margin-top:auto;text-align:center}
+.cta .h{font:500 3.9mm/1 var(--ui);letter-spacing:.22em;text-transform:uppercase;color:var(--white)}
+.cta .s{font:300 2.7mm/1.3 var(--ui);color:var(--gold);margin-top:1.5mm}
+.cta .tel{font:600 5mm/1 var(--ui);color:var(--white);letter-spacing:.06em;margin:3mm 0}
+.qr{width:22mm;height:22mm;margin:0 auto;background:var(--cream);padding:1.4mm;display:flex;align-items:center;justify-content:center}
+.qr canvas,.qr img{width:100%!important;height:100%!important;display:block}
+.qrl{font:400 2.5mm/1 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:1.6mm}
+/* verso */
+.sec{margin-top:5.2mm}
+.sec h2{font:400 3.3mm/1 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--white);margin:0}
+.sec .lead{font:300 2.7mm/1.4 var(--ui);color:var(--gold);margin:1.5mm 0 2.2mm}
+.sec ul{list-style:none;margin:0;padding:0;display:grid;gap:1.3mm}
+.sec li{font:300 2.85mm/1.35 var(--ui);color:var(--cream)}
+.sec li b{font-weight:500;color:var(--white)}
+.steps li{display:grid;grid-template-columns:5mm 1fr;gap:1.5mm}
+.steps li span{font:500 3.6mm/1 var(--display);color:var(--gold);font-style:italic}
+.pro{border:.3mm solid var(--gold-3);padding:3.2mm 3.5mm;margin-top:5mm}
+.pro h2{font:400 3.3mm/1 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--gold-2);margin:0}
+.pro p{font:300 2.75mm/1.4 var(--ui);color:var(--cream);margin:1.6mm 0 0}
+.pro .big{font:500 4.8mm/1.1 var(--display);color:var(--white);margin-top:1.8mm}
+.foot{margin-top:auto;text-align:center;border-top:.2mm solid var(--gold-3);padding-top:2.6mm}
+.foot .r{font:400 2.7mm/1 var(--ui);letter-spacing:.26em;text-transform:uppercase;color:var(--white)}
+.foot .rs{font:300 2.4mm/1.3 var(--ui);color:var(--gold);margin:1.2mm 0 2mm}
+.foot .tel{font:600 4mm/1 var(--ui);color:var(--white);letter-spacing:.06em}
+.legal{font:300 2.05mm/1.45 var(--ui);color:var(--silver);margin-top:2.4mm}
+.legal b{font-weight:600;letter-spacing:.14em;color:var(--cream)}
+.legal .todo{color:var(--gold)}
+.hint{max-width:62ch;margin:22px auto 0;font:300 13px/1.5 var(--ui);color:var(--silver);text-align:center}
+@media (max-width:860px){.panel{transform-origin:top center}}
+@media print{
+  @page{size:A4 landscape;margin:0}
+  body{padding:0;background:#fff}
+  .bar,.hint{display:none}
+  .sheet{gap:0;justify-content:flex-start;width:297mm;height:210mm;padding:0 0 0 49.5mm}
+  .panel{break-inside:avoid}
+}
+@media (prefers-reduced-motion:no-preference){.bar button{transition:background .15s}}
+</style>
+
+<div class="bar" role="group" aria-label="Langue">
+  <button type="button" data-lang="fr" aria-pressed="true">Français</button>
+  <button type="button" data-lang="en" aria-pressed="false">English</button>
+  <button type="button" data-lang="pt" aria-pressed="false">Português</button>
+</div>
+
+<div class="sheet">
+  <!-- RECTO -->
+  <section class="panel" aria-label="Recto">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="#c9a96e" stroke-width="1.6"><circle cx="32" cy="22" r="11"/><path d="M21 22h22M32 11c-5 4-5 18 0 22M32 11c5 4 5 18 0 22M23 17h18M23 27h18"/><path d="M32 4v3M32 37v3M14 22h3M47 22h3M19.3 9.3l2.1 2.1M42.6 32.6l2.1 2.1M44.7 9.3l-2.1 2.1M21.4 32.6l-2.1 2.1" stroke-linecap="round"/></g><path d="M32 30c-4 0-7 3-7 7 0 3 1.7 5.3 4 6.4L27 58h10l-2-14.6c2.3-1.1 4-3.4 4-6.4 0-4-3-7-7-7z" fill="#c9a96e"/></svg>
+      <div class="name">THE WORLD KEYS<sup style="font-size:.5em">®</sup></div>
+      <div class="sub">Lifestyle Management</div>
+    </div>
+
+    <h1 data-i="h1">Chauffeur privé</h1>
+    <p class="tag"><em data-i="zone">Paris &amp; Côte d'Azur</em><br><span data-i="tag">Prix fermé, annoncé avant le trajet. Réponse en moins d'une heure.</span></p>
+
+    <div class="photo" data-i="photo">Photo Tesla Model X — reprendre le visuel du support actuel</div>
+    <div class="specs"><span>Tesla Model X</span><span data-i="pax">6 passagers</span><span data-i="bag">6 bagages</span></div>
+
+    <div class="k" style="margin-top:4.5mm" data-i="tarifs">Tarifs<small data-i="tarifs-s">TTC · péages, attente et accueil inclus</small></div>
+    <table>
+      <tr><td class="n" data-i="t1">Transfert aéroport ou gare<i data-i="t1i">CDG, Orly, Nice ↔ Cannes, Monaco</i></td><td class="p">150 €</td></tr>
+      <tr><td class="n" data-i="t2">Mise à disposition 4 h<i data-i="t2i">Rendez-vous, shopping, salons</i></td><td class="p">400 €</td></tr>
+      <tr><td class="n" data-i="t3">Journée 8 h<i data-i="t3i">Trajets illimités, Île-de-France ou Riviera</i></td><td class="p">750 €</td></tr>
+      <tr><td class="n" data-i="t4">Soirée<i data-i="t4i">Aller, attente jusqu'à 4 h, retour · table demandée par notre concierge</i></td><td class="p">390 €</td></tr>
+      <tr><td class="n" data-i="t5">Navette salon, demi-journée<i data-i="t5i">Hôtel ↔ Porte de Versailles, Villepinte, Palais des Festivals</i></td><td class="p">400 €</td></tr>
+    </table>
+    <p class="note" data-i="note">Riviera : transfert 130 €. Nuit 22h–6h et longue distance : sur devis, prix fermé avant le départ.</p>
+
+    <div class="cta">
+      <div class="h" data-i="cta">Réservez en un message</div>
+      <div class="s" data-i="cta-s">Devis sous 1 heure, 8h–22h, sept jours sur sept</div>
+      <div class="tel">+33 7 81 93 72 70</div>
+      <div class="qr" id="qr"></div>
+      <div class="qrl">WhatsApp</div>
+    </div>
+  </section>
+
+  <!-- VERSO -->
+  <section class="panel" aria-label="Verso">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="#c9a96e" stroke-width="1.6"><circle cx="32" cy="22" r="11"/><path d="M21 22h22M32 11c-5 4-5 18 0 22M32 11c5 4 5 18 0 22M23 17h18M23 27h18"/><path d="M32 4v3M32 37v3M14 22h3M47 22h3M19.3 9.3l2.1 2.1M42.6 32.6l2.1 2.1M44.7 9.3l-2.1 2.1M21.4 32.6l-2.1 2.1" stroke-linecap="round"/></g><path d="M32 30c-4 0-7 3-7 7 0 3 1.7 5.3 4 6.4L27 58h10l-2-14.6c2.3-1.1 4-3.4 4-6.4 0-4-3-7-7-7z" fill="#c9a96e"/></svg>
+      <div class="name">THE WORLD KEYS<sup style="font-size:.5em">®</sup></div>
+      <div class="sub">Lifestyle Management</div>
+    </div>
+
+    <div class="pro">
+      <h2 data-i="pro">Professionnels</h2>
+      <p data-i="pro-p">Concierges, conciergeries, agences, DMC, assistants : un seul interlocuteur pour la voiture, la table et l'expérience de vos clients.</p>
+      <div class="big" data-i="pro-big">Tarif partenaire : −10 % sur la grille</div>
+      <p data-i="pro-p2">Facture unique mensuelle dès 3 prestations · Interlocuteur en français, anglais et portugais · Voucher avec nom du chauffeur et plaque la veille.</p>
+    </div>
+
+    <div class="sec">
+      <h2 data-i="how">Comment ça marche</h2>
+      <ul class="steps">
+        <li><span>1</span><div data-i="s1">Un message ou un appel, même décidé dans l'heure.</div></li>
+        <li><span>2</span><div data-i="s2">Devis au tarif fixe sous 1 heure, prix fermé avant le trajet.</div></li>
+        <li><span>3</span><div data-i="s3">Paiement par lien sécurisé ou sur facture mensuelle.</div></li>
+        <li><span>4</span><div data-i="s4">Chauffeur à l'heure ; rappel la veille avec plaque et nom.</div></li>
+      </ul>
+    </div>
+
+    <div class="sec">
+      <h2 data-i="table">Votre table</h2>
+      <p class="lead" data-i="table-l">À Paris et sur la Riviera, dans les maisons qui confirment.</p>
+      <ul><li data-i="table-1">Nous demandons la table auprès de nos maisons partenaires et vous transmettons la réponse. Elle figure sur le voucher une fois confirmée, jamais avant.</li></ul>
+    </div>
+
+    <div class="sec">
+      <h2 data-i="ex">Notre exigence</h2>
+      <ul>
+        <li data-i="e1"><b>Discrétion absolue</b></li>
+        <li data-i="e2"><b>Prix fermé</b>, annoncé avant le départ</li>
+        <li data-i="e3"><b>Ponctualité irréprochable</b></li>
+      </ul>
+    </div>
+
+    <div class="sec">
+      <h2 data-i="board">À bord</h2>
+      <ul>
+        <li data-i="b1">Wi-Fi et chargeurs</li>
+        <li data-i="b2">Habitacle spacieux, six places</li>
+        <li data-i="b3">Boissons fraîches et douceurs</li>
+        <li data-i="b4">Parapluie et nécessaire de voyage</li>
+      </ul>
+    </div>
+
+    <div class="foot">
+      <div class="r" data-i="rec">Nous recommander</div>
+      <div class="rs" data-i="rec-s">Confiez-nous ceux qui comptent pour vous.</div>
+      <div class="tel">+33 7 81 93 72 70</div>
+      <div class="legal"><b>THE WORLD KEYS SAS</b><br>66, avenue des Champs-Élysées, 75008 Paris<br>Capital 20 000 € · RCS Paris 901 268 326 · TVA FR24901268326<br>Marque enregistrée à l'INPI sous le n° 4773567<br><span class="todo" data-i="vtc">Exploitant VTC inscrit au registre n° [à compléter]</span></div>
+    </div>
+  </section>
+</div>
+
+<p class="hint" data-i="hint">Deux volets DL (99 × 210 mm). Le bouton de langue ne s'imprime pas. Les tarifs sont ceux proposés dans le plan du 9 octobre, à valider avant impression.</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+  var T={
+    fr:{},
+    en:{h1:"Private chauffeur",zone:"Paris & French Riviera",tag:"Fixed price, agreed before the ride. Reply within the hour.",photo:"Tesla Model X photo — reuse the visual from the current card",pax:"6 passengers",bag:"6 bags",tarifs:"Rates","tarifs-s":"VAT included · tolls, waiting and meet & greet included",t1:"Airport or station transfer",t1i:"CDG, Orly, Nice ↔ Cannes, Monaco",t2:"4-hour hire",t2i:"Meetings, shopping, trade shows",t3:"Full day, 8 hours",t3i:"Unlimited journeys, Paris region or Riviera",t4:"Evening",t4i:"Out, up to 4 h waiting, back · table requested by our concierge",t5:"Trade-show shuttle, half day",t5i:"Hotel ↔ Porte de Versailles, Villepinte, Palais des Festivals",note:"Riviera: transfer €130. Night 22:00–06:00 and long distance: quoted, fixed before departure.",cta:"Book in one message","cta-s":"Quote within 1 hour, 8am–10pm, seven days a week",pro:"Professionals","pro-p":"Concierges, villa managers, agencies, DMCs, assistants: one contact for your clients' car, table and experience.","pro-big":"Partner rate: 10% off the grid","pro-p2":"Single monthly invoice from 3 services · Contact in French, English and Portuguese · Voucher with driver's name and plate the day before.",how:"How it works",s1:"A message or a call, even decided within the hour.",s2:"Fixed-rate quote within 1 hour, price agreed before the ride.",s3:"Payment by secure link or monthly invoice.",s4:"Chauffeur on time; reminder the day before with plate and name.",table:"Your table","table-l":"In Paris and on the Riviera, at houses that confirm.","table-1":"We request the table from our partner houses and pass on their answer. It appears on the voucher once confirmed, never before.",ex:"Our standard",e1:"<b>Absolute discretion</b>",e2:"<b>Fixed price</b>, agreed before departure",e3:"<b>Impeccable punctuality</b>",board:"On board",b1:"Wi-Fi and chargers",b2:"Spacious cabin, six seats",b3:"Cold drinks and sweets",b4:"Umbrella and travel essentials",rec:"Recommend us","rec-s":"Trust us with the people who matter to you.",vtc:"VTC operator registered under no. [to complete]",hint:"Two DL panels (99 × 210 mm). The language bar does not print. Rates are those proposed in the 9 October plan, to be approved before printing."},
+    pt:{h1:"Motorista privado",zone:"Paris & Côte d'Azur",tag:"Preço fechado, combinado antes do trajeto. Resposta em menos de uma hora.",photo:"Foto do Tesla Model X — reutilizar o visual do cartão atual",pax:"6 passageiros",bag:"6 malas",tarifs:"Tarifas","tarifs-s":"IVA incluído · pedágios, espera e recepção incluídos",t1:"Transfer aeroporto ou estação",t1i:"CDG, Orly, Nice ↔ Cannes, Mônaco",t2:"Disposição 4 h",t2i:"Reuniões, compras, feiras",t3:"Dia inteiro, 8 h",t3i:"Trajetos ilimitados, região de Paris ou Riviera",t4:"Soirée",t4i:"Ida, espera até 4 h, volta · mesa pedida pelo nosso concierge",t5:"Navete de feira, meio dia",t5i:"Hotel ↔ Porte de Versailles, Villepinte, Palais des Festivals",note:"Riviera: transfer 130 €. Noite 22h–6h e longa distância: sob orçamento, fechado antes da partida.",cta:"Reserve numa mensagem","cta-s":"Orçamento em 1 hora, 8h–22h, sete dias por semana",pro:"Profissionais","pro-p":"Concierges, gestores de villas, agências, DMCs, assistentes: um só contato para o carro, a mesa e a experiência dos seus clientes.","pro-big":"Tarifa parceiro: −10 % sobre a tabela","pro-p2":"Fatura única mensal a partir de 3 serviços · Atendimento em francês, inglês e português · Voucher com nome do motorista e placa na véspera.",how:"Como funciona",s1:"Uma mensagem ou ligação, mesmo decidida na hora.",s2:"Orçamento pela tabela fixa em 1 hora, preço fechado antes do trajeto.",s3:"Pagamento por link seguro ou fatura mensal.",s4:"Motorista na hora; lembrete na véspera com placa e nome.",table:"A sua mesa","table-l":"Em Paris e na Riviera, nas casas que confirmam.","table-1":"Pedimos a mesa às casas parceiras e transmitimos a resposta. Ela entra no voucher depois de confirmada, nunca antes.",ex:"A nossa exigência",e1:"<b>Discrição absoluta</b>",e2:"<b>Preço fechado</b>, anunciado antes da partida",e3:"<b>Pontualidade irrepreensível</b>",board:"A bordo",b1:"Wi-Fi e carregadores",b2:"Habitáculo espaçoso, seis lugares",b3:"Bebidas frescas e doces",b4:"Guarda-chuva e kit de viagem",rec:"Recomende-nos","rec-s":"Confie-nos quem é importante para si.",vtc:"Exploitant VTC inscrito no registo n.º [a completar]",hint:"Dois painéis DL (99 × 210 mm). A barra de idioma não imprime. As tarifas são as propostas no plano de 9 de outubro, a validar antes de imprimir."}
+  };
+  var els=document.querySelectorAll("[data-i]"),base={};
+  els.forEach(function(e){base[e.getAttribute("data-i")]=e.innerHTML});
+  function setLang(l){
+    els.forEach(function(e){var k=e.getAttribute("data-i");e.innerHTML=(T[l]&&T[l][k])||base[k]});
+    document.querySelectorAll(".bar button").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-lang")===l))});
+    try{localStorage.setItem("twk-card-lang",l)}catch(x){}
+  }
+  document.querySelectorAll(".bar button").forEach(function(b){b.addEventListener("click",function(){setLang(b.getAttribute("data-lang"))})});
+  var saved=null;try{saved=localStorage.getItem("twk-card-lang")}catch(x){}
+  if(saved&&T[saved])setLang(saved);
+  try{
+    if(window.QRCode){new QRCode(document.getElementById("qr"),{text:"https://wa.me/33781937270",width:160,height:160,colorDark:"#070b10",colorLight:"#ede9df",correctLevel:QRCode.CorrectLevel.M});}
+  }catch(x){document.getElementById("qr").textContent="QR";}
+})();
+</script>

@@ -30,6 +30,7 @@ Não é um chatbot. É uma **máquina de estados por reserva** com núcleo 100% 
 **Saída — bloco `resultado` do contrato + artefatos:**
 - `state/eventos.jsonl` (ledger próprio, append-only): `{ts, trace_id, reservation_code, restaurant_id, degrau, decisao, canal, motivo, aprovacao_ref}`.
 - `state/propostas-<data>.json`: contatos propostos (lote para o Portão da Central).
+- **Na Central (v4.6, 2026-10-10):** o Guardião é agente de primeira classe do cockpit do MAESTRO — página `#/guardiao` (atalho `6`), saúde no cabeçalho (varredura há ≤ 30 h e não pausado), persona na Conversa, `frota_kpis`/`ler_estado("guardiao")`, regras no vigia e identidade nos cartões de Aprovações. Leitura por `orchestrator/command-center/guardiao.js` (arquivos desta pasta; na hospedada, a cópia que `push-state.ps1` envia).
 - `state/fila-ligacoes-<data>.csv`: tarefas humanas (telefone/WhatsApp), ordenadas por urgência.
 - Handoffs filhos: `destino: suporte-concierge` (degrau 4, um por reserva) e `destino: humano` (fila).
 - `relatorio-<data>.md`: contagens por degrau, por canal, por cidade; anomalias.

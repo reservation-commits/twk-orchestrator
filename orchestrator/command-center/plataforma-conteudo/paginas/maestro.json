@@ -1,0 +1,569 @@
+{
+ "id": "maestro",
+ "grupo": "Agentes",
+ "titulo": "MAESTRO",
+ "sub": "orquestração",
+ "tipo": "agente",
+ "agenteId": "maestro",
+ "cor": "gold",
+ "kicker": "Orquestrador · o regente da frota",
+ "h1": "MAESTRO",
+ "lede": "O MAESTRO é o regente. Ele não faz o trabalho dos especialistas: recebe os pedidos do fundador, decide qual agente cuida de cada parte, recolhe o que cada um relata e escreve um resumo diário. Também guarda a fila de decisões que só uma pessoa pode tomar e mantém os vigias e as travas de segurança de toda a frota.",
+ "resumo": [
+  {
+   "ref": "maestro_fila.acoes_abertas",
+   "t": "Ações abertas"
+  },
+  {
+   "ref": "maestro_fila.aprovacoes_pendentes",
+   "t": "Aprovações pendentes"
+  },
+  {
+   "ref": "porta.checagens_ok",
+   "t": "Testes aprovados"
+  }
+ ],
+ "agente": {
+  "codinome": "MAESTRO",
+  "papel": "Orquestração",
+  "resumo": "Distribui o trabalho, junta os relatos dos agentes e leva ao fundador só o que precisa de decisão.",
+  "funcoes": [
+   {
+    "nome": "Central de Comando",
+    "descricao_leiga": "O painel onde o fundador conversa com o MAESTRO e com cada agente, abre missões, aprova ou nega ações e acompanha a frota.",
+    "como_roda": "sempre no ar",
+    "arquivo": "orchestrator/command-center/server.js"
+   },
+   {
+    "nome": "Missões",
+    "descricao_leiga": "O fundador descreve um objetivo e o MAESTRO devolve um relatório com o que cada agente deve fazer e o que precisa de aprovação. O MAESTRO analisa e planeja; não executa.",
+    "como_roda": "sob demanda · até 20 por dia",
+    "arquivo": "orchestrator/command-center/brain.js"
+   },
+   {
+    "nome": "Conversa",
+    "descricao_leiga": "Um chat com o MAESTRO ou direto com um especialista, com anexos e voz. Mostra quanto custou cada conversa.",
+    "como_roda": "sob demanda · até 200 por dia",
+    "arquivo": "orchestrator/command-center/chat.js"
+   },
+   {
+    "nome": "Regência",
+    "descricao_leiga": "Todo dia cada agente entrega um relato; o MAESTRO junta tudo num Despacho para o fundador, com o que está crítico em primeiro lugar.",
+    "como_roda": "diária às 8h · alerta de hora em hora só para o que é crítico e novo",
+    "arquivo": "orchestrator/command-center/regencia/"
+   },
+   {
+    "nome": "Aprovações",
+    "descricao_leiga": "Tudo o que precisa do sim do fundador (envio a clientes, dinheiro, publicação) entra numa fila. Aprovar ou negar fica registrado.",
+    "como_roda": "a cada pedido de aprovação",
+    "arquivo": "orchestrator/command-center/chat.js"
+   },
+   {
+    "nome": "Vigia de desempenho",
+    "descricao_leiga": "Guarda a evolução dos números de cada agente e abre uma Ação quando um número cai ou para.",
+    "como_roda": "de hora em hora",
+    "arquivo": "metrics.js · sentinels.js"
+   },
+   {
+    "nome": "Analista",
+    "descricao_leiga": "Uma vez por dia, lê a série de números e propõe correções. As propostas só valem depois que uma pessoa aprova.",
+    "como_roda": "1 vez por dia",
+    "arquivo": "orchestrator/command-center/analyst.js"
+   },
+   {
+    "nome": "Leitura dos painéis dos agentes",
+    "descricao_leiga": "Busca os números de cada agente no painel dele, sem que nenhuma senha chegue ao navegador.",
+    "como_roda": "sob demanda · guarda por 60 s",
+    "arquivo": "orchestrator/command-center/kpis.js"
+   },
+   {
+    "nome": "Porta de Qualidade",
+    "descricao_leiga": "Roda todos os testes de todos os agentes de uma vez. Nenhuma versão nova é entregue com a porta vermelha.",
+    "como_roda": "antes de cada entrega",
+    "arquivo": "orchestrator/porta/verificar.cjs"
+   },
+   {
+    "nome": "Avaliações sem IA",
+    "descricao_leiga": "Seis baterias de cenários de risco (mandar para o número errado, prometer o que não existe, escrever no banco sem cópia) conferidas por regras fixas, sem depender de um modelo.",
+    "como_roda": "antes de cada entrega",
+    "arquivo": "orchestrator/evals/run.js"
+   },
+   {
+    "nome": "Travas de segurança",
+    "descricao_leiga": "Três travas automáticas: uma barra comandos destrutivos no banco, outra registra cada ação, a terceira confere se a passagem de tarefa entre agentes está completa.",
+    "como_roda": "em toda ação",
+    "arquivo": ".claude/hooks/"
+   },
+   {
+    "nome": "Sentinela de Silêncio",
+    "descricao_leiga": "Avisa quando algo que deveria acontecer parou de acontecer: uma tarefa que não rodou, a Aria sem responder, reservas sem entrar, avisos sem entrega.",
+    "como_roda": "manual · 24 sinais vigiados",
+    "arquivo": "orchestrator/agents/sentinela-silencio/"
+   },
+   {
+    "nome": "Zelador de privilégios",
+    "descricao_leiga": "Confere se algum agente está com mais poder sobre o banco do que deveria.",
+    "como_roda": "manual",
+    "arquivo": "orchestrator/agents/zelador-privilegios/"
+   },
+   {
+    "nome": "Porta única de escrita",
+    "descricao_leiga": "O único caminho para alterar o banco: valida o comando, faz cópia de segurança antes e permite desfazer com um comando.",
+    "como_roda": "a cada alteração",
+    "arquivo": "orchestrator/agents/dba-escrita/"
+   },
+   {
+    "nome": "Atendimento resolutivo",
+    "descricao_leiga": "Resolve casos de cliente e de restaurante do começo ao fim: aceitar, recusar ou remarcar uma reserva e retirar uma casa que pediu para sair.",
+    "como_roda": "sob demanda, com registro",
+    "arquivo": "orchestrator/agents/maestro-atendimento/"
+   },
+   {
+    "nome": "Ciclo do cliente",
+    "descricao_leiga": "Envia ao cliente o lembrete na véspera da reserva e o pedido de opinião depois da visita; dá boas-vindas a restaurantes novos.",
+    "como_roda": "diária às 9h15 · até 40 por vez",
+    "arquivo": "orchestrator/agents/ciclo-cliente/"
+   },
+   {
+    "nome": "Registro de quem pediu para sair",
+    "descricao_leiga": "A lista de restaurantes que pediram para não aparecer ou não ser contatados. Todo contato consulta essa lista antes; se ela não puder ser lida, ninguém é contatado.",
+    "como_roda": "consultado a cada contato",
+    "arquivo": "orchestrator/state/listing-consent.jsonl"
+   }
+  ],
+  "ferramentas": [
+   {
+    "nome": "Painel da frota",
+    "tipo": "ferramenta do cérebro",
+    "descricao": "Lê os números de um agente ou de todos."
+   },
+   {
+    "nome": "Consulta ao painel de um agente",
+    "tipo": "ferramenta do cérebro",
+    "descricao": "Lê uma página de dados de um agente, só leitura."
+   },
+   {
+    "nome": "Leitura do estado",
+    "tipo": "ferramenta do cérebro",
+    "descricao": "Lê o que o MAESTRO já sabe: tarefas, missões, registro da frota."
+   },
+   {
+    "nome": "Consulta ao banco (leitura)",
+    "tipo": "ferramenta do cérebro",
+    "descricao": "Uma consulta de leitura por vez, até 500 linhas, pelo agente de banco de dados."
+   },
+   {
+    "nome": "Consulta a um especialista",
+    "tipo": "ferramenta do cérebro",
+    "descricao": "Faz uma pergunta a um agente, que responde no papel dele."
+   },
+   {
+    "nome": "/briefing · /despacho · /delegar · /auditoria · /incidente",
+    "tipo": "comando",
+    "descricao": "Painel do dia, resumo dos agentes, criar uma tarefa para um especialista, reconstruir a história de uma tarefa, abrir resposta a incidente."
+   },
+   {
+    "nome": "Contrato de passagem de tarefa",
+    "tipo": "contrato",
+    "descricao": "Toda tarefa entre agentes leva: quem pede, quem faz, o objetivo, o mínimo de contexto (só referências, nunca dados pessoais), a prioridade, o critério de pronto e o nível de autonomia."
+   },
+   {
+    "nome": "Contrato de relato",
+    "tipo": "contrato",
+    "descricao": "Como cada agente presta contas: números, achados, o que fez sozinho, o que espera aprovação e o que não conseguiu verificar."
+   },
+   {
+    "nome": "Trava de comandos no banco",
+    "tipo": "trava",
+    "descricao": "Barra apagar tabela, apagar ou alterar sem filtro, dar poder total e restaurar por cima."
+   },
+   {
+    "nome": "Registro de ações",
+    "tipo": "trava",
+    "descricao": "Grava cada comando executado, com o código da tarefa a que pertence."
+   },
+   {
+    "nome": "Conferência de passagem",
+    "tipo": "trava",
+    "descricao": "Confere se a devolução de um agente tem todos os campos do contrato."
+   },
+   {
+    "nome": "Sincronização com a Central",
+    "tipo": "script",
+    "descricao": "Envia o estado da máquina do Orquestrador para a Central hospedada."
+   }
+  ],
+  "dados": [
+   {
+    "onde": "Fila de tarefas",
+    "o_que": "Cada tarefa delegada, quem recebeu, a situação e as evidências da conclusão."
+   },
+   {
+    "onde": "Aprovações",
+    "o_que": "Cada pedido de aprovação, a justificativa, quem decidiu e quando."
+   },
+   {
+    "onde": "Ações",
+    "o_que": "Pontos de atenção abertos pelos vigias, com a gravidade e a evidência."
+   },
+   {
+    "onde": "Relatos e Despachos",
+    "o_que": "O que cada agente relatou em cada dia e o resumo que o MAESTRO escreveu."
+   },
+   {
+    "onde": "Trilha de auditoria",
+    "o_que": "Um arquivo por dia com cada ação executada, cada bloqueio e cada escrita no banco."
+   },
+   {
+    "onde": "Compromissos",
+    "o_que": "Promessas com data feitas a clientes e restaurantes, até serem cumpridas."
+   },
+   {
+    "onde": "Conversas e anexos",
+    "o_que": "O histórico das conversas do fundador com o MAESTRO e os arquivos enviados."
+   }
+  ],
+  "autonomia": {
+   "teto": "Decompõe objetivos, distribui tarefas, arbitra conflitos entre agentes e resolve casos de cliente e de restaurante do começo ao fim, sempre com registro. Nunca executa o trabalho de um especialista.",
+   "exige_aprovacao": [
+    "Qualquer valor a cliente: reembolso, desconto, cortesia",
+    "Envio a pessoas de fora, exceto o atendimento a clientes e restaurantes",
+    "Publicar ou republicar um restaurante",
+    "Mudanças na estrutura do banco e restauração de cópias",
+    "Assuntos jurídicos e de imprensa",
+    "Colocar um fluxo novo em operação",
+    "Tarefa que passe de 10 euros ou de 8 passos"
+   ]
+  },
+  "sinais_de_vida": [
+   {
+    "nome": "A Central responde",
+    "como_ver": "A página de saúde da Central diz a versão, se o estado pode ser gravado e quantos agentes estão configurados."
+   },
+   {
+    "nome": "O Despacho do dia existe",
+    "como_ver": "Um arquivo por dia; se o de hoje não existir depois das 8h, a própria Central abre uma Ação."
+   },
+   {
+    "nome": "A trilha de auditoria cresce",
+    "como_ver": "O arquivo do dia recebe uma linha a cada ação."
+   }
+  ],
+  "lacunas": [
+   "A Regência (relatos e Despacho diário) está desligada desde 24/09/2026: as tarefas agendadas no computador do Orquestrador falhavam por falta de memória e o envio por e-mail foi suspenso. Os relatos e o Despacho mostrados aqui são dessa data.",
+   "A Sentinela de Silêncio e o Zelador só rodam quando alguém os chama; os últimos relatos gravados são de 21 e 22/09.",
+   "Parte dos bloqueios contados na trilha de auditoria são os testes das próprias travas (30 a cada rodada da Porta de Qualidade), não tentativas reais.",
+   "Faltam dias na trilha de auditoria (26 a 28/09, 03 e 04/10): nesses dias o Orquestrador não trabalhou no repositório.",
+   "A porta de qualidade, as avaliações e a sentinela são gerados na máquina do Orquestrador; na Central hospedada esses números só aparecem depois de sincronizados."
+  ]
+ },
+ "blocos": [
+  {
+   "titulo": "A fila de decisões",
+   "texto": "O que está nas mãos do MAESTRO e do fundador neste momento.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "maestro_fila.aprovacoes_pendentes",
+       "t": "Aprovações esperando o fundador",
+       "destaque": true,
+       "e": "Ações preparadas pelos agentes que só saem com autorização."
+      },
+      {
+       "ref": "maestro_fila.acoes_abertas",
+       "t": "Ações abertas",
+       "e": "Pontos de atenção levantados pelos vigias e pelos relatos."
+      },
+      {
+       "ref": "maestro_fila.acoes_criticas",
+       "t": "Delas, críticas",
+       "e": "As que afetam cliente, dinheiro ou segurança."
+      },
+      {
+       "ref": "compromissos.vencidos",
+       "t": "Promessas com data vencida",
+       "e": "Retornos prometidos a clientes ou restaurantes cujo prazo passou sem fechamento."
+      }
+     ]
+    },
+    {
+     "tipo": "dupla",
+     "itens": [
+      {
+       "tipo": "ranking",
+       "id": "maestro_acoes_por_agente",
+       "titulo": "Ações abertas, por agente",
+       "texto": "Onde estão os pontos de atenção.",
+       "cor": "gold",
+       "rotuloTitulo": "Agente",
+       "valorTitulo": "Ações"
+      },
+      {
+       "tipo": "tabela",
+       "id": "maestro_aprovacoes",
+       "titulo": "Últimos pedidos de aprovação",
+       "texto": "O que os agentes pediram ao fundador.",
+       "colunas": [
+        {
+         "campo": "titulo",
+         "rotulo": "Pedido",
+         "f": "texto"
+        },
+        {
+         "campo": "tipo",
+         "rotulo": "Tipo",
+         "f": "texto"
+        },
+        {
+         "campo": "situacao",
+         "rotulo": "Situação",
+         "f": "texto"
+        }
+       ],
+       "max": 8
+      }
+     ]
+    },
+    {
+     "tipo": "tabela",
+     "id": "maestro_acoes",
+     "titulo": "As ações abertas, da mais grave à menos grave",
+     "texto": "Cada linha é um problema detectado que ainda espera decisão.",
+     "colunas": [
+      {
+       "campo": "severidade",
+       "rotulo": "Gravidade",
+       "f": "texto"
+      },
+      {
+       "campo": "agente",
+       "rotulo": "Agente",
+       "f": "texto"
+      },
+      {
+       "campo": "titulo",
+       "rotulo": "O que foi detectado",
+       "f": "texto"
+      },
+      {
+       "campo": "ocorrencias",
+       "rotulo": "Vezes",
+       "f": "int"
+      },
+      {
+       "campo": "desde",
+       "rotulo": "Desde",
+       "f": "data"
+      }
+     ],
+     "max": 14
+    }
+   ]
+  },
+  {
+   "titulo": "O trabalho do regente",
+   "texto": "Quanto o MAESTRO já coordenou: tarefas distribuídas, missões analisadas, conversas e resumos diários.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "maestro_fila.tarefas",
+       "t": "Tarefas delegadas",
+       "e": "Passagens formais de trabalho a um especialista."
+      },
+      {
+       "ref": "maestro_fila.missoes",
+       "t": "Missões analisadas",
+       "e": "Relatórios escritos a pedido do fundador."
+      },
+      {
+       "ref": "maestro_fila.conversas",
+       "t": "Conversas guardadas",
+       "e": "Diálogos do fundador com o MAESTRO ou com um agente."
+      },
+      {
+       "ref": "maestro_fila.despachos",
+       "t": "Despachos escritos",
+       "e": "Resumos diários entregues ao fundador."
+      }
+     ]
+    },
+    {
+     "tipo": "nota",
+     "s": "atencao",
+     "titulo": "O resumo diário está parado.",
+     "texto": "O último Despacho é de 24/09/2026. As tarefas agendadas no computador do Orquestrador falhavam por falta de memória e foram desligadas; a solução prevista é rodar a Regência dentro da Central hospedada."
+    },
+    {
+     "tipo": "tabela",
+     "id": "maestro_relatos",
+     "titulo": "O que cada agente relatou no último ciclo",
+     "texto": "Cada agente presta contas ao MAESTRO num formato único: números, achados e o que não conseguiu verificar.",
+     "colunas": [
+      {
+       "campo": "agente",
+       "rotulo": "Agente",
+       "f": "texto"
+      },
+      {
+       "campo": "situacao",
+       "rotulo": "Situação",
+       "f": "texto"
+      },
+      {
+       "campo": "achados",
+       "rotulo": "Achados",
+       "f": "int"
+      },
+      {
+       "campo": "quando",
+       "rotulo": "Relatado em",
+       "f": "data"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "O ciclo do cliente",
+   "texto": "Uma rotina diária do Orquestrador acompanha o cliente antes e depois do jantar: lembra na véspera e pede a opinião depois da visita. Tem aprovação permanente do fundador desde 11/09/2026.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "ciclo_resumo.enviados",
+       "t": "E-mails do ciclo enviados",
+       "e": "Lembretes e pedidos de opinião que saíram."
+      },
+      {
+       "ref": "ciclo_resumo.hoje",
+       "t": "Enviados hoje",
+       "e": "A rotina roda todos os dias às 9h15."
+      },
+      {
+       "ref": "ciclo_resumo.falharam",
+       "t": "Envios que falharam",
+       "e": "O normal é zero."
+      },
+      {
+       "ref": "ciclo_resumo.ultimo",
+       "t": "Último envio",
+       "f": "idade",
+       "e": "Quando o ciclo enviou pela última vez."
+      }
+     ]
+    },
+    {
+     "tipo": "ranking",
+     "id": "ciclo_tipos",
+     "titulo": "O que o ciclo enviou, por tipo",
+     "texto": "Cada barra é um tipo de e-mail ao cliente ou ao restaurante.",
+     "cor": "gold",
+     "rotuloTitulo": "Tipo",
+     "valorTitulo": "E-mails"
+    }
+   ]
+  },
+  {
+   "titulo": "Tudo fica registrado",
+   "texto": "Cada ação de um agente no repositório é gravada com o código da tarefa a que pertence. Se não está no registro, não aconteceu.",
+   "itens": [
+    {
+     "tipo": "numeros",
+     "tiles": [
+      {
+       "ref": "auditoria_resumo.eventos",
+       "t": "Ações registradas",
+       "u": "em 7 dias de trabalho",
+       "e": "Linhas gravadas na trilha de auditoria."
+      },
+      {
+       "ref": "auditoria_resumo.bloqueios",
+       "t": "Comandos barrados",
+       "u": "em 7 dias",
+       "e": "Inclui os testes das próprias travas: 30 a cada rodada da Porta de Qualidade."
+      },
+      {
+       "ref": "auditoria_resumo.escritas_banco",
+       "t": "Alterações no banco",
+       "u": "em 7 dias",
+       "e": "Todas pela porta única, com cópia de segurança."
+      },
+      {
+       "ref": "auditoria_resumo.dias_com_registro",
+       "t": "Dias com registro",
+       "e": "Desde o início da operação orquestrada."
+      }
+     ]
+    },
+    {
+     "tipo": "linha",
+     "id": "auditoria_serie",
+     "titulo": "Ações e bloqueios por dia de trabalho",
+     "texto": "Os últimos 14 dias em que houve atividade.",
+     "x": "periodo",
+     "series": [
+      {
+       "campo": "acoes",
+       "rotulo": "Ações",
+       "cor": "s1"
+      },
+      {
+       "campo": "bloqueios",
+       "rotulo": "Bloqueios",
+       "cor": "s2"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titulo": "O que o MAESTRO faz",
+   "texto": "Todas as funções, em linguagem direta, com a forma como cada uma roda.",
+   "itens": [
+    {
+     "tipo": "funcoes"
+    }
+   ]
+  },
+  {
+   "titulo": "As ferramentas",
+   "texto": "O que o MAESTRO tem à mão para cumprir essas funções.",
+   "itens": [
+    {
+     "tipo": "ferramentas"
+    }
+   ]
+  },
+  {
+   "titulo": "O que pode fazer sozinho",
+   "texto": "O limite de autonomia e o que sempre sobe a uma pessoa.",
+   "itens": [
+    {
+     "tipo": "autonomia"
+    }
+   ]
+  },
+  {
+   "titulo": "Onde guarda os dados",
+   "itens": [
+    {
+     "tipo": "dados"
+    }
+   ]
+  },
+  {
+   "titulo": "O que ainda não está redondo",
+   "texto": "As limitações conhecidas — ditas com a mesma clareza que os números.",
+   "itens": [
+    {
+     "tipo": "lacunas"
+    }
+   ]
+  }
+ ]
+}

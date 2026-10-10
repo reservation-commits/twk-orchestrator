@@ -9,6 +9,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const SEMPRE_ATUALIZA = new Set(['frota.md']); // referência acompanha a versão do código
+const IGNORAR = new Set(['package.json']);     // vai junto no COPY do Dockerfile só para a semente ser opcional (build via GitHub)
 
 function seedState(stateDir, seedDir) {
   fs.mkdirSync(stateDir, { recursive: true });
@@ -18,6 +19,7 @@ function seedState(stateDir, seedDir) {
   const walk = (rel) => {
     for (const ent of fs.readdirSync(path.join(seedDir, rel), { withFileTypes: true })) {
       const childRel = rel ? path.join(rel, ent.name) : ent.name;
+      if (!rel && IGNORAR.has(ent.name)) continue;
       if (ent.isDirectory()) { fs.mkdirSync(path.join(stateDir, childRel), { recursive: true }); walk(childRel); continue; }
       const alvo = path.join(stateDir, childRel);
       if (!fs.existsSync(alvo)) { fs.copyFileSync(path.join(seedDir, childRel), alvo); novos++; }

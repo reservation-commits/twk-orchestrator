@@ -273,6 +273,39 @@ function run(stateDir, kpisById, series) {
     }
   }
 
+  // --- Guardião da Reserva (v4.6): o pedido sem resposta tem dono; quando o dono para, é achado
+  const gua = (kpisById || {}).guardiao;
+  if (gua && gua.status === 'ok') {
+    if (gua.pausado) {
+      add('guardiao', 'guardiao_pausado', 'alta',
+        'Acompanhamento de reservas pausado',
+        `Pausado${gua.pausado.ts ? ' em ' + String(gua.pausado.ts).slice(0, 16).replace('T', ' ') : ''}: ${gua.pausado.motivo || 'sem motivo'}. Enquanto pausado, nenhum pedido parado é cobrado e nenhum cliente é avisado. Retomar exige aprovação (run.js --resume --aprovacao <id>).`,
+        [{ metrica: 'pausado', antes: 'não', depois: 'sim' }]);
+    }
+    const idade = num(gua.idadeHoras);
+    if (idade === null || idade > 30) {
+      add('guardiao', 'guardiao_sem_varredura', 'alta',
+        idade === null ? 'Guardião sem nenhuma varredura registrada' : 'Guardião sem varredura há mais de 30 h',
+        idade === null ? 'Nenhuma decisão do Guardião foi encontrada. A tarefa agendada pode nunca ter rodado nesta máquina.'
+          : `Última varredura há ${idade} h (ela é diária, às 9h). Pedidos parados estão sem dono: conferir a tarefa agendada do Windows e o código de saída (Sentinela).`,
+        [{ metrica: 'horas desde a última varredura', antes: 30, depois: idade === null ? '—' : idade }]);
+    }
+    const urg = num(gua.urgentes);
+    if (urg !== null && urg > 0) {
+      add('guardiao', 'clientes_mesa_6h', 'critica',
+        `${urg} cliente(s) com mesa em menos de 6 h e sem resposta da casa`,
+        'A mensagem de WhatsApp à casa está pronta na fila do Guardião; sem resposta em 2 h, o cliente é avisado pela Aria com alternativas de casa que confirma. Nada sai sem aprovação.',
+        [{ metrica: 'clientes com mesa ≤ 6 h', antes: 0, depois: urg }]);
+    }
+    const ap = gua.aprovacoes || {};
+    if (num(ap.pendentes) > 0 && num(ap.mais_antiga_h) !== null && ap.mais_antiga_h > 48) {
+      add('guardiao', 'lote_parado_em_aprovacao', 'media',
+        `${ap.pendentes} cartão(ões) do Guardião aguardam decisão há mais de 48 h`,
+        `O mais antigo espera há ${ap.mais_antiga_h} h. Enquanto isso, as casas do lote não são cobradas e os clientes não são avisados. Aprovar ou negar em Aprovações — cartão vencido (mesa já passou) deve ser negado com motivo.`,
+        [{ metrica: 'horas do cartão mais antigo', antes: 48, depois: ap.mais_antiga_h }]);
+    }
+  }
+
   // --- aplica: upsert dos disparos + auto-resolução do que normalizou
   const fired = new Set(findings.map((f) => f.agente + '|' + f.regra));
   // Agentes visíveis nesta coleta: só quem respondeu 'ok' pode ter achado auto-resolvido.

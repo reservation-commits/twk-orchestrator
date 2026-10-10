@@ -208,11 +208,18 @@ const ADAPTERS = {
       tendencia: (seo && seo.trend) || [],
     };
   },
+
+  // ---- GUARDIÃO DA RESERVA (agente LOCAL, sem HTTP) ------------------------
+  // Núcleo determinístico que roda na máquina do Orquestrador; a leitura vem dos arquivos de
+  // estado dele (ou da cópia sincronizada por push-state.ps1). Ver guardiao.js.
+  async guardiao() {
+    return require('./guardiao.js').kpis();
+  },
 };
 
 // ---------------------------------------------------------------- fachada
 async function kpisFor(agent) {
-  if (!agent.url) return { status: 'sem_url', envs: [`AGENT_${agent.env}_URL`] };
+  if (!agent.url && !agent.local) return { status: 'sem_url', envs: [`AGENT_${agent.env}_URL`] };
   const hit = cache.get(agent.id);
   if (hit && Date.now() - hit.at < TTL_MS) return hit.data;
   const adapter = ADAPTERS[agent.id];

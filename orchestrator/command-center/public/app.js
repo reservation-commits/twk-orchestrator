@@ -6,14 +6,27 @@
   const $ = (s, el) => (el || document).querySelector(s);
   const S = { lang: localStorage.getItem('mc_lang') || 'pt', demo: localStorage.getItem('mc_demo') === '1', token: localStorage.getItem('mc_key') || '', data: { overview: null, agents: null, logs: null } };
   const t = (k) => (window.I18N[S.lang] && window.I18N[S.lang][k]) || k;
-  const PAL = { s1: '#3987e5', s2: '#d95926', s3: '#199e70', s4: '#c98500', s5: '#d55181' };
+  const PAL = { s1: '#3987e5', s2: '#d95926', s3: '#199e70', s4: '#c98500', s5: '#d55181', s7: '#9085e9' };
   const AG = [
     { id: 'comercial', nome: 'CLAVIS', roleKey: 'clavis_role', hue: PAL.s1 },
     { id: 'suporte', nome: 'ARIA', roleKey: 'aria_role', hue: PAL.s3 },
     { id: 'editorial', nome: 'QUILL', roleKey: 'quill_role', hue: PAL.s5 },
     { id: 'financeiro', nome: 'ATLAS', roleKey: 'atlas_role', hue: PAL.s4 },
     { id: 'dba', nome: 'DB ARCHITECT', roleKey: 'dba_role', hue: PAL.s2 },
+    // v4.6: o Guardião é agente LOCAL (sem URL) — saúde = varredura recente e não pausado
+    { id: 'guardiao', nome: 'GUARDIÃO', roleKey: 'guardiao_role', hue: PAL.s7, local: true },
   ];
+  // Texto de saúde válido para os dois tipos de agente: HTTP (latência) e local (idade da varredura).
+  function healthTxt(live, comMs) {
+    if (!live || !live.configured) return t('not_conf');
+    const h = live.health || {};
+    if (h.local) {
+      if (h.pausado) return t('g_pausado');
+      const idade = h.idade_h === null || h.idade_h === undefined ? '—' : h.idade_h;
+      return `${h.ok ? t('online') : t('offline')} · ${t('g_varredura')} ${idade} h`;
+    }
+    return h.ok ? (comMs ? `${t('online')} · ${h.ms} ms` : t('online')) : t('offline');
+  }
 
   // ---------- fetch ----------
   async function api(p, opts) {
@@ -148,6 +161,14 @@
     editorial: { clicks: 1642, clicks28: wave(28, 52, 16, 0.9), queue: [['q_pend', 240], ['q_prog', 12], ['q_rev', 31], ['q_apr', 402], ['q_rej', 17]], cost: [11.4, 30] },
     financeiro: { mrr: '€ 18.240', nrr: '104%', churn: '1,8%', props: 2, mrr6: [14100, 14950, 15600, 16400, 17300, 18240], aging: [['a_030', 5210], ['a_3160', 1240], ['a_6190', 380], ['a_90', 190]], recon: true },
     dba: { pub: 1228, limbo: 812, compl: '78%', mut: 14, fields: [['d_email', 81], ['d_phone', 88], ['d_hours', 93], ['d_photo', 63], ['d_price', 71]], pub30: wave(30, 1210, 14, 0.2) },
+    guardiao: {
+      avaliadas: 64, cobrar: 46, avisar: 5, urgentes: 1, aprov: 1, idade: 3,
+      contagens: { email_restaurante: 34, fila_whatsapp: 12, mensagem_cliente: 5, aguardar: 9, fora_janela: 3, bloqueado: 1 },
+      serie: wave(14, 62, 9, 0.7), lote: { casas: 27, reservas: 34 },
+      emails: [['Casa Demo Um', 'Paris', 'fr', 2], ['Trattoria Demo', 'Roma', 'it', 1], ['Demo Bistro', 'Lisboa', 'pt', 3]],
+      fila: [[4, 'Casa Demo Um', 'Paris', '2026-10-10 20:00', 'whatsapp'], [29, 'Demo Bistro', 'Lisboa', '2026-10-11 21:00', 'telefone']],
+      ledger: { env7: 0, envTot: 68, casas: 42 },
+    },
   };
 
   // ---------- header ----------
@@ -155,7 +176,7 @@
     const nav = $('#agent-nav'); nav.innerHTML = '';
     AG.forEach((a) => {
       const live = (S.data.agents || []).find((x) => x.id === a.id);
-      const st = !live || !live.configured ? t('not_conf') : (live.health && live.health.ok ? t('online') : t('offline'));
+      const st = healthTxt(live, false);
       const dot = !live || !live.configured ? '' : (live.health && live.health.ok ? 'ok' : 'bad');
       const b = document.createElement('button');
       b.className = 'agent-card' + (location.hash === '#/' + a.id ? ' active' : '');
@@ -192,6 +213,7 @@
     (S.data.agents || []).forEach((la) => {
       const meta = AG.find((x) => x.id === la.id) || { nome: la.nome };
       if (!la.configured) parts.push(`<b>${meta.nome}</b> —`);
+      else if (la.health && la.health.local) parts.push(`<b>${meta.nome}</b> <span class="${la.health.ok ? 'up' : 'crit'}">● ${esc(healthTxt(la, false))}</span>`);
       else if (la.health && la.health.ok) parts.push(`<b>${meta.nome}</b> <span class="up">● ${t('online')}</span> ${la.health.ms}ms`);
       else parts.push(`<b>${meta.nome}</b> <span class="crit">● ${t('offline')}</span>`);
     });
@@ -281,7 +303,9 @@
       for (let k = 0; k < 6; k++) { const a = Math.PI / 180 * (60 * k - 90); p.push((x + r * Math.cos(a)).toFixed(1) + ',' + (y + r * Math.sin(a)).toFixed(1)); }
       return p.join(' ');
     };
-    const X = 452, ys = [58, 141, 224, 307, 390];
+    // nós distribuídos na altura disponível — cabem 5, 6 ou mais agentes sem mexer aqui
+    const X = 452, yTop = 46, yBot = H - 58; // 58 embaixo: sobra lugar para o rótulo do último nó
+    const ys = AG.map((_, i) => Math.round(AG.length === 1 ? H / 2 : yTop + (i * (yBot - yTop)) / (AG.length - 1)));
     AG.forEach((a, i) => {
       const y = ys[i];
       // fluxo luminoso: sai do núcleo, ondula e pousa no hexágono do agente
@@ -305,8 +329,7 @@
       const lbl = el('text', { x: X, y: y + 33, 'text-anchor': 'middle' }); lbl.textContent = a.nome; g.appendChild(lbl);
       g.addEventListener('click', () => { location.hash = '#/' + a.id; });
       g.addEventListener('mousemove', (ev) => {
-        const stTxt = !live || !live.configured ? t('not_conf') : ok ? `${t('online')} · ${live.health.ms} ms` : t('offline');
-        showTip(`<b>${a.nome}</b> · ${t(a.roleKey)}<br>${stTxt}`, ev.clientX, ev.clientY);
+        showTip(`<b>${a.nome}</b> · ${t(a.roleKey)}<br>${esc(healthTxt(live, true))}`, ev.clientX, ev.clientY);
       });
       g.addEventListener('mouseleave', hideTip);
       svg.appendChild(g);
@@ -361,7 +384,7 @@
     AG.forEach((a) => {
       const live = (S.data.agents || []).find((x) => x.id === a.id);
       const ok = live && live.configured && live.health && live.health.ok;
-      const st = !live || !live.configured ? t('not_conf') : ok ? `${t('online')} · ${live.health.ms} ms` : t('offline');
+      const st = esc(healthTxt(live, true));
       const f = document.createElement('button'); f.className = 'fl';
       f.innerHTML = `<span class="dot ${!live || !live.configured ? '' : ok ? 'ok' : 'bad'}"></span><span><b style="color:${a.hue}">${a.nome}</b><div class="st">${st}</div></span>`;
       f.onclick = () => { location.hash = '#/' + a.id; };
@@ -390,6 +413,8 @@
       d.innerHTML = `<b>${t('why_no_cred_t')}</b><span>${t('why_no_cred')}</span><span><code>${(real.envs || []).join('</code> · <code>')}</code></span>`;
     } else if (real.status === 'sem_endpoint') {
       d.innerHTML = `<b>${t('why_no_ep_t')}</b><span>${esc(real.detalhe || '')}</span>`;
+    } else if (real.status === 'sem_sincronizacao') {
+      d.innerHTML = `<b>${t('why_no_sync_t')}</b><span>${t('why_no_sync')}</span><span><code>powershell -File orchestrator\\command-center\\push-state.ps1</code></span>`;
     } else {
       d.innerHTML = `<b>${t('why_err_t')}</b><span>${esc(real.erro || '')}</span>`;
     }
@@ -409,7 +434,7 @@
     const real = (S.data.kpis || {})[a.id];
     const ok = live && live.configured && live.health && live.health.ok;
     const head = document.createElement('div'); head.className = 'view-head';
-    head.innerHTML = `<h2 style="color:${a.hue}">${a.nome}</h2><span class="sub">${t(a.roleKey)} · ${t('health')}: ${!live || !live.configured ? t('not_conf') : ok ? `${t('online')} (${live.health.ms} ms)` : t('offline')}</span>`;
+    head.innerHTML = `<h2 style="color:${a.hue}">${a.nome}</h2><span class="sub">${t(a.roleKey)} · ${t('health')}: ${esc(healthTxt(live, true))}</span>`;
     m.appendChild(head);
 
     // Dado real vence demo: se o agente respondeu com números, é isso que se mostra.
@@ -638,6 +663,118 @@
         logs.forEach((e) => { const x = document.createElement('div'); x.className = 'row'; x.innerHTML = `<span class="id">${new Date(e.ts).toLocaleTimeString()}</span><span>${esc(e.motivo || '')}</span>`; rows.appendChild(x); });
         two.appendChild(panel(t('dba_guard'), rows, { live: true, src: t('src_state') }));
         mm.appendChild(two);
+      });
+    },
+    // ---------- Guardião da Reserva (v4.6) — dono do pedido de mesa sem resposta ----------
+    guardiao(m) {
+      const a = AG.find((x) => x.id === 'guardiao');
+      const hue = a.hue;
+      const acaoLbl = (k) => (window.I18N[S.lang] && window.I18N[S.lang]['g_acao_' + k]) ? t('g_acao_' + k) : k;
+      const linhas = (items, fn) => { const rows = document.createElement('div'); rows.className = 'rows'; if (!items.length) rows.innerHTML = `<div class="src">—</div>`; items.forEach((it) => { const r = document.createElement('div'); r.className = 'row'; r.innerHTML = fn(it); rows.appendChild(r); }); return rows; };
+      const paraAprov = () => { const b = document.createElement('button'); b.className = 'nm-send'; b.textContent = '⛔ ' + t('apr_title'); b.onclick = () => { location.hash = '#/aprovacoes'; }; return b; };
+
+      // relatório da última varredura (markdown do próprio Guardião), em tela cheia
+      if (new URLSearchParams(location.hash.split('?')[1] || '').get('f') === 'relatorio') {
+        const head = document.createElement('div'); head.className = 'view-head';
+        head.innerHTML = `<h2 style="color:${hue}">${a.nome}</h2><span class="sub">${t('g_relatorio')}</span>`;
+        m.appendChild(head);
+        const back = document.createElement('button'); back.className = 'demo-btn'; back.textContent = '← ' + a.nome;
+        back.onclick = () => { location.hash = '#/guardiao'; };
+        m.appendChild(back);
+        api('/api/guardiao/relatorio').then((doc) => {
+          const p = document.createElement('section'); p.className = 'panel md-doc'; p.innerHTML = mdToHtml(doc.content || '');
+          m.appendChild(p);
+          m.appendChild(Object.assign(document.createElement('div'), { className: 'src', textContent: `${t('g_varredura_de')} ${doc.dia || '—'} · ${doc.fonte || ''}` }));
+        }).catch((e) => { const w = document.createElement('div'); w.className = 'waiting'; w.innerHTML = `<b>${t('why_err_t')}</b><span>${esc(String(e.message || e))}</span>`; m.appendChild(w); });
+        return;
+      }
+
+      agentShell(m, a, (mm, d) => {
+        if (!d) { mm.appendChild(waiting()); return; }
+        const tiles = document.createElement('div'); tiles.className = 'grid g-tiles';
+        tiles.appendChild(tile(t('g_avaliadas'), fmt(d.avaliadas)));
+        tiles.appendChild(tile(t('g_cobrar'), fmt(d.cobrar)));
+        tiles.appendChild(tile(t('g_avisar'), fmt(d.avisar), d.avisar ? { txt: '● Aria', cls: 'warn' } : null));
+        tiles.appendChild(tile(t('g_urgentes'), fmt(d.urgentes), d.urgentes ? { txt: '●', cls: 'warn' } : null));
+        tiles.appendChild(tile(t('g_aprov'), fmt(d.aprov), d.aprov ? { txt: '● ' + t('pending_title'), cls: 'warn' } : null));
+        tiles.appendChild(tile(t('g_ultima'), `${d.idade} h`));
+        mm.appendChild(tiles);
+        const two = document.createElement('div'); two.className = 'grid g-2';
+        two.appendChild(panel(t('g_decisoes'), hBars(Object.entries(d.contagens).map(([k, v]) => ({ label: acaoLbl(k), v })), { color: hue })));
+        two.appendChild(panel(t('g_serie'), lineChart(d.serie, { color: hue })));
+        mm.appendChild(two);
+        const two2 = document.createElement('div'); two2.className = 'grid g-2';
+        two2.appendChild(panel(`${t('g_lote')} · ${d.lote.casas} / ${d.lote.reservas} ${t('g_reservas')}`, linhas(d.emails, ([n, c, i, r]) => `<span class="id">${i}</span><span><b>${esc(n)}</b> · ${esc(c)}</span><span class="st-badge st-fila">${r} ${t('g_reservas')}</span>`), { src: t('g_nada_enviado') }));
+        two2.appendChild(panel(t('g_fila'), linhas(d.fila, ([h, n, c, mesa, canal]) => `<span class="id">${h} h</span><span><b>${esc(n)}</b> · ${esc(c)} · ${t('g_mesa')} ${mesa}</span><span class="st-badge st-bloqueada">${canal}</span>`)));
+        mm.appendChild(two2);
+        const lg = document.createElement('div'); lg.className = 'grid g-tiles';
+        lg.appendChild(tile(t('g_env7'), fmt(d.ledger.env7))); lg.appendChild(tile(t('g_envtot'), fmt(d.ledger.envTot))); lg.appendChild(tile(t('g_casas'), fmt(d.ledger.casas)));
+        mm.appendChild(panel(t('g_ledger'), lg));
+      }, (mm, r) => {
+        // pausado / anomalias: o que precisa de olho antes dos números
+        if (r.pausado) {
+          const w = document.createElement('div'); w.className = 'waiting';
+          w.innerHTML = `<b>${t('g_pausado_t')}</b><span>${esc(r.pausado.motivo || '')}${r.pausado.ts ? ' · ' + new Date(r.pausado.ts).toLocaleString(S.lang === 'fr' ? 'fr-FR' : 'pt-BR') : ''}</span>`;
+          mm.appendChild(w);
+        }
+        const ue = r.ultimaExecucao || {};
+        const ap = r.aprovacoes || { pendentes: 0, itens: [] };
+        const tiles = document.createElement('div'); tiles.className = 'grid g-tiles';
+        tiles.appendChild(tile(t('g_avaliadas'), val(r.avaliadas)));
+        tiles.appendChild(tile(t('g_cobrar'), val(r.cobrarCasa), r.lote && r.lote.casas ? { txt: `${r.lote.casas} ${t('g_casas_lbl')} · ${r.lote.reservas} ${t('g_reservas')}` } : null));
+        tiles.appendChild(tile(t('g_avisar'), val(r.avisarCliente), r.avisarCliente ? { txt: '● Aria', cls: 'warn' } : null));
+        tiles.appendChild(tile(t('g_urgentes'), val(r.urgentes), r.urgentes ? { txt: '●', cls: 'warn' } : null));
+        tiles.appendChild(tile(t('g_aprov'), val(ap.pendentes), ap.pendentes ? { txt: `● ${t('pending_title')}${ap.mais_antiga_h ? ' · ' + ap.mais_antiga_h + ' h' : ''}`, cls: 'warn' } : null));
+        tiles.appendChild(tile(t('g_ultima'), r.idadeHoras === null || r.idadeHoras === undefined ? '—' : `${fmt(r.idadeHoras)} h`, ue.dia ? { txt: `${ue.dia} · ${ue.modo || ''}${ue.canario ? ' · ' + t('g_canario') + ' ' + esc(String(ue.canario)) : ''}`, cls: r.idadeHoras > 30 ? 'warn' : '' } : null));
+        mm.appendChild(tiles);
+
+        // barra de ações do fundador: relatório do dia + fila de aprovações
+        const bar = document.createElement('div'); bar.className = 'act-toolbar';
+        const rel = document.createElement('button'); rel.className = 'nm-send'; rel.textContent = '📄 ' + t('g_relatorio'); rel.onclick = () => { location.hash = '#/guardiao?f=relatorio'; };
+        bar.appendChild(rel);
+        if (ap.pendentes) bar.appendChild(paraAprov());
+        const src = document.createElement('span'); src.className = 'src';
+        src.textContent = (r.fonte === 'sincronizado' ? `${t('g_fonte_sinc')} ${r.sincronizadoEm ? new Date(r.sincronizadoEm).toLocaleString(S.lang === 'fr' ? 'fr-FR' : 'pt-BR') : '—'} · ` : '') + `${t('g_execucoes')}: ${val(r.execucoes)} · trace ${ue.trace_id || '—'}`;
+        bar.appendChild(src);
+        mm.appendChild(bar);
+
+        if ((r.anomalias || []).length) {
+          mm.appendChild(panel(t('g_anomalias'), linhas(r.anomalias, (x) => `<span style="color:var(--warning)">${esc(String(x))}</span>`)));
+        }
+
+        const two = document.createElement('div'); two.className = 'grid g-2';
+        const cont = Object.entries(r.contagens || {}).filter(([k, v]) => k !== 'avaliadas' && Number(v) > 0).sort((x, y) => y[1] - x[1]);
+        if (cont.length) two.appendChild(panel(t('g_decisoes'), hBars(cont.map(([k, v]) => ({ label: acaoLbl(k), v: Number(v) })), { color: hue })));
+        const serie = (r.serie || []).map((x) => Number(x.avaliadas) || 0);
+        if (serie.length > 1) two.appendChild(panel(t('g_serie'), lineChart(serie, { color: hue }), { src: (r.serie || []).map((x) => x.dia.slice(5)).join(' · ') }));
+        mm.appendChild(two);
+
+        const two2 = document.createElement('div'); two2.className = 'grid g-2';
+        two2.appendChild(panel(`${t('g_lote')} · ${(r.lote && r.lote.casas) || 0} / ${(r.lote && r.lote.reservas) || 0} ${t('g_reservas')}`,
+          linhas((r.emails || []).slice(0, 40), (e) => `<span class="id">${esc(e.idioma || '')}</span><span><b>${esc(e.nome)}</b> · ${esc(e.cidade || '')}<div class="src">${(e.codigos || []).join(', ')}</div></span><span class="st-badge st-fila">${e.reservas} ${t('g_reservas')}</span>`),
+          { src: t('g_nada_enviado') + ((r.lote && r.lote.idiomas || []).length ? ' · ' + r.lote.idiomas.map((x) => `${x.idioma} ${x.casas}`).join(' · ') : '') }));
+        two2.appendChild(panel(t('g_fila'),
+          linhas((r.fila || []).slice(0, 40), (f) => `<span class="id">${f.urgencia_h === null ? '—' : f.urgencia_h + ' h'}</span><span><b>${esc(f.nome)}</b> · ${esc(f.cidade || '')} · ${t('g_mesa')} ${esc(f.mesa || '')}<div class="src">${esc(f.reservation_code || '')} · ${t('g_degrau')} ${f.degrau ?? '—'} · ${esc(f.motivo || '')}</div></span><span class="st-badge st-bloqueada">${esc(f.canal || '')}</span>`),
+          { src: t('g_fila_src') }));
+        mm.appendChild(two2);
+
+        mm.appendChild(panel(t('g_clientes'),
+          linhas((r.clientes || []).slice(0, 40), (c) => `<span class="id">${c.horas_ate_mesa === null ? '—' : c.horas_ate_mesa + ' h'}</span><span><b>${esc(c.reservation_code)}</b> · ${esc(c.restaurante)} · ${esc(c.cidade || '')}<div class="src">${esc(c.motivo || '')}</div></span><span class="st-badge ${c.horas_ate_mesa !== null && c.horas_ate_mesa <= 6 ? 'st-erro' : 'st-bloqueada'}">${c.alternativas} ${t('g_alternativas')}</span>`),
+          { src: t('g_clientes_src') }));
+
+        if (ap.itens && ap.itens.length) {
+          mm.appendChild(panel(`${t('g_aprov')} (${ap.pendentes})`,
+            linhas(ap.itens, (x) => `<span class="id">${esc(x.id)}</span><span>${esc(x.titulo)}<div class="src">${new Date(x.criado_em).toLocaleString(S.lang === 'fr' ? 'fr-FR' : 'pt-BR')}</div></span><span class="st-badge st-bloqueada">${esc(x.tipo || '')}</span>`),
+            { src: t('g_aprov_src') }));
+        }
+
+        const l = r.ledger || {};
+        const lg = document.createElement('div'); lg.className = 'grid g-tiles';
+        lg.appendChild(tile(t('g_env7'), val(l.enviados_7d)));
+        lg.appendChild(tile(t('g_envtot'), val(l.enviados_total)));
+        lg.appendChild(tile(t('g_casas'), val(l.casas_contatadas)));
+        lg.appendChild(tile(t('g_ultenv'), l.ultimo_envio ? new Date(l.ultimo_envio).toLocaleDateString(S.lang === 'fr' ? 'fr-FR' : 'pt-BR') : '—'));
+        mm.appendChild(panel(t('g_ledger'), lg, { src: t('g_ledger_src') }));
       });
     },
   };
@@ -933,7 +1070,7 @@
     // atalhos de uma tecla (fora de campos de texto)
     const ae = document.activeElement;
     if (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
-    const map = { h: '', 1: '#/comercial', 2: '#/suporte', 3: '#/editorial', 4: '#/financeiro', 5: '#/dba', m: '#/missoes', a: '#/acoes', c: '#/conversa', p: '#/aprovacoes' };
+    const map = { h: '', 1: '#/comercial', 2: '#/suporte', 3: '#/editorial', 4: '#/financeiro', 5: '#/dba', 6: '#/guardiao', m: '#/missoes', a: '#/acoes', c: '#/conversa', p: '#/aprovacoes' };
     if (e.key.toLowerCase() in map && !e.ctrlKey && !e.metaKey && !e.altKey) location.hash = map[e.key.toLowerCase()];
   });
   $('#palette').addEventListener('click', (e) => { if (e.target.id === 'palette') palClose(); });

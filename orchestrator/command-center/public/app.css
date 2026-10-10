@@ -21,7 +21,7 @@
   --gold-light: #e4c990;
   --gold-dark: #9e7c48;
   --accent: var(--gold);
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s7: #9085e9; /* s7 = Guardião, o mesmo tom do Panorama */
   --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
   --radius: 4px;
   --serif: "Cormorant Garamond", ui-serif, Georgia, "Times New Roman", serif;

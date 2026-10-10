@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panorama · The World Keys</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23070b10'/><circle cx='12' cy='13' r='5' fill='none' stroke='%23c9a96e' stroke-width='2.2'/><path d='M16 16.5l9 9M21.5 22l2.6-2.6' stroke='%23c9a96e' stroke-width='2.2' stroke-linecap='round'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+</head>
+<body data-menu="0">
+  <div class="gate" id="gate" hidden>
+    <form>
+      <span class="micro gold">The World Keys</span>
+      <h1>PANORAMA</h1>
+      <p class="lede" style="font-size:19px;margin:0 auto">Informe a chave da Central para abrir a leitura do sistema.</p>
+      <input type="password" autocomplete="current-password" placeholder="Chave da Central" aria-label="Chave da Central" required>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <div class="shell" id="app">
+    <aside class="side" aria-label="Menu da plataforma">
+      <a class="brand" href="#/visao-geral" style="text-decoration:none;color:inherit">
+        <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12.5" cy="13.5" r="6.5"/><path d="M17.3 18.3l11.2 11.2M23.5 24.5l3.4-3.4M26.6 27.6l2.4-2.4"/></svg>
+        <span><b>PANORAMA</b><span>The World Keys · Agentes</span></span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Páginas"></nav>
+      <div class="side-foot">
+        Somente leitura. Os números vêm do banco da plataforma e dos próprios agentes.<br>
+        <a href="/">Abrir a Central de Comando</a>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="top">
+        <button class="chip menu-btn" id="menu" aria-label="Abrir o menu">Menu</button>
+        <span class="micro crumb" id="crumb"></span>
+        <span class="chip" id="selo" data-s="carregando" role="status"><span class="pulse"></span><span id="selo-t">Lendo os números…</span></span>
+        <button class="chip" id="atualizar">Atualizar</button>
+        <button class="chip opt" id="tema">Tema claro</button>
+        <button class="chip opt" id="imprimir">Imprimir relatório</button>
+      </div>
+      <main id="conteudo"></main>
+    </div>
+  </div>
+  <script src="/plataforma/plataforma.js"></script>
+</body>
+</html>
