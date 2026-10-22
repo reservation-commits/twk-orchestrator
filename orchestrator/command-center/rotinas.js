@@ -92,7 +92,7 @@ async function rodarJob(j) {
     fs.appendFileSync(logFile, `\n=== ${new Date().toISOString()} · ${j.job} · tentativa ${i + 1}/${ESPERAS_MS.length} · ${path.basename(j.script)} ${j.args.join(' ')}\n`, 'utf8');
     ultimo = await rodarUmaVez(j, logFile);
     // `modo` diz se o job agiu de verdade ou só ensaiou — visível no /health e em GET /api/rotinas, sem abrir o log do container.
-    if (ultimo.ok) return { job: j.job, ok: true, exit: 0, ms: ultimo.ms, tentativas: i + 1, modo: j.args.includes('--apply') ? 'real' : j.args.includes('--gate') ? 'portao' : 'ensaio', log: path.relative(STATE_DIR, logFile) };
+    if (ultimo.ok) return { job: j.job, ok: true, exit: 0, ms: ultimo.ms, tentativas: i + 1, modo: j.relato ? 'vigia' : j.args.includes('--apply') ? 'real' : j.args.includes('--gate') ? 'portao' : 'ensaio', log: path.relative(STATE_DIR, logFile) };
     // Vigias (Sentinela, Zelador) saem com 1 quando há achado CRÍTICO — o relato foi gravado; isso é
     // sinal, não falha da rotina. Falha de verdade é 2+ (exceção) ou processo que não iniciou.
     if (j.relato && ultimo.exit === 1) return { job: j.job, ok: true, exit: 1, achados_criticos: true, ms: ultimo.ms, tentativas: i + 1, log: path.relative(STATE_DIR, logFile) };
