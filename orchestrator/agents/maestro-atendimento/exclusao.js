@@ -308,11 +308,9 @@ if (require.main === module) (async () => {
   if (apply && (!aprovacao || aprovacao.length < 10)) { console.error('BLOQUEADO: --apply exige --aprovacao "<frase do fundador>"'); process.exit(3); }
   if (apply && (!WEBHOOK || !TOKEN)) { console.error('BLOQUEADO: EMAIL_WEBHOOK_URL/TOKEN ausentes'); process.exit(2); }
 
-  const { Client } = require(path.join(RAIZ, 'Agente Comercial', 'service', 'node_modules', 'pg'));
-  const c = new Client({ connectionString: envRO().DATABASE_URL_RO, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 15000, statement_timeout: 50000 });
-  await c.connect();
-  const d = await dossie(c, alvo);
-  await c.end();
+  // A1 (2026-10-22): conexão pela biblioteca comum (nova tentativa, read-only conferido; funciona no container).
+  const { comClienteRo } = require('../_lib/conectar');
+  const d = await comClienteRo((c) => dossie(c, alvo));
 
   console.log(`\n=== DOSSIÊ · ${d.casa.name} (${d.casa.restaurant_id}) ===`);
   console.log(`  ${d.casa.city}, ${d.casa.country} · ${d.casa.restaurant_category || 'sem categoria'} · no catálogo desde ${d.casa.created_date.slice(0, 10)}`);
@@ -397,4 +395,5 @@ if (require.main === module) (async () => {
   console.log(`  node -e "fetch('${d.casa.url_page_twk}?cb='+Date.now()).then(r=>console.log(r.status))"`);
 })().catch((e) => { audit({ evento: 'falha', erro: e.message }); console.error('ERRO', e.message); process.exit(1); });
 
-module.exports = { idiomaProvavel, idiomaPorTelefone };
+// dossie e sqlDespublicar: reutilizados pela retenção antes da exclusão (ADR-018, retencao-run.js).
+module.exports = { idiomaProvavel, idiomaPorTelefone, dossie, sqlDespublicar, idiomaDoPais };

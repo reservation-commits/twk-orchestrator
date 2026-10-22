@@ -27,6 +27,9 @@ COPY agents/sentinela-silencio ./agents/sentinela-silencio
 COPY agents/zelador-privilegios ./agents/zelador-privilegios
 COPY agents/registro-optout ./agents/registro-optout
 COPY agents/chave-girada/n8n ./agents/chave-girada/n8n
+# ADR-018: retenção antes da exclusão (MAESTRO) e a porta única de escrita que ela usa (TWK_DBA_URL no ambiente).
+COPY agents/maestro-atendimento ./agents/maestro-atendimento
+COPY agents/dba-escrita ./agents/dba-escrita
 # DURABILIDADE (v4.4): a carga-semente vai para /app/SEED (dentro da imagem),
 # NUNCA para /app/state. O /app/state é o diretório VIVO — deve ser um VOLUME
 # PERSISTENTE montado no EasyPanel, senão as conversas somem a cada deploy.

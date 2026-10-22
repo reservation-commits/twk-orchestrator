@@ -34,7 +34,7 @@ Operação de orquestração dos 5 agentes da TWK (plataforma premium de reserva
 | Criar conta de restaurante, apagar contato, corrigir dado do catálogo | **autônomo** (ADR-017) — são as escritas reversíveis acima |
 | UPDATE / DELETE sem backup declarado, ou acima do teto | sempre |
 | Reparo determinístico (rerodar tarefa agendada, religar coletor) | **autônomo após aprovação única do procedimento** em `sentinela-silencio/reparos-aprovados.json` (ADR-017) |
-| **Despublicar** a pedido do próprio estabelecimento | **delegado ao MAESTRO** (ADR-016, 2026-09-11) — dossiê, motivo gravado, oferta da conta e registro, por `exclusao.js` |
+| **Despublicar** a pedido do próprio estabelecimento | **delegado ao MAESTRO** (ADR-016, 2026-09-11) — dossiê, motivo gravado, oferta da conta e registro, por `exclusao.js`. **ADR-018 (2026-10-22): antes de excluir, avaliar o motivo e mandar UMA carta de retenção** (nada custa ser apresentado, receber e responder pedidos; números da casa; a data de saída escrita); a casa responde FICAR ou REMOVER; sem resposta em 48 h, exclui sozinho. Sem retenção quando há base jurídica, casa fechada, "não contatem" ou segundo pedido. `retencao-run.js`, nas rotinas hospedadas |
 | Publicar ou **republicar** um restaurante; despublicar por qualquer outro motivo | sempre |
 | Envio externo: e-mail, WhatsApp, publicação de conteúdo em canal oficial | sempre, **exceto** o atendimento a cliente e estabelecimento, que é do MAESTRO (ADR-014/016) |
 | Compensação, desconto, cortesia ou qualquer valor a cliente; jurídico; imprensa | sempre |

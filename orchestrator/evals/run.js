@@ -20,6 +20,7 @@ const SUITES = {
   'medidor-autonomia': './medidor-autonomia/casos.js',
   'juizes': './juizes/casos.js',
   'auditor': './auditor/casos.js',
+  'retencao': './retencao/casos.js',
 };
 const alvo = process.argv[2];
 const nomes = alvo ? [alvo] : Object.keys(SUITES);

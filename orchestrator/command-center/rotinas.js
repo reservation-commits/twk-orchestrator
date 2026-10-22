@@ -58,6 +58,9 @@ function jobs() {
   return [
     { job: 'guardiao-gate', script: path.join(AGENTS_DIR, 'guardiao-reserva', 'run.js'), args: guardiaoArgs },
     { job: 'ciclo-cliente', script: path.join(AGENTS_DIR, 'ciclo-cliente', 'run.js'), args: cicloArgs },
+    // ADR-018: pedidos de remoção — carta de retenção, decisão da casa ou prazo de 48 h, exclusão autônoma.
+    // Só age de verdade com o canal de e-mail (EMAIL_WEBHOOK_URL) e a porta única (TWK_DBA_URL); sem eles, dry-run.
+    { job: 'retencao', script: path.join(AGENTS_DIR, 'maestro-atendimento', 'retencao-run.js'), args: process.env.EMAIL_WEBHOOK_URL && process.env.TWK_DBA_URL ? ['--apply'] : [] },
     { job: 'sentinela', script: path.join(AGENTS_DIR, 'sentinela-silencio', 'verificar.js'), args: ['--relato'], relato: ['sentinela-silencio', 'sentinela-silencio.json'] },
     { job: 'zelador', script: path.join(AGENTS_DIR, 'zelador-privilegios', 'verificar.js'), args: ['--relato'], relato: ['zelador-privilegios', 'zelador-privilegios.json'] },
   ];
