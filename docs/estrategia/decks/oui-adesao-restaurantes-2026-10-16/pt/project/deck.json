@@ -1,0 +1,44 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-15T15:00:00Z"
+  },
+  "lists": "css",
+  "title": "OUI em uma mensagem — como levamos os restaurantes ao novo formato",
+  "order": [
+    "cover",
+    "frase",
+    "historia",
+    "mensagem",
+    "cartao",
+    "quem",
+    "convive",
+    "comecar"
+  ],
+  "sections": {
+    "s1": {
+      "description": "A ideia em uma frase e a história de um restaurante, do telefonema ao relatório do mês.",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "A mensagem que o restaurante recebe, a quem ligamos primeiro e por que nada do que já funciona muda.",
+      "start": "mensagem"
+    },
+    "s3": {
+      "description": "O que precisamos para começar.",
+      "start": "comecar"
+    }
+  },
+  "faces": {
+    "cormorant-garamond": {
+      "family": "Cormorant Garamond",
+      "href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+    },
+    "jost": {
+      "family": "Jost",
+      "href": "https://fonts.googleapis.com/css2?family=Jost:wght@300..600&display=swap"
+    }
+  },
+  "designSystems": []
+}

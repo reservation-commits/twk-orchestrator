@@ -10,7 +10,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const ARQUIVO_PADRAO = path.resolve(__dirname, '..', '..', 'state', 'listing-consent.jsonl');
+// A1 (2026-10-22): na Central hospedada o arquivo interino vive no volume (TWK_STATE_ROOT/listing-consent.jsonl),
+// sincronizado pelo push-state.ps1; a tabela listing_consent continua sendo a fonte única quando o banco responde.
+const ARQUIVO_PADRAO = process.env.TWK_STATE_ROOT
+  ? path.join(path.resolve(process.env.TWK_STATE_ROOT), 'listing-consent.jsonl')
+  : path.resolve(__dirname, '..', '..', 'state', 'listing-consent.jsonl');
 const STATUS = new Set(['listed', 'correction_requested', 'opted_out', 'claimed']);
 const SCOPES = new Set(['listing', 'reservations', 'outreach']);
 

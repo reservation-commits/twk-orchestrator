@@ -1,132 +1,190 @@
 <title>Balcão B2B TWK</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap">
 <style>
-/* Memorando executivo de uma coluna, 68ch, identidade TWK (encre/or em escuro; marfim/or em claro). */
+/* Memorando visual: tiles de números, fluxo "fazemos → recebemos", cartões de pacotes, barras de cenário em escala. Identidade TWK. */
 :root{
   --bg:#f7f4ef; --surface:#ffffff; --fg:#141821; --muted:#5e6472; --line:#d9d2c3;
-  --gold:#9e7c48; --gold-2:#c9a96e; --soft:#f1ebdf;
+  --gold:#9e7c48; --gold-2:#c9a96e; --soft:#f1ebdf; --ink:#141821; --on-ink:#f7f4ef;
   --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
   --ui:"Jost","Avenir Next","Segoe UI",Helvetica,Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;--ink:#1c2130;--on-ink:#f7f4ef;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;--ink:#1c2130;--on-ink:#f7f4ef;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);font-weight:300;font-size:16px;line-height:1.55;padding-block:40px 64px;padding-inline:16px}
-main{max-width:72ch;margin:0 auto;min-width:0}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);font-weight:300;font-size:16px;line-height:1.5;padding-block:40px 64px;padding-inline:16px}
+main{max-width:960px;margin:0 auto;min-width:0}
 .eyebrow{font:500 11px/1 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
-h1{font:500 42px/1.08 var(--display);margin:10px 0 6px;text-wrap:balance}
-.lede{font:italic 400 21px/1.35 var(--display);color:var(--muted);margin:0 0 28px}
-h2{font:500 13px/1 var(--ui);letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:36px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
-p{margin:0 0 12px}
+h1{font:500 46px/1.05 var(--display);margin:10px 0 8px;text-wrap:balance;max-width:20ch}
+.lede{font:italic 400 22px/1.3 var(--display);color:var(--muted);margin:0 0 26px;max-width:60ch}
+h2{font:500 13px/1 var(--ui);letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:44px 0 14px;padding-top:16px;border-top:1px solid var(--line)}
+h3{font:500 24px/1.15 var(--display);margin:0 0 6px}
+p{margin:0 0 12px;max-width:72ch}
 strong{font-weight:500}
-ul{margin:0 0 12px;padding-left:20px}
-li{margin-bottom:6px}
-.verdict{background:var(--soft);border-left:3px solid var(--gold-2);padding:16px 20px;margin:0 0 8px;font-size:17px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 6px}
-.kpi{background:var(--surface);border:1px solid var(--line);padding:14px 16px;min-width:0}
-.kpi b{display:block;font:500 30px/1 var(--display);color:var(--fg);font-variant-numeric:tabular-nums}
-.kpi span{font:400 12px/1.35 var(--ui);color:var(--muted);letter-spacing:.04em;display:block;margin-top:6px}
-table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:15px;font-variant-numeric:tabular-nums}
-th{text-align:left;font:500 11px/1.3 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:8px 10px 8px 0;border-bottom:1px solid var(--line)}
-td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
-td.r,th.r{text-align:right;white-space:nowrap;padding-right:0}
-.wrap{overflow-x:auto}
-.ask{background:var(--surface);border:1px solid var(--gold-2);padding:18px 22px;margin-top:8px}
-.ask ol{margin:8px 0 0;padding-left:22px}
-.ask li{margin-bottom:8px}
+.verdict{background:var(--ink);color:var(--on-ink);padding:22px 26px;font:400 19px/1.45 var(--ui)}
+.verdict b{color:var(--gold-2);font-weight:500}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0 6px}
+.tile{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0}
+.tile b{display:block;font:500 40px/1 var(--display);font-variant-numeric:tabular-nums}
+.tile.bad b{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--gold-2);text-decoration-thickness:2px}
+.tile span{display:block;font:400 12.5px/1.35 var(--ui);color:var(--muted);margin-top:8px}
+.flow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+.col{background:var(--surface);border:1px solid var(--line);padding:18px 20px;min-width:0}
+.col.get{border-color:var(--gold-2);background:var(--soft)}
+.col h3{font-size:14px;letter-spacing:.24em;text-transform:uppercase;font-family:var(--ui);font-weight:500;color:var(--gold);margin-bottom:12px}
+.col ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.col li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;font-size:15px}
+.col li i{font:italic 500 22px/1 var(--display);color:var(--gold);padding-top:1px}
+.col li b{display:block;font-weight:500}
+.day{display:grid;grid-template-columns:76px 1fr;gap:0;border-left:2px solid var(--gold-2);margin:10px 0 0 6px}
+.day .t{font:500 13px/1.3 var(--ui);color:var(--gold);letter-spacing:.08em;padding:10px 0 10px 16px;position:relative}
+.day .t::before{content:"";position:absolute;left:-7px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--gold-2);border:2px solid var(--bg)}
+.day .d{padding:9px 0 10px 8px;font-size:15px;border-bottom:1px solid var(--line)}
+.day .d:last-child{border-bottom:0}
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px}
+.pack{background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;min-width:0}
+.pack .who{font:500 11px/1.3 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.pack h3{font-size:22px}
+.pack .inc{font-size:14px;color:var(--muted);line-height:1.45}
+.pack .money{display:grid;grid-template-columns:1fr 1fr;gap:8px;border-top:1px solid var(--line);padding-top:10px;font-variant-numeric:tabular-nums}
+.pack .money div{min-width:0}
+.pack .money b{display:block;font:500 24px/1 var(--display)}
+.pack .money span{display:block;font:400 11px/1.3 var(--ui);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.pack .money .keep b{color:var(--gold)}
+.pack.wide{grid-column:1/-1;grid-template-rows:auto}
+.bars{display:grid;gap:12px;margin-top:12px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.bar .l{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.bar .l b{font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar .track{height:22px;background:var(--surface);border:1px solid var(--line);position:relative}
+.bar .fill{height:100%;background:var(--gold-2)}
+.bar .fill.pale{background:var(--line)}
+.bar .fixed{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--fg);left:calc(5300/12000*100%)}
+.legend{font-size:13px;color:var(--muted);margin-top:8px}
+.weeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
+.wk{background:var(--surface);border:1px solid var(--line);padding:14px 16px;min-width:0}
+.wk b{display:block;font:500 12px/1.3 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.wk p{font-size:14px;margin:0;line-height:1.45}
+.stop{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:10px}
+.stop div{border-left:3px solid var(--gold-2);padding:6px 14px;font-size:15px}
+.stop b{display:block;font-weight:500}
+.ask{background:var(--ink);color:var(--on-ink);padding:22px 26px;margin-top:14px}
+.ask .eyebrow{color:var(--gold-2)}
+.ask ol{margin:10px 0 0;padding-left:22px;font-size:17px;display:grid;gap:8px}
 .meta{font-size:13px;color:var(--muted);margin-top:34px;border-top:1px solid var(--line);padding-top:12px}
-.conf{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
-.conf span{font:400 13px/1 var(--ui);border:1px solid var(--line);padding:7px 11px;border-radius:2px;color:var(--fg)}
-.conf b{color:var(--gold);font-weight:600}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.day{grid-template-columns:64px 1fr}h1{font-size:36px}}
 </style>
 <main>
-  <div class="eyebrow">The World Keys · Memorando ao CEO · 9 de outubro de 2026</div>
-  <h1>Do pedido de mesa gratuito ao balcão B2B que fatura</h1>
-  <p class="lede">Uma decisão, três produtos, um carro já pago, seis a oito clientes profissionais. Receita em semanas, não em trimestres.</p>
+  <div class="eyebrow">The World Keys · Memorando ao CEO · outubro de 2026</div>
+  <h1>O que vamos fazer e o que vamos receber</h1>
+  <p class="lede">Um carro já pago, uma tabela de preços, seis a oito clientes profissionais que compram toda semana. Cada serviço deixa 85 a 95% na empresa.</p>
 
-  <div class="verdict"><strong>Decisão proposta.</strong> Parar de vender assinatura a restaurantes e passar a vender, a profissionais que já compram isso toda semana, a noite resolvida do cliente deles: carro com preço fechado, mesa em casa que confirma e experiência de parceiro. Pagamento antecipado, margem por serviço, resposta em menos de uma hora. O site deixa de ser um motor de pedidos gratuitos e vira a tabela de preços e a porta de reserva desse balcão.</div>
+  <div class="verdict">Paramos de vender assinatura a restaurantes. Passamos a vender a <b>concierges de hotel, gestores de villas, DMCs e agências de evento</b> a noite resolvida do cliente deles: <b>carro com preço fechado, mesa em casa que confirma, experiência de parceiro</b>. Pré-pago, resposta em menos de uma hora, fatura única no fim do mês.</div>
 
-  <h2>Por que mudar agora</h2>
-  <p>Os números são medidos no nosso banco de dados e no Search Console, não estimados.</p>
-  <div class="kpis">
-    <div class="kpi"><b>0</b><span>contas de restaurante ativadas em 13 meses (185 e-mails, 3 respostas)</span></div>
-    <div class="kpi"><b>10%</b><span>dos pedidos de mesa são aceitos pela casa; em 2025 eram 3%</span></div>
-    <div class="kpi"><b>−96%</b><span>impressões no Google desde a atualização de junho de 2025</span></div>
-    <div class="kpi"><b>7</b><span>jantares aceitos na Riviera em 12 meses, de 220 pedidos</span></div>
+  <h2>Por que mudar: quatro números medidos</h2>
+  <div class="tiles">
+    <div class="tile bad"><b>0</b><span>contas de restaurante em 13 meses, com 185 e-mails enviados</span></div>
+    <div class="tile bad"><b>10%</b><span>dos pedidos de mesa aceitos pela casa</span></div>
+    <div class="tile bad"><b>−96%</b><span>impressões no Google desde junho de 2025</span></div>
+    <div class="tile"><b>85%</b><span>do preço fica na empresa em cada serviço de motorista, com o carro e o salário já pagos</span></div>
   </div>
-  <p>O mercado confirma a leitura. O restaurante só paga por cliente novo (TheFork, 2 a 4 € por couvert) ou por independência (Zenchef, 129 a 249 € por mês). Não entregamos nenhuma das duas coisas. Já o motorista é a única linha com caixa, mas vendido como "um só chauffeur, só Riviera, orçamento por WhatsApp" é commodity de 70 a 140 € por trajeto.</p>
 
-  <h2>A oferta e o cliente</h2>
-  <p><strong>Para quem.</strong> Concierges de hotéis 4 e 5 estrelas sem frota, gestores de aluguel e villas premium, DMCs e agências de evento em Paris, Cannes e Mônaco, e delegações corporativas nos congressos de outubro a dezembro. Todos já compram carro e mesa para os clientes deles e já pagam 10 a 25% de comissão a quem resolve (prática documentada em transfers, villas, DMCs e brokers náuticos).</p>
-  <p><strong>O que compram.</strong> Tabela fixa, sem negociação: transfer 150 €, disposição 4 h 400 €, dia inteiro 750 €, Soirée (ida, espera, volta e mesa pedida pelo nosso concierge) 390 €, navette de feira 400 €. Parceiro profissional recebe 10% ou tarifa net, fatura única mensal a partir de 3 serviços, atendimento em francês, inglês e português.</p>
-  <p><strong>O que já temos e ninguém precisa construir.</strong> Motorista na folha e Tesla Model X em Paris, seis dias por semana; 34 restaurantes que confirmam pedidos (Paris aceita 40%); marca registrada nas classes 36, 39, 41 e 43; site em 7 idiomas; protótipo pronto de página, checkout e conta profissional do motorista.</p>
+  <h2>Fazemos · Recebemos</h2>
+  <div class="flow">
+    <div class="col">
+      <h3>O que fazemos</h3>
+      <ul>
+        <li><i>1</i><div><b>Respondemos em menos de uma hora</b> a qualquer concierge, agência ou gestor de villa, pela tabela fixa, sem negociar preço.</div></li>
+        <li><i>2</i><div><b>Executamos com o nosso motorista e o Tesla</b>, seis dias por semana em Paris. Nome e placa enviados na véspera.</div></li>
+        <li><i>3</i><div><b>Pedimos a mesa</b> só em casas que confirmam (Monak aceita 74%). Ela entra no voucher depois do sim, nunca antes.</div></li>
+        <li><i>4</i><div><b>Encaixamos a experiência de parceiro</b> (cruzeiro, helicóptero) com o parceiro faturando e nós na comissão.</div></li>
+        <li><i>5</i><div><b>O motorista deixa o cartão de tarifas</b> no balcão de cada hotel por onde passa. É o nosso vendedor de campo, sem custo.</div></li>
+      </ul>
+    </div>
+    <div class="col get">
+      <h3>O que recebemos</h3>
+      <ul>
+        <li><i>€</i><div><b>Preço cheio, pré-pago</b>, por link ou fatura mensal: 150 € o transfer, 400 € as 4 horas, 750 € o dia, 390 € a Soirée.</div></li>
+        <li><i>€</i><div><b>85 a 95% de cada serviço</b> depois de energia, pedágio e estacionamento. Via parceiro, descontamos 10% para ele.</div></li>
+        <li><i>€</i><div><b>10% sobre cada experiência de parceiro</b>, sem tocar no dinheiro do cliente.</div></li>
+        <li><i>€</i><div><b>Recorrência:</b> o mesmo concierge compra toda semana. Uma conta de hotel vale 1.100 € por mês para a empresa.</div></li>
+        <li><i>€</i><div><b>Um ledger por conta, produto e origem</b>, fechado todo mês. Pela primeira vez saberemos quanto o motorista fatura.</div></li>
+      </ul>
+    </div>
+  </div>
 
-  <h2>O dinheiro</h2>
-  <p>Com o motorista na folha, cada serviço deixa 85 a 95% do preço depois de energia, pedágio e estacionamento. O custo fixo (motorista e carro, cerca de 5.300 € por mês) já é pago hoje.</p>
-  <div class="wrap"><table>
-    <tr><th>Produto</th><th class="r">Preço</th><th class="r">Fica para a TWK (venda direta)</th><th class="r">Via parceiro (−10%)</th></tr>
-    <tr><td>Transfer aeroporto</td><td class="r">150 €</td><td class="r">135 €</td><td class="r">120 €</td></tr>
-    <tr><td>Disposição 4 h</td><td class="r">400 €</td><td class="r">380 €</td><td class="r">340 €</td></tr>
-    <tr><td>Dia inteiro 8 h</td><td class="r">750 €</td><td class="r">720 €</td><td class="r">645 €</td></tr>
-    <tr><td>Soirée com mesa</td><td class="r">390 €</td><td class="r">365 €</td><td class="r">326 €</td></tr>
-  </table></div>
-  <ul>
-    <li><strong>Meta de 11 de novembro, 1.600 € de receita nova rastreada:</strong> dois dias inteiros vendidos a um hotel mais uma Soirée. Três a cinco serviços em cinco semanas.</li>
-    <li><strong>10.000 € líquidos por mês depois do fixo:</strong> cerca de 50 serviços por mês num só carro a 70 a 75% de ocupação (10 dias inteiros, 16 Soirées, 24 transfers), com 6 a 8 contas profissionais que compram toda semana. Motoristas parceiros entram só para os picos, a 25% para nós.</li>
-    <li><strong>A alavanca:</strong> um dia inteiro rende o mesmo que seis transfers. Vendemos dias e noites, não corridas.</li>
-  </ul>
-  <div class="conf"><span>1.600 € até 11/11 · confiança <b>média</b></span><span>1.600 €/mês recorrentes em janeiro · <b>65%</b></span><span>10 k€/mês até junho de 2027 · <b>45%</b></span></div>
+  <h2>Um dia da empresa no novo padrão</h2>
+  <div class="day">
+    <div class="t">9h04</div><div class="d">O concierge do Hôtel X, no 8e, escreve no WhatsApp: "casal americano, chegada CDG 14h20, jantar hoje 20h30, algo bom perto do hotel".</div>
+    <div class="t">9h40</div><div class="d">Resposta pela tabela: transfer 150 € + Soirée 390 €, mesa pedida no Monak, nome do motorista e placa. Total 540 €.</div>
+    <div class="t">10h15</div><div class="d">O hóspede paga pelo link, ou o hotel acumula na fatura do mês. Às 11h o Monak confirma a mesa; só agora ela entra no voucher.</div>
+    <div class="t">14h20</div><div class="d">Placa de nome em CDG. Ao deixar o casal no hotel, o motorista entrega o cartão de tarifas ao balcão.</div>
+    <div class="t">20h10</div><div class="d">Soirée: deixa no restaurante, espera, traz de volta. Registra os dois serviços no ledger com origem "Hôtel X" em dois minutos.</div>
+    <div class="t">Ter · Qui</div><div class="d">10h às 12h: vinte ligações em francês com a lista preparada pelo CLAVIS. No mesmo dia sai o e-mail com a grille partenaire.</div>
+    <div class="t">Dia 30</div><div class="d">Fatura única ao hotel, 10% creditados ao concierge, ledger fechado. Os 540 € daquele dia deixaram 500 € na empresa.</div>
+  </div>
 
-  <h2>Por que vai funcionar</h2>
-  <ul>
-    <li>É assim que as empresas de chauffeur conseguem demanda: Welcome Pickups paga comissão a hotéis e gestores de aluguel; SnapCar divide 20% com agências; Sixième Étoile e Kingdom Limousines vendem a DMCs e hotéis. Não inventamos o canal, entramos nele.</li>
-    <li>"Carro + mesa + experiência" já se vende como pacote na Riviera (concierges de Cannes cobram a partir de 250 € por mesa; a Dorsia opera em Paris, Mônaco, Cannes e Saint-Tropez). O que falta ao mercado é um fornecedor que responda em uma hora, em três idiomas, com preço fechado.</li>
-    <li>O calendário joga a favor: nas cinco semanas até 11/11, três têm congresso em Cannes e feira em Paris ao mesmo tempo (MIPCOM, Mondial de l'Auto, SIAL, Art Basel, MAPIC, Equip'Hotel, Rolex Paris Masters). Em dezembro, o ILTM Cannes reúne os travel advisors de luxo do mundo.</li>
-  </ul>
+  <h2>Dez pacotes reais, pela tabela</h2>
+  <p>Preços TTC. "Fica" é o que sobra depois de energia, pedágio e estacionamento, com o motorista da casa; "via parceiro" já desconta os 10% do intermediário.</p>
+  <div class="packs">
+    <div class="pack"><div class="who">Concierge de hotel · hóspede de Nova York</div><h3>Arrivée Paris</h3><div class="inc">Transfer CDG → hotel, placa de nome, 60 minutos de espera incluídos.</div><div class="money"><div><b>150 €</b><span>preço</span></div><div class="keep"><b>135 €</b><span>fica · via parceiro 120 €</span></div></div></div>
+    <div class="pack"><div class="who">Concierge ou gestor de apartamento · aniversário</div><h3>Soirée Paris</h3><div class="inc">Ida, espera até 4 h, volta. Mesa pedida pelo concierge em casa que confirma (Monak, Le Tobsil).</div><div class="money"><div><b>390 €</b><span>preço</span></div><div class="keep"><b>365 €</b><span>fica · via parceiro 326 €</span></div></div></div>
+    <div class="pack"><div class="who">Expositor brasileiro no SIAL · 17 a 21/10</div><h3>Journée salon</h3><div class="inc">8 horas: hotel → Villepinte, retorno, jantar. Trajetos ilimitados.</div><div class="money"><div><b>750 €</b><span>preço</span></div><div class="keep"><b>720 €</b><span>fica · via parceiro 645 €</span></div></div></div>
+    <div class="pack"><div class="who">Agência de eventos · Equip'Hotel, 2 a 5/11</div><h3>Navette salon</h3><div class="inc">Meio dia: hotel ↔ Porte de Versailles, ida e volta com espera.</div><div class="money"><div><b>400 €</b><span>preço</span></div><div class="keep"><b>380 €</b><span>fica · via parceiro 340 €</span></div></div></div>
+    <div class="pack"><div class="who">DMC com seis executivos · três dias de feira</div><h3>Semaine congrès</h3><div class="inc">Três dias inteiros consecutivos, mesmo motorista, mesmo carro.</div><div class="money"><div><b>2.250 €</b><span>preço</span></div><div class="keep"><b>2.160 €</b><span>fica · via parceiro 1.935 €</span></div></div></div>
+    <div class="pack"><div class="who">Galeria ou colecionador · Art Basel, 23 a 25/10</div><h3>Art Basel VIP</h3><div class="inc">4 h de disposição no circuito Grand Palais e galerias + Soirée com mesa.</div><div class="money"><div><b>790 €</b><span>preço</span></div><div class="keep"><b>745 €</b><span>fica · via parceiro 666 €</span></div></div></div>
+    <div class="pack"><div class="who">Gestor de villa ou assistente pessoal · cliente do Golfo</div><h3>Journée shopping</h3><div class="inc">4 h Faubourg Saint-Honoré e Avenue Montaigne, carro à porta, compras a bordo.</div><div class="money"><div><b>400 €</b><span>preço</span></div><div class="keep"><b>380 €</b><span>fica · via parceiro 340 €</span></div></div></div>
+    <div class="pack"><div class="who">Villa em Cap-Ferrat · a partir de março, motorista parceiro</div><h3>Soirée Monaco</h3><div class="inc">Deixa no restaurante, espera, recolhe os mesmos passageiros em 3 a 8 h. Regra monegasca sem vignette.</div><div class="money"><div><b>390 €</b><span>preço</span></div><div class="keep"><b>97 €</b><span>fica · 25% sobre o parceiro</span></div></div></div>
+    <div class="pack"><div class="who">Hotel · pedido de noivado</div><h3>Soirée sur Seine</h3><div class="inc">Cruzeiro privado de parceiro (ex.: 900 €, faturado por ele) + Soirée com carro.</div><div class="money"><div><b>390 € + 900 €</b><span>preço</span></div><div class="keep"><b>365 € + 90 €</b><span>fica · carro + comissão</span></div></div></div>
+    <div class="pack"><div class="who">Hotel boutique de 40 quartos · todo mês</div><h3>Compte mensuel hôtel</h3><div class="inc">Por mês: 4 transfers + 2 Soirées, fatura única, concierge recebe 10%.</div><div class="money"><div><b>1.380 €/mês</b><span>preço</span></div><div class="keep"><b>1.132 €/mês</b><span>fica</span></div></div></div>
+  </div>
 
-  <h2>Jurídico, verificado em fonte primária</h2>
-  <ul>
-    <li>Serviço de motorista produzido pela própria SAS fica fora do Código do Turismo: faturamos o cliente direto e podemos emitir fatura única ao hotel desde já. Condições: SAS inscrita no registro VTC, carta profissional do motorista, RC pro. A SAS está apta.</li>
-    <li>Serviços de parceiros (barco, helicóptero) só em Modo A (o parceiro fatura, nós faturamos a comissão) até o registro Atout France (295 €, 3 anos). Rede de motoristas parceiros exige declaração de central de reserva, feita online.</li>
-    <li>Sem campanha à base de 23 mil cadastros: a CNIL exige opt-in e não o temos. A base é contexto transacional, não canal.</li>
-  </ul>
+  <h2>Quanto entra por mês, em três cenários</h2>
+  <p>Contribuição mensal depois dos custos variáveis, com um carro. A linha vertical é o custo fixo já pago hoje (motorista e carro, cerca de 5.300 €).</p>
+  <div class="bars" role="img" aria-label="Três cenários de contribuição mensal: 3.400, 6.800 e 11.950 euros, contra custo fixo de 5.300 euros">
+    <div class="bar"><div class="l"><span>3 contas de hotel (4 transfers + 2 Soirées cada)</span><b>3.400 €</b></div><div class="track"><div class="fill pale" style="width:28.3%"></div><div class="fixed"></div></div></div>
+    <div class="bar"><div class="l"><span>6 contas de hotel</span><b>6.800 €</b></div><div class="track"><div class="fill" style="width:56.6%"></div><div class="fixed"></div></div></div>
+    <div class="bar"><div class="l"><span>6 contas + 2 dias de congresso por semana (8 dias a 645 €)</span><b>11.950 €</b></div><div class="track"><div class="fill" style="width:99.6%"></div><div class="fixed"></div></div></div>
+  </div>
+  <p class="legend">Escala até 12.000 €. No terceiro cenário o carro trabalha cerca de 70% dos dias e a empresa fica com perto de 6.600 € líquidos acima do fixo; a partir daí, motoristas parceiros a 25% para o excedente.</p>
 
-  <h2>As cinco semanas</h2>
-  <div class="wrap"><table>
-    <tr><th>Semana</th><th>O que acontece</th><th>Meta</th></tr>
-    <tr><td>0 · até 11/10</td><td>Registro diário de serviços começa; tabela de preços FR/EN/PT; lista de 30 alvos em Paris</td><td>Pronto para ligar</td></tr>
-    <tr><td>1 · 12–18/10</td><td>Mondial de l'Auto e SIAL. Vinte ligações a hotéis e DMCs; motorista deixa o cartão nos balcões; site corrigido</td><td>4 cotações, 1 pago</td></tr>
-    <tr><td>2 · 19–25/10</td><td>Art Basel. Vinte ligações a gestores de aluguel e delegações lusófonas</td><td>Go/no-go em 23/10</td></tr>
-    <tr><td>3 · 26/10–1/11</td><td>Semana baixa: preparar Equip'Hotel e Rolex Paris Masters, pedir avaliações</td><td>2 recompras marcadas</td></tr>
-    <tr><td>4 · 2–8/11</td><td>Três horas presenciais na Equip'Hotel, onde os compradores estão reunidos; Soirée Rolex</td><td>3 a 5 pagos, 1.600 €</td></tr>
-    <tr><td>5 · 9–11/11</td><td>Fechamento e balanço: receita rastreada, contas ativas, ocupação do carro</td><td>Decisão de continuar</td></tr>
-  </table></div>
-  <p><strong>Custo do plano:</strong> quatro horas semanais de telefone em francês, o motorista preenchendo o registro em dois minutos por dia, e menos de 200 € em impressão e deslocamento. Nenhuma linha de código é necessária para a primeira venda.</p>
+  <h2>O que já temos</h2>
+  <div class="tiles">
+    <div class="tile"><b>1</b><span>motorista na folha e Tesla Model X em Paris, seis dias por semana</span></div>
+    <div class="tile"><b>34</b><span>restaurantes que confirmam pedidos; Paris aceita 40%</span></div>
+    <div class="tile"><b>4</b><span>classes da marca registrada: 36, 39, 41 e 43</span></div>
+    <div class="tile"><b>7</b><span>idiomas no site; protótipo de página, checkout e conta do motorista prontos</span></div>
+  </div>
 
-  <h2>Quando paramos</h2>
-  <ul>
-    <li><strong>23/10:</strong> menos de 3 cotações e nenhum serviço pago após 40 ligações. Paramos, revemos tabela e alvos.</li>
-    <li><strong>11/11:</strong> menos de 1.600 € rastreados e menos de 3 contas compradoras. Com quatro horas por semana o canal não fecha: ou mais horas de venda, ou abandono da tese.</li>
-    <li><strong>Em qualquer semana:</strong> se o registro mostrar o carro já acima de 80% de ocupação, o ganho vem de trocar corridas baratas por dias inteiros, e o segundo carro entra antes.</li>
-  </ul>
+  <h2>As primeiras cinco semanas</h2>
+  <div class="weeks">
+    <div class="wk"><b>Semana 0</b><p>Registro diário de serviços começa. Tabela de preços em três idiomas. Lista de 30 alvos em Paris.</p></div>
+    <div class="wk"><b>12 a 18/10</b><p>Mondial de l'Auto e SIAL. Vinte ligações a hotéis e DMCs. Cartão nos balcões. Site corrigido.</p></div>
+    <div class="wk"><b>19 a 25/10</b><p>Art Basel. Vinte ligações a gestores de aluguel e delegações lusófonas. Revisão de tabela e alvos.</p></div>
+    <div class="wk"><b>26/10 a 1/11</b><p>Semana baixa. Preparar Equip'Hotel e Rolex Paris Masters. Pedir avaliação a quem comprou.</p></div>
+    <div class="wk"><b>2 a 8/11</b><p>Três horas presenciais na Equip'Hotel, onde os compradores estão reunidos. Soirée Rolex.</p></div>
+  </div>
+  <p style="margin-top:12px"><strong>Custo:</strong> quatro horas semanais de telefone em francês, dois minutos por dia do motorista no registro, menos de 200 € de impressão. Nenhuma linha de código para a primeira venda. Depois: Paris Photo, festas de fim de ano, Maison&amp;Objet e Fashion Weeks em janeiro, Riviera com parceiros em março.</p>
 
-  <h2>O que descartamos, e por quê</h2>
-  <ul>
-    <li><strong>Insistir na assinatura de restaurantes:</strong> treze meses sem um cliente pagante; o mercado já tem Zenchef e TheFork.</li>
-    <li><strong>Site de chauffeur para o público:</strong> commodity que exige tráfego novo, e o Google deixou de nos mostrar.</li>
-    <li><strong>Concierge de luxo ao cliente final:</strong> sem demanda própria na Riviera e sem poder prometer mesa.</li>
-    <li><strong>Campanha à base de cadastros:</strong> ilegal sem opt-in e reputação já gasta por 97% de pedidos sem resposta.</li>
-  </ul>
+  <h2>Regras do jogo</h2>
+  <div class="stop">
+    <div><b>Revisão mensal</b>Contas que compraram, recompra, ocupação do carro, tempo médio de resposta. Tudo sai do ledger.</div>
+    <div><b>Mudamos de alvo</b>se 40 ligações não gerarem 3 cotações. Mudamos a tabela se as cotações não virarem compra.</div>
+    <div><b>Segundo carro</b>entra quando o registro mostrar o Tesla acima de 80% de ocupação. Parceiro declarado, 25% para nós.</div>
+    <div><b>Nunca</b>prometemos mesa antes do sim da casa, nem vendemos serviço de terceiro em nosso nome antes do registro Atout France.</div>
+  </div>
+
+  <h2>Jurídico, verificado</h2>
+  <p>Serviço de motorista produzido pela própria SAS fica fora do Código do Turismo: faturamos direto e emitimos fatura única ao hotel desde já. Condições: SAS inscrita no registro VTC, carta profissional do motorista, RC pro. Parceiros (barco, helicóptero) faturam o cliente e nos pagam comissão até termos o registro Atout France (295 €, três anos). Rede de motoristas parceiros exige a declaração de central de reserva, feita online. Sem campanha à base de 23 mil cadastros: a CNIL exige opt-in.</p>
 
   <div class="ask">
     <div class="eyebrow">O que pedimos ao CEO</div>
     <ol>
       <li>Aprovar a tabela de preços e a tarifa de parceiro de −10%.</li>
-      <li>Aprovar as quatro horas semanais de venda por telefone e a presença na Equip'Hotel em 2 a 5 de novembro.</li>
-      <li>Autorizar a correção do site: "Paris e Côte d'Azur", tabela de preços, fim das promessas de confirmação e suporte 24/7.</li>
-      <li>Autorizar os registros legais: declaração de central de reserva agora, Atout France se a meta de 11/11 for batida.</li>
+      <li>Aprovar as quatro horas semanais de venda e a presença na Equip'Hotel, 2 a 5 de novembro.</li>
+      <li>Autorizar a correção do site: Paris e Côte d'Azur, tabela de preços, fim das promessas de confirmação e suporte 24/7.</li>
+      <li>Autorizar os registros legais: declaração de central de reserva agora, Atout France quando entrarem os parceiros.</li>
     </ol>
   </div>
 
-  <p class="meta">Base documental: premissa com fontes (premissa-caminho-lucrativo-2026-10-08), plano semana a semana (plano-execucao-balcao-b2b-2026-10-09) e cartão do chauffeur (cartao-chauffeur-b2b-2026-10-09), todos em docs/estrategia. Dados internos medidos em 15/09, 30/09 e 08/10 de 2026; pesquisa de mercado e jurídica em 08/10/2026 com fontes primárias. Preparado para The World Keys SAS.</p>
+  <p class="meta">Base documental em docs/estrategia: premissa com fontes (08/10), plano semana a semana (09/10) e cartão do chauffeur (09/10). Dados internos medidos em setembro e outubro de 2026; pesquisa de mercado e jurídica com fontes primárias em 08/10/2026. Preparado para The World Keys SAS.</p>
 </main>

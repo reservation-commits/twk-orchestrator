@@ -1,0 +1,38 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-15T10:00:00Z"
+  },
+  "lists": "css",
+  "title": "A reserva nunca mais fica no escuro — WhatsApp e Guardião da Reserva",
+  "order": [
+    "cover",
+    "frase",
+    "historia",
+    "mensagem",
+    "mapa",
+    "prova"
+  ],
+  "sections": {
+    "s1": {
+      "description": "A ideia em uma frase e a história de uma cliente, do pedido ao dia seguinte.",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "A mensagem como chega, o que já aconteceu de verdade e o que precisamos para ligar tudo.",
+      "start": "mensagem"
+    }
+  },
+  "faces": {
+    "cormorant-garamond": {
+      "family": "Cormorant Garamond",
+      "href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+    },
+    "jost": {
+      "family": "Jost",
+      "href": "https://fonts.googleapis.com/css2?family=Jost:wght@300..600&display=swap"
+    }
+  },
+  "designSystems": []
+}

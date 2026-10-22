@@ -25,7 +25,7 @@ const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.6.0-guardiao-na-central-20261010';
+const BUILD = '4.7.0-rotinas-hospedadas-20261022';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -206,6 +206,11 @@ if ((process.env.REGENCIA_ENABLED || 'off') === 'on') {
   }, 5 * 60_000).unref();
   console.log(`[regencia] ligada: despacho diário às ${REG_HORA}h Paris; alerta crítico a cada hora (08–22h)`);
 }
+// ---------- Rotinas hospedadas (A1, 2026-10-22): Guardião, Ciclo do Cliente, Sentinela e Zelador dentro da Central ----------
+// ROTINAS_ENABLED=on liga. Com elas ligadas, a Regência em processo lê o estado dos agentes no volume (TWK_STATE_ROOT).
+const rotinas = require('./rotinas.js');
+if (rotinas.enabled()) { process.env.TWK_STATE_ROOT = process.env.TWK_STATE_ROOT || STATE_DIR; process.env.TWK_AGENTS_DIR = process.env.TWK_AGENTS_DIR || rotinas.AGENTS_DIR; }
+rotinas.start();
 const ANALYST_INTERVAL_MS = Math.max(1, Number(process.env.ANALYST_INTERVAL_H || 24)) * 3_600_000;
 if (analyst.enabled()) {
   setTimeout(() => { analyst.run(STATE_DIR).catch(() => {}); }, 300_000).unref(); // 1º ciclo 5 min após o boot
@@ -254,6 +259,12 @@ function handleIngest(req, res) {
       if (payload.excluidos_teste && typeof payload.excluidos_teste === 'object' && Array.isArray(payload.excluidos_teste.restaurantes)) {
         fs.writeFileSync(path.join(STATE_DIR, 'excluidos-teste.json'), JSON.stringify(payload.excluidos_teste, null, 2), 'utf8');
       }
+      // Rotinas hospedadas (A1, 2026-10-22): o Guardião dentro da Central só contata casa com o registro de
+      // opt-out legível (fail-closed), e a Sentinela lê os compromissos. Cópias dos arquivos interinos do repositório;
+      // só se aceita JSONL íntegro (toda linha um JSON), para um envio truncado nunca virar "registro vazio".
+      const jsonlIntegro = (s) => typeof s === 'string' && s.split(/\r?\n/).filter(Boolean).every((l) => { try { JSON.parse(l); return true; } catch { return false; } });
+      if (jsonlIntegro(payload.listing_consent_jsonl)) fs.writeFileSync(path.join(STATE_DIR, 'listing-consent.jsonl'), payload.listing_consent_jsonl, 'utf8');
+      if (jsonlIntegro(payload.compromissos_jsonl)) fs.writeFileSync(path.join(STATE_DIR, 'compromissos.jsonl'), payload.compromissos_jsonl, 'utf8');
       if (payload.missoes && typeof payload.missoes === 'object') {
         const mdir = path.join(STATE_DIR, 'missoes');
         fs.mkdirSync(mdir, { recursive: true });
@@ -324,6 +335,7 @@ const server = http.createServer(async (req, res) => {
         const conversas = (() => { try { return fs.readdirSync(path.join(STATE_DIR, 'threads')).filter((f) => f.endsWith('.json')).length; } catch { return 0; } })();
         return { seed: SEED_DIR ? 'on' : 'off (dev)', conversas_salvas: conversas, aviso: semVolumeProvavel ? undefined : 'monte um VOLUME persistente em /app/state no EasyPanel, senão as conversas somem no redeploy' };
       })(),
+      rotinas: rotinas.saude(),
       auth: CENTER_TOKEN ? 'token' : (IS_PROD ? 'FAIL-CLOSED (sem token em producao)' : 'dev-aberto'),
       agents_configurados: AGENTS.filter((a) => a.url || (a.local && (healthCache.get(a.id) || {}).configured)).length,
       brain: brain.brainEnabled() ? `on (${brain.MODEL_STANDARD} / complexo: ${brain.MODEL_COMPLEX})` : 'off',
@@ -450,6 +462,13 @@ const server = http.createServer(async (req, res) => {
       if (!/^[A-Za-z0-9._-]+\.md$/.test(f)) return json(res, 400, { error: 'nome invalido' });
       try { return json(res, 200, { file: f, content: fs.readFileSync(path.join(STATE_DIR, 'despachos', f), 'utf8') }); }
       catch { return json(res, 404, { error: 'despacho nao encontrado' }); }
+    }
+    // Rotinas hospedadas (A1): estado da última rodada e disparo manual (mesma chave da API).
+    if (u.pathname === '/api/rotinas' && req.method === 'GET') return json(res, 200, { saude: rotinas.saude(), ultima: rotinas.estado() });
+    if (u.pathname === '/api/rotinas/run' && req.method === 'POST') {
+      const so = u.searchParams.get('so') || null;
+      rotinas.executar({ so }).then((e) => json(res, e && e.erro ? 409 : 200, e)).catch((e) => json(res, 500, { error: String(e && e.message || e) }));
+      return;
     }
     if (u.pathname === '/api/regencia/run' && req.method === 'POST') {
       // Disparo manual pelo operador (mesma proteção X-Center-Key). Nunca envia e-mail daqui.

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>OUI em uma mensagem — como levamos os restaurantes ao novo formato</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300..600&amp;display=swap">
+<style>
+  :root{--ground:#FBFAF7;--ink:#1B1812;--muted:#6E6657;--rule:#E2DCCE;--accent:#8A6512}
+  @media (prefers-color-scheme:dark){:root{--ground:#15130F;--ink:#EFE9DC;--muted:#A39883;--rule:#2F2A21;--accent:#D9AE55}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:"Jost","Segoe UI",system-ui,sans-serif;line-height:1.5;padding:28px 16px 64px}
+  .page{max-width:1280px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;margin:0 0 20px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  header h1{font:500 26px/1.2 "Cormorant Garamond",Georgia,serif;margin:0}
+  header p{margin:0;font:12px/1.4 "IBM Plex Mono",ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  figure{margin:0 0 28px}
+  .tela{container-type:inline-size;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--rule);box-shadow:0 8px 28px rgba(0,0,0,.14);background:#141821}
+  /* Fator = largura da tela ÷ 1920 px. CSS não divide comprimentos; tan(atan2(a, b)) devolve a/b como número puro. */
+  .tela>section{width:1920px;height:1080px;position:relative;transform-origin:0 0;transform:scale(tan(atan2(100cqw, 1920px)));overflow:hidden}
+  @supports not (transform:scale(tan(atan2(1cqw, 1px)))){.tela{aspect-ratio:auto;overflow:auto}.tela>section{transform:none}}
+  /* Padrões do formato de slide: nada de margem, tamanhos explícitos vêm inline. */
+  .tela>section *{margin:0;box-sizing:border-box}
+  .tela>section h1{font-size:96px;font-weight:600;line-height:1.1}
+  .tela>section h2{font-size:64px;font-weight:600;line-height:1.15}
+  .tela>section h3{font-size:44px;font-weight:600;line-height:1.2}
+  .tela>section p{font-size:32px;line-height:1.4}
+  .tela>section ul,.tela>section ol{padding-left:1.2em}
+  .tela>section li{line-height:inherit}
+  .tela>section hr{border:0;height:0}
+  .tela>section div:not([style*="display:"]){display:flex;flex-direction:column}
+  .tela>section table{border-collapse:collapse;width:100%}
+  .tela>section th,.tela>section td{padding:.35em .6em;border-bottom:1px solid rgba(128,128,128,.35);vertical-align:top;text-align:left}
+  .tela>section tr:last-child td{border-bottom:0}
+  .tela>section b{font-weight:600}
+  figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font:12px/1.4 "IBM Plex Mono",ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  details{margin-top:6px;font-size:14.5px;color:var(--ink)}
+  details summary{cursor:pointer;color:var(--accent);font-size:13px;letter-spacing:.04em}
+  details p{margin:8px 0 0;max-width:72ch;white-space:pre-wrap}
+  @media print{body{background:#fff;padding:0}.tela{box-shadow:none;border:0}figure{break-inside:avoid;page-break-inside:avoid;margin:0 0 12px}details{display:none}}
+</style>
+</head>
+<body>
+<div class="page">
+<header><h1>OUI em uma mensagem — como levamos os restaurantes ao novo formato</h1><p>Apresentação de 2026-10-15 · 8 slides</p></header>
+<figure id="cover">
+<div class="tela"><section id="cover" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">The World Keys · Restaurantes parceiros · 16 de outubro de 2026</p>
+<div style="display:flex;flex-direction:column;gap:28px">
+<h1 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:132px;font-weight:500;line-height:1.02;width:1500px">OUI em uma mensagem</h1>
+<hr style="border-top:3px solid #c9a96e;width:160px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-style:italic;line-height:1.25;color:#ede9df;width:1400px">Como levamos os restaurantes ao novo formato: um cliente de verdade, uma mensagem de WhatsApp, e a casa entra na lista dos concierges.</p>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:end">
+<p style="font-size:28px;color:#b5b1a7">8 slides · 6 minutos</p>
+<p style="font-size:24px;color:#b5b1a7">Preparado para The World Keys SAS</p>
+</div>
+</section></div>
+<figcaption><span>Slide 1 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>Abertura (15 s): « Vou contar isto com um restaurante de exemplo, do telefonema ao fim do mês. São cinco minutos. »</p></details>
+</figure>
+<figure id="frase">
+<div class="tela"><section id="frase" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:40px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">A ideia inteira em uma frase</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;width:1640px">Levamos um cliente de hotel ao restaurante. O restaurante responde OUI no WhatsApp. Pronto: ele entra na lista dos concierges de Paris.</h2>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#141821;padding:34px 36px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">O que o restaurante ganha</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1.1;color:#ede9df">Clientes de hotel que chegam de carro, na hora marcada</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">Os concierges dos hotéis mandam os hóspedes para a nossa lista. Entrar nela é o que todo restaurante quer e não consegue sozinho.</p>
+</div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:34px 36px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O que o restaurante faz</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1.1">Responde OUI uma vez. Depois, um toque por pedido</p>
+<p style="font-size:26px;line-height:1.4;color:#3a3f4b">Cada pedido chega no WhatsApp com nome, data, hora e pessoas, e um botão: Aceitar ou recusar. Nada para instalar ou aprender.</p>
+</div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:34px 36px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O que custa</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1.1">Nada</p>
+<p style="font-size:26px;line-height:1.4;color:#3a3f4b">Sem mensalidade, sem comissão, sem exclusividade. Para sair, basta escrever PARAR. A regra é só uma: quem responde em até uma hora fica no topo da lista.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">2 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 2 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Leia a frase do título e pare. Depois os três blocos, na ordem: o que ganha, o que faz, o que custa. São as três perguntas que todo dono faz. Se perguntarem &quot;por que ele aceita?&quot;: porque nós chegamos com um cliente na mão e pedimos uma palavra, não uma assinatura.</p></details>
+</figure>
+<figure id="historia">
+<div class="tela"><section id="historia" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:30px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Um exemplo, do telefonema ao fim do mês</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">O restaurante Andia, no 16e de Paris, numa terça de manhã</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;border-left:3px solid #c9a96e">
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">10h00</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Julien liga: « Um casal do Hôtel X quer jantar na sua casa sábado às 20h30 e vai de carro conosco. Quer receber esses pedidos no WhatsApp? É grátis: responda OUI. »</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">10h02</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">O dono abre o cartão que recebeu, lê o QR e toca em enviar. A mensagem já vem escrita: « OUI — Andia ».</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">10h03</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">A Aria responde: « Bem-vindo à lista. » E envia o pedido do casal: sábado, 20h30, 2 pessoas, com o botão <b>Aceitar ou recusar</b>.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">10h10</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">O dono toca em Aceitar. O casal e o concierge são avisados na hora. Na sexta à noite, o restaurante recebe a agenda do sábado.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">Sábado</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">20h25: o casal chega com o nosso chauffeur. O chauffeur deixa mais um cartão no balcão do restaurante ao lado.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">Dia 30</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">O Andia recebe o relatório do mês: quantos pedidos chegaram, quantos aceitou, quantos vieram de hotéis. Só então falamos de um plano pago, se ele quiser mais.</p></div>
+</div>
+<div style="width:520px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#141821;padding:30px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Tempo do restaurante</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:72px;font-weight:600;line-height:1;color:#ede9df">30 s</p>
+<p style="font-size:24px;line-height:1.35;color:#b5b1a7">para entrar na lista e aceitar o primeiro cliente</p>
+</div>
+<div style="background:#efe9dd;border:1px solid #d9d2c3;padding:30px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Se ele não responder</p>
+<p style="font-size:25px;line-height:1.4;color:#3a3f4b">Em uma hora, a Aria oferece ao casal outra casa da lista. O cliente nunca fica sem resposta, e o restaurante sabe disso desde o início.</p>
+</div>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">3 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 3 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>1 min 30. Conte como uma história, hora a hora. Tudo nela já existe: o pedido com botão, o aviso automático ao cliente, a agenda da véspera, o chauffeur, a casa alternativa quando não há resposta. O que ainda precisa ser ligado é a Aria reconhecer o « OUI » como entrada na lista; está no slide 7. Andia é exemplo real: casa do 16e que já aceitou um pedido nosso por e-mail e ainda não recebe pelo WhatsApp.</p></details>
+</figure>
+<figure id="mensagem">
+<div class="tela"><section id="mensagem" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O que o restaurante recebe na mão</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Um cartão, cinco linhas, um QR. Em francês em Paris, em português em Lisboa e Lagos.</h2>
+</div>
+<div style="display:flex;gap:28px;align-items:start">
+<div style="width:700px;background:#e6e0d3;border:1px solid #d9d2c3;padding:24px 28px;display:flex;flex-direction:column;gap:9px;border-radius:18px">
+<p style="font-size:28px;font-weight:600;line-height:1.3">Votre table sur la liste des concierges de Paris</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Vous recevez :</b> les demandes des concierges d’hôtel, ici sur WhatsApp, avec nom, date, heure et couverts. Le client arrive avec notre chauffeur, à l’heure.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Vous faites :</b> un geste, Accepter ou refuser. Nous prévenons le client.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Ça coûte :</b> rien. Pas d’abonnement, pas de commission. STOP à tout moment.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>En haut de la liste :</b> les maisons qui répondent dans l’heure.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Sans réponse :</b> le client est orienté vers une autre maison.</p>
+<p style="font-size:26px;font-weight:500;color:#141821;background:#f7f4ef;border:1px solid #c9a96e;padding:12px 20px;text-align:center;border-radius:10px">Scannez et envoyez OUI</p>
+</div>
+<div style="width:700px;background:#e6e0d3;border:1px solid #d9d2c3;padding:24px 28px;display:flex;flex-direction:column;gap:9px;border-radius:18px">
+<p style="font-size:28px;font-weight:600;line-height:1.3">A sua mesa na lista dos concierges</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Recebe:</b> os pedidos dos concierges de hotel e das villas, aqui no WhatsApp, com nome, data, hora e pessoas.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Faz:</b> um toque, Aceitar ou recusar. Nós avisamos o cliente.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Custa:</b> nada. Sem mensalidade, sem comissão. PARAR a qualquer momento.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>No topo da lista:</b> as casas que respondem em até uma hora.</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c"><b>Sem resposta:</b> o cliente é encaminhado a outra casa.</p>
+<p style="font-size:26px;font-weight:500;color:#141821;background:#f7f4ef;border:1px solid #c9a96e;padding:12px 20px;text-align:center;border-radius:10px">Leia o QR e envie SIM</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Como é entregue</p>
+<p style="font-size:24px;line-height:1.4;color:#3a3f4b">Pelo chauffeur, na porta, quando deixa um cliente.</p>
+<p style="font-size:24px;line-height:1.4;color:#3a3f4b">Por mensagem, logo depois do telefonema.</p>
+<p style="font-size:24px;line-height:1.4;color:#3a3f4b">O QR já abre o WhatsApp com « OUI — nome do restaurante » escrito. Só falta tocar em enviar.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">4 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 4 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Leia o cartão francês em voz alta: quinze segundos. As cinco linhas respondem, nesta ordem: o que ganho, o que faço, quanto custa, como fico no topo, o que perco se não responder. O cartão português não fala em chauffeur porque em Portugal o carro será de um parceiro, a partir de 2027. Os textos precisam da sua aprovação antes de imprimir.</p></details>
+</figure>
+<figure id="cartao">
+<div class="tela"><section id="cartao" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O cartão com QR, na prática</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">O chauffeur entrega um cartão. O dono aponta a câmera. O WhatsApp abre com a mensagem pronta.</h2>
+</div>
+<div style="display:flex;gap:36px;align-items:start">
+<div style="width:520px;display:flex;flex-direction:column;gap:14px">
+<div style="background:#141821;padding:28px 30px;display:flex;flex-direction:column;gap:14px;align-items:center;border-radius:18px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">The World Keys</p>
+<svg aria-label="QR de exemplo" width="220" height="220" viewBox="0 0 21 21" style="background:#f7f4ef;border-radius:8px"><rect x="1" y="1" width="7" height="7" fill="#141821"/><rect x="2" y="2" width="5" height="5" fill="#f7f4ef"/><rect x="3" y="3" width="3" height="3" fill="#141821"/><rect x="13" y="1" width="7" height="7" fill="#141821"/><rect x="14" y="2" width="5" height="5" fill="#f7f4ef"/><rect x="15" y="3" width="3" height="3" fill="#141821"/><rect x="1" y="13" width="7" height="7" fill="#141821"/><rect x="2" y="14" width="5" height="5" fill="#f7f4ef"/><rect x="3" y="15" width="3" height="3" fill="#141821"/><rect x="9" y="1" width="1" height="1" fill="#141821"/><rect x="9" y="3" width="1" height="1" fill="#141821"/><rect x="11" y="2" width="1" height="1" fill="#141821"/><rect x="10" y="5" width="1" height="1" fill="#141821"/><rect x="9" y="7" width="2" height="1" fill="#141821"/><rect x="1" y="9" width="1" height="1" fill="#141821"/><rect x="3" y="9" width="2" height="1" fill="#141821"/><rect x="6" y="10" width="1" height="1" fill="#141821"/><rect x="2" y="11" width="1" height="1" fill="#141821"/><rect x="5" y="11" width="2" height="1" fill="#141821"/><rect x="9" y="9" width="1" height="2" fill="#141821"/><rect x="11" y="9" width="2" height="1" fill="#141821"/><rect x="14" y="9" width="1" height="1" fill="#141821"/><rect x="16" y="9" width="3" height="1" fill="#141821"/><rect x="12" y="11" width="1" height="1" fill="#141821"/><rect x="15" y="11" width="1" height="2" fill="#141821"/><rect x="18" y="11" width="1" height="1" fill="#141821"/><rect x="10" y="12" width="2" height="1" fill="#141821"/><rect x="13" y="13" width="1" height="1" fill="#141821"/><rect x="17" y="13" width="2" height="1" fill="#141821"/><rect x="9" y="14" width="1" height="1" fill="#141821"/><rect x="11" y="15" width="3" height="1" fill="#141821"/><rect x="16" y="15" width="1" height="1" fill="#141821"/><rect x="19" y="14" width="1" height="2" fill="#141821"/><rect x="10" y="17" width="1" height="2" fill="#141821"/><rect x="12" y="18" width="2" height="1" fill="#141821"/><rect x="15" y="17" width="1" height="1" fill="#141821"/><rect x="17" y="18" width="3" height="1" fill="#141821"/><rect x="9" y="19" width="1" height="1" fill="#141821"/><rect x="14" y="19" width="2" height="1" fill="#141821"/></svg>
+<p style="font-size:26px;font-weight:500;color:#ede9df;text-align:center">Scannez et envoyez OUI</p>
+<p style="font-size:24px;line-height:1.35;color:#b5b1a7;text-align:center">Vos clients d’hôtel, sur votre WhatsApp</p>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#6b6f7a">Frente: o QR e uma frase. Verso: as cinco linhas do cartão anterior. Impresso, um por restaurante, com o nome da casa já dentro do QR.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:18px;align-items:start;background:#efe9dd;border:1px solid #d9d2c3;padding:18px 24px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1;color:#7a5c2c;width:48px">1</p><p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>Na porta.</b> O chauffeur deixa o hóspede e, ao sair, entrega o cartão ao dono ou ao maître com uma frase: « Les concierges peuvent vous envoyer leurs demandes sur WhatsApp. Scannez et envoyez OUI, c’est gratuit. » Trinta segundos, nada a negociar.</p></div>
+<div style="display:flex;gap:18px;align-items:start;background:#efe9dd;border:1px solid #d9d2c3;padding:18px 24px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1;color:#7a5c2c;width:48px">2</p><p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>No celular do dono.</b> Ele aponta a câmera para o QR, como num cardápio. O WhatsApp abre sozinho, na conversa com o nosso número, com a mensagem já escrita: « OUI — Andia. Envoyez-nous les demandes des concierges ici. » Ele só toca em enviar.</p></div>
+<div style="display:flex;gap:18px;align-items:start;background:#efe9dd;border:1px solid #d9d2c3;padding:18px 24px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1;color:#7a5c2c;width:48px">3</p><p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>Em segundos.</b> A Aria responde com as boas-vindas, confirma o nome da casa e envia o pedido que estiver esperando, com o botão Aceitar ou recusar. Se não houver pedido, diz que o próximo chega ali.</p></div>
+<div style="display:flex;gap:18px;align-items:start;background:#141821;padding:18px 24px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1;color:#e4c990;width:48px">4</p><p style="font-size:25px;line-height:1.4;color:#ede9df"><b>Por trás.</b> O QR é só um link do WhatsApp com o nosso número e a mensagem pré-escrita. Um QR por restaurante, com o nome embutido: sabemos quem escreveu mesmo que o número não esteja no cadastro. Funciona em qualquer celular, a qualquer hora, mesmo se o dono não estiver na hora da entrega.</p></div>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">5 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 5 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>1 min. Mostre o cartão e conte os quatro passos como um gesto de trinta segundos. O que importa para o CEO: o chauffeur não vende nem explica; entrega e vai embora. Quem convence é o cartão, e quem faz o resto é a Aria. O QR é um link wa.me com texto pré-preenchido; a mensagem traz o nome da casa para a Aria reconhecer quem escreveu. A frase do chauffeur em francês é a do roteiro; se a casa responder em texto em vez de tocar no botão, a Aria devolve o link da reserva.</p></details>
+</figure>
+<figure id="quem">
+<div class="tela"><section id="quem" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:36px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">A quem ligamos, e em que ordem</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Três grupos, sempre com um cliente de verdade na mão</h2>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#141821;padding:32px 34px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:600;line-height:1;color:#e4c990">1</p>
+<h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:40px;font-weight:600;line-height:1.1;color:#ede9df">Os que já respondem bem</h3>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">34 restaurantes que hoje aceitam os nossos pedidos por e-mail. Para eles é só uma melhoria: o pedido passa a chegar no bolso, com botão.</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;line-height:1.4;color:#b5b1a7">Esta semana, por telefone.</p>
+</div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:32px 34px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:600;line-height:1;color:#7a5c2c">2</p>
+<h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:40px;font-weight:600;line-height:1.1">Os que têm um pedido esperando</h3>
+<p style="font-size:26px;line-height:1.4;color:#3a3f4b">Todo dia sabemos quais casas têm um cliente aguardando resposta. Ligamos e dizemos: « há um cliente esperando a sua resposta para sábado ».</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;line-height:1.4;color:#3a3f4b">Todo dia, começando pelas mesas mais próximas.</p>
+</div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:32px 34px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:600;line-height:1;color:#7a5c2c">3</p>
+<h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:40px;font-weight:600;line-height:1.1">Os que um concierge pediu</h3>
+<p style="font-size:26px;line-height:1.4;color:#3a3f4b">Um hotel quer mandar um hóspede a uma casa que ainda não está conosco. Ligamos com esse hóspede na mão. Nós criamos a página; a casa só aprova.</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;line-height:1.4;color:#3a3f4b">Paris agora. Côte d'Azur em março. Lisboa e Lagos no fim do ano.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#3a3f4b;border-left:4px solid #c9a96e;padding:6px 0 6px 24px;width:1600px"><b>Duas regras simples:</b> sem cliente na mão, não se liga. E nunca mandamos a primeira mensagem de WhatsApp: é sempre o restaurante que escreve OUI primeiro.</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">6 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 6 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Três grupos, três ganchos. O terceiro é o mais forte: o pedido vem do hotel, e a casa percebe que está sendo escolhida. As duas regras do rodapé são o que evita o erro do passado (mensagens frias em massa) e o que a lei e o WhatsApp exigem. Quem liga: Julien, nas quatro horas semanais já combinadas. Quem prepara a lista do dia: a equipe, com o nome do cliente e a data de cada pedido.</p></details>
+</figure>
+<figure id="convive">
+<div class="tela"><section id="convive" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:36px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">E o que já funciona hoje?</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08;color:#ede9df">Nada muda. O WhatsApp é só um caminho a mais para a mesma reserva.</h2>
+</div>
+<div style="display:flex;gap:20px;align-items:center">
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:28px 30px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">O pedido nasce</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">No site, pelo cliente, como sempre. Ou por um concierge, pela Aria.</p>
+</div>
+<svg width="56" height="28" viewBox="0 0 56 28" aria-hidden="true" style="flex:none"><path d="M0 6h34V0l22 14-22 14v-6H0z" fill="#c9a96e"/></svg>
+<div style="width:440px;background:#efe9dd;padding:28px 30px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Uma reserva só</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:40px;font-weight:600;line-height:1.1;color:#1f232c">Guardada na plataforma, num lugar só</p>
+</div>
+<svg width="56" height="28" viewBox="0 0 56 28" aria-hidden="true" style="flex:none"><path d="M0 6h34V0l22 14-22 14v-6H0z" fill="#c9a96e"/></svg>
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:28px 30px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Chega ao restaurante</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df"><b>Por e-mail:</b> como hoje, para todos.<br><b>Por WhatsApp:</b> novo, só para quem disse OUI.</p>
+</div>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#1c2130;border:1px solid #c9a96e;padding:24px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">A resposta é sempre a mesma</p><p style="font-size:26px;line-height:1.4;color:#ede9df">Pelo link do e-mail ou pelo botão do WhatsApp, o restaurante cai na mesma página e aceita a mesma reserva. Não há duas versões, nem conflito.</p></div>
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:24px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Quem não disse OUI</p><p style="font-size:26px;line-height:1.4;color:#ede9df">Continua exatamente como hoje. E quem disser PARAR volta a receber só por e-mail. Ninguém é obrigado a nada.</p></div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#b5b1a7">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#b5b1a7">7 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 7 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Esta é a resposta à pergunta « o sistema atual continua funcionando? ». Sim: a reserva é uma só, guardada na plataforma; o e-mail continua para todos; o WhatsApp é um caminho a mais só para quem disse OUI; e a resposta cai sempre na mesma página. Um detalhe para a equipe, não para o slide: o pedido feito por um concierge ainda precisa ser lançado no site por nós até a Aria fazer isso sozinha.</p></details>
+</figure>
+<figure id="comecar">
+<div class="tela"><section id="comecar" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O que precisamos para começar</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Três sins hoje, e o primeiro restaurante entra na lista na próxima semana</h2>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#141821;padding:30px 32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:600;line-height:1;color:#e4c990">1</p>
+<h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:38px;font-weight:600;line-height:1.1;color:#ede9df">Aprovar os textos</h3>
+<p style="font-size:25px;line-height:1.4;color:#ede9df">O cartão de cinco linhas, o que o Julien diz ao telefone e a regra do topo da lista: responder em até uma hora.</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;line-height:1.4;color:#b5b1a7">Resposta: sim / não</p>
+</div>
+<div style="flex:1;background:#141821;padding:30px 32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:600;line-height:1;color:#e4c990">2</p>
+<h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:38px;font-weight:600;line-height:1.1;color:#ede9df">Imprimir os cartões</h3>
+<p style="font-size:25px;line-height:1.4;color:#ede9df">50 cartões, cada um com o QR de um restaurante. O chauffeur leva no carro e entrega na porta.</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;line-height:1.4;color:#b5b1a7">Resposta: sim / não</p>
+</div>
+<div style="flex:1;background:#141821;padding:30px 32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:600;line-height:1;color:#e4c990">3</p>
+<h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:38px;font-weight:600;line-height:1.1;color:#ede9df">Ligar a resposta ao OUI</h3>
+<p style="font-size:25px;line-height:1.4;color:#ede9df">A Aria passa a reconhecer o « OUI », dar as boas-vindas e enviar o pedido que está esperando. É a única peça que falta construir.</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;line-height:1.4;color:#b5b1a7">Resposta: sim / não</p>
+</div>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#efe9dd;border:2px solid #c9a96e;padding:22px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">As três datas</p><p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>Esta semana:</b> textos aprovados e cartões impressos. <b>23 de outubro:</b> 5 restaurantes com OUI. <b>11 de novembro:</b> 10 restaurantes em Paris, 3 deles novos.</p></div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:22px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O que nunca fazemos</p><p style="font-size:25px;line-height:1.4;color:#3a3f4b">Mensagem fria. Promessa de quantos clientes virão. Contato com quem pediu para não ser contactado. Mais de dois contatos pela mesma reserva.</p></div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · OUI em uma mensagem · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">8 / 8</p></div>
+</section></div>
+<figcaption><span>Slide 8 de 8</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Peça as três respostas, uma de cada vez. A terceira é a única que exige construção: hoje a Aria já reconhece o número de um restaurante que escreve, mas ainda não trata o « OUI » como entrada na lista nem envia o pedido pendente em seguida. É uma extensão pequena, e por ser fluxo novo precisa do sim do fundador. Termine com as três datas.</p></details>
+</figure>
+</div>
+</body>
+</html>

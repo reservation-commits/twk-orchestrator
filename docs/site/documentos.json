@@ -1,26 +1,61 @@
 [
   {
-    "slug": "plano-reserva-direta",
-    "fonte": "docs/agentes/plano-reserva-direta.html",
-    "titulo": "Plano Reserva Direta",
-    "titulo_fr": "Plan Réservation Directe",
-    "descricao": "O plano em vigor, do começo ao fim, com exemplos: o botão, o número da reserva, quem recebe, o piloto de 30 dias e as decisões.",
-    "descricao_fr": "Le plan en vigueur, du début à la fin, avec des exemples : le bouton, le numéro de réservation, qui le reçoit, le pilote de 30 jours et les décisions.",
-    "data": "2026-09-14",
+    "slug": "balcao-aria-planning-ceo",
+    "fonte": "docs/estrategia/deck-balcao-aria-ceo-2026-10-14.html",
+    "titulo": "Balcão Aria · A nova proposta de negócio",
+    "titulo_fr": "Comptoir Aria · La nouvelle proposition d’activité",
+    "descricao": "A apresentação de decisão em 9 slides: a ideia em uma frase, um dia de exemplo com o concierge do Hôtel X, os seis produtos, quanto entra por mês, por que agora, o que já temos, as datas e as seis decisões pedidas ao CEO.",
+    "descricao_fr": "La présentation de décision en 9 diapositives : l’idée en une phrase, une journée d’exemple avec le concierge de l’Hôtel X, les six produits, ce que cela rapporte par mois, pourquoi maintenant, ce que nous avons déjà, les dates et les six décisions demandées au CEO.",
+    "data": "2026-10-16",
     "estado": "vigente",
     "grupo": "Planos"
   },
   {
-    "slug": "conciergerie-plano-60-dias",
-    "fonte": "docs/agentes/conciergerie-plano-60-dias.html",
-    "titulo": "Conciergerie · Plano de 60 dias",
-    "titulo_fr": "Conciergerie · Plan de 60 jours",
-    "descricao": "Plano de lançamento da Conciergerie World Keys em Paris e na Côte d'Azur: barcos, helicóptero, carros, motoristas e experiências, com painel executivo, cronograma semanal e checklist. Bilíngue, com seletor PT/FR na própria página.",
-    "descricao_fr": "Plan de lancement de la Conciergerie World Keys à Paris et sur la Côte d'Azur : bateaux, hélicoptère, voitures, chauffeurs et expériences, avec tableau de bord, calendrier hebdomadaire et checklist. Bilingue, sélecteur PT/FR intégré.",
+    "slug": "oui-adesao-restaurantes",
+    "fonte": "docs/estrategia/deck-oui-adesao-restaurantes-2026-10-16.html",
+    "titulo": "OUI em uma mensagem · Adesão de restaurantes",
+    "titulo_fr": "OUI en un message · Adhésion des restaurants",
+    "descricao": "Como levamos os restaurantes ao novo formato, em 8 slides: um cliente de verdade na mão, uma mensagem de WhatsApp, e a casa entra na lista dos concierges. Com a história de um restaurante hora a hora, o cartão de cinco linhas, a quem ligamos primeiro e o que precisamos para começar.",
+    "descricao_fr": "Comment nous amenons les restaurants au nouveau format, en 8 diapositives : un vrai client en main, un message WhatsApp, et la maison entre sur la liste des concierges. Avec l’histoire d’un restaurant heure par heure, la carte en cinq lignes, qui nous appelons en premier et ce qu’il faut pour commencer.",
+    "data": "2026-10-16",
+    "estado": "vigente",
+    "grupo": "Planos"
+  },
+  {
+    "slug": "balcao-aria-paris",
+    "fonte": "docs/estrategia/aria-balcao-paris-2026-10-10.html",
+    "titulo": "Balcão Aria Paris",
+    "titulo_fr": "Comptoir Aria Paris",
+    "descricao": "O plano visual do balcão: a Aria como contato único entre concierge, restaurante e chauffeur no WhatsApp, o fluxo dos dois sins, os produtos e o que falta construir.",
+    "descricao_fr": "Le plan visuel du comptoir : Aria comme contact unique entre concierge, restaurant et chauffeur sur WhatsApp, le flux des deux oui, les produits et ce qu'il reste à construire.",
+    "data": "2026-10-10",
+    "estado": "vigente",
+    "grupo": "Planos",
+    "arquivado": true
+  },
+  {
+    "slug": "plano-reserva-direta",
+    "fonte": "docs/agentes/plano-reserva-direta.html",
+    "titulo": "Plano Reserva Direta",
+    "titulo_fr": "Plan Réservation Directe",
+    "descricao": "O plano do botão de reserva direta, do começo ao fim, com exemplos: o botão, o número da reserva, quem recebe, o piloto de 30 dias e as decisões.",
+    "descricao_fr": "Le plan du bouton de réservation directe, du début à la fin, avec des exemples : le bouton, le numéro de réservation, qui le reçoit, le pilote de 30 jours et les décisions.",
     "data": "2026-09-14",
     "estado": "vigente",
     "grupo": "Planos",
-    "bilingue": true
+    "arquivado": true
+  },
+  {
+    "slug": "scout-balcao-aria",
+    "fonte": "docs/estrategia/scout-balcao-aria-2026-10-13.html",
+    "titulo": "Scout Balcão Aria",
+    "titulo_fr": "Scout Comptoir Aria",
+    "descricao": "O levantamento por trás do balcão: a Soirée como produto central e suas variações, os oito blocos de conhecimento da Aria, a carteira de casas em Paris, as decisões do fundador, as doze peças de construção e o calendário.",
+    "descricao_fr": "L'étude derrière le comptoir : la Soirée comme produit central et ses variantes, les huit blocs de connaissance d'Aria, le portefeuille de maisons à Paris, les décisions du fondateur, les douze pièces à construire et le calendrier.",
+    "data": "2026-10-13",
+    "estado": "análise",
+    "grupo": "Análises",
+    "arquivado": true
   },
   {
     "slug": "dossie-reserva-direta",
@@ -31,7 +66,32 @@
     "descricao_fr": "L’analyse derrière le plan : ce que font Google, OpenTable, Resy, SevenRooms, TheFork et Tabelog, les dix optimisations et ce qu’il ne faut pas copier.",
     "data": "2026-09-14",
     "estado": "análise",
-    "grupo": "Análises"
+    "grupo": "Análises",
+    "arquivado": true
+  },
+  {
+    "slug": "whatsapp-guardiao-reserva",
+    "fonte": "docs/estrategia/deck-whatsapp-guardiao-2026-10-15.html",
+    "titulo": "WhatsApp e Guardião da Reserva",
+    "titulo_fr": "WhatsApp et Gardien de la Réservation",
+    "descricao": "O que construímos, em 6 slides e com uma cliente de exemplo: a reserva nunca mais fica no escuro. O cliente e o restaurante avisados a cada passo pelo WhatsApp, os 90 modelos aprovados, o Guardião cobrando quem não responde e o que já aconteceu de verdade.",
+    "descricao_fr": "Ce que nous avons construit, en 6 diapositives et avec une cliente d’exemple : la réservation ne reste plus jamais dans le noir. Le client et le restaurant prévenus à chaque étape sur WhatsApp, les 90 modèles approuvés, le Gardien qui relance ceux qui ne répondent pas et ce qui s’est déjà passé pour de vrai.",
+    "data": "2026-10-16",
+    "estado": "vigente",
+    "grupo": "Operação"
+  },
+  {
+    "slug": "conciergerie-plano-60-dias",
+    "fonte": "docs/agentes/conciergerie-plano-60-dias.html",
+    "titulo": "Conciergerie · Plano de 60 dias",
+    "titulo_fr": "Conciergerie · Plan de 60 jours",
+    "descricao": "O plano de lançamento da Conciergerie de setembro: barcos, helicóptero, carros, motoristas e experiências. Substituído pelo Balcão Aria em outubro; vale ainda como referência de modelo, comissões e objeções. Bilíngue, com seletor PT/FR na própria página.",
+    "descricao_fr": "Le plan de lancement de la Conciergerie de septembre : bateaux, hélicoptère, voitures, chauffeurs et expériences. Remplacé par le Comptoir Aria en octobre ; reste une référence pour le modèle, les commissions et les objections. Bilingue, sélecteur PT/FR intégré.",
+    "data": "2026-09-14",
+    "estado": "superado",
+    "grupo": "Histórico",
+    "bilingue": true,
+    "arquivado": true
   },
   {
     "slug": "reserva-direta-rastreada",
@@ -42,7 +102,8 @@
     "descricao_fr": "La proposition initiale, avec les chiffres du problème et les réponses des restaurants. Remplacée par la version finale du plan.",
     "data": "2026-09-14",
     "estado": "superado",
-    "grupo": "Histórico"
+    "grupo": "Histórico",
+    "arquivado": true
   },
   {
     "slug": "chave-girada",
@@ -53,6 +114,7 @@
     "descricao_fr": "Résumé exécutif de la campagne d’activation des comptes restaurant.",
     "data": "2026-09-05",
     "estado": "referência",
-    "grupo": "Histórico"
+    "grupo": "Histórico",
+    "arquivado": true
   }
 ]

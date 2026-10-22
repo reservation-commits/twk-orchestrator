@@ -1,0 +1,343 @@
+<title>Scout Comptoir Aria</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Scout do negócio: tese → hub → carteira de serviços → o que a Aria sabe → casas → etapas → decisões → calendário → medidas → riscos. Identidade TWK (ouro sobre marfim / noite). */
+:root{
+  --bg:#f7f4ef; --surface:#ffffff; --fg:#141821; --muted:#5e6472; --line:#d9d2c3;
+  --gold:#9e7c48; --gold-2:#c9a96e; --soft:#f1ebdf; --ink:#141821; --on-ink:#f7f4ef; --on-ink-muted:#c9c4b8;
+  --ok:#3f7a52; --warn:#a4632a; --bad:#9a3b3b; --bubble:#efe7d6;
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --ui:"Jost","Avenir Next","Segoe UI",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;--ink:#1c2130;--on-ink:#f7f4ef;--on-ink-muted:#a9a497;--ok:#7fbf8f;--warn:#e0a46b;--bad:#e08a8a;--bubble:#232838;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;--ink:#1c2130;--on-ink:#f7f4ef;--on-ink-muted:#a9a497;--ok:#7fbf8f;--warn:#e0a46b;--bad:#e08a8a;--bubble:#232838;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);font-weight:300;font-size:16px;line-height:1.5;padding-block:40px 72px;padding-inline:16px}
+main{max-width:1040px;margin:0 auto;min-width:0}
+.eyebrow{font:500 11px/1.2 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+h1{font:500 52px/1.02 var(--display);margin:10px 0 8px;text-wrap:balance;max-width:20ch}
+.lede{font:italic 400 23px/1.3 var(--display);color:var(--muted);margin:0 0 26px;max-width:60ch}
+h2{font:500 13px/1.2 var(--ui);letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:52px 0 14px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h2 small{font:400 12px/1.2 var(--ui);letter-spacing:.05em;text-transform:none;color:var(--muted)}
+h3{font:500 22px/1.15 var(--display);margin:0;text-wrap:balance}
+p{margin:0 0 12px;max-width:74ch}
+strong{font-weight:500}
+.small{font-size:13px;color:var(--muted)}
+.verdict{background:var(--ink);color:var(--on-ink);padding:24px 28px;font:400 19px/1.5 var(--ui)}
+.verdict b{color:var(--gold-2);font-weight:500}
+.verdict p{max-width:none;margin:0}
+.verdict p+p{margin-top:10px}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
+.tile{background:var(--surface);border:1px solid var(--line);padding:14px 16px;min-width:0}
+.tile .k{font:500 10.5px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tile b{display:block;font:500 34px/1.05 var(--display);margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--muted)}
+
+/* hub */
+.hub{display:grid;grid-template-columns:minmax(0,1fr) 140px minmax(0,1.05fr) 140px minmax(0,1fr);align-items:center;margin-top:18px}
+.node{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0}
+.node .k{font:500 11px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.node h3{margin:6px 0 4px}
+.node p{font-size:14px;color:var(--muted);margin:0}
+.core{background:var(--ink);color:var(--on-ink);border:1px solid var(--gold-2);padding:22px 20px;text-align:center}
+.core .k{color:var(--gold-2)}
+.core h3{font-size:34px;margin:6px 0}
+.core p{color:var(--on-ink-muted);font-size:14px;margin:0}
+.stack{display:grid;gap:12px;min-width:0}
+.link{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;padding:0 6px}
+.link::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--gold-2)}
+.link span{position:relative;background:var(--bg);font:500 10.5px/1.35 var(--ui);letter-spacing:.06em;color:var(--fg);padding:4px 8px;border:1px solid var(--line);text-align:center}
+.steps{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);padding:12px 14px;font-size:14px;min-width:0}
+.steps li::before{content:counter(s);display:block;font:italic 500 26px/1 var(--display);color:var(--gold);margin-bottom:6px}
+.steps li b{font-weight:500;display:block}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px}
+.svc article{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.svc article.hero{background:var(--ink);color:var(--on-ink);border-color:var(--gold-2);grid-column:1/-1}
+.svc article.hero p{color:var(--on-ink-muted);max-width:70ch}
+.svc article.hero .k{color:var(--gold-2)}
+.svc .k{font:500 10.5px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.svc p{font-size:14px;color:var(--muted);margin:0}
+.svc .price{margin-top:auto;font:500 15px/1.2 var(--ui);font-variant-numeric:tabular-nums}
+.svc .price i{font-style:normal;color:var(--muted);font-weight:300}
+.band{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
+.band div{border-left:3px solid var(--line);padding:4px 14px;min-width:0}
+.band .ok{border-color:var(--ok)}
+.band .wait{border-color:var(--warn)}
+.band .no{border-color:var(--bad)}
+.band b{display:block;font:500 20px/1.1 var(--display);margin-bottom:4px}
+.band p{font-size:14px;margin:0;color:var(--muted)}
+
+table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface);min-width:640px}
+.tw{overflow-x:auto;border:1px solid var(--line);margin-top:14px}
+th{font:500 10.5px/1.2 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--soft)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.blank{color:var(--warn);font-style:italic}
+
+/* knowledge */
+.know{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:14px}
+.know article{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0}
+.know .k{font:500 10.5px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.know h3{margin:4px 0 10px}
+.know dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+.know dt{font:500 11px/1.6 var(--ui);letter-spacing:.14em;text-transform:uppercase}
+.know dt.have{color:var(--ok)}.know dt.lack{color:var(--warn)}.know dt.who{color:var(--muted)}
+.know dd{margin:0;color:var(--fg)}
+.know dd.m{color:var(--muted)}
+
+/* roadmap */
+.road{display:grid;gap:8px;margin-top:14px}
+.ph{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0;border:1px solid var(--line);background:var(--surface);min-width:0}
+.ph .h{background:var(--soft);padding:14px 16px;border-right:1px solid var(--line)}
+.ph .h b{display:block;font:500 20px/1.1 var(--display)}
+.ph .h span{font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.ph ul{margin:0;padding:12px 16px;list-style:none;display:grid;gap:6px;font-size:14px}
+.ph li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline;min-width:0}
+.ph li em{font-style:normal;font:500 10.5px/1.6 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.ph li em.appr{color:var(--warn)}
+.ph li em.done{color:var(--ok)}
+
+/* decisions */
+.dec{counter-reset:d;list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px}
+.dec li{counter-increment:d;background:var(--surface);border:1px solid var(--line);padding:14px 16px;font-size:14px;min-width:0}
+.dec li::before{content:counter(d);font:italic 500 24px/1 var(--display);color:var(--gold);display:block;margin-bottom:4px}
+.dec b{font-weight:500;display:block;margin-bottom:4px}
+.dec .prop{color:var(--muted)}
+.dec .prop i{font-style:normal;font:500 10.5px/1.6 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+
+/* timeline */
+.tl{position:relative;margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tl::before{content:"";position:absolute;left:0;right:0;top:9px;border-top:1px solid var(--gold-2)}
+.tl div{position:relative;padding-top:22px;min-width:0}
+.tl div::before{content:"";position:absolute;left:0;top:4px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--gold)}
+.tl div.gate::before{background:var(--gold)}
+.tl b{display:block;font:500 15px/1.2 var(--ui)}
+.tl span{display:block;font-size:13px;color:var(--muted)}
+.tl .k{font:500 10.5px/1.2 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+.kpi div{background:var(--surface);border:1px solid var(--line);padding:14px 16px;font-size:14px;min-width:0}
+.kpi b{display:block;font:500 15px/1.3 var(--ui)}
+.kpi span{color:var(--muted)}
+.risk{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:14px}
+.risk div{border-left:3px solid var(--bad);padding:4px 14px;font-size:14px;min-width:0}
+.risk b{display:block;font-weight:500}
+.risk span{color:var(--muted)}
+.foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.foot code{font:400 12.5px/1.4 ui-monospace,Consolas,monospace;color:var(--fg)}
+
+@media (max-width:760px){
+  h1{font-size:38px}
+  .hub{grid-template-columns:1fr}
+  .link{height:52px}
+  .link::before{left:50%;right:auto;top:0;bottom:0;border-top:0;border-left:1px dashed var(--gold-2)}
+  .ph{grid-template-columns:1fr}
+  .ph .h{border-right:0;border-bottom:1px solid var(--line)}
+  .ph li{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){ .tile,.svc article,.know article{transition:border-color .2s} .tile:hover,.svc article:hover,.know article:hover{border-color:var(--gold-2)} }
+</style>
+
+<main>
+<div class="eyebrow">The World Keys · Paris · scout de l’activité · 13 octobre 2026</div>
+<h1>Comptoir Aria&nbsp;: voiture, table et soirée réglée</h1>
+<p class="lede">Un seul contact pour le concierge de l’hôtel, de la villa et de l’agence. Aria reçoit la demande, confirme auprès de la maison et de Julien, renvoie une proposition ferme et s’occupe du voucher. Ce scout réunit ce que nous vendons, ce qu’Aria doit savoir, ce qu’il reste à construire et les dates qui décident si nous continuons.</p>
+
+<div class="verdict">
+<p><b>Thèse.</b> Le goulot d’étranglement n’est pas l’offre de services, c’est la demande. Celui qui achète déjà voiture et table avec commission, c’est le professionnel de l’hospitalité. Notre différence, c’est le duo que personne d’autre ne livre ensemble&nbsp;: <b>table confirmée avec preuve + voiture qui attend</b>, dans un voucher unique, répondu en un seul message.</p>
+<p><b>Règle du catalogue.</b> Moins d’articles. Un produit fort (Soirée), cinq variantes que la voiture et Aria livrent seules, et tout le reste entre sur demande datée, jamais par catalogue.</p>
+</div>
+
+<div class="tiles">
+<div class="tile"><div class="k">Voiture</div><b>1</b><span>Tesla Model X · Julien Guilloteau, CEO et chauffeur · 6 pax · 6 bagages</span></div>
+<div class="tile"><div class="k">Maison qui confirme</div><b>1</b><span>Monak, 16e · 56 acceptations sur 80 demandes · 0 refus</span></div>
+<div class="tile"><div class="k">Paris, 12 mois</div><b>73</b><span>tables acceptées sur 237 demandes (dédup)</span></div>
+<div class="tile"><div class="k">Objectif 11/11</div><b>1&nbsp;600 €</b><span>de contribution par origine nouvelle · 3 à 5 services</span></div>
+<div class="tile"><div class="k">Objectif décembre</div><b>10</b><span>maisons à Paris avec WhatsApp actif</span></div>
+</div>
+
+<h2>1 · L’activité d’un seul coup d’œil <small>flux décidé le 10/10 (Révision v2)</small></h2>
+<div class="hub">
+<div class="node"><div class="k">Qui demande</div><h3>Concierge, villa, agence</h3><p>Écrit sur le WhatsApp de TWK&nbsp;: «&nbsp;mon client arrive samedi, dîner pour deux, voiture&nbsp;».</p></div>
+<div class="link"><span>demande · proposition · voucher</span></div>
+<div class="core"><div class="k">contact unique</div><h3>Aria</h3><p>Recommande, ne demande que ce qui manque, confirme auprès des deux côtés, encaisse, émet le voucher et rappelle la veille.</p></div>
+<div class="link"><span>demande de table · course</span></div>
+<div class="stack">
+<div class="node"><div class="k">Maison</div><h3>Restaurant du portefeuille</h3><p>Reçoit <code>twk_venue_new_request</code>&nbsp;: Accepter / Refuser / Proposer un horaire.</p></div>
+<div class="node"><div class="k">Voiture</div><h3>Julien</h3><p>Reçoit <code>twk_chauffeur_course</code>&nbsp;: Disponible / Indisponible / Ajuster le prix.</p></div>
+</div>
+</div>
+<ol class="steps">
+<li><b>Demande</b>du professionnel, dans n’importe quelle langue.</li>
+<li><b>Recommandation</b>maisons du portefeuille + Julien, tarif de grille «&nbsp;sous réserve&nbsp;».</li>
+<li><b>Choix</b>le client choisit la maison&nbsp;; c’est le oui de principe sur le montant.</li>
+<li><b>Deux demandes en même temps</b>table à la maison et course à Julien.</li>
+<li><b>Deux oui</b>Aria ne parle de montant ferme qu’après les deux.</li>
+<li><b>Proposition ferme</b>table, horaires de la voiture, total, en fiche.</li>
+<li><b>Paiement et voucher</b>lien ou facture mensuelle&nbsp;; rappel la veille avec la plaque.</li>
+</ol>
+<p class="small" style="margin-top:12px">Sans réponse de la maison sous 45 min (le jour même) ou 6 h (à l’avance), Aria propose une autre maison sans citer de délai au client. Julien est le CEO et celui qui conduit&nbsp;: son bouton «&nbsp;Ajuster le prix&nbsp;» a le dernier mot, Aria ne fait qu’enregistrer le montant et poursuit. Aria répond au +55 21 96784 1007 (Cloud API)&nbsp;; Julien reçoit les courses sur son portable, +33 7 81 93 72 70, et n’a à répondre à personne pendant qu’il conduit&nbsp;: c’est le travail d’Aria. Aujourd’hui, le site, la carte de visite et l’e-mail B2B pointent encore vers son numéro (voir décision 1).</p>
+
+<h2>2 · Portefeuille de services <small>ce que nous vendons et ce que nous ne vendons pas</small></h2>
+<div class="svc">
+<article class="hero"><div class="k">Produit central</div><h3>Soirée&nbsp;: voiture + table confirmée + retour au signal</h3><p>Aller au restaurant, attente jusqu’à 4 h, retour quand l’hôte le souhaite, et la table demandée et confirmée par Aria. C’est la colonne vertébrale&nbsp;; tout ce qui suit en est une variante ou un accompagnement.</p><div class="price">390 € <i>public</i> · 351 € <i>partenaire</i></div></article>
+<article><div class="k">Variante · démarre maintenant</div><h3>Soirée avec parcours</h3><p>Apéritif dans une maison, dîner dans une autre, voiture qui attend entre les deux. Vend la soirée réglée et double l’usage des maisons qui confirment.</p><div class="price"><i>prix à définir</i></div></article>
+<article><div class="k">Variante · démarre maintenant</div><h3>Dîner de groupe (6+)</h3><p>La demande que le concierge déteste le plus. Aria négocie avec la maison et organise une ou deux voitures.</p><div class="price"><i>2e voiture sur devis</i></div></article>
+<article><div class="k">Variante · démarre maintenant</div><h3>Occasions</h3><p>Anniversaire, demande en mariage, table avec vue, gâteau, fleurs dans la voiture. Coût marginal faible, le concierge brille auprès de l’hôte.</p><div class="price"><i>supplément à définir</i></div></article>
+<article><div class="k">Variante · démarre maintenant</div><h3>Arrivée complète</h3><p>Transfert avec panneau nominatif + table le premier soir. Le premier contact avec l’hôtel et le plus facile à vendre.</p><div class="price">540 € <i>public</i> · 486 € <i>partenaire</i></div></article>
+<article><div class="k">Variante · démarre maintenant</div><h3>Journée de salon</h3><p>Navette ou journée vers Porte de Versailles et Villepinte avec déjeuner réservé près du pavillon. Dates connues, agenda prévisible.</p><div class="price">400 € <i>navette</i> · 750 € <i>journée</i></div></article>
+<article><div class="k">Accompagnement · démarre maintenant</div><h3>Compte mensuel de l’hôtel</h3><p>Facture unique, rapport du mois, mémoire des préférences. Pour l’hôtel, moins de travail administratif, c’est déjà le service.</p><div class="price"><i>à partir de 3 services payés (proposition)</i></div></article>
+</div>
+<div class="band">
+<div class="ok"><b>Nous livrons seuls</b><p>Tout ce qui précède n’utilise que la voiture, Aria et la table. Zéro juridique nouveau, zéro partenaire nouveau.</p></div>
+<div class="wait"><b>Uniquement sur demande datée</b><p>Chef privé à la villa, sommelier et cave, accès hors horaires à une boutique ou à un musée, bateau et hélicoptère sur la Riviera. Chacun relève du L211-1 et exige un contrat. Le client demande, Aria ouvre une «&nbsp;proposition sur mesure&nbsp;», nous bouclons le partenaire sur-le-champ et c’est lui qui facture.</p></div>
+<div class="no"><b>Nous ne faisons pas pour l’instant</b><p>Spa, personal shopper, billetterie, nanny, yacht à la semaine. Tout concierge de palace a déjà son fournisseur. Nous n’y gagnons rien et nous y perdons le focus.</p></div>
+</div>
+
+<div class="tw"><table>
+<thead><tr><th>Code</th><th>Produit</th><th>Comprend</th><th>Public</th><th>Partenaire (−10 %)</th></tr></thead>
+<tbody>
+<tr><td>TRF</td><td>Transfert aéroport ou gare</td><td>CDG, Orly, gares&nbsp;; panneau nominatif&nbsp;; 60 min d’attente à partir de l’atterrissage réel</td><td class="n">150 €</td><td class="n">135 €</td></tr>
+<tr><td>SOIR</td><td>Soirée</td><td>Aller, attente jusqu’à 4 h, retour&nbsp;; table demandée par Aria</td><td class="n">390 €</td><td class="n">351 €</td></tr>
+<tr><td>MAD4</td><td>Mise à disposition 4 h</td><td>Trajets illimités en Île-de-France</td><td class="n">400 €</td><td class="n">360 €</td></tr>
+<tr><td>NAV</td><td>Navette salon, demi-journée</td><td>Hôtel ↔ Porte de Versailles, Villepinte, Paris Expo&nbsp;; aller-retour avec attente</td><td class="n">400 €</td><td class="n">360 €</td></tr>
+<tr><td>JOUR</td><td>Journée 8 h</td><td>Trajets illimités en Île-de-France</td><td class="n">750 €</td><td class="n">675 €</td></tr>
+<tr><td>H+</td><td>Heure supplémentaire</td><td>Au-delà de la durée comprise</td><td class="n">85 €</td><td class="n">76,50 €</td></tr>
+<tr><td>SOIR-2</td><td>Soirée avec parcours</td><td>Deux maisons, voiture qui attend entre les deux</td><td class="n blank">à définir</td><td class="n blank">à définir</td></tr>
+<tr><td>OCC</td><td>Supplément occasion</td><td>Gâteau, fleurs, table avec vue, demande spéciale à la maison</td><td class="n blank">à définir</td><td class="n blank">à définir</td></tr>
+<tr><td>—</td><td>Nuit 22h–6h, longue distance, Riviera, 2 voitures, expérience</td><td>Aria ne chiffre pas&nbsp;; elle ouvre une demande au fondateur</td><td class="n" colspan="2">sur devis</td></tr>
+</tbody></table></div>
+<p class="small" style="margin-top:8px">Prix TTC en euros&nbsp;; péages, attente prévue et accueil compris. Les lignes «&nbsp;à définir&nbsp;» relèvent de la grille du fondateur.</p>
+
+<h2>3 · Ce qu’Aria doit savoir <small>huit blocs · état au 13/10</small></h2>
+<p>Aujourd’hui, Aria ne sait rien de tout cela&nbsp;: dans son code, il n’y a ni chauffeur, ni Julien, ni compte d’hôtel. Recommandation&nbsp;: placer les blocs 1 à 4 et le 6 dans un fichier de connaissance séparé, la <strong>Base du Comptoir</strong>, que le prompt charge. On corrige un prix ou on ajoute une maison sans nouvelle version d’Aria, et le juge et les tests lisent la même source.</p>
+<div class="know">
+<article><div class="k">Bloc 1</div><h3>Ce que nous vendons</h3><dl>
+<dt class="have">existe</dt><dd>Six produits, deux tarifs, forfaits, capacité de la voiture.</dd>
+<dt class="lack">manque</dt><dd>Ce qui compte comme Île-de-France&nbsp;; siège enfant, animal, bagage spécial&nbsp;; pourboire&nbsp;; prix des nouvelles variantes.</dd>
+<dt class="who">qui</dt><dd class="m">Fondateur</dd></dl></article>
+<article><div class="k">Bloc 2</div><h3>Les maisons qu’elle peut proposer</h3><dl>
+<dt class="have">existe</dt><dd>Taux d’acceptation par maison, en base (critère du Gardien).</dd>
+<dt class="lack">manque</dt><dd>Par maison&nbsp;: arrondissement, ambiance, cuisine, ticket moyen, dress code, groupes 6+, canal et délai de réponse habituel, phrase «&nbsp;pourquoi cette maison&nbsp;».</dd>
+<dt class="who">qui</dt><dd class="m">Fondateur + Quill</dd></dl></article>
+<article><div class="k">Bloc 3</div><h3>Julien</h3><dl>
+<dt class="have">existe</dt><dd>Véhicule et capacité.</dd>
+<dt class="lack">manque</dt><dd>Couleur et plaque&nbsp;; numéro pour l’hôte le jour même&nbsp;; langues&nbsp;; extras (eau, chargeur, siège enfant)&nbsp;; jours de repos, jours de gestion et courses hors plateforme&nbsp;; comment il souhaite être présenté à l’hôte (le CEO au volant&nbsp;: argument de vente ou discrétion&nbsp;?).</dd>
+<dt class="who">qui</dt><dd class="m">Julien</dd></dl></article>
+<article><div class="k">Bloc 4</div><h3>Logistique de Paris</h3><dl>
+<dt class="have">existe</dt><dd>Rien d’écrit.</dd>
+<dt class="lack">manque</dt><dd>Temps CDG/Orly → 8e/16e avec et sans trafic&nbsp;; vendredi soir&nbsp;; marge pour le restaurant&nbsp;; point de rendez-vous par terminal et par gare&nbsp;; accès voiture aux hôtels cibles&nbsp;; calendrier de la mode, des salons et d’Art Basel (dates 2026/27 à confirmer).</dd>
+<dt class="who">qui</dt><dd class="m">Fondateur + Julien&nbsp;; Aria tient la fiche</dd></dl></article>
+<article><div class="k">Bloc 5</div><h3>Les professionnels et leurs hôtes</h3><dl>
+<dt class="have">existe</dt><dd>Rien&nbsp;; la table des comptes n’existe pas.</dd>
+<dt class="lack">manque</dt><dd>Par compte&nbsp;: nom, établissement, qui dit «&nbsp;oui&nbsp;», tarif, mode de paiement, raison sociale et TVA, langue. De l’hôte, seulement le nécessaire&nbsp;: nom pour le panneau, vol, nombre de personnes.</dd>
+<dt class="who">qui</dt><dd class="m">DBA (DDL avec approbation) + Aria</dd></dl></article>
+<article><div class="k">Bloc 6</div><h3>Règles qu’elle applique sans demander</h3><dl>
+<dt class="have">existe</dt><dd>Propositions par écrit (section 5).</dd>
+<dt class="lack">manque</dt><dd>Décision sur l’annulation, le paiement, l’attente supplémentaire, le retard de vol, le no-show, le changement le jour même, le tarif partenaire automatique. Document du VTC (le voucher suffit-il&nbsp;?) et contenu de la facture&nbsp;: question à l’avocat.</dd>
+<dt class="who">qui</dt><dd class="m">Fondateur + avocat</dd></dl></article>
+<article><div class="k">Bloc 7</div><h3>Comment parler</h3><dl>
+<dt class="have">existe</dt><dd>Formats de proposition et de voucher en fiche&nbsp;; interdits de la porte de sortie (pas de «&nbsp;table garantie&nbsp;», pas de délai de tiers, pas de vocabulaire interne).</dd>
+<dt class="lack">manque</dt><dd>10 à 15 conversations exemplaires en FR et EN, approuvées par le fondateur&nbsp;: concierge pressé, demande incomplète, changement de dernière minute, demande de remise, réclamation.</dd>
+<dt class="who">qui</dt><dd class="m">Le fondateur approuve&nbsp;; Aria/evals rédigent</dd></dl></article>
+<article><div class="k">Bloc 8</div><h3>État en temps réel</h3><dl>
+<dt class="have">existe</dt><dd>Lecture des réservations (27 tools). Aucune écriture, aucun agenda.</dd>
+<dt class="lack">manque</dt><dd>Tools pour consulter la voiture libre, la réponse de Julien, la réponse de la maison, le paiement et le compte de qui écrit. Sans elles, toute phrase à ce sujet est une devinette.</dd>
+<dt class="who">qui</dt><dd class="m">Aria + DBA + dev du site</dd></dl></article>
+</div>
+
+<h2>4 · Portefeuille de maisons à Paris <small>base, 10/10, 12 mois, dédup</small></h2>
+<div class="tw"><table>
+<thead><tr><th>Maison</th><th>Arr.</th><th>Demandes</th><th>Acceptations</th><th>Canal</th><th>Lecture</th></tr></thead>
+<tbody>
+<tr><td><strong>Monak</strong> (255019)</td><td>16e</td><td class="n">80</td><td class="n">56 · 0 refus</td><td>WhatsApp actif</td><td>Seule maison qui confirme régulièrement&nbsp;; 71 % des demandes ven–dim 20h–23h30.</td></tr>
+<tr><td>L'Initial (14526)</td><td>5e</td><td class="n">2</td><td class="n">2</td><td>e-mail</td><td>Michelin&nbsp;; réponse lente, échantillon réduit.</td></tr>
+<tr><td>Andia (251628)</td><td>16e</td><td class="n">1</td><td class="n">1</td><td>e-mail</td><td>Échantillon réduit.</td></tr>
+<tr><td>Miss Kô (252064)</td><td>8e</td><td class="n">2</td><td class="n">1</td><td>e-mail</td><td>Échantillon réduit.</td></tr>
+</tbody></table></div>
+<p class="small" style="margin-top:8px">Règle de croissance&nbsp;: chaque demande d’hôtel vers une maison hors portefeuille devient une invitation une fois acceptée. Objectif&nbsp;: 10 maisons avec WhatsApp d’ici décembre. Parcours et groupes dépendent d’une 2e et d’une 3e maison qui confirme.</p>
+
+<h2>5 · Décisions du fondateur avant de lancer <small>rien ne démarre sans elles</small></h2>
+<ol class="dec">
+<li><b>Le numéro WhatsApp</b>Réglé le 13/10&nbsp;: <strong>+33 7 81 93 72 70 est le portable de Julien</strong>&nbsp;; Aria répond au <strong>+55 21 96784 1007</strong> (Cloud API). Donc, aujourd’hui, le site (/contact), la carte du chauffeur et l’e-mail B2B mènent le concierge à Julien, pas à Aria&nbsp;; les e-mails de réservation pointent déjà vers Aria. <span class="prop"><i>choix</i> (a) basculer site, carte et e-mail B2B vers le +55 dès maintenant&nbsp;; (b) souscrire un numéro français pour la Cloud API, car un +55 comme visage d’un comptoir de luxe à Paris joue contre nous&nbsp;; le +55 reste pour la base actuelle. Recommandation&nbsp;: (a) cette semaine, (b) avant le canari.</span></li>
+<li><b>Annulation</b><span class="prop"><i>proposition</i> gratuite jusqu’à 24 h avant&nbsp;; 50 % entre 24 h et 6 h&nbsp;; 100 % en dessous de 6 h ou no-show.</span></li>
+<li><b>Paiement</b><span class="prop"><i>proposition</i> lien immédiat pour un compte nouveau&nbsp;; facture mensuelle à partir de 3 services payés.</span></li>
+<li><b>Tarif partenaire</b><span class="prop"><i>choix</i> automatique pour qui se présente comme professionnel, ou seulement après votre approbation du compte.</span></li>
+<li><b>Agenda de la voiture</b><span class="prop"><i>choix</i> Aria est propriétaire de l’agenda (vous et Julien y saisissez les courses hors plateforme), ou un Google Calendar qu’elle lit.</span></li>
+<li><b>Attente et retard</b><span class="prop"><i>proposition</i> heure supplémentaire à 85 € au-delà de l’inclus&nbsp;; retard de vol au-delà de 60 min facturé comme heure supplémentaire.</span></li>
+<li><b>Temps du CEO au volant</b><span class="prop"><i>choix</i> quels jours et quelles heures Julien conduit, et lesquels restent pour la gestion et le téléphone en français&nbsp;; l’agenda de la voiture naît de ce choix, et Aria refuse toute course en dehors.</span></li>
+<li><b>Nouveaux prix</b><span class="prop"><i>votre grille</i> Soirée avec parcours, supplément d’occasion, 2e voiture.</span></li>
+<li><b>Juridique</b><span class="prop"><i>à l’avocat</i> document de réservation préalable du VTC, contenu de la facture, L211-1 pour les services de tiers sur demande.</span></li>
+</ol>
+
+<h2>6 · Étapes de construction <small>12 pièces, dans l’ordre où elles se débloquent</small></h2>
+<div class="road">
+<div class="ph"><div class="h"><b>Phase A</b><span>jours · sans dépendance</span></div><ul>
+<li><span>Le classificateur de périmètre accepte désormais chauffeur, transfert, mise à disposition, conciergerie et demandes de professionnels</span><em>Aria</em></li>
+<li><span>Section «&nbsp;FLUX 8 — Professionnels&nbsp;: voiture, table, expérience&nbsp;» dans le prompt, lisant la Base du Comptoir</span><em>Aria · attend la section 5</em></li>
+<li><span>Base du Comptoir&nbsp;: fichier de connaissance avec les blocs 1 à 4 et 6</span><em>Fondateur + Aria</em></li>
+</ul></div>
+<div class="ph"><div class="h"><b>Phase B</b><span>données · DDL approuvée</span></div><ul>
+<li><span><code>b2b_accounts</code>&nbsp;: téléphone, nom, établissement, tarif, facture mensuelle, langue, criado_por</span><em class="appr">DBA · approbation CREATE TABLE</em></li>
+<li><span><code>chauffeur_agenda</code>&nbsp;: début, fin, état, origine, booking_id, avec verrou contre la double réservation</span><em class="appr">DBA · approbation</em></li>
+<li><span><code>chauffeur_bookings</code>&nbsp;: le ledger en centimes, par compte, produits, origine, état du paiement, table liée&nbsp;; Atlas le lit</span><em class="appr">DBA · approbation</em></li>
+</ul></div>
+<div class="ph"><div class="h"><b>Phase C</b><span>outils</span></div><ul>
+<li><span><code>get_b2b_account</code>, <code>register_b2b_account</code>, <code>check_chauffeur_availability</code>, <code>book_chauffeur</code></span><em>Aria</em></li>
+<li><span><code>find_confirming_restaurants</code> avec le critère du Gardien (≥4 demandes en 90 jours, ≥50 % acceptées), lecture <code>twk_ro</code></span><em>Aria</em></li>
+<li><span>12 liens Stripe fixes, un par produit et par tarif&nbsp;; Aria choisit le lien, ne crée jamais d’encaissement</span><em>Le fondateur crée · Atlas réconcilie</em></li>
+<li><span><code>notify_chauffeur</code>&nbsp;: modèle <code>twk_chauffeur_course</code> chez Meta, avec les trois boutons, et fiche de la course la veille</span><em class="appr">Aria · Meta approuve le modèle</em></li>
+</ul></div>
+<div class="ph"><div class="h"><b>Phase D</b><span>la table par la plateforme</span></div><ul>
+<li><span><code>request_table</code> crée la demande via l’endpoint du site avec le compte de service «&nbsp;TWK Concierge&nbsp;»&nbsp;; n’écrit jamais dans <code>reservations</code></span><em>Dev du site + Aria</em></li>
+<li><span>Intérim en attendant&nbsp;: Aria ouvre une demande au fondateur, qui passe la demande sur le site&nbsp;; au professionnel, toujours «&nbsp;table demandée&nbsp;»</span><em class="done">vaut dès maintenant</em></li>
+<li><span>Template Meta «&nbsp;rappel_veille_chauffeur&nbsp;» (utility, FR/EN/PT) pour le rappel hors fenêtre de 24 h</span><em class="appr">Le fondateur soumet</em></li>
+</ul></div>
+<div class="ph"><div class="h"><b>Phase E</b><span>porte verte</span></div><ul>
+<li><span>30 conversations B2B d’eval (FR/EN/PT)&nbsp;: devis juste, compte nouveau, voiture occupée, table refusée, remise, Riviera, «&nbsp;table garantie&nbsp;», injection</span><em>Aria/evals</em></li>
+<li><span>Juge de Conversation étendu aux six critères du comptoir&nbsp;; Porte de Qualité verte avant de lancer</span><em>Orchestrateur</em></li>
+</ul></div>
+<div class="ph"><div class="h"><b>Phase F</b><span>canari</span></div><ul>
+<li><span>3 comptes réels, une semaine, le fondateur lisant chaque conversation dans le tableau de bord&nbsp;; le compte mensuel seulement ensuite</span><em class="appr">Fondateur · nouveau flux en opération</em></li>
+</ul></div>
+</div>
+
+<h2>7 · Calendrier <small>les dates qui décident</small></h2>
+<div class="tl">
+<div><span class="k">déjà</span><b>12/10</b><span>Le ledger de services par origine commence à compter.</span></div>
+<div><span class="k">semaine</span><b>13–17/10</b><span>Décisions de la section 5&nbsp;; Phase A&nbsp;; téléphone en français vers 30 cibles (≥4 h/semaine).</span></div>
+<div class="gate"><span class="k">go / no-go</span><b>23/10</b><span>Arrêter si &lt;3 comptes activés avec porte testée.</span></div>
+<div><span class="k">en personne</span><b>2–5/11</b><span>Equip'Hotel, Porte de Versailles&nbsp;: concierges et directeurs d’hôtel à portée de main.</span></div>
+<div class="gate"><span class="k">go / no-go</span><b>11/11</b><span>1&nbsp;600 € de contribution tracée par origine nouvelle (3 à 5 services).</span></div>
+<div><span class="k">portefeuille</span><b>décembre</b><span>10 maisons à Paris avec WhatsApp actif.</span></div>
+<div><span class="k">horizon</span><b>31/01</b><span>Paris consolidée avant tout pas vers la Riviera (haute saison à partir d’avril).</span></div>
+</div>
+
+<h2>8 · Comment nous mesurons <small>ce qui compte, c’est ce que fait le concierge, pas ce que nous disons</small></h2>
+<div class="kpi">
+<div><b>Compte B2B actif</b><span>professionnel avec ≥1 service payé. Objectif&nbsp;: 3 d’ici le 23/10, 6 à 8 d’ici le 31/01.</span></div>
+<div><b>Contribution par origine nouvelle</b><span>en centimes, dans le ledger, par compte et par produit. Objectif&nbsp;: 1&nbsp;600 € d’ici le 11/11.</span></div>
+<div><b>Délai jusqu’à la proposition ferme</b><span>de la demande aux deux oui. Cible interne&nbsp;: le jour même&nbsp;; jamais promis au client.</span></div>
+<div><b>Taux de table confirmée</b><span>demandes de table du comptoir acceptées par la maison. Monak aujourd’hui&nbsp;: 70 %.</span></div>
+<div><b>Réachat</b><span>comptes avec un 2e service sous 30 jours. C’est le signe que le concierge préfère Aria au téléphone.</span></div>
+<div><b>Note du Juge de Conversation</b><span>six critères de l’ADR-015 appliqués au comptoir&nbsp;; un échec devient une escalade.</span></div>
+</div>
+
+<h2>9 · Risques déjà connus</h2>
+<div class="risk">
+<div><b>Une seule maison</b><span>Avec le Monak comme unique «&nbsp;oui&nbsp;» régulier, la Soirée reste otage d’un seul agenda. La 2e et la 3e maison par WhatsApp viennent avant le parcours.</span></div>
+<div><b>Une seule voiture, et c’est le CEO qui conduit</b><span>Deux demandes pour samedi soir et l’une reste sans voiture&nbsp;; chaque heure au volant est une heure sans gestion. L’agenda avec verrou, l’offre d’un horaire alternatif et Aria qui répond à tout sont obligatoires dès le jour 1.</span></div>
+<div><b>Le numéro</b><span>Confirmé&nbsp;: le +33 du site, de la carte et de l’e-mail B2B est le portable de Julien. Tout concierge qui écrit aujourd’hui tombe sur le téléphone du CEO, pendant qu’il conduit, et Aria ne voit jamais la demande. Basculer avant tout envoi&nbsp;; un numéro français pour Aria avant le canari.</span></div>
+<div><b>Promesse indue</b><span>«&nbsp;Table garantie&nbsp;» ou délai de tiers brise la confiance du concierge. La porte de sortie bloque déjà&nbsp;; les evals le confirment.</span></div>
+<div><b>Juridique</b><span>Un service de tiers vendu à l’unité relève du L211-1. C’est pourquoi tout ce qui n’est pas à nous n’entre que sur demande, avec le fournisseur qui facture.</span></div>
+<div><b>Catalogue avant la demande</b><span>Ce fut l’erreur des restaurants. Aucun nouveau partenaire avant une demande datée.</span></div>
+</div>
+
+<div class="foot">Sources&nbsp;: <code>docs/agentes/aria-balcao-b2b-2026-10-10.md</code> (spécification), <code>docs/estrategia/aria-balcao-paris-2026-10-10.html</code> (plan visuel v2), <code>docs/estrategia/premissa-caminho-lucrativo-2026-10-08.md</code>, <code>docs/estrategia/plano-execucao-balcao-b2b-2026-10-09.md</code>, base <code>twk_auth</code> via <code>twk_ro</code> le 10/10. Fait × supposition × lacune&nbsp;: les chiffres de la base sont des faits&nbsp;; Julien Guilloteau est CEO et chauffeur (corrigé le 13/10&nbsp;: ce n’est pas un salarié)&nbsp;; les prix «&nbsp;à définir&nbsp;» et la facture mensuelle à partir de 3 services sont des propositions&nbsp;; numéros WhatsApp confirmés le 13/10 (Aria +55 21 96784 1007 · Julien +33 7 81 93 72 70).</div>
+</main>

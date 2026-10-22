@@ -78,7 +78,17 @@ try {
     $guardiao = (Ler (Join-Path $root 'orchestrator\state\guardiao-sincronizado.json')) | ConvertFrom-Json
 } catch { Write-Output "Aviso: exportacao do Guardiao falhou ($($_.Exception.Message))." }
 
-$payload = @{ tasks_jsonl = $tasks; conhecimento_md = $conhec; log_date = $today; log_jsonl = $log; missoes = $missoes; relatos = $relatos; plataforma_local = $plataformaLocal; guardiao = $guardiao; excluidos_teste = $excluidos } | ConvertTo-Json -Depth 12
+# Rotinas hospedadas (A1, 2026-10-22): o Guardiao que roda dentro da Central precisa do registro de opt-out
+# (fail-closed: sem registro legivel, nenhum contato) e a Sentinela precisa dos compromissos. Ambos sao
+# arquivos interinos do repositorio; aqui vai a copia, como ja acontece com excluidos-teste.json.
+$listing = $null
+$lcPath = Join-Path $root 'orchestrator\state\listing-consent.jsonl'
+if (Test-Path $lcPath) { $listing = Ler $lcPath }
+$compromissos = $null
+$cpPath = Join-Path $root 'orchestrator\state\compromissos.jsonl'
+if (Test-Path $cpPath) { $compromissos = Ler $cpPath }
+
+$payload = @{ tasks_jsonl = $tasks; conhecimento_md = $conhec; log_date = $today; log_jsonl = $log; missoes = $missoes; relatos = $relatos; plataforma_local = $plataformaLocal; guardiao = $guardiao; excluidos_teste = $excluidos; listing_consent_jsonl = $listing; compromissos_jsonl = $compromissos } | ConvertTo-Json -Depth 12
 $r = Invoke-RestMethod -Method Post -Uri "$CenterUrl/api/ingest" -Headers @{ Authorization = "Bearer $IngestToken" } -ContentType 'application/json; charset=utf-8' -Body ([System.Text.Encoding]::UTF8.GetBytes($payload))
 Write-Output "Estado sincronizado: $($r | ConvertTo-Json -Compress)"
 

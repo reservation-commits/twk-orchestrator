@@ -21,9 +21,11 @@ const path = require('node:path');
 const B = require('../chave-girada/n8n/_blocos-twk.js');
 
 const RAIZ = path.resolve(__dirname, '..', '..', '..');
-const STATE = path.join(__dirname, 'state');
+// A1 (2026-10-22): na Central hospedada, TWK_STATE_ROOT (= volume /app/state) recebe estado, ledger e audit.
+const HOSPEDADO = process.env.TWK_STATE_ROOT ? path.resolve(process.env.TWK_STATE_ROOT) : null;
+const STATE = HOSPEDADO ? path.join(HOSPEDADO, 'agents', 'ciclo-cliente') : path.join(__dirname, 'state');
 const LEDGER = path.join(STATE, 'envios.jsonl');
-const LOGS = path.join(RAIZ, 'orchestrator', 'logs');
+const LOGS = HOSPEDADO ? path.join(HOSPEDADO, 'logs') : path.join(RAIZ, 'orchestrator', 'logs');
 fs.mkdirSync(path.join(STATE, 'previews'), { recursive: true });
 
 (function env() { const f = path.join(process.env.USERPROFILE || process.env.HOME || '', '.twk', 'regencia.env'); try { for (const l of fs.readFileSync(f, 'utf8').split(/\r?\n/)) { const m = l.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)$/); if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim(); } } catch {} })();
@@ -50,7 +52,9 @@ function envRO() {
   return Object.fromEntries(fs.readFileSync(p, 'utf8').split(/[\r\n]+/).filter((l) => l && !l.startsWith('#')).map((l) => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
 }
 function excluidos() {
-  try { return new Set(JSON.parse(fs.readFileSync(path.join(RAIZ, 'orchestrator', 'state', 'excluidos-teste.json'), 'utf8')).restaurantes.map((r) => String(r.restaurant_id))); } catch { return new Set(); }
+  // Hospedado: a cópia que o push-state.ps1 sincroniza para o volume (v4.5.2); local: o repositório.
+  const f = HOSPEDADO ? path.join(HOSPEDADO, 'excluidos-teste.json') : path.join(RAIZ, 'orchestrator', 'state', 'excluidos-teste.json');
+  try { return new Set(JSON.parse(fs.readFileSync(f, 'utf8')).restaurantes.map((r) => String(r.restaurant_id))); } catch { return new Set(); }
 }
 
 // ---------- formatação ----------
@@ -143,13 +147,14 @@ async function coletar(c) {
   }
   if (apply && (!aprovacao || aprovacao.length < 10)) { console.error('BLOQUEADO: --apply exige --aprovacao "<frase do fundador>"'); process.exit(3); }
   if (apply && (!WEBHOOK || !TOKEN)) { console.error('EMAIL_WEBHOOK_URL/TOKEN ausentes'); process.exit(2); }
-  const { Client } = require(path.join(RAIZ, 'Agente Comercial', 'service', 'node_modules', 'pg'));
   // Sem timeout, um connect() que fica pendurado (TCP aberto, sessão nunca criada — visto em 2026-09-11 sob o
   // Agendador) segura o processo até o limite da tarefa. O watchdog garante saída com falha registrada.
-  const watchdog = setTimeout(() => { audit({ evento: 'falha', erro: 'watchdog: 4 min sem concluir' }); console.error('ERRO watchdog: 4 min sem concluir — abortando'); process.exit(4); }, 240000);
+  // A1 (2026-10-22): a conexão passa pela biblioteca comum, com 3 tentativas (0 s, 60 s, 180 s) — por isso o
+  // watchdog sobe para 8 min. Em 19 e 20/10 uma tentativa única morreu em "timeout expired" ao ligar o notebook.
+  const watchdog = setTimeout(() => { audit({ evento: 'falha', erro: 'watchdog: 8 min sem concluir' }); console.error('ERRO watchdog: 8 min sem concluir — abortando'); process.exit(4); }, 480000);
   watchdog.unref();
-  const c = new Client({ connectionString: envRO().DATABASE_URL_RO, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 15000, statement_timeout: 50000 });
-  await c.connect();
+  const { conectarRo } = require('../_lib/conectar');
+  const c = await conectarRo({ log: (m) => { console.error(`[ciclo/db] ${m}`); audit({ evento: 'conexao_retentada', detalhe: m }); } });
   const dados = await coletar(c);
   await c.end();
   const ledger = lerLedger();

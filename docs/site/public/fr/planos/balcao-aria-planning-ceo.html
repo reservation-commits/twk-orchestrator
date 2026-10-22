@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Comptoir Aria — la nouvelle proposition d’affaires</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300..600&amp;display=swap">
+<style>
+  :root{--ground:#FBFAF7;--ink:#1B1812;--muted:#6E6657;--rule:#E2DCCE;--accent:#8A6512}
+  @media (prefers-color-scheme:dark){:root{--ground:#15130F;--ink:#EFE9DC;--muted:#A39883;--rule:#2F2A21;--accent:#D9AE55}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:"Jost","Segoe UI",system-ui,sans-serif;line-height:1.5;padding:28px 16px 64px}
+  .page{max-width:1280px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;margin:0 0 20px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  header h1{font:500 26px/1.2 "Cormorant Garamond",Georgia,serif;margin:0}
+  header p{margin:0;font:12px/1.4 "IBM Plex Mono",ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  figure{margin:0 0 28px}
+  .tela{container-type:inline-size;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--rule);box-shadow:0 8px 28px rgba(0,0,0,.14);background:#141821}
+  /* Fator = largura da tela ÷ 1920 px. CSS não divide comprimentos; tan(atan2(a, b)) devolve a/b como número puro. */
+  .tela>section{width:1920px;height:1080px;position:relative;transform-origin:0 0;transform:scale(tan(atan2(100cqw, 1920px)));overflow:hidden}
+  @supports not (transform:scale(tan(atan2(1cqw, 1px)))){.tela{aspect-ratio:auto;overflow:auto}.tela>section{transform:none}}
+  /* Padrões do formato de slide: nada de margem, tamanhos explícitos vêm inline. */
+  .tela>section *{margin:0;box-sizing:border-box}
+  .tela>section h1{font-size:96px;font-weight:600;line-height:1.1}
+  .tela>section h2{font-size:64px;font-weight:600;line-height:1.15}
+  .tela>section h3{font-size:44px;font-weight:600;line-height:1.2}
+  .tela>section p{font-size:32px;line-height:1.4}
+  .tela>section ul,.tela>section ol{padding-left:1.2em}
+  .tela>section li{line-height:inherit}
+  .tela>section hr{border:0;height:0}
+  .tela>section div:not([style*="display:"]){display:flex;flex-direction:column}
+  .tela>section table{border-collapse:collapse;width:100%}
+  .tela>section th,.tela>section td{padding:.35em .6em;border-bottom:1px solid rgba(128,128,128,.35);vertical-align:top;text-align:left}
+  .tela>section tr:last-child td{border-bottom:0}
+  .tela>section b{font-weight:600}
+  figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font:12px/1.4 "IBM Plex Mono",ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  details{margin-top:6px;font-size:14.5px;color:var(--ink)}
+  details summary{cursor:pointer;color:var(--accent);font-size:13px;letter-spacing:.04em}
+  details p{margin:8px 0 0;max-width:72ch;white-space:pre-wrap}
+  @media print{body{background:#fff;padding:0}.tela{box-shadow:none;border:0}figure{break-inside:avoid;page-break-inside:avoid;margin:0 0 12px}details{display:none}}
+</style>
+</head>
+<body>
+<div class="page">
+<header><h1>Comptoir Aria — la nouvelle proposition d’affaires</h1><p>Présentation du 2026-10-14 · 9 diapositives</p></header>
+<figure id="cover">
+<div class="tela"><section id="cover" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">The World Keys · Paris · 16 octobre 2026</p>
+<div style="display:flex;flex-direction:column;gap:28px">
+<h1 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:132px;font-weight:500;line-height:1.02">Comptoir Aria</h1>
+<hr style="border-top:3px solid #c9a96e;width:160px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-style:italic;line-height:1.25;color:#ede9df;width:1400px">La soirée du client de l’hôtel, réglée : voiture et table en une seule demande, vendues au concierge de l’hôtel.</p>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:end">
+<p style="font-size:28px;color:#b5b1a7">9 diapositives · 6 minutes</p>
+<p style="font-size:24px;color:#b5b1a7">Préparé pour The World Keys SAS</p>
+</div>
+</section></div>
+<figcaption><span>Diapositive 1 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>Ouverture (15 s) : « Je vais montrer, avec une journée d’exemple, ce que nous vendons, à qui, ce qui nous reste et ce dont j’ai besoin de vous. Six minutes. »</p></details>
+</figure>
+<figure id="frase">
+<div class="tela"><section id="frase" data-transition="fade" style="display:flex; flex-direction:column; gap:40px; justify-content:space-between; padding:128px 128px 160px; background:#f7f4ef">
+  <div style="display:flex; flex-direction:column; gap:14px">
+    <p style="font-family:Jost, Arial, sans-serif; font-size:24px; font-weight:500; letter-spacing:6px; text-transform:uppercase; color:#7a5c2c">L’idée entière en une phrase</p>
+    <h2 style="width:1640px; font-family:'Cormorant Garamond', Georgia, serif; font-size:72px; font-weight:500; line-height:1.1; color:#1f232c">Le concierge de l’hôtel nous demande la soirée de son client. Aria organise voiture et table par WhatsApp. L’hôtel reçoit une facture par mois.</h2>
+  </div>
+  <div style="display:flex; flex-direction:row; gap:20px">
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:34px 36px; background:#141821">
+      <p style="font-family:Jost, Arial, sans-serif; font-size:24px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:#e4c990">Qui paie</p>
+      <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:44px; font-weight:600; line-height:1.1; color:#ede9df">Concierges d’hôtel, gestionnaires de villas, agences</p>
+      <p style="font-family:Jost, Arial, sans-serif; font-size:26px; line-height:1.4; color:#ede9df">Ils achètent déjà voiture et table chaque semaine pour leurs clients, et paient une commission à qui s’en charge. Désormais, ils achètent chez nous.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:34px 36px; background:#efe9dd; border:1px solid #d9d2c3">
+      <p style="font-family:Jost, Arial, sans-serif; font-size:24px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:#7a5c2c">Ce que nous vendons</p>
+      <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:44px; font-weight:600; line-height:1.1; color:#1f232c">Voiture et table confirmée, sur un seul voucher</p>
+      <p style="font-family:Jost, Arial, sans-serif; font-size:26px; line-height:1.4; color:#3a3f4b">Le client de l’hôtel arrive au restaurant avec notre chauffeur, à l’heure, et repart quand il le souhaite. Personne d’autre ne livre les deux ensemble en un seul message.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; flex:1; padding:34px 36px; background:#efe9dd; border:1px solid #d9d2c3">
+      <p style="font-family:Jost, Arial, sans-serif; font-size:24px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:#7a5c2c">Ce qui reste à l’entreprise</p>
+      <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:44px; font-weight:600; line-height:1.1; color:#1f232c">85 à 95 % de chaque service</p>
+      <p style="font-family:Jost, Arial, sans-serif; font-size:26px; line-height:1.4; color:#3a3f4b">Le service de chauffeur privé est déjà le nôtre. Il reste presque tout après l’énergie, les péages et le stationnement. Les restaurants restent partenaires : ils sont la table du voucher.</p>
+    </div>
+  </div>
+  <div style="position:absolute; right:128px; bottom:64px; left:128px; display:flex; flex-direction:row; justify-content:space-between">
+    <p style="font-family:Jost, Arial, sans-serif; font-size:24px; color:#6b6f7a">The World Keys · Comptoir Aria · 16 octobre 2026</p>
+    <p style="font-family:Jost, Arial, sans-serif; font-size:24px; color:#6b6f7a">2 / 9</p>
+  </div>
+  </section></div>
+<figcaption><span>Diapositive 2 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>45 s. Lisez la phrase et marquez une pause. Puis les trois cases : qui paie, ce que nous vendons, ce qui reste. Si l’on demande « et les restaurants ? » : ils restent partenaires et continuent de recevoir l’offre d’abonnement ; ce qui change, c’est qui paie en premier. Le comptoir amène aussi de nouvelles maisons : chaque demande d’hôtel acceptée devient une invitation au partenariat.</p></details>
+</figure>
+<figure id="dia">
+<div class="tela"><section id="dia" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:30px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Un exemple, de la demande à la fin du mois</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Un mardi avec le concierge de l’Hôtel X</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;border-left:3px solid #c9a96e">
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">9h04</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Le concierge écrit sur WhatsApp : « couple américain, arrivée à CDG à 14h20, dîner ce soir 20h30, quelque chose de bien près de l’hôtel ».</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">9h40</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Aria répond avec le prix de la grille : transfert 150 € + Soirée 390 €. En même temps, elle demande la table au Monak et la course à Julien.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">11h00</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Le Monak accepte, Julien confirme. C’est seulement maintenant qu’Aria conclut : 540 €. Le client paie par lien, ou l’hôtel cumule sur la facture du mois.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">14h20</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Pancarte au nom du client à CDG. En déposant le couple à l’hôtel, Julien remet la carte des tarifs au comptoir.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">20h10</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Soirée : conduite au restaurant, attente, retour.</p></div>
+<div style="display:flex;gap:24px;padding:12px 0 12px 28px"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:120px;white-space:nowrap">Le 30</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:760px">Facture unique à l’hôtel. Le concierge reçoit 10 %. Et il redemande la semaine suivante.</p></div>
+</div>
+<div style="width:520px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#141821;padding:30px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Le client a payé</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:80px;font-weight:600;line-height:1;color:#ede9df">540 €</p>
+</div>
+<div style="background:#efe9dd;border:1px solid #d9d2c3;padding:30px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Resté à l’entreprise</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:80px;font-weight:600;line-height:1;color:#7a5c2c">≈ 500 €</p>
+<p style="font-size:24px;line-height:1.35;color:#3a3f4b">après l’énergie, les péages et le stationnement</p>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#6b6f7a">La table n’entre dans le voucher qu’après le oui du restaurant. Nous ne promettons jamais avant.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#6b6f7a">3 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 3 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>1 min 30. Racontez-le comme une histoire. Le point à fixer : le même message du concierge génère deux services, et Aria ne parle de montant ferme qu’après les deux oui (restaurant et chauffeur). « Resté à l’entreprise », c’est la contribution après le coût variable ; le fixe de la voiture et du chauffeur apparaît à la diapositive 5. La carte au comptoir de l’hôtel est le vendeur de terrain sans coût.</p></details>
+</figure>
+<figure id="vendemos">
+<div class="tela"><section id="vendemos" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:30px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Ce que nous vendons</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Six produits à prix fixe. La Soirée est le principal ; le reste se combine avec elle.</h2>
+</div>
+<div style="display:flex;gap:28px;align-items:start">
+<table style="width:1060px;font-size:26px;border:1px solid #d9d2c3;font-variant-numeric:tabular-nums">
+<tr style="background:#141821"><th style="width:34%;color:#f7f4ef;font-weight:500;text-align:left;padding:13px 18px">Produit</th><th style="width:44%;color:#f7f4ef;font-weight:500;text-align:left">Ce que c’est</th><th style="width:22%;color:#f7f4ef;font-weight:500;text-align:right">Prix au client</th></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Soirée</td><td>Conduite au restaurant, attente jusqu’à 4 h, retour. Table demandée par Aria.</td><td style="text-align:right">390 €</td></tr>
+<tr><td style="font-weight:500">Transfert</td><td>Aéroport ou gare, avec pancarte au nom</td><td style="text-align:right">150 €</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Mise à disposition 4 h</td><td>Voiture à disposition dans Paris</td><td style="text-align:right">400 €</td></tr>
+<tr><td style="font-weight:500">Navette salon</td><td>Hôtel ↔ salon, aller-retour avec attente</td><td style="text-align:right">400 €</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Journée 8 h</td><td>Journée entière dans Paris</td><td style="text-align:right">750 €</td></tr>
+<tr><td style="font-weight:500">Heure supplémentaire</td><td>Au-delà de l’inclus</td><td style="text-align:right">85 €</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<div style="background:#141821;padding:26px 30px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Exemple de forfait</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:40px;font-weight:600;line-height:1.1;color:#ede9df">Arrivée complète : transfert + table le premier soir</p>
+<p style="font-size:25px;line-height:1.4;color:#b5b1a7">540 € pour le client. C’est le plus facile à vendre à un hôtel.</p>
+</div>
+<div style="background:#efe9dd;border:1px solid #d9d2c3;padding:26px 30px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Exemple de compte mensuel</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:40px;font-weight:600;line-height:1.1">Un hôtel : 4 transferts + 2 Soirées par mois</p>
+<p style="font-size:25px;line-height:1.4;color:#3a3f4b">1 380 € facturés, environ 1 130 € pour l’entreprise. Facture unique, le concierge reçoit 10 %.</p>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#6b6f7a">Les professionnels (hôtel, villa, agence) paient 10 % de moins. Aria ne négocie jamais le prix : elle choisit seulement le produit.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#6b6f7a">4 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 4 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>45 s. Ne lisez pas le tableau : dites « six produits, prix fixe, la Soirée est le principal ». Les deux exemples à droite sont ce que le concierge achète en pratique : l’arrivée complète pour ouvrir le compte, et le compte mensuel comme objectif. Prix TTC, péages et attente inclus ; nuit, longue distance, Riviera et deux voitures sont sur devis. Grille proposée le 09/10, en attente d’approbation.</p></details>
+</figure>
+<figure id="entra">
+<div class="tela"><section id="entra" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Ce qui rentre par mois, avec une voiture</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Six hôtels paient la voiture et le chauffeur. Les salons font le bénéfice.</h2>
+</div>
+<div style="display:flex;gap:48px;align-items:center">
+<div style="width:1120px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between"><p style="font-size:26px;color:#3a3f4b">3 hôtels comme clients</p><p style="font-size:26px;font-weight:500;color:#1f232c">3 400 €</p></div>
+<div style="position:relative;width:1120px;height:30px;background:#e6e0d3"><div style="position:absolute;left:0;top:0;width:317px;height:30px;background:#c9a96e"></div><div style="position:absolute;left:494px;top:0;width:4px;height:30px;background:#141821"></div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between"><p style="font-size:26px;color:#3a3f4b">6 hôtels</p><p style="font-size:26px;font-weight:500;color:#1f232c">6 800 €</p></div>
+<div style="position:relative;width:1120px;height:30px;background:#e6e0d3"><div style="position:absolute;left:0;top:0;width:634px;height:30px;background:#c9a96e"></div><div style="position:absolute;left:494px;top:0;width:4px;height:30px;background:#141821"></div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between"><p style="font-size:26px;color:#3a3f4b">6 hôtels + 2 jours de salon par semaine</p><p style="font-size:26px;font-weight:500;color:#1f232c">11 950 €</p></div>
+<div style="position:relative;width:1120px;height:30px;background:#e6e0d3"><div style="position:absolute;left:0;top:0;width:1115px;height:30px;background:#9e7c48"></div><div style="position:absolute;left:494px;top:0;width:4px;height:30px;background:#141821"></div></div>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#6b6f7a">Ce qui reste par mois après l’énergie, les péages et le stationnement. La ligne noire est ce que la voiture et le chauffeur coûtent déjà aujourd’hui : environ 5 300 €.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<div style="background:#141821;padding:30px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">À lire ainsi</p>
+<p style="font-size:26px;line-height:1.45;color:#ede9df">Trois hôtels ne paient pas le fixe. Six l’équilibrent. Les jours de salon, comme le SIAL et Equip’Hotel, sont la marge : environ 6 600 € au-dessus du fixe.</p>
+</div>
+<div style="background:#efe9dd;border:1px solid #d9d2c3;padding:30px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Important</p>
+<p style="font-size:26px;line-height:1.45;color:#3a3f4b">C’est un calcul sur la grille, pas une prévision. Le registre quotidien des services, commencé le 12/10, est ce qui montrera le chiffre réel.</p>
+</div>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#6b6f7a">5 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 5 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>45 s. Montrez la ligne noire : c’est le coût qui existe déjà. Chaque « hôtel » ici est le compte mensuel de la diapositive précédente (4 transferts + 2 Soirées). Dans le troisième scénario, la voiture travaille environ 70 % des jours. Soyez clair : c’est une hypothèse tant que le registre ne l’a pas prouvée.</p></details>
+</figure>
+<figure id="porque">
+<div class="tela"><section id="porque" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:36px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">Pourquoi maintenant</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08;color:#ede9df">Trois choses que nous avons apprises, et une qui ne change pas</h2>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:30px 32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:64px;font-weight:600;line-height:1;color:#e4c990">13 mois</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">à proposer l’abonnement par e-mail aux restaurants nous ont appris : le restaurant n’est pas celui qui paie en premier.</p>
+</div>
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:30px 32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:64px;font-weight:600;line-height:1;color:#e4c990">70 %</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">des demandes acceptées au Monak, à Paris. La maison qui confirme existe, et c’est avec elle que le voucher se conclut.</p>
+</div>
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:30px 32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:64px;font-weight:600;line-height:1;color:#e4c990">−96 %</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">de visites venues de Google depuis juin 2025. Le client doit arriver par une autre porte, et le concierge est cette porte.</p>
+</div>
+</div>
+<div style="background:#efe9dd;padding:28px 34px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Ce qui ne change pas</p>
+<p style="font-size:28px;line-height:1.4;color:#1f232c">Les restaurants restent partenaires et l’abonnement reste en vente. Ce qui change, c’est le focus : nous vendons d’abord à ceux qui achètent déjà chaque semaine. Et chaque demande d’hôtel qu’une maison accepte devient une invitation à rejoindre le partenariat.</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#b5b1a7">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#b5b1a7">6 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 6 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>45 s. Trois faits, présentés comme des leçons et non comme un échec. Sources : entonnoir des e-mails aux restaurants, base des réservations au 10/10, Search Console. L’encadré du bas est ce que le CEO a demandé de rendre clair : nous n’arrêtons pas de vendre l’abonnement ; nous changeons de focus.</p></details>
+</figure>
+<figure id="temos">
+<div class="tela"><section id="temos" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:34px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Ce que nous avons déjà et ce qui manque</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Nous pouvons vendre dès aujourd’hui par téléphone. Aria arrive pour vendre seule.</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#141821;padding:32px 36px;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Nous avons déjà</p>
+<ul style="font-size:27px;line-height:1.5;color:#ede9df;padding:0 0 0 30px">
+<li>La voiture et le chauffeur à Paris, 6 jours par semaine</li>
+<li>Aria sur WhatsApp, qui lit toutes les réservations</li>
+<li>La demande de table au restaurant avec bouton, déjà approuvée</li>
+<li>Une maison à Paris qui confirme : le Monak</li>
+<li>Grille de prix, carte et e-mail en français prêts</li>
+</ul>
+</div>
+<div style="flex:1;background:#efe9dd;border:2px solid #c9a96e;padding:32px 36px;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Reste à construire, dans cet ordre</p>
+<ul style="font-size:27px;line-height:1.5;color:#3a3f4b;padding:0 0 0 30px">
+<li>Apprendre à Aria à servir les concierges : prix, maisons, règles</li>
+<li>L’agenda de la voiture, pour ne jamais vendre deux fois le même créneau</li>
+<li>La liste des comptes d’hôtel et le registre de chaque service</li>
+<li>Les liens de paiement, un par produit</li>
+<li>Une semaine de test avec 3 hôtels réels, avec vous qui lisez tout</li>
+</ul>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#3a3f4b;border-left:4px solid #c9a96e;padding:6px 0 6px 24px;width:1600px"><b>En attendant, rien ne bloque la première vente :</b> le téléphone, la carte au comptoir de l’hôtel et la grille vendent dès maintenant.</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#6b6f7a">7 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 7 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>45 s. À gauche : ce qui existe et est payé. À droite : ce qui manque, en langage simple ; derrière, il y a six phases techniques, mais le CEO a seulement besoin de savoir que la première vente n’attend rien de tout cela. La semaine de test avec 3 hôtels est la dernière étape avant d’ouvrir le compte mensuel.</p></details>
+</figure>
+<figure id="datas">
+<div class="tela"><section id="datas" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:36px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">Les dates qui décident</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08;color:#ede9df">Paris fait ses preuves jusqu’au 11 novembre. Ensuite, le Portugal et la Côte d’Azur.</h2>
+</div>
+<hr style="border-top:3px solid #c9a96e;width:1664px">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-weight:600;line-height:1;color:#e4c990">23/10</p><p style="font-size:26px;font-weight:500;color:#ede9df">Premier bilan</p><p style="font-size:25px;line-height:1.4;color:#b5b1a7">3 hôtels ont déjà acheté. S’ils sont moins nombreux, nous arrêtons et revoyons prix et cibles avant de continuer.</p></div>
+<div style="display:flex;flex-direction:column;gap:10px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-weight:600;line-height:1;color:#e4c990">2–5/11</p><p style="font-size:26px;font-weight:500;color:#ede9df">Equip’Hotel</p><p style="font-size:25px;line-height:1.4;color:#b5b1a7">Le salon des hôteliers, à Paris. Trois heures là-bas valent des semaines de téléphone.</p></div>
+<div style="display:flex;flex-direction:column;gap:10px;border-left:3px solid #e4c990;padding:0 0 0 20px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-weight:600;line-height:1;color:#e4c990">11/11</p><p style="font-size:26px;font-weight:500;color:#ede9df">On continue ou on arrête</p><p style="font-size:25px;line-height:1.4;color:#b5b1a7">1 600 € restés de nouveaux clients, 3 à 5 services. En dessous, nous repensons.</p></div>
+<div style="display:flex;flex-direction:column;gap:10px"><p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-weight:600;line-height:1;color:#e4c990">2027</p><p style="font-size:26px;font-weight:500;color:#ede9df">Après Paris</p><p style="font-size:25px;line-height:1.4;color:#b5b1a7">Côte d’Azur en mars, avec des chauffeurs partenaires. Lagos et Lisbonne en saison, avec un partenaire local. Même modèle, 25 % pour nous.</p></div>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#1c2130;border:1px solid #c9a96e;padding:24px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Ce que cela coûte d’ici là</p><p style="font-size:26px;line-height:1.4;color:#ede9df">4 heures par semaine de téléphone en français, 2 minutes par jour du chauffeur au registre, moins de 200 € d’impression. Aucun nouveau code pour la première vente.</p></div>
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:24px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Comment nous le saurons</p><p style="font-size:26px;line-height:1.4;color:#ede9df">Hôtels qui ont acheté, hôtels qui ont racheté, jours où la voiture a travaillé. Tout sort du registre quotidien.</p></div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#b5b1a7">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#b5b1a7">8 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 8 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>45 s. Deux dates comptent : le 23/10 et le 11/11. L’objectif du 11/11 est celui, « atteignable et réel », que le CEO lui-même a demandé. Hors de Paris, la voiture est celle d’un partenaire et nous gardons 25 % : même modèle, économie différente, c’est pourquoi Paris fait ses preuves en premier. Rien du reste de la plateforme ne s’efface.</p></details>
+</figure>
+<figure id="pedimos">
+<div class="tela"><section id="pedimos" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Ce dont nous avons besoin de vous</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Six décisions, chacune avec notre recommandation. Un oui par ligne.</h2>
+</div>
+<table style="width:1664px;font-size:25px;border:1px solid #d9d2c3">
+<tr style="background:#141821"><th style="width:5%;color:#f7f4ef;font-weight:500;text-align:left;padding:11px 16px">#</th><th style="width:27%;color:#f7f4ef;font-weight:500;text-align:left">Décision</th><th style="width:56%;color:#f7f4ef;font-weight:500;text-align:left">Recommandation</th><th style="width:12%;color:#f7f4ef;font-weight:500;text-align:left">Réponse</th></tr>
+<tr><td style="color:#7a5c2c">1</td><td style="font-weight:500">Le numéro WhatsApp</td><td>Site, carte et e-mail pointent vers le numéro d’Aria dès cette semaine. Aujourd’hui ils pointent vers votre portable, et Aria ne voit pas la demande.</td><td style="color:#6b6f7a">oui / non</td></tr>
+<tr style="background:#efe9dd"><td style="color:#7a5c2c">2</td><td style="font-weight:500">La grille de prix</td><td>Approuver les six produits et les 10 % de remise aux professionnels, tels quels.</td><td style="color:#6b6f7a">oui / non</td></tr>
+<tr><td style="color:#7a5c2c">3</td><td style="font-weight:500">Annulation et paiement</td><td>Gratuit jusqu’à 24 h avant, 50 % entre 24 h et 6 h, 100 % après. Lien immédiat pour un nouveau client ; facture mensuelle à partir de 3 services.</td><td style="color:#6b6f7a">oui / non</td></tr>
+<tr style="background:#efe9dd"><td style="color:#7a5c2c">4</td><td style="font-weight:500">Vos jours au volant</td><td>Vous définissez quels jours et quelles heures vous conduisez et lesquels restent pour la gestion et le téléphone. Aria ne vend que dans ce cadre.</td><td style="color:#6b6f7a">oui / non</td></tr>
+<tr><td style="color:#7a5c2c">5</td><td style="font-weight:500">Temps de vente et site</td><td>4 heures par semaine de téléphone en français, 3 heures à Equip’Hotel, et le site corrigé : Paris et Côte d’Azur, grille publiée, sans promesse de « nous confirmons ».</td><td style="color:#6b6f7a">oui / non</td></tr>
+<tr style="background:#efe9dd"><td style="color:#7a5c2c">6</td><td style="font-weight:500">Construire et tester Aria</td><td>Autoriser la construction de la diapositive 7 et la semaine de test avec 3 hôtels. Les nouvelles tables dans la base exigent votre phrase d’approbation.</td><td style="color:#6b6f7a">oui / non</td></tr>
+</table>
+<div style="background:#141821;padding:20px 28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Si vous dites oui aujourd’hui</p><p style="font-size:26px;line-height:1.4;color:#ede9df">Demain, le numéro est changé et Aria commence à apprendre. D’ici vendredi, 20 appels à des hôtels de Paris. Premier bilan le 23 octobre.</p></div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · Comptoir Aria · 16 octobre 2026</p><p style="font-size:24px;color:#6b6f7a">9 / 9</p></div>
+</section></div>
+<figcaption><span>Diapositive 9 sur 9</span><span>The World Keys</span></figcaption>
+<details><summary>Notes du présentateur</summary><p>2 min. Ligne par ligne, réponse avant d’avancer. S’il hésite sur l’une, prenez la recommandation comme provisoire jusqu’au 23/10 et continuez. La décision 1 est la plus urgente et la moins chère. La 4, lui seul peut la prendre. La 6 est celle qui libère formellement l’exécution. Juridique, hors diapositive pour ne pas alourdir : la déclaration de centrale de réservation se fait en ligne dès maintenant ; l’avocat voit le voucher et la facture ; l’immatriculation tourisme seulement quand des partenaires entreront.</p></details>
+</figure>
+</div>
+</body>
+</html>
+
+<nav aria-label="Langue" style="position:fixed;top:10px;right:12px;z-index:9;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(27,24,18,.88);color:#EFE9DC;font:12px/1 'IBM Plex Mono',ui-monospace,Consolas,monospace;letter-spacing:.06em;backdrop-filter:blur(4px)"><a href="/fr/" style="color:#EFE9DC;text-decoration:none;opacity:.8">Bibliothèque</a><span style="opacity:.45">|</span><a href="/planos/balcao-aria-planning-ceo.html" style="color:#EFE9DC;text-decoration:none;font-weight:400">PT</a><span style="opacity:.45">·</span><a href="/fr/planos/balcao-aria-planning-ceo.html" style="color:#CE9E3C;text-decoration:none;font-weight:600" aria-current="true">FR</a></nav>

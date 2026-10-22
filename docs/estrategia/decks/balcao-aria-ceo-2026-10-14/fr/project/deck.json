@@ -1,0 +1,17 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-10-14T13:30:00Z"},
+  "lists": "css",
+  "title": "Comptoir Aria — la nouvelle proposition d’affaires",
+  "order": ["cover", "frase", "dia", "vendemos", "entra", "porque", "temos", "datas", "pedimos"],
+  "sections": {
+    "s1": {"description": "L’idée en une phrase et l’histoire d’une journée.", "start": "cover"},
+    "s2": {"description": "Ce que nous vendons, ce qui rentre et pourquoi maintenant.", "start": "vendemos"},
+    "s3": {"description": "Ce que nous avons déjà, les dates et ce que nous demandons au CEO.", "start": "temos"}
+  },
+  "faces": {
+    "cormorant-garamond": {"family": "Cormorant Garamond", "href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap"},
+    "jost": {"family": "Jost", "href": "https://fonts.googleapis.com/css2?family=Jost:wght@300..600&display=swap"}
+  },
+  "designSystems": []
+}

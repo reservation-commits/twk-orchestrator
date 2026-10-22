@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Arquivados · Biblioteca The World Keys</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root { --ground:#FBFAF7; --surface:#F3F0E8; --ink:#1B1812; --ink-2:#4A443A; --muted:#6E6657; --rule:#E2DCCE; --accent:#8A6512; --accent-soft:#CE9E3C; --good:#2F7A4A; --focus:#2A6BB0;
+    --serif:"Libre Caslon Text",Georgia,"Times New Roman",serif; --sans:"Instrument Sans","Segoe UI",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground:#15130F; --surface:#1E1B15; --ink:#EFE9DC; --ink-2:#CFC6B4; --muted:#A39883; --rule:#2F2A21; --accent:#D9AE55; --good:#6DBB86; --focus:#D9AE55; } }
+  :root[data-theme="dark"] { --ground:#15130F; --surface:#1E1B15; --ink:#EFE9DC; --ink-2:#CFC6B4; --muted:#A39883; --rule:#2F2A21; --accent:#D9AE55; --good:#6DBB86; --focus:#D9AE55; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.6; padding-inline:20px; padding-block:0 56px; -webkit-font-smoothing:antialiased; }
+  .page { max-width:720px; margin-inline:auto; }
+  a:focus-visible { outline:2px solid var(--focus); outline-offset:3px; border-radius:4px; }
+  header { padding-block:52px 24px; border-bottom:1px solid var(--rule); display:grid; gap:10px; }
+  .topo { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .eyebrow { font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin:0; }
+  .idiomas { display:flex; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; }
+  .idiomas a { color:var(--muted); text-decoration:none; }
+  .idiomas a[aria-current] { color:var(--accent); font-weight:600; }
+  h1 { font-family:var(--serif); font-weight:400; font-size:clamp(32px,6vw,44px); line-height:1.1; margin:0; }
+  header p { margin:0; color:var(--ink-2); max-width:58ch; }
+  section { padding-block:28px 0; display:grid; gap:12px; }
+  h2 { font-family:var(--mono); font-weight:500; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0; }
+  ul { margin:0; padding:0; list-style:none; display:grid; gap:10px; }
+  .doc a { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"estado data" "titulo titulo" "desc desc"; gap:4px 16px; padding:16px 18px; border:1px solid var(--rule); border-radius:6px; text-decoration:none; color:inherit; background:var(--ground); transition:border-color .12s ease; }
+  .doc a:hover { border-color:var(--accent-soft); }
+  .estado { grid-area:estado; justify-self:start; font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; padding:1px 8px; border-radius:999px; border:1px solid var(--rule); color:var(--muted); }
+  .estado.vigente { color:var(--good); border-color:color-mix(in srgb,var(--good) 45%,var(--rule)); }
+  .estado.anlise { color:var(--accent); border-color:color-mix(in srgb,var(--accent-soft) 55%,var(--rule)); }
+  .titulo { grid-area:titulo; font-family:var(--serif); font-size:22px; line-height:1.2; margin-top:4px; }
+  .titulo small { font-family:var(--mono); font-size:11px; color:var(--muted); margin-left:8px; vertical-align:middle; }
+  .desc { grid-area:desc; font-size:14.5px; color:var(--ink-2); }
+  .data { grid-area:data; font-family:var(--mono); font-size:12px; color:var(--muted); }
+  footer { margin-top:40px; padding-top:14px; border-top:1px solid var(--rule); font-family:var(--mono); font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 18px; }
+  .arquivo-link { margin-top:36px; padding:16px 18px; border:1px dashed var(--rule); border-radius:6px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .arquivo-link a { font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); text-decoration:none; }
+  .arquivo-link span { font-size:14px; color:var(--muted); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="topo"><p class="eyebrow">Uso interno</p><nav class="idiomas" aria-label="Idioma"><a href="/arquivo/" aria-current="true">PT</a><a href="/fr/arquivo/">FR</a></nav></div>
+      <h1>Arquivados · Biblioteca The World Keys</h1>
+      <p>Documentos anteriores, guardados para consulta. O que vale hoje está na página inicial.</p>
+    </header>
+    <section>
+      <h2>Planos</h2>
+      <ul>
+        <li class="doc">
+          <a href="/planos/balcao-aria-paris.html">
+            <span class="estado vigente">vigente</span>
+            <span class="titulo">Balcão Aria Paris</span>
+            <span class="desc">O plano visual do balcão: a Aria como contato único entre concierge, restaurante e chauffeur no WhatsApp, o fluxo dos dois sins, os produtos e o que falta construir.</span>
+            <span class="data">10/10/2026</span>
+          </a>
+        </li>
+        <li class="doc">
+          <a href="/planos/plano-reserva-direta.html">
+            <span class="estado vigente">vigente</span>
+            <span class="titulo">Plano Reserva Direta</span>
+            <span class="desc">O plano do botão de reserva direta, do começo ao fim, com exemplos: o botão, o número da reserva, quem recebe, o piloto de 30 dias e as decisões.</span>
+            <span class="data">14/09/2026</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>Análises</h2>
+      <ul>
+        <li class="doc">
+          <a href="/planos/scout-balcao-aria.html">
+            <span class="estado analise">análise</span>
+            <span class="titulo">Scout Balcão Aria</span>
+            <span class="desc">O levantamento por trás do balcão: a Soirée como produto central e suas variações, os oito blocos de conhecimento da Aria, a carteira de casas em Paris, as decisões do fundador, as doze peças de construção e o calendário.</span>
+            <span class="data">13/10/2026</span>
+          </a>
+        </li>
+        <li class="doc">
+          <a href="/planos/dossie-reserva-direta.html">
+            <span class="estado analise">análise</span>
+            <span class="titulo">Dossiê Reserva Direta</span>
+            <span class="desc">A análise por trás do plano: o que Google, OpenTable, Resy, SevenRooms, TheFork e Tabelog fazem, as dez otimizações e o que não copiar.</span>
+            <span class="data">14/09/2026</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>Histórico</h2>
+      <ul>
+        <li class="doc">
+          <a href="/planos/conciergerie-plano-60-dias.html">
+            <span class="estado superado">superado</span>
+            <span class="titulo">Conciergerie · Plano de 60 dias</span>
+            <span class="desc">O plano de lançamento da Conciergerie de setembro: barcos, helicóptero, carros, motoristas e experiências. Substituído pelo Balcão Aria em outubro; vale ainda como referência de modelo, comissões e objeções. Bilíngue, com seletor PT/FR na própria página.</span>
+            <span class="data">14/09/2026</span>
+          </a>
+        </li>
+        <li class="doc">
+          <a href="/planos/reserva-direta-rastreada.html">
+            <span class="estado superado">superado</span>
+            <span class="titulo">Reserva Direta Rastreada</span>
+            <span class="desc">A proposta inicial, com os números do problema e as respostas dos restaurantes. Superada pela versão final do plano.</span>
+            <span class="data">14/09/2026</span>
+          </a>
+        </li>
+        <li class="doc">
+          <a href="/planos/chave-girada.html">
+            <span class="estado referencia">referência</span>
+            <span class="titulo">Chave Girada</span>
+            <span class="desc">Resumo executivo da campanha de ativação das contas de restaurante.</span>
+            <span class="data">05/09/2026</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <div class="arquivo-link"><a href="/">← Voltar à página inicial</a><span>3 documentos</span></div>
+    <footer><span>The World Keys</span><span>montado em 16/10/2026 18:43 UTC</span><span>7 documentos</span></footer>
+  </div>
+</body>
+</html>

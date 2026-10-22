@@ -30,9 +30,11 @@ const forcar = a.includes('--forcar-traducao');
 const IDIOMAS = ['pt', 'fr'];
 const T = {
   pt: { html_lang: 'pt-BR', eyebrow: 'Uso interno', titulo: 'Biblioteca The World Keys', intro: 'Os planos e análises da operação, na versão mais recente. Cada documento indica se está em vigor, se é uma análise ou se já foi superado.', montado: 'montado em', documentos: 'documentos', pendente: 'em português', voltar: 'Voltar à lista de documentos', nf_titulo: 'Página não encontrada', nf_texto: 'Este endereço não existe na biblioteca.', p_titulo: 'Tradução em preparação', p_texto: 'Este documento ainda não tem versão em português.', p_link: 'Abrir o original', biblioteca: 'Biblioteca', idioma: 'Idioma',
-    grupos: { Planos: 'Planos', Análises: 'Análises', Histórico: 'Histórico' }, estados: { vigente: 'vigente', análise: 'análise', superado: 'superado', referência: 'referência' } },
+    arquivo_titulo: 'Arquivados', arquivo_intro: 'Documentos anteriores, guardados para consulta. O que vale hoje está na página inicial.', ver_arquivo: 'Ver os arquivados', voltar_inicio: 'Voltar à página inicial', arquivados: 'arquivados',
+    grupos: { Planos: 'Planos', Análises: 'Análises', Operação: 'Operação', Histórico: 'Histórico' }, estados: { vigente: 'vigente', análise: 'análise', superado: 'superado', referência: 'referência' } },
   fr: { html_lang: 'fr', eyebrow: 'Usage interne', titulo: 'Bibliothèque The World Keys', intro: 'Les plans et analyses de l’opération, dans leur version la plus récente. Chaque document indique s’il est en vigueur, s’il s’agit d’une analyse ou s’il a été remplacé.', montado: 'assemblée le', documentos: 'documents', pendente: 'en portugais', voltar: 'Retour à la liste des documents', nf_titulo: 'Page introuvable', nf_texto: 'Cette adresse n’existe pas dans la bibliothèque.', p_titulo: 'Traduction en préparation', p_texto: 'Ce document n’a pas encore de version française.', p_link: 'Ouvrir l’original en portugais', biblioteca: 'Bibliothèque', idioma: 'Langue',
-    grupos: { Planos: 'Plans', Análises: 'Analyses', Histórico: 'Historique' }, estados: { vigente: 'en vigueur', análise: 'analyse', superado: 'remplacé', referência: 'référence' } },
+    arquivo_titulo: 'Archives', arquivo_intro: 'Documents antérieurs, conservés pour consultation. Ce qui vaut aujourd’hui se trouve sur la page d’accueil.', ver_arquivo: 'Voir les archives', voltar_inicio: 'Retour à la page d’accueil', arquivados: 'archivés',
+    grupos: { Planos: 'Plans', Análises: 'Analyses', Operação: 'Opérations', Histórico: 'Historique' }, estados: { vigente: 'en vigueur', análise: 'analyse', superado: 'remplacé', referência: 'référence' } },
 };
 
 const carimbo = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '');
@@ -89,10 +91,16 @@ const CSS = `
   .desc { grid-area:desc; font-size:14.5px; color:var(--ink-2); }
   .data { grid-area:data; font-family:var(--mono); font-size:12px; color:var(--muted); }
   footer { margin-top:40px; padding-top:14px; border-top:1px solid var(--rule); font-family:var(--mono); font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 18px; }
+  .arquivo-link { margin-top:36px; padding:16px 18px; border:1px dashed var(--rule); border-radius:6px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .arquivo-link a { font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); text-decoration:none; }
+  .arquivo-link span { font-size:14px; color:var(--muted); }
 `;
 
-function indice(idioma, estadoTraducao) {
+// Página inicial (só o que vale hoje) ou página dos arquivados (o resto, marcado com "arquivado": true no catálogo).
+function indice(idioma, estadoTraducao, arquivo = false) {
   const t = T[idioma];
+  const lista = docs.filter((d) => !!d.arquivado === arquivo);
+  const outros = docs.length - lista.length;
   const campo = (d, k) => (idioma === 'pt' ? d[k] : (d[`${k}_${idioma}`] || d[k]));
   const cartao = (d) => [
     '        <li class="doc">',
@@ -104,9 +112,15 @@ function indice(idioma, estadoTraducao) {
     '          </a>',
     '        </li>',
   ].join('\n');
-  const grupos = [...new Set(docs.map((d) => d.grupo))];
-  const secao = (g) => ['    <section>', `      <h2>${esc(t.grupos[g] || g)}</h2>`, '      <ul>', docs.filter((d) => d.grupo === g).map(cartao).join('\n'), '      </ul>', '    </section>'].join('\n');
-  const idiomas = IDIOMAS.map((i) => `<a href="${raizDe(i)}"${i === idioma ? ' aria-current="true"' : ''}>${i.toUpperCase()}</a>`).join('');
+  const grupos = [...new Set(lista.map((d) => d.grupo))];
+  const secao = (g) => ['    <section>', `      <h2>${esc(t.grupos[g] || g)}</h2>`, '      <ul>', lista.filter((d) => d.grupo === g).map(cartao).join('\n'), '      </ul>', '    </section>'].join('\n');
+  const aqui = (i) => raizDe(i) + (arquivo ? 'arquivo/' : '');
+  const idiomas = IDIOMAS.map((i) => `<a href="${aqui(i)}"${i === idioma ? ' aria-current="true"' : ''}>${i.toUpperCase()}</a>`).join('');
+  const titulo = arquivo ? `${t.arquivo_titulo} · ${t.titulo}` : t.titulo;
+  const intro = arquivo ? t.arquivo_intro : t.intro;
+  const ligacao = arquivo
+    ? `    <div class="arquivo-link"><a href="${raizDe(idioma)}">← ${esc(t.voltar_inicio)}</a><span>${outros} ${esc(t.documentos)}</span></div>`
+    : (outros ? `    <div class="arquivo-link"><a href="${raizDe(idioma)}arquivo/">${esc(t.ver_arquivo)} →</a><span>${outros} ${esc(t.documentos)} ${esc(t.arquivados)}</span></div>` : '');
   return [
     '<!doctype html>',
     `<html lang="${t.html_lang}">`,
@@ -114,7 +128,7 @@ function indice(idioma, estadoTraducao) {
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<meta name="robots" content="noindex, nofollow">',
-    `<title>${esc(t.titulo)}</title>`,
+    `<title>${esc(titulo)}</title>`,
     '<link rel="preconnect" href="https://fonts.googleapis.com">',
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">',
@@ -124,11 +138,12 @@ function indice(idioma, estadoTraducao) {
     '  <div class="page">',
     '    <header>',
     `      <div class="topo"><p class="eyebrow">${esc(t.eyebrow)}</p><nav class="idiomas" aria-label="${esc(t.idioma)}">${idiomas}</nav></div>`,
-    `      <h1>${esc(t.titulo)}</h1>`,
-    `      <p>${esc(t.intro)}</p>`,
+    `      <h1>${esc(titulo)}</h1>`,
+    `      <p>${esc(intro)}</p>`,
     '    </header>',
     grupos.map(secao).join('\n'),
-    `    <footer><span>The World Keys</span><span>${esc(t.montado)} ${dataBr(carimbo.slice(0, 10))} ${carimbo.slice(11, 13)}:${carimbo.slice(13, 15)} UTC</span><span>${docs.length} ${esc(t.documentos)}</span></footer>`,
+    ligacao,
+    `    <footer><span>The World Keys</span><span>${esc(t.montado)} ${dataBr(carimbo.slice(0, 10))} ${carimbo.slice(11, 13)}:${carimbo.slice(13, 15)} UTC</span><span>${lista.length} ${esc(t.documentos)}</span></footer>`,
     '  </div>',
     '</body>',
     '</html>',
@@ -176,9 +191,11 @@ function indice(idioma, estadoTraducao) {
   for (const i of IDIOMAS) {
     const dir = path.join(SAIDA, i === 'pt' ? '' : i);
     fs.writeFileSync(path.join(dir, 'index.html'), indice(i, estadoTraducao));
+    fs.mkdirSync(path.join(dir, 'arquivo'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'arquivo', 'index.html'), indice(i, estadoTraducao, true));
     fs.writeFileSync(path.join(dir, '404.html'), paginaSimples(i, T[i].nf_titulo, T[i].nf_texto, raizDe(i), T[i].voltar));
   }
-  fs.writeFileSync(path.join(SAIDA, 'build.json'), JSON.stringify({ build: carimbo, idiomas: IDIOMAS, documentos: docs.map((d) => ({ slug: d.slug, titulo: d.titulo, data: d.data, estado: d.estado, fr: estadoTraducao[d.slug] })) }, null, 2));
+  fs.writeFileSync(path.join(SAIDA, 'build.json'), JSON.stringify({ build: carimbo, idiomas: IDIOMAS, documentos: docs.map((d) => ({ slug: d.slug, titulo: d.titulo, data: d.data, estado: d.estado, arquivado: !!d.arquivado, fr: estadoTraducao[d.slug] })) }, null, 2));
   fs.rmSync(PUBLIC, { recursive: true, force: true });
   fs.renameSync(SAIDA, PUBLIC);
   console.log(`public/ montado: ${docs.length} documentos · idiomas ${IDIOMAS.join(', ')} · build ${carimbo}`);

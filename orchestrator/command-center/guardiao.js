@@ -21,7 +21,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const REPO = path.resolve(__dirname, '..', '..');
-const DIR_REPO = path.join(REPO, 'orchestrator', 'agents', 'guardiao-reserva', 'state');
+// Rotinas hospedadas (A1, 2026-10-22): dentro da Central, o Guardião grava no volume (TWK_STATE_ROOT/agents/
+// guardiao-reserva) — essa pasta passa a ser a "fonte repositório" e o instantâneo é exportado no lugar.
+const DIR_REPO = process.env.TWK_STATE_ROOT
+  ? path.join(path.resolve(process.env.TWK_STATE_ROOT), 'agents', 'guardiao-reserva')
+  : path.join(REPO, 'orchestrator', 'agents', 'guardiao-reserva', 'state');
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
 const ARQ_SINC = 'guardiao-sincronizado.json';
 const SAIDA_EXPORT = path.join(REPO, 'orchestrator', 'state', ARQ_SINC);

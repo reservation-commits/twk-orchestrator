@@ -1,0 +1,343 @@
+<title>Balcão Aria Paris</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Plano visual: hub (cliente ⇄ Aria ⇄ restaurante + Julien), conversas reais em quatro painéis, dinheiro em barras, pacotes em cartões. Identidade TWK. */
+:root{
+  --bg:#f7f4ef; --surface:#ffffff; --fg:#141821; --muted:#5e6472; --line:#d9d2c3;
+  --gold:#9e7c48; --gold-2:#c9a96e; --soft:#f1ebdf; --ink:#141821; --on-ink:#f7f4ef;
+  --ok:#3f7a52; --warn:#a4632a; --bubble:#efe7d6;
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --ui:"Jost","Avenir Next","Segoe UI",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;--ink:#1c2130;--on-ink:#f7f4ef;--ok:#7fbf8f;--warn:#e0a46b;--bubble:#232837;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070b10;--surface:#0f1218;--fg:#ede9df;--muted:#a09c92;--line:#262a36;--gold:#c9a96e;--gold-2:#e4c990;--soft:#181c24;--ink:#1c2130;--on-ink:#f7f4ef;--ok:#7fbf8f;--warn:#e0a46b;--bubble:#232837;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);font-weight:300;font-size:16px;line-height:1.5;padding-block:40px 64px;padding-inline:16px}
+main{max-width:1000px;margin:0 auto;min-width:0}
+.eyebrow{font:500 11px/1.2 var(--ui);letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+h1{font:500 48px/1.04 var(--display);margin:10px 0 8px;text-wrap:balance;max-width:18ch}
+.lede{font:italic 400 23px/1.3 var(--display);color:var(--muted);margin:0 0 26px;max-width:58ch}
+h2{font:500 13px/1.2 var(--ui);letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:48px 0 14px;padding-top:16px;border-top:1px solid var(--line)}
+h3{font:500 22px/1.15 var(--display);margin:0}
+p{margin:0 0 12px;max-width:74ch}
+strong{font-weight:500}
+.small{font-size:13px;color:var(--muted)}
+.verdict{background:var(--ink);color:var(--on-ink);padding:22px 26px;font:400 19px/1.5 var(--ui)}
+.verdict b{color:var(--gold-2);font-weight:500}
+
+/* HUB */
+.hub{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1.05fr) 150px minmax(0,1fr);align-items:center;gap:0;margin-top:18px}
+.node{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0}
+.node .k{font:500 11px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.node h3{margin:6px 0 4px}
+.node p{font-size:14px;color:var(--muted);margin:0}
+.core{background:var(--ink);color:var(--on-ink);border:1px solid var(--gold-2);padding:22px 20px;text-align:center}
+.core .k{color:var(--gold-2)}
+.core h3{font-size:34px;margin:6px 0}
+.core p{color:#c9c4b8;font-size:14px;margin:0}
+.stack{display:grid;gap:12px;min-width:0}
+.link{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;padding:0 6px}
+.link::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--gold-2)}
+.link span{position:relative;background:var(--bg);font:500 11px/1.35 var(--ui);letter-spacing:.06em;color:var(--fg);padding:4px 8px;border:1px solid var(--line);text-align:center}
+.link.split span{font-size:10.5px}
+.founder{margin-top:12px;display:flex;gap:10px;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
+.founder b{font-weight:500;color:var(--fg)}
+.steps{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);padding:12px 14px;font-size:14px;min-width:0}
+.steps li::before{content:counter(s);display:block;font:italic 500 26px/1 var(--display);color:var(--gold);margin-bottom:6px}
+.steps li b{font-weight:500;display:block}
+
+/* CHATS */
+.chats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.chat{background:var(--surface);border:1px solid var(--line);min-width:0;display:flex;flex-direction:column}
+.chat header{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.chat header b{font:500 15px/1.2 var(--ui)}
+.chat header span{font:400 11px/1.2 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.chat .body{padding:14px 16px;display:grid;gap:10px}
+.msg{max-width:88%;padding:10px 12px;font-size:14px;line-height:1.45;border:1px solid var(--line);background:var(--surface)}
+.msg.aria{justify-self:end;background:var(--bubble);border-color:transparent}
+.msg .t{display:block;font-size:11px;color:var(--muted);margin-top:6px;text-align:right}
+.msg em{font-style:normal;font-weight:500}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.btns i{font-style:normal;font-size:12.5px;border:1px solid var(--gold-2);color:var(--gold);padding:5px 10px;background:var(--surface)}
+.btns i.on{background:var(--gold-2);color:#141821;border-color:var(--gold-2)}
+.tag{display:inline-block;font:500 10.5px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;padding:4px 7px;border:1px solid currentColor}
+.tag.ok{color:var(--ok)}
+.tag.wait{color:var(--warn)}
+
+/* MONEY */
+.split{display:flex;height:46px;margin:12px 0 8px;border:1px solid var(--line)}
+.split div{display:flex;align-items:center;justify-content:center;font:500 13px/1.1 var(--ui);text-align:center;padding:0 6px;min-width:0;overflow:hidden}
+.split .a{background:var(--gold-2);color:#141821}
+.split .b{background:var(--soft);color:var(--fg)}
+.split .c{background:var(--line);color:var(--fg)}
+.legend3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;font-size:14px}
+.legend3 div{border-left:3px solid var(--line);padding:4px 12px}
+.legend3 .a{border-color:var(--gold-2)}
+.legend3 .b{border-color:var(--soft)}
+.legend3 b{display:block;font:500 22px/1.1 var(--display)}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:14px}
+.who div{background:var(--surface);border:1px solid var(--line);padding:14px 16px;font-size:14px;min-width:0}
+.who b{display:block;font:500 12px/1.2 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+
+/* CARNET */
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+th{text-align:left;font:500 11px/1.3 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:8px 10px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right}
+.meter{display:inline-block;width:90px;height:8px;background:var(--line);vertical-align:middle;margin-right:8px}
+.meter i{display:block;height:100%;background:var(--gold-2)}
+.goal{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+.goal div{background:var(--soft);padding:14px 16px;font-size:14px}
+.goal b{display:block;font:500 26px/1 var(--display);margin-bottom:6px}
+
+/* PACKS */
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;margin-top:12px}
+.pack{background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:8px;min-width:0}
+.pack .when{font:500 11px/1.3 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.pack .route{font-size:14px;color:var(--fg)}
+.pack .route b{font-weight:500}
+.pack .inc{font-size:13.5px;color:var(--muted);line-height:1.45}
+.pack .money{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-top:1px solid var(--line);padding-top:10px;font-variant-numeric:tabular-nums}
+.pack .money div{min-width:0}
+.pack .money b{display:block;font:500 22px/1 var(--display)}
+.pack .money span{display:block;font:400 10.5px/1.3 var(--ui);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.pack .money .keep b{color:var(--gold)}
+.anchor{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.anchor div{border:1px solid var(--line);padding:10px 14px;font-size:13.5px;background:var(--surface)}
+.anchor b{display:block;font:500 20px/1.1 var(--display)}
+
+/* FALLBACK + BARS */
+.bars{display:grid;gap:14px;margin-top:12px}
+.bar .l{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:6px}
+.bar .l b{font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.track{height:24px;background:var(--surface);border:1px solid var(--line);position:relative}
+.fill{height:100%;background:var(--gold-2)}
+.fill.pale{background:var(--line)}
+.fixed{position:absolute;top:-7px;bottom:-7px;width:2px;background:var(--fg);left:33.125%}
+.fixed::after{content:"fixo 5.300 €";position:absolute;top:-16px;left:4px;font:500 10.5px/1 var(--ui);color:var(--fg);white-space:nowrap}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}
+.col{background:var(--surface);border:1px solid var(--line);padding:16px 18px;min-width:0}
+.col.todo{background:var(--soft)}
+.col h3{font:500 13px/1.2 var(--ui);letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.col ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:14.5px}
+.col li{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.col li::before{content:"✓";color:var(--ok);font-weight:600}
+.col.todo li::before{content:"○";color:var(--gold)}
+.col li em{font-style:normal;color:var(--muted);font-size:13px;display:block}
+.ask{background:var(--ink);color:var(--on-ink);padding:22px 26px;margin-top:14px}
+.ask .eyebrow{color:var(--gold-2)}
+.ask ol{margin:10px 0 0;padding-left:22px;display:grid;gap:8px;font-size:16px}
+.meta{font-size:13px;color:var(--muted);margin-top:34px;border-top:1px solid var(--line);padding-top:12px}
+
+@media (max-width:820px){
+  .hub{grid-template-columns:minmax(0,1fr)}
+  .link{height:56px;flex-direction:row}
+  .link::before{left:50%;right:auto;top:0;bottom:0;border-top:0;border-left:1px dashed var(--gold-2)}
+  .stack{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chats,.cols{grid-template-columns:minmax(0,1fr)}
+  h1{font-size:38px}
+}
+@media (max-width:480px){.stack{grid-template-columns:minmax(0,1fr)}.pack .money b{font-size:19px}}
+</style>
+
+<main>
+  <div class="eyebrow">The World Keys · Plano · Paris · outubro de 2026</div>
+  <h1>A Aria no centro de tudo</h1>
+  <p class="lede">O hotel escreve uma vez. A Aria fala com o restaurante e com o Julien, espera os dois confirmarem e devolve uma proposta fechada.</p>
+
+  <div class="verdict">Hotéis, gestores de villas e agências falam com <b>um só contato: a Aria, no WhatsApp</b>. Ela recomenda o restaurante que responde, recomenda <b>Julien Guilloteau e o Tesla Model X</b>, pede a mesa e a corrida ao mesmo tempo e só volta ao cliente quando <b>mesa, carro e valor estão confirmados</b>. A TWK fatura o carro. O restaurante recebe um cliente confirmado. O hotel ganha 10%.</div>
+
+  <h2>O modelo em uma imagem</h2>
+  <div class="hub" aria-label="Fluxo: cliente, Aria, restaurante e motorista">
+    <div class="node">
+      <div class="k">Cliente</div>
+      <h3>Hotel · villa · agência</h3>
+      <p>Concierge, gestor de aluguel, DMC, assistente. Escreve no WhatsApp, recebe proposta e voucher.</p>
+    </div>
+    <div class="link"><span>pedido<br>proposta fechada<br>voucher</span></div>
+    <div class="core">
+      <div class="k">O centro</div>
+      <h3>Aria</h3>
+      <p>Recomenda, pede, espera os sins, calcula o valor e devolve tudo numa mensagem.</p>
+    </div>
+    <div class="link split"><span>mesa ⇄ aceite<br><br>corrida ⇄ disponível + valor</span></div>
+    <div class="stack">
+      <div class="node">
+        <div class="k">Restaurante</div>
+        <h3>Monak, Paris 16e</h3>
+        <p>Recebe o pedido no WhatsApp com botões Accepter, Refuser, Proposer un horaire.</p>
+      </div>
+      <div class="node">
+        <div class="k">Motorista</div>
+        <h3>Julien · Tesla Model X</h3>
+        <p>Recebe a corrida com o valor já calculado. Responde Disponible, Indisponible ou Ajuster le prix.</p>
+      </div>
+    </div>
+  </div>
+  <div class="founder">O fundador entra <b>só nas exceções</b>: orçamento fora da tabela acima do limite, desconto, reclamação com valor, incidente.</div>
+
+  <ol class="steps">
+    <li><b>Pedido</b>O hotel escreve: data, hora, pessoas, o que o hóspede quer.</li>
+    <li><b>Recomendação</b>A Aria propõe casas que respondem, o Julien e o valor de tabela.</li>
+    <li><b>Escolha</b>O hotel escolhe a casa. É o "sim" de princípio ao valor.</li>
+    <li><b>Dois pedidos</b>Ao mesmo tempo: mesa ao restaurante, corrida ao Julien.</li>
+    <li><b>Dois sins</b>Restaurante aceita. Julien confirma disponibilidade e valor.</li>
+    <li><b>Proposta fechada</b>A Aria devolve mesa confirmada, horários do carro e total.</li>
+    <li><b>Voucher</b>Pagamento por link ou fatura do mês. Lembrete na véspera com a placa.</li>
+  </ol>
+
+  <h2>Uma noite real, mensagem por mensagem</h2>
+  <p class="small">Casa, motorista, carro e preços são reais. Hóspede, hotel e horários das mensagens são ilustrativos. Mensagens em francês, como sairão.</p>
+  <div class="chats">
+    <section class="chat" aria-label="Hotel e Aria">
+      <header><b>Hôtel boutique, Paris 8e</b><span>1 · 2 · 3 · pedido</span></header>
+      <div class="body">
+        <div class="msg">Bonsoir Aria, un couple américain arrive demain samedi à CDG, 14h20, terminal 2E. Ils voudraient dîner vers 20h30. Voiture pour l'arrivée et pour le dîner ?<span class="t">vendredi 17:02</span></div>
+        <div class="msg aria">Bonsoir. Pour samedi 17 octobre à 20h30, je vous propose :<br>· <em>Monak</em>, Paris 16e<br>· <em>Miss Kô</em>, Paris 8e<br>· <em>L'Initial</em>, étoilé, Paris 5e<br><br>Voiture : <em>Julien Guilloteau</em>, Tesla Model X.<br>Tarif partenaire : transfert CDG <em>135 €</em> + Soirée <em>351 €</em>.<br>Quelle adresse préférez-vous ?<span class="t">17:03</span></div>
+        <div class="msg">Monak, parfait. Au nom de Smith, 2 personnes, 3 valises.<span class="t">17:05</span></div>
+        <div class="msg aria">Très bien. Je demande la table au Monak et je réserve Julien. Je reviens vers vous avec la confirmation des deux.<span class="t">17:05</span></div>
+      </div>
+    </section>
+
+    <section class="chat" aria-label="Aria e restaurante">
+      <header><b>Aria → Monak</b><span>4 · 5 · mesa</span></header>
+      <div class="body">
+        <div class="msg aria"><em>Nouvelle demande de table · The World Keys</em><br>Samedi 17 octobre, 20h30<br>2 personnes · au nom de Smith<br>Client d'un hôtel partenaire, arrivée en voiture avec chauffeur.<div class="btns"><i class="on">Accepter</i><i>Refuser</i><i>Proposer un horaire</i></div><span class="t">17:05 · modelo de casa já aprovado pela Meta</span></div>
+        <div class="msg">Accepter<span class="t">resposta do restaurante</span></div>
+        <div><span class="tag ok">Mesa confirmada</span></div>
+      </div>
+    </section>
+
+    <section class="chat" aria-label="Aria e motorista">
+      <header><b>Aria → Julien</b><span>4 · 5 · carro</span></header>
+      <div class="body">
+        <div class="msg aria"><em>Nouvelle course · samedi 17 octobre</em><br>14h20 · CDG T2E → hôtel, Paris 8e<br>Panneau SMITH · 2 pers. · 3 valises<br>20h10 · hôtel → Monak, attente, retour<br><br>Tarif partenaire : <em>135 € + 351 € = 486 €</em><div class="btns"><i class="on">Disponible</i><i>Indisponible</i><i>Ajuster le prix</i></div><span class="t">17:05 · modelo novo a aprovar</span></div>
+        <div class="msg">Disponible<span class="t">resposta do Julien</span></div>
+        <div><span class="tag ok">Carro confirmado</span></div>
+      </div>
+    </section>
+
+    <section class="chat" aria-label="Aria devolve ao hotel">
+      <header><b>Aria → Hôtel</b><span>6 · 7 · fechamento</span></header>
+      <div class="body">
+        <div class="msg aria">Tout est confirmé pour samedi 17 octobre.<br><br><em>Monak</em> · 20h30 · 2 personnes · table confirmée<br><em>Julien Guilloteau</em> · Tesla Model X<br>14h20 CDG T2E, panneau SMITH<br>20h10 devant l'hôtel, retour à leur signal<br><br><em>Total : 486 € TTC</em> (tarif partenaire)<br>Paiement par lien ou sur votre facture du mois ?<span class="t">après les deux confirmations</span></div>
+        <div class="msg">Sur facture, merci Aria.<span class="t">17:41</span></div>
+        <div class="msg aria"><em>Voucher · The World Keys</em><br>M. et Mme Smith · samedi 17 octobre<br>Chauffeur Julien · Tesla Model X · plaque envoyée la veille<br>Table Monak 20h30 · confirmée<span class="t">17:41</span></div>
+      </div>
+    </section>
+  </div>
+
+  <h2>Quem paga, quem recebe</h2>
+  <p>Exemplo da noite acima a preço público: o hotel cobra 540 € do hóspede e paga 486 € à TWK.</p>
+  <div class="split" role="img" aria-label="540 euros: 446 euros ficam na TWK, 54 euros no hotel, 40 euros de custos do carro">
+    <div class="a" style="width:82.6%">TWK fica com 446 €</div>
+    <div class="b" style="width:10%">Hotel 54 €</div>
+    <div class="c" style="width:7.4%">40 €</div>
+  </div>
+  <div class="legend3">
+    <div class="a"><b>446 €</b>ficam na TWK. O salário do Julien e o Tesla já são pagos hoje.</div>
+    <div class="b"><b>54 €</b>ficam com o hotel, que revende a 540 € ou repassa o desconto ao hóspede.</div>
+    <div><b>40 €</b>de energia, pedágio e estacionamento: 15 € no transfer, 25 € na Soirée.</div>
+  </div>
+  <div class="who">
+    <div><b>Hóspede</b>Paga o carro ao hotel, ou direto pelo link. Paga a conta do restaurante no restaurante; ela não passa pela TWK.</div>
+    <div><b>Restaurante</b>Não paga nada. Recebe hóspede de hotel, confirmado pelo concierge, que chega de carro.</div>
+    <div><b>Julien</b>Salário fixo. Cada corrida vendida pela Aria preenche um horário que hoje fica vazio.</div>
+    <div><b>TWK</b>Fatura o carro e ganha o cliente recorrente: o mesmo concierge volta toda semana.</div>
+  </div>
+
+  <h2>A carteira da Aria em Paris: o ponto fraco, em dados reais</h2>
+  <p>A Aria só pode recomendar casas que respondem. Nos últimos 12 meses, Paris recebeu 237 pedidos de mesa pela plataforma e 73 foram aceitos. Uma única casa confirma com regularidade.</p>
+  <div class="wrap"><table>
+    <tr><th>Casa</th><th>Onde</th><th class="r">Pedidos 12 m</th><th>Aceitos</th><th>Canal</th><th>Papel no plano</th></tr>
+    <tr><td><strong>Monak</strong></td><td>25 av. Pierre-Ier-de-Serbie, 16e</td><td class="r">80</td><td><span class="meter"><i style="width:80%"></i></span>56 · 80%</td><td>WhatsApp ativo</td><td>Casa principal. 71% dos pedidos são de sexta a domingo, entre 20h e 23h30. Nenhuma recusa em 12 meses.</td></tr>
+    <tr><td><strong>L'Initial</strong></td><td>Paris 5e · estrela Michelin</td><td class="r">2</td><td><span class="meter"><i style="width:100%"></i></span>2 · 100%</td><td>e-mail</td><td>Alternativa gastronômica. Convidar para o WhatsApp.</td></tr>
+    <tr><td><strong>Andia</strong></td><td>Paris 16e</td><td class="r">1</td><td><span class="meter"><i style="width:100%"></i></span>1 · 100%</td><td>e-mail</td><td>Convidar para o WhatsApp.</td></tr>
+    <tr><td><strong>Miss Kô</strong></td><td>Paris 8e</td><td class="r">2</td><td><span class="meter"><i style="width:50%"></i></span>1 · 50%</td><td>e-mail</td><td>Convidar para o WhatsApp.</td></tr>
+  </table></div>
+  <p class="small">Fonte: banco da plataforma por papel somente leitura, 10/10/2026, pedidos deduplicados por cliente, data e hora. Aceite calculado sobre os pedidos não cancelados pelo cliente.</p>
+  <div class="goal">
+    <div><b>1 → 10 casas</b>Meta para dezembro: dez restaurantes de Paris que respondem pelo WhatsApp, perto dos hotéis-alvo do 8e e do 16e.</div>
+    <div><b>Pedido real abre a porta</b>Quando um hotel pede uma casa fora da carteira, a Aria envia o pedido mesmo assim. Se a casa aceita, recebe o convite para o WhatsApp.</div>
+    <div><b>1 hora por semana</b>Das quatro horas de telefone do fundador, uma vai para restaurantes: "hóspedes de hotel, que chegam de carro, resposta num toque, sem custo".</div>
+  </div>
+
+  <h2>Dez pacotes que a Aria pode oferecer já</h2>
+  <p>Tarifa pública, tarifa de parceiro (−10%) e o que fica na TWK na venda via parceiro, depois dos custos do carro. Mesas no Monak, salvo indicação.</p>
+  <div class="anchor">
+    <div><b>120 a 140 €</b>CDG → Paris em berline premium no mercado (tspvip, MyDriverParis). Nosso transfer: 150 € em Tesla Model X, 6 lugares.</div>
+    <div><b>95 a 110 €/h</b>Chauffeur em Classe S à disposição no mercado. Nossas 4 horas: 400 €, 100 €/h; o dia de 8 h: 750 €, 94 €/h.</div>
+  </div>
+  <div class="packs">
+    <div class="pack"><div class="when">Qualquer fim de semana</div><h3>Arrivée + Soirée Monak</h3><div class="route"><b>CDG → hotel</b>, depois <b>hotel → Monak → hotel</b></div><div class="inc">Panneau nominatif, 60 min de espera no aeroporto, espera durante o jantar, volta ao sinal do hóspede.</div><div class="money"><div><b>540 €</b><span>público</span></div><div><b>486 €</b><span>parceiro</span></div><div class="keep"><b>446 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Sexta a domingo, 20h a 23h30</div><h3>Soirée Monak</h3><div class="route"><b>Hotel → Monak, 16e → hotel</b></div><div class="inc">Ida, espera até 4 h, volta. A janela em que o Monak mais recebe e mais aceita.</div><div class="money"><div><b>390 €</b><span>público</span></div><div><b>351 €</b><span>parceiro</span></div><div class="keep"><b>326 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">SIAL · 17 a 21/10 · Villepinte</div><h3>Journée salon + Soirée</h3><div class="route"><b>Hotel → Paris Nord Villepinte</b>, dia inteiro, jantar no Monak</div><div class="inc">8 h com trajetos ilimitados para o expositor, depois a Soirée.</div><div class="money"><div><b>1.140 €</b><span>público</span></div><div><b>1.026 €</b><span>parceiro</span></div><div class="keep"><b>971 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Art Basel Paris · 23 a 25/10 · Grand Palais</div><h3>Art Basel VIP</h3><div class="route"><b>Grand Palais e galerias</b>, depois <b>Monak</b></div><div class="inc">4 h à disposição no circuito das galerias + Soirée com mesa.</div><div class="money"><div><b>790 €</b><span>público</span></div><div><b>711 €</b><span>parceiro</span></div><div class="keep"><b>666 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Rolex Paris Masters · 31/10 a 8/11</div><h3>Soirée Arena</h3><div class="route"><b>Hotel → Paris La Défense Arena → hotel</b></div><div class="inc">Sessão da noite: ida, espera até 4 h, volta. Hora extra a 85 € se o jogo se alongar.</div><div class="money"><div><b>390 €</b><span>público</span></div><div><b>351 €</b><span>parceiro</span></div><div class="keep"><b>326 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Equip'Hotel · 2 a 5/11 · Porte de Versailles</div><h3>Navette salon</h3><div class="route"><b>Hotel ⇄ Paris Expo Porte de Versailles</b></div><div class="inc">Meio dia, ida e volta com espera. Para expositores e compradores de hotelaria.</div><div class="money"><div><b>400 €</b><span>público</span></div><div><b>360 €</b><span>parceiro</span></div><div class="keep"><b>340 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Qualquer feira de 3 dias</div><h3>Semaine congrès</h3><div class="route"><b>Mesmo motorista, mesmo carro, 3 dias</b></div><div class="inc">3 dias de 8 h para uma DMC ou delegação de até 6 pessoas.</div><div class="money"><div><b>2.250 €</b><span>público</span></div><div><b>2.025 €</b><span>parceiro</span></div><div class="keep"><b>1.935 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Paris Photo · 12 a 15/11 · Grand Palais</div><h3>Paris Photo + L'Initial</h3><div class="route"><b>Grand Palais</b>, depois <b>L'Initial, 5e</b>, estrela Michelin</div><div class="inc">4 h à disposição + Soirée. Mesa pedida por e-mail até a casa entrar no WhatsApp.</div><div class="money"><div><b>790 €</b><span>público</span></div><div><b>711 €</b><span>parceiro</span></div><div class="keep"><b>666 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Qualquer dia · cliente do Golfo ou dos EUA</div><h3>Journée shopping</h3><div class="route"><b>Avenue Montaigne, Faubourg Saint-Honoré</b></div><div class="inc">4 h com o carro à porta e compras a bordo. Seis lugares, seis malas.</div><div class="money"><div><b>400 €</b><span>público</span></div><div><b>360 €</b><span>parceiro</span></div><div class="keep"><b>340 €</b><span>fica na TWK</span></div></div></div>
+    <div class="pack"><div class="when">Todo mês · hotel boutique</div><h3>Compte mensuel hôtel</h3><div class="route"><b>4 transfers + 2 Soirées</b> por mês</div><div class="inc">Uma fatura no fim do mês. O concierge pede tudo à Aria.</div><div class="money"><div><b>1.380 €</b><span>público</span></div><div><b>1.242 €</b><span>parceiro</span></div><div class="keep"><b>1.132 €</b><span>fica na TWK</span></div></div></div>
+  </div>
+
+  <h2>Quando algo não confirma</h2>
+  <div class="wrap"><table>
+    <tr><th>Situação</th><th>O que a Aria faz</th><th>O que o hotel lê</th></tr>
+    <tr><td>Monak recusa ou propõe outro horário</td><td>Mantém o Julien reservado e oferece o novo horário ou a próxima casa da carteira</td><td>"Le Monak propose 21h30. Je peux aussi demander Miss Kô à 20h30."</td></tr>
+    <tr><td>Restaurante não responde</td><td>Não promete prazo. Sem resposta em 45 min (pedido do dia) ou 6 h (pedido antecipado), oferece outra casa</td><td>"Je vous propose une autre adresse pour assurer la soirée."</td></tr>
+    <tr><td>Julien indisponível</td><td>Propõe o horário livre mais próximo. Segundo motorista só depois da declaração de central de reserva</td><td>"Julien est disponible à partir de 21h. Souhaitez-vous ce créneau ?"</td></tr>
+    <tr><td>Pedido fora da tabela</td><td>Envia ao Julien com "Ajuster le prix"; acima do limite que você fixar, pede o seu ok</td><td>Recebe o valor fechado na proposta, como em qualquer pacote</td></tr>
+    <tr><td>Hotel pede desconto</td><td>Mantém a tabela. Exceção só com o fundador</td><td>"Nos tarifs partenaires sont fixes."</td></tr>
+  </table></div>
+
+  <h2>Quanto entra por mês</h2>
+  <p>Contribuição mensal depois dos custos do carro, em tarifa de parceiro. Conta de hotel = 4 transfers + 2 Soirées, 1.132 €. Dia de evento = 645 €. A linha marca o custo fixo de hoje, Julien e Tesla.</p>
+  <div class="bars" role="img" aria-label="Três cenários contra custo fixo de 5.300 euros: 3.554, 5.818 e 15.506 euros">
+    <div class="bar"><div class="l"><span>Arranque · 2 contas + 2 dias de evento</span><b>3.554 €</b></div><div class="track"><div class="fill pale" style="width:22.2%"></div><div class="fixed"></div></div></div>
+    <div class="bar"><div class="l"><span>Equilíbrio · 4 contas + 2 dias de evento</span><b>5.818 €</b></div><div class="track"><div class="fill" style="width:36.4%"></div><div class="fixed"></div></div></div>
+    <div class="bar"><div class="l"><span>Carro cheio · 8 contas + 10 dias de evento</span><b>15.506 €</b></div><div class="track"><div class="fill" style="width:96.9%"></div><div class="fixed"></div></div></div>
+  </div>
+  <p class="small" style="margin-top:10px">Escala até 16.000 €. No cenário cheio sobram cerca de 10.200 € acima do fixo, com 58 serviços no mês. É o limite de um carro e de um motorista dentro da jornada legal; acima disso entra um segundo motorista.</p>
+
+  <h2>O que já existe e o que falta</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>Já existe, verificado</h3>
+      <ul>
+        <li><span>Aria no WhatsApp, respondendo no idioma de quem escreve<em>Porta de saída barra promessa de mesa e prazo que não controlamos</em></span></li>
+        <li><span>Pedido ao restaurante por WhatsApp com botões<em>Modelo aprovado pela Meta. Primeira entrega confirmada em 06/10, aceita 6 min depois da leitura</em></span></li>
+        <li><span>Monak com WhatsApp ativo<em>80% de aceite em 12 meses</em></span></li>
+        <li><span>Alerta no celular do fundador<em>Para as exceções</em></span></li>
+        <li><span>Julien, Tesla Model X, tabela de preços, cartão e e-mail B2B</span></li>
+      </ul>
+    </div>
+    <div class="col todo">
+      <h3>Falta construir</h3>
+      <ul>
+        <li><span>Ensinar o fluxo à Aria: tabela, carteira de casas, Julien<em>Dias</em></span></li>
+        <li><span>Filtro de primeiro contato aceitar pedido de carro<em>Horas. Hoje ele descreve a TWK só como restaurantes</em></span></li>
+        <li><span>Aviso ao Julien com botões<em>Modelo novo, aprovação da Meta em dias</em></span></li>
+        <li><span>Aria criar o pedido de mesa na plataforma<em>Dev do site. Até lá, o fundador cria em 1 minuto quando a Aria avisar</em></span></li>
+        <li><span>Agenda do carro, contas de hotel e registro de serviços<em>Três tabelas, com a sua aprovação</em></span></li>
+        <li><span>30 conversas de teste e uma semana com 2 ou 3 hotéis reais<em>Antes de abrir para todos</em></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ask">
+    <div class="eyebrow">Quatro decisões para começar</div>
+    <ol>
+      <li>O número do cartão e do e-mail fica com a Aria. O Julien recebe as corridas no número pessoal dele.</li>
+      <li>Cancelamento: gratuito até 24 h antes, 50% entre 24 h e 6 h, 100% abaixo de 6 h ou no-show.</li>
+      <li>Tarifa de parceiro automática para quem se identifica como hotel, villa ou agência, com a lista diária para você revisar.</li>
+      <li>Limite para o Julien ajustar preço fora da tabela sem o seu ok. Proposta: até 200 €.</li>
+    </ol>
+  </div>
+
+  <p class="meta">Dados reais: carteira de restaurantes e pedidos lidos no banco da plataforma por papel somente leitura em 10/10/2026; canal de WhatsApp das casas medido em 05 e 07/10; preços de mercado pesquisados em 08/10. Tabela de preços e custos do carro conforme o plano de 09/10. Preparado para The World Keys SAS.</p>
+</main>
+
+<nav aria-label="Idioma" style="position:fixed;top:10px;right:12px;z-index:9;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(27,24,18,.88);color:#EFE9DC;font:12px/1 'IBM Plex Mono',ui-monospace,Consolas,monospace;letter-spacing:.06em;backdrop-filter:blur(4px)"><a href="/" style="color:#EFE9DC;text-decoration:none;opacity:.8">Biblioteca</a><span style="opacity:.45">|</span><a href="/planos/balcao-aria-paris.html" style="color:#CE9E3C;text-decoration:none;font-weight:600" aria-current="true">PT</a><span style="opacity:.45">·</span><a href="/fr/planos/balcao-aria-paris.html" style="color:#EFE9DC;text-decoration:none;font-weight:400">FR</a></nav>

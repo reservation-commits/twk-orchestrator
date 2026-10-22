@@ -25,15 +25,11 @@ function pg() {
   catch { return require('pg'); }
 }
 
+// A1 (2026-10-22): conexão com nova tentativa (0 s, 60 s, 180 s) pela biblioteca comum — em 19 e 20/10 a
+// tarefa morreu em "timeout expired" ao ligar o notebook antes do Wi-Fi. A conferência read-only continua.
+const { comClienteRo } = require('../_lib/conectar');
 async function comCliente(fn) {
-  const { Client } = pg();
-  const c = new Client({ connectionString: urlRo(), ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 15000, statement_timeout: 50000 });
-  await c.connect();
-  try {
-    const who = await c.query("select current_user u, current_setting('default_transaction_read_only') ro");
-    if (who.rows[0].ro !== 'on') throw new Error(`sessão não é read-only (user=${who.rows[0].u}) — abortando por segurança`);
-    return await fn(c);
-  } finally { await c.end(); }
+  return comClienteRo(fn, { log: (m) => console.error(`[guardiao/db] ${m}`) });
 }
 
 /** Pendências vivas + dados mínimos da casa (sem PII de cliente). */

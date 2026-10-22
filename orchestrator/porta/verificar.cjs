@@ -4,6 +4,7 @@
  *
  *   node orchestrator/porta/verificar.cjs            # tudo (≈ 3–5 min)
  *   node orchestrator/porta/verificar.cjs --rapido   # sem a suíte dos hooks (PowerShell, ~35 s)
+ *   node orchestrator/porta/verificar.cjs --diario   # pula Quill/Atlas se não mudaram desde a última porta verde (plano D)
  *   node orchestrator/porta/verificar.cjs --so aria  # só um agente (aria | clavis | atlas | quill | dba | hooks | evals)
  *
  * Por que existe (22/09/2026): cada agente tinha typecheck, testes e evals — 760 checagens
@@ -23,12 +24,16 @@ const RAIZ = path.resolve(__dirname, "..", "..");
 const args = process.argv.slice(2);
 const rapido = args.includes("--rapido");
 const so = args.includes("--so") ? args[args.indexOf("--so") + 1] : null;
+// Plano D (2026-10-22): --diario pula as etapas CONGELÁVEIS (Quill, Atlas — sem commit desde 24/09) quando o
+// repositório delas não mudou desde a última porta verde. Rodar 32 k linhas paradas a cada porta custa 5 min
+// e atenção; o modo completo (sem --diario) continua sendo o da semana e o de antes de qualquer push.
+const diario = args.includes("--diario");
 
 const ETAPAS = [
   { chave: "aria", nome: "Aria — typecheck + testes", dir: "Agente de Suporte e Concierge", cmds: ["npx tsc --noEmit", "npm test"] },
   { chave: "clavis", nome: "CLAVIS — typecheck + testes", dir: "Agente Comercial/service", cmds: ["npx tsc --noEmit", "npm test"] },
-  { chave: "atlas", nome: "Atlas — typecheck + testes", dir: "Agente Financeiro", cmds: ["npx tsc --noEmit", "npx vitest run"] },
-  { chave: "quill", nome: "Quill — testes (shared + jobs)", dir: "Agente Editorial", cmds: ["npm test"] },
+  { chave: "atlas", nome: "Atlas — typecheck + testes", dir: "Agente Financeiro", cmds: ["npx tsc --noEmit", "npx vitest run"], congelavel: true },
+  { chave: "quill", nome: "Quill — testes (shared + jobs)", dir: "Agente Editorial", cmds: ["npm test"], congelavel: true },
   { chave: "dba", nome: "TWK DB Architect — testes", dir: "Agente Gerenciador do Banco de Dados/twk-db-agent", cmds: ["npm test"] },
   { chave: "regencia", nome: "Regência — testes do Despacho (pull, alerta, dívidas)", dir: "orchestrator/command-center", cmds: ["node --test regencia/test/despacho.test.js"] },
   { chave: "evals", nome: "Orquestrador — evals (10 suítes)", dir: ".", cmds: ["node orchestrator/evals/run.js"] },
@@ -52,7 +57,20 @@ function contar(saida) {
   return null;
 }
 
-const selecionadas = ETAPAS.filter((e) => (!so || e.chave === so) && !(rapido && e.lento));
+// Congelado = congelável, em --diario, e sem commit nem mudança local desde a última porta verde.
+function mudouDesde(dir, iso) {
+  try {
+    const log = spawnSync("git", ["log", "-1", "--format=%cI"], { cwd: dir, encoding: "utf8" });
+    const st = spawnSync("git", ["status", "--porcelain"], { cwd: dir, encoding: "utf8" });
+    const ultimo = (log.stdout || "").trim();
+    if (log.status !== 0 || !ultimo) return true; // sem git legível: não se assume congelado
+    return Date.parse(ultimo) > Date.parse(iso) || (st.stdout || "").trim().length > 0;
+  } catch { return true; }
+}
+const ultimaVerde = (() => { try { const j = JSON.parse(fs.readFileSync(path.join(RAIZ, "orchestrator/state/porta-qualidade.json"), "utf8")); return j.verde ? j.rodou_em : null; } catch { return null; } })();
+const congelados = diario && ultimaVerde ? ETAPAS.filter((e) => e.congelavel && !mudouDesde(path.join(RAIZ, e.dir), ultimaVerde)).map((e) => e.chave) : [];
+const selecionadas = ETAPAS.filter((e) => (!so || e.chave === so) && !(rapido && e.lento) && !congelados.includes(e.chave));
+if (congelados.length) console.log(`congeladas (sem mudança desde a última porta verde em ${ultimaVerde.slice(0, 16)}): ${congelados.join(", ")}`);
 if (selecionadas.length === 0) {
   console.error(`etapa desconhecida: ${so}. Válidas: ${ETAPAS.map((e) => e.chave).join(", ")}`);
   process.exit(2);
@@ -95,7 +113,9 @@ const estado = {
   duracao_s: Math.round((Date.now() - inicio.getTime()) / 1000),
   verde,
   completa: !so,
+  modo: so ? "so" : diario ? "diario" : rapido ? "rapido" : "completa",
   puladas,
+  congeladas: congelados,
   checagens_ok: totalOk,
   etapas: resultados.map(({ chave, ok, ms, passaram }) => ({ chave, ok, s: Math.round(ms / 1000), passaram })),
 };

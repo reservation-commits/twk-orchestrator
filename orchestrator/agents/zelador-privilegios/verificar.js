@@ -29,7 +29,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const RAIZ = path.resolve(__dirname, '..', '..', '..');
-const STATE = path.join(__dirname, 'state');
+// A1 (2026-10-22): na Central hospedada o relato vai para o volume (TWK_STATE_ROOT/agents/zelador-privilegios).
+// Os .env locais dos agentes não existem lá: a checagem 1 fica "ausente" (não é achado), e o servidor é lido igual.
+const HOSPEDADO = process.env.TWK_STATE_ROOT ? path.resolve(process.env.TWK_STATE_ROOT) : null;
+const STATE = HOSPEDADO ? path.join(HOSPEDADO, 'agents', 'zelador-privilegios') : path.join(__dirname, 'state');
+const { conectarRo } = require('../_lib/conectar');
 const hoje = () => new Date().toISOString().slice(0, 10);
 
 // ── quem usa qual credencial, localmente (só o usuário da URL, nunca a senha) ──
@@ -63,12 +67,7 @@ const SOMENTE_LEITURA = ['twk_ro', 'atlas_agent_ro', 'clavis_ro'];
 const TABELAS_ATLAS = ['audit_log', 'fx_rates', 'ledger_entries', 'stripe_balance_transactions', 'stripe_charges', 'stripe_customers',
   'stripe_disputes', 'stripe_events', 'stripe_invoices', 'stripe_payouts', 'stripe_refunds', 'stripe_subscription_items', 'stripe_subscriptions', 'sync_outbox'];
 
-function urlRo() {
-  const f = process.env.TWK_RO_ENV || path.join(RAIZ, 'Agente Gerenciador do Banco de Dados', 'twk-db-agent', '.env.readonly.local');
-  const l = fs.readFileSync(f, 'utf8').split(/\r?\n/).find((x) => x.startsWith('DATABASE_URL_RO='));
-  if (!l) throw new Error('DATABASE_URL_RO ausente em ' + f);
-  return l.slice('DATABASE_URL_RO='.length).trim().replace(/^["']|["']$/g, '');
-}
+// Credencial e biblioteca pg: resolvidas pela biblioteca comum (DATABASE_URL_RO no ambiente vence).
 
 async function main() {
   const achados = [];
@@ -84,9 +83,8 @@ async function main() {
   }
 
   // 2–6. servidor
-  const { Client } = (() => { for (const p of [["Agente Gerenciador do Banco de Dados","twk-db-agent","node_modules","pg"],["Agente de Suporte e Concierge","node_modules","pg"],["Agente Comercial","service","node_modules","pg"],["orchestrator","command-center","node_modules","pg"]]) { try { return require(path.join(RAIZ, ...p)); } catch {} } throw new Error("biblioteca pg não encontrada em nenhum agente — rode npm install na Aria"); })();
-  const c = new Client({ connectionString: urlRo(), ssl: { rejectUnauthorized: false } });
-  await c.connect();
+  // A1 (2026-10-22): conexão com nova tentativa e conferência read-only pela biblioteca comum.
+  const c = await conectarRo({ log: (m) => console.error(`[zelador/db] ${m}`) });
   const ro = await c.query('show default_transaction_read_only');
   if (String(ro.rows[0].default_transaction_read_only) !== 'on') { await c.end(); throw new Error('a sessão do zelador NÃO é read-only — abortado (a credencial não é twk_ro?)'); }
 

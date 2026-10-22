@@ -1,0 +1,44 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-15T15:00:00Z"
+  },
+  "lists": "css",
+  "title": "OUI en un message — comment nous amenons les restaurants au nouveau format",
+  "order": [
+    "cover",
+    "frase",
+    "historia",
+    "mensagem",
+    "cartao",
+    "quem",
+    "convive",
+    "comecar"
+  ],
+  "sections": {
+    "s1": {
+      "description": "L’idée en une phrase et l’histoire d’un restaurant, de l’appel au rapport du mois.",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Le message que le restaurant reçoit, qui nous appelons en premier et pourquoi rien de ce qui fonctionne déjà ne change.",
+      "start": "mensagem"
+    },
+    "s3": {
+      "description": "Ce dont nous avons besoin pour commencer.",
+      "start": "comecar"
+    }
+  },
+  "faces": {
+    "cormorant-garamond": {
+      "family": "Cormorant Garamond",
+      "href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+    },
+    "jost": {
+      "family": "Jost",
+      "href": "https://fonts.googleapis.com/css2?family=Jost:wght@300..600&display=swap"
+    }
+  },
+  "designSystems": []
+}

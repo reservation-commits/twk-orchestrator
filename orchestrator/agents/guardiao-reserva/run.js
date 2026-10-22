@@ -20,10 +20,14 @@ const db = require('./db');
 const registro = require('../registro-optout/registro');
 
 const RAIZ = path.resolve(__dirname, '..', '..', '..');
-const STATE = path.join(__dirname, 'state');
-const ORCH_STATE = path.join(RAIZ, 'orchestrator', 'state');
-const CENTRAL_STATE = path.join(RAIZ, 'orchestrator', 'command-center', 'state');
-const LOGS = path.join(RAIZ, 'orchestrator', 'logs');
+// A1 (2026-10-22): na Central hospedada, TWK_STATE_ROOT aponta para o volume (/app/state) e TUDO que o
+// Guardião grava (estado, lote, aprovações, audit) vai para lá — a imagem do container é descartável.
+// Sem a variável, os caminhos são os do repositório, como sempre.
+const HOSPEDADO = process.env.TWK_STATE_ROOT ? path.resolve(process.env.TWK_STATE_ROOT) : null;
+const STATE = HOSPEDADO ? path.join(HOSPEDADO, 'agents', 'guardiao-reserva') : path.join(__dirname, 'state');
+const ORCH_STATE = HOSPEDADO || path.join(RAIZ, 'orchestrator', 'state');
+const CENTRAL_STATE = HOSPEDADO || path.join(RAIZ, 'orchestrator', 'command-center', 'state');
+const LOGS = HOSPEDADO ? path.join(HOSPEDADO, 'logs') : path.join(RAIZ, 'orchestrator', 'logs');
 // Credencial do canal de envio: mesma do MAESTRO (n8n maestro-email). Carrega de
 // ~/.twk/regencia.env como os demais agentes — antes só olhava process.env com outro
 // nome, o que obrigava a passar o token na linha de comando para rodar o lote.

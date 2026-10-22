@@ -1,4 +1,5 @@
 {
   "_doc": "Reparos que o orquestrador pode executar SOZINHO quando a Sentinela de Silêncio acusar. true = aprovado pelo fundador (uma vez, vale sempre). Tudo nasce false.",
-  "rerodar_tarefa_agendada": false
+  "_aprovacao": "fundador, chat 2026-10-22: 'vamos executar todas as suas poderosas recomendações' (plano docs/auditoria/avaliacao-eficiencia-2026-10-21.md, item B5)",
+  "rerodar_tarefa_agendada": true
 }

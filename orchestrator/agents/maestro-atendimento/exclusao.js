@@ -283,6 +283,7 @@ function sqlDespublicar(d, motivoTexto) {
 -- Autoridade: ADR-016 (delegação do fundador em 2026-09-11) · trace ${trace}
 -- Sem DELETE: nenhuma linha some. published=false tira a casa das listagens,
 -- do_not_relist e ready_pending_photo impedem que qualquer rotina a republique.
+-- backup: public.db_restaurants where restaurant_id = '${id}'
 begin;
 update public.db_restaurants
    set published = false,

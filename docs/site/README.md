@@ -43,6 +43,13 @@ Títulos e descrições do índice em francês vêm de `documentos.json` (`titul
 
 `node docs/site/montar.js` → subir o zip novo no serviço → **Redeploy**. O `build` em `/health` e no rodapé do índice muda; se não mudou, o deploy não pegou.
 
+## Arquivados
+
+`"arquivado": true` num documento do `documentos.json` tira-o da página inicial e o coloca em `/arquivo/` (e `/fr/arquivo/`),
+com os mesmos cartões e grupos. O endereço do documento não muda (`/planos/<slug>.html`). A página inicial mostra só o que
+vale hoje e um link "Ver os arquivados" com a contagem. Regra: na inicial ficam os documentos otimizados ou criados na
+rodada mais recente; o resto arquiva, nunca se apaga.
+
 ## Regras
 
 - Documento listado em `documentos.json` que não existe derruba a montagem (falhar alto).

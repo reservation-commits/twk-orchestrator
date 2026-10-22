@@ -30,7 +30,12 @@ async function fichaNoAr(slug) {
   } catch (e) { return { status: null, erro: e.message }; } finally { clearTimeout(t); }
 }
 const ORCH = path.join(REPO, 'orchestrator');
-const localDisponivel = () => fs.existsSync(path.join(ORCH, 'state'));
+// Rotinas hospedadas (A1, 2026-10-22): dentro da Central, os agentes vivem em TWK_AGENTS_DIR (/app/agents) e o
+// estado deles no volume (TWK_STATE_ROOT/agents/<agente>). Sem as variáveis, tudo é o repositório, como antes.
+const HOSP = process.env.TWK_STATE_ROOT ? path.resolve(process.env.TWK_STATE_ROOT) : null;
+const AGENTS_DIR = process.env.TWK_AGENTS_DIR ? path.resolve(process.env.TWK_AGENTS_DIR) : path.join(ORCH, 'agents');
+const estadoAgente = (agente) => (HOSP ? path.join(HOSP, 'agents', agente) : path.join(ORCH, 'agents', agente, 'state'));
+const localDisponivel = () => fs.existsSync(path.join(ORCH, 'state')) || (!!HOSP && fs.existsSync(path.join(HOSP, 'agents')));
 const hoje = () => new Date().toISOString().slice(0, 10);
 const lerJsonl = (f) => { try { return fs.readFileSync(f, 'utf8').split(/\r?\n/).filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; } };
 const lerJson = (f) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return null; } };
@@ -141,8 +146,8 @@ async function dba(ctx) {
 function guardiao(ctx) {
   const r = base('guardiao-reserva', ctx.trace);
   if (!localDisponivel()) { r.status = 'sem_fonte'; r.cobertura.lacunas.push('estado do Guardião não está nesta máquina (só via push-state)'); return r; }
-  const dir = path.join(ORCH, 'agents', 'guardiao-reserva');
-  const st = path.join(dir, 'state');
+  const dir = path.join(AGENTS_DIR, 'guardiao-reserva');
+  const st = estadoAgente('guardiao-reserva');
   if (fs.existsSync(path.join(st, 'PAUSADO'))) { r.status = 'parcial'; r.achados.push(achado({ chave: 'guardiao.pausado', severidade: 'alta', titulo: 'O acompanhamento de reservas está pausado', evidencia: lerJson(path.join(st, 'PAUSADO'))?.motivo || '', acao_proposta: 'me diga `pode retomar` para religar', dono: 'você' })); }
   let prop = lerJson(path.join(st, `propostas-${hoje()}.json`));
   if (!prop && !ctx.semExecutar) {
@@ -166,7 +171,7 @@ function guardiao(ctx) {
 async function registroOptout(ctx) {
   const r = base('registro-optout', ctx.trace);
   let reg;
-  try { reg = await require(path.join(ORCH, 'agents', 'registro-optout', 'registro.js')).carregarAuto(); }
+  try { reg = await require(path.join(AGENTS_DIR, 'registro-optout', 'registro.js')).carregarAuto(); }
   catch (e) { r.status = 'sem_fonte'; r.cobertura.lacunas.push(e.message); r.achados.push(achado({ chave: 'optout.registro_ausente', severidade: 'critica', titulo: 'A lista de quem pediu remoção está inacessível — por segurança, nenhum contato a restaurante vai sair', evidencia: e.message, acao_proposta: 'restaurar acesso ao banco ou ao arquivo interino', dono: 'MAESTRO' })); return r; }
   r.cobertura.fontes.push(`registro de opt-out — ${reg.fonte}`);
   if (/arquivo interino/.test(reg.fonte)) r.achados.push(achado({ chave: 'optout.fonte_degradada', severidade: 'alta', titulo: 'A lista de quem pediu remoção foi lida de uma cópia, não da fonte principal', evidencia: reg.fonte, acao_proposta: 'restaurar leitura de public.v_listing_consent_atual', dono: 'catálogo', autonomia: 'requer_aprovacao_orquestrador' }));

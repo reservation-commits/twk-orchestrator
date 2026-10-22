@@ -21,8 +21,16 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const RAIZ = path.resolve(__dirname, '..', '..', '..');
-const STATE = path.join(__dirname, 'state');
+// A1 (2026-10-22): na Central hospedada, TWK_STATE_ROOT (= volume /app/state) substitui o repositório como
+// raiz dos arquivos diários: "orchestrator/logs/tarefas/x.log" vira "<volume>/logs/tarefas/x.log" e
+// "orchestrator/agents/<a>/state/x" vira "<volume>/agents/<a>/x". O relato também vai para o volume.
+const HOSPEDADO = process.env.TWK_STATE_ROOT ? path.resolve(process.env.TWK_STATE_ROOT) : null;
+const STATE = HOSPEDADO ? path.join(HOSPEDADO, 'agents', 'sentinela-silencio') : path.join(__dirname, 'state');
 const CAD = JSON.parse(fs.readFileSync(path.join(__dirname, 'cadencias.json'), 'utf8')).fontes;
+const { conectarRo } = require('../_lib/conectar');
+function caminhoHospedado(rel) {
+  return path.join(HOSPEDADO, rel.replace(/^orchestrator\/agents\/([^/]+)\/state\//, 'agents/$1/').replace(/^orchestrator\//, ''));
+}
 const H = 3_600_000;
 const agora = new Date();
 const hoje = () => agora.toISOString().slice(0, 10);
@@ -36,18 +44,14 @@ function fmt(d, padrao) {
 function ultimoArquivo(padrao) {
   for (let i = 0; i < 60; i++) {
     const d = new Date(agora.getTime() - i * 24 * H);
-    const f = path.join(RAIZ, fmt(d, padrao));
-    if (fs.existsSync(f)) { const st = fs.statSync(f); return { quando: st.mtime, arquivo: path.relative(RAIZ, f), diasAtras: i }; }
+    const rel = fmt(d, padrao);
+    const f = HOSPEDADO ? caminhoHospedado(rel) : path.join(RAIZ, rel);
+    if (fs.existsSync(f)) { const st = fs.statSync(f); return { quando: st.mtime, arquivo: HOSPEDADO ? path.relative(HOSPEDADO, f) : path.relative(RAIZ, f), diasAtras: i }; }
   }
   return null;
 }
 
-function urlRo() {
-  const f = process.env.TWK_RO_ENV || path.join(RAIZ, 'Agente Gerenciador do Banco de Dados', 'twk-db-agent', '.env.readonly.local');
-  const l = fs.readFileSync(f, 'utf8').split(/\r?\n/).find((x) => x.startsWith('DATABASE_URL_RO='));
-  if (!l) throw new Error('DATABASE_URL_RO ausente em ' + f);
-  return l.slice('DATABASE_URL_RO='.length).trim().replace(/^["']|["']$/g, '');
-}
+// Credencial e biblioteca pg: resolvidas pela biblioteca comum (DATABASE_URL_RO no ambiente vence).
 
 async function main() {
   const achados = [];
@@ -92,9 +96,8 @@ async function main() {
   }
 
   // ── banco ──
-  const { Client } = (() => { for (const p of [["Agente Gerenciador do Banco de Dados","twk-db-agent","node_modules","pg"],["Agente de Suporte e Concierge","node_modules","pg"],["Agente Comercial","service","node_modules","pg"],["orchestrator","command-center","node_modules","pg"]]) { try { return require(path.join(RAIZ, ...p)); } catch {} } throw new Error("biblioteca pg não encontrada em nenhum agente — rode npm install na Aria"); })();
-  const c = new Client({ connectionString: urlRo(), ssl: { rejectUnauthorized: false } });
-  await c.connect();
+  // A1: conexão com nova tentativa e conferência read-only pela biblioteca comum.
+  const c = await conectarRo({ log: (m) => console.error(`[sentinela/db] ${m}`) });
   const ro = await c.query('show default_transaction_read_only');
   if (String(ro.rows[0].default_transaction_read_only) !== 'on') { await c.end(); throw new Error('sessão NÃO é read-only — abortado'); }
   for (const f of CAD.filter((x) => x.tipo === 'sql_max_ts' || x.tipo === 'sql_idade_ts' || x.tipo === 'sql_bool')) {
@@ -141,7 +144,7 @@ async function main() {
 
   // ── compromissos com data vencida (ADR-015: promessa ao cliente é compromisso) ──
   try {
-    const linhas = fs.readFileSync(path.join(RAIZ, 'orchestrator', 'state', 'compromissos.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean);
+    const linhas = fs.readFileSync(HOSPEDADO ? path.join(HOSPEDADO, 'compromissos.jsonl') : path.join(RAIZ, 'orchestrator', 'state', 'compromissos.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean);
     let vencidos = 0;
     for (const l of linhas) { try { const o = JSON.parse(l); const d = o.data || o.prazo || o.ate; if (d && !o.cumprido && !o.fechado && String(d).slice(0, 10) < hoje()) vencidos++; } catch {} }
     if (vencidos) achados.push({ chave: 'silencio.compromissos_vencidos', severidade: 'alta', titulo: `${vencidos} compromisso(s) com cliente vencido(s) sem fechamento`, evidencia: 'orchestrator/state/compromissos.jsonl', fonte: 'sentinela-silencio', acao_proposta: 'fechar ou renegociar cada um (Aria)', autonomia: 'requer_aprovacao_orquestrador', dono: 'suporte-concierge' });

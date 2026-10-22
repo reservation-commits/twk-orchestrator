@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>A reserva nunca mais fica no escuro — WhatsApp e Guardião da Reserva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300..600&amp;display=swap">
+<style>
+  :root{--ground:#FBFAF7;--ink:#1B1812;--muted:#6E6657;--rule:#E2DCCE;--accent:#8A6512}
+  @media (prefers-color-scheme:dark){:root{--ground:#15130F;--ink:#EFE9DC;--muted:#A39883;--rule:#2F2A21;--accent:#D9AE55}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:"Jost","Segoe UI",system-ui,sans-serif;line-height:1.5;padding:28px 16px 64px}
+  .page{max-width:1280px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;margin:0 0 20px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  header h1{font:500 26px/1.2 "Cormorant Garamond",Georgia,serif;margin:0}
+  header p{margin:0;font:12px/1.4 "IBM Plex Mono",ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  figure{margin:0 0 28px}
+  .tela{container-type:inline-size;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--rule);box-shadow:0 8px 28px rgba(0,0,0,.14);background:#141821}
+  /* Fator = largura da tela ÷ 1920 px. CSS não divide comprimentos; tan(atan2(a, b)) devolve a/b como número puro. */
+  .tela>section{width:1920px;height:1080px;position:relative;transform-origin:0 0;transform:scale(tan(atan2(100cqw, 1920px)));overflow:hidden}
+  @supports not (transform:scale(tan(atan2(1cqw, 1px)))){.tela{aspect-ratio:auto;overflow:auto}.tela>section{transform:none}}
+  /* Padrões do formato de slide: nada de margem, tamanhos explícitos vêm inline. */
+  .tela>section *{margin:0;box-sizing:border-box}
+  .tela>section h1{font-size:96px;font-weight:600;line-height:1.1}
+  .tela>section h2{font-size:64px;font-weight:600;line-height:1.15}
+  .tela>section h3{font-size:44px;font-weight:600;line-height:1.2}
+  .tela>section p{font-size:32px;line-height:1.4}
+  .tela>section ul,.tela>section ol{padding-left:1.2em}
+  .tela>section li{line-height:inherit}
+  .tela>section hr{border:0;height:0}
+  .tela>section div:not([style*="display:"]){display:flex;flex-direction:column}
+  .tela>section table{border-collapse:collapse;width:100%}
+  .tela>section th,.tela>section td{padding:.35em .6em;border-bottom:1px solid rgba(128,128,128,.35);vertical-align:top;text-align:left}
+  .tela>section tr:last-child td{border-bottom:0}
+  .tela>section b{font-weight:600}
+  figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font:12px/1.4 "IBM Plex Mono",ui-monospace,Consolas,monospace;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  details{margin-top:6px;font-size:14.5px;color:var(--ink)}
+  details summary{cursor:pointer;color:var(--accent);font-size:13px;letter-spacing:.04em}
+  details p{margin:8px 0 0;max-width:72ch;white-space:pre-wrap}
+  @media print{body{background:#fff;padding:0}.tela{box-shadow:none;border:0}figure{break-inside:avoid;page-break-inside:avoid;margin:0 0 12px}details{display:none}}
+</style>
+</head>
+<body>
+<div class="page">
+<header><h1>A reserva nunca mais fica no escuro — WhatsApp e Guardião da Reserva</h1><p>Apresentação de 2026-10-15 · 6 slides</p></header>
+<figure id="cover">
+<div class="tela"><section id="cover" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">The World Keys · Operação · 16 de outubro de 2026</p>
+<div style="display:flex;flex-direction:column;gap:28px">
+<h1 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:120px;font-weight:500;line-height:1.02;width:1500px">A reserva nunca mais fica no escuro</h1>
+<hr style="border-top:3px solid #c9a96e;width:160px">
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:48px;font-style:italic;line-height:1.25;color:#ede9df;width:1400px">O que construímos no WhatsApp e o Guardião da Reserva, contados com uma cliente de exemplo.</p>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:end">
+<p style="font-size:28px;color:#b5b1a7">6 slides · 5 minutos</p>
+<p style="font-size:24px;color:#b5b1a7">Preparado para The World Keys SAS</p>
+</div>
+</section></div>
+<figcaption><span>Slide 1 de 6</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>Abertura (15 s): « Vou contar com uma cliente de exemplo, a Anna, o que acontece hoje quando alguém pede uma mesa. Cinco minutos. »</p></details>
+</figure>
+<figure id="frase">
+<div class="tela"><section id="frase" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:40px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">A ideia inteira em uma frase</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;width:1640px">Cada pedido de mesa tem alguém cuidando dele do início ao fim. O WhatsApp avisa cliente e restaurante a cada passo. O Guardião cobra quem não respondeu.</h2>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#141821;padding:34px 36px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">Para o cliente</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1.1;color:#ede9df">Nunca mais fica sem resposta</p>
+<p style="font-size:26px;line-height:1.4;color:#ede9df">Recebe no WhatsApp, no idioma dele, cada novidade da reserva. Se o restaurante demora, ouve a verdade antes da data e ganha uma alternativa.</p>
+</div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:34px 36px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Para o restaurante</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1.1">O pedido chega no bolso, com um botão</p>
+<p style="font-size:26px;line-height:1.4;color:#3a3f4b">Nome, data, hora, pessoas e "Aceitar ou recusar". Um toque. Na véspera, a agenda do dia. Nada para instalar.</p>
+</div>
+<div style="flex:1;background:#efe9dd;border:1px solid #d9d2c3;padding:34px 36px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Para nós</p>
+<p style="font-family:'Cormorant Garamond', Georgia, serif;font-size:44px;font-weight:600;line-height:1.1">Tudo medido, nada prometido</p>
+<p style="font-size:26px;line-height:1.4;color:#3a3f4b">Sabemos quem recebeu, quem leu e quem aceitou. Nunca dizemos "confirmado" antes do sim do restaurante.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · WhatsApp e Guardião · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">2 / 6</p></div>
+</section></div>
+<figcaption><span>Slide 2 de 6</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Leia a frase e pare. Depois as três caixas: cliente, restaurante, nós. Tudo o que está aqui já existe: 90 modelos de mensagem aprovados em 6 idiomas, o botão de aceitar, a entrega rastreada, o Guardião rodando todo dia.</p></details>
+</figure>
+<figure id="historia">
+<div class="tela"><section id="historia" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:30px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Um exemplo, do pedido ao dia seguinte</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">A Anna pede uma mesa para sábado no Le Tobsil</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;border-left:3px solid #c9a96e">
+<div style="display:flex;gap:24px;padding:11px 0 11px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:150px;white-space:nowrap">Terça 10h</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:740px">A Anna pede no site. Em segundos recebe no WhatsApp: « Recebemos o seu pedido e já estamos cuidando dele. »</p></div>
+<div style="display:flex;gap:24px;padding:11px 0 11px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:150px;white-space:nowrap">Terça 10h</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:740px">O Le Tobsil recebe o pedido no celular, com nome, data, hora, pessoas e o botão <b>Aceitar ou recusar</b>.</p></div>
+<div style="display:flex;gap:24px;padding:11px 0 11px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:150px;white-space:nowrap">Terça 10h08</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:740px">O restaurante toca em Aceitar. A Anna recebe: « Mesa aceita. » Pronto.</p></div>
+<div style="display:flex;gap:24px;padding:11px 0 11px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:150px;white-space:nowrap">Sexta à noite</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:740px">A Anna recebe o lembrete da véspera com endereço e botão do mapa. O Le Tobsil recebe a agenda do sábado.</p></div>
+<div style="display:flex;gap:24px;padding:11px 0 11px 28px;border-bottom:1px solid #d9d2c3"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:150px;white-space:nowrap">Sábado 18h</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:740px">Duas horas antes, um último lembrete. Depois do jantar, « como foi? ».</p></div>
+<div style="display:flex;gap:24px;padding:11px 0 11px 28px"><p style="font-size:26px;font-weight:500;color:#7a5c2c;width:150px;white-space:nowrap">Por trás</p><p style="font-size:26px;line-height:1.4;color:#3a3f4b;width:740px">Tudo no idioma da Anna, com data por extenso. O restaurante recebe em francês. Cada mensagem sai uma vez, e só para quem disse que quer receber.</p></div>
+</div>
+<div style="width:540px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#141821;padding:28px 32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">E se o restaurante não responde?</p>
+<p style="font-size:25px;line-height:1.45;color:#ede9df"><b>24 h depois:</b> a Anna recebe « seu pedido segue conosco », com botão para procurar outra mesa ou aguardar. O Guardião cobra o restaurante por e-mail, no idioma dele.</p>
+<p style="font-size:25px;line-height:1.45;color:#ede9df"><b>48 h depois:</b> a equipe recebe o texto pronto para mandar por WhatsApp ou ligar.</p>
+<p style="font-size:25px;line-height:1.45;color:#ede9df"><b>20 h antes da mesa:</b> a Anna ouve a verdade e recebe uma alternativa que confirma.</p>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#6b6f7a">Nunca mais de dois contatos ao restaurante pela mesma reserva. Nunca "confirmado" antes do sim dele.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · WhatsApp e Guardião · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">3 / 6</p></div>
+</section></div>
+<figcaption><span>Slide 3 de 6</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>1 min 30. Conte como uma história. O caminho feliz à esquerda, hora a hora; o caminho difícil à direita, que é onde o Guardião entra: ele começa a cobrar 24 horas depois, pelo canal que a casa realmente usa, e a Anna nunca descobre no dia que não tem mesa. Anna e Le Tobsil são os exemplos usados nos modelos aprovados pela Meta.</p></details>
+</figure>
+<figure id="mensagem">
+<div class="tela"><section id="mensagem" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">A mensagem, como chega no celular</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08">Curta, organizada, sem emoji. A mesma estrutura em todas as mensagens e nos seis idiomas.</h2>
+</div>
+<div style="display:flex;gap:32px;align-items:start">
+<div style="width:620px;background:#e6e0d3;border:1px solid #d9d2c3;padding:24px 26px;display:flex;flex-direction:column;gap:8px;border-radius:18px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Para a Anna · cliente</p>
+<p style="font-size:26px;font-weight:600;line-height:1.3">Pedido recebido</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c">Olá Anna, recebemos o seu pedido e já estamos cuidando dele.</p>
+<p style="font-size:25px;line-height:1.5;color:#1f232c"><b>Restaurante:</b> Le Tobsil<br><b>Data:</b> Sábado, 3 de outubro de 2026<br><b>Horário:</b> 20:00<br><b>Pessoas:</b> 2</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c">Você não precisa fazer nada. Escrevo aqui assim que tiver novidades. Se algo mudar do seu lado, é só responder a esta mensagem.</p>
+<p style="font-size:24px;line-height:1.4;color:#6b6f7a">Responda PARAR para não receber mais avisos de reserva.</p>
+</div>
+<div style="width:620px;background:#e6e0d3;border:1px solid #d9d2c3;padding:24px 26px;display:flex;flex-direction:column;gap:8px;border-radius:18px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Para o Le Tobsil · restaurante</p>
+<p style="font-size:26px;font-weight:600;line-height:1.3">Novo pedido de reserva</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c">A The World Keys recebeu um novo pedido de mesa para o seu restaurante.</p>
+<p style="font-size:25px;line-height:1.5;color:#1f232c"><b>Restaurante:</b> Le Tobsil<br><b>Data:</b> Sábado, 3 de outubro de 2026<br><b>Horário:</b> 20:00<br><b>Pessoas:</b> 2<br><b>Cliente:</b> Anna Lee</p>
+<p style="font-size:25px;line-height:1.4;color:#1f232c">Para aceitar ou recusar, use o botão abaixo. O cliente é avisado automaticamente.</p>
+<p style="font-size:25px;font-weight:500;color:#141821;background:#f7f4ef;border:1px solid #c9a96e;padding:12px 20px;text-align:center;border-radius:10px">Aceitar ou recusar</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Em números</p>
+<p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>15 momentos</b> da reserva têm mensagem pronta: recebido, aceito, recusado, cancelado, lembretes, agenda, avaliação.</p>
+<p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>6 idiomas:</b> inglês, português, francês, espanhol, italiano, alemão. A Anna recebe no dela; o restaurante, no dele.</p>
+<p style="font-size:25px;line-height:1.4;color:#3a3f4b"><b>90 modelos</b> aprovados pelo WhatsApp.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · WhatsApp e Guardião · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">4 / 6</p></div>
+</section></div>
+<figcaption><span>Slide 4 de 6</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>45 s. Deixe as duas bolhas falarem. É o formato que o CEO aprovou em 30/09: título curto, dados um por linha, frase de ação, sem emoji. O botão do restaurante abre a página da reserva, onde ele aceita, recusa ou propõe outro horário.</p></details>
+</figure>
+<figure id="mapa">
+<div class="tela"><section id="mapa" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Os modelos aprovados · o mapa completo</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:64px;font-weight:500;line-height:1.08">Quinze momentos com mensagem pronta, em seis idiomas: 90 modelos aprovados pelo WhatsApp</h2>
+</div>
+<div style="display:flex;gap:24px;align-items:start">
+<table style="width:1010px;font-size:23px;border:1px solid #d9d2c3">
+<tr style="background:#141821"><th style="width:33%;color:#f7f4ef;font-weight:500;text-align:left;padding:9px 14px">Para o cliente · 10 mensagens</th><th style="width:27%;color:#f7f4ef;font-weight:500;text-align:left">Quando</th><th style="width:40%;color:#f7f4ef;font-weight:500;text-align:left">O que diz</th></tr>
+<tr><td style="font-weight:500">Pedido recebido</td><td>na hora</td><td>« Recebemos o seu pedido e já estamos cuidando dele »</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Seu pedido segue conosco</td><td>24 h depois, sem resposta</td><td>botões: procurar outra mesa · prefiro aguardar</td></tr>
+<tr><td style="font-weight:500">Ainda sem resposta</td><td>20 h antes da mesa</td><td>aviso honesto, botão para procurar outra mesa</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Mesa aceita</td><td>quando a casa aceita</td><td>restaurante, data, hora, pessoas</td></tr>
+<tr><td style="font-weight:500">Mesa recusada</td><td>quando a casa recusa</td><td>recusa com oferta de ajuda</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Cancelamento</td><td>quando a reserva cai</td><td>aviso do cancelamento</td></tr>
+<tr><td style="font-weight:500">Véspera</td><td>na véspera</td><td>data por extenso, hora, pessoas</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Véspera com mapa</td><td>na véspera, com endereço</td><td>endereço e botão do Google Maps</td></tr>
+<tr><td style="font-weight:500">Lembrete</td><td>2 h antes, no fuso da casa</td><td>« até já » com restaurante e hora</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Como foi?</td><td>6 h depois do jantar</td><td>convite para avaliar</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<table style="width:630px;font-size:23px;border:1px solid #d9d2c3">
+<tr style="background:#141821"><th style="width:48%;color:#f7f4ef;font-weight:500;text-align:left;padding:9px 14px">Para o restaurante · 5</th><th style="width:52%;color:#f7f4ef;font-weight:500;text-align:left">Quando</th></tr>
+<tr><td style="font-weight:500">Novo pedido, com botão</td><td>na hora</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Lembrete do pedido</td><td>24 h depois, sem resposta</td></tr>
+<tr><td style="font-weight:500">O cliente cancelou</td><td>na hora</td></tr>
+<tr style="background:#efe9dd"><td style="font-weight:500">Véspera</td><td>uma mesa no dia</td></tr>
+<tr><td style="font-weight:500">Agenda do dia</td><td>duas ou mais mesas no dia</td></tr>
+</table>
+<div style="background:#141821;padding:22px 26px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">O trabalho por trás</p>
+<p style="font-size:23px;line-height:1.45;color:#ede9df">15 mensagens × 6 idiomas = 90 modelos escritos, enviados à Meta e aprovados, um a um. Reescritos em formato de ficha e reaprovados. Data por extenso em cada idioma. Botões de ação. Rodapé de saída em todos. Mais um modelo de alerta para o seu celular, se a Aria parar.</p>
+</div>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#6b6f7a">The World Keys · WhatsApp e Guardião · 16 de outubro de 2026</p><p style="font-size:24px;color:#6b6f7a">5 / 6</p></div>
+</section></div>
+<figcaption><span>Slide 5 de 6</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>1 min. Não leia linha a linha: diga « dez mensagens para o cliente, cinco para o restaurante, cada uma com hora certa, em seis idiomas ». Depois aponte duas que importam: as duas de espera (24 h depois e 20 h antes), que são o que impede o cliente de ficar no escuro, e a agenda do dia para a casa. A caixa &quot;o trabalho por trás&quot; é para o CEO entender o volume: cada modelo foi submetido e aprovado individualmente pela Meta, e um modelo aprovado só aceita uma edição por dia, por isso o formato de ficha foi uma segunda rodada inteira. Idiomas: inglês, português, francês, espanhol, italiano, alemão.</p></details>
+</figure>
+<figure id="prova">
+<div class="tela"><section id="prova" data-transition="fade" style="background:#141821;color:#ede9df;font-family:'Jost', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:34px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#c9a96e;font-weight:500">Já aconteceu de verdade</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:68px;font-weight:500;line-height:1.08;color:#ede9df">Um restaurante aceitou em seis minutos. O Guardião cuidou de 62 pedidos numa manhã.</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:30px 34px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">6 de outubro · La Route du Miam, França</p>
+<p style="font-size:26px;line-height:1.45;color:#ede9df"><b>07h37</b> o pedido entra no site.<br><b>2 segundos depois</b> a mensagem chega ao restaurante.<br><b>08h45</b> o restaurante lê.<br><b>08h51</b> aceita. Seis minutos depois de ler.</p>
+<p style="font-size:24px;line-height:1.4;color:#b5b1a7">Antes, o pedido ia por e-mail e esperava alguém abrir a caixa.</p>
+</div>
+<div style="flex:1;background:#1c2130;border:1px solid #2a3040;padding:30px 34px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#e4c990;font-weight:500">14 de outubro · uma manhã do Guardião</p>
+<p style="font-size:26px;line-height:1.45;color:#ede9df"><b>62</b> pedidos esperando resposta, lidos.<br><b>37</b> e-mails de cobrança preparados, para 32 restaurantes, em 5 idiomas.<br><b>17</b> mensagens de WhatsApp prontas para a equipe, as mais urgentes primeiro.<br><b>5</b> avisos a clientes.</p>
+<p style="font-size:24px;line-height:1.4;color:#b5b1a7">Hoje ele propõe; envia quando você aprovar o primeiro lote.</p>
+</div>
+</div>
+<div style="background:#efe9dd;padding:24px 32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500">O que protege a marca, em cinco regras</p>
+<p style="font-size:26px;line-height:1.45;color:#1f232c">Só recebe quem disse que quer receber. Número duvidoso nunca recebe. PARAR desliga na hora. No máximo 50 mensagens por dia. Nunca prometemos mesa, prazo ou confirmação antes do sim do restaurante.</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#b5b1a7">The World Keys · WhatsApp e Guardião · 16 de outubro de 2026</p><p style="font-size:24px;color:#b5b1a7">6 / 6</p></div>
+</section></div>
+<figcaption><span>Slide 6 de 6</span><span>The World Keys</span></figcaption>
+<details><summary>Notas do apresentador</summary><p>1 min. Dois fatos, não promessas: a primeira entrega confirmada com aceite (pedido GPG32S3S) e a varredura real do Guardião de 14/10. As cinco regras resumem as travas técnicas (consentimento, validação de telefone, lista de bloqueio, teto diário, porta de saída). Se perguntarem por detalhes, estão todos no documento longo da biblioteca.</p></details>
+</figure>
+</div>
+</body>
+</html>
+
+<nav aria-label="Idioma" style="position:fixed;top:10px;right:12px;z-index:9;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(27,24,18,.88);color:#EFE9DC;font:12px/1 'IBM Plex Mono',ui-monospace,Consolas,monospace;letter-spacing:.06em;backdrop-filter:blur(4px)"><a href="/" style="color:#EFE9DC;text-decoration:none;opacity:.8">Biblioteca</a><span style="opacity:.45">|</span><a href="/planos/whatsapp-guardiao-reserva.html" style="color:#CE9E3C;text-decoration:none;font-weight:600" aria-current="true">PT</a><span style="opacity:.45">·</span><a href="/fr/planos/whatsapp-guardiao-reserva.html" style="color:#EFE9DC;text-decoration:none;font-weight:400">FR</a></nav>

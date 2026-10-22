@@ -1,36 +1,80 @@
 {
-  "build": "2026-09-15-1203",
+  "build": "2026-10-16-1843",
   "idiomas": [
     "pt",
     "fr"
   ],
   "documentos": [
     {
+      "slug": "balcao-aria-planning-ceo",
+      "titulo": "Balcão Aria · A nova proposta de negócio",
+      "data": "2026-10-16",
+      "estado": "vigente",
+      "arquivado": false,
+      "fr": "manual"
+    },
+    {
+      "slug": "oui-adesao-restaurantes",
+      "titulo": "OUI em uma mensagem · Adesão de restaurantes",
+      "data": "2026-10-16",
+      "estado": "vigente",
+      "arquivado": false,
+      "fr": "manual"
+    },
+    {
+      "slug": "balcao-aria-paris",
+      "titulo": "Balcão Aria Paris",
+      "data": "2026-10-10",
+      "estado": "vigente",
+      "arquivado": true,
+      "fr": "manual"
+    },
+    {
       "slug": "plano-reserva-direta",
       "titulo": "Plano Reserva Direta",
       "data": "2026-09-14",
       "estado": "vigente",
+      "arquivado": true,
       "fr": "manual"
     },
     {
-      "slug": "conciergerie-plano-60-dias",
-      "titulo": "Conciergerie · Plano de 60 dias",
-      "data": "2026-09-14",
-      "estado": "vigente",
-      "fr": "bilingue"
+      "slug": "scout-balcao-aria",
+      "titulo": "Scout Balcão Aria",
+      "data": "2026-10-13",
+      "estado": "análise",
+      "arquivado": true,
+      "fr": "manual"
     },
     {
       "slug": "dossie-reserva-direta",
       "titulo": "Dossiê Reserva Direta",
       "data": "2026-09-14",
       "estado": "análise",
+      "arquivado": true,
       "fr": "pendente"
+    },
+    {
+      "slug": "whatsapp-guardiao-reserva",
+      "titulo": "WhatsApp e Guardião da Reserva",
+      "data": "2026-10-16",
+      "estado": "vigente",
+      "arquivado": false,
+      "fr": "manual"
+    },
+    {
+      "slug": "conciergerie-plano-60-dias",
+      "titulo": "Conciergerie · Plano de 60 dias",
+      "data": "2026-09-14",
+      "estado": "superado",
+      "arquivado": true,
+      "fr": "bilingue"
     },
     {
       "slug": "reserva-direta-rastreada",
       "titulo": "Reserva Direta Rastreada",
       "data": "2026-09-14",
       "estado": "superado",
+      "arquivado": true,
       "fr": "pendente"
     },
     {
@@ -38,6 +82,7 @@
       "titulo": "Chave Girada",
       "data": "2026-09-05",
       "estado": "referência",
+      "arquivado": true,
       "fr": "pendente"
     }
   ]
