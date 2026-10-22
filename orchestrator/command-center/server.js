@@ -25,7 +25,7 @@ const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.7.0-rotinas-hospedadas-20261022';
+const BUILD = '4.7.1-rotinas-modo-visivel-20261022';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));

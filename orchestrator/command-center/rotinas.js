@@ -91,7 +91,8 @@ async function rodarJob(j) {
     if (ESPERAS_MS[i] > 0) await dormir(ESPERAS_MS[i]);
     fs.appendFileSync(logFile, `\n=== ${new Date().toISOString()} · ${j.job} · tentativa ${i + 1}/${ESPERAS_MS.length} · ${path.basename(j.script)} ${j.args.join(' ')}\n`, 'utf8');
     ultimo = await rodarUmaVez(j, logFile);
-    if (ultimo.ok) return { job: j.job, ok: true, exit: 0, ms: ultimo.ms, tentativas: i + 1, log: path.relative(STATE_DIR, logFile) };
+    // `modo` diz se o job agiu de verdade ou só ensaiou — visível no /health e em GET /api/rotinas, sem abrir o log do container.
+    if (ultimo.ok) return { job: j.job, ok: true, exit: 0, ms: ultimo.ms, tentativas: i + 1, modo: j.args.includes('--apply') ? 'real' : j.args.includes('--gate') ? 'portao' : 'ensaio', log: path.relative(STATE_DIR, logFile) };
     // Vigias (Sentinela, Zelador) saem com 1 quando há achado CRÍTICO — o relato foi gravado; isso é
     // sinal, não falha da rotina. Falha de verdade é 2+ (exceção) ou processo que não iniciou.
     if (j.relato && ultimo.exit === 1) return { job: j.job, ok: true, exit: 1, achados_criticos: true, ms: ultimo.ms, tentativas: i + 1, log: path.relative(STATE_DIR, logFile) };
@@ -157,7 +158,18 @@ function saude() {
   const agentes = fs.existsSync(AGENTS_DIR);
   if (!agentes) return { ligado: true, erro: `pasta de agentes ausente (${AGENTS_DIR}) — Dockerfile precisa copiar orchestrator/agents` };
   if (!e) return { ligado: true, hora_paris: HORA, ultima: null, aviso: 'ainda não rodou neste container' };
-  return { ligado: true, hora_paris: HORA, ultima: e.dia, ok: e.ok, jobs: e.jobs.map((j) => `${j.job}:${j.ok ? 'ok' : 'FALHOU'}`), guardiao_exportado: e.guardiao_exportado };
+  return {
+    ligado: true, hora_paris: HORA, ultima: e.dia, ok: e.ok,
+    jobs: e.jobs.map((j) => `${j.job}:${j.ok ? 'ok' : 'FALHOU'}${j.modo ? ':' + j.modo : ''}`),
+    guardiao_exportado: e.guardiao_exportado,
+    // O que falta no ambiente para cada job agir de verdade (nomes de variáveis, nunca valores).
+    faltam: [
+      ...(process.env.CICLO_APROVACAO ? [] : ['CICLO_APROVACAO (Ciclo do Cliente em ensaio)']),
+      ...(process.env.EMAIL_WEBHOOK_URL ? [] : ['EMAIL_WEBHOOK_URL (retenção em ensaio)']),
+      ...(process.env.TWK_DBA_URL ? [] : ['TWK_DBA_URL (retenção em ensaio)']),
+      ...(process.env.DATABASE_URL_RO ? [] : ['DATABASE_URL_RO (nenhum job lê o banco)']),
+    ],
+  };
 }
 
 function start() {
