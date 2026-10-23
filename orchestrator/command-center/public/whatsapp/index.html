@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Sala do WhatsApp · The World Keys</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23070b10'/><circle cx='16' cy='16' r='8' fill='none' stroke='%23c9a96e' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='%2325d366'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <link rel="stylesheet" href="/whatsapp/whatsapp.css">
+</head>
+<body>
+  <div class="gate" id="gate" hidden>
+    <form>
+      <span class="micro gold">The World Keys</span>
+      <h1>SALA DO WHATSAPP</h1>
+      <p class="lede" style="font-size:19px;margin:0 auto">Informe a chave da Central para abrir o canal ao vivo.</p>
+      <input type="password" autocomplete="current-password" placeholder="Chave da Central" aria-label="Chave da Central" required>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <div class="shell" id="app">
+    <aside class="side" aria-label="Seções">
+      <a class="brand" href="#pulso" style="text-decoration:none;color:inherit">
+        <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="17" cy="17" r="11"/><circle cx="17" cy="17" r="4" fill="#25d366" stroke="none"/><path d="M6 17h4M24 17h4M17 6v4M17 24v4"/></svg>
+        <span><b>SALA DO WHATSAPP</b><span>The World Keys · Aria</span></span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Seções">
+        <a href="#pulso" class="on">Pulso</a>
+        <a href="#conversas">Conversas</a>
+        <a href="#funil">Funil</a>
+        <a href="#entregas">Entregas</a>
+        <a href="#casas">Casas</a>
+        <a href="#clientes">Clientes</a>
+        <a href="#qualidade">Qualidade</a>
+        <a href="#escalacoes">Escalações</a>
+        <a href="#compromissos">Compromissos</a>
+        <a href="#motor">Motor</a>
+      </nav>
+      <div class="side-foot">
+        Somente leitura, ao vivo. Números do banco da plataforma e do próprio serviço da Aria. Identificadores sempre mascarados.<br>
+        <a href="/">Central de Comando</a> · <a href="/plataforma">Panorama</a>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="top">
+        <button class="chip menu-btn" id="menu" aria-label="Abrir o menu">Menu</button>
+        <span class="chip live" id="live"><span class="dot"></span><span id="live-t">conectando…</span></span>
+        <span class="micro crumb" id="crumb"></span>
+        <span class="chip tog" id="periodo" data-v="30" title="Janela dos números">30 dias</span>
+        <span class="chip tog on" id="canal" data-v="whatsapp" title="Só conversas de WhatsApp ou todas">só WhatsApp</span>
+        <button class="chip" id="atualizar">Atualizar agora</button>
+        <button class="chip opt" id="tema">Tema claro</button>
+      </div>
+      <main id="conteudo">
+        <section id="pulso" class="sec"><div class="page-head"><h1>Pulso</h1><p class="lede" id="pulso-lede">Lendo o canal…</p></div><div id="pulso-body" class="skel"></div></section>
+        <section id="conversas" class="sec"><div class="page-head"><h1>Conversas</h1><p class="lede">Tudo o que entrou e saiu, por conversa. Clique numa linha para abrir a troca inteira, com as ferramentas que a Aria usou e as notas do juiz.</p></div><div class="conv-wrap"><div id="conv-lista" class="conv-lista skel"></div><div id="conv-thread" class="conv-thread"><div class="vazio">Escolha uma conversa à esquerda.</div></div></div></section>
+        <section id="funil" class="sec"><div class="page-head"><h1>Funil de saída</h1><p class="lede">De cada 100 mensagens que o sistema quis mandar, quantas saíram e, as que não saíram, por quê. O não-envio é o dado mais valioso: diz se a trava está calibrada ou engolindo gente legítima.</p></div><div id="funil-body" class="skel"></div></section>
+        <section id="entregas" class="sec"><div class="page-head"><h1>Entregas</h1><p class="lede">O que a Meta devolveu para cada modelo: enviado, entregue, lido, falhou.</p></div><div id="entregas-body" class="skel"></div></section>
+        <section id="casas" class="sec"><div class="page-head"><h1>Casas no canal</h1><p class="lede">Restaurantes com opt-in para receber pedidos pelo WhatsApp, o que receberam e o que a Meta disse do número deles.</p></div><div id="casas-body" class="skel"></div></section>
+        <section id="clientes" class="sec"><div class="page-head"><h1>Clientes no canal</h1><p class="lede">Quem tocou no botão do e-mail e passou a acompanhar o pedido pelo WhatsApp.</p></div><div id="clientes-body" class="skel"></div></section>
+        <section id="qualidade" class="sec"><div class="page-head"><h1>Qualidade</h1><p class="lede">O Juiz de Conversa lê cada resposta da Aria com a régua do ADR-015: idioma, sem prazo, sem vocabulário interno, discrição, resolve agora, tom. Nota de 0 a 6; abaixo de 5 reprova.</p></div><div id="qualidade-body" class="skel"></div></section>
+        <section id="escalacoes" class="sec"><div class="page-head"><h1>Escalações</h1><p class="lede">Só o que exige uma pessoa. Cada uma tem dono.</p></div><div id="escalacoes-body" class="skel"></div></section>
+        <section id="compromissos" class="sec"><div class="page-head"><h1>Compromissos com data</h1><p class="lede">A data que a Aria prometeu ao cliente e cumpre sozinha, por WhatsApp ou por e-mail.</p></div><div id="compromissos-body" class="skel"></div></section>
+        <section id="motor" class="sec"><div class="page-head"><h1>Motor</h1><p class="lede">Ferramentas, modelo e custo dos últimos sete dias.</p></div><div id="motor-body" class="skel"></div></section>
+        <p class="rodape micro" id="rodape"></p>
+      </main>
+    </div>
+  </div>
+  <script src="/whatsapp/whatsapp.js"></script>
+</body>
+</html>

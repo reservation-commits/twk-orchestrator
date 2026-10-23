@@ -22,10 +22,11 @@ const metrics = require('./metrics.js');
 const sentinels = require('./sentinels.js');
 const analyst = require('./analyst.js');
 const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da frota (somente leitura)
+const whatsapp = require('./whatsapp.js'); // Sala do WhatsApp: o canal ao vivo (somente leitura, cache 30 s)
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.7.1-rotinas-modo-visivel-20261022';
+const BUILD = '4.8.0-sala-do-whatsapp-20261023';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -654,6 +655,15 @@ const server = http.createServer(async (req, res) => {
       try { return json(res, 200, await plataforma.snapshot({ stateDir: STATE_DIR, agents: AGENTS, kpisFor, fresco: u.searchParams.get('fresco') === '1' })); }
       catch (e) { return json(res, 500, { error: 'plataforma: ' + String((e && e.message) || e).slice(0, 200) }); }
     }
+    // ---------- Sala do WhatsApp: o canal ao vivo (conversas, entregas, funil, casas, clientes, qualidade) ----------
+    if (u.pathname === '/api/whatsapp') {
+      try { return json(res, 200, await whatsapp.snapshot({ fresco: u.searchParams.get('fresco') === '1' })); }
+      catch (e) { return json(res, 500, { error: 'whatsapp: ' + String((e && e.message) || e).slice(0, 200) }); }
+    }
+    if (u.pathname === '/api/whatsapp/conversa') {
+      try { return json(res, 200, await whatsapp.conversa(u.searchParams.get('id') || '')); }
+      catch (e) { return json(res, 500, { error: 'whatsapp/conversa: ' + String((e && e.message) || e).slice(0, 200) }); }
+    }
     if (u.pathname === '/api/agents') {
       return json(res, 200, {
         // agente local (Guardião): "configurado" = o estado dele é legível aqui (repositório ou sincronizado)
@@ -664,6 +674,7 @@ const server = http.createServer(async (req, res) => {
   }
   // Panorama: /plataforma abre a página da plataforma (não o cockpit, que é o fallback de SPA).
   if (u.pathname === '/plataforma' || u.pathname === '/plataforma/') { req.url = '/plataforma/index.html'; }
+  if (u.pathname === '/whatsapp' || u.pathname === '/whatsapp/') { req.url = '/whatsapp/index.html'; }
   serveStatic(req, res);
 });
 
