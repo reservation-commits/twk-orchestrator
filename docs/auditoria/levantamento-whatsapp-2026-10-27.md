@@ -175,7 +175,9 @@ Nos **últimos 7 dias** (pós-v22): 24 pedidos novos caíram em casa sem destina
 | O3+ | **Dois bugs da própria porta de saída** apareceram ao testar: (a) `\bvocê\b` nunca fechava depois do "ê" — "Pronto. Você não receberá mais…" era "anotação"; (b) faltavam as formas de tratamento de es/it/de (usted, Lei/suo, Sie/Ihr). Corrigidos em `format.ts`; textos es/it do VOLTAR ganharam "Usted"/"Lei". A trava fica mais exata, não mais frouxa: um texto sem saudação e sem segunda pessoa continua retido (teste novo). | `test/outboundGateAcentos.test.ts`, `test/consent.test.ts` |
 | O5 | Sentinela: tipo novo `rotina_central` (`rotinaCentral.js`, puro + `carregar()`): lê `rotinas.json` do volume quando hospedada, `GET /api/rotinas` com `X-Center-Key` quando local; `ciclo_cliente`, `guardiao_gate` e `retencao` (nova) usam isso; tarefas do Windows **desabilitadas** viram lacuna declarada, não "morta". Rodada local: 2 achados (retenção FALHOU com o erro exato; relatório do Guardião), 0 críticos, 24 fontes vivas — antes eram 9 achados falsos. | `regencia/test/sentinela-rotinas.test.js` (5 casos) · Porta da Central 18/18 |
 
-Não feito nesta rodada: O2 (carta ao Marriott sai sozinha na primeira rodada da retenção hospedada depois do redeploy, ou à mão com `retencao-run.js --apply`), O4, O6–O18.
+Não feito nesta rodada: O2 (carta ao Marriott sai sozinha na primeira rodada da retenção hospedada depois do redeploy, ou à mão com `retencao-run.js --apply`), O6–O18.
+
+**28/10, tarde — ADR-019 (autonomia no atendimento comum), a pedido do fundador.** Cobre O4 e O10 e vai além: silêncio do modelo não escala; três tentativas e carta de espera com compromisso registrado em vez de retenção; revisor calibrado (o que não é violação + trecho literal); aviso de cartão de sistema de reservas vira escalação ao fundador com prazo (caso Pierluigi); Guardião envia o degrau 1 sozinho nas rotinas (`GUARDIAO_AUTONOMO=on`), delega à Aria as casas com WhatsApp e não gera mais cartão de degrau 4. `POL-008`/`POL-009`, Auditor `A17`, Aria v24. Detalhe em `docs/adr/ADR-019-autonomia-no-atendimento-comum.md`.
 
 ## 7. Decisões que só o fundador toma
 

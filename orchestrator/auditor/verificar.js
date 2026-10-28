@@ -84,6 +84,17 @@ const CHECAGENS = [
     for (const s of fs.readdirSync(dir)) { const f = path.join(dir, s, 'casos.js'); if (fs.existsSync(f) && /inje[cç]/i.test(fs.readFileSync(f, 'utf8'))) n++; }
     return { ok: n >= 1, detalhe: `${n} suíte(s) com casos de injeção` };
   } },
+  { id: 'A17_adr019_carta_de_espera', sev: 'hard', regra: 'ADR-019: a carta de espera passa pela porta de saída com compromisso registrado; silêncio não escala; POL-008/009 ativas', run: (raiz) => {
+    const ent = ler(raiz, 'Agente de Suporte e Concierge/src/entrega.ts') || '';
+    const seq = ent.indexOf('registrarCompromisso(') > 0 && ent.indexOf('outboundGate(carta') > 0 && ent.indexOf('outboundGate(carta') < ent.indexOf('registrarCompromisso(');
+    const silencio = /containsSilenceMarker\(primeiro\.reply\)/.test(ent) && /silencio: true/.test(ent);
+    const { carregarPoliticas } = require(path.join(raiz, 'orchestrator/politicas/avaliar.js'));
+    const cfg = carregarPoliticas(path.join(raiz, 'orchestrator/politicas/politicas.json'));
+    const pol = ['POL-008', 'POL-009'].every((id) => cfg.politicas.some((p) => p.id === id && p.status === 'ativa'));
+    const guard = /--autonomo/.test(ler(raiz, 'orchestrator/agents/guardiao-reserva/run.js') || '') && /casa_whatsapp/.test(ler(raiz, 'orchestrator/agents/guardiao-reserva/db.js') || '');
+    const ok = seq && silencio && pol && guard;
+    return { ok, detalhe: ok ? 'porta antes do compromisso; silêncio = decisão; POL-008/009 ativas; Guardião --autonomo e casa_whatsapp' : `porta_antes_compromisso=${seq} silencio=${silencio} politicas=${pol} guardiao=${guard}` };
+  } },
   { id: 'A12_porta_recente', sev: 'soft', regra: 'Porta de Qualidade verde nos últimos 7 dias', run: (raiz) => {
     const p = JSON.parse(ler(raiz, 'orchestrator/state/porta-qualidade.json') || 'null'); if (!p) return { ok: false, detalhe: 'porta-qualidade.json ausente' };
     const idadeH = (Date.now() - new Date(p.rodou_em).getTime()) / 3600_000;

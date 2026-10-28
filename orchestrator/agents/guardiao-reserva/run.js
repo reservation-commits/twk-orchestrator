@@ -72,8 +72,12 @@ async function main() {
   if (fs.existsSync(pausado)) { const p = JSON.parse(fs.readFileSync(pausado, 'utf8')); audit({ evento: 'execucao_bloqueada', motivo: `pausado: ${p.motivo}` }); console.log('BLOQUEADA: pausado —', p.motivo); process.exit(3); }
 
   const modo = flag('--apply') ? 'apply' : flag('--gate') ? 'gate' : 'dry-run';
-  const aprovacaoRef = val('--aprovacao');
-  if (modo === 'apply' && !aprovacaoRef) { console.error('--apply exige --aprovacao <APR-id> (aprovação registrada na Central)'); process.exit(2); }
+  // ADR-019 (2026-10-28): o degrau 1 (e-mail de lembrete à casa) é autônomo com log. `--autonomo` dispensa o
+  // cartão de aprovação por lote; a aprovação é a decisão do fundador registrada no ADR, e os tetos continuam.
+  const autonomo = modo === 'apply' && flag('--autonomo');
+  const aprovacaoRef = autonomo ? 'ADR-019' : val('--aprovacao');
+  if (modo === 'apply' && !aprovacaoRef) { console.error('--apply exige --aprovacao <APR-id> (aprovação registrada na Central) ou --autonomo (ADR-019)'); process.exit(2); }
+  if (autonomo) audit({ evento: 'autonomia_adr019', degrau: 1, motivo: 'fundador, chat 2026-10-28: "sobre muitas coisas mais comuns, quero que a Aria e o guardião sejam autônomos"' });
 
   // Validação do --apply ANTES de qualquer gravação. Em 11/09 uma execução com aprovação
   // inválida foi barrada só no passo 7, depois de o ledger já ter gravado 68 linhas como
@@ -82,7 +86,7 @@ async function main() {
   // de ação executada.
   if (modo === 'apply') {
     if (!N8N_MAESTRO_EMAIL || !N8N_MAESTRO_TOKEN) { audit({ evento: 'execucao_bloqueada', motivo: 'webhook de envio ausente' }); console.error('BLOQUEADA: sem webhook de envio configurado'); process.exit(3); }
-    const apr = lerJsonl(path.join(CENTRAL_STATE, 'aprovacoes.jsonl')).find((a) => a.id === aprovacaoRef);
+    const apr = autonomo ? { status: 'aprovada' } : lerJsonl(path.join(CENTRAL_STATE, 'aprovacoes.jsonl')).find((a) => a.id === aprovacaoRef);
     if (!apr || apr.status !== 'aprovada') {
       audit({ evento: 'execucao_bloqueada', motivo: `aprovação ${aprovacaoRef} inexistente ou não aprovada`, gravou_ledger: false });
       console.error(`BLOQUEADA: aprovação inválida (${aprovacaoRef}) — nada foi gravado.`);
@@ -103,9 +107,14 @@ async function main() {
   // o restaurante por uma mesa já confirmada (caso EVU5Z99H, 14/09). Cada linha exige evidência; nada
   // é forjado no ledger de contatos.
   const resolvidasFora = new Map(lerJsonl(path.join(STATE, 'resolvidas-fora-da-plataforma.jsonl')).map((x) => [x.reservation_code, x]));
-  const reservas = reservasBrutas.filter((x) => !resolvidasFora.has(x.reservation_code));
-  const ignoradas = reservasBrutas.length - reservas.length;
+  const semResolvidas = reservasBrutas.filter((x) => !resolvidasFora.has(x.reservation_code));
+  const ignoradas = reservasBrutas.length - semResolvidas.length;
   if (ignoradas) audit({ evento: 'resolvidas_fora_ignoradas', n: ignoradas, codigos: reservasBrutas.filter((x) => resolvidasFora.has(x.reservation_code)).map((x) => x.reservation_code) });
+  // ADR-019: casa com WhatsApp marcado (e que entrega) é da Aria — ela manda o pedido novo com botão e o
+  // lembrete de 24 h pelo canal vivo. O Guardião não a cobra por e-mail por cima (máx. 2 contatos por reserva).
+  const delegadasAria = semResolvidas.filter((x) => restaurantes[x.restaurant_id] && restaurantes[x.restaurant_id].casa_whatsapp);
+  const reservas = semResolvidas.filter((x) => !(restaurantes[x.restaurant_id] && restaurantes[x.restaurant_id].casa_whatsapp));
+  if (delegadasAria.length) audit({ evento: 'delegadas_aria_whatsapp', n: delegadasAria.length, codigos: delegadasAria.map((x) => x.reservation_code) });
   const respondedoras = await db.carregarRespondedoras();
   const mortos = contatosMortos();
   const eventos = lerJsonl(path.join(STATE, 'eventos.jsonl'));
@@ -160,15 +169,15 @@ async function main() {
     const clientesNovos = clientes.filter((c) => !jaCliente.has(c.reservation_code));
     // agente 'guardiao' = o id do Guardião na Central (v4.6): o cartão sai com a identidade dele, não a do MAESTRO.
     if (emails.length && !jaLote) appendJsonl(f, { id: id('APR'), thread_id: traceId, trace_id: traceId, agente: 'guardiao', titulo: `[Guardião] Degrau 1 — lote de ${emails.length} e-mails a restaurantes (${emails.reduce((n, e) => n + e.reservas.length, 0)} reservas)`, tipo: 'envio_externo', justificativa: `Pendências sem resposta ≥24h. Prévia completa em orchestrator/agents/guardiao-reserva/state/propostas-${dia}.json. Aprovar = liberar \`run.js --apply --aprovacao <id>\`. Nenhuma casa com opt-out/published=false incluída (bloqueio por código).`, status: 'pendente', criado_em: agora.toISOString(), lote: emails.map((e) => ({ restaurant_id: e.restaurant_id, nome: e.nome, idioma: e.idioma, reservas: e.reservas, assunto: e.assunto })) });
-    for (const c of clientesNovos) appendJsonl(f, { id: id('APR'), thread_id: traceId, trace_id: traceId, agente: 'suporte-concierge', titulo: `[Guardião] Degrau 4 — avisar cliente da reserva ${c.reservation_code} (${c.fatos.restaurante}, mesa em ${c.horas_ate_mesa}h)`, tipo: 'envio_externo', justificativa: `${c.motivo}. Rascunho-base (EN) para a Aria localizar:\n\n${c.texto_base}`, status: 'pendente', criado_em: agora.toISOString(), handoff: { destino: 'suporte-concierge', contexto_minimo: { reservation_code: c.reservation_code, restaurant_id: c.restaurant_id, alternativas: c.fatos.alternativas.map((a) => a.restaurant_id) }, regras: c.regras_para_aria } });
-    audit({ evento: 'aprovacao_solicitada', lote: emails.length && !jaLote ? emails.length : 0, clientes: clientesNovos.length, dedup_lote: jaLote, dedup_clientes: clientes.length - clientesNovos.length });
+    // ADR-019 (2026-10-28): o degrau 4 não gera mais cartão — o aviso ao cliente é a cadência da Aria
+    // (pending_nudge 24 h, pending_close na véspera, por WhatsApp ou e-mail). Fica só no relatório.
+    audit({ evento: 'aprovacao_solicitada', lote: emails.length && !jaLote ? emails.length : 0, clientes_aria: clientesNovos.length, dedup_lote: jaLote });
   }
 
   // 7. Apply: envio do lote do degrau 1 via n8n (Bearer). Só com aprovação. Nunca envia ao cliente (isso é a Aria).
   if (modo === 'apply') {
     if (!N8N_MAESTRO_EMAIL || !N8N_MAESTRO_TOKEN) { audit({ evento: 'execucao_bloqueada', motivo: 'N8N_MAESTRO_EMAIL_URL/TOKEN ausentes' }); console.error('BLOQUEADA: sem webhook de envio configurado'); process.exit(3); }
-    const aprs = lerJsonl(path.join(CENTRAL_STATE, 'aprovacoes.jsonl'));
-    const apr = aprs.find((a) => a.id === aprovacaoRef);
+    const apr = autonomo ? { status: 'aprovada' } : lerJsonl(path.join(CENTRAL_STATE, 'aprovacoes.jsonl')).find((a) => a.id === aprovacaoRef);
     if (!apr || apr.status !== 'aprovada') { audit({ evento: 'execucao_bloqueada', motivo: `aprovação ${aprovacaoRef} inexistente ou não aprovada` }); console.error('BLOQUEADA: aprovação inválida'); process.exit(3); }
     let enviados = 0;
     for (const e of emails) {
@@ -196,6 +205,8 @@ async function main() {
     '', `## Degrau 4 — clientes a avisar via Aria (${clientes.length})`, '| Reserva | Casa | Cidade | h até a mesa | Alternativas | Motivo |', '|---|---|---|---|---|---|',
     ...clientes.map((c) => `| ${c.reservation_code} | ${c.fatos.restaurante} | ${c.fatos.cidade} | ${c.horas_ate_mesa} | ${c.fatos.alternativas.map((a) => a.name).join(' · ') || '—'} | ${c.motivo} |`),
     '', `Fusos supostos (Europe/Paris por falta de timezone): ${r.decisoes.filter((d) => d.fuso_suposto).length}`,
+    `Delegadas à Aria (casa com WhatsApp que entrega — ADR-019): ${delegadasAria.length}${delegadasAria.length ? ' · ' + delegadasAria.map((x) => x.reservation_code).join(', ') : ''}`,
+    autonomo ? 'Modo: AUTÔNOMO (ADR-019) — lote do degrau 1 enviado sem cartão de aprovação; tetos e registro de opt-out em vigor.' : '',
     '', '> Nada foi enviado neste modo.'.replace('neste modo', modo === 'apply' ? 'além do lote aprovado' : 'neste modo'),
   ].join('\n');
   fs.writeFileSync(path.join(STATE, `relatorio-${dia}.md`), md, 'utf8');

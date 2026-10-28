@@ -1,6 +1,6 @@
 {
   "_doc": "Tabela de escalonamento do CLAUDE.md como código (08/10/2026). Cada política cobre UMA classe de ação. status=ativa é o que já foi aprovado em ADR; status=proposta é o que o fundador ainda não aprovou — o motor NUNCA aplica uma proposta: devolve requer_aprovacao_humana e nomeia a proposta que cobriria. As classes em CLASSES_SEMPRE_HUMANO (em avaliar.js) não aceitam política nenhuma. condicoes: atributo ausente = condição não atendida (falhar alto). orcamento_mensal = execuções por mês civil (Europe/Paris) acima das quais a decisão cai para requer_aprovacao_orquestrador.",
-  "versao": "2026-10-08",
+  "versao": "2026-10-28",
   "politicas": [
     {
       "id": "POL-001",
@@ -220,6 +220,48 @@
       "desfazer": "n/a",
       "orcamento_mensal": 100,
       "frase_de_aprovacao": "Aprovo PROP-105"
+    },
+    {
+      "id": "POL-008",
+      "classe": "carta_de_espera_com_compromisso",
+      "status": "ativa",
+      "fundamento": "ADR-019 (2026-10-28) — fundador: \"quero que a Aria e o guardião sejam autônomos, porém façam um trabalho confiável e extremamente profissional\"",
+      "decisao": "autonomo_com_log",
+      "condicoes": {
+        "tres_revisoes_reprovadas": true,
+        "passou_outbound_gate": true,
+        "compromisso_registrado": true,
+        "idioma_do_destinatario": true,
+        "valor_ao_cliente_cents": {
+          "max": 0
+        },
+        "juridico": false,
+        "imprensa": false
+      },
+      "desfazer": "não há (carta enviada); o compromisso registrado é cumprido pela Aria no dia (compromissos.ts) ou vira escalação",
+      "orcamento_mensal": 200
+    },
+    {
+      "id": "POL-009",
+      "classe": "guardiao_email_restaurante",
+      "status": "ativa",
+      "fundamento": "ADR-019 (2026-10-28) — degrau 1 do Guardião (ADR-009) autônomo",
+      "decisao": "autonomo_com_log",
+      "condicoes": {
+        "registro_optout_consultado": true,
+        "casa_publicada": true,
+        "casa_sem_whatsapp_vivo": true,
+        "contatos_por_reserva_max": {
+          "max": 2
+        },
+        "um_email_por_casa_24h": true,
+        "teto_diario": {
+          "max": 50
+        },
+        "template_aprovado": true
+      },
+      "desfazer": "não há (e-mail enviado); cooldown de 24 h impede repetição; ledger em guardiao-reserva/state/eventos.jsonl",
+      "orcamento_mensal": 1000
     }
   ]
 }

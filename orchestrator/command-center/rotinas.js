@@ -50,7 +50,10 @@ const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
 function enabled() { return (process.env.ROTINAS_ENABLED || 'off') === 'on'; }
 
 function jobs() {
-  const guardiaoArgs = ['--gate'];
+  // ADR-019 (2026-10-28): com GUARDIAO_AUTONOMO=on e o canal de e-mail, o degrau 1 sai sozinho (--apply --autonomo);
+  // sem isso, continua no portão (cartão de aprovação na Central).
+  const emailOk = (process.env.N8N_MAESTRO_EMAIL_URL || process.env.EMAIL_WEBHOOK_URL) && (process.env.N8N_MAESTRO_EMAIL_TOKEN || process.env.EMAIL_WEBHOOK_TOKEN);
+  const guardiaoArgs = process.env.GUARDIAO_AUTONOMO === 'on' && emailOk ? ['--apply', '--autonomo'] : ['--gate'];
   if (process.env.GUARDIAO_CANARIO) guardiaoArgs.push('--canario', process.env.GUARDIAO_CANARIO);
   if (process.env.GUARDIAO_MAX_EMAILS) guardiaoArgs.push('--max-emails', String(process.env.GUARDIAO_MAX_EMAILS));
   const cicloArgs = [];
@@ -165,6 +168,7 @@ function saude() {
     // O que falta no ambiente para cada job agir de verdade (nomes de variáveis, nunca valores).
     faltam: [
       ...(process.env.CICLO_APROVACAO ? [] : ['CICLO_APROVACAO (Ciclo do Cliente em ensaio)']),
+      ...(process.env.GUARDIAO_AUTONOMO === 'on' ? [] : ['GUARDIAO_AUTONOMO=on (Guardião só no portão — ADR-019)']),
       ...(process.env.EMAIL_WEBHOOK_URL ? [] : ['EMAIL_WEBHOOK_URL (retenção em ensaio)']),
       ...(process.env.TWK_DBA_URL ? [] : ['TWK_DBA_URL (retenção em ensaio)']),
       ...(process.env.DATABASE_URL_RO ? [] : ['DATABASE_URL_RO (nenhum job lê o banco)']),

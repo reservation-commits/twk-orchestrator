@@ -40,6 +40,9 @@ Operação de orquestração dos 5 agentes da TWK (plataforma premium de reserva
 | Compensação, desconto, cortesia ou qualquer valor a cliente; jurídico; imprensa | sempre |
 | Má notícia simples a cliente (atraso, recusa, pedido de desculpas, alternativa sem custo) | **autônomo com log** (ADR-014, 2026-09-10) — o MAESTRO/Aria resolvem ponta a ponta |
 | Prometer prazo de terceiro (resposta de restaurante) ou de etapa humana | **proibido** (ADR-015, 2026-09-11) — oferecer só o que o agente executa agora |
+| Resposta da Aria reprovada na revisão (cliente ou estabelecimento) | **autônomo com log** (ADR-019, 2026-10-28): 3 tentativas do modelo (a 3ª em modo estrito) e, se ainda reprovar, **carta de espera** fixa no idioma do destinatário com a data NOSSA registrada em `aria_commitments`; escalação RESPONDER só se nem a carta de espera passar pela porta. Silêncio decidido pelo modelo é silêncio, não retenção |
+| Degrau 1 do Guardião (e-mail de lembrete à casa sem WhatsApp, pedido ≥ 24 h sem resposta) | **autônomo com log** (ADR-019): `run.js --apply --autonomo` nas rotinas hospedadas com `GUARDIAO_AUTONOMO=on`; teto 50/dia, 1 e-mail por casa por 24 h, 2 contatos por reserva, registro de opt-out, casas com WhatsApp ficam com a Aria. Degraus 2–3 continuam fila humana; degrau 4 é a cadência da Aria (24 h / véspera) |
+| Aviso de sistema de reservas exigindo cartão ou pagamento (SevenRooms, TheFork…) | **sempre** — escalação `PEDIDO_ESPECIAL` ao fundador com o prazo, por `avisoOperacional.ts`; nunca resposta ao endereço automático |
 | Novo fluxo orquestrado entrando em operação | sempre |
 | Tarefa que estoure orçamento (>€10 ou >8 passos) | revisão antes de continuar |
 

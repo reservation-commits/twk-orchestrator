@@ -43,7 +43,11 @@ async function carregarPendencias() {
              lower(split_part(r.email_for_reservations,'@',2)) AS email_dominio,
              (r.telephone_of_the_establishment IS NOT NULL AND r.telephone_of_the_establishment <> '') AS tem_telefone,
              r.telephone_of_the_establishment AS telefone_casa,
-             r.slug
+             r.slug,
+             EXISTS (SELECT 1 FROM public.aria_contact_consent cc
+                      WHERE cc.tipo = 'estabelecimento' AND cc.restaurant_id::text = r.restaurant_id::text
+                        AND cc.whatsapp_reservas AND NOT COALESCE(cc.whatsapp_indisponivel, false)
+                        AND NOT COALESCE(cc.outbound_opted_out, false)) AS casa_whatsapp
         FROM public.reservations s
         JOIN public.db_restaurants r ON r.restaurant_id = s.restaurant_id
        WHERE s.expired_at IS NULL
@@ -53,7 +57,7 @@ async function carregarPendencias() {
     const reservas = []; const restaurantes = {};
     for (const x of r.rows) {
       reservas.push({ reservation_code: x.reservation_code, restaurant_id: String(x.restaurant_id), booking_date: x.booking_date, reservation_time: x.reservation_time, created_date: x.created_date.replace(' ', 'T') + 'Z', booking_status: x.booking_status });
-      restaurantes[String(x.restaurant_id)] = { restaurant_id: String(x.restaurant_id), name: x.name, city: x.city, country: x.country, partner: !!x.partner, published: x.published !== false, timezone: x.timezone || null, tem_email: !!x.tem_email, email_dominio: x.email_dominio || null, tem_telefone: !!x.tem_telefone, telefone_casa: x.telefone_casa || null, slug: x.slug };
+      restaurantes[String(x.restaurant_id)] = { restaurant_id: String(x.restaurant_id), name: x.name, city: x.city, country: x.country, partner: !!x.partner, published: x.published !== false, timezone: x.timezone || null, tem_email: !!x.tem_email, email_dominio: x.email_dominio || null, tem_telefone: !!x.tem_telefone, telefone_casa: x.telefone_casa || null, slug: x.slug, casa_whatsapp: !!x.casa_whatsapp };
     }
     return { reservas, restaurantes };
   });
