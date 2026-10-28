@@ -63,36 +63,67 @@ async function main() {
     tarefa: f.tarefa || null,
   });
 
+  // ── tarefas agendadas do Windows: estado e último resultado (lidos uma vez) ──
+  // 22/10: as cinco tarefas TWK foram desabilitadas de propósito (rotinas hospedadas na Central).
+  // Tarefa desabilitada não é tarefa morta nem arquivo em silêncio — acusá-la era falso positivo diário.
+  let tarefasWin = null;
+  const tarefasDesabilitadas = new Set();
+  if (process.platform === 'win32' && CAD.some((x) => x.tarefa)) {
+    try {
+      const ps = require('node:child_process').spawnSync('powershell', ['-NoProfile', '-Command',
+        "Get-ScheduledTask | Where-Object { $_.TaskName -like 'TWK *' } | ForEach-Object { $i = $_ | Get-ScheduledTaskInfo; [pscustomobject]@{ n = $_.TaskName; s = $_.State.ToString(); r = $i.LastTaskResult; t = $i.LastRunTime.ToString('s') } } | ConvertTo-Json -Compress"],
+        { encoding: 'utf8', timeout: 60_000 });
+      const bruto = JSON.parse((ps.stdout || '').trim() || '[]');
+      tarefasWin = Array.isArray(bruto) ? bruto : [bruto];
+      for (const t of tarefasWin) if (t && String(t.s) === 'Disabled') tarefasDesabilitadas.add(t.n);
+    } catch (e) { lacunas.push('tarefas agendadas: não consegui ler o resultado (' + e.message + ')'); }
+  }
+
   // ── arquivos diários ──
   for (const f of CAD.filter((x) => x.tipo === 'arquivo_diario')) {
     const u = ultimoArquivo(f.padrao);
     if (!u) { lacunas.push(`${f.chave}: nenhum arquivo nos últimos 60 dias (nunca rodou aqui, ou o padrão mudou)`); continue; }
     const horas = (agora - u.quando) / H;
-    if (horas > f.tolerancia_horas) achado(f, `último: ${u.arquivo} há ${horas.toFixed(0)}h (tolerância ${f.tolerancia_horas}h)`, f.tarefa ? `rerodar a tarefa agendada "${f.tarefa}" e ler o log` : 'verificar o processo que gera a fonte');
+    if (horas > f.tolerancia_horas && f.tarefa && tarefasDesabilitadas.has(f.tarefa)) lacunas.push(`${f.chave}: tarefa "${f.tarefa}" desabilitada de propósito — arquivo local parou em ${u.arquivo}`);
+    else if (horas > f.tolerancia_horas) achado(f, `último: ${u.arquivo} há ${horas.toFixed(0)}h (tolerância ${f.tolerancia_horas}h)`, f.tarefa ? `rerodar a tarefa agendada "${f.tarefa}" e ler o log` : 'verificar o processo que gera a fonte');
     else ok.push(`${f.chave}: há ${horas.toFixed(0)}h`);
+  }
+
+  // ── rotinas hospedadas da Central (27/10/2026) ──
+  // Guardião, Ciclo, Retenção, Sentinela e Zelador rodam dentro da Central desde 22/10; a fonte da verdade é o
+  // rotinas.json que ela grava (lido do volume quando hospedada, pela API com X-Center-Key quando local).
+  const rotinasCad = CAD.filter((x) => x.tipo === 'rotina_central');
+  if (rotinasCad.length) {
+    const rc = require('./rotinaCentral');
+    let ultima = null;
+    let origem = '';
+    try { ({ ultima, origem } = await rc.carregar()); } catch (e) { lacunas.push(`rotinas da Central: não consegui ler (${String(e.message).slice(0, 100)}) — NÃO conferidas: ${rotinasCad.map((x) => x.chave).join(', ')}`); }
+    if (origem || ultima) for (const f of rotinasCad) {
+      const r = rc.avaliar(f, ultima, agora);
+      if (r.tipo === 'ok') ok.push(r.texto);
+      else if (r.tipo === 'lacuna') lacunas.push(r.texto);
+      else achado(f, r.evidencia, r.acao);
+    }
   }
 
   // ── resultado das tarefas agendadas ──
   // O arquivo de log existir NÃO prova que a tarefa terminou bem: em 22/09/2026 as quatro
   // tarefas TWK morreram (0xC000013A, 0xC0000142, 0x1) e deixaram logs parciais que passavam
   // na checagem acima. Aqui lemos o código de saída registrado pelo Windows.
-  if (process.platform === 'win32' && CAD.some((x) => x.tarefa)) {
-    try {
-      const ps = require('node:child_process').spawnSync('powershell', ['-NoProfile', '-Command',
-        "Get-ScheduledTask | Where-Object { $_.TaskName -like 'TWK *' } | ForEach-Object { $i = $_ | Get-ScheduledTaskInfo; [pscustomobject]@{ n = $_.TaskName; r = $i.LastTaskResult; t = $i.LastRunTime.ToString('s') } } | ConvertTo-Json -Compress"],
-        { encoding: 'utf8', timeout: 60_000 });
-      const bruto = JSON.parse((ps.stdout || '').trim() || '[]');
-      const lista = Array.isArray(bruto) ? bruto : [bruto];
+  if (tarefasWin) {
+    {
+      const lista = tarefasWin;
       for (const f of CAD.filter((x) => x.tarefa)) {
         const t = lista.find((x) => x && x.n === f.tarefa);
         if (!t) { lacunas.push(`${f.chave}: tarefa "${f.tarefa}" não está registrada nesta máquina`); continue; }
+        if (tarefasDesabilitadas.has(f.tarefa)) continue; // já declarada como lacuna na checagem do arquivo diário
         const codigo = Number(t.r) >>> 0;
         const hex = '0x' + codigo.toString(16).toUpperCase();
         if (codigo === 0 || codigo === 0x41301 /* em execução */ || codigo === 0x41303 /* nunca rodou */) { ok.push(`${f.chave}: tarefa terminou ${hex}`); continue; }
         const nome = codigo === 0xC000013A ? 'morta (falta de memória no notebook)' : codigo === 0xC0000142 ? 'não conseguiu iniciar' : 'terminou com erro';
         achado(f, `tarefa "${f.tarefa}" ${nome}: ${hex} em ${String(t.t).slice(0, 16)}`, `rerodar a tarefa "${f.tarefa}" e ler o log; solução definitiva: Regência hospedada (REGENCIA_ENABLED=on na Central)`);
       }
-    } catch (e) { lacunas.push('tarefas agendadas: não consegui ler o resultado (' + e.message + ')'); }
+    }
   }
 
   // ── banco ──

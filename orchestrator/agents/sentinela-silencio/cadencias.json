@@ -16,18 +16,25 @@
       "tarefa": "TWK MAESTRO Regencia (diario)"
     },
     { "chave": "ciclo_cliente",
-      "tipo": "arquivo_diario",
-      "padrao": "orchestrator/logs/tarefas/ciclo-cliente-{YYYYMMDD}.log",
+      "tipo": "rotina_central",
+      "job": "ciclo-cliente",
       "tolerancia_horas": 30,
       "severidade": "critica",
-      "tarefa": "TWK Ciclo do Cliente (diario)"
+      "acao": "rotina hospedada do Ciclo do Cliente falhou — ler o log no volume da Central e disparar POST /api/rotinas/run {\"so\":\"ciclo-cliente\"}"
     },
     { "chave": "guardiao_gate",
-      "tipo": "arquivo_diario",
-      "padrao": "orchestrator/logs/tarefas/guardiao-gate-{YYYYMMDD}.log",
+      "tipo": "rotina_central",
+      "job": "guardiao-gate",
       "tolerancia_horas": 30,
       "severidade": "alta",
-      "tarefa": "TWK Guardiao Reserva (gate canario)"
+      "acao": "rotina hospedada do Guardião (portão) falhou — ler o log no volume da Central e disparar POST /api/rotinas/run {\"so\":\"guardiao-gate\"}"
+    },
+    { "chave": "retencao",
+      "tipo": "rotina_central",
+      "job": "retencao",
+      "tolerancia_horas": 30,
+      "severidade": "alta",
+      "acao": "rotina hospedada de retenção (ADR-018) falhou — pedidos de remoção ficam sem carta; ler o log no volume da Central, corrigir e disparar POST /api/rotinas/run {\"so\":\"retencao\"}"
     },
     { "chave": "guardiao_relatorio",
       "tipo": "arquivo_diario",

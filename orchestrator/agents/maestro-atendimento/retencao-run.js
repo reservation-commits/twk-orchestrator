@@ -82,7 +82,7 @@ async function coletar() {
       const remetente = String(e.phone || '').includes('@') ? String(e.phone).trim().toLowerCase() : null;
       let texto = '';
       if (remetente) {
-        const r = await c.query(`SELECT content FROM public.aria_messages WHERE chat_id = $1 AND direction = 'inbound' AND created_at <= $2 + interval '5 minutes' ORDER BY created_at DESC LIMIT 1`, [`email:${remetente}`, e.created_at]);
+        const r = await c.query(`SELECT content FROM public.aria_messages WHERE chat_id = $1 AND direction = 'inbound' AND created_at <= $2::timestamptz + interval '5 minutes' ORDER BY created_at DESC LIMIT 1`, [`email:${remetente}`, e.created_at]);
         texto = r.rows[0]?.content || '';
       }
       casos.push({ escalacao: e.id, criada: e.created_at, rid: m ? m[1] : null, remetente, texto, resumo: e.summary });
