@@ -4,8 +4,18 @@
     {
       "name": "central-dev",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["orchestrator/command-center/dev-local.cjs"],
+      "runtimeArgs": [
+        "orchestrator/command-center/dev-local.cjs"
+      ],
       "port": 8788
+    },
+    {
+      "name": "biblioteca",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "docs/site/server.js"
+      ],
+      "port": 8080
     }
   ]
 }

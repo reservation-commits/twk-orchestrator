@@ -1,0 +1,46 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-29T09:00:00Z"
+  },
+  "lists": "css",
+  "title": "Chauffeur privé · O formulário que registra, pergunta o certo e mostra o preço",
+  "order": [
+    "cover",
+    "hoje",
+    "registro",
+    "campos",
+    "autocompletar",
+    "preco",
+    "mensagem",
+    "mobile",
+    "peso",
+    "ordem"
+  ],
+  "sections": {
+    "s1": {
+      "description": "O que a página faz hoje e por que o formulário é o ponto a otimizar.",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Sete otimizações, cada uma com o print de hoje e o desenho de como deve ficar.",
+      "start": "registro"
+    },
+    "s3": {
+      "description": "Ordem de implementação e o que medir.",
+      "start": "ordem"
+    }
+  },
+  "faces": {
+    "cormorant-garamond": {
+      "family": "Cormorant Garamond",
+      "href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+    },
+    "jost": {
+      "family": "Jost",
+      "href": "https://fonts.googleapis.com/css2?family=Jost:wght@300..600&display=swap"
+    }
+  },
+  "designSystems": []
+}

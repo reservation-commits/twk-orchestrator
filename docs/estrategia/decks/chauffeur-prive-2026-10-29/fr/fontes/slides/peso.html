@@ -1,0 +1,35 @@
+<section id="peso" data-transition="fade" style="background:#f7f4ef;color:#1f232c;font-family:'Jost', Arial, sans-serif;padding:88px 96px 120px;display:flex;flex-direction:column;gap:36px">
+
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<p style="font-size:22px;letter-spacing:6px;text-transform:uppercase;color:#7a5c2c;font-weight:500">Optimisation 7</p>
+<h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:60px;font-weight:500;line-height:1.08;color:#1f232c">Poids de la page et carte de partage</h2>
+<p style="font-size:26px;line-height:1.4;color:#6b6f7a;width:1600px">La page transfère 4,9 MB. Les deux versions de la photo de la Tesla sont téléchargées ensemble sur desktop, et l’image qui s’affiche en partageant le lien sur WhatsApp n’existe pas (404).</p>
+</div>
+<div style="display:flex;gap:56px;align-items:flex-start"><div style="display:flex;flex-direction:column;gap:18px;width:820px"><p style="display:inline-block;font-size:18px;letter-spacing:4px;text-transform:uppercase;color:#c8695c;font-weight:500;border:2px solid #c8695c;padding:6px 14px;align-self:flex-start">Aujourd’hui · mesuré avec curl le 28/10</p>
+  <table style="font-size:22px;color:#1f232c">
+  <tr><th style="font-size:16px;letter-spacing:3px;text-transform:uppercase;color:#6b6f7a;font-weight:500">Fichier</th><th style="font-size:16px;letter-spacing:3px;text-transform:uppercase;color:#6b6f7a;font-weight:500;text-align:right">Poids</th><th style="font-size:16px;letter-spacing:3px;text-transform:uppercase;color:#6b6f7a;font-weight:500">Remarque</th></tr>
+  <tr><td>tesla-model-x-mobile.png</td><td style="text-align:right;color:#c8695c;font-weight:500">1,49 MB</td><td>941×1672, téléchargé aussi sur desktop</td></tr>
+  <tr><td>tesla-model-x.png</td><td style="text-align:right">704 KB</td><td>chargé deux fois dans la page</td></tr>
+  <tr><td>nice.jpg</td><td style="text-align:right">634 KB</td><td>petite carte de la ville</td></tr>
+  <tr><td>saint-tropez.jpg + monaco.jpg</td><td style="text-align:right">760 KB</td><td>idem</td></tr>
+  <tr><td>twk-logo.gif</td><td style="text-align:right">146 KB</td><td>logo animé</td></tr>
+  <tr><td>og-default.jpg</td><td style="text-align:right;color:#c8695c;font-weight:500">404</td><td>pas d’image au partage du lien</td></tr>
+  <tr><td><b>Total transféré</b></td><td style="text-align:right"><b>4,9 MB</b></td><td>cache des images : 4 heures</td></tr>
+  </table></div>
+<div style="display:flex;flex-direction:column;gap:18px;width:780px">
+<p style="display:inline-block;font-size:18px;letter-spacing:4px;text-transform:uppercase;color:#7a5c2c;font-weight:500;border:2px solid #7a5c2c;padding:6px 14px;align-self:flex-start">Ce qu’il faut obtenir</p>
+
+  <div style="display:flex;flex-direction:column;gap:18px;width:780px">
+  <div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:14px;align-items:flex-start"><span style="display:block;width:10px;height:10px;border-radius:5px;background:#c9a96e;margin-top:12px;flex:none"></span><p style="font-size:21px;line-height:1.4;color:#1f232c"><b>Une</b> seule photo de la Tesla par écran (&lt;picture&gt; ou next/image), WebP/AVIF, ≤ 150 KB chacune ; villes ≤ 120 KB ; logo en SVG.</p></div><div style="display:flex;gap:14px;align-items:flex-start"><span style="display:block;width:10px;height:10px;border-radius:5px;background:#c9a96e;margin-top:12px;flex:none"></span><p style="font-size:21px;line-height:1.4;color:#1f232c">Cache de 1 an avec nom versionné ; Google Maps seulement quand le champ reçoit le focus.</p></div><div style="display:flex;gap:14px;align-items:flex-start"><span style="display:block;width:10px;height:10px;border-radius:5px;background:#c9a96e;margin-top:12px;flex:none"></span><p style="font-size:21px;line-height:1.4;color:#1f232c">Créer <b>og-default.jpg</b> 1200×630 avec la Tesla ; idéalement, une image par page.</p></div></div>
+  <p style="font-size:16px;letter-spacing:3px;text-transform:uppercase;color:#7a5c2c;font-weight:500;margin-top:6px">Comment le lien s’affichera sur WhatsApp</p>
+  <div style="display:flex;gap:24px">
+    <div style="display:flex;flex-direction:column;width:360px;border:1px solid #d9d2c3;border-radius:12px;overflow:hidden;background:#fff"><div style="display:flex;align-items:center;justify-content:center;height:150px;background:#e5e2da"><p style="font-size:16px;color:#6b6f7a">aujourd’hui : pas d’image (404)</p></div><div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px"><p style="font-size:17px;font-weight:500;color:#111">Chauffeur privé sur la Côte d’Azur</p><p style="font-size:14px;color:#6b6f7a">theworldkeys.com</p></div></div>
+    <div style="display:flex;flex-direction:column;width:360px;border:1px solid #d9d2c3;border-radius:12px;overflow:hidden;background:#fff"><div style="display:block;height:150px;background:url('img/hero-desktop.jpg') center/cover"></div><div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px"><p style="font-size:17px;font-weight:500;color:#111">Chauffeur privé sur la Côte d’Azur</p><p style="font-size:14px;color:#6b6f7a">theworldkeys.com</p></div></div>
+  </div></div>
+</div></div>
+
+
+<div style="position:absolute;left:96px;right:96px;bottom:48px;display:flex;justify-content:space-between"><p style="font-size:22px;color:#6b6f7a">The World Keys · Chauffeur privé · audit du 28 octobre 2026</p><p style="font-size:22px;color:#6b6f7a">9 / 10</p></div>
+<aside>40 s. Les poids viennent de curl -I le 28/10 ; l’og:image en 404 figurait déjà dans l’audit du site du 07/10 et persiste. La carte WhatsApp est précisément le canal de la conversion : un lien partagé sans photo a l’air abandonné.</aside>
+</section>

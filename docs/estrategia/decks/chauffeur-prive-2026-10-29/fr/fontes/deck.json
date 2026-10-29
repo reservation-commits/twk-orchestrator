@@ -1,0 +1,46 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-29T09:00:00Z"
+  },
+  "lists": "css",
+  "title": "Chauffeur privé · Le formulaire qui enregistre, demande ce qu’il faut et affiche le prix",
+  "order": [
+    "cover",
+    "hoje",
+    "registro",
+    "campos",
+    "autocompletar",
+    "preco",
+    "mensagem",
+    "mobile",
+    "peso",
+    "ordem"
+  ],
+  "sections": {
+    "s1": {
+      "description": "Ce que fait la page aujourd’hui et pourquoi le formulaire est le point à optimiser.",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Sept optimisations, chacune avec la capture d’aujourd’hui et le dessin de ce qu’elle doit devenir.",
+      "start": "registro"
+    },
+    "s3": {
+      "description": "Ordre de mise en œuvre et ce qu’il faut mesurer.",
+      "start": "ordem"
+    }
+  },
+  "faces": {
+    "cormorant-garamond": {
+      "family": "Cormorant Garamond",
+      "href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+    },
+    "jost": {
+      "family": "Jost",
+      "href": "https://fonts.googleapis.com/css2?family=Jost:wght@300..600&display=swap"
+    }
+  },
+  "designSystems": []
+}

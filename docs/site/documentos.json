@@ -1,5 +1,16 @@
 [
   {
+    "slug": "chauffeur-prive-formulario",
+    "fonte": "docs/estrategia/deck-chauffeur-prive-2026-10-29.html",
+    "titulo": "Chauffeur privé · O formulário que registra, pergunta o certo e mostra o preço",
+    "titulo_fr": "Chauffeur privé · Le formulaire qui enregistre, pose les bonnes questions et affiche le prix",
+    "descricao": "Auditoria da página /chauffeur-prive em 10 slides: o print de cada área como está hoje e o desenho de como deve ficar. Sete otimizações do formulário de reserva (registro do pedido, campos que faltam, autocompletar na Riviera, preço antes do clique, mensagem a Julien, celular, peso da página) e a ordem de implementação.",
+    "descricao_fr": "Audit de la page /chauffeur-prive en 10 diapositives : la capture de chaque zone telle qu’elle est aujourd’hui et la maquette de ce qu’elle doit devenir. Sept optimisations du formulaire de réservation (enregistrement de la demande, champs manquants, autocomplétion sur la Riviera, prix avant le clic, message à Julien, mobile, poids de la page) et l’ordre de mise en œuvre.",
+    "data": "2026-10-29",
+    "estado": "vigente",
+    "grupo": "Análises"
+  },
+  {
     "slug": "balcao-aria-planning-ceo",
     "fonte": "docs/estrategia/deck-balcao-aria-ceo-2026-10-14.html",
     "titulo": "Balcão Aria · A nova proposta de negócio",
