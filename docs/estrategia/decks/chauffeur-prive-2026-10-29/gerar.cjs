@@ -161,7 +161,7 @@ ${linha(
   coluna('Hoje · depois do clique', C.hoje, print(img('whatsapp-intersticio-800.jpg'), 700, 624, [{ x: 232, y: 410, w: 236, h: 108, t: 'Saiu do site, na mesma aba. Nenhum registro nosso.', lx: 10, ly: 540, lw: 420 }]), 700),
   coluna('Como deve ficar · a página fica, o WhatsApp abre ao lado', C.goldD, cartao(`
     <div style="display:flex;align-items:center;justify-content:space-between"><p style="font-family:${SERIF};font-size:34px;color:${C.white}">Mensagem preparada</p><p style="font-size:16px;letter-spacing:2px;color:${C.gold};border:1px solid ${C.gold};padding:6px 12px">REF. CH-4F2K</p></div>
-    <p style="font-size:19px;line-height:1.45;color:${C.creamD}">Aeroporto de Nice → Hôtel de Paris, Mônaco · 5 de novembro, 14:30 · 2 passageiros</p>
+    <p style="font-size:19px;line-height:1.45;color:${C.creamD}">Aeroporto de Nice → Hôtel de Paris, Mônaco · 5 de novembro, 2:30 PM · 2 passageiros</p>
     ${botao('Abrir o WhatsApp com a mensagem', { wa: true })}
     <div style="display:flex;gap:14px">${botao('Copiar a mensagem', { ghost: true, h: 52, w: 345 })}${botao('Ligar +33 7 81 93 72 70', { ghost: true, h: 52, w: 345 })}</div>
     <p style="font-size:16px;line-height:1.45;color:${C.silver}">Se o WhatsApp não abrir, a mensagem já está copiada. Julien responde pelo mesmo número.</p>
@@ -184,9 +184,9 @@ ${linha(
   coluna('Como deve ficar', C.goldD, cartao(`
     ${segmento(['Transfer', 'À disposição · hora ou dia', 'Evento · noite'], 'Transfer')}
     <div style="display:flex;gap:16px">${campo('Partida', 'Aeroporto de Nice (NCE)', { icone: '◎', h: 46 })}${campo('Destino', 'Hôtel de Paris, Mônaco', { icone: '◎', h: 46 })}</div>
-    <div style="display:flex;gap:16px">${campo('Data', '5 de novembro de 2026', { icone: '▦', h: 46 })}${campo('Horário', '14:30', { icone: '◷', h: 46 })}</div>
+    <div style="display:flex;gap:16px">${campo('Data', '5 de novembro de 2026', { icone: '▦', h: 46 })}${campo('Horário', '2:30 PM', { icone: '◷', h: 46 })}</div>
     <div style="display:flex;gap:16px">${stepper('Passageiros', '2')}${stepper('Bagagens', '2')}${campo('Nº do voo', 'AF 1234', { opcional: true, h: 46 })}</div>
-    ${toggle('Ida e volta', true, 'Retorno: 9 de novembro, 11:00 · do hotel ao aeroporto')}
+    ${toggle('Ida e volta', true, 'Retorno: 9 de novembro, 11:00 AM · do hotel ao aeroporto')}
     ${campo('Seu nome', 'Ana Ribeiro', { opcional: true, h: 44, fs: 19 })}
     ${botao('Pedir orçamento no WhatsApp', { h: 54 })}
   `, 900, 'gap:12px;padding:22px 28px'), 900))}
@@ -264,7 +264,7 @@ ${linha(
   coluna('Como deve ficar', C.goldD, cartao(`
     ${campo('Partida', '', { placeholder: 'Aeroporto de Nice, hotel, endereço…', foco: true, erro: 'Informe o local de partida.', h: 52, fs: 22 })}
     ${campo('Destino', '', { placeholder: 'Cannes, Mônaco, Saint-Tropez…', h: 52, fs: 22 })}
-    <div style="display:flex;gap:16px">${campo('Data', 'Hoje, 29 de outubro', { h: 52, fs: 22 })}${campo('Horário', '19:30', { h: 52, fs: 22, nota: 'Para hoje, a partir das 16:40 (2 h de antecedência). Antes disso, ligue.' })}</div>
+    <div style="display:flex;gap:16px">${campo('Data', 'Hoje, 29 de outubro', { h: 52, fs: 22 })}${campo('Horário', '7:30 PM', { h: 52, fs: 22, nota: 'Para hoje, a partir das 4:40 PM (2 h de antecedência). Antes disso, ligue.' })}</div>
     ${botao('Pedir orçamento no WhatsApp', { h: 54 })}
   `, 760, 'gap:12px;padding:24px 28px') + `<div style="display:flex;flex-direction:column;gap:8px;width:760px">${lista(['Ao falhar: foco e rolagem até o <b>primeiro campo inválido</b>.', 'Campos com <b>16 px</b> no celular; altura 48–56 px (já está).', 'Hora mínima quando a data é hoje; <b>name</b> em cada input.'], C.text, 19)}</div>`, 760))}
 `, '40 s. Detalhe pequeno, custo pequeno (meio dia junto com o slide 4), mas é onde o celular perde gente: o zoom involuntário desorienta e o erro sem foco parece que o botão não funcionou.');
