@@ -101,7 +101,7 @@ const stepper = (label, valor) => `
 <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid ${C.border};border-radius:6px;color:${C.cream};font-size:22px">+</span></div></div>`;
 const segmento = (opcoes, ativa) => `
 <div style="display:flex;gap:6px;background:${C.ink};border:1px solid ${C.border};border-radius:10px;padding:6px">
-${opcoes.map((o) => `<p style="flex:1;text-align:center;font-size:17px;letter-spacing:1px;padding:12px 6px;border-radius:7px;${o === ativa ? `background:${C.warm};color:${C.white};box-shadow:inset 0 0 0 1px ${C.border};font-weight:500` : `color:${C.creamD}`}">${o}</p>`).join('')}
+${opcoes.map((o) => `<p style="flex:1;text-align:center;font-size:17px;letter-spacing:1px;padding:10px 6px;border-radius:7px;${o === ativa ? `background:${C.warm};color:${C.white};box-shadow:inset 0 0 0 1px ${C.border};font-weight:500` : `color:${C.creamD}`}">${o}</p>`).join('')}
 </div>`;
 const toggle = (label, on, nota) => `
 <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:6px 0">
@@ -184,13 +184,13 @@ ${linha(
   coluna('Como deve ficar', C.goldD, cartao(`
     ${segmento(['Transfer', 'À disposição · hora ou dia', 'Evento · noite'], 'Transfer')}
     <div style="display:flex;gap:16px">${campo('Partida', 'Aeroporto de Nice (NCE)', { icone: '◎', h: 46 })}${campo('Destino', 'Hôtel de Paris, Mônaco', { icone: '◎', h: 46 })}</div>
-    <div style="display:flex;gap:16px">${campo('Data', '5 de novembro de 2026', { icone: '▦', h: 46 })}${campo('Horário', '2:30 PM', { icone: '◷', h: 46 })}</div>
+    <div style="display:flex;gap:16px">${campo('Data', '5 de novembro de 2026', { icone: '▦', h: 46 })}${campo('Horário', '2:30 PM', { icone: '◷', h: 46, nota: 'Só de 5 em 5 minutos: 2:25, 2:30, 2:35 PM. Nunca 2:33.' })}</div>
     <div style="display:flex;gap:16px">${stepper('Passageiros', '2')}${stepper('Bagagens', '2')}${campo('Nº do voo', 'AF 1234', { opcional: true, h: 46 })}</div>
     ${toggle('Ida e volta', true, 'Retorno: 9 de novembro, 11:00 AM · do hotel ao aeroporto')}
     ${campo('Seu nome', 'Ana Ribeiro', { opcional: true, h: 44, fs: 19 })}
     ${botao('Pedir orçamento no WhatsApp', { h: 54 })}
-  `, 900, 'gap:12px;padding:22px 28px'), 900))}
-`, '1 min 15. Tipo de serviço muda o formulário: em "à disposição" o destino vira duração (3 h, 6 h, dia). Voo aparece quando partida ou destino é aeroporto ou estação. Acima de 6 passageiros, mensagem "fale com Julien". O botão passa a dizer o que acontece: é orçamento, não reserva confirmada.');
+  `, 900, 'gap:10px;padding:20px 28px'), 900))}
+`, '1 min 15. Tipo de serviço muda o formulário: em "à disposição" o destino vira duração (3 h, 6 h, dia). Voo aparece quando partida ou destino é aeroporto ou estação. O horário é escolhido em passos de 5 minutos (2:30, 2:35, 2:40), nunca minuto quebrado: facilita a agenda de Julien e evita erro de digitação. Acima de 6 passageiros, mensagem "fale com Julien". O botão passa a dizer o que acontece: é orçamento, não reserva confirmada.');
 
 S.autocompletar = secao('autocompletar', `
 ${cab('Otimização 3', 'O autocompletar precisa conhecer a Riviera', 'Para "Aeroporto de N" o Google sugere Nice, mas também Ajaccio, Nantes, Lille e Nancy. O cliente pode seguir ao WhatsApp com um trajeto que não atendemos.')}
@@ -264,9 +264,9 @@ ${linha(
   coluna('Como deve ficar', C.goldD, cartao(`
     ${campo('Partida', '', { placeholder: 'Aeroporto de Nice, hotel, endereço…', foco: true, erro: 'Informe o local de partida.', h: 52, fs: 22 })}
     ${campo('Destino', '', { placeholder: 'Cannes, Mônaco, Saint-Tropez…', h: 52, fs: 22 })}
-    <div style="display:flex;gap:16px">${campo('Data', 'Hoje, 29 de outubro', { h: 52, fs: 22 })}${campo('Horário', '7:30 PM', { h: 52, fs: 22, nota: 'Para hoje, a partir das 4:40 PM (2 h de antecedência). Antes disso, ligue.' })}</div>
+    <div style="display:flex;gap:16px">${campo('Data', 'Hoje, 29 de outubro', { h: 52, fs: 22 })}${campo('Horário', '7:30 PM', { h: 52, fs: 22, nota: 'De 5 em 5 minutos (7:25, 7:30, 7:35 PM). Para hoje, a partir das 4:40 PM. Antes disso, ligue.' })}</div>
     ${botao('Pedir orçamento no WhatsApp', { h: 54 })}
-  `, 760, 'gap:12px;padding:24px 28px') + `<div style="display:flex;flex-direction:column;gap:8px;width:760px">${lista(['Ao falhar: foco e rolagem até o <b>primeiro campo inválido</b>.', 'Campos com <b>16 px</b> no celular; altura 48–56 px (já está).', 'Hora mínima quando a data é hoje; <b>name</b> em cada input.'], C.text, 19)}</div>`, 760))}
+  `, 760, 'gap:12px;padding:24px 28px') + `<div style="display:flex;flex-direction:column;gap:8px;width:760px">${lista(['Ao falhar: foco e rolagem até o <b>primeiro campo inválido</b>.', 'Campos com <b>16 px</b> no celular; altura 48–56 px (já está).', 'Horário só em passos de <b>5 minutos</b>, nunca 7:33; hora mínima quando a data é hoje.'], C.text, 19)}</div>`, 760))}
 `, '40 s. Detalhe pequeno, custo pequeno (meio dia junto com o slide 4), mas é onde o celular perde gente: o zoom involuntário desorienta e o erro sem foco parece que o botão não funcionou.');
 
 S.peso = secao('peso', `

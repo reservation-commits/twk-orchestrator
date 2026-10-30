@@ -36,7 +36,7 @@ A própria FAQ promete "informe partida, chegada, data e **número de passageiro
 6. **Ida e volta** (toggle) com data/hora de retorno; é o caso mais comum em transfer de aeroporto.
 7. **Número do voo** (opcional, aparece quando a partida ou destino é aeroporto/estação) — permite acompanhar atraso e evita a pergunta de volta.
 8. **Nome** (opcional) — a mensagem hoje chega anônima ("Olá Julien, gostaria…"); um nome permite responder "Bonjour Madame X".
-9. **Hora mínima** quando a data é hoje (não aceitar hora já passada) e aviso "pedidos para as próximas 2 h: ligue" — hoje o campo aceita qualquer hora.
+9. **Horário em passos de 5 minutos** (2:30, 2:35, 2:40 PM), nunca minuto quebrado como 2:33 — lista fixa em vez do relógio livre do navegador; facilita a agenda de Julien e evita erro de digitação. **Hora mínima** quando a data é hoje (não aceitar hora já passada) e aviso "pedidos para as próximas 2 h: ligue" — hoje o campo aceita qualquer hora e qualquer minuto.
 
 ### P1 — autocompletar fora da zona de atendimento
 10. Restringir a `componentRestrictions: { country: ['fr','mc'] }` com `bounds` Saint-Tropez ↔ Menton e `strictBounds` (ou pelo menos viés). Sugerir **atalhos** acima do campo: *Aeroporto de Nice (NCE)*, *Estação Nice-Ville*, *Cannes Croisette*, *Mônaco Monte-Carlo*, *Heliporto de Mônaco* — um toque preenche. Migrar para `AutocompleteSuggestion` (a API atual é legada) e carregar o Maps com `loading=async` só quando o campo recebe foco (economiza o script na primeira pintura).
