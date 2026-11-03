@@ -86,6 +86,9 @@ function criar({ stateDir, isProd, segredo }) {
     sessaoDe(req) { const p = abrirToken(cookieDe(req)); return p ? { id: p.id, nome: p.nome } : null; },
     cookie(token, secure) { return `twk_tarefas=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${DIAS_SESSAO * 86400}${secure ? '; Secure' : ''}`; },
     cookieSair(secure) { return `twk_tarefas=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure ? '; Secure' : ''}`; },
+    // Tokens do conector MCP (oauth.js): mesma assinatura HMAC da sessão, com tipo e validade próprios.
+    token(payload, dias) { return assinar({ ...payload, exp: Date.now() + dias * 864e5 }); },
+    abrir(token) { return abrirToken(token); },
     _abrirToken: abrirToken,
   };
 }

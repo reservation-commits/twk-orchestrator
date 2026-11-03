@@ -180,7 +180,26 @@
 
   // ---------- chat ----------
   const msgs = $('#msgs');
-  function addMsg(html, me) { const m = document.createElement('div'); m.className = 'msg' + (me ? ' me' : ''); m.innerHTML = `<span class="who">${me ? 'Você' : 'Planejador'}</span>${html}`; msgs.appendChild(m); msgs.scrollTop = msgs.scrollHeight; return m; }
+  function addMsg(html, me, rotulo) { const m = document.createElement('div'); m.className = 'msg' + (me ? ' me' : ''); m.innerHTML = `<span class="who">${esc(rotulo || (me ? 'Você' : 'Planejador'))}</span>${html}`; msgs.appendChild(m); msgs.scrollTop = msgs.scrollHeight; return m; }
+  const hora = (ts) => { const d = new Date(ts); const p = (n) => String(n).padStart(2, '0'); return `${p(d.getDate())}/${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+  // Histórico por pessoa: o servidor guarda cada mensagem e a proposta; aqui só se relê (sem botões — proposta antiga
+  // não vira card de novo; escreva outra vez).
+  function historicoHtml(p) {
+    return `<div class="prop"><span class="tag">${esc(p.area)}</span><span class="t">${esc(p.titulo)}</span><ol>${(p.etapas || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
+      <span class="meta">${p.dono ? av(p.dono) + ' ' + esc(PESSOAS()[p.dono] || '') : 'sem dono no pedido'} <span>· ${p.vence_em ? 'até ' + fmt(p.vence_em) : 'sem prazo no pedido'}</span><span>· ${(p.etapas || []).length} etapas</span></span></div>`;
+  }
+  async function carregarChat() {
+    let h; try { h = await api('GET', '/api/chat'); } catch { return; }
+    msgs.innerHTML = '';
+    for (const m of h.mensagens || []) {
+      const via = m.canal === 'mcp' ? ' · pelo Claude' : ''; const q = m.ts ? ' · ' + hora(m.ts) : '';
+      const quemLabel = S.eu.id === 'admin' && m.quem && m.quem !== 'admin' ? ` (${esc(PESSOAS()[m.quem] || m.quem)})` : '';
+      if (m.papel === 'pessoa') addMsg(`<p>${esc(m.texto || '')}</p>`, true, `Você${quemLabel}${via}${q}`);
+      else if (m.tarefa_id) addMsg(`<p>${esc(m.texto || `Card ${m.tarefa_id} criado.`)}</p>`, false, `Planejador${via}${q}`);
+      else if (m.proposta) addMsg(historicoHtml(m.proposta), false, `Planejador${via}${q}`);
+    }
+    if ((h.mensagens || []).length) addMsg('<p class="hintline">Histórico até aqui. Para criar um card a partir de uma proposta antiga, escreva o pedido de novo.</p>');
+  }
   function proposeHtml(p) {
     return `<p>${p.origem_modelo ? 'Entendi.' : 'Entendi (etapas padrão da área; o modelo não respondeu).'} Proponho um card assim${p.motivo ? `, ${esc(p.motivo)}` : ''}:</p>
     <div class="prop"><span class="tag">${esc(p.area)}</span><span class="t">${esc(p.titulo)}</span>
@@ -193,7 +212,7 @@
     addMsg(`<p>${esc(v)}</p>`, true); inp.value = '';
     const espera = addMsg('<p class="hintline">Dividindo em etapas…</p>');
     try {
-      const r = await api('POST', '/api/planejar', { texto: v }); S.pending = r.proposta;
+      const r = await api('POST', '/api/planejar', { texto: v }); S.pending = r.proposta; S.pending.conversa_id = r.conversa_id || '';
       if (!S.pending.dono) { S.pending.dono = S.pessoas[0].id; S.pending.pessoa_citada = false; } // admin sem nome no texto: começa na primeira pessoa, troca com um clique
       espera.innerHTML = `<span class="who">Planejador</span>${proposeHtml(S.pending)}`;
     }
@@ -203,7 +222,7 @@
   msgs.addEventListener('click', async (e) => {
     const b = e.target.closest('[data-c]'); if (!b || !S.pending) return; const box = b.closest('.msg'); const p = S.pending;
     if (b.dataset.c === 'who') { const ids = S.pessoas.map((x) => x.id); p.dono = ids[(ids.indexOf(p.dono) + 1) % ids.length]; p.pessoa_citada = true; box.querySelector('.meta').innerHTML = `${av(p.dono)} ${esc(PESSOAS()[p.dono])} <span>· ${p.vence_em ? 'até ' + fmt(p.vence_em) : 'sem prazo no pedido'}</span><span>· ${p.etapas.length} etapas</span>`; return; }
-    const corpo = { titulo: p.titulo, area: p.area, dono: p.dono, vence_em: p.vence_em, estado: 'todo', etapas: p.etapas.map((s) => ({ texto: s, feita: false })), notas: p.motivo || '', origem: { tipo: 'chat', ref: '' } };
+    const corpo = { titulo: p.titulo, area: p.area, dono: p.dono, vence_em: p.vence_em, estado: 'todo', etapas: p.etapas.map((s) => ({ texto: s, feita: false })), notas: p.motivo || '', origem: { tipo: 'chat', ref: p.conversa_id || '' } };
     if (b.dataset.c === 'edit') { openEditor(null, corpo); box.querySelector('.acts').innerHTML = '<span class="hintline">Aberto no editor.</span>'; S.pending = null; return; }
     if (b.dataset.c === 'create') {
       try { const r = await api('POST', '/api/tarefas', corpo); await carregar(); box.querySelector('.acts').innerHTML = `<span class="hintline">Card ${esc(r.tarefa.id)} criado em "A fazer" para ${esc(PESSOAS()[p.dono])}.</span>`; addMsg(`<p>Criado. ${esc(PESSOAS()[p.dono])} vê o card no quadro${p.vence_em ? ' e no calendário de ' + fmt(p.vence_em) : ''}. Marque as etapas conforme andar.</p>`); S.pending = null; }
@@ -232,6 +251,7 @@
     try { const v = localStorage.getItem('compasso-view'); if (v) document.querySelector(`.views [data-v="${v}"]`)?.click(); } catch { /* opcional */ }
     await carregar();
     try { S.sug = await api('GET', '/api/sugestoes'); $('#sugCount').textContent = S.sug.itens.length; } catch { /* sem sugestões */ }
+    await carregarChat();
     if (!msgs.children.length) { const r = S.tarefas; const late = r.filter((t) => dueClass(t) === 'late').length; const hoje = r.filter((t) => t.vence_em === S.hoje && t.estado !== 'done').length; addMsg(`<p>Olá, ${esc(S.eu.nome)}. Hoje há <b>${late} atrasada${late === 1 ? '' : 's'}</b> e <b>${hoje} para hoje</b>. Escreva o que precisa ser feito, com prazo e nome se já souber.</p>`); }
   }
   $('#loginForm').addEventListener('submit', async (e) => {

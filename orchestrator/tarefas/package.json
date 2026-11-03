@@ -1,6 +1,6 @@
 {
   "name": "compasso-tarefas",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "description": "COMPASSO Tarefas - gerenciador de tarefas da TWK para Márlon, Lucas e Julien: quadro por status, calendário, chat que divide em etapas e sugestões do planejador",
   "main": "server.js",

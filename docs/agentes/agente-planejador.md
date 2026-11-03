@@ -183,3 +183,12 @@ Decisão do fundador em 03/11: a interface não é a página de carteira e núme
 - **§5 autonomia:** a cobrança a agentes por handoff fica para a v2; na v1 quem cobra é o quadro (atrasada em vermelho) e o relato à Regência (`GET /api/relato`, contrato dos agentes via API).
 - **§6 KPIs e §7 morte:** iguais; a baseline é lida no próprio app.
 - **§8 guardrails** mantidos no código: dono obrigatório, prazo e pessoa só do texto, exclusão vira evento, ledger append-only, sugestão descartada volta em 14 dias, texto externo é dado, fail-closed sem segredo ou usuários.
+
+## 14. Adenda 2026-11-03 (tarde) — histórico do chat e o Claude como cliente do COMPASSO
+
+Pedido do fundador: os cards com passo a passo devem poder ser pedidos **do chat do Claude** (claude.ai, conta da empresa) e **do Claude Code**, não só pela tela do app; e o chat do app deve guardar o histórico. Decisões tomadas com ele: autenticação por **login do próprio app** (não chave na URL) e histórico **por pessoa**.
+
+- **§3 entradas:** além do chat do app, o serviço expõe um **servidor MCP** (`POST /mcp`) com oito ferramentas (`resumo`, `listar_tarefas`, `ver_tarefa`, `criar_tarefa`, `atualizar_tarefa`, `planejar`, `sugestoes`, `assumir_sugestao`). O Claude é um *cliente* do agente, nunca o contrário: entra por OAuth 2.1 (`oauth.js`: metadados, registro dinâmico, tela de login do COMPASSO, PKCE obrigatório, tokens assinados com o segredo da sessão) e age **em nome de quem autorizou** (`<login> via Claude` em eventos e auditoria).
+- **§3 saídas:** `plan_conversas` (ou `conversas.jsonl`): toda mensagem, a proposta devolvida e o card que nasceu dela, com canal (`app` | `mcp`). Cada pessoa lê a sua; o admin lê todas.
+- **§8 guardrails novos:** o Claude não exclui tarefa, não cria login, não altera usuários, não envia nada; `criar_tarefa` exige dono e etapas; `vence_em` só se a pessoa deu o prazo (instrução no `initialize` e no esquema da ferramenta); redirect de OAuth só `https` ou `http://localhost`; código de autorização de uso único e 5 minutos; freio de 20 tentativas de senha por IP a cada 10 min; cliente/redirect desconhecidos recebem página de erro, nunca redirecionamento.
+- **O que não muda:** o app continua sem envio externo e sem acoplamento à Central além da API; o relato à Regência é o mesmo.

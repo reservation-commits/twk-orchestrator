@@ -1,7 +1,7 @@
 -- COMPASSO Tarefas — livro único de tarefas (plan_*) e papel twk_plan.
 -- EXIGE A FRASE DO FUNDADOR: CREATE TABLE em public (ADR-017, pela porta única, com GRANT CREATE ao twk_dba)
 -- e CREATE ROLE (papéis de banco são sempre humanos). Rodar como dono do banco, numa transação.
--- Reversão: DROP TABLE plan_eventos, plan_sugestoes, plan_tarefas; DROP ROLE twk_plan; (também humano).
+-- Reversão: DROP TABLE plan_eventos, plan_sugestoes, plan_conversas, plan_tarefas; DROP ROLE twk_plan; (também humano).
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.plan_tarefas (
@@ -40,6 +40,17 @@ CREATE TABLE IF NOT EXISTS public.plan_sugestoes (
   criado_em timestamptz NOT NULL DEFAULT now()
 );
 
+-- Histórico do chat (03/11): uma linha por mensagem, append-only (sem UPDATE/DELETE para o papel).
+CREATE TABLE IF NOT EXISTS public.plan_conversas (
+  id     text PRIMARY KEY,                        -- c-<aleatório>
+  ts     timestamptz NOT NULL DEFAULT now(),
+  quem   text,                                    -- login que escreveu (admin|marlon|lucas|julien)
+  canal  text NOT NULL DEFAULT 'app',             -- app | mcp (Claude pelo conector)
+  papel  text NOT NULL DEFAULT 'pessoa',          -- pessoa | planejador
+  dados  jsonb NOT NULL                           -- texto, proposta, tarefa_id, trace_id
+);
+CREATE INDEX IF NOT EXISTS plan_conversas_quem_ts ON public.plan_conversas (quem, ts DESC);
+
 -- Papel do app: só estas tabelas, nada de DDL, nada fora de plan_*.
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'twk_plan') THEN
@@ -49,7 +60,7 @@ END $$;
 ALTER ROLE twk_plan SET statement_timeout = '8s';
 GRANT USAGE ON SCHEMA public TO twk_plan;
 GRANT SELECT, INSERT, UPDATE ON public.plan_tarefas, public.plan_sugestoes TO twk_plan;
-GRANT SELECT, INSERT ON public.plan_eventos TO twk_plan;
+GRANT SELECT, INSERT ON public.plan_eventos, public.plan_conversas TO twk_plan;
 GRANT USAGE, SELECT ON SEQUENCE public.plan_eventos_id_seq TO twk_plan;
 -- (sem DELETE em lugar nenhum; a exclusão de tarefa é UPDATE de excluida_em)
 

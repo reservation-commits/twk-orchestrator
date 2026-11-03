@@ -70,7 +70,7 @@ function normalizar(entrada, base) {
 // ------------------------------------------------------------------ motor de arquivo
 function motorArquivo(stateDir) {
   fs.mkdirSync(stateDir, { recursive: true });
-  const F = { tarefas: path.join(stateDir, 'tarefas.json'), eventos: path.join(stateDir, 'eventos.jsonl'), sug: path.join(stateDir, 'sugestoes.json') };
+  const F = { tarefas: path.join(stateDir, 'tarefas.json'), eventos: path.join(stateDir, 'eventos.jsonl'), sug: path.join(stateDir, 'sugestoes.json'), conversas: path.join(stateDir, 'conversas.jsonl') };
   const lerJson = (f, dflt) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return dflt; } };
   const gravarJson = (f, v) => { const tmp = `${f}.${process.pid}.tmp`; fs.writeFileSync(tmp, JSON.stringify(v, null, 1), 'utf8'); fs.renameSync(tmp, f); };
   let tarefas = lerJson(F.tarefas, []);
@@ -132,8 +132,21 @@ function motorArquivo(stateDir) {
       evento({ tarefa_id: tarefaId || null, tipo: `sugestao_${decisao}`, quem, trace_id: trace, de: { sugestao: id, titulo: s.titulo } });
       return { ...s };
     },
+    // Histórico do chat (03/11): append-only, por pessoa. Cada linha é uma mensagem (pessoa ou planejador),
+    // com a proposta devolvida e, quando virou card, o id da tarefa. Nada é apagado.
+    async conversaGravar(m) {
+      const linha = { id: novaConversaId(), ts: new Date().toISOString(), ...m };
+      fs.appendFileSync(F.conversas, JSON.stringify(linha) + '\n', 'utf8');
+      return linha;
+    },
+    async conversaLer({ quem, limite = 50 } = {}) {
+      let linhas = [];
+      try { linhas = fs.readFileSync(F.conversas, 'utf8').split(/\r?\n/).filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { /* sem conversa ainda */ }
+      return (quem ? linhas.filter((m) => m.quem === quem) : linhas).slice(-limite);
+    },
   };
 }
+function novaConversaId() { return 'c-' + crypto.randomBytes(6).toString('hex'); }
 
 // ------------------------------------------------------------------ motor postgres
 function motorPostgres(url) {
@@ -194,6 +207,15 @@ function motorPostgres(url) {
       if (!r.rowCount) return null;
       await evento({ tarefa_id: tarefaId || null, tipo: `sugestao_${decisao}`, quem, trace_id: trace, detalhe: { sugestao: id } });
       return linha(r.rows[0]);
+    },
+    async conversaGravar(m) {
+      const l = { id: novaConversaId(), ts: new Date().toISOString(), ...m };
+      await q('INSERT INTO plan_conversas (id, ts, quem, canal, papel, dados) VALUES ($1,$2,$3,$4,$5,$6)', [l.id, l.ts, l.quem || null, l.canal || 'app', l.papel || 'pessoa', JSON.stringify(l)]);
+      return l;
+    },
+    async conversaLer({ quem, limite = 50 } = {}) {
+      const r = quem ? await q('SELECT dados FROM plan_conversas WHERE quem=$1 ORDER BY ts DESC LIMIT $2', [quem, limite]) : await q('SELECT dados FROM plan_conversas ORDER BY ts DESC LIMIT $1', [limite]);
+      return r.rows.map((x) => x.dados).reverse();
     },
   };
 }

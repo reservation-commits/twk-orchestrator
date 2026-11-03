@@ -21,8 +21,10 @@ const store = require('./store.js');
 const authMod = require('./auth.js');
 const planejador = require('./planejador.js');
 const sugestoes = require('./sugestoes.js');
+const oauthMod = require('./oauth.js');
+const mcpMod = require('./mcp.js');
 
-const BUILD = '0.2.0-compasso-central-api-20261103';
+const BUILD = '0.3.0-compasso-mcp-20261103';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -39,6 +41,11 @@ let auth;
 try { auth = authMod.criar({ stateDir: STATE_DIR, isProd: IS_PROD, segredo: process.env.TAREFAS_SECRET || '' }); }
 catch (e) { console.error('[auth]', e.message); auth = { operacional: false, usuarios: [], sessaoDe: () => null }; }
 if (!auth.operacional) console.error('[tarefas] NÃO OPERACIONAL: faltam usuários (TAREFAS_USUARIOS ou state/usuarios.json) ou TAREFAS_SECRET — a API responde 503.');
+// Conector MCP (03/11): o chat do Claude e o Claude Code entram por OAuth com o login do app e agem em nome de quem
+// autorizou. TAREFAS_URL é o endereço público (issuer); sem ela, deriva de x-forwarded-proto + host.
+const TAREFAS_URL = String(process.env.TAREFAS_URL || '').replace(/\/+$/, '');
+const oauth = oauthMod.criar({ auth, stateDir: STATE_DIR, urlPublica: TAREFAS_URL, auditar });
+const mcp = mcpMod.criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, auditar, build: BUILD });
 
 // ---------- util ----------
 function json(res, code, obj, extra) { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...(extra || {}) }); res.end(JSON.stringify(obj)); }
@@ -76,6 +83,20 @@ async function sugestoesAtuais(forcar) {
   const salvas = await db.sugestoesGravar(g.itens);
   sugCache = { em: Date.now(), dados: g };
   return { ...salvas, cobertura: g.cobertura };
+}
+
+/** Sugestão → card. Usado pela API (gaveta) e pelo MCP. Devolve { tarefa } ou { erro }. */
+async function assumirSugestao(id, dono, quem, trace, venceEm) {
+  const s = (await db.sugestoesLer()).itens.find((x) => x.id === id);
+  if (!s) return { erro: 'sugestão não existe mais' };
+  if (s.decisao === 'assumida') return { erro: `sugestão já virou a tarefa ${s.tarefa_id || ''}`.trim() };
+  try {
+    const vence = venceEm || new Date(Date.now() + 4 * 864e5).toISOString().slice(0, 10);
+    const t = await db.criar({ titulo: s.titulo, area: s.area, dono, vence_em: vence, estado: 'todo', etapas: s.etapas.map((e) => ({ texto: e, feita: false })), notas: `Por quê: ${s.porque}\nFonte: ${s.fonte}`, origem: { tipo: 'sugestao', ref: s.chave } }, quem, trace);
+    await db.sugestaoDecidir(s.id, 'assumida', quem, trace, t.id);
+    auditar({ tipo: 'sugestao_assumida', quem, id: s.id, tarefa: t.id, dono, trace });
+    return { tarefa: t };
+  } catch (e) { return { erro: e.message }; }
 }
 
 // ---------- relato à Regência ----------
@@ -120,8 +141,12 @@ async function api(req, res, url) {
   if (rota === '/api/tarefas' && req.method === 'GET') { const t = await db.listar(); return json(res, 200, { tarefas: t, resumo: store.resumo(t), hoje: store.hoje() }); }
   if (rota === '/api/tarefas' && req.method === 'POST') {
     const b = await lerCorpo(req);
-    try { const t = await db.criar({ ...b, dono: b.dono || donoPadrao }, quem, trace); auditar({ tipo: 'tarefa_criada', quem, id: t.id, trace }); return json(res, 201, { tarefa: t }); }
-    catch (e) { return erro(res, 400, e.message); }
+    try {
+      const t = await db.criar({ ...b, dono: b.dono || donoPadrao }, quem, trace); auditar({ tipo: 'tarefa_criada', quem, id: t.id, trace });
+      // Card nascido do chat: fecha a conversa com o resultado, para o histórico contar a história inteira.
+      if (b.origem && b.origem.tipo === 'chat') await db.conversaGravar({ quem, canal: 'app', papel: 'planejador', texto: `Card ${t.id} criado em "A fazer" para ${store.PESSOAS[t.dono] || t.dono}: ${t.titulo}`, tarefa_id: t.id, proposta_ref: String(b.origem.ref || ''), trace_id: trace });
+      return json(res, 201, { tarefa: t });
+    } catch (e) { return erro(res, 400, e.message); }
   }
   let m = rota.match(/^\/api\/tarefas\/(T-\d{8}-\d{4})$/);
   if (m && req.method === 'PATCH') {
@@ -140,7 +165,15 @@ async function api(req, res, url) {
     if (texto.length > 2000) return erro(res, 400, 'texto longo demais (máx. 2000 caracteres)');
     const p = await planejador.decompor(texto, { donoPadrao });
     auditar({ tipo: 'planejar', quem, chars: texto.length, modelo: p.origem_modelo, custo: p.custo || null, trace });
-    return json(res, 200, { proposta: p });
+    // Histórico por pessoa (03/11): a mensagem e a proposta ficam gravadas; o id da proposta volta para ligar o card.
+    await db.conversaGravar({ quem, canal: 'app', papel: 'pessoa', texto, trace_id: trace });
+    const mr = await db.conversaGravar({ quem, canal: 'app', papel: 'planejador', proposta: p, trace_id: trace });
+    return json(res, 200, { proposta: p, conversa_id: mr.id });
+  }
+  if (rota === '/api/chat' && req.method === 'GET') {
+    // Cada pessoa vê a própria conversa; o admin vê todas (é quem opera o app pelos três e pelo Claude).
+    const limite = Math.min(200, Math.max(1, Number(url.searchParams.get('limite')) || 50));
+    return json(res, 200, { mensagens: await db.conversaLer({ quem: quem === 'admin' ? null : quem, limite }) });
   }
 
   if (rota === '/api/sugestoes' && req.method === 'GET') {
@@ -153,14 +186,9 @@ async function api(req, res, url) {
     const s = (await db.sugestoesLer()).itens.find((x) => x.id === m[1]);
     if (!s) return erro(res, 404, 'sugestão não existe mais');
     if (m[2] === 'descartar') { await db.sugestaoDecidir(s.id, 'descartada', quem, trace); auditar({ tipo: 'sugestao_descartada', quem, id: s.id, trace }); return json(res, 200, { ok: true }); }
-    const dono = b.dono || donoPadrao;
-    try {
-      const vence = b.vence_em || new Date(Date.now() + 4 * 864e5).toISOString().slice(0, 10);
-      const t = await db.criar({ titulo: s.titulo, area: s.area, dono, vence_em: vence, estado: 'todo', etapas: s.etapas.map((e) => ({ texto: e, feita: false })), notas: `Por quê: ${s.porque}\nFonte: ${s.fonte}`, origem: { tipo: 'sugestao', ref: s.chave } }, quem, trace);
-      await db.sugestaoDecidir(s.id, 'assumida', quem, trace, t.id);
-      auditar({ tipo: 'sugestao_assumida', quem, id: s.id, tarefa: t.id, dono, trace });
-      return json(res, 201, { tarefa: t });
-    } catch (e) { return erro(res, 400, e.message); }
+    const r = await assumirSugestao(s.id, b.dono || donoPadrao, quem, trace, b.vence_em);
+    if (r.erro) return erro(res, 400, r.erro);
+    return json(res, 201, { tarefa: r.tarefa });
   }
   return erro(res, 404, 'rota não existe');
 }
@@ -169,7 +197,23 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   res.setHeader('x-content-type-options', 'nosniff');
   res.setHeader('referrer-policy', 'same-origin');
-  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO } });
+  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length } });
+  // ---- conector MCP: OAuth (metadados, registro, login, token) e o próprio /mcp ----
+  if (url.pathname.startsWith('/.well-known/oauth-') || url.pathname.startsWith('/oauth/')) {
+    if (!auth.operacional) return erro(res, 503, 'serviço não configurado: faltam usuários ou TAREFAS_SECRET');
+    try { if (await oauth.tratar(req, res, url)) return; } catch (e) { console.error('[oauth]', url.pathname, e && e.message); if (!res.headersSent) return erro(res, 500, 'falha interna'); return; }
+    return erro(res, 404, 'rota não existe');
+  }
+  if (url.pathname === '/mcp') {
+    if (!auth.operacional) return erro(res, 503, 'serviço não configurado: faltam usuários ou TAREFAS_SECRET');
+    const ident = oauth.identidade(req);
+    if (!ident) return json(res, 401, { erro: 'autorize o conector (OAuth) para usar o COMPASSO' }, oauth.cabecalho401(req));
+    let corpo = {};
+    if (req.method === 'POST') { try { corpo = await lerCorpo(req); } catch (e) { return json(res, 400, { jsonrpc: '2.0', id: null, error: { code: -32700, message: e.message } }); } }
+    try { await mcp.tratar(req, res, corpo, ident, traceDe(req)); }
+    catch (e) { console.error('[mcp]', e && e.message); if (!res.headersSent) json(res, 500, { jsonrpc: '2.0', id: null, error: { code: -32603, message: 'falha interna' } }); }
+    return;
+  }
   if (url.pathname.startsWith('/api/')) {
     try { await api(req, res, url); }
     catch (e) { console.error('[api]', url.pathname, e && e.message); if (!res.headersSent) erro(res, 500, 'falha interna: ' + String(e && e.message || e).slice(0, 120)); }
