@@ -94,3 +94,15 @@ test('sem CENTER_URL lê só do disco; Central fora do ar vira lacuna com motivo
   assert.equal(cob.central.ok, true, 'perguntas do disco seguem valendo quando a API cai');
   assert.equal(cob.central.origem, 'arquivo');
 });
+
+test('a biblioteca de conexão é achada no repositório E na disposição da imagem (./agents/_lib ao lado do módulo)', () => {
+  assert.ok(sugestoes.carregarConectar(), 'no repositório: orchestrator/agents/_lib/conectar.js');
+  // Simula a imagem do EasyPanel: /app/sugestoes.js + /app/agents/_lib/conectar.js, sem o resto do repositório.
+  const app = vazio();
+  fs.copyFileSync(path.join(__dirname, '..', 'sugestoes.js'), path.join(app, 'sugestoes.js'));
+  fs.mkdirSync(path.join(app, 'agents', '_lib'), { recursive: true });
+  fs.writeFileSync(path.join(app, 'agents', '_lib', 'conectar.js'), "module.exports = { urlRo: () => '', marca: 'stub-da-imagem' };");
+  const naImagem = require(path.join(app, 'sugestoes.js'));
+  assert.equal(naImagem.carregarConectar().marca, 'stub-da-imagem');
+  return naImagem.doBanco({}).then((r) => { assert.equal(r.ok, false); assert.match(r.lacuna, /sem credencial twk_ro/, 'com a biblioteca achada, a lacuna passa a ser a credencial, não a biblioteca'); });
+});

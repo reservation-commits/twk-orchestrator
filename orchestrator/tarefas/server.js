@@ -24,7 +24,7 @@ const sugestoes = require('./sugestoes.js');
 const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 
-const BUILD = '0.3.1-compasso-durabilidade-20261103';
+const BUILD = '0.3.2-compasso-banco-na-imagem-20261103';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));

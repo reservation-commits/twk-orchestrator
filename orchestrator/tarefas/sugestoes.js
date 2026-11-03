@@ -113,9 +113,20 @@ async function dePerguntasEAprovacoes(ctx) {
   return { fonte: 'central', ok: true, origem, itens, perguntas: pa.length, aprovacoes: ap.length, lacuna: parcial };
 }
 
+/**
+ * Biblioteca de conexão dos agentes. No repositório fica em orchestrator/agents/_lib; na imagem do EasyPanel o
+ * Dockerfile a copia para ./agents/_lib ao lado deste arquivo (lição de 03/11: só o caminho do repositório fazia a
+ * fonte "banco" aparecer como "biblioteca ausente" em produção, mesmo com DATABASE_URL_RO no ambiente).
+ */
+function carregarConectar() {
+  const candidatos = [path.join(__dirname, 'agents', '_lib', 'conectar.js'), path.join(RAIZ, 'orchestrator', 'agents', '_lib', 'conectar.js')];
+  for (const p of candidatos) { if (fs.existsSync(p)) { try { return require(p); } catch (e) { return { erro: `${path.basename(p)}: ${e.message}` }; } } }
+  return null;
+}
 async function doBanco(ctx) {
-  let conectar = null;
-  try { conectar = require(path.join(RAIZ, 'orchestrator', 'agents', '_lib', 'conectar.js')); } catch { return { fonte: 'banco', ok: false, itens: [], lacuna: 'biblioteca de conexão ausente' }; }
+  const conectar = carregarConectar();
+  if (!conectar) return { fonte: 'banco', ok: false, itens: [], lacuna: 'biblioteca de conexão ausente' };
+  if (conectar.erro) return { fonte: 'banco', ok: false, itens: [], lacuna: `biblioteca de conexão não carregou (${conectar.erro})`.slice(0, 120) };
   if (!conectar.urlRo || !conectar.urlRo()) return { fonte: 'banco', ok: false, itens: [], lacuna: 'sem credencial twk_ro' };
   try {
     return await conectar.comClienteRo(async (c) => {
@@ -156,4 +167,4 @@ async function gerar(ctx = {}, anteriores = []) {
   return { itens: [...vivas, ...decididasAgora], cobertura: leituras.map((l) => ({ fonte: l.fonte, ok: l.ok, origem: l.origem || null, lacuna: l.lacuna || null })) };
 }
 
-module.exports = { gerar, deCompromissos, deAcoes, dePerguntasEAprovacoes, doBanco, lerFila, _id: id };
+module.exports = { gerar, deCompromissos, deAcoes, dePerguntasEAprovacoes, doBanco, lerFila, carregarConectar, _id: id };
