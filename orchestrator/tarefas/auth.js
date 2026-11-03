@@ -17,6 +17,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const PESSOAS = { marlon: 'Márlon', lucas: 'Lucas', julien: 'Julien' };
+// Logins aceitos: as três pessoas e um `admin` (login único do fundador). As TAREFAS continuam sendo
+// sempre de Márlon, Lucas ou Julien: admin entra, cria, edita e atribui, mas nunca é dono de tarefa.
+const LOGINS = { ...PESSOAS, admin: 'Admin' };
 const DIAS_SESSAO = 30;
 
 function hashSenha(senha, salt) {
@@ -36,9 +39,9 @@ function carregarUsuarios({ stateDir, isProd }) {
   if (process.env.TAREFAS_USUARIOS) { try { lista = JSON.parse(process.env.TAREFAS_USUARIOS); } catch { throw new Error('TAREFAS_USUARIOS não é JSON válido.'); } }
   else { const f = path.join(stateDir, 'usuarios.json'); if (fs.existsSync(f)) lista = JSON.parse(fs.readFileSync(f, 'utf8')); }
   if (Array.isArray(lista) && lista.length) {
-    const ok = lista.filter((u) => PESSOAS[u.id] && /^scrypt\$/.test(u.senha));
-    if (!ok.length) throw new Error('Nenhum usuário válido (id em marlon|lucas|julien e senha em hash scrypt).');
-    return ok.map((u) => ({ id: u.id, nome: u.nome || PESSOAS[u.id], senha: u.senha }));
+    const ok = lista.filter((u) => LOGINS[u.id] && /^scrypt\$/.test(u.senha));
+    if (!ok.length) throw new Error('Nenhum usuário válido (id em admin|marlon|lucas|julien e senha em hash scrypt).');
+    return ok.map((u) => ({ id: u.id, nome: u.nome || LOGINS[u.id], senha: u.senha }));
   }
   if (isProd) return [];
   console.warn('[auth] DESENVOLVIMENTO: sem usuarios.json — Márlon, Lucas e Julien entram com a senha "twk".');
@@ -84,7 +87,7 @@ function criar({ stateDir, isProd, segredo }) {
   };
 }
 
-module.exports = { criar, hashSenha, conferirSenha, PESSOAS };
+module.exports = { criar, hashSenha, conferirSenha, PESSOAS, LOGINS };
 
 if (require.main === module) {
   const i = process.argv.indexOf('--senha');

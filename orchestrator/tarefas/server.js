@@ -104,18 +104,20 @@ async function api(req, res, url) {
     return json(res, 200, { usuario: r.usuario }, { 'set-cookie': auth.cookie(r.token, seguro(req)) });
   }
   const sessao = auth.sessaoDe(req);
-  if (rota === '/api/eu') return json(res, 200, { usuario: sessao, pessoas: auth.usuarios, build: BUILD, motor: db.motor, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística' });
+  // pessoas = quem pode ser dono de tarefa (sempre as três); usuarios = quem pode entrar (pode ser só o admin)
+  if (rota === '/api/eu') return json(res, 200, { usuario: sessao, pessoas: Object.entries(store.PESSOAS).map(([id, nome]) => ({ id, nome })), usuarios: auth.usuarios, build: BUILD, motor: db.motor, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística' });
   if (!sessao) return erro(res, 401, 'entre com seu usuário');
   if (req.method !== 'GET' && req.headers['x-requested-with'] !== 'fetch') return erro(res, 403, 'origem não reconhecida');
   const trace = traceDe(req);
   const quem = sessao.id;
+  const donoPadrao = store.PESSOAS[quem] ? quem : null; // admin não é dono de tarefa: precisa escolher alguém
 
   if (rota === '/api/logout' && req.method === 'POST') { auditar({ tipo: 'logout', quem }); return json(res, 200, { ok: true }, { 'set-cookie': auth.cookieSair(seguro(req)) }); }
 
   if (rota === '/api/tarefas' && req.method === 'GET') { const t = await db.listar(); return json(res, 200, { tarefas: t, resumo: store.resumo(t), hoje: store.hoje() }); }
   if (rota === '/api/tarefas' && req.method === 'POST') {
     const b = await lerCorpo(req);
-    try { const t = await db.criar({ ...b, dono: b.dono || quem }, quem, trace); auditar({ tipo: 'tarefa_criada', quem, id: t.id, trace }); return json(res, 201, { tarefa: t }); }
+    try { const t = await db.criar({ ...b, dono: b.dono || donoPadrao }, quem, trace); auditar({ tipo: 'tarefa_criada', quem, id: t.id, trace }); return json(res, 201, { tarefa: t }); }
     catch (e) { return erro(res, 400, e.message); }
   }
   let m = rota.match(/^\/api\/tarefas\/(T-\d{8}-\d{4})$/);
@@ -133,7 +135,7 @@ async function api(req, res, url) {
     const texto = String(b.texto || '').trim();
     if (texto.length < 4) return erro(res, 400, 'escreva o que precisa ser feito');
     if (texto.length > 2000) return erro(res, 400, 'texto longo demais (máx. 2000 caracteres)');
-    const p = await planejador.decompor(texto, { donoPadrao: quem });
+    const p = await planejador.decompor(texto, { donoPadrao });
     auditar({ tipo: 'planejar', quem, chars: texto.length, modelo: p.origem_modelo, custo: p.custo || null, trace });
     return json(res, 200, { proposta: p });
   }
@@ -148,7 +150,7 @@ async function api(req, res, url) {
     const s = (await db.sugestoesLer()).itens.find((x) => x.id === m[1]);
     if (!s) return erro(res, 404, 'sugestão não existe mais');
     if (m[2] === 'descartar') { await db.sugestaoDecidir(s.id, 'descartada', quem, trace); auditar({ tipo: 'sugestao_descartada', quem, id: s.id, trace }); return json(res, 200, { ok: true }); }
-    const dono = b.dono || quem;
+    const dono = b.dono || donoPadrao;
     try {
       const vence = b.vence_em || new Date(Date.now() + 4 * 864e5).toISOString().slice(0, 10);
       const t = await db.criar({ titulo: s.titulo, area: s.area, dono, vence_em: vence, estado: 'todo', etapas: s.etapas.map((e) => ({ texto: e, feita: false })), notas: `Por quê: ${s.porque}\nFonte: ${s.fonte}`, origem: { tipo: 'sugestao', ref: s.chave } }, quem, trace);

@@ -106,7 +106,9 @@
   scrim.addEventListener('click', closeDrawer);
 
   async function openEditor(id, rascunhoInicial) {
-    const base = id ? S.tarefas.find((x) => x.id === id) : (rascunhoInicial || { titulo: '', area: 'Operação', dono: S.eu.id, vence_em: '', estado: 'todo', etapas: [], notas: '' });
+    const donoPadrao = S.pessoas.some((p) => p.id === S.eu.id) ? S.eu.id : S.pessoas[0].id; // admin não é dono: cai na primeira pessoa
+    const base = id ? S.tarefas.find((x) => x.id === id) : (rascunhoInicial || { titulo: '', area: 'Operação', dono: donoPadrao, vence_em: '', estado: 'todo', etapas: [], notas: '' });
+    if (!id && base.dono == null) base.dono = donoPadrao;
     const draft = JSON.parse(JSON.stringify(base));
     let hist = [];
     if (id) { try { hist = (await api('GET', `/api/tarefas/${id}/eventos`)).eventos.slice(-6).reverse(); } catch { hist = []; } }
@@ -188,7 +190,11 @@
     e.preventDefault(); const inp = $('#input'); const v = inp.value.trim(); if (!v) return;
     addMsg(`<p>${esc(v)}</p>`, true); inp.value = '';
     const espera = addMsg('<p class="hintline">Dividindo em etapas…</p>');
-    try { const r = await api('POST', '/api/planejar', { texto: v }); S.pending = r.proposta; espera.innerHTML = `<span class="who">Planejador</span>${proposeHtml(S.pending)}`; }
+    try {
+      const r = await api('POST', '/api/planejar', { texto: v }); S.pending = r.proposta;
+      if (!S.pending.dono) { S.pending.dono = S.pessoas[0].id; S.pending.pessoa_citada = false; } // admin sem nome no texto: começa na primeira pessoa, troca com um clique
+      espera.innerHTML = `<span class="who">Planejador</span>${proposeHtml(S.pending)}`;
+    }
     catch (err) { espera.innerHTML = `<span class="who">Planejador</span><p>${esc(err.message)}</p>`; }
   });
   $('#input').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#composer').requestSubmit(); } });
@@ -214,8 +220,8 @@
   function mostrarLogin() { $('#app').hidden = true; $('#login').hidden = false; }
   async function iniciar() {
     const eu = await api('GET', '/api/eu');
-    S.pessoas = eu.pessoas;
-    $('#lUser').innerHTML = eu.pessoas.map((p) => `<option value="${p.id}">${esc(p.nome)}</option>`).join('');
+    S.pessoas = eu.pessoas; // quem pode ser dono de tarefa (sempre as três)
+    $('#lUser').innerHTML = (eu.usuarios || eu.pessoas).map((p) => `<option value="${p.id}">${esc(p.nome)}</option>`).join(''); // quem pode entrar
     if (!eu.usuario) return mostrarLogin();
     S.eu = eu.usuario; $('#login').hidden = true; $('#app').hidden = false;
     $('#euAv').className = `av ${S.eu.id}`; $('#euAv').textContent = S.eu.nome.slice(0, 2).toUpperCase();

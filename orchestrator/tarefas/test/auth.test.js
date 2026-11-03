@@ -28,6 +28,16 @@ test('produção sem usuários ou sem segredo = não operacional', () => {
   assert.deepEqual(c.usuarios, [{ id: 'marlon', nome: 'Márlon' }]);
 });
 
+test('um login só: admin entra, mas não está entre as pessoas que assumem tarefa', () => {
+  const dir = tmp();
+  fs.writeFileSync(path.join(dir, 'usuarios.json'), JSON.stringify([{ id: 'admin', senha: auth.hashSenha('chave-do-fundador') }]));
+  const a = auth.criar({ stateDir: dir, isProd: true, segredo: 'x'.repeat(32) });
+  assert.equal(a.operacional, true);
+  assert.deepEqual(a.usuarios, [{ id: 'admin', nome: 'Admin' }]);
+  assert.equal(a.entrar('admin', 'chave-do-fundador').usuario.nome, 'Admin');
+  assert.equal(auth.PESSOAS.admin, undefined, 'admin nunca é dono de tarefa');
+});
+
 test('usuário fora do trio ou senha em claro são ignorados', () => {
   const dir = tmp();
   fs.writeFileSync(path.join(dir, 'usuarios.json'), JSON.stringify([{ id: 'fulano', senha: auth.hashSenha('a') }, { id: 'lucas', senha: 'em-claro' }]));
