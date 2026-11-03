@@ -24,7 +24,7 @@ const sugestoes = require('./sugestoes.js');
 const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 
-const BUILD = '0.3.0-compasso-mcp-20261103';
+const BUILD = '0.3.1-compasso-durabilidade-20261103';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -97,6 +97,42 @@ async function assumirSugestao(id, dono, quem, trace, venceEm) {
     auditar({ tipo: 'sugestao_assumida', quem, id: s.id, tarefa: t.id, dono, trace });
     return { tarefa: t };
   } catch (e) { return { erro: e.message }; }
+}
+
+// ---------- durabilidade (03/11): o app denuncia quando o estado pode sumir no próximo deploy ----------
+// O livro em arquivo vive em STATE_DIR. Em produção isso TEM de ser um volume montado pelo EasyPanel em /app/state;
+// o VOLUME do Dockerfile sozinho não sobrevive a um redeploy. Aqui se verifica o ponto de montagem, se marca a
+// primeira escrita (prova de que o estado atravessou reinícios) e se conta o que há no livro.
+const INICIO = new Date().toISOString();
+function durabilidade() {
+  const info = { state_dir: STATE_DIR, motor: db.motor, processo_desde: INICIO };
+  try { const linhas = fs.readFileSync('/proc/mounts', 'utf8').split('\n'); info.volume_montado = linhas.some((l) => l.split(' ')[1] === STATE_DIR); } catch { info.volume_montado = null; } // fora do Linux não dá para saber
+  const marca = path.join(STATE_DIR, 'estado-desde.txt');
+  try { if (!fs.existsSync(marca)) fs.writeFileSync(marca, INICIO, 'utf8'); info.estado_desde = fs.readFileSync(marca, 'utf8').trim(); } catch (e) { info.estado_desde = null; info.erro_escrita = e.message; }
+  info.sobreviveu_a_reinicio = !!info.estado_desde && info.estado_desde < INICIO;
+  if (db.motor === 'arquivo') {
+    try { info.tarefas = JSON.parse(fs.readFileSync(path.join(STATE_DIR, 'tarefas.json'), 'utf8')).length; } catch { info.tarefas = 0; }
+    try { info.eventos = fs.readFileSync(path.join(STATE_DIR, 'eventos.jsonl'), 'utf8').split('\n').filter(Boolean).length; } catch { info.eventos = 0; }
+    try { info.copias = fs.readdirSync(path.join(STATE_DIR, 'backups')).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort().slice(-3); } catch { info.copias = []; }
+  }
+  if (info.erro_escrita) info.aviso = `STATE_DIR não aceita escrita (${info.erro_escrita}): nada será guardado.`;
+  else if (db.motor === 'arquivo' && info.volume_montado === false) info.aviso = 'STATE_DIR não é um volume montado: tarefas, histórico e auditoria SOMEM no próximo deploy. No EasyPanel, monte um volume persistente em /app/state.';
+  return info;
+}
+/** Cópia diária do livro dentro do próprio volume (STATE_DIR/backups/AAAA-MM-DD), 14 dias. Protege de erro de operação,
+ *  não de volume ausente — para isso só o volume montado serve. */
+function copiaDeSeguranca() {
+  if (db.motor !== 'arquivo') return null;
+  try {
+    const dia = new Date().toISOString().slice(0, 10);
+    const dir = path.join(STATE_DIR, 'backups', dia);
+    fs.mkdirSync(dir, { recursive: true });
+    let n = 0;
+    for (const f of ['tarefas.json', 'eventos.jsonl', 'conversas.jsonl', 'sugestoes.json', 'oauth-clients.json']) { const o = path.join(STATE_DIR, f); if (fs.existsSync(o)) { fs.copyFileSync(o, path.join(dir, f)); n++; } }
+    const todas = fs.readdirSync(path.join(STATE_DIR, 'backups')).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+    for (const velha of todas.slice(0, Math.max(0, todas.length - 14))) fs.rmSync(path.join(STATE_DIR, 'backups', velha), { recursive: true, force: true });
+    return { dia, arquivos: n };
+  } catch (e) { console.error('[tarefas] cópia de segurança falhou:', e.message); return null; }
 }
 
 // ---------- relato à Regência ----------
@@ -197,7 +233,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   res.setHeader('x-content-type-options', 'nosniff');
   res.setHeader('referrer-policy', 'same-origin');
-  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length } });
+  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length }, durabilidade: durabilidade() });
   // ---- conector MCP: OAuth (metadados, registro, login, token) e o próprio /mcp ----
   if (url.pathname.startsWith('/.well-known/oauth-') || url.pathname.startsWith('/oauth/')) {
     if (!auth.operacional) return erro(res, 503, 'serviço não configurado: faltam usuários ou TAREFAS_SECRET');
@@ -225,9 +261,16 @@ const server = http.createServer(async (req, res) => {
 
 function iniciar() {
   return db.pronto().then(() => {
-    server.listen(PORT, () => console.log(`[tarefas] COMPASSO Tarefas ${BUILD} em http://localhost:${PORT} · motor ${db.motor} · estado ${STATE_DIR} · modelo ${planejador.modeloLigado() ? 'ligado' : 'heurística'} · ${auth.operacional ? 'operacional' : 'NÃO OPERACIONAL'}`));
+    server.listen(PORT, () => {
+      console.log(`[tarefas] COMPASSO Tarefas ${BUILD} em http://localhost:${PORT} · motor ${db.motor} · estado ${STATE_DIR} · modelo ${planejador.modeloLigado() ? 'ligado' : 'heurística'} · ${auth.operacional ? 'operacional' : 'NÃO OPERACIONAL'}`);
+      const d = durabilidade();
+      console.log(`[tarefas] durabilidade: volume ${d.volume_montado === null ? 'não verificável' : d.volume_montado ? 'montado' : 'NÃO MONTADO'} · estado desde ${d.estado_desde || '?'} · ${d.tarefas ?? '?'} tarefas · ${d.eventos ?? '?'} eventos${d.sobreviveu_a_reinicio ? ' · sobreviveu a reinício' : ''}`);
+      if (d.aviso) console.error('[tarefas] AVISO:', d.aviso);
+      const c = copiaDeSeguranca(); if (c) console.log(`[tarefas] cópia de segurança ${c.dia}: ${c.arquivos} arquivos`);
+      setInterval(copiaDeSeguranca, 6 * 3600 * 1000).unref();
+    });
   }).catch((e) => { console.error('[tarefas] armazenamento indisponível:', e.message); process.exit(1); });
 }
 if (require.main === module) iniciar();
 
-module.exports = { server, api, relato, db, BUILD, iniciar };
+module.exports = { server, api, relato, db, BUILD, iniciar, durabilidade, copiaDeSeguranca };

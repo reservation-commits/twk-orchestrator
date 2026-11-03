@@ -30,6 +30,8 @@ Serviço próprio. **Build Path `/orchestrator`, Dockerfile `tarefas/Dockerfile`
 
 A DDL e o papel `twk_plan` exigem a frase do fundador (tabela de escalonamento). Até lá o serviço roda com o livro em arquivo, que já é durável no volume.
 
+**Durabilidade: um deploy nunca pode apagar um card.** O que protege é o **volume persistente montado em `/app/state`** no EasyPanel (Storage/Mounts do serviço, tipo Volume, caminho `/app/state`). O `VOLUME` do Dockerfile sozinho não sobrevive a um redeploy. O app confere isso a cada boot e no `GET /health` → `durabilidade`: `volume_montado` (lido de `/proc/mounts`), `estado_desde` (primeira escrita; se for anterior ao `processo_desde`, o estado atravessou um reinício), `tarefas`, `eventos` e as últimas `copias`. Com `volume_montado: false` o log grita `AVISO` e o `/health` traz `aviso`. Além disso, o app guarda uma **cópia diária** do livro em `/app/state/backups/AAAA-MM-DD/` (14 dias) — protege de erro de operação, não de volume ausente. Com o livro no Postgres (`TAREFAS_DATABASE_URL`, após a frase para `sql/001-plan.sql`), as tarefas deixam de depender do volume.
+
 **Lições do primeiro deploy (03/11):**
 - O hash é `scrypt:salt:hash`, com dois-pontos. O formato antigo com `$` era engolido pelo EasyPanel, que trata `$palavra` numa variável de ambiente como referência a outra variável. Se algum dia precisar de `$` numa variável, escreva `$$`.
 - O EasyPanel injeta `PORT=80`; o servidor ouve nela e o health check acompanha. Em **Domínios**, a porta do serviço é a `80` (ou defina `PORT=8790` em Ambiente e use 8790 nos dois lugares).

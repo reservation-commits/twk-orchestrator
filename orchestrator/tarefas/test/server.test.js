@@ -29,6 +29,11 @@ test.after(() => server.close());
 
 test('health aberto; API fechada sem sessão; relato com chave da Central', async () => {
   const h = await call('GET', '/health'); assert.equal(h.status, 200); assert.equal(h.j.operacional, true);
+  // durabilidade: o /health diz onde o estado vive, se é volume e quanto há no livro; a cópia diária existe
+  assert.equal(h.j.durabilidade.state_dir, dir); assert.equal(h.j.durabilidade.motor, 'arquivo'); assert.equal(typeof h.j.durabilidade.tarefas, 'number');
+  assert.ok(fs.existsSync(path.join(dir, 'estado-desde.txt')), 'marca de primeira escrita gravada');
+  const { copiaDeSeguranca } = require('../server.js');
+  const c = copiaDeSeguranca(); assert.ok(c && c.dia); assert.ok(fs.existsSync(path.join(dir, 'backups', c.dia)));
   assert.equal((await call('GET', '/api/tarefas')).status, 401);
   assert.equal((await call('GET', '/api/relato')).status, 401);
   const r = await call('GET', '/api/relato', null, { 'x-center-key': 'chave-da-central-de-teste' });
