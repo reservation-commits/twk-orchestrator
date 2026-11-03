@@ -81,3 +81,13 @@ Legenda de solução: `PRODUTO` · `N8N` (regra determinística) · `EXT:<agente
 - **Pedidos de remoção/correção por mês:** 1 caso formal. O canário do Registro de Opt-out (classificador sobre as caixas support@/reservation@) produz o primeiro número.
 - **Software de reserva por casa:** 0 dados.
 - **Receita por parceiro / assinaturas ativas:** não consultado nesta sessão (Atlas); necessário para F1.
+
+## 4. Adenda 2026-11-02 — linha P: ninguém é dono do plano (trace `trc-planejador1102`)
+
+> Fontes: `orchestrator/state/compromissos.jsonl`, `orchestrator/command-center/state/{acoes,aprovacoes,perguntas,backlog,tasks}.jsonl`, `orchestrator/state/autonomia.json` (28/10), lidos nesta sessão. Mesma legenda de §1.
+
+| # | Problema | Evidência (número/fonte) | Quem cuida hoje | Cobertura | Melhor solução | Justificativa |
+|---|---|---|---|---|---|---|
+| P | **Achado vira ação e morre: ninguém é dono do plano, do prazo nem da verificação de efeito** | compromissos: 15 registrados, **13 abertos, 13 vencidos** (eram 7 vencidos em 08/10) · `acoes.jsonl`: **24 abertas, 0 fechadas** desde a criação · 10 aprovações pendentes · 8 perguntas abertas · autonomia **56,7 %** vs meta 98 % | vigia determinístico + Analista por domínio detectam e propõem (Central) · Despacho do MAESTRO relata · Orquestrador roteia uma cadeia por vez · oito filas sem dono do todo | parcial (olhos e boca; sem mãos nem memória) | **AGENTE NOVO — Planejador (COMPASSO)**: `docs/agentes/agente-planejador.md` | Nenhum componente fecha o ciclo medir → propor → planejar → cobrar → verificar. Não é extensão do MAESTRO porque o MAESTRO é a voz do dia e o atendimento; não é extensão do Orquestrador porque o horizonte é semanas e carteira, não uma cadeia. Núcleo determinístico, modelo em dois pontos, zero ferramenta de envio externo, dono do livro único de tarefas (ADR-004: tarefas = Planejador). |
+
+**Contagem atualizada:** 25 linhas · **2** agentes novos (H, P). Canário do Planejador só depois de 2026-11-21 (ciclo de 30 dias: ADR-018 em 22/10, ADR-019 em 28/10) ou com a frase do fundador.

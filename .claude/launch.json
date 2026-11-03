@@ -16,6 +16,14 @@
         "docs/site/server.js"
       ],
       "port": 8080
+    },
+    {
+      "name": "tarefas-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "orchestrator/tarefas/dev-local.cjs"
+      ],
+      "port": 8790
     }
   ]
 }
