@@ -192,3 +192,11 @@ Pedido do fundador: os cards com passo a passo devem poder ser pedidos **do chat
 - **§3 saídas:** `plan_conversas` (ou `conversas.jsonl`): toda mensagem, a proposta devolvida e o card que nasceu dela, com canal (`app` | `mcp`). Cada pessoa lê a sua; o admin lê todas.
 - **§8 guardrails novos:** o Claude não exclui tarefa, não cria login, não altera usuários, não envia nada; `criar_tarefa` exige dono e etapas; `vence_em` só se a pessoa deu o prazo (instrução no `initialize` e no esquema da ferramenta); redirect de OAuth só `https` ou `http://localhost`; código de autorização de uso único e 5 minutos; freio de 20 tentativas de senha por IP a cada 10 min; cliente/redirect desconhecidos recebem página de erro, nunca redirecionamento.
 - **O que não muda:** o app continua sem envio externo e sem acoplamento à Central além da API; o relato à Regência é o mesmo.
+
+## 15. Adenda 2026-11-03 (noite) — idiomas, campos do ecossistema, excluir com motivo e arquivo
+
+Três pedidos do fundador, atendidos na 0.4.0 do app:
+
+- **Idioma PT-BR / FR** no topo e na tela de login (`public/i18n.js`): troca interface, rótulos de área/canal/status, datas e o idioma em que o planejador escreve título e etapas (modelo e heurística; prazos em francês entendidos). Dados seguem em português no servidor.
+- **Card segundo o ecossistema:** além de título, dono, prazo, status e área, o card ganhou **prioridade** (alta sobe e marca), **cidade**, **canal** (WhatsApp, E-mail, Telefone, Presencial, Sistema), **referência** (código da reserva, restaurante, hotel, cliente) e **resultado** (pedido ao concluir). Tudo no editor, no quadro, no calendário e nas ferramentas MCP.
+- **Excluir × arquivar (§8):** não concluída pode ser excluída **com motivo** (≥ 5 caracteres; tarefa inteira e motivo no ledger e na auditoria). Concluída **não se exclui**: **arquiva-se** — sai do quadro, fica no Arquivo (busca; `GET /api/arquivo`; `listar_tarefas(arquivadas=true)` no MCP; `tarefas_arquivadas` no relato). O Claude pode arquivar, não excluir. Ids nunca são reaproveitados (defeito achado e corrigido: o gerador contava as vivas e reutilizava o número após uma exclusão).

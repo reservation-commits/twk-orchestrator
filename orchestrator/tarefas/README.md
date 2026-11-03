@@ -45,7 +45,8 @@ Todas as rotas sob `/api/*` exigem sessão (cookie HttpOnly) e, para mutação, 
 | Rota | O que faz |
 |---|---|
 | `POST /api/login` · `POST /api/logout` · `GET /api/eu` | sessão e lista das três pessoas |
-| `GET/POST /api/tarefas` · `PATCH/DELETE /api/tarefas/:id` · `GET /api/tarefas/:id/eventos` | o livro; toda mudança vira evento append-only com quem e trace |
+| `GET/POST /api/tarefas` · `PATCH /api/tarefas/:id` · `DELETE /api/tarefas/:id {motivo}` · `GET /api/tarefas/:id/eventos` | o livro; toda mudança vira evento append-only com quem e trace; excluir exige motivo e só antes de concluir |
+| `POST /api/tarefas/:id/arquivar` · `…/desarquivar` · `GET /api/arquivo[?q=]` | arquivo das concluídas, com busca |
 | `POST /api/planejar {texto}` | proposta de card (título, etapas, área, dono, prazo). Não cria tarefa; grava a mensagem e a proposta no histórico e devolve `conversa_id` |
 | `GET /api/chat[?limite=50]` | histórico do chat: cada pessoa vê o seu, o admin vê todos (inclui o que o Claude fez pelo MCP) |
 | `GET /api/sugestoes[?atualizar=1]` · `POST /api/sugestoes/:id/assumir {dono}` · `POST …/descartar` | sugestões com "por quê" e fonte; assumir cria a tarefa; descartada volta em 14 dias |
@@ -70,14 +71,31 @@ O navegador abre a mesma tela de autorização. A partir daí o COMPASSO aparece
 |---|---|
 | `resumo` | abertas, atrasadas, hoje, concluídas em 7 dias, carga por pessoa |
 | `listar_tarefas` · `ver_tarefa` | quadro com filtros; ficha completa com etapas e eventos |
-| `criar_tarefa` | card com passo a passo; **exige** `dono` (marlon, lucas, julien) e `etapas`; `vence_em` só se a pessoa deu o prazo |
-| `atualizar_tarefa` | status, dono, prazo, título, área, notas; marca etapas feitas (1..n) ou substitui a lista |
+| `criar_tarefa` | card com passo a passo; **exige** `dono` (marlon, lucas, julien) e `etapas`; `vence_em` só se a pessoa deu o prazo; aceita prioridade, cidade, canal, referência |
+| `atualizar_tarefa` | status, dono, prazo, título, área, prioridade, cidade, canal, referência, notas, resultado; marca etapas feitas (1..n) ou substitui a lista |
+| `arquivar_tarefa` | arquiva concluída; `listar_tarefas(arquivadas=true, busca=…)` consulta o arquivo |
 | `planejar` | proposta do planejador sem gravar (entra no histórico do chat) |
 | `sugestoes` · `assumir_sugestao` | a mesma gaveta de Sugestões; assumir cria o card |
 
 O que o Claude **não** consegue por aqui: excluir tarefa, criar login, mudar usuários, enviar qualquer coisa para fora. As mesmas travas do app valem (dono obrigatório entre os três; modelo nunca inventa data).
 
 **OAuth, em uma linha por rota:** `/.well-known/oauth-authorization-server` e `/.well-known/oauth-protected-resource` (metadados), `POST /oauth/register` (registro dinâmico; só `https` ou `http://localhost`), `GET|POST /oauth/authorize` (tela de login; PKCE S256 obrigatório; código de 5 min, uso único), `POST /oauth/token` (`authorization_code` e `refresh_token`; acesso 1 dia, refresh 90 dias, assinados com `TAREFAS_SECRET`). Clientes registrados ficam em `state/oauth-clients.json`. Para revogar um Claude: remover o conector lá e trocar a senha aqui (os tokens dependem dela só na emissão; trocar `TAREFAS_SECRET` derruba todos de uma vez).
+
+## O card (campos, 03/11)
+
+| Campo | Para quê |
+|---|---|
+| título, dono, prazo, status, área | o essencial (área: Clientes, Site, Chauffeur, Catálogo, Operação) |
+| **prioridade** alta · normal · baixa | alta só quando há cliente ou reserva esperando; sobe ao topo da coluna e ganha a marca vermelha |
+| **cidade** | Paris, Lagos, Marrakech… (sugestões no campo) |
+| **canal** WhatsApp · E-mail · Telefone · Presencial · Sistema | por onde a conversa acontece |
+| **referência** | código da reserva, nome/id do restaurante, hotel ou cliente — o que identifica o caso; aparece no card e é buscável no arquivo |
+| etapas, notas | passo a passo e contexto |
+| **resultado** | o que ficou feito, o que o cliente recebeu, o que ficou pendente — pedido ao concluir; é o que fica no arquivo |
+
+**Idioma.** Botões PT / FR no topo (e na tela de login). Trocam toda a interface, os rótulos de área, canal e status, as datas, e o idioma em que o planejador escreve título e etapas (o pedido pode vir em qualquer um dos dois; prazos como "vendredi", "d'ici demain", "pour le 12/11" são entendidos). Os dados ficam em português no servidor; só o rótulo muda. A escolha fica no navegador.
+
+**Excluir × arquivar.** Card **não concluído** pode ser excluído, sempre com **motivo** (mínimo 5 caracteres): a tarefa inteira e o motivo ficam no ledger de eventos e na auditoria. Card **concluído** não se exclui: **arquiva-se**. Arquivada sai do quadro e do calendário e fica no **Arquivo** (link no rodapé do quadro, com busca por título, referência, cidade e resultado), em `GET /api/arquivo?q=`, na ferramenta MCP `listar_tarefas(arquivadas=true)` e no relato à Regência (`tarefas_arquivadas`). "Devolver ao quadro" desarquiva; voltar o status de Concluída também. Ids nunca são reaproveitados, nem depois de excluir.
 
 ## Regras que o código impõe
 

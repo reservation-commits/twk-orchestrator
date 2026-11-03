@@ -64,6 +64,31 @@ button{cursor:pointer}
 .steps{height:3px;background:var(--line);border-radius:2px;overflow:hidden}
 .steps i{display:block;height:100%;background:var(--gold)}
 .card.done .t{color:var(--muted);text-decoration:line-through}
+.card.hot{border-left:3px solid var(--crit)}
+.card .hd{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.prio{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;font-size:11px;font-weight:600;line-height:1;flex:none}
+.prio.alta{background:var(--crit);color:#fff}
+.prio.baixa{color:var(--muted);border:1px solid var(--line-2)}
+.ref{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;color:var(--ink-2);background:var(--warm);border-radius:4px;padding:1px 6px;letter-spacing:.02em;word-break:break-word}
+.card .m .ch{color:var(--muted)}
+.lang{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;padding:4px 9px;font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.lang button.on{background:var(--gold);color:var(--on-gold)}
+.linkbtn{border:0;background:transparent;color:var(--gold);font-size:12px;padding:0 2px;text-decoration:underline;text-underline-offset:3px;display:inline-flex;gap:4px;align-items:center}
+.linkbtn span:last-child{background:var(--gold-soft);border-radius:999px;padding:0 7px;font-weight:500;text-decoration:none}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+details.ctx{border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;background:var(--bg)}
+details.ctx summary{cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;list-style:none;display:flex;gap:8px;align-items:center}
+details.ctx summary::before{content:'›';display:inline-block;transition:transform .15s;color:var(--gold)}
+details.ctx[open] summary::before{transform:rotate(90deg)}
+details.ctx[open] summary{margin-bottom:10px}
+details.ctx summary .ref{text-transform:none;letter-spacing:.02em}
+.field.dim textarea{opacity:.75}
+.delbox{border:1px solid var(--crit);border-radius:var(--r);padding:10px;display:grid;gap:8px;background:rgba(194,70,63,.06)}
+.delbox .acts{display:flex;gap:6px;flex-wrap:wrap}
+.btn.danger{background:var(--crit);border-color:var(--crit);color:#fff}
+.search{border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px;background:var(--bg);width:100%}
+.fitem.arc .s.res{color:var(--ink-2);font-style:italic}
 .add{border:1px dashed var(--line-2);background:transparent;color:var(--muted);padding:8px;border-radius:var(--r);font-size:12px}
 
 .strip{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
@@ -146,4 +171,6 @@ button{cursor:pointer}
   .strip{grid-template-columns:repeat(7,1fr)}
   .fday{grid-template-columns:1fr}
   .top{gap:8px}.views button{padding:7px 11px;font-size:12px}
+  .row3{grid-template-columns:1fr 1fr}
 }
+.login-card .lang{justify-self:start}

@@ -61,8 +61,19 @@ test('login, criação, atualização, eventos, exclusão, auditoria', async () 
 
   const lista = await call('GET', '/api/tarefas'); assert.equal(lista.j.tarefas.length, 2); assert.equal(lista.j.resumo.abertas, 2);
   const ev = await call('GET', `/api/tarefas/${id}/eventos`); assert.deepEqual(ev.j.eventos.map((e) => e.tipo), ['criada', 'estado']);
-  assert.equal((await call('DELETE', `/api/tarefas/${id}`)).status, 200);
-  assert.equal((await call('DELETE', `/api/tarefas/${id}`)).status, 404);
+  assert.equal((await call('DELETE', `/api/tarefas/${id}`)).status, 400, 'excluir sem motivo não passa');
+  assert.equal((await call('DELETE', `/api/tarefas/${id}`, { motivo: 'pedido cancelado pelo hotel' })).status, 200);
+  assert.equal((await call('DELETE', `/api/tarefas/${id}`, { motivo: 'pedido cancelado pelo hotel' })).status, 404);
+  // concluída: não se exclui, arquiva-se; o arquivo é consultável e some do quadro
+  const feita = (await call('POST', '/api/tarefas', { titulo: 'Confirmar a mesa do Monak', dono: 'lucas', estado: 'done', referencia: 'reserva QWER1234', cidade: 'Paris', resultado: 'mesa confirmada para 4' })).j.tarefa;
+  assert.equal((await call('DELETE', `/api/tarefas/${feita.id}`, { motivo: 'não quero mais ver' })).status, 400);
+  const arq = await call('POST', `/api/tarefas/${feita.id}/arquivar`, {}); assert.equal(arq.status, 200); assert.ok(arq.j.tarefa.arquivada_em);
+  const quadro = await call('GET', '/api/tarefas'); assert.ok(!quadro.j.tarefas.some((t) => t.id === feita.id)); assert.equal(quadro.j.arquivadas, 1);
+  const busca = await call('GET', '/api/arquivo?q=qwer'); assert.equal(busca.j.total, 1); assert.equal(busca.j.tarefas[0].id, feita.id);
+  assert.equal((await call('GET', '/api/arquivo?q=inexistente')).j.total, 0);
+  assert.equal((await call('POST', `/api/tarefas/${feita.id}/desarquivar`, {})).j.tarefa.arquivada_em, null);
+  const rel = await call('GET', '/api/relato', null, { 'x-center-key': 'chave-da-central-de-teste' }); assert.equal(typeof rel.j.kpis.tarefas_arquivadas, 'number');
+  const euDepois = await call('GET', '/api/eu'); assert.deepEqual(euDepois.j.prioridades, ['alta', 'normal', 'baixa']); assert.ok(euDepois.j.canais.includes('WhatsApp'));
 
   const audit = fs.readFileSync(path.join(dir, 'logs', `audit-${new Date().toISOString().slice(0, 10)}.jsonl`), 'utf8');
   assert.match(audit, /"tipo":"login"/); assert.match(audit, /"tipo":"tarefa_criada"/); assert.match(audit, /"tipo":"tarefa_excluida"/);

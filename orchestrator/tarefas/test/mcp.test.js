@@ -162,3 +162,19 @@ test('histórico do chat: mensagem, proposta e card ligados; cada pessoa vê o s
   assert.equal((await api(cl, 'GET', '/api/chat')).mensagens.length, 0, 'Lucas não vê a conversa de Márlon');
   assert.ok(fs.readFileSync(path.join(dir, 'conversas.jsonl'), 'utf8').split('\n').filter(Boolean).length >= 6);
 });
+
+test('campos do ecossistema e arquivo pelo MCP: criar com prioridade/cidade/canal/referência, concluir com resultado, arquivar, consultar', async () => {
+  const c = await chamar('criar_tarefa', { titulo: 'Confirmar a Soirée do hotel Lutetia', dono: 'lucas', area: 'Chauffeur', etapas: ['Ligar para o concierge', 'Fechar horário'], prioridade: 'alta', cidade: 'Paris', canal: 'WhatsApp', referencia: 'hotel Lutetia · reserva LUT12345' });
+  assert.equal(c.j.result.isError, undefined);
+  const t = c.j.result.structuredContent; assert.equal(t.prioridade, 'alta'); assert.equal(t.canal, 'WhatsApp'); assert.match(c.j.result.content[0].text, /prioridade alta · Paris · ref hotel Lutetia/);
+  assert.equal((await chamar('criar_tarefa', { titulo: 'x y z', dono: 'lucas', etapas: ['a'], canal: 'Pombo' })).j.result.isError, true);
+  assert.equal((await chamar('arquivar_tarefa', { id: t.id })).j.result.isError, true, 'não concluída não arquiva');
+  const done = await chamar('atualizar_tarefa', { id: t.id, estado: 'done', resultado: 'Soirée confirmada para sábado, 2 carros' });
+  assert.equal(done.j.result.structuredContent.resultado, 'Soirée confirmada para sábado, 2 carros');
+  const arq = await chamar('arquivar_tarefa', { id: t.id }); assert.match(arq.j.result.content[0].text, /^Arquivada T-/);
+  assert.ok(!/LUT12345/.test((await chamar('listar_tarefas', { incluir_feitas: true })).j.result.content[0].text), 'arquivada some do quadro');
+  const busca = await chamar('listar_tarefas', { arquivadas: true, busca: 'lut12345' });
+  assert.match(busca.j.result.content[0].text, /arquivada\] Confirmar a Soirée/);
+  const lista = await rpc({ jsonrpc: '2.0', id: 9, method: 'tools/list' }, access);
+  assert.ok(lista.j.result.tools.some((f) => f.name === 'arquivar_tarefa')); assert.ok(lista.j.result.tools.find((f) => f.name === 'criar_tarefa').inputSchema.properties.referencia);
+});

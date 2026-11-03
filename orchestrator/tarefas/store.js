@@ -19,12 +19,19 @@ const crypto = require('node:crypto');
 const ESTADOS = ['todo', 'doing', 'wait', 'done'];
 const PESSOAS = { marlon: 'Márlon', lucas: 'Lucas', julien: 'Julien' };
 const AREAS = ['Clientes', 'Site', 'Chauffeur', 'Catálogo', 'Operação'];
+// Campos do ecossistema (03/11): por onde a conversa acontece, onde a casa/cliente está, qual é o código em jogo.
+const CANAIS = ['WhatsApp', 'E-mail', 'Telefone', 'Presencial', 'Sistema'];
+const PRIORIDADES = ['alta', 'normal', 'baixa'];
 
 function hoje() { return new Date().toISOString().slice(0, 10); }
+/** Próximo id do dia = maior sequência já vista + 1. Nunca conta: uma exclusão não pode fazer o id voltar a ser usado
+ *  (o ledger e o histórico do chat apontam para ele). `existentes` deve incluir os ids do ledger do dia. */
 function novoId(prefixo, existentes) {
   const dia = hoje().replace(/-/g, '');
-  const n = existentes.filter((id) => id.startsWith(`${prefixo}-${dia}-`)).length + 1;
-  return `${prefixo}-${dia}-${String(n).padStart(4, '0')}`;
+  const re = new RegExp(`^${prefixo}-${dia}-(\\d{4})$`);
+  let max = 0;
+  for (const id of existentes) { const m = re.exec(String(id || '')); if (m) max = Math.max(max, Number(m[1])); }
+  return `${prefixo}-${dia}-${String(max + 1).padStart(4, '0')}`;
 }
 
 /** Normaliza e valida um rascunho de tarefa. Lança Error com mensagem legível. */
@@ -56,6 +63,11 @@ function normalizar(entrada, base) {
     t.etapas = entrada.etapas.map((e) => ({ texto: String(e.texto || '').trim().slice(0, 200), feita: !!e.feita })).filter((e) => e.texto);
   }
   if (entrada.notas !== undefined) t.notas = String(entrada.notas || '').slice(0, 2000);
+  if (entrada.prioridade !== undefined) { if (!PRIORIDADES.includes(entrada.prioridade)) throw new Error('Prioridade: alta, normal ou baixa.'); t.prioridade = entrada.prioridade; }
+  if (entrada.cidade !== undefined) t.cidade = String(entrada.cidade || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+  if (entrada.canal !== undefined) { const c = String(entrada.canal || ''); if (c && !CANAIS.includes(c)) throw new Error(`Canal: ${CANAIS.join(', ')} ou vazio.`); t.canal = c; }
+  if (entrada.referencia !== undefined) t.referencia = String(entrada.referencia || '').trim().replace(/\s+/g, ' ').slice(0, 120); // código da reserva, restaurante, hotel, cliente
+  if (entrada.resultado !== undefined) t.resultado = String(entrada.resultado || '').slice(0, 1000); // o que ficou feito, preenchido ao concluir
   if (entrada.origem !== undefined) t.origem = entrada.origem && typeof entrada.origem === 'object' ? { tipo: String(entrada.origem.tipo || 'manual'), ref: String(entrada.origem.ref || '') } : { tipo: 'manual', ref: '' };
   if (!t.titulo) throw new Error('Escreva o que precisa ser feito.');
   if (!t.dono) throw new Error('Toda tarefa precisa de alguém que assuma: Márlon, Lucas ou Julien.');
@@ -64,8 +76,16 @@ function normalizar(entrada, base) {
   t.etapas = t.etapas || [];
   t.notas = t.notas || '';
   t.vence_em = t.vence_em || null;
+  t.prioridade = t.prioridade || 'normal';
+  t.cidade = t.cidade || '';
+  t.canal = t.canal || '';
+  t.referencia = t.referencia || '';
+  t.resultado = t.resultado || '';
+  t.arquivada_em = t.arquivada_em || null; // só o arquivar() escreve aqui; voltar de "done" limpa
   return t;
 }
+const filtrarArquivo = (lista, arquivadas) => lista.filter((t) => (arquivadas === 'todas' ? true : arquivadas ? !!t.arquivada_em : !t.arquivada_em));
+function validarMotivo(motivo) { const m = String(motivo || '').trim().replace(/\s+/g, ' '); if (m.length < 5) throw new Error('Excluir exige um motivo (mínimo 5 caracteres).'); return m.slice(0, 300); }
 
 // ------------------------------------------------------------------ motor de arquivo
 function motorArquivo(stateDir) {
@@ -84,11 +104,14 @@ function motorArquivo(stateDir) {
   return {
     motor: 'arquivo',
     async pronto() { return true; },
-    async listar() { return tarefas.map((t) => ({ ...t })); },
+    /** listar(): só as vivas no quadro (não arquivadas). { arquivadas: true } = só o arquivo; 'todas' = tudo. */
+    async listar(opts = {}) { return filtrarArquivo(tarefas, opts.arquivadas).map((t) => ({ ...t })); },
     async obter(id) { const t = tarefas.find((x) => x.id === id); return t ? { ...t } : null; },
     async criar(entrada, quem, trace) {
       const t = normalizar(entrada);
-      t.id = novoId('T', tarefas.map((x) => x.id));
+      let doLedger = [];
+      try { doLedger = fs.readFileSync(F.eventos, 'utf8').split(/\r?\n/).filter(Boolean).map((l) => { try { return JSON.parse(l).tarefa_id; } catch { return null; } }).filter(Boolean); } catch { /* sem ledger ainda */ }
+      t.id = novoId('T', [...tarefas.map((x) => x.id), ...doLedger]);
       t.criado_em = new Date().toISOString(); t.criado_por = quem; t.atualizado_em = t.criado_em;
       t.concluido_em = t.estado === 'done' ? t.criado_em : null;
       tarefas.unshift(t); gravarJson(F.tarefas, tarefas);
@@ -102,7 +125,7 @@ function motorArquivo(stateDir) {
       const depois = normalizar(patch, antes);
       depois.atualizado_em = new Date().toISOString();
       if (depois.estado === 'done' && antes.estado !== 'done') { depois.concluido_em = depois.atualizado_em; depois.etapas = depois.etapas.map((e) => ({ ...e, feita: true })); }
-      if (depois.estado !== 'done') depois.concluido_em = null;
+      if (depois.estado !== 'done') { depois.concluido_em = null; depois.arquivada_em = null; }
       tarefas[i] = depois; gravarJson(F.tarefas, tarefas);
       const mudou = {};
       for (const k of ['titulo', 'area', 'dono', 'vence_em', 'estado', 'notas']) if (JSON.stringify(antes[k]) !== JSON.stringify(depois[k])) mudou[k] = { de: antes[k], para: depois[k] };
@@ -110,12 +133,29 @@ function motorArquivo(stateDir) {
       if (Object.keys(mudou).length) evento({ tarefa_id: id, tipo: mudou.estado ? 'estado' : 'atualizada', quem, trace_id: trace, mudou });
       return { ...depois };
     },
-    async excluir(id, quem, trace) {
+    // Excluir (03/11): só antes de concluir, sempre com motivo; o ledger guarda a tarefa inteira e o motivo.
+    async excluir(id, quem, trace, motivo) {
       const t = tarefas.find((x) => x.id === id);
       if (!t) return false;
+      if (t.estado === 'done') throw new Error('Tarefa concluída não se exclui: arquive.');
+      const m = validarMotivo(motivo);
       tarefas = tarefas.filter((x) => x.id !== id); gravarJson(F.tarefas, tarefas);
-      evento({ tarefa_id: id, tipo: 'excluida', quem, trace_id: trace, de: { titulo: t.titulo, estado: t.estado } });
+      evento({ tarefa_id: id, tipo: 'excluida', quem, trace_id: trace, motivo: m, de: { ...t } });
       return true;
+    },
+    // Arquivar (03/11): só concluída; sai do quadro e do calendário, fica consultável em listar({ arquivadas: true }).
+    async arquivar(id, quem, trace) {
+      const t = tarefas.find((x) => x.id === id);
+      if (!t) return null;
+      if (t.estado !== 'done') throw new Error('Só tarefa concluída pode ser arquivada.');
+      if (!t.arquivada_em) { t.arquivada_em = new Date().toISOString(); t.atualizado_em = t.arquivada_em; gravarJson(F.tarefas, tarefas); evento({ tarefa_id: id, tipo: 'arquivada', quem, trace_id: trace, de: { titulo: t.titulo, concluido_em: t.concluido_em } }); }
+      return { ...t };
+    },
+    async desarquivar(id, quem, trace) {
+      const t = tarefas.find((x) => x.id === id);
+      if (!t) return null;
+      if (t.arquivada_em) { t.arquivada_em = null; t.atualizado_em = new Date().toISOString(); gravarJson(F.tarefas, tarefas); evento({ tarefa_id: id, tipo: 'desarquivada', quem, trace_id: trace }); }
+      return { ...t };
     },
     async eventos(id, limite = 200) {
       let linhas = [];
@@ -161,7 +201,11 @@ function motorPostgres(url) {
   return {
     motor: 'postgres',
     async pronto() { try { await q('SELECT 1 FROM plan_tarefas LIMIT 1'); return true; } catch (e) { throw new Error(`plan_tarefas indisponível: ${e.message}`); } },
-    async listar() { const r = await q('SELECT id, dados FROM plan_tarefas WHERE excluida_em IS NULL ORDER BY criado_em DESC'); return r.rows.map(linha); },
+    async listar(opts = {}) {
+      const arq = opts.arquivadas;
+      const cond = arq === 'todas' ? '' : arq ? " AND (dados->>'arquivada_em') IS NOT NULL" : " AND (dados->>'arquivada_em') IS NULL";
+      const r = await q(`SELECT id, dados FROM plan_tarefas WHERE excluida_em IS NULL${cond} ORDER BY criado_em DESC`); return r.rows.map(linha);
+    },
     async obter(id) { const r = await q('SELECT id, dados FROM plan_tarefas WHERE id=$1 AND excluida_em IS NULL', [id]); return linha(r.rows[0]); },
     async criar(entrada, quem, trace) {
       const t = normalizar(entrada);
@@ -178,7 +222,7 @@ function motorPostgres(url) {
       const depois = normalizar(patch, antes);
       depois.atualizado_em = new Date().toISOString();
       if (depois.estado === 'done' && antes.estado !== 'done') { depois.concluido_em = depois.atualizado_em; depois.etapas = depois.etapas.map((e) => ({ ...e, feita: true })); }
-      if (depois.estado !== 'done') depois.concluido_em = null;
+      if (depois.estado !== 'done') { depois.concluido_em = null; depois.arquivada_em = null; }
       await q('UPDATE plan_tarefas SET dados=$2, estado=$3, dono=$4, vence_em=$5, atualizado_em=$6 WHERE id=$1', [id, JSON.stringify(depois), depois.estado, depois.dono, depois.vence_em, depois.atualizado_em]);
       const mudou = {};
       for (const k of ['titulo', 'area', 'dono', 'vence_em', 'estado', 'notas']) if (JSON.stringify(antes[k]) !== JSON.stringify(depois[k])) mudou[k] = { de: antes[k], para: depois[k] };
@@ -186,11 +230,34 @@ function motorPostgres(url) {
       if (Object.keys(mudou).length) await evento({ tarefa_id: id, tipo: mudou.estado ? 'estado' : 'atualizada', quem, trace_id: trace, detalhe: mudou });
       return depois;
     },
-    async excluir(id, quem, trace) {
+    async excluir(id, quem, trace, motivo) {
+      const t = await this.obter(id);
+      if (!t) return false;
+      if (t.estado === 'done') throw new Error('Tarefa concluída não se exclui: arquive.');
+      const m = validarMotivo(motivo);
       const r = await q('UPDATE plan_tarefas SET excluida_em=now() WHERE id=$1 AND excluida_em IS NULL', [id]);
       if (!r.rowCount) return false;
-      await evento({ tarefa_id: id, tipo: 'excluida', quem, trace_id: trace });
+      await evento({ tarefa_id: id, tipo: 'excluida', quem, trace_id: trace, detalhe: { motivo: m, tarefa: t } });
       return true;
+    },
+    async arquivar(id, quem, trace) {
+      const t = await this.obter(id);
+      if (!t) return null;
+      if (t.estado !== 'done') throw new Error('Só tarefa concluída pode ser arquivada.');
+      if (t.arquivada_em) return t;
+      t.arquivada_em = new Date().toISOString(); t.atualizado_em = t.arquivada_em;
+      await q('UPDATE plan_tarefas SET dados=$2, atualizado_em=$3 WHERE id=$1', [id, JSON.stringify(t), t.atualizado_em]);
+      await evento({ tarefa_id: id, tipo: 'arquivada', quem, trace_id: trace, detalhe: { titulo: t.titulo, concluido_em: t.concluido_em } });
+      return t;
+    },
+    async desarquivar(id, quem, trace) {
+      const t = await this.obter(id);
+      if (!t) return null;
+      if (!t.arquivada_em) return t;
+      t.arquivada_em = null; t.atualizado_em = new Date().toISOString();
+      await q('UPDATE plan_tarefas SET dados=$2, atualizado_em=$3 WHERE id=$1', [id, JSON.stringify(t), t.atualizado_em]);
+      await evento({ tarefa_id: id, tipo: 'desarquivada', quem, trace_id: trace });
+      return t;
     },
     async eventos(id, limite = 200) {
       const r = id ? await q('SELECT * FROM plan_eventos WHERE tarefa_id=$1 ORDER BY ts DESC LIMIT $2', [id, limite]) : await q('SELECT * FROM plan_eventos ORDER BY ts DESC LIMIT $1', [limite]);
@@ -239,4 +306,4 @@ function resumo(tarefas, diaRef) {
   return { abertas: abertas.length, atrasadas: atrasadas.length, hoje: hojeL.length, concluidas_7d: concluidas7.length, por_pessoa: porPessoa, mais_antiga_atrasada: atrasadas.map((t) => t.vence_em).sort()[0] || null };
 }
 
-module.exports = { abrir, normalizar, resumo, ESTADOS, PESSOAS, AREAS, hoje, novoId, _hash: (s) => crypto.createHash('sha1').update(s).digest('hex').slice(0, 10) };
+module.exports = { abrir, normalizar, resumo, ESTADOS, PESSOAS, AREAS, CANAIS, PRIORIDADES, hoje, novoId, _hash: (s) => crypto.createHash('sha1').update(s).digest('hex').slice(0, 10) };

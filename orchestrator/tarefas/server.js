@@ -24,7 +24,7 @@ const sugestoes = require('./sugestoes.js');
 const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 
-const BUILD = '0.3.3-compasso-marco-zero-20261103';
+const BUILD = '0.4.0-compasso-idiomas-arquivo-20261103';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -148,7 +148,8 @@ async function relato() {
   const atrasadas = tarefas.filter((t) => t.estado !== 'done' && t.vence_em && t.vence_em < hoje).sort((a, b) => a.vence_em.localeCompare(b.vence_em));
   for (const t of atrasadas.slice(0, 5)) achados.push({ chave: `tarefas.atrasada.${t.id}`, severidade: hoje > new Date(Date.parse(t.vence_em) + 7 * 864e5).toISOString().slice(0, 10) ? 'alta' : 'media', titulo: `Tarefa atrasada desde ${t.vence_em}: ${t.titulo}`, evidencia: `dono ${store.PESSOAS[t.dono] || t.dono}, ${t.etapas.filter((e) => e.feita).length}/${t.etapas.length} etapas`, fonte: 'plan_tarefas', acao_proposta: 'concluir, mudar a data ou devolver ao quadro', dono: store.PESSOAS[t.dono] || t.dono, autonomia: 'autonomo_com_log' });
   if (atrasadas.length > 5) achados.push({ chave: 'tarefas.atrasadas.total', severidade: 'alta', titulo: `${atrasadas.length} tarefas atrasadas no total`, evidencia: `a mais antiga vence em ${atrasadas[0].vence_em}`, fonte: 'plan_tarefas', acao_proposta: 'abrir o Calendário e triar', dono: 'equipe', autonomia: 'autonomo_com_log' });
-  return { agente: 'planejador', ts: new Date().toISOString(), trace_id: `trc-tarefas-${hoje.replace(/-/g, '')}`, status: 'ok', build: BUILD, motor: db.motor, kpis: { tarefas_abertas: r.abertas, tarefas_atrasadas: r.atrasadas, tarefas_hoje: r.hoje, concluidas_7d: r.concluidas_7d, marlon_abertas: r.por_pessoa.marlon.abertas, lucas_abertas: r.por_pessoa.lucas.abertas, julien_abertas: r.por_pessoa.julien.abertas }, achados, cobertura: { fontes: [`${db.motor} (livro de tarefas)`], lacunas: [] } };
+  const arquivadas = (await db.listar({ arquivadas: true })).length;
+  return { agente: 'planejador', ts: new Date().toISOString(), trace_id: `trc-tarefas-${hoje.replace(/-/g, '')}`, status: 'ok', build: BUILD, motor: db.motor, kpis: { tarefas_abertas: r.abertas, tarefas_atrasadas: r.atrasadas, tarefas_hoje: r.hoje, concluidas_7d: r.concluidas_7d, tarefas_arquivadas: arquivadas, marlon_abertas: r.por_pessoa.marlon.abertas, lucas_abertas: r.por_pessoa.lucas.abertas, julien_abertas: r.por_pessoa.julien.abertas }, achados, cobertura: { fontes: [`${db.motor} (livro de tarefas)`], lacunas: [] } };
 }
 
 // ---------- rotas ----------
@@ -169,7 +170,7 @@ async function api(req, res, url) {
   }
   const sessao = auth.sessaoDe(req);
   // pessoas = quem pode ser dono de tarefa (sempre as três); usuarios = quem pode entrar (pode ser só o admin)
-  if (rota === '/api/eu') return json(res, 200, { usuario: sessao, pessoas: Object.entries(store.PESSOAS).map(([id, nome]) => ({ id, nome })), usuarios: auth.usuarios, build: BUILD, motor: db.motor, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística' });
+  if (rota === '/api/eu') return json(res, 200, { usuario: sessao, pessoas: Object.entries(store.PESSOAS).map(([id, nome]) => ({ id, nome })), usuarios: auth.usuarios, areas: store.AREAS, canais: store.CANAIS, prioridades: store.PRIORIDADES, build: BUILD, motor: db.motor, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística' });
   if (!sessao) return erro(res, 401, 'entre com seu usuário');
   if (req.method !== 'GET' && req.headers['x-requested-with'] !== 'fetch') return erro(res, 403, 'origem não reconhecida');
   const trace = traceDe(req);
@@ -178,7 +179,15 @@ async function api(req, res, url) {
 
   if (rota === '/api/logout' && req.method === 'POST') { auditar({ tipo: 'logout', quem }); return json(res, 200, { ok: true }, { 'set-cookie': auth.cookieSair(seguro(req)) }); }
 
-  if (rota === '/api/tarefas' && req.method === 'GET') { const t = await db.listar(); return json(res, 200, { tarefas: t, resumo: store.resumo(t), hoje: store.hoje() }); }
+  if (rota === '/api/tarefas' && req.method === 'GET') { const t = await db.listar(); return json(res, 200, { tarefas: t, resumo: store.resumo(t), hoje: store.hoje(), arquivadas: (await db.listar({ arquivadas: true })).length }); }
+  // Arquivo (03/11): concluídas arquivadas saem do quadro mas ficam consultáveis aqui, no MCP e no relato.
+  if (rota === '/api/arquivo' && req.method === 'GET') {
+    const q = String(url.searchParams.get('q') || '').trim().toLowerCase();
+    let t = await db.listar({ arquivadas: true });
+    if (q) t = t.filter((x) => [x.titulo, x.notas, x.referencia, x.cidade, x.resultado, x.area, x.dono].join(' ').toLowerCase().includes(q));
+    t.sort((a, b) => String(b.arquivada_em).localeCompare(String(a.arquivada_em)));
+    return json(res, 200, { tarefas: t.slice(0, 200), total: t.length });
+  }
   if (rota === '/api/tarefas' && req.method === 'POST') {
     const b = await lerCorpo(req);
     try {
@@ -194,7 +203,18 @@ async function api(req, res, url) {
     try { const t = await db.atualizar(m[1], b, quem, trace); if (!t) return erro(res, 404, 'tarefa não existe'); auditar({ tipo: 'tarefa_atualizada', quem, id: m[1], campos: Object.keys(b), trace }); return json(res, 200, { tarefa: t }); }
     catch (e) { return erro(res, 400, e.message); }
   }
-  if (m && req.method === 'DELETE') { const ok = await db.excluir(m[1], quem, trace); if (!ok) return erro(res, 404, 'tarefa não existe'); auditar({ tipo: 'tarefa_excluida', quem, id: m[1], trace }); return json(res, 200, { ok: true }); }
+  if (m && req.method === 'DELETE') {
+    // Excluir exige motivo (corpo JSON {motivo} ou ?motivo=) e só vale antes de concluir; concluída se arquiva.
+    const b = await lerCorpo(req).catch(() => ({}));
+    const motivo = b.motivo !== undefined ? b.motivo : url.searchParams.get('motivo');
+    try { const ok = await db.excluir(m[1], quem, trace, motivo); if (!ok) return erro(res, 404, 'tarefa não existe'); auditar({ tipo: 'tarefa_excluida', quem, id: m[1], motivo: String(motivo).slice(0, 300), trace }); return json(res, 200, { ok: true }); }
+    catch (e) { return erro(res, 400, e.message); }
+  }
+  m = rota.match(/^\/api\/tarefas\/(T-\d{8}-\d{4})\/(arquivar|desarquivar)$/);
+  if (m && req.method === 'POST') {
+    try { const t = await db[m[2]](m[1], quem, trace); if (!t) return erro(res, 404, 'tarefa não existe'); auditar({ tipo: `tarefa_${m[2] === 'arquivar' ? 'arquivada' : 'desarquivada'}`, quem, id: m[1], trace }); return json(res, 200, { tarefa: t }); }
+    catch (e) { return erro(res, 400, e.message); }
+  }
   m = rota.match(/^\/api\/tarefas\/(T-\d{8}-\d{4})\/eventos$/);
   if (m && req.method === 'GET') return json(res, 200, { eventos: await db.eventos(m[1]) });
 
@@ -203,10 +223,11 @@ async function api(req, res, url) {
     const texto = String(b.texto || '').trim();
     if (texto.length < 4) return erro(res, 400, 'escreva o que precisa ser feito');
     if (texto.length > 2000) return erro(res, 400, 'texto longo demais (máx. 2000 caracteres)');
-    const p = await planejador.decompor(texto, { donoPadrao });
-    auditar({ tipo: 'planejar', quem, chars: texto.length, modelo: p.origem_modelo, custo: p.custo || null, trace });
+    const idioma = b.idioma === 'fr' ? 'fr' : 'pt';
+    const p = await planejador.decompor(texto, { donoPadrao, idioma });
+    auditar({ tipo: 'planejar', quem, chars: texto.length, idioma, modelo: p.origem_modelo, custo: p.custo || null, trace });
     // Histórico por pessoa (03/11): a mensagem e a proposta ficam gravadas; o id da proposta volta para ligar o card.
-    await db.conversaGravar({ quem, canal: 'app', papel: 'pessoa', texto, trace_id: trace });
+    await db.conversaGravar({ quem, canal: 'app', papel: 'pessoa', texto, idioma, trace_id: trace });
     const mr = await db.conversaGravar({ quem, canal: 'app', papel: 'planejador', proposta: p, trace_id: trace });
     return json(res, 200, { proposta: p, conversa_id: mr.id });
   }

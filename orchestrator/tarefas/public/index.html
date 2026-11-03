@@ -11,13 +11,14 @@
 <body>
 <div class="app" id="app" hidden>
   <header class="top">
-    <div class="brand"><b>COMPASSO</b><span>Tarefas</span></div>
+    <div class="brand"><b>COMPASSO</b><span data-i="brand_sub">Tarefas</span></div>
     <nav class="views" aria-label="Vistas">
-      <button class="on" data-v="board">Quadro</button><button data-v="cal">Calendário</button><button data-v="chat">Chat</button>
+      <button class="on" data-v="board" data-i="nav_board">Quadro</button><button data-v="cal" data-i="nav_cal">Calendário</button><button data-v="chat" data-i="nav_chat">Chat</button>
     </nav>
     <div class="right">
-      <button class="btn gold" id="sugBtn">Sugestões <span class="count" id="sugCount">0</span></button>
-      <button class="btn ghost sm" id="euBtn" title="Sair"><span class="av" id="euAv"></span></button>
+      <div class="lang" role="group" aria-label="Idioma / Langue"><button data-l="pt" title="Português do Brasil">PT</button><button data-l="fr" title="Français">FR</button></div>
+      <button class="btn gold" id="sugBtn"><span data-i="sug">Sugestões</span> <span class="count" id="sugCount">0</span></button>
+      <button class="btn ghost sm" id="euBtn" data-i-title="logout" title="Sair"><span class="av" id="euAv"></span></button>
     </div>
   </header>
 
@@ -27,22 +28,22 @@
       <div class="filters" id="whoFilter"></div>
     </div>
     <div class="board" id="board"></div>
-    <p class="hintline">Arraste um card para mudar o status, ou clique nele para editar. No celular, mude o status dentro do card.</p>
+    <p class="hintline"><span data-i="board_hint">Arraste um card para mudar o status, ou clique nele para editar. No celular, mude o status dentro do card.</span> <button class="linkbtn" id="arcBtn"><span data-i="archive_link">Arquivo</span> <span id="arcCount">0</span></button></p>
   </section>
 
   <section class="view" id="v-cal">
-    <div class="sub"><h1>Próximos 14 dias</h1><span>Clique num dia para filtrar. Atrasadas aparecem primeiro.</span></div>
+    <div class="sub"><h1 data-i="cal_title">Próximos 14 dias</h1><span data-i="cal_hint">Clique num dia para filtrar. Atrasadas aparecem primeiro.</span></div>
     <div class="strip" id="strip"></div>
     <div class="feed" id="feed"></div>
   </section>
 
   <section class="view" id="v-chat">
-    <div class="sub"><h1>Diga o que precisa ser feito</h1><span id="chatHint">O planejador divide em etapas e sugere quem assume. Você confirma antes de virar card.</span></div>
+    <div class="sub"><h1 data-i="chat_title">Diga o que precisa ser feito</h1><span id="chatHint"></span></div>
     <div class="chatwrap">
       <div class="msgs" id="msgs"></div>
       <form class="composer" id="composer">
-        <textarea id="input" placeholder="ex.: Responder os 4 hotéis de Paris que pediram chauffeur até sexta, Julien cuida"></textarea>
-        <button class="btn gold" type="submit">Enviar</button>
+        <textarea id="input" data-i-ph="chat_ph" placeholder=""></textarea>
+        <button class="btn gold" type="submit" data-i="send">Enviar</button>
       </form>
     </div>
   </section>
@@ -51,18 +52,20 @@
 
 <div class="login" id="login" hidden>
   <form class="login-card" id="loginForm">
-    <div class="brand"><b>COMPASSO</b><span>Tarefas</span></div>
-    <p class="hintline">Quadro de tarefas da The World Keys. Entre com o seu usuário.</p>
-    <div class="field"><label for="lUser">Quem é você</label><select id="lUser"></select></div>
-    <div class="field"><label for="lPass">Senha</label><input type="password" id="lPass" autocomplete="current-password" required></div>
+    <div class="brand"><b>COMPASSO</b><span data-i="brand_sub">Tarefas</span></div>
+    <div class="lang" role="group" aria-label="Idioma / Langue"><button data-l="pt">PT</button><button data-l="fr">FR</button></div>
+    <p class="hintline" data-i="login_hint">Quadro de tarefas da The World Keys. Entre com o seu usuário.</p>
+    <div class="field"><label for="lUser" data-i="login_who">Quem é você</label><select id="lUser"></select></div>
+    <div class="field"><label for="lPass" data-i="login_pass">Senha</label><input type="password" id="lPass" autocomplete="current-password" required></div>
     <div class="hint bad" id="lErr"></div>
-    <button class="btn gold" type="submit">Entrar</button>
+    <button class="btn gold" type="submit" data-i="login_btn">Entrar</button>
   </form>
 </div>
 
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-hidden="true"></aside>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/i18n.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>
