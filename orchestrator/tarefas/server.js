@@ -22,12 +22,15 @@ const authMod = require('./auth.js');
 const planejador = require('./planejador.js');
 const sugestoes = require('./sugestoes.js');
 
-const BUILD = '0.1.0-compasso-20261103';
+const BUILD = '0.2.0-compasso-central-api-20261103';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const CENTER_TOKEN = process.env.CENTER_TOKEN || '';
+// Com CENTER_URL, as sugestões leem as filas da Central (achados, perguntas, aprovações, compromissos) pela API
+// com a mesma chave; sem ela, só do disco (máquina do Orquestrador) — e o banco, se houver DATABASE_URL_RO.
+const CENTER_URL = String(process.env.CENTER_URL || '').replace(/\/+$/, '');
 const SUGESTOES_TTL_MS = Number(process.env.TAREFAS_SUGESTOES_TTL_MIN || 360) * 60000;
 
 fs.mkdirSync(path.join(STATE_DIR, 'logs'), { recursive: true });
@@ -69,7 +72,7 @@ async function sugestoesAtuais(forcar) {
   const guardadas = await db.sugestoesLer();
   const idade = guardadas.geradas_em ? Date.now() - Date.parse(guardadas.geradas_em) : Infinity;
   if (!forcar && idade < SUGESTOES_TTL_MS) return { ...guardadas, cobertura: sugCache.dados?.cobertura || null };
-  const g = await sugestoes.gerar({ centralStateDir: process.env.CENTRAL_STATE_DIR || '', compromissosPath: process.env.COMPROMISSOS_PATH || '' }, guardadas.itens);
+  const g = await sugestoes.gerar({ centerUrl: CENTER_URL, centerToken: CENTER_TOKEN, centralStateDir: process.env.CENTRAL_STATE_DIR || '', compromissosPath: process.env.COMPROMISSOS_PATH || '' }, guardadas.itens);
   const salvas = await db.sugestoesGravar(g.itens);
   sugCache = { em: Date.now(), dados: g };
   return { ...salvas, cobertura: g.cobertura };
@@ -166,7 +169,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   res.setHeader('x-content-type-options', 'nosniff');
   res.setHeader('referrer-policy', 'same-origin');
-  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística' });
+  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO } });
   if (url.pathname.startsWith('/api/')) {
     try { await api(req, res, url); }
     catch (e) { console.error('[api]', url.pathname, e && e.message); if (!res.headersSent) erro(res, 500, 'falha interna: ' + String(e && e.message || e).slice(0, 120)); }

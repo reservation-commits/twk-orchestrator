@@ -23,8 +23,9 @@ Serviço próprio. **Build Path `/orchestrator`, Dockerfile `tarefas/Dockerfile`
 | `ANTHROPIC_API_KEY` | não | chat com modelo (`TAREFAS_MODELO`, padrão `claude-opus-5-5`; `off` desliga). Teto `TAREFAS_MAX_LLM_POR_DIA`, padrão 60 |
 | `TAREFAS_DATABASE_URL` | não | livro no Postgres (`sql/001-plan.sql`, papel `twk_plan`). Sem ela, livro em arquivo no volume |
 | `DATABASE_URL_RO` | não | sugestões a partir do banco (escalações paradas, pendências em 48 h), só leitura |
-| `CENTER_TOKEN` | não | permite à Central ler `GET /api/relato` com `X-Center-Key` |
-| `CENTRAL_STATE_DIR`, `COMPROMISSOS_PATH` | não | onde ler achados do vigia e compromissos quando estiverem no mesmo host |
+| `CENTER_TOKEN` | não | chave da Central: permite a ela ler `GET /api/relato` com `X-Center-Key` e é a mesma chave que o COMPASSO usa para ler as filas dela |
+| `CENTER_URL` | não | endereço da Central hospedada (ex.: `https://…easypanel.host`). Com ela, as sugestões leem **pela API** os achados do vigia (`/api/actions`), aprovações (`/api/approvals`), perguntas (`/api/perguntas`) e compromissos (`/api/compromissos`, Central ≥ 4.8.1) — é assim que o serviço hospedado enxerga o sistema sem o notebook ligado |
+| `CENTRAL_STATE_DIR`, `COMPROMISSOS_PATH` | não | reserva: onde ler os mesmos arquivos do disco quando não há `CENTER_URL` ou a API falhou (máquina do Orquestrador) |
 
 A DDL e o papel `twk_plan` exigem a frase do fundador (tabela de escalonamento). Até lá o serviço roda com o livro em arquivo, que já é durável no volume.
 
@@ -58,5 +59,5 @@ Todas as rotas sob `/api/*` exigem sessão (cookie HttpOnly) e, para mutação, 
 ## Integração com a frota
 
 - **Regência / Despacho:** apontar `AGENT_PLANEJADOR_URL` para este serviço e ler `/api/relato` com a chave da Central (mesmo padrão do Quill e do Atlas).
-- **Sugestões:** leem `compromissos.jsonl`, `acoes.jsonl`, `aprovacoes.jsonl`, `perguntas.jsonl` e o banco via `twk_ro`. Cada fonte falha sozinha e aparece como lacuna na gaveta.
+- **Sugestões:** leem `compromissos.jsonl`, `acoes.jsonl`, `aprovacoes.jsonl`, `perguntas.jsonl` (pela API da Central com `CENTER_URL`, ou do disco) e o banco via `twk_ro`. Cada fonte falha sozinha: a gaveta mostra "Fontes lidas" com a origem (Central, twk_ro) e "Fontes que não consegui ler agora" com o motivo (chave recusada, rota ausente, Central fora do ar). `GET /health` traz `leitura` (`central: api|arquivo`, `banco: true|false`).
 - **Auditoria:** `STATE_DIR/logs/audit-AAAA-MM-DD.jsonl` e o ledger de eventos (`eventos.jsonl` ou `plan_eventos`).

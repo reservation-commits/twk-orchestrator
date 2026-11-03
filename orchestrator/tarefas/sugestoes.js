@@ -9,8 +9,15 @@
  * Fontes (todas opcionais):
  *   - compromissos.jsonl do orquestrador (abertos e vencidos)
  *   - Central: acoes.jsonl (achados críticos abertos), aprovacoes.jsonl (pendentes), perguntas.jsonl (abertas)
- *     lidos do disco (máquina do Orquestrador) ou pela API da Central (CENTER_URL + CENTER_TOKEN) quando hospedado
  *   - banco twk_auth via twk_ro (escalações do atendimento paradas; pendências que vencem em 48 h) — se houver credencial
+ *
+ * De onde vêm as filas da Central e os compromissos (03/11, serviço hospedado):
+ *   1. API da Central, quando CENTER_URL está definido — GET /api/actions, /api/approvals, /api/perguntas,
+ *      /api/compromissos com o cabeçalho X-Center-Key (CENTER_TOKEN). É a fonte viva: a Central hospedada é
+ *      onde a Regência roda e para onde o notebook empurra os compromissos.
+ *   2. Disco, quando não há CENTER_URL ou a API falhou — CENTRAL_STATE_DIR / command-center/state e
+ *      COMPROMISSOS_PATH / orchestrator/state/compromissos.jsonl (máquina do Orquestrador).
+ *   A cobertura diz de onde cada fonte veio (origem: 'api' | 'arquivo') e por que falhou quando falhou.
  */
 const fs = require('node:fs');
 const path = require('node:path');
@@ -25,53 +32,85 @@ function sug(o) {
   return { id: id(o.chave), chave: o.chave, titulo: o.titulo.slice(0, 200), area: o.area || 'Operação', porque: o.porque.slice(0, 300), fonte: o.fonte, dono_sugerido: o.dono_sugerido || null, etapas: (o.etapas || []).slice(0, 6), prioridade_fixa: !!o.prioridade_fixa, severidade: o.severidade || 'media' };
 }
 
+// ---------------------------------------------------------------- Central por API
+/** GET numa rota da Central com a chave. Devolve o JSON ou lança com motivo curto (vira lacuna). */
+async function buscarCentral(ctx, rota) {
+  const base = String(ctx.centerUrl || '').replace(/\/+$/, '');
+  if (!base) throw new Error('sem CENTER_URL');
+  const r = await fetch(base + rota, { headers: { 'X-Center-Key': ctx.centerToken || '', accept: 'application/json' }, signal: AbortSignal.timeout(ctx.timeoutMs || 6000) });
+  if (r.status === 401) throw new Error('Central recusou a chave (401)');
+  if (r.status === 404) throw new Error(`Central ainda não serve ${rota} (404)`);
+  if (!r.ok) throw new Error(`Central respondeu ${r.status} em ${rota}`);
+  return r.json();
+}
+
+/**
+ * Lê uma fila: API da Central primeiro (quando configurada), disco depois.
+ * Devolve { linhas, origem: 'api'|'arquivo' } ou { linhas: null, lacuna }.
+ */
+async function lerFila(ctx, { rota, campo, arquivos }) {
+  let lacuna = null;
+  if (ctx.centerUrl) {
+    try {
+      const dados = await buscarCentral(ctx, rota);
+      const linhas = dados && Array.isArray(dados[campo]) ? dados[campo] : null;
+      if (linhas) return { linhas, origem: 'api' };
+      lacuna = `Central devolveu ${rota} sem o campo ${campo}`;
+    } catch (e) { lacuna = String(e.name === 'TimeoutError' ? `Central não respondeu em ${rota}` : e.message || e).slice(0, 120); }
+  }
+  for (const f of arquivos.filter(Boolean)) { const l = lerJsonl(f); if (l) return { linhas: l, origem: 'arquivo' }; }
+  return { linhas: null, lacuna: lacuna || 'arquivo ausente neste host (defina CENTER_URL ou o caminho)' };
+}
+
+// Caminho explícito é exclusivo (quem define CENTRAL_STATE_DIR/COMPROMISSOS_PATH não quer o estado do repositório por trás).
+const dirsCentral = (ctx) => ctx.centralStateDir ? [ctx.centralStateDir] : [path.join(RAIZ, 'orchestrator', 'command-center', 'state')];
+const arquivosCompromissos = (ctx) => ctx.compromissosPath ? [ctx.compromissosPath] : [path.join(RAIZ, 'orchestrator', 'state', 'compromissos.jsonl')];
+const rotulo = (nome, origem) => origem === 'api' ? `${nome} (Central)` : nome;
+
 // ---------------------------------------------------------------- leitores
-function deCompromissos(ctx) {
-  const f = ctx.compromissosPath || path.join(RAIZ, 'orchestrator', 'state', 'compromissos.jsonl');
-  const linhas = lerJsonl(f);
-  if (!linhas) return { fonte: 'compromissos', ok: false, itens: [] };
+async function deCompromissos(ctx) {
+  const { linhas, origem, lacuna } = await lerFila(ctx, { rota: '/api/compromissos', campo: 'items', arquivos: arquivosCompromissos(ctx) });
+  if (!linhas) return { fonte: 'compromissos', ok: false, itens: [], lacuna };
   const hoje = hojeIso();
   const abertos = linhas.filter((c) => c.status === 'aberto');
   const itens = abertos.filter((c) => c.vence_em && c.vence_em < hoje).map((c) => sug({
-    chave: `compromisso:${c.id}`, titulo: c.o_que.split(/[.(]/)[0].trim(), area: /cliente|reserva/i.test(c.tipo + c.o_que) ? 'Clientes' : /restaurante|casa|e-mail morto/i.test(c.o_que) ? 'Catálogo' : /front|site|workflow|produto/i.test(c.tipo + c.o_que) ? 'Site' : 'Operação',
-    porque: `Compromisso ${c.id} vencido em ${c.vence_em} (dono registrado: ${c.dono}). Se já foi superado, assuma e feche com o motivo.`, fonte: 'compromissos.jsonl',
+    chave: `compromisso:${c.id}`, titulo: String(c.o_que || c.id).split(/[.(]/)[0].trim(), area: /cliente|reserva/i.test(c.tipo + c.o_que) ? 'Clientes' : /restaurante|casa|e-mail morto/i.test(c.o_que) ? 'Catálogo' : /front|site|workflow|produto/i.test(c.tipo + c.o_que) ? 'Site' : 'Operação',
+    porque: `Compromisso ${c.id} vencido em ${c.vence_em} (dono registrado: ${c.dono}). Se já foi superado, assuma e feche com o motivo.`, fonte: rotulo('compromissos.jsonl', origem),
     prioridade_fixa: /cliente|reserva/i.test(c.tipo), severidade: /cliente|reserva/i.test(c.tipo) ? 'alta' : 'media',
     etapas: ['Ler o compromisso e o que mudou desde então', 'Fazer, ou fechar como superado com motivo', 'Registrar'],
   }));
-  return { fonte: 'compromissos', ok: true, itens, total_abertos: abertos.length };
+  return { fonte: 'compromissos', ok: true, origem, itens, total_abertos: abertos.length };
 }
 
-function lerCentral(ctx, arquivo) {
-  const dirs = [ctx.centralStateDir, path.join(RAIZ, 'orchestrator', 'command-center', 'state')].filter(Boolean);
-  for (const d of dirs) { const l = lerJsonl(path.join(d, arquivo)); if (l) return l; }
-  return null;
-}
-
-function deAcoes(ctx) {
-  const acoes = lerCentral(ctx, 'acoes.jsonl');
-  if (!acoes) return { fonte: 'acoes', ok: false, itens: [] };
+async function deAcoes(ctx) {
+  const { linhas: acoes, origem, lacuna } = await lerFila(ctx, { rota: '/api/actions', campo: 'acoes', arquivos: dirsCentral(ctx).map((d) => path.join(d, 'acoes.jsonl')) });
+  if (!acoes) return { fonte: 'acoes', ok: false, itens: [], lacuna };
   const abertas = acoes.filter((a) => a.status === 'aberta');
   const criticas = abertas.filter((a) => a.severidade === 'critica');
   // Uma sugestão por achado crítico (as 5 mais antigas) + uma de varredura geral quando a fila está velha.
   const itens = criticas.sort((a, b) => String(a.criado_em || '').localeCompare(String(b.criado_em || ''))).slice(0, 5).map((a) => sug({
     chave: `acao:${a.id || a.chave || a.titulo}`, titulo: a.titulo || a.regra || 'Achado crítico do vigia', area: /suporte|atend|aria|whatsapp/i.test(a.agente || '') ? 'Clientes' : /dba|catalogo|catálogo/i.test(a.agente || '') ? 'Catálogo' : /central|site/i.test(a.agente || '') ? 'Site' : 'Operação',
-    porque: `Achado crítico aberto desde ${String(a.criado_em || '').slice(0, 10)} (${a.agente || 'vigia'}). ${String(a.detalhe || a.evidencia || '').slice(0, 140)}`.trim(), fonte: 'acoes.jsonl', severidade: 'alta',
+    porque: `Achado crítico aberto desde ${String(a.criado_em || '').slice(0, 10)} (${a.agente || 'vigia'}). ${String(a.detalhe || a.evidencia || '').slice(0, 140)}`.trim(), fonte: rotulo('acoes.jsonl', origem), severidade: 'alta',
     etapas: ['Confirmar se o achado ainda é verdadeiro', 'Corrigir ou delegar', 'Fechar o achado na Central'],
   }));
-  if (abertas.length >= 10) itens.push(sug({ chave: 'acoes:varredura', titulo: `Reler os ${abertas.length} achados abertos do vigia e fechar os que já normalizaram`, area: 'Operação', porque: `${abertas.length} achados abertos, ${criticas.length} críticos; nenhum fechado desde a criação da fila.`, fonte: 'acoes.jsonl', etapas: ['Ler os críticos primeiro', 'Fechar os que normalizaram', 'Dar dono aos que seguem verdadeiros'] }));
-  return { fonte: 'acoes', ok: true, itens, abertas: abertas.length, criticas: criticas.length };
+  if (abertas.length >= 10) itens.push(sug({ chave: 'acoes:varredura', titulo: `Reler os ${abertas.length} achados abertos do vigia e fechar os que já normalizaram`, area: 'Operação', porque: `${abertas.length} achados abertos, ${criticas.length} críticos; nenhum fechado desde a criação da fila.`, fonte: rotulo('acoes.jsonl', origem), etapas: ['Ler os críticos primeiro', 'Fechar os que normalizaram', 'Dar dono aos que seguem verdadeiros'] }));
+  return { fonte: 'acoes', ok: true, origem, itens, abertas: abertas.length, criticas: criticas.length };
 }
 
-function dePerguntasEAprovacoes(ctx) {
-  const perguntas = lerCentral(ctx, 'perguntas.jsonl');
-  const aprov = lerCentral(ctx, 'aprovacoes.jsonl');
-  if (!perguntas && !aprov) return { fonte: 'central', ok: false, itens: [] };
+async function dePerguntasEAprovacoes(ctx) {
+  const [p, a] = await Promise.all([
+    lerFila(ctx, { rota: '/api/perguntas', campo: 'items', arquivos: dirsCentral(ctx).map((d) => path.join(d, 'perguntas.jsonl')) }),
+    lerFila(ctx, { rota: '/api/approvals', campo: 'aprovacoes', arquivos: dirsCentral(ctx).map((d) => path.join(d, 'aprovacoes.jsonl')) }),
+  ]);
+  if (!p.linhas && !a.linhas) return { fonte: 'central', ok: false, itens: [], lacuna: p.lacuna || a.lacuna };
+  const origem = p.origem || a.origem;
   const itens = [];
-  const pa = (perguntas || []).filter((q) => q.status === 'aberta');
-  const ap = (aprov || []).filter((a) => a.status === 'pendente');
-  if (pa.length) itens.push(sug({ chave: 'central:perguntas', titulo: `Responder as ${pa.length} perguntas abertas na Central`, area: 'Operação', porque: `${pa.length} perguntas sem resposta; a mais antiga é de ${pa.map((q) => String(q.criado_em || '').slice(0, 10)).sort()[0] || '?'}. Cada uma trava uma decisão de agente.`, fonte: 'perguntas.jsonl', dono_sugerido: 'marlon', etapas: ['Abrir a Conversa da Central', 'Responder ou marcar como não se aplica', 'Conferir que a fila zerou'] }));
-  if (ap.length) itens.push(sug({ chave: 'central:aprovacoes', titulo: `Decidir as ${ap.length} aprovações pendentes na Central`, area: 'Operação', porque: `${ap.length} pedidos de autorização parados; agentes esperando para agir.`, fonte: 'aprovacoes.jsonl', dono_sugerido: 'marlon', etapas: ['Abrir Aprovações', 'Aprovar ou negar cada um', 'Registrar o motivo das negadas'] }));
-  return { fonte: 'central', ok: true, itens, perguntas: pa.length, aprovacoes: ap.length };
+  const pa = (p.linhas || []).filter((q) => q.status === 'aberta');
+  const ap = (a.linhas || []).filter((x) => x.status === 'pendente');
+  if (pa.length) itens.push(sug({ chave: 'central:perguntas', titulo: pa.length === 1 ? 'Responder a pergunta aberta na Central' : `Responder as ${pa.length} perguntas abertas na Central`, area: 'Operação', porque: `${pa.length} pergunta${pa.length === 1 ? '' : 's'} sem resposta; a mais antiga é de ${pa.map((q) => String(q.criado_em || '').slice(0, 10)).sort()[0] || '?'}. Cada uma trava uma decisão de agente.`, fonte: rotulo('perguntas.jsonl', p.origem), dono_sugerido: 'marlon', etapas: ['Abrir a Conversa da Central', 'Responder ou marcar como não se aplica', 'Conferir que a fila zerou'] }));
+  if (ap.length) itens.push(sug({ chave: 'central:aprovacoes', titulo: ap.length === 1 ? 'Decidir a aprovação pendente na Central' : `Decidir as ${ap.length} aprovações pendentes na Central`, area: 'Operação', porque: `${ap.length} pedido${ap.length === 1 ? '' : 's'} de autorização parado${ap.length === 1 ? '' : 's'}; agentes esperando para agir.`, fonte: rotulo('aprovacoes.jsonl', a.origem), dono_sugerido: 'marlon', etapas: ['Abrir Aprovações', 'Aprovar ou negar cada um', 'Registrar o motivo das negadas'] }));
+  const parcial = (!p.linhas && p.lacuna) || (!a.linhas && a.lacuna) || null;
+  return { fonte: 'central', ok: true, origem, itens, perguntas: pa.length, aprovacoes: ap.length, lacuna: parcial };
 }
 
 async function doBanco(ctx) {
@@ -87,14 +126,14 @@ async function doBanco(ctx) {
       const pend = await c.query("SELECT count(*)::int AS n FROM reservations WHERE expired_at IS NULL AND booking_status IN ('Pending','In Treatment') AND booking_date BETWEEN current_date AND current_date + 2");
       const np = pend.rows[0]?.n || 0;
       if (np > 0) itens.push(sug({ chave: 'banco:pendencias_48h', titulo: np === 1 ? 'Correr atrás da reserva pendente que acontece nas próximas 48 h' : `Correr atrás das ${np} reservas pendentes que acontecem nas próximas 48 h`, area: 'Clientes', porque: `${np} pedido${np === 1 ? '' : 's'} de mesa sem resposta do restaurante com data até depois de amanhã.`, fonte: 'reservations (twk_ro)', prioridade_fixa: true, severidade: 'alta', etapas: ['Ver a fila do Guardião', 'Ligar ou escrever para as casas', 'Avisar o cliente pela Aria quando não houver resposta'] }));
-      return { fonte: 'banco', ok: true, itens };
+      return { fonte: 'banco', ok: true, origem: 'banco', itens };
     });
   } catch (e) { return { fonte: 'banco', ok: false, itens: [], lacuna: String(e.message || e).slice(0, 120) }; }
 }
 
 /** Gera a lista nova preservando decisões anteriores (assumida/descartada) por id estável. */
 async function gerar(ctx = {}, anteriores = []) {
-  const leituras = [deCompromissos(ctx), deAcoes(ctx), dePerguntasEAprovacoes(ctx), await doBanco(ctx)];
+  const leituras = await Promise.all([deCompromissos(ctx), deAcoes(ctx), dePerguntasEAprovacoes(ctx), doBanco(ctx)]);
   const decididas = new Map(anteriores.filter((s) => s.decisao).map((s) => [s.id, s]));
   const vistos = new Set();
   const itens = [];
@@ -114,7 +153,7 @@ async function gerar(ctx = {}, anteriores = []) {
   // Foco: no máximo 12 sugestões vivas por vez (as decididas não contam). O resto espera a próxima leitura.
   const vivas = itens.filter((s) => !s.decisao).slice(0, 12);
   const decididasAgora = itens.filter((s) => s.decisao);
-  return { itens: [...vivas, ...decididasAgora], cobertura: leituras.map((l) => ({ fonte: l.fonte, ok: l.ok, lacuna: l.lacuna || null })) };
+  return { itens: [...vivas, ...decididasAgora], cobertura: leituras.map((l) => ({ fonte: l.fonte, ok: l.ok, origem: l.origem || null, lacuna: l.lacuna || null })) };
 }
 
-module.exports = { gerar, deCompromissos, deAcoes, dePerguntasEAprovacoes, doBanco, _id: id };
+module.exports = { gerar, deCompromissos, deAcoes, dePerguntasEAprovacoes, doBanco, lerFila, _id: id };

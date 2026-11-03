@@ -26,7 +26,7 @@ const whatsapp = require('./whatsapp.js'); // Sala do WhatsApp: o canal ao vivo 
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.8.0-sala-do-whatsapp-20261023';
+const BUILD = '4.8.1-compromissos-api-20261103';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -422,6 +422,11 @@ const server = http.createServer(async (req, res) => {
     }
     if (u.pathname === '/api/perguntas') {
       return json(res, 200, { items: readLines(path.join(STATE_DIR, 'perguntas.jsonl')) });
+    }
+    // Compromissos com data (ADR-015), cópia empurrada pelo push-state.ps1 e lida pela Sentinela. Servidos aqui
+    // para o COMPASSO (tarefas) sugerir a partir deles sem depender do notebook (03/11).
+    if (u.pathname === '/api/compromissos') {
+      return json(res, 200, { items: readLines(path.join(STATE_DIR, 'compromissos.jsonl')) });
     }
     // ---------- Regência (ADR-012): relatos dos agentes e despachos do MAESTRO ----------
     if (u.pathname === '/api/relatos' && req.method === 'GET') {
