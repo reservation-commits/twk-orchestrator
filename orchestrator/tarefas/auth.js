@@ -22,13 +22,16 @@ const PESSOAS = { marlon: 'Márlon', lucas: 'Lucas', julien: 'Julien' };
 const LOGINS = { ...PESSOAS, admin: 'Admin' };
 const DIAS_SESSAO = 30;
 
+// Formato `scrypt:salt:hash`. Sem cifrão de propósito: o EasyPanel (e o docker compose) tratam `$palavra`
+// numa variável de ambiente como referência a outra variável e engolem o conteúdo — foi o que derrubou o
+// primeiro deploy (03/11). O formato antigo `scrypt$salt$hash` continua aceito na leitura.
 function hashSenha(senha, salt) {
   const s = salt || crypto.randomBytes(12).toString('hex');
   const h = crypto.scryptSync(String(senha), s, 32).toString('hex');
-  return `scrypt$${s}$${h}`;
+  return `scrypt:${s}:${h}`;
 }
 function conferirSenha(senha, guardado) {
-  const [alg, salt, h] = String(guardado || '').split('$');
+  const [alg, salt, h] = String(guardado || '').split(/[:$]/);
   if (alg !== 'scrypt' || !salt || !h) return false;
   const calc = crypto.scryptSync(String(senha), salt, 32).toString('hex');
   return calc.length === h.length && crypto.timingSafeEqual(Buffer.from(calc, 'hex'), Buffer.from(h, 'hex'));
@@ -39,8 +42,8 @@ function carregarUsuarios({ stateDir, isProd }) {
   if (process.env.TAREFAS_USUARIOS) { try { lista = JSON.parse(process.env.TAREFAS_USUARIOS); } catch { throw new Error('TAREFAS_USUARIOS não é JSON válido.'); } }
   else { const f = path.join(stateDir, 'usuarios.json'); if (fs.existsSync(f)) lista = JSON.parse(fs.readFileSync(f, 'utf8')); }
   if (Array.isArray(lista) && lista.length) {
-    const ok = lista.filter((u) => LOGINS[u.id] && /^scrypt\$/.test(u.senha));
-    if (!ok.length) throw new Error('Nenhum usuário válido (id em admin|marlon|lucas|julien e senha em hash scrypt).');
+    const ok = lista.filter((u) => LOGINS[u.id] && /^scrypt[:$][0-9a-f]+[:$][0-9a-f]{64}$/.test(u.senha));
+    if (!ok.length) throw new Error(`Nenhum usuário válido (id em admin|marlon|lucas|julien e senha em hash "scrypt:salt:hash"). Recebido: ${lista.map((u) => `${u.id}=${String(u.senha || '').slice(0, 12)}…`).join(', ')}`);
     return ok.map((u) => ({ id: u.id, nome: u.nome || LOGINS[u.id], senha: u.senha }));
   }
   if (isProd) return [];

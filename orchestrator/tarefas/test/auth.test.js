@@ -10,10 +10,11 @@ function tmp() { return fs.mkdtempSync(path.join(os.tmpdir(), 'twk-auth-test-'))
 
 test('hash e conferência de senha', () => {
   const h = auth.hashSenha('segredo');
-  assert.match(h, /^scrypt\$[0-9a-f]{24}\$[0-9a-f]{64}$/);
+  assert.match(h, /^scrypt:[0-9a-f]{24}:[0-9a-f]{64}$/, 'sem cifrão: o EasyPanel engole $palavra em variáveis de ambiente');
   assert.equal(auth.conferirSenha('segredo', h), true);
   assert.equal(auth.conferirSenha('outra', h), false);
   assert.equal(auth.conferirSenha('segredo', 'lixo'), false);
+  assert.equal(auth.conferirSenha('segredo', h.replace(/:/g, '$')), true, 'formato antigo com $ continua aceito');
 });
 
 test('produção sem usuários ou sem segredo = não operacional', () => {

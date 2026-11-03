@@ -21,6 +21,7 @@ ENV PORT=8790
 ENV STATE_DIR=/app/state
 VOLUME /app/state
 EXPOSE 8790
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -qO- http://127.0.0.1:8790/health || exit 1
+# O EasyPanel injeta PORT=80 no container; o servidor ouve nela. O health check segue a mesma variável.
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -qO- "http://127.0.0.1:${PORT:-8790}/health" || exit 1
 USER node
 CMD ["node", "server.js"]

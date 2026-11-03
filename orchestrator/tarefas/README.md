@@ -28,6 +28,11 @@ Serviço próprio. **Build Path `/orchestrator`, Dockerfile `tarefas/Dockerfile`
 
 A DDL e o papel `twk_plan` exigem a frase do fundador (tabela de escalonamento). Até lá o serviço roda com o livro em arquivo, que já é durável no volume.
 
+**Lições do primeiro deploy (03/11):**
+- O hash é `scrypt:salt:hash`, com dois-pontos. O formato antigo com `$` era engolido pelo EasyPanel, que trata `$palavra` numa variável de ambiente como referência a outra variável. Se algum dia precisar de `$` numa variável, escreva `$$`.
+- O EasyPanel injeta `PORT=80`; o servidor ouve nela e o health check acompanha. Em **Domínios**, a porta do serviço é a `80` (ou defina `PORT=8790` em Ambiente e use 8790 nos dois lugares).
+- Com usuários ou segredo errados o log diz exatamente o que faltou (`[auth] …`) e o serviço fica `NÃO OPERACIONAL` respondendo 503, sem cair.
+
 ## API
 
 Todas as rotas sob `/api/*` exigem sessão (cookie HttpOnly) e, para mutação, o cabeçalho `X-Requested-With: fetch`.
