@@ -123,7 +123,7 @@ function motorArquivo(stateDir) {
       return (id ? linhas.filter((e) => e.tarefa_id === id) : linhas).slice(-limite);
     },
     async sugestoesLer() { return { ...sugestoes, itens: sugestoes.itens.map((s) => ({ ...s })) }; },
-    async sugestoesGravar(itens) { sugestoes = { geradas_em: new Date().toISOString(), itens }; gravarJson(F.sug, sugestoes); return sugestoes; },
+    async sugestoesGravar(itens, extra) { sugestoes = { geradas_em: new Date().toISOString(), marco_zero: (extra && extra.marco_zero) || null, itens }; gravarJson(F.sug, sugestoes); return sugestoes; },
     async sugestaoDecidir(id, decisao, quem, trace, tarefaId) {
       const s = sugestoes.itens.find((x) => x.id === id);
       if (!s) return null;
@@ -196,10 +196,11 @@ function motorPostgres(url) {
       const r = id ? await q('SELECT * FROM plan_eventos WHERE tarefa_id=$1 ORDER BY ts DESC LIMIT $2', [id, limite]) : await q('SELECT * FROM plan_eventos ORDER BY ts DESC LIMIT $1', [limite]);
       return r.rows.reverse();
     },
-    async sugestoesLer() { const r = await q('SELECT id, dados FROM plan_sugestoes ORDER BY criado_em DESC'); return { geradas_em: r.rows[0]?.dados?.gerada_em || null, itens: r.rows.map(linha) }; },
-    async sugestoesGravar(itens) {
+    async sugestoesLer() { const r = await q('SELECT id, dados FROM plan_sugestoes ORDER BY criado_em DESC'); return { geradas_em: r.rows[0]?.dados?.gerada_em || null, marco_zero: r.rows[0]?.dados?.marco_zero || null, itens: r.rows.map(linha) }; },
+    async sugestoesGravar(itens, extra) {
       const agora = new Date().toISOString();
-      for (const s of itens) await q('INSERT INTO plan_sugestoes (id, dados, criado_em) VALUES ($1,$2,$3) ON CONFLICT (id) DO UPDATE SET dados = plan_sugestoes.dados || $2::jsonb', [s.id, JSON.stringify({ ...s, gerada_em: agora }), agora]);
+      const marco = (extra && extra.marco_zero) || null;
+      for (const s of itens) await q('INSERT INTO plan_sugestoes (id, dados, criado_em) VALUES ($1,$2,$3) ON CONFLICT (id) DO UPDATE SET dados = plan_sugestoes.dados || $2::jsonb', [s.id, JSON.stringify({ ...s, gerada_em: agora, marco_zero: marco }), agora]);
       return this.sugestoesLer();
     },
     async sugestaoDecidir(id, decisao, quem, trace, tarefaId) {

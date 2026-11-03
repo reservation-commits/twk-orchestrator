@@ -106,3 +106,29 @@ test('a biblioteca de conexão é achada no repositório E na disposição da im
   assert.equal(naImagem.carregarConectar().marca, 'stub-da-imagem');
   return naImagem.doBanco({}).then((r) => { assert.equal(r.ok, false); assert.match(r.lacuna, /sem credencial twk_ro/, 'com a biblioteca achada, a lacuna passa a ser a credencial, não a biblioteca'); });
 });
+
+test('marco zero: o que nasceu antes da data não vira sugestão, em nenhuma fonte; sem data = fora', async () => {
+  const hoje = new Date().toISOString().slice(0, 10);
+  const c = await centralFalsa({
+    acoes: [{ id: 'A-velha', status: 'aberta', severidade: 'critica', criado_em: '2026-10-22T10:00:00Z', titulo: 'velha' }, { id: 'A-nova', status: 'aberta', severidade: 'critica', criado_em: `${hoje}T10:00:00Z`, titulo: 'nova' }, { id: 'A-sem-data', status: 'aberta', severidade: 'critica', titulo: 'sem data' }],
+    aprovacoes: [{ id: 'APR-20261022191516-1b54', status: 'pendente' }, { id: 'APR-nova', status: 'pendente', criado_em: `${hoje}T11:00:00Z` }],
+    perguntas: [{ id: 'Q-2026-09-02-01', status: 'aberta' }],
+    compromissos: [{ id: 'C-1', status: 'aberto', criado_em: '2026-09-14T13:04:36Z', vence_em: ontem, tipo: 'cliente', o_que: 'Antigo', dono: 'x' }],
+  });
+  try {
+    const ctx = { centerUrl: c.url, centerToken: CHAVE, centralStateDir: vazio(), compromissosPath: path.join(vazio(), 'nao.jsonl'), marcoZero: hoje };
+    const g = await sugestoes.gerar(ctx, []);
+    const chaves = g.itens.map((s) => s.chave);
+    assert.deepEqual(chaves.filter((k) => k.startsWith('acao:')), ['acao:A-nova']);
+    assert.ok(!chaves.includes('compromisso:C-1'));
+    assert.ok(!chaves.includes('central:perguntas'), 'pergunta de 02/09 (data no id) fica fora');
+    assert.ok(chaves.includes('central:aprovacoes'));
+    assert.equal(g.itens.find((s) => s.chave === 'central:aprovacoes').porque.slice(0, 1), '1', 'só a aprovação nova conta');
+    assert.equal(g.marco_zero, hoje);
+    const semMarco = await sugestoes.gerar({ ...ctx, marcoZero: null }, []);
+    assert.ok(semMarco.itens.map((s) => s.chave).includes('compromisso:C-1'), 'sem marco, tudo volta');
+  } finally { c.fechar(); }
+  assert.equal(sugestoes.dataDe({ id: 'APR-20261022191516-1b54' }), '2026-10-22');
+  assert.equal(sugestoes.dataDe({ id: 'Q-2026-09-02-01' }), '2026-09-02');
+  assert.equal(sugestoes.dataDe({ id: 'x' }), null);
+});

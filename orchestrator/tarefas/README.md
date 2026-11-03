@@ -26,6 +26,7 @@ Serviço próprio. **Build Path `/orchestrator`, Dockerfile `tarefas/Dockerfile`
 | `CENTER_TOKEN` | não | chave da Central: permite a ela ler `GET /api/relato` com `X-Center-Key` e é a mesma chave que o COMPASSO usa para ler as filas dela |
 | `CENTER_URL` | não | endereço da Central hospedada (ex.: `https://…easypanel.host`). Com ela, as sugestões leem **pela API** os achados do vigia (`/api/actions`), aprovações (`/api/approvals`), perguntas (`/api/perguntas`) e compromissos (`/api/compromissos`, Central ≥ 4.8.1) — é assim que o serviço hospedado enxerga o sistema sem o notebook ligado |
 | `CENTRAL_STATE_DIR`, `COMPROMISSOS_PATH` | não | reserva: onde ler os mesmos arquivos do disco quando não há `CENTER_URL` ou a API falhou (máquina do Orquestrador) |
+| `TAREFAS_MARCO_ZERO` | não | **marco zero** (`AAAA-MM-DD`, decisão do fundador em 03/11: "apague as atrasadas, só as futuras"). Sinais nascidos antes da data — compromissos, achados do vigia, perguntas, aprovações, escalações — não viram sugestão; a lista guardada é regenerada ao mudar a data. O registro de origem (Central, banco) não é tocado |
 | `TAREFAS_URL` | recomendada | endereço público do serviço (ex.: `https://theworldkeys-compasso.xis4ee.easypanel.host`), usado como *issuer* do OAuth do conector MCP. Sem ela, deriva de `x-forwarded-proto` + `host` |
 
 A DDL e o papel `twk_plan` exigem a frase do fundador (tabela de escalonamento). Até lá o serviço roda com o livro em arquivo, que já é durável no volume.

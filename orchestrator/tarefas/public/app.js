@@ -163,6 +163,7 @@
       <div class="body">${S.sug.itens.length ? S.sug.itens.map((s) => `<div class="sug" data-s="${s.id}"><span class="tag">${esc(s.area)}${s.prioridade_fixa ? ' · prioridade' : ''}</span><span class="t">${esc(s.titulo)}</span><span class="why">${esc(s.porque)} <em>(${esc(s.fonte)})</em></span>
         <span class="who">Assumir como: <span class="pick">${S.pessoas.map((p) => `<button data-take="${p.id}">${av(p.id)}${esc(p.nome)}</button>`).join('')}</span></span>
         <span class="who"><button class="btn ghost sm" data-skip="${s.id}">Agora não</button></span></div>`).join('') : '<p class="hintline">Nenhuma sugestão pendente. O planejador traz novas quando os números mudam.</p>'}
+      ${S.sug.marco_zero ? `<p class="hintline">Marco zero: só sinais a partir de ${fmt(S.sug.marco_zero)}. O que nasceu antes não vira sugestão.</p>` : ''}
       ${lidas.length ? `<p class="hintline">Fontes lidas: ${lidas.map(esc).join(', ')}.</p>` : ''}
       ${lac.length ? `<p class="hintline">Fontes que não consegui ler agora: ${lac.map((c) => esc(c.fonte + (c.lacuna ? ` (${c.lacuna})` : ''))).join(', ')}.</p>` : ''}
       <p class="hintline">${S.sug.geradas_em ? 'Lidas em ' + esc(S.sug.geradas_em.slice(0, 16).replace('T', ' ')) : ''}${S.sug.decididas ? ` · ${S.sug.decididas} já decididas` : ''}</p></div>`);

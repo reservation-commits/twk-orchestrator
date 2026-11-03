@@ -63,6 +63,22 @@ async function lerFila(ctx, { rota, campo, arquivos }) {
 }
 
 // Caminho explícito é exclusivo (quem define CENTRAL_STATE_DIR/COMPROMISSOS_PATH não quer o estado do repositório por trás).
+// ---------------------------------------------------------------- marco zero (03/11, decisão do fundador)
+// "Apague as atrasadas; a partir de agora só as futuras": com ctx.marcoZero (AAAA-MM-DD) nenhum sinal nascido antes
+// dessa data vira sugestão — compromisso, achado, pergunta, aprovação ou escalação. O registro de origem não é
+// tocado (é de outro agente); o COMPASSO só deixa de olhar para trás. Item sem data conhecida fica de fora também.
+function dataDe(o) {
+  const d = o && (o.criado_em || o.criada_em || o.created_at || o.ts);
+  if (d) return String(d).slice(0, 10);
+  const m = String(o && o.id || '').match(/(\d{4})-?(\d{2})-?(\d{2})/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+}
+function depoisDoMarco(ctx, o) {
+  if (!ctx.marcoZero) return true;
+  const d = dataDe(o);
+  return !!d && d >= String(ctx.marcoZero).slice(0, 10);
+}
+
 const dirsCentral = (ctx) => ctx.centralStateDir ? [ctx.centralStateDir] : [path.join(RAIZ, 'orchestrator', 'command-center', 'state')];
 const arquivosCompromissos = (ctx) => ctx.compromissosPath ? [ctx.compromissosPath] : [path.join(RAIZ, 'orchestrator', 'state', 'compromissos.jsonl')];
 const rotulo = (nome, origem) => origem === 'api' ? `${nome} (Central)` : nome;
@@ -72,7 +88,7 @@ async function deCompromissos(ctx) {
   const { linhas, origem, lacuna } = await lerFila(ctx, { rota: '/api/compromissos', campo: 'items', arquivos: arquivosCompromissos(ctx) });
   if (!linhas) return { fonte: 'compromissos', ok: false, itens: [], lacuna };
   const hoje = hojeIso();
-  const abertos = linhas.filter((c) => c.status === 'aberto');
+  const abertos = linhas.filter((c) => c.status === 'aberto' && depoisDoMarco(ctx, c));
   const itens = abertos.filter((c) => c.vence_em && c.vence_em < hoje).map((c) => sug({
     chave: `compromisso:${c.id}`, titulo: String(c.o_que || c.id).split(/[.(]/)[0].trim(), area: /cliente|reserva/i.test(c.tipo + c.o_que) ? 'Clientes' : /restaurante|casa|e-mail morto/i.test(c.o_que) ? 'Catálogo' : /front|site|workflow|produto/i.test(c.tipo + c.o_que) ? 'Site' : 'Operação',
     porque: `Compromisso ${c.id} vencido em ${c.vence_em} (dono registrado: ${c.dono}). Se já foi superado, assuma e feche com o motivo.`, fonte: rotulo('compromissos.jsonl', origem),
@@ -85,7 +101,7 @@ async function deCompromissos(ctx) {
 async function deAcoes(ctx) {
   const { linhas: acoes, origem, lacuna } = await lerFila(ctx, { rota: '/api/actions', campo: 'acoes', arquivos: dirsCentral(ctx).map((d) => path.join(d, 'acoes.jsonl')) });
   if (!acoes) return { fonte: 'acoes', ok: false, itens: [], lacuna };
-  const abertas = acoes.filter((a) => a.status === 'aberta');
+  const abertas = acoes.filter((a) => a.status === 'aberta' && depoisDoMarco(ctx, a));
   const criticas = abertas.filter((a) => a.severidade === 'critica');
   // Uma sugestão por achado crítico (as 5 mais antigas) + uma de varredura geral quando a fila está velha.
   const itens = criticas.sort((a, b) => String(a.criado_em || '').localeCompare(String(b.criado_em || ''))).slice(0, 5).map((a) => sug({
@@ -105,8 +121,8 @@ async function dePerguntasEAprovacoes(ctx) {
   if (!p.linhas && !a.linhas) return { fonte: 'central', ok: false, itens: [], lacuna: p.lacuna || a.lacuna };
   const origem = p.origem || a.origem;
   const itens = [];
-  const pa = (p.linhas || []).filter((q) => q.status === 'aberta');
-  const ap = (a.linhas || []).filter((x) => x.status === 'pendente');
+  const pa = (p.linhas || []).filter((q) => q.status === 'aberta' && depoisDoMarco(ctx, q));
+  const ap = (a.linhas || []).filter((x) => x.status === 'pendente' && depoisDoMarco(ctx, x));
   if (pa.length) itens.push(sug({ chave: 'central:perguntas', titulo: pa.length === 1 ? 'Responder a pergunta aberta na Central' : `Responder as ${pa.length} perguntas abertas na Central`, area: 'Operação', porque: `${pa.length} pergunta${pa.length === 1 ? '' : 's'} sem resposta; a mais antiga é de ${pa.map((q) => String(q.criado_em || '').slice(0, 10)).sort()[0] || '?'}. Cada uma trava uma decisão de agente.`, fonte: rotulo('perguntas.jsonl', p.origem), dono_sugerido: 'marlon', etapas: ['Abrir a Conversa da Central', 'Responder ou marcar como não se aplica', 'Conferir que a fila zerou'] }));
   if (ap.length) itens.push(sug({ chave: 'central:aprovacoes', titulo: ap.length === 1 ? 'Decidir a aprovação pendente na Central' : `Decidir as ${ap.length} aprovações pendentes na Central`, area: 'Operação', porque: `${ap.length} pedido${ap.length === 1 ? '' : 's'} de autorização parado${ap.length === 1 ? '' : 's'}; agentes esperando para agir.`, fonte: rotulo('aprovacoes.jsonl', a.origem), dono_sugerido: 'marlon', etapas: ['Abrir Aprovações', 'Aprovar ou negar cada um', 'Registrar o motivo das negadas'] }));
   const parcial = (!p.linhas && p.lacuna) || (!a.linhas && a.lacuna) || null;
@@ -131,7 +147,8 @@ async function doBanco(ctx) {
   try {
     return await conectar.comClienteRo(async (c) => {
       const itens = [];
-      const esc = await c.query("SELECT count(*)::int AS n, min(created_at)::date::text AS desde FROM aria_escalations WHERE status IN ('open','aberta','pendente') AND created_at < now() - interval '7 days'");
+      const marco = ctx.marcoZero ? String(ctx.marcoZero).slice(0, 10) : '1970-01-01';
+      const esc = await c.query("SELECT count(*)::int AS n, min(created_at)::date::text AS desde FROM aria_escalations WHERE status IN ('open','aberta','pendente') AND created_at < now() - interval '7 days' AND created_at >= $1::date", [marco]);
       const ne = esc.rows[0]?.n || 0;
       if (ne > 0) itens.push(sug({ chave: 'banco:escalacoes_paradas', titulo: ne === 1 ? 'Ler e fechar a escalação do atendimento parada há mais de 7 dias' : `Ler e fechar as ${ne} escalações do atendimento paradas há mais de 7 dias`, area: 'Clientes', porque: `${ne} escalaç${ne === 1 ? 'ão aberta' : 'ões abertas'} desde ${esc.rows[0].desde}; cada uma é um cliente ou uma casa esperando.`, fonte: 'aria_escalations (twk_ro)', dono_sugerido: 'marlon', prioridade_fixa: true, severidade: 'alta', etapas: ['Triar por urgência', 'Responder as de cliente primeiro', 'Fechar as resolvidas'] }));
       const pend = await c.query("SELECT count(*)::int AS n FROM reservations WHERE expired_at IS NULL AND booking_status IN ('Pending','In Treatment') AND booking_date BETWEEN current_date AND current_date + 2");
@@ -164,7 +181,7 @@ async function gerar(ctx = {}, anteriores = []) {
   // Foco: no máximo 12 sugestões vivas por vez (as decididas não contam). O resto espera a próxima leitura.
   const vivas = itens.filter((s) => !s.decisao).slice(0, 12);
   const decididasAgora = itens.filter((s) => s.decisao);
-  return { itens: [...vivas, ...decididasAgora], cobertura: leituras.map((l) => ({ fonte: l.fonte, ok: l.ok, origem: l.origem || null, lacuna: l.lacuna || null })) };
+  return { itens: [...vivas, ...decididasAgora], marco_zero: ctx.marcoZero ? String(ctx.marcoZero).slice(0, 10) : null, cobertura: leituras.map((l) => ({ fonte: l.fonte, ok: l.ok, origem: l.origem || null, lacuna: l.lacuna || null })) };
 }
 
-module.exports = { gerar, deCompromissos, deAcoes, dePerguntasEAprovacoes, doBanco, lerFila, carregarConectar, _id: id };
+module.exports = { gerar, deCompromissos, deAcoes, dePerguntasEAprovacoes, doBanco, lerFila, carregarConectar, depoisDoMarco, dataDe, _id: id };

@@ -24,7 +24,7 @@ const sugestoes = require('./sugestoes.js');
 const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 
-const BUILD = '0.3.2-compasso-banco-na-imagem-20261103';
+const BUILD = '0.3.3-compasso-marco-zero-20261103';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -34,6 +34,9 @@ const CENTER_TOKEN = process.env.CENTER_TOKEN || '';
 // com a mesma chave; sem ela, só do disco (máquina do Orquestrador) — e o banco, se houver DATABASE_URL_RO.
 const CENTER_URL = String(process.env.CENTER_URL || '').replace(/\/+$/, '');
 const SUGESTOES_TTL_MS = Number(process.env.TAREFAS_SUGESTOES_TTL_MIN || 360) * 60000;
+// Marco zero (03/11, decisão do fundador): sinais nascidos antes desta data (AAAA-MM-DD) não viram sugestão.
+const MARCO_ZERO = /^\d{4}-\d{2}-\d{2}$/.test(process.env.TAREFAS_MARCO_ZERO || '') ? process.env.TAREFAS_MARCO_ZERO : null;
+if (process.env.TAREFAS_MARCO_ZERO && !MARCO_ZERO) console.error('[tarefas] TAREFAS_MARCO_ZERO ignorado: use AAAA-MM-DD.');
 
 fs.mkdirSync(path.join(STATE_DIR, 'logs'), { recursive: true });
 const db = store.abrir({ stateDir: STATE_DIR, databaseUrl: process.env.TAREFAS_DATABASE_URL || '' });
@@ -78,9 +81,10 @@ let sugCache = { em: 0, dados: null };
 async function sugestoesAtuais(forcar) {
   const guardadas = await db.sugestoesLer();
   const idade = guardadas.geradas_em ? Date.now() - Date.parse(guardadas.geradas_em) : Infinity;
-  if (!forcar && idade < SUGESTOES_TTL_MS) return { ...guardadas, cobertura: sugCache.dados?.cobertura || null };
-  const g = await sugestoes.gerar({ centerUrl: CENTER_URL, centerToken: CENTER_TOKEN, centralStateDir: process.env.CENTRAL_STATE_DIR || '', compromissosPath: process.env.COMPROMISSOS_PATH || '' }, guardadas.itens);
-  const salvas = await db.sugestoesGravar(g.itens);
+  // marco zero diferente do que gerou a lista guardada = a lista velha não vale mais: regenera já
+  if (!forcar && idade < SUGESTOES_TTL_MS && (guardadas.marco_zero || null) === MARCO_ZERO) return { ...guardadas, cobertura: sugCache.dados?.cobertura || null };
+  const g = await sugestoes.gerar({ centerUrl: CENTER_URL, centerToken: CENTER_TOKEN, centralStateDir: process.env.CENTRAL_STATE_DIR || '', compromissosPath: process.env.COMPROMISSOS_PATH || '', marcoZero: MARCO_ZERO }, guardadas.itens);
+  const salvas = await db.sugestoesGravar(g.itens, { marco_zero: MARCO_ZERO });
   sugCache = { em: Date.now(), dados: g };
   return { ...salvas, cobertura: g.cobertura };
 }
@@ -214,7 +218,7 @@ async function api(req, res, url) {
 
   if (rota === '/api/sugestoes' && req.method === 'GET') {
     const s = await sugestoesAtuais(url.searchParams.get('atualizar') === '1');
-    return json(res, 200, { geradas_em: s.geradas_em, itens: s.itens.filter((x) => !x.decisao), decididas: s.itens.filter((x) => x.decisao).length, cobertura: s.cobertura });
+    return json(res, 200, { geradas_em: s.geradas_em, marco_zero: MARCO_ZERO, itens: s.itens.filter((x) => !x.decisao), decididas: s.itens.filter((x) => x.decisao).length, cobertura: s.cobertura });
   }
   m = rota.match(/^\/api\/sugestoes\/(s-[a-f0-9]{12})\/(assumir|descartar)$/);
   if (m && req.method === 'POST') {
@@ -233,7 +237,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   res.setHeader('x-content-type-options', 'nosniff');
   res.setHeader('referrer-policy', 'same-origin');
-  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length }, durabilidade: durabilidade() });
+  if (url.pathname === '/health') return json(res, 200, { ok: true, build: BUILD, motor: db.motor, operacional: auth.operacional, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO, marco_zero: MARCO_ZERO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length }, durabilidade: durabilidade() });
   // ---- conector MCP: OAuth (metadados, registro, login, token) e o próprio /mcp ----
   if (url.pathname.startsWith('/.well-known/oauth-') || url.pathname.startsWith('/oauth/')) {
     if (!auth.operacional) return erro(res, 503, 'serviço não configurado: faltam usuários ou TAREFAS_SECRET');

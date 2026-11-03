@@ -92,7 +92,7 @@ function criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, audita
       const s = await sugestoesAtuais(!!a.atualizar);
       const vivas = s.itens.filter((x) => !x.decisao);
       const lac = (s.cobertura || []).filter((c) => !c.ok).map((c) => `${c.fonte}${c.lacuna ? ` (${c.lacuna})` : ''}`);
-      return { texto: (vivas.length ? vivas.map((x) => `${x.id} · ${x.titulo} · ${x.area}${x.prioridade_fixa ? ' · PRIORIDADE' : ''}\n   por quê: ${x.porque} [${x.fonte}]`).join('\n') : 'Nenhuma sugestão pendente.') + (lac.length ? `\nFontes não lidas agora: ${lac.join(', ')}` : ''), dados: { itens: vivas, cobertura: s.cobertura } };
+      return { texto: (vivas.length ? vivas.map((x) => `${x.id} · ${x.titulo} · ${x.area}${x.prioridade_fixa ? ' · PRIORIDADE' : ''}\n   por quê: ${x.porque} [${x.fonte}]`).join('\n') : 'Nenhuma sugestão pendente.') + (s.marco_zero ? `\nMarco zero: só sinais a partir de ${fmtData(s.marco_zero)}.` : '') + (lac.length ? `\nFontes não lidas agora: ${lac.join(', ')}` : ''), dados: { itens: vivas, marco_zero: s.marco_zero || null, cobertura: s.cobertura } };
     }
     if (nome === 'assumir_sugestao') {
       const r = await assumirSugestao(a.id, a.dono, quem, trace, a.vence_em);
