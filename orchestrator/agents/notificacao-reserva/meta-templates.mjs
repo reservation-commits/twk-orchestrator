@@ -37,6 +37,7 @@ const opt = (f) => (args.includes(f) ? args[args.indexOf(f) + 1] : null);
 const DOC = opt("--doc") ? path.resolve(opt("--doc")) : path.join(RAIZ, "docs/notificacoes/templates-meta-v2-2026-09-30.md");
 
 // Amostras por idioma (a Meta exige exemplo para cada variável). Data como a Aria v15 formata (dia da semana + mês por extenso).
+// v25 (05/11/2026): a hora sai sempre em AM/PM ("8:00 PM") em todo idioma — as amostras seguem.
 const COMUM = {
   endereco: "1 Derb Abdellah Ben Hessaien, Bab Ksour, Marrakech", quantidade: "3", lista: "19:30 Anna Lee (2) · 20:00 Marc Dupont (4) · 21:00 Sofia Rossi (3)",
   // v4 (05/10/2026): alerta ao operador — só pt_BR, rodar com --lang pt_BR
@@ -44,11 +45,11 @@ const COMUM = {
 };
 const AMOSTRA = {
   en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
-  pt_BR: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de outubro de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
-  fr: { nome: "Anna", casa: "Le Tobsil", data: "Samedi 3 octobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
-  es: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de octubre de 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
-  it: { nome: "Anna", casa: "Le Tobsil", data: "Sabato 3 ottobre 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
-  de: { nome: "Anna", casa: "Le Tobsil", data: "Samstag, 3. Oktober 2026", hora: "20:00", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  pt_BR: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de outubro de 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  fr: { nome: "Anna", casa: "Le Tobsil", data: "Samedi 3 octobre 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  es: { nome: "Anna", casa: "Le Tobsil", data: "Sábado, 3 de octubre de 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  it: { nome: "Anna", casa: "Le Tobsil", data: "Sabato 3 ottobre 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
+  de: { nome: "Anna", casa: "Le Tobsil", data: "Samstag, 3. Oktober 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
 };
 // Ordem das variáveis por template (contrato com o código da Aria).
 const VARIAVEIS = {
@@ -74,6 +75,8 @@ const VARIAVEIS = {
   twk_venue_agenda: ["casa", "data", "quantidade", "lista"],
   // v4 (05/10/2026): alerta ao operador (Aria v20, alertaOperador.ts)
   twk_ops_alert: ["sistema", "situacao", "horario"],
+  // v5 (05/11/2026): reserva que já nasce confirmada (confirmação automática, ex.: MONAK) — Aria v25
+  twk_venue_confirmed: ["casa", "data", "hora", "pessoas", "cliente"],
 };
 const BOTAO_URL = {
   twk_venue_new_request: { url: "https://theworldkeys.com/r/{{1}}", exemplo: "https://theworldkeys.com/r/6DSPZXQ7" },

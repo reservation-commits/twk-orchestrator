@@ -97,15 +97,19 @@ const VARS_V3 = {
   twk_venue_request_reminder: ['restaurante', 'data', 'hora', 'pessoas', 'cliente'],
   twk_eve_briefing_map: ['primeiro_nome', 'restaurante', 'data', 'hora', 'pessoas', 'endereco'],
   twk_venue_agenda: ['restaurante', 'data', 'quantidade', 'lista'],
+  // v5 (05/11/2026): reserva que já nasce confirmada — vai à CASA, não ao cliente (Aria v25)
+  twk_venue_confirmed: ['restaurante', 'data', 'hora', 'pessoas', 'cliente'],
 };
-const documentoV3 = fs.existsSync(DOC_V3) ? lerDocumento(fs.readFileSync(DOC_V3, 'utf8')) : { rodape: {}, templates: [] };
-const TEXTOS_V3 = documentoV3.templates
+// v5 entra pelas mesmas regras de texto do v3 (sai pelo vigia, não pelo contrato de evento do cliente).
+const DOC_V5 = path.resolve(__dirname, '../../../docs/notificacoes/templates-meta-v5-casa-confirmada-2026-11-05.md');
+const lerSeExiste = (f) => (fs.existsSync(f) ? lerDocumento(fs.readFileSync(f, 'utf8')) : { rodape: {}, templates: [] });
+const TEXTOS_V3 = [lerSeExiste(DOC_V3), lerSeExiste(DOC_V5)].flatMap((doc) => doc.templates
   .filter((t) => t.corpos.en && VARS_V3[t.nome])
   .map((t) => ({
     nome: t.nome, categoria: 'UTILITY', idioma: 'en', cabecalho: t.cabecalhos?.en ?? null,
-    corpo: t.corpos.en, rodape: documentoV3.rodape.en, confirmaMesa: false, params: VARS_V3[t.nome],
+    corpo: t.corpos.en, rodape: doc.rodape.en, confirmaMesa: false, params: VARS_V3[t.nome],
     respostas: t.respostas?.en ?? null,
-  }));
+  })));
 
 /** Quantos {{n}} distintos o corpo declara. */
 function contarPlaceholders(corpo) {
@@ -123,4 +127,4 @@ function placeholdersContiguos(corpo) {
 
 const porEvento = (evento) => TEMPLATES.find((t) => t.evento === evento) || null;
 
-module.exports = { TEMPLATES, TEXTOS_V3, RODAPE_EN, DOC, DOC_V3, contarPlaceholders, placeholdersContiguos, porEvento };
+module.exports = { TEMPLATES, TEXTOS_V3, RODAPE_EN, DOC, DOC_V3, DOC_V5, contarPlaceholders, placeholdersContiguos, porEvento };

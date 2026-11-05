@@ -332,10 +332,12 @@ casos.push({
 });
 
 casos.push({
-  nome: 'hora segue o costume do país (americano não lê 20:00)',
+  // v25 (05/11/2026), decisão do fundador: "tudo em AM e PM direto" — todo país, cliente e casa.
+  nome: 'hora sempre em AM/PM, em todo país',
   run: () => [
-    ...esperar(/PM/i.test(eventFormat.formatarHora('20:00:00', 'US')), 'US não recebeu 12h'),
-    ...esperar(!/PM/i.test(eventFormat.formatarHora('20:00:00', 'FR')), 'FR recebeu AM/PM'),
+    ...esperar(eventFormat.formatarHora('20:00:00', 'US') === '8:00 PM', 'US não recebeu 8:00 PM'),
+    ...esperar(eventFormat.formatarHora('20:00:00', 'FR') === '8:00 PM', 'FR não recebeu 8:00 PM'),
+    ...esperar(eventFormat.formatarHora('09:30:00', 'BR') === '9:30 AM', 'BR não recebeu 9:30 AM'),
   ],
 });
 
