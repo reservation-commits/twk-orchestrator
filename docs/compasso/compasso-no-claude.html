@@ -1,0 +1,293 @@
+<title>COMPASSO no Claude</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap">
+<style>
+/* Layout: uma folha só — cabeçalho da marca, grade 3×3 com as nove ações (três famílias), faixa de limites no pé. */
+:root{
+  --bg:#f4f1ea; --surface:#fffdf8; --warm:#ece7dc; --line:#ddd6c6; --line-2:#c9c0ab;
+  --ink:#1b1a17; --ink-2:#4a463f; --muted:#6f695d;
+  --gold:#8f6f3e; --gold-2:#c9a96e; --gold-soft:rgba(158,124,72,.13);
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Jost","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b0e13; --surface:#141923; --warm:#191f2a; --line:#252c3a; --line-2:#364051;
+    --ink:#ede9df; --ink-2:#cfcabd; --muted:#a19eae;
+    --gold:#d0b078; --gold-2:#e4c990; --gold-soft:rgba(201,169,110,.15);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b0e13; --surface:#141923; --warm:#191f2a; --line:#252c3a; --line-2:#364051;
+  --ink:#ede9df; --ink-2:#cfcabd; --muted:#a19eae;
+  --gold:#d0b078; --gold-2:#e4c990; --gold-soft:rgba(201,169,110,.15);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding-block:28px 40px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+.folha{max-width:1080px;margin-inline:auto;display:flex;flex-direction:column;gap:26px}
+
+/* cabeçalho */
+.topo{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;
+  padding-bottom:14px;border-bottom:1px solid var(--line-2)}
+.marca{font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:.09em;display:flex;align-items:center;gap:9px}
+.marca i{width:7px;height:7px;border-radius:50%;background:var(--gold-2);display:inline-block}
+.casa{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+.lingua{display:flex;flex-direction:column;gap:26px}
+.topo-dir{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.idioma{display:inline-flex;border:1px solid var(--line-2);border-radius:4px;overflow:hidden}
+.idioma button{font:600 11.5px var(--sans);letter-spacing:.14em;padding:6px 11px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.idioma button[aria-pressed="true"]{background:var(--gold);color:var(--surface)}
+.idioma button:focus-visible{outline:2px solid var(--gold-2);outline-offset:-2px}
+[lang="fr"] .diga q{quotes:"« " " »"}
+
+.abre{display:flex;flex-direction:column;gap:10px;max-width:46em}
+.abre h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5.2vw,50px);line-height:1.05;text-wrap:balance}
+.abre h1 em{font-style:italic;color:var(--gold)}
+.abre p{color:var(--ink-2);font-size:16px;max-width:38em}
+
+/* grade das nove ações */
+.grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+.acao{background:var(--surface);padding:20px 20px 18px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.num{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1;color:var(--gold);font-variant-numeric:lining-nums}
+.fam{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.acao h2{font-family:var(--serif);font-size:23px;font-weight:600;line-height:1.12;text-wrap:balance}
+.acao p{color:var(--ink-2);font-size:14.5px}
+.diga{margin-top:auto;padding-top:11px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.diga span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.diga q{font-style:italic;quotes:"“" "”"}
+
+/* limites */
+.limites{background:var(--warm);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:14px}
+.limites h3{font-family:var(--serif);font-size:22px;font-weight:600}
+.limites ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.limites li{font-size:13.5px;color:var(--ink-2);padding-top:9px;border-top:2px solid var(--gold-2);min-width:0}
+.limites li b{display:block;color:var(--ink);font-weight:600;font-size:14.5px}
+
+.pe{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+@media (max-width:900px){
+  .grade{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .limites ul{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .grade{grid-template-columns:minmax(0,1fr)}
+  .limites ul{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+
+<div class="folha">
+  <header class="topo">
+    <div class="marca">COMPASSO <i aria-hidden="true"></i></div>
+    <div class="topo-dir">
+      <div class="casa">The World Keys</div>
+      <div class="idioma" role="group" aria-label="Idioma / Langue">
+        <button type="button" id="btn-pt" data-l="pt" aria-pressed="true">PT</button><button type="button" id="btn-fr" data-l="fr" aria-pressed="false">FR</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="lingua" id="l-pt" lang="pt-BR">
+  <section class="abre">
+    <h1>Nove coisas que você faz no quadro <em>só conversando</em> com o Claude</h1>
+    <p>Com o COMPASSO conectado à nossa conta, basta escrever no chat do Claude em português comum. Ele consulta, cria e atualiza os cards de Márlon, Lucas e Julien.</p>
+  </section>
+
+  <section class="grade" aria-label="As nove ações">
+    <article class="acao">
+      <div class="cab"><span class="num">1</span><span class="fam">Consultar</span></div>
+      <h2>Ver o resumo do quadro</h2>
+      <p>Abertas, atrasadas, para hoje, concluídas em 7 dias e a carga de cada pessoa.</p>
+      <div class="diga"><span>Diga</span><q>Como está o quadro hoje?</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">2</span><span class="fam">Consultar</span></div>
+      <h2>Listar e buscar tarefas</h2>
+      <p>Por dono, por status ou por palavra. Também procura no arquivo o que já foi feito.</p>
+      <div class="diga"><span>Diga</span><q>O que o Julien tem atrasado?</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">3</span><span class="fam">Consultar</span></div>
+      <h2>Abrir a ficha de uma tarefa</h2>
+      <p>Etapas, notas e os últimos acontecimentos daquele card.</p>
+      <div class="diga"><span>Diga</span><q>Me mostra a tarefa do Monak.</q></div>
+    </article>
+
+    <article class="acao">
+      <div class="cab"><span class="num">4</span><span class="fam">Criar</span></div>
+      <h2>Planejar a partir de uma frase</h2>
+      <p>Você escreve a ideia solta e recebe uma proposta de card. Nada é gravado antes do seu sim.</p>
+      <div class="diga"><span>Diga</span><q>Planeja: preparar a visita aos hotéis de Paris.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">5</span><span class="fam">Criar</span></div>
+      <h2>Criar uma tarefa</h2>
+      <p>Card com passo a passo, dono, área, prioridade, cidade, canal e prazo.</p>
+      <div class="diga"><span>Diga</span><q>Cria uma tarefa para o Lucas ligar para o Monak até sexta.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">6</span><span class="fam">Criar</span></div>
+      <h2>Receber sugestões da operação</h2>
+      <p>O planejador lê os sinais do sistema e aponta o que precisa virar tarefa, com o motivo e a fonte.</p>
+      <div class="diga"><span>Diga</span><q>Quais sugestões a operação tem?</q></div>
+    </article>
+
+    <article class="acao">
+      <div class="cab"><span class="num">7</span><span class="fam">Criar</span></div>
+      <h2>Assumir uma sugestão</h2>
+      <p>A sugestão vira card no nome de alguém e sai da lista.</p>
+      <div class="diga"><span>Diga</span><q>Passa a primeira sugestão para o Márlon.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">8</span><span class="fam">Atualizar</span></div>
+      <h2>Atualizar e concluir</h2>
+      <p>Muda status, dono, prazo ou notas, marca etapas feitas e fecha com o resultado escrito.</p>
+      <div class="diga"><span>Diga</span><q>Marca as etapas 1 e 2 como feitas.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">9</span><span class="fam">Atualizar</span></div>
+      <h2>Arquivar o que terminou</h2>
+      <p>A tarefa concluída sai do quadro e do calendário, e continua consultável no arquivo.</p>
+      <div class="diga"><span>Diga</span><q>Arquiva as tarefas concluídas do Lucas.</q></div>
+    </article>
+  </section>
+
+  <section class="limites">
+    <h3>Bom saber antes de usar</h3>
+    <ul>
+      <li><b>Não avisa ninguém</b>Criar ou mudar um card não envia mensagem ao dono. Avise a pessoa.</li>
+      <li><b>Toda tarefa tem dono</b>Márlon, Lucas ou Julien. Sem dono, o Claude pergunta antes de criar.</li>
+      <li><b>Prazo só o que você disser</b>O Claude não inventa data.</li>
+      <li><b>Não exclui</b>Excluir é só no aplicativo, com o motivo escrito.</li>
+      <li><b>Arquiva só o concluído</b>Tarefa aberta fica no quadro até ser fechada.</li>
+    </ul>
+  </section>
+
+  <footer class="pe">
+    <span>COMPASSO · The World Keys</span>
+    <span>Status do quadro: A fazer · Fazendo · Aguardando · Feito</span>
+  </footer>
+  </div>
+
+  <div class="lingua" id="l-fr" lang="fr" hidden>
+  <section class="abre">
+    <h1>Neuf choses à faire sur le tableau <em>en parlant simplement</em> à Claude</h1>
+    <p>Avec COMPASSO connecté à notre compte, il suffit d'écrire dans le chat de Claude, en français courant. Il consulte, crée et met à jour les cartes de Márlon, Lucas et Julien.</p>
+  </section>
+
+  <section class="grade" aria-label="Les neuf actions">
+    <article class="acao">
+      <div class="cab"><span class="num">1</span><span class="fam">Consulter</span></div>
+      <h2>Voir le résumé du tableau</h2>
+      <p>Ouvertes, en retard, pour aujourd'hui, terminées sur 7 jours et la charge de chacun.</p>
+      <div class="diga"><span>Dites</span><q>Où en est le tableau aujourd'hui ?</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">2</span><span class="fam">Consulter</span></div>
+      <h2>Lister et chercher des tâches</h2>
+      <p>Par responsable, par statut ou par mot. Cherche aussi dans les archives ce qui a déjà été fait.</p>
+      <div class="diga"><span>Dites</span><q>Qu'est-ce que Julien a en retard ?</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">3</span><span class="fam">Consulter</span></div>
+      <h2>Ouvrir la fiche d'une tâche</h2>
+      <p>Les étapes, les notes et les derniers événements de la carte.</p>
+      <div class="diga"><span>Dites</span><q>Montre-moi la tâche du Monak.</q></div>
+    </article>
+
+    <article class="acao">
+      <div class="cab"><span class="num">4</span><span class="fam">Créer</span></div>
+      <h2>Planifier à partir d'une phrase</h2>
+      <p>Vous écrivez l'idée telle quelle et recevez une proposition de carte. Rien n'est enregistré avant votre accord.</p>
+      <div class="diga"><span>Dites</span><q>Planifie : préparer la visite des hôtels à Paris.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">5</span><span class="fam">Créer</span></div>
+      <h2>Créer une tâche</h2>
+      <p>Une carte avec ses étapes, un responsable, le domaine, la priorité, la ville, le canal et l'échéance.</p>
+      <div class="diga"><span>Dites</span><q>Crée une tâche pour que Lucas appelle le Monak d'ici vendredi.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">6</span><span class="fam">Créer</span></div>
+      <h2>Recevoir les suggestions de l'opération</h2>
+      <p>Le planificateur lit les signaux du système et indique ce qui doit devenir une tâche, avec la raison et la source.</p>
+      <div class="diga"><span>Dites</span><q>Quelles suggestions l'opération a-t-elle ?</q></div>
+    </article>
+
+    <article class="acao">
+      <div class="cab"><span class="num">7</span><span class="fam">Créer</span></div>
+      <h2>Prendre une suggestion</h2>
+      <p>La suggestion devient une carte au nom de quelqu'un et quitte la liste.</p>
+      <div class="diga"><span>Dites</span><q>Donne la première suggestion à Márlon.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">8</span><span class="fam">Mettre à jour</span></div>
+      <h2>Mettre à jour et terminer</h2>
+      <p>Change le statut, le responsable, l'échéance ou les notes, coche les étapes faites et clôt avec le résultat écrit.</p>
+      <div class="diga"><span>Dites</span><q>Coche les étapes 1 et 2.</q></div>
+    </article>
+    <article class="acao">
+      <div class="cab"><span class="num">9</span><span class="fam">Mettre à jour</span></div>
+      <h2>Archiver ce qui est terminé</h2>
+      <p>La tâche terminée quitte le tableau et le calendrier, et reste consultable dans les archives.</p>
+      <div class="diga"><span>Dites</span><q>Archive les tâches terminées de Lucas.</q></div>
+    </article>
+  </section>
+
+  <section class="limites">
+    <h3>Bon à savoir avant de commencer</h3>
+    <ul>
+      <li><b>Ne prévient personne</b>Créer ou modifier une carte n'envoie aucun message au responsable. Prévenez la personne.</li>
+      <li><b>Toute tâche a un responsable</b>Márlon, Lucas ou Julien. Sans responsable, Claude demande avant de créer.</li>
+      <li><b>Pas d'échéance inventée</b>Claude ne met que la date que vous donnez.</li>
+      <li><b>Ne supprime pas</b>La suppression se fait dans l'application, avec le motif écrit.</li>
+      <li><b>N'archive que le terminé</b>Une tâche ouverte reste sur le tableau jusqu'à sa clôture.</li>
+    </ul>
+  </section>
+
+  <footer class="pe">
+    <span>COMPASSO · The World Keys</span>
+    <span>Statuts du tableau : À faire · En cours · En attente · Terminée</span>
+  </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  var pt=document.getElementById('l-pt'), fr=document.getElementById('l-fr');
+  var bpt=document.getElementById('btn-pt'), bfr=document.getElementById('btn-fr');
+  function mostrar(l){
+    var f=(l==='fr');
+    fr.hidden=!f; pt.hidden=f;
+    bfr.setAttribute('aria-pressed',f?'true':'false');
+    bpt.setAttribute('aria-pressed',f?'false':'true');
+    document.documentElement.lang=f?'fr':'pt-BR';
+  }
+  function escolher(l){
+    try{localStorage.setItem('compasso-card-lang',l)}catch(e){}
+    if(location.hash.replace('#','')!==l){location.hash=l}else{mostrar(l)}
+  }
+  function inicial(){
+    var h=location.hash.replace('#','');
+    if(h==='fr'||h==='pt')return h;
+    try{var s=localStorage.getItem('compasso-card-lang');if(s==='fr'||s==='pt')return s}catch(e){}
+    return /^fr/i.test(navigator.language||'')?'fr':'pt';
+  }
+  bpt.addEventListener('click',function(){escolher('pt')});
+  bfr.addEventListener('click',function(){escolher('fr')});
+  window.addEventListener('hashchange',function(){mostrar(inicial())});
+  mostrar(inicial());
+})();
+</script>

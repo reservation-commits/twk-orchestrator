@@ -14,12 +14,13 @@
  * Opções:  --de-novo lucas[,julien]  gera provisória nova para quem já tem login ("esqueci a senha")
  *          --colar                   não lê a área de transferência: pede o valor aqui no terminal
  *          --sem-admin               aceita ficar sem o login admin
+ *          --janela                  senhas numa janela na tela, não na saída (o Claude pode rodar sem vê-las)
  *
  * No primeiro acesso, o app obriga a pessoa a escolher a própria senha; a provisória deixa de valer na hora.
  */
 const crypto = require('node:crypto');
 const readline = require('node:readline');
-const { execFileSync } = require('node:child_process');
+const { execFileSync, spawnSync } = require('node:child_process');
 const { hashSenha, conferirSenha, FORMATO_HASH, PESSOAS, LOGINS } = require('./auth.js');
 
 const CHAVE = 'TAREFAS_USUARIOS';
@@ -121,16 +122,40 @@ function escreverArea(texto) {
   return false;
 }
 
+/**
+ * --janela: as senhas aparecem numa janela na tela de quem está no computador, e não na saída do comando. Assim o
+ * Claude pode rodar o script sem nunca ver uma senha. Nada vai para disco: o texto chega à janela pela entrada padrão
+ * (nem na linha de comando aparece), e o comando só termina quando a janela é fechada.
+ * `fecharEmMs` existe para o teste: a janela se fecha sozinha.
+ */
+function abrirJanela(texto, { fecharEmMs = 0 } = {}) {
+  const script = [
+    'Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing',
+    '$t = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String([Console]::In.ReadToEnd().Trim()))',
+    '$f = New-Object Windows.Forms.Form; $f.Text = "COMPASSO: senhas provisórias"; $f.Width = 760; $f.Height = 480; $f.StartPosition = "CenterScreen"; $f.TopMost = $true',
+    '$c = New-Object Windows.Forms.TextBox; $c.Multiline = $true; $c.ReadOnly = $true; $c.ScrollBars = "Vertical"; $c.WordWrap = $true; $c.Dock = "Fill"; $c.Font = New-Object Drawing.Font("Consolas", 11); $c.Text = $t',
+    '$b = New-Object Windows.Forms.Button; $b.Text = "Já anotei: fechar"; $b.Dock = "Bottom"; $b.Height = 40; $b.Add_Click({ $f.Close() })',
+    '$f.Controls.Add($c); $f.Controls.Add($b); $f.Add_Shown({ $f.Activate(); $c.SelectionLength = 0; [Console]::Out.WriteLine("janela aberta") })',
+    fecharEmMs ? `$tm = New-Object Windows.Forms.Timer; $tm.Interval = ${Number(fecharEmMs)}; $tm.Add_Tick({ $f.Close() }); $tm.Start()` : '',
+    '[void]$f.ShowDialog(); [Console]::Out.WriteLine("janela fechada")',
+  ].filter(Boolean).join('\n');
+  const r = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-STA', '-EncodedCommand', Buffer.from(script, 'utf16le').toString('base64')], { input: Buffer.from(texto.replace(/\r?\n/g, '\r\n'), 'utf8').toString('base64'), encoding: 'utf8', windowsHide: false, maxBuffer: 1024 * 1024 });
+  const saida = String(r.stdout || '');
+  return { aberta: saida.includes('janela aberta'), fechada: saida.includes('janela fechada'), erro: r.status === 0 ? null : String(r.stderr || r.error || '').replace(/#< CLIXML[\s\S]*/, '').slice(0, 200) };
+}
+
 async function principal() {
   const args = process.argv.slice(2);
   const opcao = (n) => { const i = args.indexOf(n); return i >= 0 ? (args[i + 1] || '') : null; };
   const deNovo = String(opcao('--de-novo') || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+  const janela = args.includes('--janela');
+  if (janela && process.platform !== 'win32') { console.log('   --janela só funciona no Windows.\n'); process.exitCode = 1; return; }
   console.log('\nCOMPASSO: um login para cada pessoa\n');
 
   let texto = '';
   if (!args.includes('--colar')) { try { texto = lerArea(); } catch (e) { console.log(`   (não consegui ler a área de transferência: ${e.message})`); } }
   let fonte = null;
-  try { fonte = lerFonte(texto); } catch (e) { if (args.includes('--colar') || !texto) fonte = null; else { console.log(`   ${e.message}\n`); process.exitCode = 1; return; } }
+  try { fonte = lerFonte(texto); } catch (e) { if (!janela && (args.includes('--colar') || !texto)) fonte = null; else { console.log(`   ${e.message}\n`); process.exitCode = 1; return; } }
   if (!fonte) {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const colado = await new Promise((ok) => rl.question(`   Cole aqui o valor de ${CHAVE} e aperte Enter: `, ok));
@@ -156,6 +181,17 @@ async function principal() {
 
   let copiado = false;
   try { copiado = escreverArea(saida); } catch { copiado = false; }
+  if (janela) {
+    const linhasSenha = Object.entries(provisorias).map(([id, senha]) => `   ${PESSOAS[id].padEnd(7)} usuário: ${id.padEnd(7)} senha provisória: ${senha}`);
+    const passo1 = copiado
+      ? (fonte.modo === 'ambiente' ? 'O Ambiente atualizado já está copiado. No EasyPanel, clique na caixa do Ambiente: Ctrl+A, Ctrl+V, Salvar, Implantar.' : `A linha ${CHAVE} nova já está copiada. No EasyPanel, selecione a linha ${CHAVE} inteira na caixa do Ambiente e cole por cima. Salvar, Implantar.`)
+      : `Não consegui copiar sozinho. Copie a linha abaixo inteira e cole por cima da linha ${CHAVE} no Ambiente. Salvar, Implantar.\r\n\r\n${escreverFonte({ ...fonte, modo: 'linha' }, lista)}`;
+    console.log(`${copiado ? 'O Ambiente atualizado está na área de transferência' : 'Não consegui copiar; a linha nova vai na janela'}. Abrindo a janela com as senhas de ${Object.keys(provisorias).map((id) => PESSOAS[id]).join(', ')}; o comando termina quando ela for fechada.`);
+    const r = abrirJanela(['COMPASSO: logins de Márlon, Lucas e Julien', '', `1. ${passo1}`, '   Faça isto ANTES de copiar qualquer coisa desta janela.', '', '2. Senhas provisórias. Entregue a cada um em particular, nunca em grupo nem em conversa com o Claude:', '', ...linhasSenha, '', '   No primeiro acesso o app pede uma senha nova; a provisória deixa de valer na hora.', '', 'Anote e feche esta janela. As senhas não ficam gravadas em lugar nenhum.'].join('\n'));
+    if (!r.aberta) { console.log(`A janela não abriu${r.erro ? ` (${r.erro})` : ''}. Nada mudou no EasyPanel: não cole o que está na área de transferência. Rode de novo num terminal, sem --janela.`); process.exitCode = 1; return; }
+    console.log(`Janela ${r.fechada ? 'aberta e fechada' : 'aberta'}. Nenhuma senha foi impressa aqui.`);
+    return;
+  }
   if (copiado && fonte.modo === 'ambiente') {
     console.log(`1. Pronto: a área de transferência já tem o Ambiente com ${CHAVE} atualizado (as outras linhas estão iguais).`);
     console.log('   No EasyPanel, clique na caixa do Ambiente → Ctrl+A → Ctrl+V → Salvar → Implantar.\n');
@@ -173,5 +209,5 @@ async function principal() {
   console.log('   No primeiro acesso o app pede uma senha nova; a provisória deixa de valer na hora.\n');
 }
 
-module.exports = { montar, senhaProvisoria, lerFonte, escreverFonte, limparValor, jsonAscii, ALFABETO, _area: { lerArea, escreverArea } };
+module.exports = { montar, senhaProvisoria, lerFonte, escreverFonte, limparValor, jsonAscii, ALFABETO, _area: { lerArea, escreverArea }, _abrirJanela: abrirJanela };
 if (require.main === module) principal().catch((e) => { console.error(`\nErro: ${e.message}`); process.exit(1); });
