@@ -98,6 +98,22 @@
   </form>
 </div>
 
+<div class="login" id="trocar" hidden>
+  <form class="login-card" id="trocarForm">
+    <div class="brand"><b>COMPASSO</b></div>
+    <h2 class="trocar-tit" id="tTitulo" data-i="pw_title">Escolha a sua senha</h2>
+    <p class="hintline" id="tDica"></p>
+    <input type="text" id="tUser" autocomplete="username" hidden>
+    <div class="field" id="tAtualBox"><label for="tAtual" data-i="pw_current">Senha atual</label><input type="password" id="tAtual" autocomplete="current-password"></div>
+    <div class="field"><label for="tNova" data-i="pw_new">Senha nova</label><input type="password" id="tNova" autocomplete="new-password" required minlength="10"></div>
+    <div class="field"><label for="tConf" data-i="pw_confirm">Repita a senha nova</label><input type="password" id="tConf" autocomplete="new-password" required minlength="10"></div>
+    <p class="hintline" data-i="pw_rules">Pelo menos 10 caracteres. Uma frase curta é mais fácil de lembrar e mais difícil de adivinhar.</p>
+    <div class="hint bad" id="tErr" role="alert"></div>
+    <button class="btn gold" type="submit" data-i="pw_save">Salvar senha</button>
+    <button class="btn ghost sm" type="button" id="tVoltar"></button>
+  </form>
+</div>
+
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-hidden="true" inert></aside>
 <div class="paleta" id="paleta" role="dialog" aria-modal="true" hidden>

@@ -52,7 +52,7 @@ test('desenvolvimento: trio com senha twk; sessão assinada e expirada', () => {
   const s = a.entrar('Julien', 'twk');
   assert.equal(s.usuario.id, 'julien');
   const req = { headers: { cookie: `outro=1; twk_tarefas=${encodeURIComponent(s.token)}` } };
-  assert.deepEqual(a.sessaoDe(req), { id: 'julien', nome: 'Julien' });
+  assert.deepEqual(a.sessaoDe(req), { id: 'julien', nome: 'Julien', trocar: false });
   const [corpo] = s.token.split('.');
   assert.equal(a.sessaoDe({ headers: { cookie: `twk_tarefas=${corpo}.assinatura-falsa` } }), null);
   assert.equal(a._abrirToken(`${Buffer.from(JSON.stringify({ id: 'julien', exp: Date.now() - 1 })).toString('base64url')}.x`), null);

@@ -48,6 +48,7 @@
     const r = await fetch(rota, { method: metodo, headers: { 'content-type': 'application/json', 'x-requested-with': 'fetch' }, body: corpo ? JSON.stringify(corpo) : undefined, credentials: 'same-origin' });
     let j = {}; try { j = await r.json(); } catch { /* sem corpo */ }
     if (r.status === 401 && rota !== '/api/login') { mostrarLogin(); throw new Error(t('session_expired')); }
+    if (r.status === 403 && j.trocar_senha) { mostrarTroca(true, S.eu); throw new Error(t('pw_needed')); }
     if (!r.ok) { const e = new Error(j.erro || `erro ${r.status}`); e.status = r.status; e.dados = j; throw e; }
     return j;
   }
@@ -903,7 +904,7 @@
   function comandos() {
     const v = [['hoje', 'nav_today'], ['quadro', 'nav_board'], ['calendario', 'nav_cal'], ['planejador', 'nav_chat']].map(([k, l]) => ({ rot: t('pal_goto', { v: t(l) }), fn: () => irPara(k) }));
     const f = [{ rot: t('pal_filter_all'), fn: () => { S.who = 'all'; guardar('compasso-who', 'all'); pintarAgora(); } }, ...S.pessoas.map((p) => ({ rot: t('pal_filter', { p: p.nome }), html: av(p.id, true), fn: () => { S.who = p.id; guardar('compasso-who', p.id); pintarAgora(); } }))];
-    return [{ rot: t('new_task'), kbd: 'C', fn: () => abrirEditor(null) }, { rot: t('sug'), fn: () => abrirSugestoes(false) }, { rot: t('novi_title'), fn: () => abrirNovidades() }, { rot: t('archive_title'), fn: () => abrirArquivo('') }, ...v, ...f, { rot: t('pal_lang'), fn: () => mudarIdioma() }, { rot: t('pal_help'), kbd: '?', fn: () => abrirAjuda() }];
+    return [{ rot: t('new_task'), kbd: 'C', fn: () => abrirEditor(null) }, { rot: t('pw_change'), fn: () => mostrarTroca(false, S.eu) }, { rot: t('sug'), fn: () => abrirSugestoes(false) }, { rot: t('novi_title'), fn: () => abrirNovidades() }, { rot: t('archive_title'), fn: () => abrirArquivo('') }, ...v, ...f, { rot: t('pal_lang'), fn: () => mudarIdioma() }, { rot: t('pal_help'), kbd: '?', fn: () => abrirAjuda() }];
   }
   function pintarPaleta() {
     const q = palInput.value.trim();
@@ -1127,10 +1128,12 @@
   function mostrarLogin() {
     desligarTempoReal(); S.eu = null; guardar('compasso-cache', null);
     fecharGaveta();
-    $('#app').hidden = true; $('#tabbar').hidden = true; $('#login').hidden = false; aplicarIdioma();
+    $('#app').hidden = true; $('#tabbar').hidden = true; $('#trocar').hidden = true; $('#login').hidden = false; aplicarIdioma();
+    const ult = ler('compasso-ultimo-login');
+    if (ult && $$('#lUser option').some((o) => o.value === ult)) $('#lUser').value = ult;
   }
   function mostrarApp() {
-    $('#login').hidden = true; $('#app').hidden = false; $('#tabbar').hidden = false;
+    $('#login').hidden = true; $('#trocar').hidden = true; $('#app').hidden = false; $('#tabbar').hidden = false;
     $('#euAv').className = `av ${S.eu.id}`; $('#euAv').textContent = (S.eu.nome || S.eu.id).slice(0, 2).toUpperCase();
     $('#chatHint').textContent = S.modelo === 'heurística' ? t('chat_hint_heur') : t('chat_hint_model');
   }
@@ -1143,6 +1146,7 @@
     S.pessoas = eu.pessoas;
     $('#lUser').innerHTML = (eu.usuarios || eu.pessoas).map((p) => `<option value="${esc(p.id)}">${esc(p.nome)}</option>`).join('');
     if (!eu.usuario) return mostrarLogin();
+    if (eu.usuario.trocar) return mostrarTroca(true, eu.usuario);
     S.eu = eu.usuario; S.areas = eu.areas; S.canais = eu.canais; S.prioridades = eu.prioridades; S.repeticoes = eu.repeticoes; S.fuso = eu.fuso || S.fuso; S.modelo = eu.modelo; S.hoje = N.hoje(S.fuso);
     const quem = ler('compasso-who');
     S.who = quem && (quem === 'all' || PESSOAS()[quem]) ? quem : (PESSOAS()[S.eu.id] ? S.eu.id : 'all');
@@ -1159,10 +1163,61 @@
     if ('serviceWorker' in navigator && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') navigator.serviceWorker.register('/sw.js').catch(() => {});
     return undefined;
   }
+  // Senha provisória: quem acabou de digitá-la não precisa digitar de novo na troca. Fica só na memória, por 5 min.
+  let senhaRecente = null; let tmSenha;
   $('#loginForm').addEventListener('submit', async (e) => {
     e.preventDefault(); $('#lErr').textContent = '';
-    try { await api('POST', '/api/login', { usuario: $('#lUser').value, senha: $('#lPass').value }); $('#lPass').value = ''; await iniciar(); }
-    catch (err) { $('#lErr').textContent = err.message; }
+    const senha = $('#lPass').value;
+    try {
+      const r = await api('POST', '/api/login', { usuario: $('#lUser').value, senha });
+      guardar('compasso-ultimo-login', $('#lUser').value);
+      $('#lPass').value = '';
+      if (r.usuario && r.usuario.trocar) { senhaRecente = senha; clearTimeout(tmSenha); tmSenha = setTimeout(() => { senhaRecente = null; }, 300000); }
+      await iniciar();
+    } catch (err) { $('#lErr').textContent = err.message; }
+  });
+
+  // ---------- trocar a senha ----------
+  let trocaForcada = false;
+  function mostrarTroca(forcada, usuario) {
+    trocaForcada = !!forcada;
+    fecharGaveta(); fecharPaleta();
+    if (forcada) desligarTempoReal();
+    $('#app').hidden = true; $('#tabbar').hidden = true; $('#login').hidden = true; $('#trocar').hidden = false;
+    aplicarIdioma();
+    const nome = (usuario && usuario.nome) || '';
+    $('#tUser').value = (usuario && usuario.id) || '';
+    $('#tDica').textContent = forcada ? t('pw_forced_hint', { n: nome }) : t('pw_change_hint');
+    const pularAtual = forcada && !!senhaRecente;
+    $('#tAtualBox').hidden = pularAtual;
+    $('#tAtual').value = pularAtual ? senhaRecente : '';
+    $('#tAtual').required = !pularAtual;
+    $('#tNova').value = ''; $('#tConf').value = ''; $('#tErr').textContent = '';
+    $('#tVoltar').textContent = forcada ? t('logout') : t('pw_cancel');
+    (pularAtual ? $('#tNova') : $('#tAtual')).focus();
+  }
+  $('#trocarForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); $('#tErr').textContent = '';
+    const nova = $('#tNova').value;
+    if (nova.length < 10) { $('#tErr').textContent = t('pw_short'); $('#tNova').focus(); return; }
+    if (nova !== $('#tConf').value) { $('#tErr').textContent = t('pw_mismatch'); $('#tConf').focus(); return; }
+    const botao = $('#trocarForm button[type=submit]'); botao.disabled = true;
+    try {
+      await api('POST', '/api/senha', { atual: $('#tAtual').value, nova });
+      senhaRecente = null; $('#tAtual').value = ''; $('#tNova').value = ''; $('#tConf').value = '';
+      $('#trocar').hidden = true;
+      await iniciar();
+      toast(t('pw_saved'));
+    } catch (err) {
+      $('#tErr').textContent = err.message;
+      if (err.dados && err.dados.senha_atual) { senhaRecente = null; $('#tAtualBox').hidden = false; $('#tAtual').required = true; $('#tAtual').value = ''; $('#tAtual').focus(); }
+    } finally { botao.disabled = false; }
+  });
+  $('#tVoltar').addEventListener('click', async () => {
+    if (!trocaForcada) { $('#trocar').hidden = true; $('#app').hidden = false; $('#tabbar').hidden = false; return; }
+    senhaRecente = null;
+    try { await api('POST', '/api/logout', {}); } catch { /* já saiu */ }
+    location.reload();
   });
   $('#euBtn').addEventListener('click', async () => {
     const b = $('#euBtn');

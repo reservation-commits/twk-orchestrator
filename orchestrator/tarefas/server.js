@@ -26,7 +26,7 @@ const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 const nucleo = store.nucleo;
 
-const BUILD = '1.0.0-compasso-20261105';
+const BUILD = '1.1.0-compasso-logins-20261109';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -257,7 +257,7 @@ async function api(req, res, url) {
   const rota = url.pathname.replace(/\/+$/, '');
   if (livroFatal) return erro(res, 503, `Livro indisponível: ${livroFatal}`);
   if (rota === '/api/relato') {
-    if (!chaveCentralOk(req)) { const s = auth.sessaoDe(req); if (!s) return erro(res, 401, 'chave da Central ou sessão necessária'); }
+    if (!chaveCentralOk(req)) { const s = auth.sessaoDe(req); if (!s || s.trocar) return erro(res, 401, 'chave da Central ou sessão necessária'); }
     return json(res, 200, await relato());
   }
   if (!auth.operacional) return erro(res, 503, 'serviço não configurado: faltam usuários ou TAREFAS_SECRET');
@@ -290,6 +290,21 @@ async function api(req, res, url) {
   const donoPadrao = store.PESSOAS[quem] ? quem : null; // admin não é dono de tarefa: precisa escolher alguém
 
   if (rota === '/api/logout' && req.method === 'POST') { auditar({ tipo: 'logout', quem }); return json(res, 200, { ok: true }, { 'set-cookie': auth.cookieSair(seguro(req)) }); }
+
+  // Trocar a senha: com a atual, sempre; na senha provisória, é a única coisa que o app deixa fazer.
+  if (rota === '/api/senha' && req.method === 'POST') {
+    const b = await lerCorpo(req);
+    const chaves = [`ip:${ipDe(req)}`, `u:${quem}`];
+    const espera = freioLogin.bloqueado(chaves);
+    if (espera) { auditar({ tipo: 'senha_bloqueada', quem }); return erro(res, 429, `Muitas tentativas. Espere ${Math.ceil(espera / 60)} min.`, { espera_s: espera }); }
+    freioLogin.falhou(chaves);
+    const r = await auth.trocarSenha(quem, b.atual, b.nova);
+    if (r.erro) { if (!r.senha_atual) freioLogin.acertou(chaves); auditar({ tipo: 'senha_recusada', quem, motivo: r.senha_atual ? 'atual' : 'regra' }); return erro(res, 400, r.erro, { senha_atual: !!r.senha_atual }); }
+    freioLogin.acertou(chaves);
+    auditar({ tipo: 'senha_trocada', quem, trace });
+    return json(res, 200, { usuario: r.usuario }, { 'set-cookie': auth.cookie(r.token, seguro(req)) });
+  }
+  if (sessao.trocar) return erro(res, 403, 'Escolha a sua senha antes de continuar.', { trocar_senha: true });
 
   // Tempo real (SSE). Um canal por aba; o pulso mantém a conexão viva atrás do proxy.
   if (rota === '/api/stream' && req.method === 'GET') {

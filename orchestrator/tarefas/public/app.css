@@ -329,6 +329,7 @@ details.ctx summary .ref{text-transform:none;letter-spacing:.02em}
 .login{flex:1;display:grid;place-items:center;padding:24px 0}
 .login-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:26px;display:grid;gap:14px;width:min(380px,100%)}
 .login-card .lang{justify-self:start}
+.trocar-tit{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.2}
 .tabbar{display:none}
 
 /* celular */
