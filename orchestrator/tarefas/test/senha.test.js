@@ -92,6 +92,42 @@ test('script de logins: mantém o admin, gera provisórias que conferem, recusa 
   assert.equal(authMod.problemaNaSenha(s, { id: 'julien' }), null, 'a provisória passa nas próprias regras');
 });
 
+test('script: lê o Ambiente inteiro copiado, troca só a linha certa e devolve o resto byte a byte', () => {
+  const { lerFonte, escreverFonte, jsonAscii } = require('../logins.cjs');
+  const adminLinha = { id: 'admin', nome: 'Admin', senha: authMod.hashSenha(ADMIN) };
+  const ambiente = ['NODE_ENV=production', 'TAREFAS_SECRET=um-segredo-com-é-e-$$', `TAREFAS_USUARIOS=${JSON.stringify([adminLinha])}`, 'CENTER_URL=https://exemplo', ''].join('\r\n');
+  const f = lerFonte(ambiente);
+  assert.equal(f.modo, 'ambiente'); assert.equal(f.eol, '\r\n');
+  const { lista } = montar(f.valor, ['marlon', 'lucas', 'julien'], () => 'provisoria-de-teste');
+  const saida = escreverFonte(f, lista);
+  const linhas = saida.split('\r\n');
+  assert.deepEqual([linhas[0], linhas[1], linhas[3], linhas[4]], ['NODE_ENV=production', 'TAREFAS_SECRET=um-segredo-com-é-e-$$', 'CENTER_URL=https://exemplo', ''], 'as outras linhas saem idênticas, inclusive acento e cifrão');
+  assert.ok(/^TAREFAS_USUARIOS=\[/.test(linhas[2]) && /^[\x20-\x7e]+$/.test(linhas[2]), 'a linha nova é só ASCII: nenhuma cópia estraga o "á" de Márlon');
+  assert.equal(JSON.parse(lerFonte(saida).valor)[1].nome, 'Márlon');
+  assert.equal(jsonAscii({ n: 'Márlon' }), '{"n":"M\\u00e1rlon"}');
+  // Só a linha, só o valor, com aspas, com quebra de linha no meio do hash (cópia de terminal cortada)
+  assert.equal(lerFonte(`TAREFAS_USUARIOS=${JSON.stringify([adminLinha])}`).modo, 'linha');
+  assert.equal(lerFonte(JSON.stringify([adminLinha])).modo, 'linha');
+  assert.equal(lerFonte(`TAREFAS_USUARIOS='${JSON.stringify([adminLinha])}'`).aspas, "'");
+  const quebrado = JSON.stringify([adminLinha]).replace(/(scrypt:[0-9a-f]{10})/, '$1\n');
+  assert.equal(montar(lerFonte(quebrado).valor, []).lista[0].senha, adminLinha.senha, 'quebra de linha no meio do hash é consertada');
+  // Ambiente sem a linha: ela é acrescentada antes da última linha vazia
+  const semLinha = lerFonte('NODE_ENV=production\nTAREFAS_SECRET=x\n');
+  assert.equal(semLinha.i, -1); assert.match(escreverFonte(semLinha, lista), /^NODE_ENV=production\nTAREFAS_SECRET=x\nTAREFAS_USUARIOS=\[.*\]\n$/s);
+  assert.throws(() => lerFonte(''), /Não há nada copiado/);
+  assert.throws(() => lerFonte('um texto qualquer que copiei antes'), /não é o Ambiente/);
+});
+
+test('servidor: cópia com quebra de linha ou espaço no hash ainda vale; login estragado não some em silêncio', () => {
+  const h = authMod.hashSenha('uma-senha-qualquer-1');
+  const valor = `'[{"id":"admin","senha":"${h.slice(0, 20)}\n${h.slice(20)}"},{"id":"lucas","senha":"${h.slice(0, 30)} ${h.slice(30)}"},{"id":"julien","senha":"scrypt:cortado"},{"id":"fulano","senha":"${h}"}]'`;
+  const a = comUsuarios(valor, () => authMod.criar({ stateDir: tmp(), isProd: true, segredo: SEGREDO }));
+  assert.deepEqual(a.usuarios.map((u) => u.id), ['admin', 'lucas'], 'quebra de linha e espaço no meio do hash são consertados');
+  assert.deepEqual(a.ignorados.map((x) => x.id), ['julien', 'fulano']);
+  assert.match(a.ignorados[0].motivo, /formato/);
+  assert.ok(a.entrar('lucas', 'uma-senha-qualquer-1'));
+});
+
 test('login repetido na variável é recusado com mensagem clara', () => {
   const h = authMod.hashSenha('qualquer-coisa-12');
   assert.throws(() => comUsuarios(JSON.stringify([{ id: 'lucas', senha: h }, { id: 'lucas', senha: h }]), () => authMod.criar({ stateDir: tmp(), isProd: true, segredo: SEGREDO })), /mais de uma vez: lucas/);
@@ -115,6 +151,8 @@ test('pela API: provisória só deixa trocar a senha; depois, o app abre normal;
   const oa = await chamar('POST', '/oauth/authorize', form, null, { 'content-type': 'application/x-www-form-urlencoded' });
   assert.equal(oa.status, 403); assert.match(oa.texto, /senha provisória/);
 
+  const h = (await chamar('GET', '/health')).j;
+  assert.equal(h.logins, 2); assert.equal(h.logins_ignorados, undefined); assert.equal(h.alerta, false);
   const l = await chamar('POST', '/api/login', { usuario: 'julien', senha: PROVISORIA });
   assert.equal(l.status, 200); assert.equal(l.j.usuario.trocar, true);
   const c1 = l.cookie;
