@@ -16,15 +16,21 @@ const { auditedUpdateRow } = require('./db-audited'); // escrita auditada (2026-
 const argv = process.argv.slice(2);
 const APPLY = argv.includes('--apply');
 const LIMIT = (() => { const i = argv.indexOf('--limit'); return i >= 0 ? parseInt(argv[i + 1], 10) : 12; })();
+const DUMP = (() => { const i = argv.indexOf('--dump'); return i >= 0 && argv[i + 1] ? argv[i + 1] : ''; })();
+const dump = [];
+const IDS = (() => { const i = argv.indexOf('--ids'); return i >= 0 && argv[i + 1] ? argv[i + 1].split(',').map((s) => s.trim()).filter(Boolean) : []; })();
 const CONCURRENCY = 3;
 const COVER_MIN_W = 1500, GALLERY_MIN_W = 1100;
-process.on('unhandledRejection', (e) => console.error('[unhandledRejection]', String((e && e.message) || e).slice(0, 120)));
-process.on('uncaughtException', (e) => console.error('[uncaughtException]', String((e && e.message) || e).slice(0, 120)));
+if (require.main === module) {
+  process.on('unhandledRejection', (e) => console.error('[unhandledRejection]', String((e && e.message) || e).slice(0, 120)));
+  process.on('uncaughtException', (e) => console.error('[uncaughtException]', String((e && e.message) || e).slice(0, 120)));
+}
 
 const env = fs.readFileSync(path.join(__dirname, 'twk-db-agent', '.env.local'), 'utf8');
 const anthropic = new Anthropic({ apiKey: env.match(/ANTHROPIC_API_KEY=(.+)/)[1].trim() });
 const VISION_MODEL = 'claude-haiku-4-5-20251001';
-const pool = new Pool({ connectionString: require('./db-config').CONN, ssl: { rejectUnauthorized: false } });
+// Só quem roda este arquivo direto abre o banco: quem importa qualificar() não carrega a credencial de escrita.
+const pool = require.main === module ? new Pool({ connectionString: require('./db-config').CONN, ssl: { rejectUnauthorized: false } }) : null;
 const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; TWK-Bot/1.0)', Accept: 'text/html,*/*', Connection: 'close' };
 
 const JUNK = /logo|icon|favicon|sprite|placeholder|avatar|flag|emoji|pixel|badge|button|arrow|gravatar|cookie|loader|spinner|blank|1x1|spacer|wp-content\/plugins|\/icons?\/|social|whatsapp|facebook|instagram|tripadvisor|thefork|opentable|paypal|visa|mastercard|border|divider|separator|ornament|pattern|texture|repsol|guia-|\bnav\b|nav-|menu-bg/i;
@@ -98,6 +104,8 @@ function candidates(html, baseUrl) {
   return out.slice(0, 14);
 }
 
+const usoVisao = { chamadas: 0, entrada: 0, saida: 0 };
+
 async function classify(imgs) {
   const content = [{ type: 'text', text:
 `Você é curador de fotos para um diretório de restaurantes de alto padrão. Para CADA imagem (na ordem), retorne um objeto:
@@ -112,6 +120,7 @@ async function classify(imgs) {
 Responda APENAS o array JSON, nada mais.` }];
   imgs.forEach((im) => content.push({ type: 'image', source: { type: 'base64', media_type: im.media_type, data: im.data } }));
   const msg = await anthropic.messages.create({ model: VISION_MODEL, max_tokens: 700, messages: [{ role: 'user', content }] });
+  usoVisao.chamadas++; usoVisao.entrada += msg.usage?.input_tokens || 0; usoVisao.saida += msg.usage?.output_tokens || 0;
   const text = msg.content.map((b) => (b.type === 'text' ? b.text : '')).join('');
   const m = text.match(/\[[\s\S]*\]/); if (!m) return [];
   try { return JSON.parse(m[0]); } catch { return []; }
@@ -120,10 +129,48 @@ Responda APENAS o array JSON, nada mais.` }];
 const basename = (u) => { try { return decodeURIComponent(new URL(u).pathname.split('/').pop() || 'image').slice(0, 120); } catch { return 'image'; } };
 const item = (u, name) => ({ id: null, alt_text: name || '', filename: basename(u), source_url: u });
 
-(async () => {
-  const where = `published AND images_json IS NULL AND site_url IS NOT NULL AND site_url <> ''`;
-  const total = (await pool.query(`SELECT COUNT(*)::int c FROM db_restaurants WHERE ${where}`)).rows[0].c;
-  const rows = (await pool.query(`SELECT restaurant_id, name, city, site_url FROM db_restaurants WHERE ${where} ORDER BY (partner) DESC, name ${APPLY ? '' : `LIMIT ${LIMIT}`}`)).rows;
+// Coleta e qualifica as fotos do site oficial de uma casa. Não escreve nada; é o único lugar do critério de foto.
+// Devolve { ok: true, kind, cover, gallery, imagesJson } ou { ok: false, motivo }.
+async function qualificar(base, name) {
+  let cands = [];
+  const keys = new Set();
+  for (const p of ['', '/gallery', '/galerie', '/photos', '/galeria']) {
+    const html = await fetchHtml(base + p); if (!html) continue;
+    for (const u of candidates(html, base + p)) { const k = dedupKey(u); if (!keys.has(k)) { keys.add(k); cands.push(u); } }
+    if (cands.length >= 12) break;
+  }
+  cands = cands.slice(0, 14);
+  const imgs = []; const meta = [];
+  for (const u of cands) { const im = await fetchImage(u); if (im) { imgs.push(im); meta.push({ url: u, w: im.w, h: im.h }); } if (imgs.length >= 6) break; }
+  if (!imgs.length) return { ok: false, motivo: 'nenhuma imagem em alta resolução' };
+  // Sem imagem que possa ser capa, a visão não mudaria o resultado: descarta antes de pagar por ela.
+  if (!meta.some((m) => m.w >= COVER_MIN_W && m.w >= m.h)) return { ok: false, motivo: `sem capa em alta resolução/paisagem (melhor: ${Math.max(...meta.map((m) => m.w))}px)` };
+  const cls = await classify(imgs);
+  const get = (i) => cls.find((c) => c.i === i) || {};
+  const okIdx = (cat) => meta.map((m, i) => ({ ...m, i })).filter((m) => { const c = get(m.i); return c.cat === cat && c.hq === true && c.person !== true; });
+  let chosen = okIdx('ambiente'); let kind = 'AMBIENTE';
+  if (!chosen.length) { chosen = okIdx('prato'); kind = 'prato'; }
+  if (!chosen.length) return { ok: false, motivo: 'sem ambiente/prato qualificado' };
+  // cover: landscape & >=1500px, widest
+  const coverPool = chosen.filter((m) => m.w >= COVER_MIN_W && m.w >= m.h).sort((a, b) => b.w - a.w);
+  if (!coverPool.length) return { ok: false, motivo: `sem capa em alta resolução/paisagem (melhor: ${Math.max(...chosen.map((m) => m.w))}px)` };
+  const cover = coverPool[0];
+  const gallery = chosen.filter((m) => m.url !== cover.url && m.w >= GALLERY_MIN_W).sort((a, b) => b.w - a.w).slice(0, 6);
+  return { ok: true, kind, cover, gallery, imagesJson: { logo: null, cover: item(cover.url, name), slider: gallery.map((m) => item(m.url, name)) } };
+}
+
+module.exports = { qualificar, normUrl, fetchHtml, usoVisao };
+
+if (require.main === module) (async () => {
+  // --ids a,b,c (2026-11-05, lote 1 de Paris): casas escolhidas à mão, publicadas ou não, que ainda não têm
+  // capa nem slider (images_json pode existir só com logo). Sem --ids, o alvo original: publicadas sem images_json.
+  const SEM_HERO = `COALESCE(images_json->'cover'->>'source_url','')='' AND COALESCE(images_json->'slider'->0->>'source_url','')=''`;
+  const where = IDS.length
+    ? `restaurant_id = ANY($1) AND ${SEM_HERO} AND site_url IS NOT NULL AND site_url <> ''`
+    : `published AND images_json IS NULL AND site_url IS NOT NULL AND site_url <> ''`;
+  const params = IDS.length ? [IDS] : [];
+  const total = (await pool.query(`SELECT COUNT(*)::int c FROM db_restaurants WHERE ${where}`, params)).rows[0].c;
+  const rows = (await pool.query(`SELECT restaurant_id, name, city, site_url FROM db_restaurants WHERE ${where} ORDER BY (partner) DESC, name ${APPLY || IDS.length ? '' : `LIMIT ${LIMIT}`}`, params)).rows;
   console.log(`Candidatos: ${total} | processando: ${rows.length} | modo: ${APPLY ? 'APPLY' : 'PILOTO'} | capa>=${COVER_MIN_W}px paisagem\n`);
 
   const tally = { ambiente: 0, prato: 0, null: 0, err: 0 };
@@ -133,33 +180,15 @@ const item = (u, name) => ({ id: null, alt_text: name || '', filename: basename(
       const r = queue.shift(); done++;
       const base = normUrl(r.site_url); if (!base) { tally.null++; continue; }
       try {
-        let cands = [];
-        const keys = new Set();
-        for (const p of ['', '/gallery', '/galerie', '/photos', '/galeria']) {
-          const html = await fetchHtml(base + p); if (!html) continue;
-          for (const u of candidates(html, base + p)) { const k = dedupKey(u); if (!keys.has(k)) { keys.add(k); cands.push(u); } }
-          if (cands.length >= 12) break;
-        }
-        cands = cands.slice(0, 14);
-        const imgs = []; const meta = [];
-        for (const u of cands) { const im = await fetchImage(u); if (im) { imgs.push(im); meta.push({ url: u, w: im.w, h: im.h }); } if (imgs.length >= 6) break; }
-        if (!imgs.length) { tally.null++; if (!APPLY) console.log(`  ∅ ${r.name} (${r.city}) — nenhuma imagem em alta resolução`); continue; }
-        const cls = await classify(imgs);
-        const get = (i) => cls.find((c) => c.i === i) || {};
-        const okIdx = (cat) => meta.map((m, i) => ({ ...m, i })).filter((m) => { const c = get(m.i); return c.cat === cat && c.hq === true && c.person !== true; });
-        let chosen = okIdx('ambiente'); let kind = 'AMBIENTE';
-        if (!chosen.length) { chosen = okIdx('prato'); kind = 'prato'; }
-        if (!chosen.length) { tally.null++; if (!APPLY) console.log(`  ∅ ${r.name} (${r.city}) — sem ambiente/prato qualificado`); continue; }
-        // cover: landscape & >=1500px, widest
-        const coverPool = chosen.filter((m) => m.w >= COVER_MIN_W && m.w >= m.h).sort((a, b) => b.w - a.w);
-        if (!coverPool.length) { tally.null++; if (!APPLY) console.log(`  ∅ ${r.name} (${r.city}) — sem capa em alta resolução/paisagem (melhor: ${Math.max(...chosen.map((m) => m.w))}px)`); continue; }
-        const cover = coverPool[0];
-        const gallery = chosen.filter((m) => m.url !== cover.url && m.w >= GALLERY_MIN_W).sort((a, b) => b.w - a.w).slice(0, 6);
+        const q = await qualificar(base, r.name);
+        if (!q.ok) { tally.null++; if (!APPLY) console.log(`  ∅ ${r.name} (${r.city}) — ${q.motivo}`); continue; }
+        const { kind, cover, gallery, imagesJson } = q;
         if (kind === 'AMBIENTE') tally.ambiente++; else tally.prato++;
-        const imagesJson = { logo: null, cover: item(cover.url, r.name), slider: gallery.map((m) => item(m.url, r.name)) };
         if (!APPLY) {
           console.log(`  ✓ ${r.name} (${r.city}) — ${kind} · capa ${cover.w}x${cover.h} + ${gallery.length} galeria`);
           console.log(`      capa: ${cover.url.slice(0, 95)}`);
+          // --dump <arquivo.json>: guarda o images_json qualificado para gerar SQL reversível (porta única, ADR-017)
+          if (DUMP) dump.push({ restaurant_id: r.restaurant_id, name: r.name, kind, cover_w: cover.w, cover_h: cover.h, source: base, images_json: imagesJson });
         } else {
           // Escrita auditada: old_data + agent_audit_log na mesma transação; `images_json IS NULL`
           // continua como condição (idempotente/retomável) — se já tiver foto, não grava nem audita.
@@ -167,7 +196,7 @@ const item = (u, name) => ({ id: null, alt_text: name || '', filename: basename(
             table: 'db_restaurants', pk: 'restaurant_id', id: r.restaurant_id,
             set: `images_json=$1::jsonb, last_verified_at=now(), enrichment_log=COALESCE(enrichment_log,'[]'::jsonb)||$2::jsonb`,
             params: [JSON.stringify(imagesJson), JSON.stringify([{ field: 'images_json', action: 'vision_scrape', kind, cover_w: cover.w, count: gallery.length + 1, source: base, at: new Date().toISOString() }])],
-            extraWhere: 'images_json IS NULL',
+            extraWhere: IDS.length ? SEM_HERO : 'images_json IS NULL',
             agent: 'enrich_photos_v2', reason: `fotos por visao (${kind}, capa ${cover.w}px, ${gallery.length + 1} imagens)`,
           });
           if ((tally.ambiente + tally.prato) % 25 === 0) console.log(`  ...${tally.ambiente + tally.prato} gravados (${done}/${rows.length} vistos)`);
@@ -179,5 +208,6 @@ const item = (u, name) => ({ id: null, alt_text: name || '', filename: basename(
   console.log(`\n──────── RESUMO ────────`);
   console.log(`Ambiente: ${tally.ambiente} | Prato: ${tally.prato} | NULL (sem qualificado): ${tally.null} | erros: ${tally.err}`);
   console.log(`${APPLY ? 'Gravados' : 'Qualificados'}: ${tally.ambiente + tally.prato}/${rows.length}`);
+  if (DUMP && !APPLY) { fs.writeFileSync(DUMP, JSON.stringify({ gerado_em: new Date().toISOString(), casas: dump }, null, 1)); console.log(`dump: ${DUMP} (${dump.length} casas)`); }
   await pool.end();
 })();
