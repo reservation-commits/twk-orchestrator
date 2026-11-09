@@ -1,6 +1,8 @@
 # Aria v25 — reserva confirmada à casa e hora em AM/PM (05/11/2026)
 
-**Pacote:** `Agente de Suporte e Concierge/aria_agent_whatsapp-2026-11-05-v25.zip` (138 arquivos, todos com `/`, gerado com o `tar.exe` do System32; mesma lista de arquivos do v24). **Commit:** `9fe9783` no repositório da Aria (não enviado ao GitHub). **Porta de Qualidade:** verde, 1151 checagens (`orchestrator/logs/porta/2026-11-05.md`).
+**Pacote (use este):** `Agente de Suporte e Concierge/aria_agent_whatsapp-2026-11-09-v25.zip` (138 arquivos, todos com `/`, gerado com o `tar.exe` do System32; mesma lista de arquivos do v24). **Commits:** `9fe9783` + `b70f503` no repositório da Aria (não enviados ao GitHub). **Porta de Qualidade:** verde, 1203 checagens (`orchestrator/logs/porta/2026-11-09.md`).
+
+**Estado em 09/11:** o zip de 05/11 foi ao ar em 05/11 às 4:04 PM (Paris) com o código da v25, mas (a) ainda rotulado `v24` no `/health` — o rótulo em `src/buildInfo.ts` não tinha sido trocado — e (b) **sem** a variável `RESERVATION_EVENT_TEMPLATE_VENUE_CONFIRMADA`: `/health` mostra `confirmadaCasa: false` e o MONAK não recebeu as reservas J669RDHJ (06/11) e TPT3TW3N (07/11). O zip de 09/11 só troca o rótulo para `2026-11-09-v25-casa-confirmada-am-pm`.
 
 ## O que muda
 
@@ -20,8 +22,9 @@
 1. **Ambiente:** acrescentar
    `RESERVATION_EVENT_TEMPLATE_VENUE_CONFIRMADA=twk_venue_confirmed`
    (só depois da aprovação da Meta; nenhuma outra variável muda.)
-2. **Origem:** enviar o zip `aria_agent_whatsapp-2026-11-05-v25.zip` e fazer **Deploy/Redeploy**, como no v24.
+2. **Origem:** enviar o zip `aria_agent_whatsapp-2026-11-09-v25.zip` e fazer **Deploy/Redeploy**, como no v24.
 3. **Conferir** `/health` da Aria:
+   - `build: "2026-11-09-v25-casa-confirmada-am-pm"`
    - `etapas.confirmadaCasa: true`
    - `notificacoes.templates.casaConfirmada: "twk_venue_confirmed"`
    - `etapas.pedidoNovoCasa`, `vesperaCasa` etc. iguais a antes.
