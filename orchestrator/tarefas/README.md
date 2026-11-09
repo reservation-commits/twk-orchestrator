@@ -41,7 +41,7 @@ Serviço próprio. **Build Path `/orchestrator`, Dockerfile `tarefas/Dockerfile`
 |---|---|---|
 | `TAREFAS_SECRET` | sim | assina a sessão (32+ caracteres aleatórios). Sem ela: 503 |
 | `TAREFAS_USUARIOS` | sim (ou `state/usuarios.json`) | quem pode **entrar**: `admin`, `marlon`, `lucas`, `julien`, em qualquer combinação. Monte com `node orchestrator/tarefas/logins.cjs` (ver "Um login para cada pessoa"). As tarefas são sempre de Márlon, Lucas ou Julien, independentemente de quem entra |
-| `ANTHROPIC_API_KEY` | não | chat com modelo (`TAREFAS_MODELO`, padrão `claude-opus-5-5`; `off` desliga; `TAREFAS_EFFORT`, padrão `low`). Teto `TAREFAS_MAX_LLM_POR_DIA`, padrão 60 |
+| `ANTHROPIC_API_KEY` | não | chat com modelo (`TAREFAS_MODELO`, padrão `claude-fable-5-1`; `off` desliga; `TAREFAS_EFFORT`, padrão `high`; `TAREFAS_LLM_TIMEOUT_MS`, padrão 60000). Teto `TAREFAS_MAX_LLM_POR_DIA`, padrão 60. O Fable 5.1 exige conta com retenção de 30 dias (sem ZDR) |
 | `TAREFAS_DATABASE_URL` | não | livro no Postgres (`sql/001-plan.sql`, papel `twk_plan`). Sem ela, livro em arquivo no volume |
 | `TAREFAS_FUSO` | não | fuso da empresa, padrão `Europe/Paris`. "Hoje", ids e auditoria seguem esse dia, nunca o de UTC |
 | `TAREFAS_SUGESTOES_TTL_MIN` | não | de quanto em quanto as fontes são relidas, por trás, padrão 60 |
