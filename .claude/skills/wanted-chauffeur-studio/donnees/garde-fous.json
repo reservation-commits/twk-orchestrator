@@ -1,0 +1,204 @@
+{
+  "version": "1.0",
+  "source": "Travas do plano Wanted Chauffeur de 09/11/2026 (docs/estrategia/plano-night-ride-gta6-2026-11-09.html, seção 6) e doutrina TWK. Onde o plano marca \"a confirmar\", a regra aqui também é só um alerta.",
+  "note": "Cada regra roda em um ou mais contextos: `ecran` (texto na tela, capa, miniatura), `legende` (legenda), `voix` (fala), `bio`. `motif` é comparado em minúsculas e sem acentos. Níveis: `bloquant` (não publicar assim), `alerte` (precisa de uma pessoa conferir), `rappel` (lembrete de procedimento).",
+  "regles": [
+    {
+      "id": "marque-jeu-ecran",
+      "niveau": "bloquant",
+      "contextes": [
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\bgta\\b|\\bgrand theft\\b|\\brockstar\\b|\\bvice city\\b",
+      "message": "Marca do jogo na tela, na capa ou na bio. O plano só permite \"GTA\" na legenda e na fala; nunca na marca, no nome, na capa nem na miniatura."
+    },
+    {
+      "id": "record-sans-preuve",
+      "niveau": "bloquant",
+      "contextes": [
+        "ecran",
+        "legende",
+        "voix",
+        "bio"
+      ],
+      "motif": "\\b(premier|premiere|1er|1ere|seule?|unique|meilleure?|n ?° ?1|numero 1)\\b.{0,40}\\b(au monde|du monde|d'europe|en europe|de france|en france|mondiale?)\\b",
+      "message": "Recorde que não provamos. O plano autoriza só o recorte da Riviera: \"la seule voiture de la Riviera où…\"."
+    },
+    {
+      "id": "disponibilite",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\bdispo(nible)?s? (ce soir|maintenant|tout de suite|immediatement|24 ?h|7 ?j)|\\b24 ?h ?/ ?24\\b|\\b7 ?j ?/ ?7\\b|\\bgaranti[es]?\\b|\\bconfirmation immediate\\b|\\bsans attente\\b|\\ben \\d+ ?min(utes)? chez (toi|vous)",
+      "message": "Promessa de disponibilidade ou garantia. Um carro, um motorista: disponibilidade só depois de o Julien confirmar."
+    },
+    {
+      "id": "sans-reservation",
+      "niveau": "bloquant",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\bsans reservation\\b|\\bsans reserver\\b|\\bon (te|vous) (prend|recupere|ramasse) (dans la rue|devant|a la sortie)|\\bhele[zr]?\\b|\\bfais(-nous)? signe\\b|\\bmonte[zs]? direct",
+      "message": "VTC não pega passageiro na rua: toda corrida nasce de uma reserva. Escreva o caminho: WhatsApp, mesmo dez minutos antes."
+    },
+    {
+      "id": "alcool",
+      "niveau": "bloquant",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\bchampagne\\b|\\bopen bar\\b|\\bcocktails?\\b|\\bshots?\\b|\\bbiere[s]?\\b|\\bvodka\\b|\\bapero\\b|\\bbouteille[s]? (a bord|offerte)",
+      "message": "Álcool a bordo. A regra do produto é sem álcool a bordo; bebidas do pacote são sem álcool."
+    },
+    {
+      "id": "mineurs-jeu",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\benfants?\\b|\\bfamilial[e]?\\b|\\ben famille\\b|\\bados?\\b|\\badolescents?\\b|\\bkids?\\b|\\bpour les petits\\b|\\bmineurs?\\b",
+      "message": "Público menor de idade perto do jogo. O jogo é 18+: só maiores jogam, e o produto se vende como \"soirée\", não como programa de família."
+    },
+    {
+      "id": "chauffeur-ecran",
+      "niveau": "bloquant",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran"
+      ],
+      "motif": "\\b(chauffeur|julien|conducteur) (\\S+ ){0,3}(joue|regarde l'ecran|filme|tient le telephone|a la manette)\\b.{0,40}\\b(en conduisant|en roulant|au volant|sur la route)\\b|\\b(en conduisant|au volant)\\b.{0,40}\\b(joue|filme|regarde l'ecran)\\b",
+      "message": "Motorista jogando, filmando ou vendo a tela ao volante. É infração: câmeras fixas, e o motorista nunca vê a tela."
+    },
+    {
+      "id": "leds-en-roulant",
+      "niveau": "bloquant",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran"
+      ],
+      "motif": "\\b(led|leds|neons?|lumieres?)\\b.{0,50}\\b(en roulant|sur la route|en conduisant|dans les rues|en circulation|pendant le trajet)\\b|\\b(en roulant|sur la route)\\b.{0,50}\\b(led|leds|neons?)\\b",
+      "message": "LEDs com o carro em circulação. Só acendem com o carro parado e a porta aberta."
+    },
+    {
+      "id": "vitesse",
+      "niveau": "bloquant",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran"
+      ],
+      "motif": "\\b\\d{3} ?km ?/ ?h\\b|\\bpied au plancher\\b|\\bexces de vitesse\\b|\\bon (a )?(seme|grille|brule) (les|la|un|le)\\b|\\bcourse[- ]poursuite\\b|\\bdrift\\b|\\bburn ?out\\b",
+      "message": "Velocidade ou direção perigosa de verdade. A perseguição é do personagem e do jogo; o carro real anda dentro da lei."
+    },
+    {
+      "id": "police",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran"
+      ],
+      "motif": "\\bpolice (nationale|municipale)\\b|\\bgendarmerie\\b|\\bgendarme[s]?\\b|\\bgyrophare\\b|\\bsirene\\b|\\barme[s]?\\b|\\bpistolet\\b|\\bflingue\\b",
+      "message": "Referência à polícia francesa, sirene ou arma. O Agente é FBI evidente, sem distintivo exibido, sem arma de brinquedo, sem sirene."
+    },
+    {
+      "id": "prix",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran",
+        "bio"
+      ],
+      "motif": null,
+      "message": "Preço citado. Confira com a tabela: os valores de 09/11 são PROPOSTA, ainda não aprovada pelo fundador. Sempre TTC e dizendo para quantas pessoas."
+    },
+    {
+      "id": "concurrent",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "voix",
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\buber\\b|\\bbolt\\b|\\bheetch\\b|\\bblablacar\\b|\\bg7\\b",
+      "message": "Concorrente citado pelo nome. Publicidade comparativa tem regras na França: uma pessoa precisa conferir antes."
+    },
+    {
+      "id": "heure-24h",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "ecran",
+        "bio"
+      ],
+      "motif": "\\b(a|vers|des|jusqu'a|rdv|rendez-vous) ([01]?\\d|2[0-3]) ?h ?([0-5]\\d)?\\b|\\b([01]?\\d|2[0-3])h[0-5]\\d\\b|\\b(1[3-9]|2[0-3]):[0-5]\\d\\b",
+      "message": "Hora em formato 24 h. Regra do fundador (05/11): sempre AM/PM, como \"9:00 PM\". Duração (\"3 h à bord\") não entra nesta regra."
+    },
+    {
+      "id": "consentement",
+      "niveau": "rappel",
+      "contextes": [
+        "legende",
+        "voix"
+      ],
+      "motif": "\\b(client[es]?|passagers?|passageres?|invite[es]?|notre ami[es]?|un pere|une mere|un groupe|six amis|des amis)\\b",
+      "message": "Pessoa real citada ou mostrada. Termo de imagem assinado antes de publicar; sem termo, rosto desfocado ou de costas. Menores nunca aparecem jogando."
+    },
+    {
+      "id": "musique",
+      "niveau": "rappel",
+      "contextes": [
+        "legende",
+        "voix"
+      ],
+      "motif": "\\bmusique\\b|\\bplaylist\\b|\\bbande[- ]son\\b|\\bchanson\\b|\\bmorceau\\b",
+      "message": "Música. Só o tema original ou a biblioteca comercial da rede; nenhum sucesso famoso em vídeo monetizado ou live."
+    },
+    {
+      "id": "telephone",
+      "niveau": "alerte",
+      "contextes": [
+        "legende",
+        "ecran",
+        "bio"
+      ],
+      "motif": "(\\+33|0033)[ .]?[1-9]([ .]?\\d{2}){4}|\\b0[67]([ .]?\\d{2}){4}\\b",
+      "message": "Número de telefone no texto. O caminho medido é o link da bio para a página /ride; número solto perde a origem do pedido."
+    }
+  ],
+  "prix_proposes": {
+    "note": "Proposta de 09/11/2026, para decisão do fundador. NÃO é tabela aprovada. Por pessoa considera 6 passageiros.",
+    "valeurs": [
+      150,
+      25,
+      350,
+      58,
+      490,
+      82,
+      390,
+      65,
+      750,
+      125,
+      130,
+      400
+    ]
+  }
+}

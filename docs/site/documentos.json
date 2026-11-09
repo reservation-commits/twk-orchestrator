@@ -1,5 +1,16 @@
 [
   {
+    "slug": "wanted-chauffeur",
+    "fonte": "docs/estrategia/plano-night-ride-gta6-2026-11-09.html",
+    "titulo": "Wanted Chauffeur · O plano de lançamento",
+    "titulo_fr": "Wanted Chauffeur · Le plan de lancement",
+    "descricao": "O Tesla Model X com PS5 na Riviera, do conceito à execução: a promessa, a direção de arte anos 80, os cinco personagens e as lives, a oferta e os preços, o funil do vídeo ao WhatsApp, as travas, 38 ideias de vídeo, o equipamento e o dia a dia de 09 a 30/11 para o fundador e o dev, com dezembro e a série de janeiro.",
+    "descricao_fr": "La Tesla Model X avec PS5 sur la Riviera, du concept à l’exécution : la promesse, la direction artistique années 80, les cinq personnages et les lives, l’offre et les prix, le parcours de la vidéo à WhatsApp, les garde-fous, 38 idées de vidéo, le matériel et le quotidien du 09 au 30/11 pour le fondateur et le dev, avec décembre et la série de janvier.",
+    "data": "2026-11-09",
+    "estado": "vigente",
+    "grupo": "Planos"
+  },
+  {
     "slug": "chauffeur-prive-formulario",
     "fonte": "docs/estrategia/deck-chauffeur-prive-2026-10-29.html",
     "titulo": "Chauffeur privé · O formulário que registra, pergunta o certo e mostra o preço",

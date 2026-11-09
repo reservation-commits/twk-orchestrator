@@ -44,6 +44,11 @@ const classeEstado = (e) => e.normalize('NFD').replace(/[^a-z]/g, '');
 const raizDe = (idioma) => (idioma === 'pt' ? '/' : `/${idioma}/`);
 const urlDoc = (idioma, slug) => `${raizDe(idioma)}planos/${slug}.html`;
 
+// Documento que nasceu como página de artifact começa no <title>: não traz <!doctype>, <html> nem viewport. Sem isso o
+// celular abre a página com 980 px de largura e o navegador cai em quirks mode. Documento completo passa intocado.
+const esqueleto = (html, idioma) => (/^\s*<!doctype/i.test(html) ? html
+  : `<!doctype html>\n<html lang="${T[idioma].html_lang}">\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="robots" content="noindex, nofollow">\n${html}`);
+
 // Barra fixa acrescentada ao fim de cada documento: volta à Biblioteca e troca de idioma.
 function barra(idioma, slug, opts = {}) {
   const t = T[idioma];
@@ -179,11 +184,11 @@ function indice(idioma, estadoTraducao, arquivo = false) {
       estadoTraducao[d.slug] = 'bilingue';
       continue;
     }
-    fs.writeFileSync(path.join(SAIDA, 'planos', `${d.slug}.html`), html + barra('pt', d.slug));
+    fs.writeFileSync(path.join(SAIDA, 'planos', `${d.slug}.html`), esqueleto(html, 'pt') + barra('pt', d.slug));
     for (const idioma of IDIOMAS.filter((i) => i !== 'pt')) {
       const destino = path.join(SAIDA, idioma, 'planos', `${d.slug}.html`);
       const tr = await obterTraducao({ slug: d.slug, fonteRelativa: d.fonte, origemHtml: html, para: idioma, permitirApi: !semTraducao, forcar });
-      if (tr) { fs.writeFileSync(destino, tr.html + barra(idioma, d.slug)); estadoTraducao[d.slug] = tr.fonte; }
+      if (tr) { fs.writeFileSync(destino, esqueleto(tr.html, idioma) + barra(idioma, d.slug)); estadoTraducao[d.slug] = tr.fonte; }
       else { fs.writeFileSync(destino, paginaSimples(idioma, T[idioma].p_titulo, T[idioma].p_texto, urlDoc('pt', d.slug), T[idioma].p_link) + barra(idioma, d.slug)); estadoTraducao[d.slug] = 'pendente'; }
     }
   }

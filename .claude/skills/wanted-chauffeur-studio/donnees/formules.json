@@ -1,0 +1,178 @@
+{
+  "version": "1.0",
+  "note": "Fórmulas de gancho em francês para o @wantedchauffeur. Um Reel tem TRÊS ganchos que disparam juntos: a imagem de abertura, o texto na tela e a primeira frase falada. Cada fórmula traz o modelo, um exemplo falado, a versão de tela, para que serve e como costuma ser estragada. O campo `reconnait` é uma expressão regular aplicada ao texto em minúsculas e SEM acentos (a ferramenta normaliza antes), para dar nome a ganchos encontrados na pesquisa. A ordem de `ordre` vai da mais específica para a mais genérica. Editar à vontade: é do projeto.",
+  "ordre": ["pov", "reaction", "liste", "prix", "premiere-fois", "reponse", "personne-ne-dit", "interdit", "erreur", "contre-pied", "coulisses", "avant-apres", "defi", "le-seul", "imagine", "question", "histoire", "lieu", "chiffre"],
+  "formules": [
+    {
+      "id": "pov", "nom": "POV",
+      "modele": "POV : tu {situation banale} et c'est {ça} qui arrive",
+      "exemple": "POV : tu commandes un chauffeur à Nice et c'est ça qui arrive",
+      "ecran": "POV : ton chauffeur à Nice",
+      "pour": "A entrada: porta Falcon abrindo, teto acendendo. Funciona sem fala nenhuma.",
+      "rate": "POV que não é ponto de vista: a câmera precisa estar no lugar de quem vive a cena.",
+      "reconnait": "^pov\\b"
+    },
+    {
+      "id": "reaction", "nom": "Il ne savait pas",
+      "modele": "{Il/Elle} ne savait pas que {détail concret}",
+      "exemple": "Il ne savait pas qu'il y avait une PS5 dans la voiture",
+      "ecran": "Il ne savait pas",
+      "pour": "Reação pura do passageiro. O formato que mais retém, segundo o plano.",
+      "rate": "Reação encenada. Se o passageiro sabia, não publique como surpresa. Sem termo de imagem assinado, não publique.",
+      "reconnait": "\\b(il|elle|ils|elles|on) ne (savait|savaient|s'attendait|s'attendaient|se doutait|se doutaient) pas\\b|\\bsa reaction\\b|\\bleur reaction\\b"
+    },
+    {
+      "id": "liste", "nom": "La liste",
+      "modele": "{N} {choses} que {public} {verbe} à {lieu}",
+      "exemple": "3 choses que personne ne fait en arrivant à l'aéroport de Nice",
+      "ecran": "3 choses à Nice",
+      "pour": "Bastidores e dicas da Riviera. Promete um fim, então segura até o último item.",
+      "rate": "Mais de 5 itens num Reel curto. O último item precisa ser o melhor.",
+      "reconnait": "^(\\d+|deux|trois|quatre|cinq|six|sept) (choses|raisons|erreurs|endroits|trucs|facons|astuces|regles|details|questions)\\b"
+    },
+    {
+      "id": "prix", "nom": "Combien ça coûte",
+      "modele": "Combien coûte {l'expérience} ? {prix par personne}",
+      "exemple": "Combien coûte une soirée jeux en Tesla à six ? 82 euros chacun",
+      "ecran": "82 € par personne",
+      "pour": "Responder o preço sem rodeios, por pessoa. Vende o tempo a bordo, não o quilômetro.",
+      "rate": "Preço fora da tabela aprovada, ou sem dizer para quantas pessoas. Sempre TTC.",
+      "reconnait": "\\bcombien (ca |coute|coutent|vaut|pour)|\\bc'est combien\\b|\\bquel prix\\b|\\bpar personne\\b|\\bchacun\\b.*(euro|€)|(euro|€).*\\bchacun\\b"
+    },
+    {
+      "id": "premiere-fois", "nom": "La première fois",
+      "modele": "La première fois que {événement datable}",
+      "exemple": "La première fois que le ciel étoilé s'allume",
+      "ecran": "Première fois",
+      "pour": "Episódio zero, reveal, instalação. Só vale para o que aconteceu de fato pela primeira vez.",
+      "rate": "\"Premier au monde\" sem prova. O plano proíbe: use \"la première fois\" de um fato nosso, nunca um recorde mundial.",
+      "reconnait": "\\b(la |pour la |ma |sa |notre )?premiere fois\\b"
+    },
+    {
+      "id": "reponse", "nom": "Vous avez demandé",
+      "modele": "Vous avez demandé {question d'un commentaire}",
+      "exemple": "Vous avez demandé combien consomme la PS5 en une nuit",
+      "ecran": "Votre question",
+      "pour": "Série semanal de respostas aos comentários. Prova que há gente do outro lado.",
+      "rate": "Pergunta inventada. Mostre o comentário real na tela, com consentimento se aparecer o nome.",
+      "reconnait": "\\bvous (avez|m'avez|nous avez) (demande|pose)\\b|\\ben reponse a\\b|\\bon me demande\\b|\\bvous demandez\\b"
+    },
+    {
+      "id": "personne-ne-dit", "nom": "Personne ne te dit",
+      "modele": "Personne ne te dit que {vérité inconfortable et précise}",
+      "exemple": "Personne ne te dit que jouer en voiture donne le mal de mer au bout de dix minutes",
+      "ecran": "Personne ne te le dit",
+      "pour": "Honestidade que desarma: o enjoo, a regra dos 10 minutos, o que dá errado.",
+      "rate": "Verdade que todo mundo já diz. Se cabe em qualquer conta, não é esta fórmula.",
+      "reconnait": "\\bpersonne ne (te |vous |t'|nous )?(dit|parle|montre|previent|explique|raconte)"
+    },
+    {
+      "id": "interdit", "nom": "La consigne négative",
+      "modele": "Ne {fais} pas {chose courante} avant {d'avoir vu ça}",
+      "exemple": "Ne réserve pas ton transfert Nice-Monaco avant d'avoir vu ça",
+      "ecran": "Avant de réserver",
+      "pour": "Parar quem está prestes a comprar o comum. Bom para turista planejando a viagem.",
+      "rate": "Ordem sem recompensa. O vídeo precisa entregar o \"ça\" em três segundos.",
+      "reconnait": "^(ne |n')\\S+ (pas|plus|jamais)\\b|^(arrete|arretez)\\b|^stop\\b"
+    },
+    {
+      "id": "erreur", "nom": "L'erreur",
+      "modele": "L'erreur que {public} fait {situation}",
+      "exemple": "L'erreur que tous les groupes font pour sortir à Monaco",
+      "ecran": "L'erreur à Monaco",
+      "pour": "Dica local com consequência. Posiciona o chauffeur como quem conhece a noite.",
+      "rate": "Erro vago. Diga o erro na segunda frase, não no fim.",
+      "reconnait": "\\berreurs?\\b|\\bpiege\\b|\\ba ne (jamais|surtout) pas faire\\b"
+    },
+    {
+      "id": "contre-pied", "nom": "Le contre-pied",
+      "modele": "Tout le monde pense que {croyance}. En vrai, {fait}",
+      "exemple": "Tout le monde pense qu'un chauffeur privé coûte une fortune. À six, c'est 25 euros chacun",
+      "ecran": "25 € chacun",
+      "pour": "Derrubar a objeção de preço. Precisa de um número verdadeiro logo depois.",
+      "rate": "Contrariar por contrariar. Sem o fato concreto, vira provocação vazia.",
+      "reconnait": "\\btout le monde (pense|croit|dit)\\b|\\bon (croit|pense) que\\b|\\bcontrairement a\\b|\\ben vrai\\b|\\ben realite\\b"
+    },
+    {
+      "id": "coulisses", "nom": "Les coulisses",
+      "modele": "Ce qu'on ne te montre jamais {sujet}",
+      "exemple": "Ce qu'on ne te montre jamais après une soirée jeux : le nettoyage",
+      "ecran": "Après la soirée",
+      "pour": "Quinta-feira, bastidores: limpeza, carga, instalação. Material da série de janeiro.",
+      "rate": "Bastidor sem ação. Mostre mãos fazendo algo, não alguém explicando.",
+      "reconnait": "\\bcoulisses\\b|\\bce qu'on ne (te|vous) montre\\b|\\bl'envers du decor\\b|\\bbackstage\\b|\\bdans les coulisses\\b"
+    },
+    {
+      "id": "avant-apres", "nom": "Avant / après",
+      "modele": "{Objet} avant. {Objet} après.",
+      "exemple": "Le Model X avant. Le Model X après 40 heures d'atelier",
+      "ecran": "Avant / Après",
+      "pour": "A série da transformação em janeiro: envelopamento, teto, LEDs.",
+      "rate": "Mostrar o depois no primeiro quadro e matar o motivo de assistir. Ou o contrário: demorar demais para revelar.",
+      "reconnait": "\\bavant\\b.{0,60}\\bapres\\b|\\btransformation\\b|\\bavant ?/ ?apres\\b"
+    },
+    {
+      "id": "defi", "nom": "Le défi",
+      "modele": "Qui gagne : {A} ou {B} ?",
+      "exemple": "Qui arrive en premier à Monaco : Julien en vrai ou toi dans le jeu ?",
+      "ecran": "Qui gagne ?",
+      "pour": "A bordo: passageiro contra chauffeur, mesmo trajeto. Tem começo, meio e resultado.",
+      "rate": "Desafio que exige o motorista olhar a tela ou correr. Nunca: o motorista não vê a tela e não acelera para a câmera.",
+      "reconnait": "\\bqui gagne\\b|\\bdefi\\b|\\bpari\\b|\\bon a teste\\b|\\bbattle\\b|\\b(contre|vs)\\b"
+    },
+    {
+      "id": "le-seul", "nom": "Le seul",
+      "modele": "{La seule} {chose} de {lieu} où {fait vérifiable}",
+      "exemple": "La seule voiture de la Riviera où tu joues pendant qu'on conduit",
+      "ecran": "La seule de la Riviera",
+      "pour": "A promessa do projeto. Só com recorte geográfico que conseguimos sustentar.",
+      "rate": "\"Du monde\", \"d'Europe\", \"n°1\". O plano só autoriza o recorte da Riviera.",
+      "reconnait": "\\b(le|la|les) seule?s?\\b|\\bl'unique\\b|\\ble plus\\b|\\bla plus\\b"
+    },
+    {
+      "id": "imagine", "nom": "Imagine",
+      "modele": "Imagine : {scène en une phrase}",
+      "exemple": "Imagine : tu sors du Palais des Festivals et ta partie t'attend",
+      "ecran": "Imagine",
+      "pour": "Público de empresa e evento. Coloca a pessoa dentro da cena antes do carro aparecer.",
+      "rate": "Cena longa. Uma frase, e a imagem já tem de estar na tela.",
+      "reconnait": "^imagine[sz]?\\b|^et si\\b"
+    },
+    {
+      "id": "question", "nom": "La question directe",
+      "modele": "Tu {ferais} quoi {situation} ?",
+      "exemple": "Tu ferais quoi avec trois heures et une PS5 sur la route de Monaco ?",
+      "ecran": "Tu ferais quoi ?",
+      "pour": "Comentários. A pergunta precisa ser respondível em quatro palavras.",
+      "rate": "Pergunta de sim ou não, ou pergunta que ninguém se faz.",
+      "reconnait": "^(tu |vous |t'as |t'es |as-tu|avez-vous|est-ce que|c'est quoi|pourquoi|comment)\\b.*\\?\\s*$"
+    },
+    {
+      "id": "histoire", "nom": "Hier soir",
+      "modele": "{Moment daté}, {quelqu'un} a {fait quelque chose d'inattendu}",
+      "exemple": "Hier soir, un père a réservé pour les 30 ans de son fils",
+      "ecran": "Hier soir",
+      "pour": "Histórias reais de corrida. Só com o termo de imagem e sem inventar nada.",
+      "rate": "História inventada ou enfeitada. Se não aconteceu assim, não conte.",
+      "reconnait": "^(hier|ce soir|cette nuit|ce matin|l'autre (jour|soir)|la semaine derniere|samedi|vendredi|dimanche|il y a)\\b"
+    },
+    {
+      "id": "lieu", "nom": "Le lieu d'abord",
+      "modele": "{Lieu}, {heure}. {Ce qui se passe}",
+      "exemple": "Monte-Carlo, minuit. Vu de la banquette arrière",
+      "ecran": "Monte-Carlo · minuit",
+      "pour": "Terça, o carro à noite. Cumpre a regra do plano: o nome da cidade nos dois primeiros segundos.",
+      "rate": "Lugar genérico (\"la Côte d'Azur\") quando dá para dizer a rua.",
+      "reconnait": "^(nice|monaco|monte-carlo|monte carlo|cannes|antibes|menton|eze|villefranche|saint-tropez|la croisette|la promenade|promenade des anglais|aeroport de nice|sophia)\\b"
+    },
+    {
+      "id": "chiffre", "nom": "Le chiffre",
+      "modele": "{Nombre} {unité} : {ce que ça veut dire}",
+      "exemple": "220 watts : ce que consomme la PS5 pendant que tu joues",
+      "ecran": "220 W",
+      "pour": "Curiosidade técnica: energia, tempo, distância. O número tem de ser medido por nós.",
+      "rate": "Número redondo demais ou tirado da internet. Use {{chiffre}} até ter o dado.",
+      "reconnait": "^(\\d|un |une |deux |trois |quatre |cinq |six |sept |huit |neuf |dix |cent |mille )"
+    }
+  ]
+}

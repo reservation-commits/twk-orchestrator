@@ -1,0 +1,436 @@
+<title>Plan Night Ride 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: documento longo de operação, lido no celular pelo fundador e no desktop pelo dev.
+   Uma coluna de leitura (~68ch), tabelas largas com rolagem própria, duas cores de pessoa:
+   rosa = Fundador, azul-claro = Dev (as cores dos LEDs das portas). Dark-first: o assunto é a noite. */
+:root{
+  --bg:#0B0D12; --bg2:#12151D; --bg3:#1A1E29;
+  --fg:#ECEAE3; --muted:#9AA0AD; --rule:#262B38;
+  --accent:#8AD8FF; --warm:#FF8CCB; --violet:#B48CFF; --ok:#7FD1A1; --alert:#F08A7E;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F4F3EE; --bg2:#FFFFFF; --bg3:#ECEBE4;
+    --fg:#15181F; --muted:#5B6270; --rule:#DAD8D0;
+    --accent:#0F6FA8; --warm:#B4237A; --violet:#6B3FC4; --ok:#1E7F4C; --alert:#B5392C;
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F4F3EE; --bg2:#FFFFFF; --bg3:#ECEBE4;
+  --fg:#15181F; --muted:#5B6270; --rule:#DAD8D0;
+  --accent:#0F6FA8; --warm:#B4237A; --violet:#6B3FC4; --ok:#1E7F4C; --alert:#B5392C;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.02;margin:0}
+h1{font-size:clamp(44px,9vw,92px);font-weight:900;letter-spacing:-.01em;text-transform:uppercase}
+h2{font-size:clamp(30px,5vw,44px);font-weight:700;text-transform:uppercase;letter-spacing:.01em;margin-top:64px;padding-top:20px;border-top:1px solid var(--rule)}
+h3{font-size:clamp(20px,3vw,26px);font-weight:700;margin-top:32px;color:var(--fg)}
+p,li{max-width:68ch}
+p{margin:12px 0}
+ul,ol{padding-left:22px;margin:10px 0}
+li{margin:5px 0}
+.eyebrow{font-family:var(--body);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.hero{padding-block:40px 0}
+.hero::after{content:"";display:block;height:3px;margin-top:24px;background:linear-gradient(90deg,var(--violet),var(--warm),var(--accent))}
+.hero .lead{font-size:19px;max-width:62ch;color:var(--fg)}
+.meta{display:flex;flex-wrap:wrap;gap:10px 24px;color:var(--muted);font-size:14px;margin-top:16px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:3px;vertical-align:middle}
+.fato{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.sup{background:color-mix(in srgb,var(--warm) 18%,transparent);color:var(--warm)}
+.lac{background:color-mix(in srgb,var(--alert) 18%,transparent);color:var(--alert)}
+.F{color:var(--warm)} .D{color:var(--accent)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:18px 0}
+.card{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;min-width:0}
+.card h4{font-family:var(--display);font-size:22px;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:.02em}
+.card p{font-size:15px;margin:6px 0;color:var(--fg)}
+.card .n{font-family:var(--display);font-size:40px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.callout{border-left:3px solid var(--accent);background:var(--bg2);padding:14px 18px;margin:20px 0;border-radius:0 6px 6px 0}
+.callout.warm{border-left-color:var(--warm)}
+.callout.alert{border-left-color:var(--alert)}
+.callout p{margin:6px 0}
+.tbl{overflow-x:auto;margin:16px 0;border:1px solid var(--rule);border-radius:6px;background:var(--bg2)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--bg3);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td ul{margin:0;padding-left:16px}
+td li{margin:3px 0;max-width:none}
+.dia td:first-child{white-space:nowrap;font-weight:700;font-family:var(--display);font-size:17px;letter-spacing:.02em}
+.dia th.f{color:var(--warm)} .dia th.d{color:var(--accent)}
+.dia td.marco{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+.toc a{font-size:13px;color:var(--fg);text-decoration:none;border:1px solid var(--rule);padding:5px 10px;border-radius:999px;background:var(--bg2)}
+.toc a:hover,.toc a:focus-visible{border-color:var(--accent);outline:none}
+a{color:var(--accent)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;background:var(--bg3);padding:1px 5px;border-radius:3px}
+.ideias{columns:2;column-gap:28px;margin:12px 0}
+.ideias li{break-inside:avoid;max-width:none}
+@media (max-width:640px){.ideias{columns:1}}
+.foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){.toc a{transition:border-color .15s}}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">The World Keys · Côte d’Azur · plan de lancement · 09/11/2026</div>
+  <h1>Wanted<br>Chauffeur</h1>
+  <p class="lead">Une Tesla Model X noir satiné, ciel étoilé, LED dans les portes, PS5 à bord et un chauffeur qui change de personnage. Quatre canaux (@wantedchauffeur sur Instagram, TikTok, YouTube et Twitch) qui publient tous les jours, passent en direct et mènent à un seul WhatsApp. Des courses qui coûtent ce que vaut une soirée, pas ce que facture Uber. Ce document transforme le plan en concept, tunnel, garde-fous et un calendrier jour par jour pour deux personnes.</p>
+  <div class="meta">
+    <span><span class="F">■</span> Fondateur&nbsp;: direction, marque, contenu, approbations</span>
+    <span><span class="D">■</span> Dev&nbsp;: page, suivi, WhatsApp, automatisations</span>
+    <span>Julien&nbsp;: conduit, endosse les personnages, filme en caméra fixe, répond sur WhatsApp</span>
+  </div>
+  <div class="meta"><span class="tag fato">fait</span> vérifié · <span class="tag sup">hypothèse</span> de notre part, à valider · <span class="tag lac">lacune</span> impossible à vérifier</div>
+  <div class="meta"><span><strong>Version 2 · 09/11/2026&nbsp;:</strong> nom @wantedchauffeur, direction artistique années 80, cinq looks et lives intégrés.</span></div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#leitura">Lecture du plan</a><a href="#conceito">Concept</a><a href="#da">Direction artistique et looks</a><a href="#lives">Lives</a><a href="#oferta">Offre et prix</a><a href="#funil">Tunnel et suivi</a><a href="#redes">Monétisation</a><a href="#travas">Garde-fous</a><a href="#conteudo">Contenu et idées</a><a href="#ferramentas">Outils</a><a href="#metas">Objectifs</a><a href="#sprint">Jour par jour 09–30/11</a><a href="#dezembro">Décembre</a><a href="#janeiro">Janvier</a><a href="#decisoes">Décisions</a>
+  </nav>
+</header>
+
+<section id="leitura">
+<h2>1. Lecture du plan</h2>
+<p>Le plan vise juste sur l’essentiel&nbsp;: il y a un atout que personne d’autre n’a dans la région, une date extérieure que le monde entier va regarder (19/11) et un canal de vente qui existe déjà et qui fonctionne (WhatsApp + page <code>/chauffeur-prive</code>). Ce qui manque, c’est ce que ce document ajoute&nbsp;: mesure, garde-fous et rythme.</p>
+<div class="grid">
+  <div class="card"><h4>Ce qui est fort</h4><p>Voiture unique + date de lancement mondiale + canal de vente déjà en ligne. La page, le numéro de Julien et la grille tarifaire existent depuis octobre.</p></div>
+  <div class="card"><h4>Ce qui est fragile</h4><p>Le viral est mondial, le client est local. Une vidéo à 2 millions de vues à São Paulo ne génère pas de course à Nice. Le contenu doit nommer le lieu dans chaque vidéo.</p></div>
+  <div class="card"><h4>Le plafond physique</h4><p>Une voiture, un chauffeur&nbsp;: 3 à 4 prestations par soir. Les réseaux sont l’actif qui passe à l’échelle&nbsp;; la voiture est la scène. Le revenu direct des courses a un plafond&nbsp;; l’audience, non.</p></div>
+  <div class="card"><h4>La bonne urgence</h4><p>Il reste 10 jours avant GTA 6. Ce qui ne sera pas filmé, configuré et testé d’ici le 18/11 ne prendra pas la vague. Décembre, c’est la consolidation&nbsp;; janvier, la deuxième vague (transformation).</p></div>
+</div>
+<div class="callout alert">
+  <p><strong>Si le ciel étoilé commence demain (10/11), filmez demain.</strong> Le plan dit «&nbsp;à partir de demain&nbsp;». Cette installation est l’épisode zéro de la série de janvier et ne se reproduira pas. Trépied, téléphone à la verticale, deux angles, un time-lapse de 10 s toutes les 15 min. Rien n’a besoin d’être monté maintenant&nbsp;; il faut seulement que cela existe.</p>
+</div>
+<p>À propos de l’objectif de «&nbsp;3 à 10× Uber&nbsp;»&nbsp;: <span class="tag fato">fait</span> la grille approuvée le 08/10 place déjà le transfert Nice–Monaco à 130&nbsp;€ contre environ 60–80&nbsp;€ chez Uber (<span class="tag sup">hypothèse</span>, variable selon l’heure), soit ~2×. Les 3 à 10× ne tiennent que lorsque la vente cesse d’être un trajet et devient du <strong>temps à bord</strong>&nbsp;: une Game Night de 3 heures pour 6 amis à 490&nbsp;€, c’est 82&nbsp;€ par personne, bon marché pour une soirée et 8× un Uber. C’est ainsi que l’on facture cher sans paraître cher&nbsp;: un prix par personne, pas au kilomètre.</p>
+</section>
+
+<section id="conceito">
+<h2>2. Concept</h2>
+<h3>La promesse</h3>
+<p><strong>«&nbsp;Vous jouez. On conduit.&nbsp;»</strong> · «&nbsp;You play. We drive.&nbsp;» · «&nbsp;Você joga. A gente dirige.&nbsp;» Une phrase, trois langues, la même dans chaque bio, chaque couverture et chaque première seconde de vidéo. La promesse, c’est le temps&nbsp;: la soirée commence quand la porte Falcon s’ouvre, pas quand on arrive en boîte de nuit.</p>
+<h3>Le nom</h3>
+<p><strong>Décidé le 09/11&nbsp;: Wanted Chauffeur</strong> · @wantedchauffeur. C’est un bon nom&nbsp;: «&nbsp;wanted&nbsp;» rappelle l’indice de recherche du jeu sans utiliser aucune marque de Rockstar, «&nbsp;chauffeur&nbsp;» dit ce que nous vendons et survit au jour où le jeu sortira de l’actualité, et il se lit de la même façon en français et en anglais. Il offre aussi une ressource de marque&nbsp;: cinq étoiles, c’est à la fois l’indice de recherche maximal et la note du client (dessinées dans notre trait, pas copiées de l’écran du jeu).</p>
+<p>La règle que le nom respecte déjà et qui vaut pour tout le reste&nbsp;: <strong>le nom ne peut pas contenir «&nbsp;GTA&nbsp;», «&nbsp;Rockstar&nbsp;» ou «&nbsp;Grand Theft&nbsp;»</strong>. Ce sont des marques déposées&nbsp;; un compte portant ce nom peut être supprimé au premier avertissement, et le jeu quitte la scène en décembre de toute façon. GTA est l’accroche du premier mois, pas la marque. La marque, c’est la voiture la nuit.</p>
+<div class="tbl"><table>
+<tr><th>À vérifier aujourd’hui</th><th>Pourquoi</th><th>État</th></tr>
+<tr><td><strong>@wantedchauffeur</strong> sur les quatre canaux&nbsp;: Instagram, TikTok, YouTube, Twitch</td><td>Le même handle partout, c’est ce qui permet de retrouver le compte après avoir vu une vidéo sur un autre réseau. Enregistrer les quatre le même jour, avant le premier teaser.</td><td><span class="tag lac">lacune</span> le lien Instagram est arrivé avec «&nbsp;?&nbsp;»&nbsp;; je n’ai pas vérifié la disponibilité</td></tr>
+<tr><td>Domaine <code>wantedchauffeur.com</code> et <code>.fr</code></td><td>Ne devient pas un site&nbsp;: il redirige seulement vers <code>theworldkeys.com/ride</code>. Il sert pour l’autocollant de la voiture, le QR et pour que personne ne l’enregistre avant.</td><td><span class="tag lac">lacune</span> à vérifier</td></tr>
+<tr><td>Marque homonyme (INPI et EUIPO, transport et divertissement)</td><td>Avant de payer un covering, un uniforme ou un autocollant portant le nom. Une recherche gratuite de 10 minutes.</td><td><span class="tag lac">lacune</span> à vérifier</td></tr>
+</table></div>
+<p>Si l’un des quatre est pris, on choisit une variante unique pour tous (par exemple <code>@wanted.chauffeur</code>), jamais un nom différent par réseau. <strong>Deux vitrines, une maison&nbsp;:</strong> la bio dit «&nbsp;by The World Keys&nbsp;» et la réservation se fait sur theworldkeys.com, mais la page B2B <code>/chauffeur-prive</code> reste sobre, sans personnages. L’hôtel et la conciergerie achètent le costume&nbsp;; l’audience achète le show.</p>
+<h3>Pour qui</h3>
+<div class="grid">
+  <div class="card"><h4>Groupes d’amis</h4><p>4 à 6 personnes, 20–35 ans, soirée à Nice, Cannes et Monaco. Ils achètent l’expérience divisée par tête. C’est le public de la vidéo de réaction.</p></div>
+  <div class="card"><h4>Touristes et visiteurs</h4><p>Celui qui voit la vidéo et vient sur la Riviera réserve des semaines à l’avance. Contenu en anglais avec le nom de la ville à l’écran.</p></div>
+  <div class="card"><h4>Entreprises et événements</h4><p>Sophia Antipolis, congrès de Cannes, Monaco. Un transfert d’équipe qui devient un «&nbsp;team building de 40 minutes&nbsp;». Achat par e-mail, avec demande de facture.</p></div>
+  <div class="card"><h4>Hôtels et conciergeries</h4><p>Le canal B2B que TWK travaille déjà. La vidéo est la carte de visite&nbsp;; le forfait Soirée (voiture + table qui confirme) est la vente.</p></div>
+</div>
+<h3>Ce que la voiture vend, dans cet ordre</h3>
+<ol>
+  <li><strong>L’entrée</strong> (porte Falcon qui s’ouvre, ciel étoilé, écran allumé). C’est l’instant le plus filmable et celui qui arrête le pouce.</li>
+  <li><strong>Le temps à bord</strong> (jouer, musique, lumière). C’est ce qui justifie le prix.</li>
+  <li><strong>La destination</strong> (restaurant partenaire, boîte de nuit, hôtel). C’est là que TWK gagne deux fois.</li>
+</ol>
+</section>
+
+<section id="da">
+<h2>2A. Direction artistique, personnages et lives</h2>
+<h3>L’ambiance</h3>
+<p>Le Miami des années 80 transplanté sur la Riviera&nbsp;: funk américain, néon violet, rose et bleu clair, palmiers, coucher de soleil sur la Promenade, et le Model X noir satiné au centre, portes Falcon ouvertes. L’image de référence (couverture en cases de bande dessinée) définit le format des couvertures&nbsp;: une case pour la voiture, une pour le personnage, une pour le passager. Les références originales sont conservées dans <code>docs/estrategia/wanted-chauffeur-referencias/</code>.</p>
+<div class="tbl"><table>
+<tr><th>Élément</th><th>Ce que cela donne</th><th>Précaution</th></tr>
+<tr><td>Palette</td><td>Noir satiné + violet, rose et bleu clair des LED. Les trois couleurs apparaissent ensemble, en bande, sur chaque couverture et dans l’overlay du live.</td><td>Aucune quatrième couleur d’accent&nbsp;; l’orange reste réservé à l’uniforme du Fugitif.</td></tr>
+<tr><td>Couvertures et miniatures</td><td>Cases de BD au trait propre, réalisées à partir de vraies photos de la voiture et de Julien.</td><td>L’image générée sert de moodboard, pas de visuel final&nbsp;: elle imite de près les jaquettes du jeu. Sans la police de GTA, sans logo, sans chiffre romain, sans minicarte.</td></tr>
+<tr><td>Typographie</td><td>Une enseigne néon manuscrite pour «&nbsp;Wanted&nbsp;» + une sans-serif condensée pour «&nbsp;Chauffeur&nbsp;» et les sous-titres.</td><td>Ne pas utiliser la police Pricedown (celle du logo du jeu) ni des polices similaires.</td></tr>
+<tr><td>Son</td><td>Un <strong>thème original de 30 secondes</strong> en funk années 80 (basse slappée, synthétiseur, claps), commandé ou produit une fois et utilisé dans chaque vidéo et chaque live. Il devient la signature sonore.</td><td><span class="tag fato">fait, à vérifier à la date</span> Un compte qui fait la promotion d’un service ne peut utiliser que la bibliothèque commerciale des réseaux&nbsp;; une musique célèbre dans une vidéo monétisée est retirée et, en live sur Twitch, elle vaut un strike. L’ambiance est celle des années 80, les morceaux ne peuvent pas l’être.</td></tr>
+<tr><td>LED dans les portes</td><td>Violet → rose → bleu clair qui s’allument quand la porte Falcon s’ouvre. C’est la scène d’ouverture de chaque vidéo.</td><td><span class="tag fato">fait, à vérifier avec l’installateur</span> Un éclairage non homologué visible de l’extérieur sur une voiture en circulation est interdit en France, et le bleu est la couleur des véhicules d’urgence. Les LED ne s’allument que voiture à l’arrêt et s’éteignent toutes seules dès que la marche est enclenchée.</td></tr>
+</table></div>
+<h3>Les cinq personnages</h3>
+<p>Les looks cessent d’être des tenues de scène et deviennent une distribution&nbsp;: le même chauffeur, cinq personnages, une histoire qui continue de vidéo en vidéo. Le Fugitif est le «&nbsp;wanted&nbsp;» du nom&nbsp;; l’Agent le recherche&nbsp;; les deux n’apparaissent jamais ensemble parce qu’ils sont la même personne, et c’est la blague de la série. Les noms sont une <span class="tag sup">proposition</span>.</p>
+<div class="tbl"><table>
+<tr><th>Look</th><th>Personnage</th><th>Où il intervient</th><th>Précaution</th></tr>
+<tr><td>Costume bleu clair, chemise rose</td><td><strong>Le Vice</strong></td><td>Tenue par défaut de toute course payante et du contenu de voiture la nuit. C’est le seul look qui sert les deux vitrines&nbsp;: show et hôtel.</td><td>Aucune&nbsp;; c’est l’uniforme de la marque.</td></tr>
+<tr><td>Uniforme orange de détenu américain</td><td><strong>Le Fugitif</strong></td><td>Mascotte du nom. Sketchs voiture à l’arrêt, ouverture des lives, «&nbsp;le chauffeur le plus recherché de la Riviera&nbsp;».</td><td>Ne pas aller chercher de client à l’hôtel ni circuler à pied près d’un commissariat ou d’un tribunal dans cette tenue&nbsp;; la plaisanterie est pour la caméra.</td></tr>
+<tr><td>Agent du FBI</td><td><strong>L’Agent</strong></td><td>Recherche le Fugitif dans chaque épisode&nbsp;; interroge les passagers («&nbsp;avez-vous vu cet homme&nbsp;?&nbsp;»).</td><td><span class="tag fato">fait</span> La loi française punit le port d’une tenue pouvant être confondue avec celle de la police française. FBI en grosses lettres est un déguisement évident, mais sans insigne montré à des tiers, sans arme factice, sans lumière ni sirène sur la voiture.</td></tr>
+<tr><td>Débardeur blanc, bandana, chaînes</td><td><strong>Le Complice</strong></td><td>Hôte des Game Nights avec les groupes&nbsp;: joue avec eux pendant l’arrêt, commente la conduite des passagers.</td><td>C’est la garde-robe du genre, pas la caricature d’un groupe&nbsp;: sans signes de gang, sans couleurs de faction, sans accent imité.</td></tr>
+<tr><td>Torse nu, tatoué</td><td><strong>Le Tatoué</strong></td><td>Contenu de plage, d’entraînement et de coulisses&nbsp;; l’été et la série de la transformation («&nbsp;la voiture aussi se fait tatouer&nbsp;»).</td><td>Uniquement en tournage, jamais en conduisant un client. Ce look apporte des vues, pas de contrat d’hôtel&nbsp;; il reste hors de tout support envoyé au canal B2B.</td></tr>
+</table></div>
+<div class="callout warm">
+  <p><strong>Le personnage devient un produit.</strong> Dans le formulaire de <code>/ride</code>, un champ «&nbsp;Choisissez votre chauffeur&nbsp;»&nbsp;: Le Vice (par défaut), Le Fugitif, L’Agent ou Le Complice. Celui qui choisit sait déjà ce qu’il va trouver, a déjà consenti au ton et a déjà de quoi raconter à ses amis. Sans choix, c’est toujours le costume.</p>
+</div>
+<h3 id="lives">Lives</h3>
+<p>Le live est le format que la voiture réclame&nbsp;: une Game Night entière, avec des invités qui ont consenti, et le chat qui décide de l’itinéraire, du personnage et du défi. C’est aussi la porte d’entrée de Twitch, qui paie tôt (abonnements et bits).</p>
+<div class="tbl"><table>
+<tr><th>Point</th><th>Comment nous faisons</th></tr>
+<tr><td>Émission</td><td><strong>Wanted Live</strong>, le vendredi à 10:00 PM, 60 à 90 minutes, à partir du 27/11. Ouvre avec le Fugitif, l’Agent «&nbsp;fait irruption&nbsp;» au milieu, se termine avec le lien de réservation à l’écran.</td></tr>
+<tr><td>Image</td><td>Trois caméras fixes&nbsp;: habitacle en plan large, visage des passagers, route/extérieur. Un encodeur à bord envoie le signal&nbsp;; le changement de scène se fait depuis l’extérieur de la voiture.</td></tr>
+<tr><td>Destinations</td><td>Twitch et YouTube à l’horizontale par le même signal (multistream). Instagram à la verticale, par un téléphone dédié. <span class="tag sup">à confirmer</span> règles de diffusion simultanée de chaque plateforme.</td></tr>
+<tr><td>Réseau</td><td>Routeur 5G dédié au live, séparé de celui du PSN&nbsp;; test d’upload sur le trajet réel avant chaque émission. Tunnel et montagne font tomber le signal&nbsp;: l’itinéraire du live est choisi d’après la carte de couverture.</td></tr>
+<tr><td>Qui modère</td><td>Fondateur ou Dev, depuis l’extérieur de la voiture&nbsp;: lit le chat, change les scènes, a le bouton de coupure. <strong>Celui qui conduit ne lit jamais le chat.</strong> Les passagers lisent les questions à voix haute.</td></tr>
+<tr><td>Sécurité</td><td>Délai de 3 minutes sur le signal&nbsp;; ne jamais montrer d’adresse de prise en charge, d’entrée d’hôtel ni de plaque de tiers&nbsp;; autorisation signée avant de passer à l’antenne&nbsp;; uniquement des plus de 18 ans.</td></tr>
+<tr><td>Twitch Affilié</td><td><span class="tag fato">fait, à vérifier à la date</span> 50 followers, 500 minutes diffusées, 7 jours distincts et une moyenne de 3 spectateurs sur 30 jours. Quatre vendredis plus trois lives courts de coulisses couvrent les 7 jours.</td></tr>
+</table></div>
+<p><strong>Le 19/11 en direct ou enregistré&nbsp;?</strong> Le minuit du lancement ne passe en direct que si la répétition du 18/11, sur le même trajet et à la même heure, tourne 30 minutes sans coupure. Si elle tombe, on enregistre et on publie le matin. Une première qui plante en direct coûte plus qu’une première enregistrée ne rapporte.</p>
+</section>
+
+<section id="oferta">
+<h2>3. Offre et prix</h2>
+<p>Nous partons de la grille approuvée le 08/10 et ajoutons deux produits de temps à bord. Les prix sont une <span class="tag sup">proposition</span> soumise à la décision du fondateur&nbsp;; «&nbsp;par personne&nbsp;» suppose 6 passagers. Tous les montants en euros, TVA incluse dans la communication au client.</p>
+<div class="tbl"><table>
+<tr><th>Produit</th><th>Ce que c’est</th><th>Prix</th><th>Par personne (6)</th><th>Origine</th></tr>
+<tr><td><strong>Transfer Experience</strong></td><td>A → B sur la Riviera (jusqu’à 45 min), PS5 allumée, 2 manettes</td><td class="num">150&nbsp;€</td><td class="num">25&nbsp;€</td><td>130&nbsp;€ de la grille + 20&nbsp;€ pour le setup à bord</td></tr>
+<tr><td><strong>Night Ride</strong></td><td>2 h à disposition la nuit, jusqu’à 2 arrêts (boîte de nuit, point de vue, dîner)</td><td class="num">350&nbsp;€</td><td class="num">58&nbsp;€</td><td>nouveau&nbsp;; en dessous de la mise à disposition 4 h (400&nbsp;€)</td></tr>
+<tr><td><strong>Game Night</strong></td><td>3 h, route panoramique Nice ↔ Monaco, 2 manettes, boissons sans alcool, photo à la sortie</td><td class="num">490&nbsp;€</td><td class="num">82&nbsp;€</td><td>nouveau&nbsp;; produit de vidéo, celui qui se partage le plus</td></tr>
+<tr><td><strong>Soirée</strong></td><td>Aller, attente 4 h, retour + table dans un établissement qui confirme les demandes</td><td class="num">390&nbsp;€ + dîner</td><td class="num">65&nbsp;€ + dîner</td><td>grille 08/10&nbsp;; relie au catalogue TWK</td></tr>
+<tr><td><strong>Journée entière</strong></td><td>8 h, Riviera ou Monaco–Saint-Tropez</td><td class="num">750&nbsp;€</td><td class="num">125&nbsp;€</td><td>grille 08/10</td></tr>
+</table></div>
+<p>Règles de bord qui font partie du produit, pas des petites lignes&nbsp;: ceinture bouclée pour jouer&nbsp;; seuls les plus de 18 ans jouent (GTA est 18+)&nbsp;; le chauffeur ne voit jamais l’écran&nbsp;; pas d’alcool à bord&nbsp;; pause de 10 minutes si quelqu’un a la nausée (GTA dans une voiture en mouvement donne la nausée, et cela va arriver&nbsp;; bonbons au gingembre et sachets dans la poche du siège). <span class="tag fato">fait</span> Le coût fixe de la voiture et du chauffeur (≈ 5 300&nbsp;€/mois, prémisse 08/10) est déjà payé aujourd’hui&nbsp;; chaque nouvelle course est presque entièrement de la marge.</p>
+</section>
+
+<section id="funil">
+<h2>4. Tunnel et suivi</h2>
+<p>Un seul chemin, mesuré à chaque étape&nbsp;: <strong>vidéo → lien en bio → page <code>/ride</code> → WhatsApp de Julien</strong>. Pas de Linktree&nbsp;: le lien de la bio est notre page, avec la source dans l’URL.</p>
+<div class="tbl"><table>
+<tr><th>Étape</th><th>Comment</th><th>Ce que l’on mesure</th></tr>
+<tr><td>Lien en bio</td><td><code>theworldkeys.com/ride?utm_source=tiktok&amp;utm_medium=bio&amp;utm_campaign=wantedchauffeur</code> (idem instagram, youtube, twitch). <code>/driver</code> et <code>/pt/driver</code> (404 depuis septembre) redirigent désormais en 301 vers cette page.</td><td>Visites par réseau (GA4, avec consentement)</td></tr>
+<tr><td>Page <code>/ride</code></td><td>Un seul écran&nbsp;: vidéo de 10 s en boucle, trois produits avec prix, bouton «&nbsp;Demander sur WhatsApp&nbsp;», formulaire court (type, date, heure par pas de 5 min, passagers, nom, personnage du chauffeur). Version courte et nocturne de <code>/chauffeur-prive</code>, qui reste pour le B2B et les transferts classiques.</td><td>Clics sur le bouton&nbsp;; début et envoi du formulaire</td></tr>
+<tr><td>Enregistrer avant d’ouvrir WhatsApp</td><td><code>navigator.sendBeacon('/api/chauffeur/lead')</code> avec source, produit, date, langue&nbsp;; sans nom ni téléphone. Renvoie une référence courte qui indique déjà l’origine&nbsp;: <strong>WTD-T-7K2Q</strong> (T = TikTok, I = Instagram, Y = YouTube, W = Twitch, S = site). Ne dépend pas d’un cookie&nbsp;: n’identifie personne.</td><td>Leads par réseau, y compris ceux qui abandonnent sur l’interstitiel de WhatsApp</td></tr>
+<tr><td>Message prêt</td><td>«&nbsp;Bonjour Julien, [Ref WTD-T-7K2Q] Game Night, sam. 22/11, 9:00 PM, 5 personnes. — Léa&nbsp;». Libellés en français pour Julien, langue du client indiquée dans l’en-tête.</td><td>Julien fait correspondre WhatsApp ↔ lead grâce à la référence</td></tr>
+<tr><td>Clôture</td><td>Julien marque la conversation avec une étiquette WhatsApp Business (Devis / Confirmé / Fait / Perdu) et, une fois par jour, le tableau de bord de la Central lit les références clôturées.</td><td>Courses et revenu par réseau&nbsp;; taux lead → course</td></tr>
+</table></div>
+<div class="callout">
+  <p><strong>Où le lead est enregistré.</strong> La table <code>chauffeur_leads</code> n’existe pas encore. <code>CREATE TABLE</code> dans le schéma <code>public</code> exige la phrase du fondateur par la porte unique (ADR-017). Tant que la phrase n’arrive pas, le Dev enregistre dans <code>orchestrator/state/chauffeur-leads.jsonl</code> et le tableau de bord lit à partir de là&nbsp;; la migration vers la table est une étape ultérieure, sans rien perdre.</p>
+  <p><strong>Numéro WhatsApp.</strong> Celui de la page aujourd’hui est celui de Julien (+33 7 81 93 72 70). Recommandation pour novembre&nbsp;: <strong>WhatsApp Business (app)</strong> sur ce numéro, avec catalogue, message d’accueil, message d’absence et réponses rapides. Cela se configure en une journée et Julien y répond déjà. Un numéro ne peut pas être à la fois dans l’app et dans l’API de Meta&nbsp;; Aria (API) entre en décembre, si le volume le justifie, et il s’agit alors d’un nouveau flux en exploitation&nbsp;: approbation du fondateur au préalable.</p>
+</div>
+</section>
+
+<section id="redes">
+<h2>5. Les réseaux comme source de revenu</h2>
+<p>Les programmes existent et paient, mais ils ont une porte d’entrée. Montants et règles <span class="tag fato">fait</span> d’après les pages officielles à notre dernière lecture&nbsp;; à vérifier à la date d’inscription.</p>
+<div class="tbl"><table>
+<tr><th>Réseau</th><th>Porte d’entrée</th><th>Paie pour</th><th>Délai réaliste</th></tr>
+<tr><td>TikTok (Creator Rewards, disponible en France)</td><td>18+, 10 000 abonnés, 100 000 vues sur les 30 derniers jours</td><td>Vidéos de plus de 1 minute&nbsp;; vues qualifiées</td><td>Atteignable en décembre si une vidéo de la semaine de lancement prend&nbsp;; exige de publier aussi des versions de 60 s+</td></tr>
+<tr><td>YouTube (Partner Program)</td><td>1 000 abonnés + 4 000 h de visionnage en 12 mois <em>ou</em> 10 millions de vues sur Shorts en 90 jours</td><td>Publicités, Super Thanks, abonnements à la chaîne</td><td>Shorts quotidiens + 1 vidéo longue par semaine (la série de janvier est la vidéo longue naturelle). Janvier–février.</td></tr>
+<tr><td>Twitch (Affilié)</td><td>50 followers, 500 min diffusées, 7 jours distincts, moyenne de 3 spectateurs sur 30 jours</td><td>Abonnements à la chaîne, bits, publicités</td><td>La porte la plus basse des quatre&nbsp;: atteignable en décembre avec le Wanted Live hebdomadaire</td></tr>
+<tr><td>Instagram</td><td>Pas de programme de bonus en France</td><td>Partenariats avec des marques, abonnements, affiliation</td><td>C’est la vitrine pour les hôtels et les marques, pas le revenu direct</td></tr>
+</table></div>
+<p>Revenu indirect qui arrive avant les programmes&nbsp;: <strong>partenariats</strong> (boutique de jeux vidéo et de périphériques à Nice, marque de boisson sans alcool, detailing automobile, l’atelier de covering lui-même en échange de la série), <strong>affiliation</strong> (lien du moniteur, du support, de la caméra que nous utilisons&nbsp;; chaque «&nbsp;c’est quel moniteur&nbsp;?&nbsp;» dans les commentaires est une vente) et, quand il y aura 20 k abonnés, <strong>sponsoring de la voiture</strong> (un logo discret sur le flanc, contrat mensuel). Ne jamais vendre d’espace avant d’avoir des chiffres&nbsp;: la première proposition de sponsoring part avec le rapport de décembre en main.</p>
+</section>
+
+<section id="travas">
+<h2>6. Garde-fous&nbsp;: ce qui peut tout faire tomber</h2>
+<div class="tbl"><table>
+<tr><th>Garde-fou</th><th>Règle</th><th>Comment la respecter sans perdre la vidéo</th></tr>
+<tr><td>Image des passagers</td><td><span class="tag fato">fait</span> En France, publier un visage exige le consentement (droit à l’image)&nbsp;; le passager est aussi une donnée personnelle (CNIL).</td><td>Autorisation de 1 page FR/EN, signée sur le téléphone avant de monter (QR sur le dossier du siège). Celui qui ne signe pas voyage de la même façon et apparaît flouté ou de dos. Les mineurs n’apparaissent jamais en train de jouer.</td></tr>
+<tr><td>GTA 6 est 18+</td><td><span class="tag fato">fait</span> PEGI 18 attendu pour la série&nbsp;; confirmer la classification finale.</td><td>Seuls les majeurs jouent&nbsp;; le produit est vendu comme une «&nbsp;soirée&nbsp;», pas comme «&nbsp;pour la famille&nbsp;». Dans la vidéo, l’âge du passager ne fait jamais de doute.</td></tr>
+<tr><td>Marque Rockstar</td><td><span class="tag sup">hypothèse à confirmer</span> La politique de Rockstar autorise les vidéos de gameplay, y compris monétisées par les programmes de créateurs, mais interdit l’usage commercial pour promouvoir un produit ou un service.</td><td>La vidéo montre la <em>réaction</em> et la <em>voiture</em>&nbsp;; l’écran apparaît furtivement, sans logo mis en avant, jamais dans le thumbnail ni dans le nom. Le mot «&nbsp;GTA&nbsp;» reste dans la légende et dans la parole, pas dans la marque. En cas d’avertissement, nous changeons de jeu sans changer de compte.</td></tr>
+<tr><td>Le chauffeur ne filme pas</td><td><span class="tag fato">fait</span> Le téléphone en main au volant est une infraction&nbsp;; un écran vidéo visible du conducteur aussi.</td><td>Caméras fixes (ventouse, 360°) allumées avant de partir&nbsp;; moniteur des passagers derrière les dossiers, invisible depuis le siège du conducteur. Julien appuie sur un bouton et conduit.</td></tr>
+<tr><td>Le VTC exige une réservation préalable</td><td><span class="tag fato">fait</span> Un VTC ne peut pas prendre de passager dans la rue&nbsp;; la course naît d’une réservation.</td><td>Devant les boîtes de nuit, nous filmons la voiture, nous ne «&nbsp;prenons&nbsp;» personne&nbsp;: celui qui monte a réservé par WhatsApp, même 10 minutes avant. Le lien <code>wa.me</code> «&nbsp;J’ai besoin d’une voiture maintenant&nbsp;» règle cela sur-le-champ.</td></tr>
+<tr><td>Promesses</td><td>Doctrine TWK&nbsp;: ne pas promettre ce que l’on ne contrôle pas.</td><td>Jamais «&nbsp;premier au monde&nbsp;» (nous ne le prouvons pas)&nbsp;; oui à «&nbsp;la seule voiture de la Riviera où vous jouez à GTA 6&nbsp;». Disponibilité seulement après confirmation de Julien.</td></tr>
+<tr><td>LED dans les portes</td><td><span class="tag fato">fait, à vérifier avec l’installateur</span> Un éclairage non homologué visible de l’extérieur en circulation est interdit&nbsp;; le bleu est réservé aux urgences.</td><td>Elles ne s’allument que voiture à l’arrêt et porte ouverte&nbsp;; elles s’éteignent dès que la marche est enclenchée. C’est justement la scène que l’on filme.</td></tr>
+<tr><td>Déguisements et accessoires</td><td><span class="tag fato">fait</span> Une tenue pouvant être confondue avec celle de la police française est une infraction&nbsp;; une réplique d’arme sur la voie publique fait venir la vraie police.</td><td>FBI évident et américain&nbsp;; aucune arme factice, aucun insigne exhibé à des tiers, ni gyrophare ni sirène. Les personnages autres que le costume uniquement en tournage ou quand le client l’a choisi.</td></tr>
+<tr><td>Musique</td><td><span class="tag fato">fait, à vérifier à la date</span> Un compte commercial n’utilise que la bibliothèque commerciale&nbsp;; Twitch sanctionne les morceaux protégés en live et en VOD.</td><td>Thème original de 30 s + bibliothèque sous licence de funk et de boogie. Aucun tube des années 80 dans une vidéo monétisée ou un live.</td></tr>
+<tr><td>En direct</td><td>En live, il n’y a ni coupe ni floutage après coup.</td><td>Autorisation avant de passer à l’antenne, délai de 3 min, modérateur hors de la voiture avec bouton de coupure, chauffeur sans écran de chat, adresses et plaques hors champ.</td></tr>
+<tr><td>Énergie et réseau à bord</td><td><span class="tag sup">hypothèse technique</span> Une PS5 en jeu demande 200–220 W&nbsp;; la prise 12 V de la voiture ne suffit pas&nbsp;; la Tesla ne partage pas internet avec d’autres appareils.</td><td>Station d’énergie portable (≥ 500 Wh, sortie pur sinus&nbsp;; ≥ 1 000 Wh avec le kit de live) + moniteur&nbsp;; routeur 5G propre pour le PSN et un autre pour le live. À valider avec l’installateur avant d’acheter.</td></tr>
+</table></div>
+</section>
+
+<section id="conteudo">
+<h2>7. Contenu&nbsp;: piliers, format et 38 idées</h2>
+<h3>Cinq piliers, un par jour ouvré</h3>
+<div class="grid">
+  <div class="card"><h4>Lun · L’entrée</h4><p>Réactions à l’ouverture de la porte, à la vue du plafond, à l’écran qui s’allume. Le format qui retient le plus. 7–15 s.</p></div>
+  <div class="card"><h4>Mar · La voiture la nuit</h4><p>Extérieur cinématographique&nbsp;: Promenade, Casino de Monte-Carlo, Croisette. Sans parole, seulement le son et la lumière. 10–20 s.</p></div>
+  <div class="card"><h4>Mer · À bord</h4><p>Jeu en mouvement, conversation, nausée, blague entre initiés. C’est ici que l’on vend le temps. 20–45 s.</p></div>
+  <div class="card"><h4>Jeu · Coulisses</h4><p>Installation, nettoyage, recharge, la vie de Julien. Cela humanise et c’est la matière de la série de janvier. 30–60 s (compte pour TikTok Rewards).</p></div>
+  <div class="card"><h4>Ven · La nuit sur la Riviera</h4><p>La destination&nbsp;: restaurant partenaire, point de vue, boîte de nuit. Là où TWK apparaît comme maison mère. 15–30 s.</p></div>
+</div>
+<p>Week-end&nbsp;: la meilleure vidéo de la semaine recoupée en version de 60 s+ (YouTube Shorts et TikTok long) et un carrousel de photos sur Instagram. Langue&nbsp;: texte à l’écran en anglais, parole dans la langue du passager, sous-titres FR + EN générés&nbsp;; nom de la ville dans chaque vidéo dans les 2 premières secondes. Heure toujours en AM/PM.</p>
+<h3>Format fixe de la série <em>Night Ride #N</em></h3>
+<ol>
+  <li>0–1 s&nbsp;: porte Falcon qui s’ouvre, nom de la ville à l’écran.</li>
+  <li>1–4 s&nbsp;: la réaction (sans coupes, son d’ambiance).</li>
+  <li>4–12 s&nbsp;: le moment à bord (jeu, musique, lumière du plafond).</li>
+  <li>Dernière seconde&nbsp;: «&nbsp;Vous jouez. On conduit.&nbsp;» + @wantedchauffeur + «&nbsp;lien en bio&nbsp;».</li>
+</ol>
+<h3>38 idées, prêtes pour le calendrier</h3>
+<ol class="ideias">
+  <li>Minuit du 19/11&nbsp;: la première partie de GTA 6 en mouvement sur la Riviera (avec les passagers zéro).</li>
+  <li>«&nbsp;Il ne savait pas qu’il y avait une PS5 dans la voiture&nbsp;» — réaction pure, sans narration.</li>
+  <li>POV&nbsp;: vous commandez une voiture et c’est ceci qui arrive (porte qui s’ouvre au ralenti).</li>
+  <li>Le ciel étoilé qui s’allume pour la première fois (épisode zéro de la série).</li>
+  <li>«&nbsp;Combien ça coûte&nbsp;?&nbsp;» avec la réponse à l’écran, par personne, sans détour.</li>
+  <li>Nausée&nbsp;: la règle des 10 minutes (humour + honnêteté).</li>
+  <li>Julien explique pourquoi il ne voit jamais l’écran.</li>
+  <li>Monte-Carlo à minuit vu de la banquette arrière, seulement le son.</li>
+  <li>Transfert depuis l’aéroport de Nice&nbsp;: après le vol, 25 min de retour à la maison en jouant.</li>
+  <li>«&nbsp;Rate my passenger&nbsp;»&nbsp;: le passager conduit dans le jeu, Julien évalue sa conduite.</li>
+  <li>Qui gagne la course&nbsp;: Julien dans la vraie vie ou le passager dans le jeu (même trajet, Nice → Monaco).</li>
+  <li>Groupe de 6 amis qui se partagent 490&nbsp;€ et découvrent que cela fait 82&nbsp;€ chacun.</li>
+  <li>Un père qui a réservé pour l’anniversaire de son fils adulte (réaction des deux).</li>
+  <li>Le nettoyage de la voiture après une Game Night (coulisse courte, satisfaisante).</li>
+  <li>Combien d’énergie la PS5 consomme en une nuit (chiffre à l’écran, station d’énergie).</li>
+  <li>Dîner dans un établissement partenaire à Nice avec la voiture à la porte&nbsp;: la Soirée entière en 30 s.</li>
+  <li>«&nbsp;Les questions que vous avez posées&nbsp;»&nbsp;: réponses rapides aux commentaires (1 par semaine).</li>
+  <li>Un touriste qui a vu la vidéo dans un autre pays et a réservé&nbsp;: l’arrivée.</li>
+  <li>Falcon doors sous la pluie (la scène se vend toute seule).</li>
+  <li>Congrès à Cannes&nbsp;: équipe de 5 sortant du Palais et montant dans la voiture.</li>
+  <li>Duo/stitch avec une vidéo de test de GTA 6&nbsp;: «&nbsp;et si vous y jouiez ici&nbsp;?&nbsp;».</li>
+  <li>Réveillon du Nouvel An à Monaco&nbsp;: la nuit la plus chère de l’année, prévente avec places comptées.</li>
+  <li>Noël&nbsp;: «&nbsp;offrez une Night Ride&nbsp;» avec le bon dans la main de celui qui le reçoit.</li>
+  <li>Nuit de l’atelier&nbsp;: la voiture remise pour le covering (janvier, ép. 1).</li>
+  <li>Time-lapse du covering noir satiné (ép. 2).</li>
+  <li>Fibre de carbone pièce par pièce (ép. 3).</li>
+  <li>Le reveal&nbsp;: amis et clients qui voient la nouvelle voiture pour la première fois (ép. 5, vidéo longue).</li>
+  <li>Avant/après côte à côte, 7 s, sans parole (la vidéo qui tournera le plus en janvier).</li>
+  <li>«&nbsp;C’est quel moniteur&nbsp;?&nbsp;» — réponse avec lien d’affiliation.</li>
+  <li>Julien raconte comment s’est passée la première semaine (vidéo longue de 3 min pour YouTube).</li>
+  <li>«&nbsp;Wanted&nbsp;»&nbsp;: le Fugitif s’évade de prison et le premier endroit où il va est le siège du conducteur (épisode 1 de l’histoire).</li>
+  <li>L’Agent interroge les passagers&nbsp;: «&nbsp;avez-vous vu cet homme&nbsp;?&nbsp;» (la photo est celle du chauffeur lui-même).</li>
+  <li>Changement de personnage en une coupe&nbsp;: la porte se ferme en orange, s’ouvre en costume bleu clair.</li>
+  <li>Les portes qui s’allument en violet, rose et bleu clair sur le thème musical, sans parole (le jingle de la marque).</li>
+  <li>Le passager choisit le chauffeur dans le formulaire et réagit à celui qui apparaît.</li>
+  <li>Le Complice commente la conduite du groupe dans le jeu pendant l’arrêt au point de vue.</li>
+  <li>Wanted Live&nbsp;: le chat vote l’itinéraire, le personnage et le défi de la soirée.</li>
+  <li>«&nbsp;Indice de recherche&nbsp;»&nbsp;: une étoile s’allume à chaque client qui donne la note 5 (compteur de la saison).</li>
+</ol>
+</section>
+
+<section id="ferramentas">
+<h2>8. Outils et équipement</h2>
+<h3>Montage et IA, par tâche</h3>
+<div class="tbl"><table>
+<tr><th>Tâche</th><th>Outil</th><th>Comment nous l’utilisons</th></tr>
+<tr><td>Couper et sous-titrer vite</td><td>CapCut desktop (gratuit) ou Descript</td><td>Modèle fixe de la série enregistré comme template&nbsp;; sous-titres automatiques relus en 5 min&nbsp;; exporter en 9:16 et 1:1</td></tr>
+<tr><td>Sous-titres stylisés et versions par langue</td><td>Submagic ou CapCut + Claude</td><td>Script → sous-titres en FR, EN, PT, IT, DE, ES en une commande&nbsp;; le Dev automatise à partir du texte du script</td></tr>
+<tr><td>Scripts, accroches et descriptions</td><td>Claude</td><td>Un prompt standard avec la promesse, les garde-fous et le pilier du jour&nbsp;; 5 accroches par vidéo, on en choisit 1&nbsp;; description avec le lien tracké déjà inclus</td></tr>
+<tr><td>Voix off (le cas échéant)</td><td>ElevenLabs</td><td>Uniquement dans les coulisses&nbsp;; la réaction, c’est toujours le son d’ambiance</td></tr>
+<tr><td>Couvertures et carrousel</td><td>Canva</td><td>Un template par pilier, couleur fixe de la marque</td></tr>
+<tr><td>Programmation et statistiques</td><td>Metricool (ou Buffer)</td><td>Publie sur les 3 réseaux à la bonne heure (19:00–21:00 et 23:00, heure locale, dans les tests de la semaine 1), exporte vues et abonnés vers le tableau de bord hebdomadaire</td></tr>
+<tr><td>Lives</td><td>OBS (gratuit) + Restream</td><td>Scènes prêtes (habitacle, visage, route), overlay avec @wantedchauffeur et QR de <code>/ride</code>, délai de 3 min, même signal pour Twitch et YouTube</td></tr>
+<tr><td>Musique</td><td>Thème original + bibliothèque sous licence (Epidemic Sound ou Artlist)</td><td>Une playlist de funk et de boogie approuvée pour la vidéo et le live&nbsp;; rien en dehors d’elle ne passe à l’antenne</td></tr>
+<tr><td>Réponses automatiques</td><td>WhatsApp Business (app)</td><td>Message d’accueil avec les 3 prix et les horaires de réponse&nbsp;; message d’absence en dehors des horaires&nbsp;; réponses rapides <code>/prix</code>, <code>/dispo</code>, <code>/regles</code>&nbsp;; catalogue avec les 5 produits</td></tr>
+</table></div>
+<h3>Liste d’achats</h3>
+<p>Prix <span class="tag sup">estimation</span> de marché&nbsp;; la PS5 est déjà prévue dans le plan de la voiture. Total ≈ 2 800–4 800&nbsp;€ en plus de la console, kit de live, looks et LED compris (sans eux, 1 600–2 400&nbsp;€).</p>
+<ul>
+  <li>Moniteur portable 15,6" 1080p (≥ 60 Hz), 1 ou 2 — 150–200&nbsp;€ pièce&nbsp;; support de dossier — 30&nbsp;€ pièce.</li>
+  <li>Station d’énergie portable ≥ 500 Wh, sortie pur sinus — 400–800&nbsp;€. À valider avec l’installateur.</li>
+  <li>Routeur 5G avec carte SIM de données — 150&nbsp;€ + forfait. Le PSN tombe sans réseau stable.</li>
+  <li>Caméra 360° (Insta360 X4) ou GoPro 13 — 450–500&nbsp;€&nbsp;; ventouse et bras — 60&nbsp;€. Caméra fixe, jamais dans la main du chauffeur.</li>
+  <li>Micro-cravate sans fil (DJI Mic Mini) — 170&nbsp;€. Une réaction sans son propre ne vaut rien.</li>
+  <li>2 manettes DualSense supplémentaires — 70&nbsp;€ pièce. Ruban LED ambre pour le pied des sièges — 30&nbsp;€.</li>
+  <li>Kit nausée (bonbons au gingembre, sachets discrets), serviettes, chargeurs, chiffon pour l’écran.</li>
+  <li>Kit de live&nbsp;: deuxième caméra avec sortie HDMI propre — 500–700&nbsp;€&nbsp;; cartes d’acquisition et mini PC ou encodeur portable — 200–800&nbsp;€&nbsp;; deuxième carte SIM de données. La station d’énergie passe à ≥ 1 000 Wh.</li>
+  <li>Les cinq looks (le costume bleu clair et la chemise rose sur mesure sont l’investissement&nbsp;; les autres sont des déguisements) — 300–500&nbsp;€.</li>
+  <li>LED des portes avec activation uniquement porte ouverte et voiture à l’arrêt — 200–400&nbsp;€ posées.</li>
+  <li>Thème musical original de 30 s — commande unique&nbsp;; bibliothèque sous licence et Restream — ≈ 40&nbsp;€/mois.</li>
+</ul>
+</section>
+
+<section id="metas">
+<h2>9. Objectifs et ce que l’on mesure chaque lundi</h2>
+<div class="grid">
+  <div class="card"><div class="n">30/11</div><p>4 canaux en ligne, 15+ vidéos, 1 live public, 1 vidéo au-dessus de 100 k vues, 30 leads avec référence, <strong>6 courses</strong> payantes venues des réseaux.</p></div>
+  <div class="card"><div class="n">31/12</div><p>10 k abonnés cumulés, TikTok Rewards éligible ou presque, <strong>25 courses</strong> dans le mois (≈ 6 k€), 2 partenariats actifs, réveillon vendu.</p></div>
+  <div class="card"><div class="n">31/01</div><p>Série de la transformation complète (6 épisodes + reveal), 1 vidéo longue par semaine sur YouTube, première proposition de sponsoring envoyée avec les chiffres.</p></div>
+</div>
+<p>Tableau de bord hebdomadaire (le Dev le monte, le Fondateur le lit en 2 minutes)&nbsp;: vidéos publiées · vues par réseau · abonnés · clics sur la bio par réseau · leads par réseau (référence) · courses conclues · revenu · € par course · coût cumulé de l’équipement. Source de chaque chiffre déclarée dans le tableau de bord. Si un chiffre ne peut pas être lu, le tableau de bord affiche «&nbsp;pas de donnée&nbsp;», jamais zéro.</p>
+</section>
+
+<section id="sprint">
+<h2>10. Jour par jour · 09 au 30 novembre</h2>
+<p>Deux colonnes, deux personnes. Chaque ligne tient dans une journée de travail normale&nbsp;; ce qui exige Julien est signalé. Les jours en bleu sont des jalons. Si un jour prend du retard, ce qui ne peut pas en prendre, c’est la colonne du 18/11&nbsp;: tout testé avant le lancement.</p>
+<div class="tbl"><table class="dia">
+<tr><th>Jour</th><th class="f">Fondateur</th><th class="d">Dev</th></tr>
+<tr><td>Lun 09/11</td><td><ul><li>Trancher les 10 décisions de la section 13 (ou marquer celles qui restent pour demain)</li><li>Confirmer que @wantedchauffeur est libre sur Instagram, TikTok, YouTube et Twitch et enregistrer les quatre aujourd’hui&nbsp;; vérifier le domaine et la marque</li><li>Prévenir Julien&nbsp;: si le ciel étoilé commence demain, filmer (trépied, 2 angles, time-lapse)</li><li>Demander à Julien des photos actuelles de la voiture et le planning des courses de la semaine</li></ul></td><td><ul><li>Lire l’audit du 28/10 et ouvrir le code de <code>/chauffeur-prive</code> dans le repo du site</li><li>Écrire la DDL de <code>chauffeur_leads</code> pour la phrase du fondateur&nbsp;; préparer le fallback dans <code>state/chauffeur-leads.jsonl</code></li><li>Rediriger en 301 <code>/driver</code> et <code>/pt/driver</code> → <code>/ride</code> (ou <code>/chauffeur-prive</code> tant que <code>/ride</code> n’existe pas)</li></ul></td></tr>
+<tr><td>Mar 10/11</td><td><ul><li>Compléter les 4 canaux (même nom, même photo, bio avec la promesse et le lien provisoire) et l’e-mail de la marque</li><li>Identité années 80&nbsp;: logo propre (sans la police du jeu), bande violet–rose–bleu clair, couverture en cases de BD, lower-third néon</li><li>Commander le thème musical original de 30 s et s’abonner à la bibliothèque sous licence</li><li>Écrire les 5 scripts de la semaine de lancement (teaser 1–3, minuit, réaction)</li><li>Julien&nbsp;: filme le ciel étoilé</li></ul></td><td><ul><li>Enregistrer le lead avant la redirection (<code>sendBeacon</code> + référence WTD-x-xxxx) sur la page actuelle</li><li>WhatsApp dans un nouvel onglet avec fallback «&nbsp;copier le message / appeler&nbsp;»</li><li>Événement GA4 <code>generate_lead</code> avec source et produit</li></ul></td></tr>
+<tr><td>Mer 11/11 <small>(férié FR)</small></td><td><ul><li>Commander la liste d’achats (section 8), les cinq looks et les LED des portes&nbsp;; confirmer avec l’installateur l’énergie à bord et le fait que les LED ne s’allument que voiture à l’arrêt</li><li>Rédiger l’autorisation de droit à l’image FR/EN (1 page) et les règles de bord</li><li>Brief de tournage pour Julien&nbsp;: liste des plans fixes, où fixer les caméras</li></ul></td><td><ul><li>Monter la landing <code>/ride</code>&nbsp;: vidéo en boucle, 3 produits avec prix, bouton WhatsApp, formulaire court</li><li>Créer <code>og:image</code> 1200×630 avec la voiture la nuit (l’actuelle donne 404)</li><li>Formulaire&nbsp;: heure par pas de 5 min, minimum quand la date est aujourd’hui, passagers 1–6, nom, «&nbsp;Choisissez votre chauffeur&nbsp;»</li></ul></td></tr>
+<tr><td>Jeu 12/11</td><td><ul><li>Avec Julien, dans la voiture&nbsp;: installer moniteur, énergie, routeur&nbsp;; jouer 30 min en mouvement (latence, nausée, ceinture, visibilité du chauffeur)</li><li>Filmer le test en entier = coulisses #1</li><li>Inviter 4–6 «&nbsp;passagers zéro&nbsp;» pour la nuit du 19/11 (amis, 1–2 créateurs locaux)</li></ul></td><td><ul><li>WhatsApp Business sur le numéro de Julien&nbsp;: catalogue (5 produits), message d’accueil, absence, réponses rapides, étiquettes</li><li>Liens <code>wa.me</code> par réseau avec texte déjà marqué (T/I/Y/W) pour ceux qui ne passent pas par la page</li><li>QR de l’autorisation de droit à l’image pour le dossier du siège</li><li>Monter le live&nbsp;: scènes dans OBS, overlay avec @wantedchauffeur et QR de <code>/ride</code>, multistream, délai de 3 min&nbsp;; premier test non répertorié</li></ul></td></tr>
+<tr><td>Ven 13/11</td><td><ul><li>Premier tournage nocturne en extérieur avec Julien en costume bleu clair&nbsp;: Promenade, Casino, portes qui s’ouvrent avec les LED (voiture à l’arrêt), 1 h</li><li>Tourner l’évasion du Fugitif (épisode 1 de l’histoire), si l’uniforme est déjà arrivé</li><li>Monter 3 teasers (10–15 s) dans le template fixe</li><li>Relire les réponses rapides WhatsApp en FR/EN</li></ul></td><td><ul><li>Tableau de bord <code>/ride</code> dans la Central&nbsp;: leads par source, par produit, par jour&nbsp;; statut d’après l’étiquette</li><li>Test de bout en bout sur les 3 sources&nbsp;: bio → page → lead enregistré → WhatsApp ouvert avec référence</li></ul></td></tr>
+<tr><td>Sam 14/11</td><td><ul><li>Publier le teaser #1 sur les 3 réseaux (ouverture discrète, sans annoncer de date)</li><li>Constituer le dossier des sons et tendances de la semaine (sons en vogue sur TikTok FR)</li></ul></td><td><ul><li>Poids de la page&nbsp;: une seule image de la voiture via <code>&lt;picture&gt;</code> WebP, logo léger, cache de 1 an</li><li>Mobile&nbsp;: police 16 px dans les champs, focus sur le premier champ invalide</li></ul></td></tr>
+<tr><td>Dim 15/11</td><td><ul><li>Répondre à chaque commentaire du teaser</li><li>Planifier la semaine&nbsp;: qui filme quoi, à quelle heure</li></ul></td><td><ul><li>Repos ou réserve pour ce qui a pris du retard</li></ul></td></tr>
+<tr><td>Lun 16/11</td><td><ul><li>Teaser #2 («&nbsp;plus que 3 jours&nbsp;», sans logo du jeu)</li><li>Confirmer les passagers zéro et recueillir les consentements déjà signés</li><li>Demander à Julien d’acheter GTA 6 en version numérique sur la PS5 de la voiture et d’activer le préchargement</li></ul></td><td><ul><li>Estimation de prix sur la page (les 3 produits ont déjà un prix fixe&nbsp;; le transfert à la distance utilise la grille)</li><li>Versions FR et EN de <code>/ride</code> avec hreflang&nbsp;; les autres langues héritent de <code>/chauffeur-prive</code></li></ul></td></tr>
+<tr><td>Mar 17/11</td><td><ul><li>Teaser #3 («&nbsp;demain à minuit&nbsp;»)</li><li>Script de la nuit de lancement minute par minute (heure de déblocage du jeu&nbsp;: <span class="tag lac">lacune</span>, à confirmer la veille)</li><li>Confirmer avec Julien l’itinéraire et le point de rendez-vous</li></ul></td><td><ul><li>Pipeline de sous-titres&nbsp;: script → 6 langues → fichier SRT par vidéo, via Claude, en une commande</li><li>Template de description par réseau avec le lien tracké déjà monté</li></ul></td></tr>
+<tr><td class="marco">Mer 18/11</td><td class="marco"><ul><li>Répétition générale de nuit&nbsp;: caméras, audio, énergie, jeu qui tourne, ceinture, autorisation</li><li>Live non répertorié de 30 min sur le trajet et à l’heure du lancement&nbsp;: s’il tombe, le 19/11 est enregistré</li><li>Checklist imprimée dans la boîte à gants</li><li>Se coucher tôt</li></ul></td><td class="marco"><ul><li>Alerte à Julien à chaque nouveau lead (message interne, pas au client)</li><li>Lien de la bio pointant vers <code>/ride</code> sur les 4 canaux&nbsp;; test final sur téléphone en données mobiles</li><li>Astreinte convenue pour la nuit</li></ul></td></tr>
+<tr><td class="marco">Jeu 19/11</td><td class="marco"><ul><li>00:00&nbsp;: la première partie en mouvement avec les passagers zéro&nbsp;; réaction + voiture + écran aperçu furtivement. En direct si la répétition est passée, enregistré sinon</li><li>Monter et publier avant midi&nbsp;: «&nbsp;la seule voiture de la Riviera où vous jouez à GTA 6&nbsp;»</li><li>Le soir&nbsp;: deuxième tournage avec de vrais clients ou des invités</li></ul></td><td class="marco"><ul><li>Astreinte&nbsp;: leads qui arrivent, erreurs sur la page, temps de réponse sur WhatsApp&nbsp;; s’il y a un live, modérer le chat et tenir le bouton de coupure</li><li>Corriger sur-le-champ ce qui casse&nbsp;; pas de nouvelle fonctionnalité aujourd’hui</li></ul></td></tr>
+<tr><td>Ven 20/11</td><td><ul><li>Vidéo 2 (réaction) + version de 60 s+ pour TikTok Rewards et YouTube</li><li>Répondre à tous les commentaires et DM&nbsp;; reporter les questions dans les réponses rapides</li></ul></td><td><ul><li>Rapport des premières 24 h&nbsp;: visites, leads et courses par réseau</li><li>Ajustements des UTM et de la référence selon ce qui est apparu</li></ul></td></tr>
+<tr><td>Sam 21/11</td><td><ul><li>Nuit de samedi&nbsp;: extérieur devant les boîtes de nuit de Nice/Cannes + courses réservées</li><li>2 vidéos (une de voiture, une de réaction)</li></ul></td><td><ul><li>Astreinte légère depuis le téléphone</li></ul></td></tr>
+<tr><td>Dim 22/11</td><td><ul><li>Récap de la semaine en carrousel (Instagram) et vidéo de 60 s</li><li>Lire le tableau de bord&nbsp;: quelle vidéo a retenu, d’où est venu le lead</li></ul></td><td><ul><li>—</li></ul></td></tr>
+<tr><td>Lun 23/11</td><td><ul><li>Doubler la mise sur le format qui a retenu&nbsp;; abandonner celui qui n’a pas retenu</li><li>Liste de 10 partenaires locaux (boutique de jeux vidéo, boissons sans alcool, detailing, atelier de covering) et la proposition de 1 page</li></ul></td><td><ul><li>Test A/B du bouton de <code>/ride</code> («&nbsp;Demander sur WhatsApp&nbsp;» × «&nbsp;Voir les disponibilités&nbsp;»)</li><li>Vitesse de la page mesurée sur téléphone (LCP)</li></ul></td></tr>
+<tr><td>Mar 24/11</td><td><ul><li>Envoyer la vidéo comme carte de visite à 5 hôtels et conciergeries du canal B2B (e-mail externe&nbsp;: approbation du fondateur, qui est celui qui envoie)</li><li>Tourner les coulisses #2 (recharge, nettoyage, routine de Julien)</li></ul></td><td><ul><li>Chaque lead devient une carte dans le COMPASSO pour Julien (avec référence, sans téléphone)</li><li>Tableau de bord hebdomadaire automatique chaque lundi 8:00 AM</li></ul></td></tr>
+<tr><td>Mer 25/11</td><td><ul><li>Fixer le format de la série <em>Night Ride #N</em> et l’histoire du Fugitif contre l’Agent&nbsp;; publier le #1 officiel</li><li>Répondre aux commentaires «&nbsp;combien ça coûte&nbsp;» avec la vidéo du prix par personne</li></ul></td><td><ul><li>Revoir les réponses rapides avec les vraies questions de la première semaine</li><li>Registre d’opt-out&nbsp;: celui qui demande à ne pas être filmé ou contacté reste enregistré</li></ul></td></tr>
+<tr><td>Jeu 26/11</td><td><ul><li>Vidéo demandée par l’audience (le commentaire le plus voté)</li><li>Tourner la Soirée&nbsp;: dîner dans un établissement partenaire de Nice avec la voiture à la porte</li></ul></td><td><ul><li>Bloc «&nbsp;Dîner + voiture&nbsp;» sur <code>/ride</code> relié aux établissements de la Riviera qui confirment les demandes</li></ul></td></tr>
+<tr><td>Ven 27/11 <small>(Black Friday)</small></td><td><ul><li>Offre limitée pour décembre&nbsp;: 10 Game Nights avec photo imprimée offerte (de la valeur, pas une remise)&nbsp;; places comptées sur la page</li><li>Vidéo de l’offre</li><li>10:00 PM&nbsp;: premier <em>Wanted Live</em> à l’horaire fixe du vendredi</li></ul></td><td><ul><li>Compteur de places sur <code>/ride</code> lisant le tableau de bord</li><li>Modérer le Wanted Live depuis l’extérieur de la voiture</li></ul></td></tr>
+<tr><td>Sam 28/11</td><td><ul><li>Tournage du week-end (2 vidéos) + courses</li></ul></td><td><ul><li>—</li></ul></td></tr>
+<tr><td>Dim 29/11</td><td><ul><li>Planifier décembre&nbsp;: calendrier de 31 vidéos avec pilier, accroche et lieu</li></ul></td><td><ul><li>—</li></ul></td></tr>
+<tr><td class="marco">Lun 30/11</td><td class="marco"><ul><li>Rétrospective avec le Dev et Julien&nbsp;: chiffres de la section 9 face aux objectifs</li><li>Décider&nbsp;: Aria entre-t-elle sur WhatsApp en décembre&nbsp;? Monteur freelance&nbsp;? Sponsoring&nbsp;?</li></ul></td><td class="marco"><ul><li>Rapport de novembre&nbsp;: tunnel complet par réseau, coût de l’équipement, liste de ce qui a cassé</li><li>Si la phrase est arrivée&nbsp;: migrer le <code>jsonl</code> vers <code>chauffeur_leads</code> par la porte unique</li></ul></td></tr>
+</table></div>
+</section>
+
+<section id="dezembro">
+<h2>11. Décembre · consolider</h2>
+<p>Routine quotidienne qui ne change pas&nbsp;: le <span class="F">Fondateur</span> publie 1 vidéo (programmée la veille), répond aux commentaires deux fois par jour (9:00 AM et 10:00 PM), lit le tableau de bord le lundi. Le <span class="D">Dev</span> corrige ce que le tableau de bord signale, 2 h par jour, et livre une amélioration par semaine. Julien filme en caméra fixe à chaque course pour laquelle il y a consentement. Chaque vendredi à 10:00 PM, Wanted Live&nbsp;: l’un des deux modère depuis l’extérieur de la voiture, à tour de rôle.</p>
+<div class="tbl"><table>
+<tr><th>Semaine</th><th>Fondateur</th><th>Dev</th></tr>
+<tr><td>01–06/12</td><td>Conclure 2 partenariats locaux&nbsp;; vidéos «&nbsp;offrez une Night Ride&nbsp;»&nbsp;; premier trajet vers Monaco avec un vrai client, filmé</td><td>Bon cadeau&nbsp;: lien de paiement Stripe par produit (domaine d’Atlas&nbsp;; approbation du fondateur avant activation)&nbsp;; page du bon</td></tr>
+<tr><td>07–13/12</td><td>Marchés de Noël de Nice et de Monaco comme décor&nbsp;; 1 vidéo longue (3 min) pour YouTube&nbsp;; s’inscrire à TikTok Rewards si éligible</td><td>Si approuvé&nbsp;: Aria répond sur le numéro WhatsApp via l’API (nouveau flux, approbation du fondateur&nbsp;; horaires, prix et règles dans le prompt&nbsp;; le silence du client n’est pas une rétention)</td></tr>
+<tr><td>14–20/12</td><td>Prévente du réveillon (Monaco et Nice) avec places comptées&nbsp;; contenu corporate (fêtes d’entreprise de Sophia Antipolis)</td><td>Agenda de disponibilité public sur <code>/ride</code> (les jours complets apparaissent comme complets)&nbsp;; exporter le tableau de bord vers le rapport de la Regência</td></tr>
+<tr><td>21–27/12</td><td>Noël&nbsp;: familles de touristes (sans mineurs qui jouent), vidéos légères&nbsp;; préparer la série de janvier (script des 6 épisodes, contact avec l’atelier pour filmer)</td><td>Suivi de l’affiliation (liens des équipements)&nbsp;; nettoyage de ce qui n’est pas lu dans le tableau de bord</td></tr>
+<tr><td>28–31/12</td><td>Réveillon&nbsp;: la nuit la plus filmée de l’année&nbsp;; rapport de décembre pour la première proposition de sponsoring</td><td>Sauvegarde et clôture du mois&nbsp;; checklist de la série de janvier (upload des vidéos longues, chapitres, miniatures)</td></tr>
+</table></div>
+</section>
+
+<section id="janeiro">
+<h2>12. Janvier · la transformation</h2>
+<p>La série est le contenu long que YouTube réclame et l’avant/après qu’Instagram et TikTok récompensent. Le calendrier réel dépend de l’atelier&nbsp;; la structure, non. Chaque épisode a une version courte (15 s) sur les trois réseaux le même jour et une version longue (3–6 min) sur YouTube la semaine suivante.</p>
+<div class="tbl"><table>
+<tr><th>Épisode</th><th>Ce que l’on filme</th><th>Fondateur</th><th>Dev</th></tr>
+<tr><td>0 · Ciel étoilé</td><td>Déjà filmé le 10/11 (si le plan est respecté)</td><td>Publier en ouverture de la série, 1re semaine</td><td>La page <code>/ride</code> gagne l’onglet «&nbsp;La transformation&nbsp;» avec les épisodes</td></tr>
+<tr><td>1 · Remise</td><td>La voiture arrivant à l’atelier, dernière nuit «&nbsp;d’origine&nbsp;»</td><td>Filmer les adieux avec des clients&nbsp;; voix de Julien</td><td>Sondage sur les réseaux («&nbsp;quelle finition en premier&nbsp;?&nbsp;») enregistré dans le tableau de bord</td></tr>
+<tr><td>2 · Covering</td><td>Time-lapse du noir satiné, 2–3 jours</td><td>Caméra fixe à l’atelier (accord d’image avec l’atelier en échange d’un crédit)</td><td>—</td></tr>
+<tr><td>3 · Carbone</td><td>Pièce par pièce, mains de l’installateur</td><td>Coupe courte «&nbsp;satisfaisante&nbsp;» par pièce</td><td>—</td></tr>
+<tr><td>4 · Détails</td><td>Intérieur, lumière, nettoyage final</td><td>Teaser du reveal avec date et heure</td><td>Prévente de la «&nbsp;première nuit de la nouvelle voiture&nbsp;» sur <code>/ride</code></td></tr>
+<tr><td>5 · Reveal</td><td>Amis, clients et partenaires qui voient la voiture pour la première fois&nbsp;; en direct sur les réseaux</td><td>Événement nocturne à Nice&nbsp;; vidéo longue montée en 48 h</td><td>Diffusion en direct configurée&nbsp;; tableau de bord du jour</td></tr>
+<tr><td>6 · Première nuit</td><td>La première Night Ride de la voiture transformée</td><td>Avant/après côte à côte (7 s)&nbsp;; proposition de sponsoring envoyée avec les chiffres de déc./janv.</td><td>Rapport de la série&nbsp;: vues par épisode, leads, courses</td></tr>
+</table></div>
+</section>
+
+<section id="decisoes">
+<h2>13. Décisions du fondateur</h2>
+<p>Le nom est décidé (Wanted Chauffeur), tout comme la direction artistique et les looks. Dix décisions débloquent la première semaine&nbsp;; les trois premières sont pour aujourd’hui.</p>
+<ol>
+  <li><strong>Enregistrer @wantedchauffeur</strong> sur les quatre canaux aujourd’hui et vérifier le domaine et la marque&nbsp;; si l’un est pris, choisir la variante unique pour tous.</li>
+  <li><strong>Grille tarifaire</strong> de la section 3, en particulier Night Ride 350&nbsp;€ et Game Night 490&nbsp;€.</li>
+  <li><strong>Numéro WhatsApp</strong>&nbsp;: WhatsApp Business (app) sur le numéro de Julien en novembre&nbsp;; Aria via l’API seulement en décembre, avec approbation.</li>
+  <li><strong>Langue</strong>&nbsp;: texte à l’écran en anglais, sous-titres FR + EN, parole dans la langue du passager.</li>
+  <li><strong>Budget d’équipement</strong>&nbsp;: jusqu’à 4 800&nbsp;€ en plus de la PS5 avec live, looks et LED, achat d’ici le 11/11&nbsp;; ou 2 400&nbsp;€ maintenant et le kit de live en décembre.</li>
+  <li><strong>Phrase de la porte unique</strong> pour créer <code>chauffeur_leads</code> (ADR-017). Sans elle, le Dev enregistre dans un fichier et rien ne se perd.</li>
+  <li><strong>Qui monte</strong>&nbsp;: le fondateur avec templates et IA les 3 premières semaines&nbsp;; monteur freelance à partir de décembre si la cadence quotidienne ne tient pas.</li>
+  <li><strong>Politique d’image</strong>&nbsp;: autorisation signée avant de monter, mineurs jamais en train de jouer ni à l’image, floutage pour celui qui ne signe pas.</li>
+  <li><strong>Règle des personnages</strong>&nbsp;: le costume bleu clair est la tenue par défaut de toute course payante&nbsp;; les autres looks uniquement en tournage ou quand le client l’a choisi dans le formulaire&nbsp;; la page B2B reste sans personnages.</li>
+  <li><strong>Lives</strong>&nbsp;: Wanted Live le vendredi, 10:00 PM, à partir du 27/11, avec modérateur hors de la voiture&nbsp;; le 19/11 en direct seulement si la répétition du 18/11 passe.</li>
+</ol>
+<h3>Ce qu’il ne faut pas faire</h3>
+<ul>
+  <li>Ne pas mettre «&nbsp;GTA&nbsp;» dans le nom du compte, dans le logo ou dans la miniature, ni la police, le logo ou l’écran d’étoiles du jeu dans les visuels.</li>
+  <li>Ne pas allumer de LED extérieure voiture en mouvement&nbsp;; ne pas utiliser d’arme factice, d’insigne, de gyrophare ni de sirène.</li>
+  <li>Ne pas mettre de musique célèbre dans une vidéo monétisée ou dans un live&nbsp;; ne pas lire le chat au volant.</li>
+  <li>Ne pas promettre de disponibilité avant la confirmation de Julien&nbsp;; ne pas promettre «&nbsp;premier au monde&nbsp;».</li>
+  <li>Ne pas publier de visage sans autorisation signée&nbsp;; ne pas publier de mineur en train de jouer.</li>
+  <li>Ne pas laisser le chauffeur filmer&nbsp;; caméra fixe ou deuxième personne.</li>
+  <li>Ne pas acheter d’abonnés, ne pas utiliser d’audio sans licence dans une vidéo monétisée, ne pas répondre à un commentaire avec un prix différent de celui de la page.</li>
+  <li>Ne pas renoncer au suivi par précipitation&nbsp;: un lead sans référence est un lead dont on n’apprend rien.</li>
+</ul>
+</section>
+
+<p class="foot">Version 2 (09/11/2026)&nbsp;: nom, direction artistique, looks et lives reçus du fondateur intégrés. Plan préparé le 09/11/2026 à partir du message du plan, de l’audit de la page <code>/chauffeur-prive</code> (28/10/2026), de la prémisse de la voie rentable (08/10/2026) et des règles d’exploitation de TWK. Valeurs de marché, règles des programmes de créateurs et exigences techniques à bord marquées comme fait, hypothèse ou lacune selon ce que nous avons pu vérifier&nbsp;; à vérifier à la date d’utilisation.</p>
+</div>
