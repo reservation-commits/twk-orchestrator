@@ -1,8 +1,8 @@
 {
   "name": "compasso-tarefas",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "COMPASSO Tarefas - gerenciador de tarefas da TWK para Márlon, Lucas e Julien: quadro por status, calendário, chat que divide em etapas e sugestões do planejador",
+  "description": "COMPASSO Tarefas - gerenciador de tarefas da TWK para MÃ¡rlon, Lucas e Julien: quadro por status, calendÃ¡rio, chat que divide em etapas e sugestÃµes do planejador",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -14,5 +14,8 @@
   },
   "optionalDependencies": {
     "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15"
   }
 }

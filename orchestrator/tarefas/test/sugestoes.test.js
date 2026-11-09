@@ -5,6 +5,7 @@ const http = require('node:http');
 const os = require('node:os');
 const fs = require('node:fs');
 const path = require('node:path');
+process.env.TAREFAS_SEM_BANCO = '1'; // nenhum teste toca no banco real
 const sugestoes = require('../sugestoes.js');
 
 const CHAVE = 'chave-da-central-de-teste';
@@ -95,16 +96,35 @@ test('sem CENTER_URL lê só do disco; Central fora do ar vira lacuna com motivo
   assert.equal(cob.central.origem, 'arquivo');
 });
 
+test('fonte fora do ar não apaga decisão; erro inesperado numa fonte não derruba as outras', async () => {
+  const dir = vazio();
+  const f = path.join(dir, 'compromissos.jsonl');
+  fs.writeFileSync(f, JSON.stringify({ id: 'C-D', status: 'aberto', vence_em: ontem, tipo: 'produto', o_que: 'Decidido antes', dono: 'Lucas' }) + '\n');
+  const ctx = { compromissosPath: f, centralStateDir: dir };
+  const [s] = (await sugestoes.gerar(ctx, [])).itens;
+  const descartada = { ...s, decisao: 'descartada', decidida_em: new Date().toISOString() };
+  const semFonte = await sugestoes.gerar({ compromissosPath: path.join(dir, 'sumiu.jsonl'), centralStateDir: dir }, [descartada]);
+  assert.ok(semFonte.itens.some((x) => x.id === s.id && x.decisao === 'descartada'), 'a decisão sobrevive à falha da fonte');
+  const voltou = await sugestoes.gerar(ctx, semFonte.itens);
+  assert.equal(voltou.itens.find((x) => x.id === s.id).decisao, 'descartada', 'quando a fonte volta, ela não reaparece viva');
+  fs.writeFileSync(f, '');
+  const resolvida = await sugestoes.gerar(ctx, voltou.itens);
+  assert.ok(!resolvida.itens.some((x) => x.id === s.id), 'fonte de pé e sinal sumido: aí sim sai da lista');
+});
+
 test('a biblioteca de conexão é achada no repositório E na disposição da imagem (./agents/_lib ao lado do módulo)', () => {
   assert.ok(sugestoes.carregarConectar(), 'no repositório: orchestrator/agents/_lib/conectar.js');
   // Simula a imagem do EasyPanel: /app/sugestoes.js + /app/agents/_lib/conectar.js, sem o resto do repositório.
   const app = vazio();
   fs.copyFileSync(path.join(__dirname, '..', 'sugestoes.js'), path.join(app, 'sugestoes.js'));
+  fs.mkdirSync(path.join(app, 'public'), { recursive: true }); // o Dockerfile copia public/ inteiro: o núcleo vai junto
+  fs.copyFileSync(path.join(__dirname, '..', 'public', 'nucleo.js'), path.join(app, 'public', 'nucleo.js'));
   fs.mkdirSync(path.join(app, 'agents', '_lib'), { recursive: true });
   fs.writeFileSync(path.join(app, 'agents', '_lib', 'conectar.js'), "module.exports = { urlRo: () => '', marca: 'stub-da-imagem' };");
   const naImagem = require(path.join(app, 'sugestoes.js'));
   assert.equal(naImagem.carregarConectar().marca, 'stub-da-imagem');
-  return naImagem.doBanco({}).then((r) => { assert.equal(r.ok, false); assert.match(r.lacuna, /sem credencial twk_ro/, 'com a biblioteca achada, a lacuna passa a ser a credencial, não a biblioteca'); });
+  delete process.env.TAREFAS_SEM_BANCO;
+  return naImagem.doBanco({}).finally(() => { process.env.TAREFAS_SEM_BANCO = '1'; }).then((r) => { assert.equal(r.ok, false); assert.match(r.lacuna, /sem credencial twk_ro/, 'com a biblioteca achada, a lacuna passa a ser a credencial, não a biblioteca'); });
 });
 
 test('marco zero: o que nasceu antes da data não vira sugestão, em nenhuma fonte; sem data = fora', async () => {

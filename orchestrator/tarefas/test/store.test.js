@@ -16,7 +16,8 @@ test('normalizar: exige título e dono válidos, aplica padrões', () => {
   const t = store.normalizar({ titulo: '  Ligar   para a casa ', dono: 'lucas', etapas: [{ texto: ' a ' }, { texto: '' }] });
   assert.equal(t.titulo, 'Ligar para a casa');
   assert.equal(t.area, 'Operação'); assert.equal(t.estado, 'todo'); assert.equal(t.vence_em, null);
-  assert.deepEqual(t.etapas, [{ texto: 'a', feita: false }]);
+  assert.deepEqual(t.etapas.map(({ texto, feita }) => ({ texto, feita })), [{ texto: 'a', feita: false }]);
+  assert.ok(t.etapas[0].id, 'toda etapa tem id estável: marcar etapas diferentes nunca entra em conflito');
 });
 
 test('motor de arquivo: criar, atualizar, concluir marca etapas, excluir deixa evento', async () => {

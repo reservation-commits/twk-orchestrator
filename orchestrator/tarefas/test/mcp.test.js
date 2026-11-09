@@ -10,6 +10,7 @@ const crypto = require('node:crypto');
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-tarefas-mcp-'));
 process.env.STATE_DIR = dir;
 process.env.NODE_ENV = 'development';
+process.env.TAREFAS_SEM_BANCO = '1'; // nenhum teste toca no banco real
 process.env.CENTER_TOKEN = 'chave-da-central-de-teste';
 process.env.COMPROMISSOS_PATH = path.join(dir, 'nao-existe.jsonl');
 process.env.CENTRAL_STATE_DIR = path.join(dir, 'central-vazia');
@@ -177,4 +178,51 @@ test('campos do ecossistema e arquivo pelo MCP: criar com prioridade/cidade/cana
   assert.match(busca.j.result.content[0].text, /arquivada\] Confirmar a Soirée/);
   const lista = await rpc({ jsonrpc: '2.0', id: 9, method: 'tools/list' }, access);
   assert.ok(lista.j.result.tools.some((f) => f.name === 'arquivar_tarefa')); assert.ok(lista.j.result.tools.find((f) => f.name === 'criar_tarefa').inputSchema.properties.referencia);
+});
+
+test('toda ferramenta diz se só lê: o cliente pode executar leitura sem pedir confirmação a cada chamada', async () => {
+  const { tools } = (await rpc({ jsonrpc: '2.0', id: 11, method: 'tools/list' }, access)).j.result;
+  const por = Object.fromEntries(tools.map((f) => [f.name, f]));
+  assert.ok(tools.every((f) => f.annotations && typeof f.annotations.readOnlyHint === 'boolean' && f.title));
+  for (const n of ['resumo', 'listar_tarefas', 'ver_tarefa', 'minha_fila', 'sugestoes']) assert.equal(por[n].annotations.readOnlyHint, true, n);
+  for (const n of ['criar_tarefa', 'atualizar_tarefa', 'comentar_tarefa', 'arquivar_tarefa']) assert.equal(por[n].annotations.readOnlyHint, false, n);
+  assert.ok(tools.every((f) => f.annotations.destructiveHint === false), 'nada aqui destrói: excluir só no app, com motivo');
+  assert.ok(!tools.some((f) => /excluir|apagar/.test(f.name)));
+});
+
+test('minha_fila, comentário, espera e desarquivar pelo Claude', async () => {
+  const hoje = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date());
+  const c = await chamar('criar_tarefa', { titulo: 'Responder o hotel Ritz hoje', dono: 'julien', etapas: ['Ligar para o concierge', 'Registrar'], vence_em: hoje, repete: 'semanal' });
+  const id = c.j.result.structuredContent.id;
+  const f = await chamar('minha_fila', { dono: 'julien' });
+  assert.match(f.j.result.content[0].text, /Hoje \(\d+\):/); assert.match(f.j.result.content[0].text, /próxima etapa: Ligar para o concierge/);
+  assert.ok(f.j.result.structuredContent.hoje.some((x) => x.id === id && x.proxima_etapa === 'Ligar para o concierge'));
+  assert.match((await chamar('comentar_tarefa', { id, texto: 'Concierge pediu confirmação até 6 PM, @lucas acompanha' })).j.result.content[0].text, /Comentário registrado/);
+  const ver = await chamar('ver_tarefa', { id });
+  assert.match(ver.j.result.content[0].text, /Concierge pediu confirmação/); assert.match(ver.j.result.content[0].text, /comentario \(marlon via Claude\)/);
+  assert.ok((await chamar('listar_tarefas', { busca: 'concierge pediu' })).j.result.structuredContent.tarefas.some((x) => x.id === id), 'a busca alcança comentários');
+  const w = await chamar('atualizar_tarefa', { id, estado: 'wait', aguardando_quem: 'Hotel Ritz', cobrar_em: '2030-01-10', etapas_feitas: [1] });
+  assert.equal(w.j.result.structuredContent.aguardando_quem, 'Hotel Ritz'); assert.equal(w.j.result.structuredContent.etapas[0].feita, true);
+  assert.match((await chamar('listar_tarefas', { estado: 'wait' })).j.result.content[0].text, /aguardando Hotel Ritz, cobrar 10\/01\/2030/);
+  const d = await chamar('atualizar_tarefa', { id, estado: 'done', resultado: 'respondido' });
+  assert.ok(d.j.result.structuredContent.proxima_id, 'concluir recorrente cria a próxima');
+  await chamar('arquivar_tarefa', { id });
+  assert.match((await chamar('desarquivar_tarefa', { id })).j.result.content[0].text, /voltou ao quadro/);
+  assert.equal((await chamar('desarquivar_tarefa', { id: 'T-20000101-0001' })).j.result.isError, true);
+  const ps = await chamar('planejar', { texto: 'Para Lucas:\n- Ligar para o Monak\n- Avisar o hotel', idioma: 'fr' });
+  assert.equal(ps.j.result.structuredContent.propostas.length, 2); assert.equal(ps.j.result.structuredContent.propostas[0].idioma, 'fr');
+});
+
+test('OAuth: acesso só volta ao Claude ou à máquina local; a tela diz para onde; freio na senha', async () => {
+  const reg = (uri) => pegar('/oauth/register', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ redirect_uris: [uri], client_name: 'Claude' }) });
+  assert.equal((await reg('https://atacante.example/cb')).status, 400, 'um "Claude" falso não registra destino próprio');
+  assert.equal((await reg('https://claude.ai.atacante.example/cb')).status, 400);
+  assert.equal((await reg('https://claude.com/api/mcp/auth_callback')).status, 201);
+  const q = '/oauth/authorize?' + new URLSearchParams({ client_id, redirect_uri: REDIRECT, response_type: 'code', code_challenge: 'abc', code_challenge_method: 'S256' }).toString();
+  assert.match((await pegar(q)).texto, /devolvido a: <strong>claude\.ai<\/strong>/);
+  const p = pkce();
+  const cabec = { headers: { 'content-type': 'application/x-www-form-urlencoded', 'x-forwarded-for': '203.0.113.50' } };
+  const campos = { client_id, redirect_uri: REDIRECT, response_type: 'code', code_challenge: p.c, code_challenge_method: 'S256', usuario: 'julien', senha: 'errada' };
+  const st = []; for (let i = 0; i < 10; i++) st.push((await form('/oauth/authorize', campos, cabec)).status);
+  assert.deepEqual(st.slice(0, 8), Array(8).fill(401)); assert.equal(st[9], 429);
 });

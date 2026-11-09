@@ -15,7 +15,7 @@ test('prazo: formas explícitas e relativas; sem pista = null', () => {
   assert.equal(p.extrairPrazo('na terça', HOJE), '2026-11-10', 'mesmo dia da semana = próxima');
   assert.equal(p.extrairPrazo('até o fim da semana', HOJE), '2026-11-06');
   assert.equal(p.extrairPrazo('semana que vem', HOJE), '2026-11-13');
-  assert.equal(p.extrairPrazo('é urgente', HOJE), '2026-11-04');
+  assert.equal(p.extrairPrazo('é urgente', HOJE), null, 'urgente é prioridade, não data inventada');
   assert.equal(p.extrairPrazo('ligar para a casa', HOJE), null);
 });
 
@@ -36,7 +36,8 @@ test('área por vocabulário', () => {
 
 test('heurística: proposta completa, dono padrão de quem escreve, nunca inventa data', () => {
   const h = p.heuristica('Precisamos responder os 4 hotéis de Paris que pediram chauffeur até sexta, Julien cuida', { hoje: '2026-11-03', donoPadrao: 'marlon' });
-  assert.equal(h.titulo, 'Responder os 4 hotéis de Paris que pediram chauffeur até sexta, Julien cuida');
+  assert.equal(h.titulo, 'Responder os 4 hotéis de Paris que pediram chauffeur', 'o que virou campo sai do título');
+  assert.equal(h.cidade, 'Paris');
   assert.equal(h.dono, 'julien'); assert.equal(h.pessoa_citada, true);
   assert.equal(h.vence_em, '2026-11-06'); assert.equal(h.prazo_citado, true);
   assert.equal(h.area, 'Chauffeur'); assert.ok(h.etapas.length >= 3);
