@@ -596,9 +596,47 @@
     const box = $('#eSteps', drawer); if (!box) return;
     const x = D.t; const lista = x.etapas || [];
     const focado = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.etapa : null;
-    box.innerHTML = lista.map((s) => `<div class="step ${s.feita ? 'done' : ''}" data-e="${esc(s.id)}"><input type="checkbox" ${s.feita ? 'checked' : ''} aria-label="${esc(s.texto)}"><input type="text" data-etapa="${esc(s.id)}" value="${esc(s.texto)}" maxlength="200" aria-label="${esc(t('f_steps'))}"><button type="button" class="x" aria-label="${esc(t('remove_step'))}" title="${esc(t('remove_step'))}">×</button></div>`).join('') || `<span class="hintline">${esc(t('no_steps'))}</span>`;
+    // O texto é um botão que abre o modal (etapa inteira + ações); o checkbox continua na linha para marcar rápido.
+    box.innerHTML = lista.map((s) => `<div class="step ${s.feita ? 'done' : ''}" data-e="${esc(s.id)}"><input type="checkbox" ${s.feita ? 'checked' : ''} aria-label="${esc(s.texto)}"><button type="button" class="txt" data-etapa="${esc(s.id)}" title="${esc(t('open_step'))}">${esc(s.texto)}</button><button type="button" class="x" aria-label="${esc(t('remove_step'))}" title="${esc(t('remove_step'))}">×</button></div>`).join('') || `<span class="hintline">${esc(t('no_steps'))}</span>`;
     $('#eStepCount', drawer).textContent = lista.length ? `· ${feitas(x)}/${lista.length}` : '';
     if (focado) { const el = $(`[data-etapa="${CSS.escape(focado)}"]`, box); if (el) el.focus(); }
+    if (E.id) pintarModalEtapa();
+  }
+  // ---- modal da etapa: texto completo, posição e as ações (feita, subir, descer, excluir)
+  const E = { id: null };
+  const dlg = () => $('#etapaDlg');
+  const etapaAtual = () => (D.t && (D.t.etapas || []).find((s) => s.id === E.id)) || null;
+  function abrirEtapa(id) {
+    E.id = id; const s = etapaAtual(); if (!s) return;
+    $('#etapaTxt').value = s.texto; pintarModalEtapa();
+    const d = dlg(); if (!d.open) d.showModal();
+    const ta = $('#etapaTxt'); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  }
+  function pintarModalEtapa() {
+    const s = etapaAtual(); const lista = (D.t && D.t.etapas) || [];
+    if (!s) { fecharEtapa(); return; }
+    const i = lista.findIndex((e) => e.id === E.id);
+    $('#etapaPos').textContent = t('step_pos', { a: i + 1, b: lista.length });
+    $('#etapaFeita').textContent = s.feita ? t('step_unmark') : t('step_mark');
+    $('#etapaSobe').disabled = i <= 0; $('#etapaDesce').disabled = i >= lista.length - 1;
+    contarEtapa();
+  }
+  function contarEtapa() { const ta = $('#etapaTxt'); const c = $('#etapaCont'); c.textContent = `${ta.value.length}/200`; c.classList.toggle('cheio', ta.value.length >= 190); }
+  function salvarTextoEtapa() { const s = etapaAtual(); if (!s) return; const v = $('#etapaTxt').value.trim(); if (v && v !== s.texto) opEtapa({ op: 'texto', id: E.id, texto: v }); }
+  function fecharEtapa() { const d = dlg(); if (d && d.open) d.close(); const id = E.id; E.id = null; if (id && drawer) { const el = $(`[data-etapa="${CSS.escape(id)}"]`, drawer); if (el) el.focus(); } }
+  function ligarModalEtapa() {
+    const d = dlg(); if (!d || d.dataset.ligado) return; d.dataset.ligado = '1';
+    $('#etapaTxt').addEventListener('input', contarEtapa);
+    $('#etapaTxt').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); salvarTextoEtapa(); fecharEtapa(); } });
+    $('#etapaSalvar').addEventListener('click', () => { salvarTextoEtapa(); fecharEtapa(); });
+    $('#etapaFechar').addEventListener('click', () => { salvarTextoEtapa(); fecharEtapa(); });
+    $('#etapaFeita').addEventListener('click', () => { const s = etapaAtual(); if (!s) return; salvarTextoEtapa(); opEtapa({ op: 'marcar', id: E.id, feita: !s.feita }); });
+    $('#etapaSobe').addEventListener('click', () => { const i = (D.t.etapas || []).findIndex((e) => e.id === E.id); salvarTextoEtapa(); opEtapa({ op: 'mover', id: E.id, para: i - 1 }); });
+    $('#etapaDesce').addEventListener('click', () => { const i = (D.t.etapas || []).findIndex((e) => e.id === E.id); salvarTextoEtapa(); opEtapa({ op: 'mover', id: E.id, para: i + 1 }); });
+    $('#etapaDel').addEventListener('click', () => { const id = E.id; fecharEtapa(); opEtapa({ op: 'del', id }); });
+    // Esc e clique fora: fecham salvando o texto, como o botão. 'cancel' cobre o Esc; 'click' no próprio <dialog> é o fundo.
+    d.addEventListener('cancel', (e) => { e.preventDefault(); salvarTextoEtapa(); fecharEtapa(); });
+    d.addEventListener('click', (e) => { if (e.target === d) { salvarTextoEtapa(); fecharEtapa(); } });
   }
   function opEtapa(op) {
     if (D.novo) { D.t.etapas = aplicarOpsLocal(D.t.etapas, [op]); pintarEtapas(); return; }
@@ -632,16 +670,18 @@
     g('#eSteps').addEventListener('change', (e) => {
       const linha = e.target.closest('[data-e]'); if (!linha) return;
       if (e.target.type === 'checkbox') opEtapa({ op: 'marcar', id: linha.dataset.e, feita: e.target.checked });
-      else if (e.target.dataset.etapa && e.target.value.trim()) opEtapa({ op: 'texto', id: linha.dataset.e, texto: e.target.value.trim() });
     });
-    g('#eSteps').addEventListener('click', (e) => { const x = e.target.closest('.x'); if (x) opEtapa({ op: 'del', id: x.closest('[data-e]').dataset.e }); });
+    g('#eSteps').addEventListener('click', (e) => {
+      const x = e.target.closest('.x'); if (x) { opEtapa({ op: 'del', id: x.closest('[data-e]').dataset.e }); return; }
+      const txt = e.target.closest('.txt'); if (txt) abrirEtapa(txt.dataset.etapa);
+    });
     g('#eSteps').addEventListener('keydown', (e) => {
+      // Alt+↑/↓ reordena direto da lista, para quem já tinha o hábito; o resto fica no modal.
       const linha = e.target.closest('[data-e]'); if (!linha || !e.target.dataset.etapa) return;
       const id = linha.dataset.e;
-      if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); g('#eAdd').focus(); }
       if (e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) { e.preventDefault(); const lista = D.t.etapas; const i = lista.findIndex((s) => s.id === id); opEtapa({ op: 'mover', id, para: i + (e.key === 'ArrowUp' ? -1 : 1) }); }
-      if (e.key === 'Backspace' && !e.target.value) { e.preventDefault(); opEtapa({ op: 'del', id }); g('#eAdd').focus(); }
     });
+    ligarModalEtapa();
     g('#eAdd').addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
       e.preventDefault(); const v = e.target.value.trim(); if (!v) return;

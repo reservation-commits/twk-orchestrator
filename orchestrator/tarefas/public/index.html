@@ -127,6 +127,18 @@
 <div class="popover" id="novi" hidden></div>
 <div class="folha" id="folha" role="dialog" aria-live="polite" hidden></div>
 <div class="ajuda" id="ajuda" role="dialog" aria-modal="true" hidden></div>
+<dialog class="etapa-dlg" id="etapaDlg" aria-labelledby="etapaRotulo">
+  <header><span class="rotulo"><span id="etapaRotulo" data-i="step_one">Etapa</span> <span id="etapaPos"></span></span><button class="icon" id="etapaFechar" type="button" data-i-title="step_close" title="Fechar">×</button></header>
+  <textarea id="etapaTxt" maxlength="200" rows="4" aria-label="Texto da etapa"></textarea>
+  <div class="etapa-pe"><span class="hintline" data-i="step_hint">Diga o que fazer, onde e como saber que ficou pronto.</span><span class="etapa-cont" id="etapaCont">0/200</span></div>
+  <div class="etapa-acoes">
+    <button class="btn" id="etapaFeita" type="button"></button>
+    <button class="btn ghost" id="etapaSobe" type="button">↑ <span data-i="step_up">Subir</span></button>
+    <button class="btn ghost" id="etapaDesce" type="button">↓ <span data-i="step_down">Descer</span></button>
+    <button class="btn ghost perigo" id="etapaDel" type="button" data-i="step_del">Excluir etapa</button>
+  </div>
+  <footer><button class="btn gold" id="etapaSalvar" type="button" data-i="step_save">Salvar e fechar</button></footer>
+</dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="/nucleo.js?v=__V__"></script>
 <script src="/i18n.js?v=__V__"></script>

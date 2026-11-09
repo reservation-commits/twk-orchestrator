@@ -26,7 +26,7 @@ const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 const nucleo = store.nucleo;
 
-const BUILD = '1.2.0-fable-cards-claros-20261109';
+const BUILD = '1.2.1-etapa-modal-20261109';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
