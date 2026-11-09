@@ -26,7 +26,7 @@ const oauthMod = require('./oauth.js');
 const mcpMod = require('./mcp.js');
 const nucleo = store.nucleo;
 
-const BUILD = '1.1.0-compasso-logins-20261109';
+const BUILD = '1.1.1-compasso-logins-20261109';
 const PORT = Number(process.env.PORT || 8790);
 const IS_PROD = process.env.NODE_ENV === 'production';
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -437,10 +437,12 @@ async function atender(req, res) {
   cabecalhosDeSeguranca(req, res, url);
   if (url.pathname === '/health') {
     // Sem login: só se está de pé. O detalhe (caminhos, contagens, aviso) é para quem tem sessão ou a chave da Central.
-    const aviso = livroFatal || db.saude().recuperado ? true : false;
-    const publico = { ok: !livroFatal, build: BUILD, operacional: auth.operacional, alerta: aviso, mcp: { rota: '/mcp', ferramentas: mcp.FERRAMENTAS.length } };
+    const ignorados = auth.ignorados || [];
+    const aviso = livroFatal || db.saude().recuperado || ignorados.length ? true : false;
+    // Quantos logins existem já é público (a tela de entrada os lista); o número de ignorados deixa o defeito à vista sem login.
+    const publico = { ok: !livroFatal, build: BUILD, operacional: auth.operacional, alerta: aviso, logins: auth.usuarios.length, ...(ignorados.length ? { logins_ignorados: ignorados.length } : {}), mcp: { rota: '/mcp', ferramentas: mcp.FERRAMENTAS.length } };
     if (!chaveCentralOk(req) && !auth.sessaoDe(req)) return json(res, livroFatal ? 503 : 200, publico);
-    return json(res, livroFatal ? 503 : 200, { ...publico, motor: db.motor, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', fuso: store.FUSO, conexoes_ao_vivo: conexoes.size, leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO, marco_zero: MARCO_ZERO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length }, durabilidade: durabilidade() });
+    return json(res, livroFatal ? 503 : 200, { ...publico, usuarios_ignorados: ignorados, motor: db.motor, modelo: planejador.modeloLigado() ? 'ligado' : 'heurística', fuso: store.FUSO, conexoes_ao_vivo: conexoes.size, leitura: { central: CENTER_URL ? 'api' : 'arquivo', banco: !!process.env.DATABASE_URL_RO, marco_zero: MARCO_ZERO }, mcp: { rota: '/mcp', issuer: TAREFAS_URL || 'derivado do host', ferramentas: mcp.FERRAMENTAS.length }, durabilidade: durabilidade() });
   }
   // ---- conector MCP: OAuth (metadados, registro, login, token) e o próprio /mcp ----
   if (url.pathname.startsWith('/.well-known/oauth-') || url.pathname.startsWith('/oauth/')) {

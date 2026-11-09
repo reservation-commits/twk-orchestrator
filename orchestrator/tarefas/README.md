@@ -67,10 +67,11 @@ A DDL e o papel `twk_plan` exigem a frase do fundador (tabela de escalonamento).
 
 **Um login para cada pessoa (09/11).** Com login próprio, cada um abre no próprio dia, as Novidades funcionam e o histórico diz quem fez o quê.
 
-1. Nesta máquina, na raiz do repositório: `node orchestrator/tarefas/logins.cjs`. Ele pede o valor atual de `TAREFAS_USUARIOS` (para manter o admin como está), gera uma senha provisória forte para cada pessoa escolhida e imprime o valor novo e as senhas. Nada sai da máquina; a senha só aparece no terminal de quem roda.
-2. No EasyPanel, em `TAREFAS_USUARIOS`, substitua o valor inteiro pela linha impressa. Não mexa em `TAREFAS_SECRET`. Implantar.
-3. Entregue a cada pessoa a senha dela, em particular. No primeiro acesso o app só deixa escolher uma senha nova (10+ caracteres, sem o nome de usuário); a provisória deixa de valer na hora. O conector do Claude também só aceita a pessoa depois disso.
-4. **Esqueci a senha:** rode o comando de novo só para aquela pessoa e implante. A provisória nova derruba a senha escolhida e as sessões abertas dela.
+1. No EasyPanel (serviço compasso → Ambiente), clique na caixa de texto: Ctrl+A, Ctrl+C.
+2. Nesta máquina, na raiz do repositório: `node orchestrator/tarefas/logins.cjs`. Ele lê o Ambiente da área de transferência, troca só a linha `TAREFAS_USUARIOS` (o admin e as outras linhas ficam idênticos), devolve o Ambiente pronto para a área de transferência e mostra as senhas provisórias. Nada sai da máquina; a senha só aparece no terminal de quem roda. Sem área de transferência: `--colar`.
+3. De volta à caixa do Ambiente: Ctrl+A, Ctrl+V, Salvar, Implantar. Se algum login vier estragado, o `/health` mostra `logins_ignorados` e o log diz qual e por quê.
+4. Entregue a cada pessoa a senha dela, em particular. No primeiro acesso o app só deixa escolher uma senha nova (10+ caracteres, sem o nome de usuário); a provisória deixa de valer na hora. O conector do Claude também só aceita a pessoa depois disso.
+5. **Esqueci a senha:** repita com `--de-novo lucas` (só para aquela pessoa) e implante. A provisória nova derruba a senha escolhida e as sessões abertas dela.
 
 A senha escolhida fica no volume (`state/senhas.json`, só o hash), presa à provisória que substituiu. Qualquer pessoa troca a própria senha pelo `Ctrl K` → "Trocar minha senha"; trocar encerra as sessões dos outros aparelhos e desconecta o Claude dela. Sessões e conectores anteriores a 09/11 seguem válidos até vencer.
 

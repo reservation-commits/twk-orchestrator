@@ -87,24 +87,39 @@ function criarFreio({ max = 8, janelaMs = 15 * 60 * 1000 } = {}) {
   };
 }
 
+/** O que uma cópia costuma estragar num valor de ambiente: quebra de linha e espaço no meio, aspas em volta. */
+function limparValor(v) {
+  let s = String(v || '').replace(/[\r\n\t]+/g, '').trim();
+  if (s.length > 1 && (s[0] === "'" || s[0] === '"') && s[s.length - 1] === s[0] && s[1] === '[') s = s.slice(1, -1);
+  return s;
+}
+
+/** Devolve { usuarios, ignorados }. Login com defeito não derruba os outros, mas nunca some em silêncio: vai para `ignorados`. */
 function carregarUsuarios({ stateDir, isProd }) {
   let lista = null;
-  if (process.env.TAREFAS_USUARIOS) { try { lista = JSON.parse(process.env.TAREFAS_USUARIOS); } catch { throw new Error('TAREFAS_USUARIOS não é JSON válido.'); } }
+  if (process.env.TAREFAS_USUARIOS) { try { lista = JSON.parse(limparValor(process.env.TAREFAS_USUARIOS)); } catch { throw new Error('TAREFAS_USUARIOS não é JSON válido.'); } }
   else { const f = path.join(stateDir, 'usuarios.json'); if (fs.existsSync(f)) lista = JSON.parse(fs.readFileSync(f, 'utf8')); }
   if (Array.isArray(lista) && lista.length) {
-    const ok = lista.filter((u) => u && LOGINS[u.id] && FORMATO_HASH.test(u.senha));
+    const ok = []; const ignorados = [];
+    for (const u of lista) {
+      if (!u || !LOGINS[u.id]) { ignorados.push({ id: String((u && u.id) || '?').slice(0, 20), motivo: 'login desconhecido (aceitos: admin, marlon, lucas, julien)' }); continue; }
+      const senha = String(u.senha || '').replace(/\s+/g, '');
+      if (!FORMATO_HASH.test(senha)) { ignorados.push({ id: u.id, motivo: 'senha fora do formato scrypt:salt:hash (cópia cortada?)' }); continue; }
+      ok.push({ ...u, senha });
+    }
     if (!ok.length) throw new Error(`Nenhum usuário válido (id em admin|marlon|lucas|julien e senha em hash "scrypt:salt:hash"). Recebido: ${lista.map((u) => `${u && u.id}=${String((u && u.senha) || '').slice(0, 12)}…`).join(', ')}`);
     const repetidos = ok.map((u) => u.id).filter((id, i, a) => a.indexOf(id) !== i);
     if (repetidos.length) throw new Error(`TAREFAS_USUARIOS tem o mesmo login mais de uma vez: ${[...new Set(repetidos)].join(', ')}.`);
-    return ok.map((u) => ({ id: u.id, nome: u.nome || LOGINS[u.id], senha: u.senha, trocar: u.trocar === true }));
+    if (ignorados.length) console.error(`[auth] AVISO: ${ignorados.length} login(s) de TAREFAS_USUARIOS ignorado(s): ${ignorados.map((x) => `${x.id} (${x.motivo})`).join('; ')}. Gere de novo com node orchestrator/tarefas/logins.cjs.`);
+    return { usuarios: ok.map((u) => ({ id: u.id, nome: u.nome || LOGINS[u.id], senha: u.senha, trocar: u.trocar === true })), ignorados };
   }
-  if (isProd) return [];
+  if (isProd) return { usuarios: [], ignorados: [] };
   console.warn('[auth] DESENVOLVIMENTO: sem usuarios.json — Márlon, Lucas e Julien entram com a senha "twk".');
-  return Object.entries(PESSOAS).map(([id, nome]) => ({ id, nome, senha: hashSenha('twk', 'dev'), trocar: false }));
+  return { usuarios: Object.entries(PESSOAS).map(([id, nome]) => ({ id, nome, senha: hashSenha('twk', 'dev'), trocar: false })), ignorados: [] };
 }
 
 function criar({ stateDir, isProd, segredo }) {
-  const usuarios = carregarUsuarios({ stateDir, isProd });
+  const { usuarios, ignorados } = carregarUsuarios({ stateDir, isProd });
   const chave = segredo || (isProd ? '' : crypto.randomBytes(24).toString('hex'));
   const operacional = usuarios.length > 0 && !!chave;
 
@@ -149,6 +164,7 @@ function criar({ stateDir, isProd, segredo }) {
   return {
     operacional,
     usuarios: usuarios.map((u) => ({ id: u.id, nome: u.nome })),
+    ignorados,
     entrar(id, senha) {
       const u = usuario(id);
       if (!u || !conferirSenha(senha, hashEmVigor(u))) return null;
@@ -190,7 +206,7 @@ function criar({ stateDir, isProd, segredo }) {
   };
 }
 
-module.exports = { criar, criarFreio, hashSenha, conferirSenha, conferirSenhaAsync, problemaNaSenha, SENHA_MIN, FORMATO_HASH, PESSOAS, LOGINS };
+module.exports = { criar, criarFreio, hashSenha, conferirSenha, conferirSenhaAsync, problemaNaSenha, limparValor, SENHA_MIN, FORMATO_HASH, PESSOAS, LOGINS };
 
 if (require.main === module) {
   const i = process.argv.indexOf('--senha');
