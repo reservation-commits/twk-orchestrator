@@ -40,7 +40,7 @@ Serviço próprio. **Build Path `/orchestrator`, Dockerfile `tarefas/Dockerfile`
 | Variável | Obrigatória | Para quê |
 |---|---|---|
 | `TAREFAS_SECRET` | sim | assina a sessão (32+ caracteres aleatórios). Sem ela: 503 |
-| `TAREFAS_USUARIOS` | sim (ou `state/usuarios.json`) | quem pode **entrar**: `admin`, `marlon`, `lucas`, `julien`, em qualquer combinação. Hash: `node auth.js --senha "a senha"`. As tarefas são sempre de Márlon, Lucas ou Julien, independentemente de quem entra. **Com login próprio, cada um abre no próprio dia, as Novidades funcionam e o histórico diz quem fez** |
+| `TAREFAS_USUARIOS` | sim (ou `state/usuarios.json`) | quem pode **entrar**: `admin`, `marlon`, `lucas`, `julien`, em qualquer combinação. Monte com `node orchestrator/tarefas/logins.cjs` (ver "Um login para cada pessoa"). As tarefas são sempre de Márlon, Lucas ou Julien, independentemente de quem entra |
 | `ANTHROPIC_API_KEY` | não | chat com modelo (`TAREFAS_MODELO`, padrão `claude-opus-5-5`; `off` desliga; `TAREFAS_EFFORT`, padrão `low`). Teto `TAREFAS_MAX_LLM_POR_DIA`, padrão 60 |
 | `TAREFAS_DATABASE_URL` | não | livro no Postgres (`sql/001-plan.sql`, papel `twk_plan`). Sem ela, livro em arquivo no volume |
 | `TAREFAS_FUSO` | não | fuso da empresa, padrão `Europe/Paris`. "Hoje", ids e auditoria seguem esse dia, nunca o de UTC |
@@ -65,6 +65,15 @@ A DDL e o papel `twk_plan` exigem a frase do fundador (tabela de escalonamento).
 - Cópia diária em `/app/state/backups/AAAA-MM-DD/`, 14 dias, sempre tirada da memória íntegra. Protege de erro de operação, **não** de perder o volume: para isso, Postgres ou cópia fora do servidor.
 - O que protege de um deploy continua sendo o **volume montado em `/app/state`** (Storage/Mounts do serviço). O `GET /health` com sessão ou chave da Central mostra `durabilidade`.
 
+**Um login para cada pessoa (09/11).** Com login próprio, cada um abre no próprio dia, as Novidades funcionam e o histórico diz quem fez o quê.
+
+1. Nesta máquina, na raiz do repositório: `node orchestrator/tarefas/logins.cjs`. Ele pede o valor atual de `TAREFAS_USUARIOS` (para manter o admin como está), gera uma senha provisória forte para cada pessoa escolhida e imprime o valor novo e as senhas. Nada sai da máquina; a senha só aparece no terminal de quem roda.
+2. No EasyPanel, em `TAREFAS_USUARIOS`, substitua o valor inteiro pela linha impressa. Não mexa em `TAREFAS_SECRET`. Implantar.
+3. Entregue a cada pessoa a senha dela, em particular. No primeiro acesso o app só deixa escolher uma senha nova (10+ caracteres, sem o nome de usuário); a provisória deixa de valer na hora. O conector do Claude também só aceita a pessoa depois disso.
+4. **Esqueci a senha:** rode o comando de novo só para aquela pessoa e implante. A provisória nova derruba a senha escolhida e as sessões abertas dela.
+
+A senha escolhida fica no volume (`state/senhas.json`, só o hash), presa à provisória que substituiu. Qualquer pessoa troca a própria senha pelo `Ctrl K` → "Trocar minha senha"; trocar encerra as sessões dos outros aparelhos e desconecta o Claude dela. Sessões e conectores anteriores a 09/11 seguem válidos até vencer.
+
 **Lições do primeiro deploy (03/11):**
 - O hash é `scrypt:salt:hash`, com dois-pontos. O EasyPanel trata `$palavra` numa variável como referência a outra variável.
 - O EasyPanel injeta `PORT=80`; o servidor ouve nela e o health check acompanha.
@@ -76,7 +85,8 @@ Todas as rotas sob `/api/*` exigem sessão (cookie HttpOnly) e, para mutação, 
 
 | Rota | O que faz |
 |---|---|
-| `POST /api/login` · `POST /api/logout` · `GET /api/eu` | sessão. Login tem freio: 8 falhas por IP ou usuário em 15 min = 429. Sem sessão, `/api/eu` só traz o necessário para a tela de entrada |
+| `POST /api/login` · `POST /api/logout` · `GET /api/eu` | sessão. Login tem freio: 8 falhas por IP em 15 min = 429. Sem sessão, `/api/eu` só traz o necessário para a tela de entrada. `usuario.trocar: true` = senha provisória |
+| `POST /api/senha {atual, nova}` | troca a própria senha e devolve sessão nova; mesmo freio do login. Com senha provisória, todo o resto da API responde 403 `trocar_senha` |
 | `GET /api/tarefas[?desde=seq]` | quadro, resumo, `seq`. Com `desde` igual ao atual, responde `{inalterado:true}` em poucos bytes |
 | `POST /api/tarefas` · `GET/PATCH /api/tarefas/:id` · `DELETE /api/tarefas/:id {motivo}` | o livro. **`PATCH` aceita `base: {campo: valor que vi}`**: se outra pessoa mudou o mesmo campo, devolve **409** com `conflito` e o valor atual; campos diferentes se somam. **`etapas_ops: [{op: marcar\|texto\|add\|del\|mover, id, …}]`** muda etapas sem conflito |
 | `POST /api/tarefas/:id/comentarios {texto}` | comentário permanente; `@nome` entra em `mencoes` |

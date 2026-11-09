@@ -165,6 +165,8 @@ ${erro ? `<p class="err">${esc(erro)}</p>` : ''}${campos}
       auditar({ tipo: 'oauth_login', usuario: String(p.usuario || '').slice(0, 20), ok: !!r, client_id: p.client_id, ip });
       if (!r) { return html(res, 401, paginaLogin({ cliente, p, erro: 'Usuário ou senha não conferem.' })), true; }
       freio.acertou(chaves);
+      // Senha provisória: primeiro a pessoa escolhe a dela no app; só então o Claude pode agir em seu nome.
+      if (r.usuario.trocar) { auditar({ tipo: 'oauth_senha_provisoria', usuario: r.usuario.id, client_id: p.client_id }); return html(res, 403, paginaLogin({ cliente, p, erro: 'Esta é a sua senha provisória. Entre no COMPASSO, escolha a sua senha e volte aqui.' })), true; }
       if (!cliente.autorizado_em) { cliente.autorizado_em = new Date().toISOString(); gravarClientes(); }
       const code = crypto.randomBytes(32).toString('base64url');
       for (const [k, v] of codigos) if (v.exp < Date.now()) codigos.delete(k);
