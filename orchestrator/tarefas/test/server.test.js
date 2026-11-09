@@ -9,6 +9,7 @@ const path = require('node:path');
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-tarefas-srv-'));
 process.env.STATE_DIR = dir;
 process.env.NODE_ENV = 'development';
+process.env.TAREFAS_SEM_BANCO = '1'; // nenhum teste toca no banco real
 process.env.CENTER_TOKEN = 'chave-da-central-de-teste';
 process.env.COMPROMISSOS_PATH = path.join(dir, 'nao-existe.jsonl');
 process.env.CENTRAL_STATE_DIR = path.join(dir, 'central-vazia');
@@ -28,8 +29,10 @@ test.before(async () => { await new Promise((ok) => server.listen(0, '127.0.0.1'
 test.after(() => server.close());
 
 test('health aberto; API fechada sem sessão; relato com chave da Central', async () => {
-  const h = await call('GET', '/health'); assert.equal(h.status, 200); assert.equal(h.j.operacional, true);
-  // durabilidade: o /health diz onde o estado vive, se é volume e quanto há no livro; a cópia diária existe
+  const anon = await call('GET', '/health'); assert.equal(anon.status, 200); assert.equal(anon.j.operacional, true);
+  assert.equal(anon.j.durabilidade, undefined, 'sem login, /health não expõe caminhos nem contagens');
+  // durabilidade: com a chave (ou sessão) o /health diz onde o estado vive, se é volume e quanto há no livro; a cópia diária existe
+  const h = await call('GET', '/health', null, { 'x-center-key': 'chave-da-central-de-teste' });
   assert.equal(h.j.durabilidade.state_dir, dir); assert.equal(h.j.durabilidade.motor, 'arquivo'); assert.equal(typeof h.j.durabilidade.tarefas, 'number');
   assert.ok(fs.existsSync(path.join(dir, 'estado-desde.txt')), 'marca de primeira escrita gravada');
   const { copiaDeSeguranca } = require('../server.js');
@@ -75,7 +78,7 @@ test('login, criação, atualização, eventos, exclusão, auditoria', async () 
   const rel = await call('GET', '/api/relato', null, { 'x-center-key': 'chave-da-central-de-teste' }); assert.equal(typeof rel.j.kpis.tarefas_arquivadas, 'number');
   const euDepois = await call('GET', '/api/eu'); assert.deepEqual(euDepois.j.prioridades, ['alta', 'normal', 'baixa']); assert.ok(euDepois.j.canais.includes('WhatsApp'));
 
-  const audit = fs.readFileSync(path.join(dir, 'logs', `audit-${new Date().toISOString().slice(0, 10)}.jsonl`), 'utf8');
+  const audit = fs.readFileSync(path.join(dir, 'logs', `audit-${require('../store.js').hoje()}.jsonl`), 'utf8'); // o dia é o de Paris, não o de UTC
   assert.match(audit, /"tipo":"login"/); assert.match(audit, /"tipo":"tarefa_criada"/); assert.match(audit, /"tipo":"tarefa_excluida"/);
 });
 

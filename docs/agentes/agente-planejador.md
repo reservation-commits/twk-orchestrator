@@ -200,3 +200,13 @@ Três pedidos do fundador, atendidos na 0.4.0 do app:
 - **Idioma PT-BR / FR** no topo e na tela de login (`public/i18n.js`): troca interface, rótulos de área/canal/status, datas e o idioma em que o planejador escreve título e etapas (modelo e heurística; prazos em francês entendidos). Dados seguem em português no servidor.
 - **Card segundo o ecossistema:** além de título, dono, prazo, status e área, o card ganhou **prioridade** (alta sobe e marca), **cidade**, **canal** (WhatsApp, E-mail, Telefone, Presencial, Sistema), **referência** (código da reserva, restaurante, hotel, cliente) e **resultado** (pedido ao concluir). Tudo no editor, no quadro, no calendário e nas ferramentas MCP.
 - **Excluir × arquivar (§8):** não concluída pode ser excluída **com motivo** (≥ 5 caracteres; tarefa inteira e motivo no ledger e na auditoria). Concluída **não se exclui**: **arquiva-se** — sai do quadro, fica no Arquivo (busca; `GET /api/arquivo`; `listar_tarefas(arquivadas=true)` no MCP; `tarefas_arquivadas` no relato). O Claude pode arquivar, não excluir. Ids nunca são reaproveitados (defeito achado e corrigido: o gerador contava as vivas e reutilizava o número após uma exclusão).
+
+## 16. Adenda 2026-11-05 — COMPASSO 1.0: auditoria e reconstrução
+
+Auditoria completa, com números de antes e depois: `docs/auditoria/compasso-auditoria-2026-11-05.md`. O que muda para este dossiê:
+
+- **O ledger virou a fonte da verdade** do motor de arquivo (§8): `eventos.jsonl` guarda o card inteiro a cada mudança, gravado antes da resposta; `tarefas.json` é só instantâneo. Arquivo ilegível se reconstrói com aviso; sem nada de onde reconstruir, 503 com o motivo.
+- **Sugestões chegam antes:** compromisso aparece 48 h antes de vencer. Prazo e prioridade do card vêm do sinal, não de +4 dias fixos. Assumida fica fora só enquanto o card estiver aberto; card cujo sinal sumiu é marcado.
+- **O app abre em Hoje**, com a próxima etapa em cada linha; **Aguardando** tem de quem é a resposta e a data de cobrança.
+- **Fora de propósito, por decisão:** Gantt, sprints, horas, campos personalizados, papéis, automação visual. "Não pode ser cheio de coisas."
+- **Continua sem envio externo.** Avisar a equipe fora do app é a próxima decisão do fundador.

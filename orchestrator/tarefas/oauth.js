@@ -31,10 +31,14 @@ const ESCOPO = 'tarefas';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+// Para onde o acesso pode ser devolvido: Claude (web e Claude Code local). O registro é aberto por exigência do MCP;
+// sem esta lista, qualquer um registrava um "Claude" falso com o próprio site de destino e mandava o link de login.
+const HOSTS_PADRAO = ['claude.ai', 'claude.com', 'anthropic.com'];
+function hostsPermitidos() { return [...HOSTS_PADRAO, ...String(process.env.TAREFAS_OAUTH_HOSTS || '').split(',').map((h) => h.trim().toLowerCase()).filter(Boolean)]; }
 function redirectValido(u) {
   try {
     const x = new URL(u);
-    if (x.protocol === 'https:') return true;
+    if (x.protocol === 'https:') { const h = x.hostname.toLowerCase(); return hostsPermitidos().some((p) => h === p || h.endsWith('.' + p)); }
     if (x.protocol === 'http:' && (x.hostname === 'localhost' || x.hostname === '127.0.0.1' || x.hostname === '[::1]' || x.hostname === '::1')) return true;
     return false;
   } catch { return false; }
@@ -56,12 +60,12 @@ function lerForm(req) {
   });
 }
 
-function criar({ auth, stateDir, urlPublica, auditar, nomeApp = 'COMPASSO Tarefas' }) {
+function criar({ auth, stateDir, urlPublica, auditar, freio, ipDe, nomeApp = 'COMPASSO Tarefas' }) {
   const F = path.join(stateDir, 'oauth-clients.json');
   let clientes = (() => { try { return JSON.parse(fs.readFileSync(F, 'utf8')); } catch { return {}; } })();
   const gravarClientes = () => { try { fs.writeFileSync(F, JSON.stringify(clientes, null, 1), 'utf8'); } catch (e) { console.error('[oauth] não gravei clientes:', e.message); } };
   const codigos = new Map();
-  const tentativas = new Map(); // ip -> { n, desde } — freio simples contra força bruta na tela de login
+  const registros = new Map(); // ip -> { n, desde }: registro dinâmico é aberto, mas não infinito
 
   function issuer(req) {
     if (urlPublica) return urlPublica.replace(/\/+$/, '');
@@ -81,15 +85,16 @@ function criar({ auth, stateDir, urlPublica, auditar, nomeApp = 'COMPASSO Tarefa
     return { resource: `${iss}/mcp`, authorization_servers: [iss], scopes_supported: [ESCOPO], bearer_methods_supported: ['header'], resource_name: nomeApp };
   }
 
-  function freio(ip) {
+  function registroLiberado(ip) {
     const agora = Date.now();
-    const t = tentativas.get(ip) || { n: 0, desde: agora };
-    if (agora - t.desde > 10 * 60 * 1000) { t.n = 0; t.desde = agora; }
-    t.n += 1; tentativas.set(ip, t);
-    if (tentativas.size > 5000) tentativas.clear();
-    return t.n <= 20;
+    const t = registros.get(ip) || { n: 0, desde: agora };
+    if (agora - t.desde > 3600 * 1000) { t.n = 0; t.desde = agora; }
+    t.n += 1; registros.set(ip, t);
+    if (registros.size > 5000) registros.clear();
+    return t.n <= 30;
   }
 
+  const hostDe = (u) => { try { return new URL(u).host; } catch { return '?'; } };
   function paginaLogin({ cliente, p, erro }) {
     const campos = ['client_id', 'redirect_uri', 'state', 'code_challenge', 'code_challenge_method', 'scope', 'resource'].map((k) => `<input type="hidden" name="${k}" value="${esc(p[k] || '')}">`).join('');
     const opcoes = auth.usuarios.map((u) => `<option value="${esc(u.id)}">${esc(u.nome)}</option>`).join('');
@@ -99,7 +104,7 @@ function criar({ auth, stateDir, urlPublica, auditar, nomeApp = 'COMPASSO Tarefa
 h1{margin:0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;opacity:.75}p{margin:0}label{display:grid;gap:6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
 select,input{font:inherit;padding:10px 12px;border-radius:9px;border:1px solid rgba(0,0,0,.18);background:transparent;color:inherit}button{font:inherit;padding:11px;border-radius:9px;border:0;background:#b8893a;color:#fff;font-weight:500;cursor:pointer}
 .err{color:#a3341f;font-size:14px}.hint{font-size:13px;opacity:.7}</style></head><body><form class="card" method="post" action="/oauth/authorize">
-<h1>${esc(nomeApp)}</h1><p><strong>${esc(cliente.client_name || 'Um aplicativo')}</strong> quer criar e acompanhar tarefas no COMPASSO em seu nome. Entre para autorizar.</p>
+<h1>${esc(nomeApp)}</h1><p><strong>${esc(cliente.client_name || 'Um aplicativo')}</strong> quer criar e acompanhar tarefas no COMPASSO em seu nome. Entre para autorizar.</p><p class="hint">O acesso será devolvido a: <strong>${esc(hostDe(p.redirect_uri))}</strong>. Se você não pediu isto, feche esta página.</p>
 ${erro ? `<p class="err">${esc(erro)}</p>` : ''}${campos}
 <label>Quem é você<select name="usuario" required>${opcoes}</select></label>
 <label>Senha<input type="password" name="senha" required autocomplete="current-password" autofocus></label>
@@ -126,12 +131,16 @@ ${erro ? `<p class="err">${esc(erro)}</p>` : ''}${campos}
     if (rota === '/oauth/register') {
       if (req.method !== 'POST') return json(res, 405, { error: 'invalid_request' }), true;
       let b; try { b = await lerForm(req); } catch (e) { return json(res, 400, { error: 'invalid_client_metadata', error_description: e.message }), true; }
+      const ipReg = ipDe(req);
+      if (!registroLiberado(ipReg)) { auditar({ tipo: 'oauth_registro_bloqueado', ip: ipReg }); return json(res, 429, { error: 'too_many_requests', error_description: 'muitos registros; espere uma hora' }), true; }
       const uris = Array.isArray(b.redirect_uris) ? b.redirect_uris.map(String) : [];
-      if (!uris.length || !uris.every(redirectValido)) return json(res, 400, { error: 'invalid_redirect_uri', error_description: 'redirect_uris: https, ou http://localhost para clientes locais' }), true;
+      if (!uris.length || !uris.every(redirectValido)) return json(res, 400, { error: 'invalid_redirect_uri', error_description: 'redirect_uris: endereço do Claude (claude.ai, claude.com) ou http://localhost para clientes locais' }), true;
       const client_id = 'c_' + crypto.randomBytes(16).toString('hex');
       const c = { client_id, client_name: String(b.client_name || 'cliente MCP').slice(0, 80), redirect_uris: uris.slice(0, 10), token_endpoint_auth_method: 'none', grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'], scope: ESCOPO, client_id_issued_at: Math.floor(Date.now() / 1000) };
       clientes[client_id] = c;
-      const ids = Object.keys(clientes); if (ids.length > 200) for (const id of ids.slice(0, ids.length - 200)) delete clientes[id];
+      // Teto de 200: sai primeiro quem nunca foi autorizado. Um cliente em uso nunca é despejado por registros em massa.
+      const ids = Object.keys(clientes);
+      if (ids.length > 200) for (const id of ids.filter((i) => !clientes[i].autorizado_em).slice(0, ids.length - 200)) delete clientes[id];
       gravarClientes();
       auditar({ tipo: 'oauth_cliente_registrado', client_id, nome: c.client_name, redirect: uris[0] });
       return json(res, 201, c), true;
@@ -148,11 +157,15 @@ ${erro ? `<p class="err">${esc(erro)}</p>` : ''}${campos}
       if (!p.code_challenge || (p.code_challenge_method || 'S256') !== 'S256') return volta({ error: 'invalid_request', error_description: 'PKCE S256 obrigatório', state: p.state });
       if (req.method === 'GET') return html(res, 200, paginaLogin({ cliente, p })), true;
       if (req.method !== 'POST') return json(res, 405, { error: 'invalid_request' }), true;
-      const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
-      if (!freio(ip)) { auditar({ tipo: 'oauth_login_bloqueado', ip }); return html(res, 429, paginaLogin({ cliente, p, erro: 'Muitas tentativas. Espere 10 minutos.' })), true; }
-      const r = auth.entrar(p.usuario, p.senha);
+      const ip = ipDe(req);
+      const chaves = [`ip:${ip}`, `u:${String(p.usuario || '').slice(0, 20).toLowerCase()}`];
+      if (freio.bloqueado(chaves)) { auditar({ tipo: 'oauth_login_bloqueado', ip }); return html(res, 429, paginaLogin({ cliente, p, erro: 'Muitas tentativas. Espere 15 minutos.' })), true; }
+      freio.falhou(chaves); // conta antes de conferir: tentativas em paralelo não passam juntas
+      const r = await auth.entrarAsync(p.usuario, p.senha);
       auditar({ tipo: 'oauth_login', usuario: String(p.usuario || '').slice(0, 20), ok: !!r, client_id: p.client_id, ip });
-      if (!r) return html(res, 401, paginaLogin({ cliente, p, erro: 'Usuário ou senha não conferem.' })), true;
+      if (!r) { return html(res, 401, paginaLogin({ cliente, p, erro: 'Usuário ou senha não conferem.' })), true; }
+      freio.acertou(chaves);
+      if (!cliente.autorizado_em) { cliente.autorizado_em = new Date().toISOString(); gravarClientes(); }
       const code = crypto.randomBytes(32).toString('base64url');
       for (const [k, v] of codigos) if (v.exp < Date.now()) codigos.delete(k);
       codigos.set(code, { cid: p.client_id, redirect: p.redirect_uri, challenge: p.code_challenge, sub: r.usuario.id, nome: r.usuario.nome, exp: Date.now() + MS_CODIGO });
@@ -171,7 +184,8 @@ ${erro ? `<p class="err">${esc(erro)}</p>` : ''}${campos}
         if (b.client_id && b.client_id !== c.cid) return json(res, 400, { error: 'invalid_grant', error_description: 'cliente não confere' }), true;
         if (b.redirect_uri && b.redirect_uri !== c.redirect) return json(res, 400, { error: 'invalid_grant', error_description: 'redirect_uri não confere' }), true;
         const esperado = crypto.createHash('sha256').update(String(b.code_verifier || '')).digest('base64url');
-        if (!b.code_verifier || esperado.length !== c.challenge.length || !crypto.timingSafeEqual(Buffer.from(esperado), Buffer.from(c.challenge))) return json(res, 400, { error: 'invalid_grant', error_description: 'PKCE não confere' }), true;
+        const ba = Buffer.from(esperado); const bb = Buffer.from(String(c.challenge));
+        if (!b.code_verifier || ba.length !== bb.length || !crypto.timingSafeEqual(ba, bb)) return json(res, 400, { error: 'invalid_grant', error_description: 'PKCE não confere' }), true;
         auditar({ tipo: 'oauth_token', usuario: c.sub, client_id: c.cid, grant: 'authorization_code' });
         return emitir(c.sub, c.nome, c.cid), true;
       }
@@ -179,6 +193,8 @@ ${erro ? `<p class="err">${esc(erro)}</p>` : ''}${campos}
         const p = auth.abrir(String(b.refresh_token || ''));
         if (!p || p.t !== 'refresh' || !p.sub || !auth.usuarios.some((u) => u.id === p.sub)) return json(res, 400, { error: 'invalid_grant', error_description: 'refresh_token inválido ou vencido' }), true;
         if (b.client_id && p.cid && b.client_id !== p.cid) return json(res, 400, { error: 'invalid_grant', error_description: 'cliente não confere' }), true;
+        // Cliente registrado antes da marca de uso: renovar prova que está em uso, e ele nunca é despejado.
+        if (p.cid && clientes[p.cid] && !clientes[p.cid].autorizado_em) { clientes[p.cid].autorizado_em = new Date().toISOString(); gravarClientes(); }
         auditar({ tipo: 'oauth_token', usuario: p.sub, client_id: p.cid, grant: 'refresh_token' });
         return emitir(p.sub, p.nome, p.cid), true;
       }
