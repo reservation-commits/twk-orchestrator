@@ -1,11 +1,11 @@
 {
   "v": 4,
-  "createdOnFiles": {"v": 1, "at": "2026-10-14T13:30:00Z"},
+  "createdOnFiles": {"v": 1, "at": "2026-11-11T17:00:00Z"},
   "lists": "css",
   "title": "Balcão Aria — a nova proposta de negócio",
-  "order": ["cover", "frase", "dia", "vendemos", "entra", "porque", "temos", "datas", "pedimos"],
+  "order": ["cover", "frase", "novo", "dia", "vendemos", "entra", "porque", "temos", "datas", "pedimos"],
   "sections": {
-    "s1": {"description": "A ideia em uma frase e a história de um dia.", "start": "cover"},
+    "s1": {"description": "A ideia em uma frase, o diferencial com a Maelle e a história de um dia.", "start": "cover"},
     "s2": {"description": "O que vendemos, quanto entra e por que agora.", "start": "vendemos"},
     "s3": {"description": "O que já temos, as datas e o que pedimos ao CEO.", "start": "temos"}
   },

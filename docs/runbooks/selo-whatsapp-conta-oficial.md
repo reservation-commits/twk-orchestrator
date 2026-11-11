@@ -32,7 +32,9 @@ Conferido no WhatsApp Manager pelo Chrome do fundador e pela API (log `orchestra
 - **A API tem `POST /{phone_number_id}/official_business_account`** (campos `business_website_url`, `primary_country_of_operation`, `primary_language`, `additional_supporting_information`, `supporting_links` 5–10). Script: `meta-selo-pedido.mjs` (simulação sem flag; `--apply` envia). Em 11/11, com a frase do fundador ("Enviar com França"), cinco variantes devolveram **HTTP 500, código 1, "An unknown error has occurred."** e `oba_status` seguiu `NOT_STARTED`. Nenhum pedido chegou a existir. A aresta GET do mesmo nome não existe para o nosso token; o estado se lê por `?fields=official_business_account`.
 - Conclusão (fato): o pedido de OBA está indisponível para o portfólio, no painel e na API. Caminho que a página da Meta indica: **Suporte da Meta** (Meta Business Suite → Ajuda → Suporte, ou business.facebook.com/business-support-home), pedindo a verificação de elegibilidade. Texto do chamado: ver "Chamado ao Suporte" abaixo.
 
-### Chamado ao Suporte (texto aprovado pelo fundador antes de enviar)
+**Chamado aberto em 2026-11-11 pelo fundador: caso Meta `4757335437829700`** (ativo informado: "The World Keys", ID 937481542790891; a Meta ofereceu "Iniciar conversa"). Acompanhar em business.facebook.com/business-support-home. Quando a Meta liberar: `meta-selo-pedido.mjs --apply` ou o botão *Enviar solicitação*; conferir com `meta-selo-status.mjs`. Nota: a página de contato do Suporte congela o Chrome neste notebook quando automatizada; abrir à mão.
+
+### Chamado ao Suporte (texto enviado no caso acima)
 
 > Assunto: Official Business Account request unavailable for a fully eligible number
 >

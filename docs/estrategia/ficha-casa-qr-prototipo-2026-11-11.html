@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Monak · Vos chiffres · The World Keys</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --tinta:#141821; --tinta2:#1c2130; --linha:#2a3040; --marfim:#f7f4ef; --areia:#efe9dd; --borda:#d9d2c3; --ouro:#c9a96e; --ouro-claro:#e4c990; --ouro-escuro:#7a5c2c; --texto:#1f232c; --texto2:#3a3f4b; --cinza:#6b6f7a; --cinza-claro:#b5b1a7; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-text-size-adjust:100%; }
+  body { background:var(--tinta); color:var(--texto); font-family:'Jost', Arial, sans-serif; font-size:17px; line-height:1.5; }
+  .pagina { max-width:480px; margin:0 auto; background:var(--marfim); min-height:100vh; }
+  .serif { font-family:'Cormorant Garamond', Georgia, serif; }
+  .rotulo { font-size:12px; letter-spacing:3px; text-transform:uppercase; font-weight:500; }
+
+  /* Faixa de protótipo: sai na versão final */
+  .proto { background:#2a3040; color:var(--cinza-claro); font-size:12px; padding:8px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .proto button { font:inherit; color:var(--ouro-claro); background:none; border:1px solid var(--ouro); padding:3px 10px; cursor:pointer; }
+
+  .topo { background:var(--tinta); color:var(--marfim); padding:28px 24px 34px; }
+  .topo .marca { color:var(--ouro); display:flex; justify-content:space-between; align-items:center; }
+  .topo h1 { font-size:58px; font-weight:500; line-height:1; margin:26px 0 8px; }
+  .topo .onde { color:var(--cinza-claro); font-size:15px; }
+  .topo hr { border:0; border-top:2px solid var(--ouro); width:56px; margin:22px 0 18px; }
+  .topo .frase { font-size:24px; font-style:italic; line-height:1.25; color:var(--marfim); }
+
+  .bloco { padding:28px 24px; }
+  .bloco + .bloco { border-top:1px solid var(--borda); }
+
+  .grande { display:flex; align-items:flex-end; gap:16px; margin:10px 0 22px; }
+  .grande .n { font-size:104px; font-weight:600; line-height:.82; color:var(--texto); font-variant-numeric:tabular-nums; }
+  .grande p { font-size:17px; color:var(--texto2); line-height:1.35; padding-bottom:4px; }
+
+  .barra { display:flex; height:16px; background:#e6e0d3; overflow:hidden; }
+  .barra i { display:block; height:100%; width:0; transition:width 1.1s cubic-bezier(.2,.7,.2,1); }
+  .barra .a { background:var(--ouro); }
+  .barra .b { background:var(--tinta); }
+  .pronta .barra .a { width:70%; }
+  .pronta .barra .b { width:30%; }
+  .legenda { margin-top:16px; display:flex; flex-direction:column; gap:10px; }
+  .legenda div { display:flex; align-items:baseline; gap:12px; }
+  .legenda .q { width:14px; height:14px; flex:none; align-self:center; }
+  .legenda .v { font-family:'Cormorant Garamond', Georgia, serif; font-size:30px; font-weight:600; line-height:1; width:44px; font-variant-numeric:tabular-nums; }
+  .legenda .t { font-size:16px; color:var(--texto2); }
+
+  .duas { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .cartao { background:var(--areia); border:1px solid var(--borda); padding:18px 16px; }
+  .cartao .v { font-family:'Cormorant Garamond', Georgia, serif; font-size:46px; font-weight:600; line-height:1; color:var(--ouro-escuro); }
+  .cartao p { font-size:15px; color:var(--texto2); line-height:1.35; margin-top:8px; }
+
+  .escuro { background:var(--tinta); color:var(--marfim); }
+  .escuro .rotulo { color:var(--ouro-claro); }
+  .escuro h2 { font-size:34px; font-weight:500; line-height:1.12; margin:10px 0 14px; }
+  .escuro p { color:#d8d4ca; font-size:16px; }
+
+  .oferta { display:flex; flex-direction:column; gap:18px; margin-top:16px; }
+  .oferta div { display:grid; grid-template-columns:104px 1fr; gap:14px; align-items:baseline; }
+  .oferta .k { font-family:'Cormorant Garamond', Georgia, serif; font-size:24px; font-weight:600; color:var(--ouro-escuro); line-height:1.1; }
+  .oferta .d { font-size:16px; color:var(--texto2); line-height:1.4; }
+
+  .fundadoras { margin-top:22px; border:1px solid var(--ouro); padding:14px 16px; font-size:15px; color:var(--texto2); }
+  .fundadoras b { color:var(--texto); font-weight:600; }
+
+  .acao { padding:26px 24px 30px; background:var(--areia); border-top:1px solid var(--borda); }
+  .botao { display:block; text-align:center; text-decoration:none; font-size:17px; font-weight:600; letter-spacing:.5px; padding:17px 16px; }
+  .botao.um { background:var(--tinta); color:var(--ouro-claro); }
+  .botao.dois { margin-top:10px; border:1px solid var(--tinta); color:var(--tinta); font-weight:500; }
+  .acao small { display:block; text-align:center; margin-top:12px; font-size:13px; color:var(--cinza); }
+
+  .rodape { padding:20px 24px 34px; font-size:12.5px; line-height:1.5; color:var(--cinza); }
+
+  @media (prefers-reduced-motion: reduce) { .barra i { transition:none; } }
+</style>
+</head>
+<body>
+<div class="pagina" id="pagina">
+
+  <div class="proto">
+    <span data-fr="Prototype · chiffres du Monak mesurés le 10/10/2026" data-pt="Protótipo · números do Monak medidos em 10/10/2026"></span>
+    <button type="button" id="idioma">PT</button>
+  </div>
+
+  <header class="topo">
+    <div class="marca rotulo"><span>The World Keys</span><span data-fr="Paris" data-pt="Paris"></span></div>
+    <h1 class="serif">Monak</h1>
+    <p class="onde" data-fr="Paris 16e · vos chiffres chez nous, 12 derniers mois" data-pt="Paris 16e · os seus números conosco, últimos 12 meses"></p>
+    <hr>
+    <p class="serif frase" data-fr="Des voyageurs demandent votre table par nous. Voici combien, et ce qu’ils sont devenus." data-pt="Viajantes pedem a sua mesa por nós. Aqui está quantos, e o que aconteceu com eles."></p>
+  </header>
+
+  <section class="bloco">
+    <p class="rotulo" style="color:var(--ouro-escuro)" data-fr="Demandes de table" data-pt="Pedidos de mesa"></p>
+    <div class="grande">
+      <span class="serif n" id="total" data-alvo="80">80</span>
+      <p data-fr="demandes reçues pour votre maison en 12 mois" data-pt="pedidos recebidos para a sua casa em 12 meses"></p>
+    </div>
+    <div class="barra" role="img" aria-label="56 / 24"><i class="a"></i><i class="b"></i></div>
+    <div class="legenda">
+      <div><span class="q" style="background:var(--ouro)"></span><span class="v">56</span><span class="t" data-fr="acceptées par vous" data-pt="aceitos por vocês"></span></div>
+      <div><span class="q" style="background:var(--tinta)"></span><span class="v">24</span><span class="t" data-fr="restées sans suite" data-pt="ficaram sem desfecho"></span></div>
+      <div><span class="q" style="border:1px solid var(--borda)"></span><span class="v">0</span><span class="t" data-fr="refusée" data-pt="recusado"></span></div>
+    </div>
+  </section>
+
+  <section class="bloco">
+    <p class="rotulo" style="color:var(--ouro-escuro);margin-bottom:14px" data-fr="Qui vous demande, et quand" data-pt="Quem pede, e quando"></p>
+    <div class="duas">
+      <div class="cartao"><p class="v">70&nbsp;%</p><p data-fr="des demandes ont eu votre oui" data-pt="dos pedidos tiveram o seu sim"></p></div>
+      <div class="cartao"><p class="v">71&nbsp;%</p><p data-fr="du vendredi au dimanche, entre 8:00 PM et 11:30 PM" data-pt="de sexta a domingo, entre 8:00 PM e 11:30 PM"></p></div>
+    </div>
+  </section>
+
+  <section class="bloco escuro">
+    <p class="rotulo" data-fr="Ce que cela veut dire" data-pt="O que isso quer dizer"></p>
+    <h2 class="serif" data-fr="24 tables attendaient une réponse." data-pt="24 mesas esperavam uma resposta."></h2>
+    <p data-fr="Ce sont des clients qui avaient choisi votre maison. Nous voulons qu’aucun ne reste sans suite : c’est pour cela que Maelle est venue vous voir." data-pt="São clientes que tinham escolhido a sua casa. Queremos que nenhum fique sem desfecho: é por isso que a Maelle veio falar com vocês."></p>
+  </section>
+
+  <section class="bloco">
+    <p class="rotulo" style="color:var(--ouro-escuro)" data-fr="Ce que nous proposons" data-pt="O que propomos"></p>
+    <div class="oferta">
+      <div><span class="k" data-fr="Vous recevez" data-pt="Vocês recebem"></span><span class="d" data-fr="des voyageurs qui réservent par nous, annoncés par leur nom, et pour certains amenés à votre porte par notre chauffeur." data-pt="viajantes que reservam por nós, anunciados pelo nome, e alguns trazidos à sua porta pelo nosso chauffeur."></span></div>
+      <div><span class="k" data-fr="Vous gardez" data-pt="Vocês guardam"></span><span class="d" data-fr="une table pour nous jusqu’à 5:00 PM, les soirs que vous choisissez. Sans demande, elle vous revient." data-pt="uma mesa para nós até as 5:00 PM, nas noites que escolherem. Sem pedido, ela volta para vocês."></span></div>
+      <div><span class="k" data-fr="Cela coûte" data-pt="Isso custa"></span><span class="d" data-fr="rien. Pas d’abonnement, pas de commission, pas d’exclusivité." data-pt="nada. Sem assinatura, sem comissão, sem exclusividade."></span></div>
+    </div>
+    <p class="fundadoras" data-fr-html="<b>Dix maisons fondatrices à Paris.</b> Elles sont proposées en premier à nos clients. Inscriptions jusqu’au 15 décembre." data-pt-html="<b>Dez casas fundadoras em Paris.</b> São as primeiras oferecidas aos nossos clientes. Inscrições até 15 de dezembro."></p>
+  </section>
+
+  <section class="acao">
+    <a class="botao um" href="#" data-fr="Répondre OUI sur WhatsApp" data-pt="Responder OUI no WhatsApp"></a>
+    <a class="botao dois" href="#" data-fr="Parler à Maelle" data-pt="Falar com a Maelle"></a>
+    <small data-fr="Un message suffit. Aucun compte à créer." data-pt="Uma mensagem basta. Nenhuma conta para criar."></small>
+  </section>
+
+  <footer class="rodape">
+    <p data-fr="Chiffres issus des demandes de réservation reçues par The World Keys pour cette maison. Aucune donnée personnelle de client n’est affichée. Page réservée à la direction du Monak." data-pt="Números tirados dos pedidos de reserva recebidos pela The World Keys para esta casa. Nenhum dado pessoal de cliente é exibido. Página reservada à direção do Monak."></p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var pagina = document.getElementById('pagina');
+  var botao = document.getElementById('idioma');
+  var idioma = /[?&]lang=pt/.test(location.search) ? 'pt' : 'fr';
+
+  function aplicar() {
+    document.documentElement.lang = idioma === 'pt' ? 'pt-BR' : 'fr';
+    var nos = document.querySelectorAll('[data-fr]');
+    for (var i = 0; i < nos.length; i++) nos[i].textContent = nos[i].getAttribute('data-' + idioma);
+    var ricos = document.querySelectorAll('[data-fr-html]');
+    for (var j = 0; j < ricos.length; j++) ricos[j].innerHTML = ricos[j].getAttribute('data-' + idioma + '-html');
+    botao.textContent = idioma === 'pt' ? 'FR' : 'PT';
+  }
+  botao.addEventListener('click', function () { idioma = idioma === 'pt' ? 'fr' : 'pt'; aplicar(); });
+  aplicar();
+
+  // Entrada: a barra cresce e o número conta até o total. Sem movimento para quem pediu menos animação.
+  var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var total = document.getElementById('total');
+  var alvo = Number(total.getAttribute('data-alvo'));
+  if (calmo) { pagina.classList.add('pronta'); return; }
+  total.textContent = '0';
+  var inicio = null;
+  function passo(t) {
+    if (inicio === null) inicio = t;
+    var p = Math.min(1, (t - inicio) / 900);
+    total.textContent = String(Math.round(alvo * (1 - Math.pow(1 - p, 3))));
+    if (p < 1) requestAnimationFrame(passo);
+  }
+  requestAnimationFrame(function (t) { pagina.classList.add('pronta'); passo(t); });
+  // Garantia: aba em segundo plano pausa a animação; depois de 1,5 s o total aparece de qualquer jeito.
+  setTimeout(function () { pagina.classList.add('pronta'); total.textContent = String(alvo); }, 1500);
+})();
+</script>
+</body>
+</html>

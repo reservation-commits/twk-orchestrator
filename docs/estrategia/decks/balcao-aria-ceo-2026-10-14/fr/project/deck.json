@@ -1,11 +1,11 @@
 {
   "v": 4,
-  "createdOnFiles": {"v": 1, "at": "2026-10-14T13:30:00Z"},
+  "createdOnFiles": {"v": 1, "at": "2026-11-11T17:00:00Z"},
   "lists": "css",
   "title": "Comptoir Aria — la nouvelle proposition d’affaires",
-  "order": ["cover", "frase", "dia", "vendemos", "entra", "porque", "temos", "datas", "pedimos"],
+  "order": ["cover", "frase", "novo", "dia", "vendemos", "entra", "porque", "temos", "datas", "pedimos"],
   "sections": {
-    "s1": {"description": "L’idée en une phrase et l’histoire d’une journée.", "start": "cover"},
+    "s1": {"description": "L’idée en une phrase, ce qui nous distingue avec Maelle et l’histoire d’une journée.", "start": "cover"},
     "s2": {"description": "Ce que nous vendons, ce qui rentre et pourquoi maintenant.", "start": "vendemos"},
     "s3": {"description": "Ce que nous avons déjà, les dates et ce que nous demandons au CEO.", "start": "temos"}
   },
