@@ -23,6 +23,25 @@ Para reconferir a qualquer momento (só leitura, sem segredo no chat):
 node orchestrator/agents/notificacao-reserva/meta-selo-status.mjs
 ```
 
+## Estado em 2026-11-11 — pedido indisponível; próximo passo é o Suporte da Meta
+
+Conferido no WhatsApp Manager pelo Chrome do fundador e pela API (log `orchestrator/logs/selo-whatsapp-2026-11-09.jsonl`):
+
+- **Verificação em duas etapas não é mais um passo.** A Meta está aposentando o PIN para números elegíveis da Cloud API; para esses números a aba *Verificação em duas etapas* deixa de existir no WhatsApp Manager (é o nosso caso: não aparece em Perfil, em Mais, nem nas Configurações da conta). O PIN é exigido no registro do número na Cloud API, então o critério 4 está cumprido. Fonte: página de two-step verification da Cloud API.
+- **O botão "Enviar solicitação" existe, mas está desabilitado**, com a dica: *"Pedidos de contas comerciais oficiais não estão disponíveis para sua empresa no momento. Verifique outra vez mais tarde."* A Meta não publica o motivo (lacuna).
+- **A API tem `POST /{phone_number_id}/official_business_account`** (campos `business_website_url`, `primary_country_of_operation`, `primary_language`, `additional_supporting_information`, `supporting_links` 5–10). Script: `meta-selo-pedido.mjs` (simulação sem flag; `--apply` envia). Em 11/11, com a frase do fundador ("Enviar com França"), cinco variantes devolveram **HTTP 500, código 1, "An unknown error has occurred."** e `oba_status` seguiu `NOT_STARTED`. Nenhum pedido chegou a existir. A aresta GET do mesmo nome não existe para o nosso token; o estado se lê por `?fields=official_business_account`.
+- Conclusão (fato): o pedido de OBA está indisponível para o portfólio, no painel e na API. Caminho que a página da Meta indica: **Suporte da Meta** (Meta Business Suite → Ajuda → Suporte, ou business.facebook.com/business-support-home), pedindo a verificação de elegibilidade. Texto do chamado: ver "Chamado ao Suporte" abaixo.
+
+### Chamado ao Suporte (texto aprovado pelo fundador antes de enviar)
+
+> Assunto: Official Business Account request unavailable for a fully eligible number
+>
+> Business portfolio: The World Keys (ID 1160127927797199), business verification: verified. WhatsApp Business Account ID 912548304699169, phone number ID 1042654062259988 (+55 21 96784-1007), Cloud API, live since September 2026, quality rating GREEN, display name "The World Keys" approved, two-step verification set at registration.
+>
+> In WhatsApp Manager → Phone numbers → Profile → Official business account, the "Submit request" button is disabled with the message "Official business account requests are not available for your business at this time". The API endpoint POST /{phone_number_id}/official_business_account returns HTTP 500, error code 1 ("An unknown error has occurred"), fbtrace_id AyoaD1nowswozcB5BbGHYka. oba_status stays NOT_STARTED.
+>
+> We meet all five published criteria. Could you confirm whether the number is eligible for the OBA application and enable the request, or tell us which criterion is missing? Website: https://theworldkeys.com. Primary country of operation: France. Thank you.
+
 ## Passo a passo (fundador, ~15 minutos, mais a espera da Meta)
 
 Tudo em **business.facebook.com → WhatsApp Manager**, logado como administrador do portfólio "The World Keys".

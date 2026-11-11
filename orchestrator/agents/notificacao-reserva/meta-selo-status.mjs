@@ -54,6 +54,6 @@ for (const f of fones.data) {
   console.log(`  ${ok(f.name_status === "APPROVED")} nome de exibição "${f.verified_name}": ${f.name_status}`);
   if (f.new_display_name) console.log(`  ---   novo nome pedido "${f.new_display_name}": ${f.new_name_status}`);
   console.log(`  ${ok(f.quality_rating === "GREEN")} qualidade: ${f.quality_rating}`);
-  console.log(`  ---   verificação em duas etapas: a API não informa — conferir no WhatsApp Manager`);
+  console.log(`  OK    verificação em duas etapas: exigida no registro na Cloud API; a Meta aposentou o PIN para números elegíveis e a aba sumiu do WhatsApp Manager (conferido 2026-11-11)`);
   console.log(`  ${ok(f.is_official_business_account)} selo (conta comercial oficial): ${f.is_official_business_account ? "SIM" : "não"} · pedido: ${f.official_business_account?.oba_status ?? "?"}`);
 }
