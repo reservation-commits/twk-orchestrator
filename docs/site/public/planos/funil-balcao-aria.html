@@ -116,6 +116,14 @@ b{font-weight:600}
 .fala .rot{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--gold-text);margin:0 0 6px}
 .fala p{font-family:var(--display);font-style:italic;font-size:21px;line-height:1.3;margin:0;max-width:none}
 .fala small{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
+.p2 .cartao{background:var(--p2-fill);color:var(--p2-ink)}
+.p2 .cartao .quad{background:var(--p2-ink)} .p2 .cartao .quad i{background:var(--p2-fill)} .p2 .cartao .quad i.v{background:transparent}
+.p2 .cartao .tx b{color:var(--p2-ink)} .p2 .cartao .tx small{color:var(--p2-ink);opacity:.8}
+.p2 .momentos .k{color:var(--teal-text)}
+.p2 .fala{border-left-color:var(--teal)} .p2 .fala .rot{color:var(--teal-text)}
+.ganha{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.ganha div{background:var(--surface);border:1px solid var(--rule);padding:14px 16px;min-width:0;font-size:15.5px;color:var(--fg2)}
+.ganha b{display:block;color:var(--fg);margin-bottom:4px}
 .nunca{margin:14px 0 0;padding-left:20px;columns:2;column-gap:32px}
 .nunca li{break-inside:avoid;margin:0 0 7px;font-size:15.5px;color:var(--fg2)}
 
@@ -147,7 +155,7 @@ b{font-weight:600}
 .fonte{margin-top:36px;padding-top:14px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
 
 @media (max-width:680px){
-  .portas,.duas,.tres,.cresce,.qr{grid-template-columns:1fr}
+  .portas,.duas,.tres,.cresce,.qr,.ganha{grid-template-columns:1fr}
   .nunca{columns:1}
   .split span{font-size:13px}
   .split .conc,.split .custo{font-size:0}
@@ -308,6 +316,45 @@ b{font-weight:600}
     <li>Nunca falar de assinatura na primeira visita.</li>
     <li>Nunca insistir: sem OUI, o cartão fica e ela volta com o próximo cliente.</li>
   </ul>
+</section>
+
+<section class="p2">
+  <h2>O balcão do hotel</h2>
+  <p>O concierge não compra uma ideia: ele testa um serviço com um hóspede. Por isso a apresentação é curta, acontece no balcão dele e termina com um pedido de teste, não com um contrato. A melhor apresentação é o Tesla parado na porta do hotel, entregando um hóspede.</p>
+  <div class="ganha">
+    <div><b>Um sim em minutos</b>Casa e carro confirmados na mesma conversa de WhatsApp. É o que ele não consegue sozinho.</div>
+    <div><b>10 % em todo serviço</b>Extrato no dia 30 e pagamento no mesmo dia, ao balcão ou a ele, conforme a regra do hotel.</div>
+    <div><b>O hóspede continua dele</b>Nunca falamos com o hóspede por fora. O concierge é o dono da relação; nós somos o braço.</div>
+  </div>
+  <div class="qr">
+    <div>
+      <div class="cartao">
+        <div class="quad" aria-hidden="true"><i></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i></div>
+        <div class="tx"><b>Hôtel X · Votre comptoir</b>Scannez : la grille, les maisons de la semaine, le WhatsApp d’Aria.<small>Verso: os seis produtos com preço e os 10 %</small></div>
+      </div>
+      <p class="miudo">O cartão de tarifas fica no balcão. A página do QR mostra a tabela, as casas Signature da semana e o botão que abre o WhatsApp da Aria com o primeiro pedido já escrito.</p>
+    </div>
+    <div>
+      <ol class="momentos">
+        <li><span class="k">1</span><span><b>A entrega</b><span class="pr">O Julien deixa um hóspede no hotel e entrega o cartão ao concierge: 30 segundos, com o carro à vista.</span></span></li>
+        <li><span class="k">2</span><span><b>A visita</b><span class="pr">Entre 10:00 AM e 12:00 PM, depois dos check-outs, com o chef concierge. Dois minutos, de pé, no balcão.</span></span></li>
+        <li><span class="k">3</span><span><b>O teste</b><span class="pr">Ele manda o primeiro pedido real pelo WhatsApp. A Aria responde com casa, hora e preço; ele vê o serviço funcionar.</span></span></li>
+        <li><span class="k">4</span><span><b>O dia seguinte</b><span class="pr">A Aria pergunta como foi. No dia 30, o extrato com os 10 % dele. No terceiro serviço, a conta mensal.</span></span></li>
+      </ol>
+    </div>
+  </div>
+  <div class="fala">
+    <p class="rot">As quatro frases, em francês</p>
+    <p>« Bonjour, The World Keys : voiture et table confirmées en une seule conversation WhatsApp, pour vos clients. Prix fixes, une facture par mois, 10 % pour votre comptoir. Les maisons de la semaine sont sur la carte. Testez avec un client ce soir : vous envoyez, Aria répond en quelques minutes. »</p>
+    <small>O que ganha, quanto ganha, a prova, o teste. Nessa ordem, e sem pedir nada além de um pedido.</small>
+  </div>
+  <ul class="nunca">
+    <li>Nunca e-mail frio nem mensagem fria: o primeiro contato é pessoal, no balcão.</li>
+    <li>Nunca negociar preço ou comissão no balcão: a tabela é a mesma para todos.</li>
+    <li>Nunca falar com o hóspede dele por fora.</li>
+    <li>Nunca prometer mesa antes do sim: dizemos « confirmada » só quando está.</li>
+  </ul>
+  <p class="miudo">Por onde começar: os hotéis a dez minutos das casas Signature, 8e, 16e e 1er; o chef concierge antes do diretor; e os balcões onde o Julien já entregou um hóspede.</p>
 </section>
 
 <section>
