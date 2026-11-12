@@ -96,6 +96,29 @@ b{font-weight:600}
 .cresce .k{font-family:var(--display);font-size:22px;font-weight:600;color:var(--gold-text);font-variant-numeric:lining-nums;margin-right:8px}
 .cresce b{color:var(--fg)}
 
+/* Le QR dans la main de Maelle */
+.qr{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+.qr > div{min-width:0}
+.cartao{background:var(--band);color:var(--band-fg);padding:18px 20px;display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center}
+.cartao .quad{width:96px;height:96px;background:var(--band-fg);display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);padding:6px;gap:2px}
+.cartao .quad i{background:var(--band)}
+.cartao .quad i.v{background:transparent}
+.cartao .tx{font-size:14.5px;line-height:1.35}
+.cartao .tx b{display:block;font-family:var(--display);font-size:24px;font-weight:600;color:var(--band-gold);line-height:1.1;margin-bottom:4px}
+.cartao .tx small{display:block;color:var(--band-muted);margin-top:6px;font-size:13px}
+.momentos{list-style:none;margin:0;padding:0}
+.momentos li{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:15.5px;line-height:1.35}
+.momentos li:last-child{border-bottom:0}
+.momentos .k{font-family:var(--display);font-size:22px;font-weight:600;line-height:1;color:var(--gold-text);font-variant-numeric:lining-nums}
+.momentos b{display:block}
+.momentos span.pr{color:var(--fg2)}
+.fala{border-left:3px solid var(--gold);background:var(--surface);padding:14px 18px;margin:16px 0 0;max-width:none}
+.fala .rot{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--gold-text);margin:0 0 6px}
+.fala p{font-family:var(--display);font-style:italic;font-size:21px;line-height:1.3;margin:0;max-width:none}
+.fala small{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
+.nunca{margin:14px 0 0;padding-left:20px;columns:2;column-gap:32px}
+.nunca li{break-inside:avoid;margin:0 0 7px;font-size:15.5px;color:var(--fg2)}
+
 .duas{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
 .duas > div{min-width:0}
 .provas{list-style:none;margin:10px 0 0;padding:0}
@@ -124,7 +147,8 @@ b{font-weight:600}
 .fonte{margin-top:36px;padding-top:14px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
 
 @media (max-width:680px){
-  .portas,.duas,.tres,.cresce{grid-template-columns:1fr}
+  .portas,.duas,.tres,.cresce,.qr{grid-template-columns:1fr}
+  .nunca{columns:1}
   .split span{font-size:13px}
   .split .conc,.split .custo{font-size:0}
   .datas{grid-template-columns:1fr 1fr}
@@ -251,6 +275,39 @@ b{font-weight:600}
       </ol>
     </div>
   </div>
+</section>
+
+<section>
+  <h2>Le QR dans la main de Maelle</h2>
+  <p>Maelle ne présente pas l’entreprise. Elle remet une carte, le patron scanne le QR et voit les chiffres de sa propre maison sur son téléphone. L’échange dure deux minutes, entre 3:00 PM et 5:00 PM, avec le décideur.</p>
+  <div class="qr">
+    <div>
+      <div class="cartao">
+        <div class="quad" aria-hidden="true"><i></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i class="v"></i><i></i><i></i><i></i><i></i><i class="v"></i><i></i><i></i><i></i></div>
+        <div class="tx"><b>Monak · Vos chiffres</b>Scannez : les demandes reçues pour votre maison, en 12 mois.<small>Verso : Vous recevez · Vous gardez · Cela ne coûte rien · Répondre OUI</small></div>
+      </div>
+      <p class="miudo">Une carte par maison, avec son nom imprimé. Recto : le QR et une phrase. Verso : la proposition en trois lignes et le bouton pour répondre OUI.</p>
+    </div>
+    <div>
+      <ol class="momentos">
+        <li><span class="k">1</span><span><b>À la porte</b><span class="pr">Elle demande le patron ou le gérant et dit une phrase : elle a un client pour samedi.</span></span></li>
+        <li><span class="k">2</span><span><b>Sur son téléphone</b><span class="pr">Il scanne le QR. La page s’ouvre avec le nom de la maison et les demandes reçues par nous.</span></span></li>
+        <li><span class="k">3</span><span><b>En une minute</b><span class="pr">Elle montre les trois lignes : ce qu’il reçoit, ce qu’il garde, ce que cela coûte (rien).</span></span></li>
+        <li><span class="k">4</span><span><b>La demande</b><span class="pr">Une soirée d’essai. Le bouton de la page envoie le OUI sur WhatsApp ; la carte reste chez lui.</span></span></li>
+      </ol>
+    </div>
+  </div>
+  <div class="fala">
+    <p class="rot">Les quatre phrases</p>
+    <p>« Bonjour, je suis Maelle, de The World Keys. Des voyageurs demandent votre table par nous : scannez, ce sont vos chiffres. J’ai un couple pour samedi soir. Gardez-nous une table ce soir-là jusqu’à 5:00 PM ; si personne ne la demande, elle vous revient. »</p>
+    <small>Nom, preuve, client, demande. Dans cet ordre, et sans parler d’abonnement.</small>
+  </div>
+  <ul class="nunca">
+    <li>Ne jamais promettre un volume de clients.</li>
+    <li>Ne jamais demander de contrat ni d’exclusivité.</li>
+    <li>Ne jamais parler d’abonnement à la première visite.</li>
+    <li>Ne jamais insister : sans OUI, la carte reste et elle revient avec le prochain client.</li>
+  </ul>
 </section>
 
 <section>
