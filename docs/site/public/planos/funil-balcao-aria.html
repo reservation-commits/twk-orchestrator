@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Funil Balcão Aria</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap">
+<style>
+/* Layout: resumo de uma página, para ler em dois minutos. O desenho do funil no alto (ouro = casas,
+   azul-petróleo = compradores, faixa escura = a venda) e, abaixo, quatro blocos curtos: a prova de cada etapa,
+   o ritmo, as regras e as datas. Identidade TWK: tinta, marfim e ouro; Cormorant nos títulos, Jost no texto. */
+:root{
+  --bg:#f7f4ef; --surface:#efe9dd; --fg:#1f232c; --fg2:#3a3f4b; --muted:#6b6f7a; --rule:#d9d2c3;
+  --gold:#c9a96e; --gold-text:#7a5c2c; --teal:#2f6f73; --teal-text:#245558;
+  --band:#141821; --band-fg:#ede9df; --band-muted:#b5b1a7; --band-rule:#2a3040; --band-gold:#e4c990;
+  --p1-fill:#c9a96e; --p1-ink:#141821; --p2-fill:#2f6f73; --p2-ink:#f7f4ef;
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --body:"Jost",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141821; --surface:#1c2130; --fg:#ede9df; --fg2:#d8d4ca; --muted:#a9a59b; --rule:#2a3040;
+    --gold:#c9a96e; --gold-text:#e4c990; --teal:#4f9da1; --teal-text:#8fd0d2;
+    --band:#0d1016; --band-fg:#ede9df; --band-muted:#b5b1a7; --band-rule:#2a3040; --band-gold:#e4c990;
+    --p1-fill:#c9a96e; --p1-ink:#141821; --p2-fill:#3d8a8e; --p2-ink:#0d1016;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141821; --surface:#1c2130; --fg:#ede9df; --fg2:#d8d4ca; --muted:#a9a59b; --rule:#2a3040;
+  --gold:#c9a96e; --gold-text:#e4c990; --teal:#4f9da1; --teal-text:#8fd0d2;
+  --band:#0d1016; --band-fg:#ede9df; --band-muted:#b5b1a7; --band-rule:#2a3040; --band-gold:#e4c990;
+  --p1-fill:#c9a96e; --p1-ink:#141821; --p2-fill:#3d8a8e; --p2-ink:#0d1016;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+.wrap{max-width:920px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;line-height:1.08;margin:0}
+h1{font-size:clamp(38px,7vw,64px);margin-top:14px}
+h2{font-size:clamp(26px,4vw,34px);margin-top:44px;padding-top:18px;border-top:1px solid var(--rule)}
+h3{font-size:24px;font-weight:600}
+p{margin:10px 0;max-width:68ch}
+b{font-weight:600}
+.eyebrow{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--gold-text)}
+.hero{padding-block:36px 4px}
+.lead{font-family:var(--display);font-style:italic;font-size:clamp(21px,3vw,26px);line-height:1.3;max-width:34em;margin-top:14px}
+
+.portas{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:22px}
+.porta{min-width:0}
+.dono{font-size:14.5px;color:var(--muted);margin:4px 0 12px}
+.funil{display:flex;flex-direction:column;align-items:center;gap:6px}
+.funil div{display:flex;align-items:baseline;gap:10px;padding:9px 14px;min-height:44px}
+.funil .n{font-family:var(--display);font-size:26px;font-weight:600;line-height:1;font-variant-numeric:lining-nums;flex:none}
+.funil .t{font-size:15px;line-height:1.25;font-weight:500}
+.p1 .funil div{background:var(--p1-fill);color:var(--p1-ink)}
+.p2 .funil div{background:var(--p2-fill);color:var(--p2-ink)}
+.funil div:nth-child(1){width:100%}
+.funil div:nth-child(2){width:90%}
+.funil div:nth-child(3){width:80%}
+.funil div:nth-child(4){width:70%}
+.funil div:nth-child(5){width:60%}
+.seta{text-align:center;font-size:20px;line-height:1;color:var(--muted);margin:12px 0 8px;max-width:none}
+.venda{background:var(--band);color:var(--band-fg);padding:18px 20px 20px}
+.venda .eyebrow{color:var(--band-gold)}
+.passos{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.passos li{border:1px solid var(--band-rule);padding:6px 12px;font-size:15px}
+.passos li b{color:var(--band-gold);margin-right:6px}
+.venda p{color:var(--band-muted);font-size:15px;margin:12px 0 0}
+
+.primeira{border-left:3px solid var(--gold);background:var(--surface);padding:12px 16px;margin:16px 0 0;max-width:none;font-size:16px}
+
+/* O dinheiro */
+.noite{margin-top:18px}
+.noite .rot{font-size:14.5px;color:var(--muted);margin:0 0 8px}
+.split{display:flex;height:40px;max-width:none}
+.split span{display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden}
+.split .fica{width:82%;background:var(--p1-fill);color:var(--p1-ink)}
+.split .conc{width:10%;background:var(--p2-fill);color:var(--p2-ink)}
+.split .custo{width:8%;background:var(--muted);color:var(--bg)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 20px;margin:10px 0 0;padding:0;list-style:none;font-size:14.5px;color:var(--fg2)}
+.leg li::before{content:"";display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:baseline}
+.leg .a::before{background:var(--p1-fill)} .leg .b::before{background:var(--p2-fill)} .leg .c::before{background:var(--muted)}
+.degraus{display:grid;gap:14px;margin-top:22px}
+.degrau p{max-width:none;margin:0}
+.degrau .l{display:flex;justify-content:space-between;gap:14px;align-items:baseline;font-size:16px}
+.degrau .l b{font-family:var(--display);font-size:24px;font-weight:600;font-variant-numeric:lining-nums;white-space:nowrap}
+.trilho{position:relative;height:18px;background:var(--surface);border:1px solid var(--rule);margin-top:6px}
+.trilho i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+.trilho u{position:absolute;top:-4px;bottom:-4px;left:29.9%;width:3px;background:var(--fg)}
+.miudo{font-size:14.5px;color:var(--muted);margin-top:12px}
+.cresce{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cresce li{border:1px solid var(--rule);padding:14px 16px;font-size:15.5px;color:var(--fg2);min-width:0}
+.cresce .k{font-family:var(--display);font-size:22px;font-weight:600;color:var(--gold-text);font-variant-numeric:lining-nums;margin-right:8px}
+.cresce b{color:var(--fg)}
+
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+.duas > div{min-width:0}
+.provas{list-style:none;margin:10px 0 0;padding:0}
+.provas li{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:15.5px;line-height:1.35}
+.provas li:last-child{border-bottom:0}
+.provas .k{font-family:var(--display);font-size:22px;font-weight:600;line-height:1;font-variant-numeric:lining-nums}
+.p1 .provas .k{color:var(--gold-text)} .p2 .provas .k{color:var(--teal-text)}
+.provas b{display:block}
+.provas span.pr{color:var(--fg2)}
+
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.caixa{background:var(--surface);border:1px solid var(--rule);padding:16px 18px;min-width:0}
+.caixa .v{font-family:var(--display);font-size:46px;font-weight:600;line-height:1;color:var(--gold-text);font-variant-numeric:lining-nums;margin:0}
+.caixa p{font-size:15px;margin:8px 0 0;color:var(--fg2)}
+
+.regras{columns:2;column-gap:32px;margin:14px 0 0;padding-left:20px}
+.regras li{break-inside:avoid;margin:0 0 9px;font-size:16px;color:var(--fg2)}
+
+.datas{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.data{border-top:3px solid var(--gold);padding-top:10px;min-width:0}
+.data .d{font-family:var(--display);font-size:34px;font-weight:600;line-height:1;font-variant-numeric:lining-nums;margin:0}
+.data p{font-size:15px;color:var(--fg2);margin:6px 0 0}
+
+.decisoes{margin:12px 0 0;padding-left:22px}
+.decisoes li{margin:0 0 8px;max-width:68ch}
+.fonte{margin-top:36px;padding-top:14px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
+
+@media (max-width:680px){
+  .portas,.duas,.tres,.cresce{grid-template-columns:1fr}
+  .split span{font-size:13px}
+  .split .conc,.split .custo{font-size:0}
+  .datas{grid-template-columns:1fr 1fr}
+  .regras{columns:1}
+  body{font-size:16px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">The World Keys · Paris · 11 de novembro de 2026</p>
+  <h1>O funil de vendas do Balcão Aria</h1>
+  <p class="lead">Duas portas de entrada, uma venda, um registro. Cada casa e cada comprador têm sempre uma etapa, um dono e um próximo passo.</p>
+</header>
+
+<section>
+  <div class="portas">
+    <div class="porta p1">
+      <h3>Porta 1 · As casas</h3>
+      <p class="dono">Dona: Maelle · até 15 de dezembro</p>
+      <div class="funil">
+        <div><span class="n">40</span><span class="t">Na lista</span></div>
+        <div><span class="n">30</span><span class="t">Conversa com quem decide</span></div>
+        <div><span class="n">15</span><span class="t">Noite de teste</span></div>
+        <div><span class="n">10</span><span class="t">Casa Signature</span></div>
+        <div><span class="n">→</span><span class="t">Casa ativa</span></div>
+      </div>
+    </div>
+    <div class="porta p2">
+      <h3>Porta 2 · Os compradores</h3>
+      <p class="dono">Dono: a confirmar · até 31 de janeiro</p>
+      <div class="funil">
+        <div><span class="n">120</span><span class="t">Alvos</span></div>
+        <div><span class="n">60</span><span class="t">Conversa com o concierge</span></div>
+        <div><span class="n">18</span><span class="t">Primeiro pedido</span></div>
+        <div><span class="n">6</span><span class="t">Primeira venda</span></div>
+        <div><span class="n">3</span><span class="t">Recompra</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="primeira"><b>A primeira Casa Signature já tem nome: o Monak.</b> De todos os pedidos que enviamos a ele, quase todos foram aceitos automaticamente. É por ele que o funil começa.</p>
+  <p class="seta" aria-hidden="true">↓</p>
+  <div class="venda">
+    <p class="eyebrow">A venda, do pedido ao dinheiro</p>
+    <ol class="passos">
+      <li><b>1</b>Pedido</li>
+      <li><b>2</b>Proposta</li>
+      <li><b>3</b>Dois sins</li>
+      <li><b>4</b>Pagamento</li>
+      <li><b>5</b>Voucher</li>
+      <li><b>6</b>Serviço</li>
+      <li><b>7</b>Fatura e relatório</li>
+    </ol>
+    <p>No terceiro serviço ao mesmo comprador abre-se a conta mensal: uma fatura por mês e 10 % para o concierge.</p>
+  </div>
+</section>
+
+<section>
+  <h2>De onde vem o dinheiro</h2>
+  <p>Quem paga é o hóspede do hotel. Ele paga o carro e a noite, pelo link ou pela fatura do hotel. A casa não paga nada, e o concierge recebe 10 %. Quase tudo fica conosco porque o carro e o chauffeur são nossos.</p>
+
+  <div class="noite">
+    <p class="rot">O que acontece com os 490 € de uma noite Signature</p>
+    <p class="split"><span class="fica">≈ 400 € ficam na empresa</span><span class="conc">49 €</span><span class="custo">≈ 40 €</span></p>
+    <ul class="leg">
+      <li class="a">Fica na empresa: cerca de 400 €</li>
+      <li class="b">Concierge: 49 €</li>
+      <li class="c">Energia, pedágio e estacionamento: cerca de 40 €</li>
+    </ul>
+  </div>
+
+  <div class="tres">
+    <div class="caixa"><p class="v">400 €</p><p>ficam de cada noite Signature vendida</p></div>
+    <div class="caixa"><p class="v">14 noites</p><p>por mês pagam o carro e o chauffeur. Da 15ª em diante, o que entra fica acima do custo.</p></div>
+    <div class="caixa"><p class="v">1.700 €</p><p>por mês deixa cada comprador com conta: 4 transfers e 3 noites Signature</p></div>
+  </div>
+
+  <div class="degraus">
+    <div class="degrau"><p class="l"><span>3 compradores com conta: o carro praticamente se paga</span><b>5.100 €</b></p><p class="trilho"><i style="width:28.8%"></i><u></u></p></div>
+    <div class="degrau"><p class="l"><span>6 compradores com conta: quase o dobro do custo</span><b>10.200 €</b></p><p class="trilho"><i style="width:57.6%"></i><u></u></p></div>
+    <div class="degrau"><p class="l"><span>6 compradores e 2 dias de feira por semana</span><b>15.300 €</b></p><p class="trilho"><i style="width:86.4%"></i><u></u></p></div>
+    <div class="degrau"><p class="l"><span>E mais 20 noites feitas por chauffeur parceiro</span><b>até 17.700 €</b></p><p class="trilho"><i style="width:100%"></i><u></u></p></div>
+  </div>
+  <p class="miudo">O que fica por mês, depois dos 10 % do concierge e dos custos de cada corrida. O traço vertical é o que o carro e o chauffeur já custam: cerca de 5.300 € por mês.</p>
+  <p><b>Em um ano,</b> seis compradores com conta deixam cerca de 59.000 € acima do custo fixo.</p>
+  <p class="miudo">Estimativas feitas sobre a tabela de preços, antes de impostos e da parte da Maelle. O registro dos serviços mostrará o número real.</p>
+</section>
+
+<section>
+  <h2>Como isso cresce</h2>
+  <p>Há espaço para crescer, e a ordem importa: primeiro encher o que já temos, depois multiplicar.</p>
+  <ol class="cresce">
+    <li><span class="k">1</span><b>Encher o nosso carro.</b> Um carro comporta cerca de 26 noites por mês. É o caminho até cerca de 15.000 € por mês, sem gastar nada a mais.</li>
+    <li><span class="k">2</span><b>Chauffeurs parceiros.</b> Quando as nossas noites acabam, um parceiro faz a seguinte e ficamos com 25 %. Cresce sem comprar carro.</li>
+    <li><span class="k">3</span><b>Outras cidades.</b> O mesmo modelo na Côte d’Azur em março, depois em Lisboa e Lagos, com um parceiro local como a Maelle.</li>
+    <li><span class="k">4</span><b>Um segundo carro.</b> Só quando o primeiro estiver cheio dois meses seguidos. Custa perto do primeiro e se paga com as mesmas 14 noites.</li>
+  </ol>
+  <p><b>Onde investir agora:</b> quase nada. Menos de 200 € de impressão, a página com QR e o nosso tempo. Cada degrau paga o seguinte.</p>
+  <p><b>Uma receita que ainda não contamos:</b> as casas ativas recebem o convite à parceria completa, por assinatura.</p>
+  <p class="miudo">Um sinal do mercado, da pesquisa de outubro: plataformas de transporte e de experiências ficam com 20 a 30 % de cada venda. Nós ficamos com cerca de 80 %, porque o serviço é nosso.</p>
+</section>
+
+<section>
+  <h2>A prova de cada etapa</h2>
+  <p>Ninguém avança de etapa por impressão. Só quando a prova existe.</p>
+  <div class="duas">
+    <div class="p1">
+      <ol class="provas">
+        <li><span class="k">1</span><span><b>Na lista</b><span class="pr">Não pediu para sair da nossa lista; a página dela com QR está pronta.</span></span></li>
+        <li><span class="k">2</span><span><b>Conversa</b><span class="pr">Quem decide abriu a página no celular.</span></span></li>
+        <li><span class="k">3</span><span><b>Noite de teste</b><span class="pr">A data da mesa guardada está marcada.</span></span></li>
+        <li><span class="k">4</span><span><b>Casa Signature</b><span class="pr">O OUI chegou pelo WhatsApp.</span></span></li>
+        <li><span class="k">5</span><span><b>Casa ativa</b><span class="pr">Recebeu o primeiro hóspede nosso.</span></span></li>
+      </ol>
+    </div>
+    <div class="p2">
+      <ol class="provas">
+        <li><span class="k">1</span><span><b>Alvo</b><span class="pr">Temos o nome e o telefone profissional.</span></span></li>
+        <li><span class="k">2</span><span><b>Conversa</b><span class="pr">Recebeu a tabela e salvou o número da Aria.</span></span></li>
+        <li><span class="k">3</span><span><b>Primeiro pedido</b><span class="pr">A proposta saiu com casa, hora e valor.</span></span></li>
+        <li><span class="k">4</span><span><b>Primeira venda</b><span class="pr">Pagamento recebido antes do serviço.</span></span></li>
+        <li><span class="k">5</span><span><b>Recompra</b><span class="pr">Segundo serviço pago em até 30 dias.</span></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>O ritmo da semana</h2>
+  <div class="tres">
+    <div class="caixa"><p class="v">8</p><p>conversas com casas, pela Maelle</p></div>
+    <div class="caixa"><p class="v">13</p><p>contatos com compradores, em francês</p></div>
+    <div class="caixa"><p class="v">20 min</p><p>toda segunda-feira: quantos em cada etapa e os três casos parados</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Seis regras que não se quebram</h2>
+  <ul class="regras">
+    <li>Casa que pediu para sair da lista não é contatada.</li>
+    <li>No WhatsApp, a casa escreve primeiro. O OUI dela é a nossa autorização.</li>
+    <li>A mesa só entra no voucher com mesa guardada ou com o sim da casa.</li>
+    <li>O preço é o da tabela. Desconto ou cortesia, só com o sim do fundador.</li>
+    <li>Cliente novo paga antes do serviço.</li>
+    <li>O que não está no registro não aconteceu.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>As datas que decidem</h2>
+  <div class="datas">
+    <div class="data"><p class="d">18/11</p><p>Página com QR e roteiro prontos. 20 casas e 40 alvos na lista.</p></div>
+    <div class="data"><p class="d">30/11</p><p>5 casas com mesa guardada e 6 primeiros pedidos. Com menos de 3, mudamos a abordagem.</p></div>
+    <div class="data"><p class="d">15/12</p><p>10 casas Signature e 3 primeiras vendas, antes das festas.</p></div>
+    <div class="data"><p class="d">31/01</p><p>6 compradores com venda e 3 com recompra: abrimos a Côte d’Azur em março.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Três decisões para começar</h2>
+  <ol class="decisoes">
+    <li><b>Quem faz a venda aos compradores.</b> Sem esse nome, a Porta 2 não tem dono.</li>
+    <li><b>As seis decisões do plano,</b> a começar pela Mesa Signature e pelo acordo com a Maelle.</li>
+    <li><b>A página com QR:</b> onde fica no ar e qual número de WhatsApp aparece nela.</li>
+  </ol>
+</section>
+
+<footer class="fonte">
+  <p>Os números de cada etapa são metas de trabalho. Depois de duas semanas de registro, passam a ser as taxas medidas.</p>
+</footer>
+
+</div>
+
+<nav aria-label="Idioma" style="position:fixed;top:10px;right:12px;z-index:9;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(27,24,18,.88);color:#EFE9DC;font:12px/1 'IBM Plex Mono',ui-monospace,Consolas,monospace;letter-spacing:.06em;backdrop-filter:blur(4px)"><a href="/" style="color:#EFE9DC;text-decoration:none;opacity:.8">Biblioteca</a><span style="opacity:.45">|</span><a href="/planos/funil-balcao-aria.html" style="color:#CE9E3C;text-decoration:none;font-weight:600" aria-current="true">PT</a><span style="opacity:.45">·</span><a href="/fr/planos/funil-balcao-aria.html" style="color:#EFE9DC;text-decoration:none;font-weight:400">FR</a></nav>

@@ -1,10 +1,18 @@
 {
-  "build": "2026-11-11-1843",
+  "build": "2026-11-12-1308",
   "idiomas": [
     "pt",
     "fr"
   ],
   "documentos": [
+    {
+      "slug": "funil-balcao-aria",
+      "titulo": "Funil de vendas do Balcão Aria",
+      "data": "2026-11-11",
+      "estado": "vigente",
+      "arquivado": false,
+      "fr": "manual"
+    },
     {
       "slug": "wanted-chauffeur",
       "titulo": "Wanted Chauffeur · O plano de lançamento",

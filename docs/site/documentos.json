@@ -1,5 +1,16 @@
 [
   {
+    "slug": "funil-balcao-aria",
+    "fonte": "docs/estrategia/funil-balcao-aria-2026-11-11.html",
+    "titulo": "Funil de vendas do Balcão Aria",
+    "titulo_fr": "Le tunnel de vente du Comptoir Aria",
+    "descricao": "O funil do Balcão Aria em uma página: as duas portas de entrada (as casas, com a Maelle, e os compradores), a venda em sete passos, a prova de cada etapa, o ritmo da semana, seis regras, as quatro datas que decidem e três decisões para começar.",
+    "descricao_fr": "Le tunnel de vente du Comptoir Aria en une page : les deux portes d’entrée (les maisons, avec Maelle, et les acheteurs), la vente en sept étapes, la preuve de chaque étape, le rythme de la semaine, six règles, les quatre dates qui décident et trois décisions pour commencer.",
+    "data": "2026-11-11",
+    "estado": "vigente",
+    "grupo": "Planos"
+  },
+  {
     "slug": "wanted-chauffeur",
     "fonte": "docs/estrategia/plano-night-ride-gta6-2026-11-09.html",
     "titulo": "Wanted Chauffeur · O plano de lançamento",
