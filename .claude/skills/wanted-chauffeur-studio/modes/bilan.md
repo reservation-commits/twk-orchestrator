@@ -5,7 +5,14 @@ o que rende **nesta conta** e se a nota de gancho tem alguma relação com o res
 
 Neste repositório: `--dossier docs/estrategia/wanted-chauffeur` em todos os comandos abaixo.
 
-## Registrar um post (no dia em que sai)
+## Primeiro: o diário automático
+
+Com o conector ligado, o Olheiro do Instagram já registra cada post e atualiza os números todo dia. Chame
+`instagram_diario`, grave o texto como `journal.jsonl` numa pasta e rode o `bilan` com `--dossier` nela
+(`modes/compte.md`). Os passos à mão abaixo valem para TikTok, YouTube e para quando o conector não estiver ligado.
+Antes do balanço, confira se os posts têm pilar: sem ele, pergunte e anote com `instagram_anotar`.
+
+## Registrar um post à mão (no dia em que sai)
 
 ```bash
 node outils/wc.js journal ajouter --accroche "Il ne savait pas qu'il y avait une PS5 dans la voiture" \

@@ -210,6 +210,7 @@ if ((process.env.REGENCIA_ENABLED || 'off') === 'on') {
 // ---------- Rotinas hospedadas (A1, 2026-10-22): Guardião, Ciclo do Cliente, Sentinela e Zelador dentro da Central ----------
 // ROTINAS_ENABLED=on liga. Com elas ligadas, a Regência em processo lê o estado dos agentes no volume (TWK_STATE_ROOT).
 const rotinas = require('./rotinas.js');
+const instagram = require('./instagram.js').criar({ stateDir: STATE_DIR, agentsDir: rotinas.AGENTS_DIR });
 if (rotinas.enabled()) { process.env.TWK_STATE_ROOT = process.env.TWK_STATE_ROOT || STATE_DIR; process.env.TWK_AGENTS_DIR = process.env.TWK_AGENTS_DIR || rotinas.AGENTS_DIR; }
 rotinas.start();
 const ANALYST_INTERVAL_MS = Math.max(1, Number(process.env.ANALYST_INTERVAL_H || 24)) * 3_600_000;
@@ -470,6 +471,8 @@ const server = http.createServer(async (req, res) => {
       catch { return json(res, 404, { error: 'despacho nao encontrado' }); }
     }
     // Rotinas hospedadas (A1): estado da última rodada e disparo manual (mesma chave da API).
+    // Instagram do @wantedchauffeur (Olheiro): leitura e anotações, para o conector do COMPASSO.
+    if (instagram.tratar(req, res, u, json)) return;
     if (u.pathname === '/api/rotinas' && req.method === 'GET') return json(res, 200, { saude: rotinas.saude(), ultima: rotinas.estado() });
     if (u.pathname === '/api/rotinas/run' && req.method === 'POST') {
       const so = u.searchParams.get('so') || null;

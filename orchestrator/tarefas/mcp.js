@@ -17,7 +17,7 @@
  */
 const VERSOES = ['2025-06-18', '2025-11-25', '2025-03-26', '2024-11-05'];
 
-function criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, auditar, build }) {
+function criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, auditar, build, instagram = null }) {
   const PESSOAS = Object.keys(store.PESSOAS);
   const nomeDe = (id) => store.PESSOAS[id] || id;
   const fmtData = (d) => (d ? d.split('-').reverse().join('/') : 'sem prazo');
@@ -44,9 +44,12 @@ function criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, audita
     { name: 'assumir_sugestao', title: 'Assumir sugestão', annotations: ESCRITA, description: 'Transforma uma sugestão em card para alguém (marlon, lucas ou julien). A sugestão sai da lista.', inputSchema: { type: 'object', properties: { id: { type: 'string', pattern: '^s-[a-f0-9]{12}$' }, dono: { type: 'string', enum: PESSOAS }, vence_em: { type: 'string', pattern: '^\\d{4}-\\d{2}-\\d{2}$' } }, required: ['id', 'dono'], additionalProperties: false } },
   ];
 
-  const INSTRUCOES = `COMPASSO Tarefas é o quadro de tarefas da The World Keys para Márlon, Lucas e Julien. Toda tarefa precisa de um dono entre os três: se a pessoa não disse quem assume, pergunte antes de criar. Só informe prazo (vence_em) quando a pessoa o deu; nunca invente datas. Escreva títulos começando por verbo e etapas concretas, na ordem de execução, em português. Seja claro e explicativo: quem lê o card pode não conhecer termos técnicos, então cada etapa diz em palavras simples o que fazer, onde e como saber que ficou pronto; sigla, nome de sistema ou de tabela só com a explicação ao lado. O card existe para facilitar o entendimento e a execução. Nada aqui envia mensagens para fora: criar um card não avisa ninguém. Depois de criar ou mudar algo, responda com o id do card.`;
+  const INSTRUCOES = `COMPASSO Tarefas é o quadro de tarefas da The World Keys para Márlon, Lucas e Julien. Toda tarefa precisa de um dono entre os três: se a pessoa não disse quem assume, pergunte antes de criar. Só informe prazo (vence_em) quando a pessoa o deu; nunca invente datas. Escreva títulos começando por verbo e etapas concretas, na ordem de execução, em português. Seja claro e explicativo: quem lê o card pode não conhecer termos técnicos, então cada etapa diz em palavras simples o que fazer, onde e como saber que ficou pronto; sigla, nome de sistema ou de tabela só com a explicação ao lado. O card existe para facilitar o entendimento e a execução. Nada aqui envia mensagens para fora: criar um card não avisa ninguém. Depois de criar ou mudar algo, responda com o id do card.${instagram ? ` ${instagram.INSTRUCOES}` : ''}`;
+  // Instagram do @wantedchauffeur (14/11): ferramentas de leitura vindas da Central, no mesmo conector.
+  if (instagram) FERRAMENTAS.push(...instagram.FERRAMENTAS);
 
   async function executar(nome, a, ident, trace) {
+    if (instagram && instagram.nomes.has(nome)) return instagram.executar(nome, a);
     const quem = `${ident.id} via Claude`;
     const origem = { tipo: 'mcp', ref: ident.cliente || '' };
     if (nome === 'resumo') {

@@ -29,6 +29,13 @@
       "severidade": "alta",
       "acao": "rotina hospedada do Guardião (portão) falhou — ler o log no volume da Central e disparar POST /api/rotinas/run {\"so\":\"guardiao-gate\"}"
     },
+    { "chave": "olheiro_instagram",
+      "tipo": "rotina_central",
+      "job": "olheiro-instagram",
+      "tolerancia_horas": 30,
+      "severidade": "media",
+      "acao": "rotina do Olheiro do Instagram falhou ou parou — o diário do @wantedchauffeur deixa de ser atualizado; ler o log no volume da Central (logs/tarefas/olheiro-instagram-*.log), conferir a chave IG_ACCESS_TOKEN e disparar POST /api/rotinas/run?so=olheiro-instagram"
+    },
     { "chave": "retencao",
       "tipo": "rotina_central",
       "job": "retencao",

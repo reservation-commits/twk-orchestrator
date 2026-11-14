@@ -30,6 +30,8 @@ COPY agents/chave-girada/n8n ./agents/chave-girada/n8n
 # ADR-018: retenção antes da exclusão (MAESTRO) e a porta única de escrita que ela usa (TWK_DBA_URL no ambiente).
 COPY agents/maestro-atendimento ./agents/maestro-atendimento
 COPY agents/dba-escrita ./agents/dba-escrita
+# Olheiro do Instagram (14/11): leitura diária do @wantedchauffeur pela API da Meta; a chave vem do ambiente.
+COPY agents/olheiro-instagram ./agents/olheiro-instagram
 # DURABILIDADE (v4.4): a carga-semente vai para /app/SEED (dentro da imagem),
 # NUNCA para /app/state. O /app/state é o diretório VIVO — deve ser um VOLUME
 # PERSISTENTE montado no EasyPanel, senão as conversas somem a cada deploy.

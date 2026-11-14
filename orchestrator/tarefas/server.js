@@ -56,7 +56,9 @@ const freioLogin = authMod.criarFreio({ max: (c) => (c.startsWith('u:') ? 50 : 8
 // Conector MCP: o chat do Claude e o Claude Code entram por OAuth com o login do app e agem em nome de quem autorizou.
 const TAREFAS_URL = String(process.env.TAREFAS_URL || '').replace(/\/+$/, '');
 const oauth = oauthMod.criar({ auth, stateDir: STATE_DIR, urlPublica: TAREFAS_URL, auditar, freio: freioLogin, ipDe });
-const mcp = mcpMod.criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, auditar, build: BUILD });
+// Instagram do @wantedchauffeur: só quando a Central está ligada (CENTER_URL); sem ela, as ferramentas não aparecem.
+const instagramMcp = CENTER_URL ? require('./mcp-instagram.js').criar({ centerUrl: CENTER_URL, centerToken: CENTER_TOKEN }) : null;
+const mcp = mcpMod.criar({ db, store, planejador, sugestoesAtuais, assumirSugestao, auditar, build: BUILD, instagram: instagramMcp });
 
 // ---------- util ----------
 function json(res, code, obj, extra) {

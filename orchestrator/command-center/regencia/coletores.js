@@ -291,6 +291,18 @@ function viaApi(agente, chave, ctx, urlEnv) {
 }
 
 // ---------------- Central ----------------
+// ---------------- Olheiro do Instagram (@wantedchauffeur) ----------------
+/** Lê o relato que a rotina do Olheiro gravou hoje. Sem chave no ambiente: lacuna declarada, nunca silêncio. */
+function olheiroInstagram(ctx) {
+  const r = base('olheiro-instagram', ctx.trace);
+  const st = estadoAgente('olheiro-instagram');
+  const rel = lerJson(path.join(st, `relato-${hoje()}.json`));
+  if (rel && rel.agente === 'olheiro-instagram') return { ...r, ...rel, trace_id: ctx.trace || rel.trace_id };
+  if (!process.env.IG_ACCESS_TOKEN) { r.status = 'sem_credencial'; r.cobertura.lacunas.push('Olheiro do Instagram ainda não ligado (IG_ACCESS_TOKEN ausente no ambiente da Central)'); return r; }
+  r.status = 'sem_fonte'; r.cobertura.lacunas.push('o Olheiro do Instagram não gravou relato hoje (ver rotina olheiro-instagram em /api/rotinas)');
+  return r;
+}
+
 function central(ctx) {
   const r = base('central', ctx.trace);
   const S = ctx.stateDir;
@@ -317,6 +329,7 @@ async function coletarTudo(ctx) {
   relatos.push(suporte(ctx));
   relatos.push(viaApi('editorial', 'editorial', ctx, 'AGENT_QUILL_URL'));
   relatos.push(viaApi('financeiro', 'financeiro', ctx, 'AGENT_ATLAS_URL'));
+  relatos.push(olheiroInstagram(ctx));
   relatos.push(central(ctx));
   return relatos;
 }
@@ -333,4 +346,4 @@ async function ariaDesatualizada() {
   } catch { return false; }
 }
 
-module.exports = { coletarTudo, dba, guardiao, registroOptout, comercial, suporte, central, compromissosVencendo };
+module.exports = { coletarTudo, dba, guardiao, registroOptout, comercial, suporte, central, olheiroInstagram, compromissosVencendo };

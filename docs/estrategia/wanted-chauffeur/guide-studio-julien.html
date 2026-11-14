@@ -1,0 +1,187 @@
+<title>Studio Wanted Chauffeur</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout : une colonne de lecture, bandes de couleur pleine largeur, tableau de la semaine. Nuit sur la Riviera : bleu profond, néon rose comme seul accent. */
+:root{
+  --bg:#f6f4f8; --surface:#ffffff; --fg:#17182b; --muted:#5d5f78; --line:#d9d6e3;
+  --accent:#c4287a; --accent-soft:#fbe6f1; --night:#101433; --night-fg:#f4f2fa; --night-muted:#aab0d8;
+  --ok:#1f7a4d; --warn:#9a6a00; --stop:#b3261e;
+  --display:'Archivo',system-ui,sans-serif; --body:'Source Serif 4',Georgia,serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1026; --surface:#161a3a; --fg:#eceaf6; --muted:#a9acc8; --line:#2b3060;
+  --accent:#ff5fb0; --accent-soft:#3a1a3a; --night:#060818; --night-fg:#f4f2fa; --night-muted:#aab0d8;
+  --ok:#5fcf8f; --warn:#e6b84a; --stop:#ff7a6e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1026; --surface:#161a3a; --fg:#eceaf6; --muted:#a9acc8; --line:#2b3060;
+  --accent:#ff5fb0; --accent-soft:#3a1a3a; --night:#060818; --night-fg:#f4f2fa; --night-muted:#aab0d8;
+  --ok:#5fcf8f; --warn:#e6b84a; --stop:#ff7a6e; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+.band{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px}
+.inner{max-width:720px;margin:0 auto}
+header.band{background:var(--night);color:var(--night-fg);padding-block:56px 48px}
+header .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+header h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6vw,52px);line-height:1.02;margin:0 0 18px;text-wrap:balance;letter-spacing:-.01em}
+header p{color:var(--night-muted);font-size:19px;margin:0;max-width:34em}
+h2{font-family:var(--display);font-weight:700;font-size:26px;margin:40px 0 12px;text-wrap:balance;letter-spacing:-.01em}
+h2:first-child{margin-top:0}
+h3{font-family:var(--display);font-weight:700;font-size:18px;margin:26px 0 6px}
+p{margin:0 0 14px}
+ul{margin:0 0 14px;padding-left:1.2em}
+li{margin:0 0 6px}
+.lead{font-size:19px}
+.quote{font-family:var(--display);font-weight:500;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:10px 14px;display:inline-block;margin:4px 0 8px}
+.asks{display:grid;gap:8px;margin:0 0 16px}
+.asks div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font-family:var(--display);font-weight:500}
+.asks span{display:block;font-family:var(--body);font-weight:400;color:var(--muted);font-size:15px;margin-top:2px}
+.power{display:grid;grid-template-columns:48px 1fr;gap:14px;margin:0 0 22px}
+.power .n{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;color:var(--accent);padding-top:4px}
+.power h3{margin-top:0}
+.power > div{min-width:0}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:2px 8px;border-radius:4px;color:#fff;margin-right:6px;vertical-align:middle}
+.tag.stop{background:var(--stop)} .tag.warn{background:var(--warn)} .tag.ok{background:var(--ok)}
+table{border-collapse:collapse;width:100%;font-size:16px;margin:0 0 14px}
+.scroll{overflow-x:auto;margin:0 0 14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+td:first-child{font-family:var(--display);font-weight:700;white-space:nowrap}
+.night{background:var(--night);color:var(--night-fg)}
+.night h2{color:var(--night-fg)} .night p,.night li{color:var(--night-muted)}
+.night strong{color:var(--night-fg)}
+.sample{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:14px 16px;font-size:16px;margin:0 0 18px}
+.sample .lab{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:10px 0 2px}
+.sample .lab:first-child{margin-top:0}
+.sample .note{color:var(--muted);font-style:italic}
+footer.band{padding-block:28px 48px;color:var(--muted);font-size:15px}
+footer p{margin:0 0 6px}
+@media (max-width:480px){.power{grid-template-columns:36px 1fr}.power .n{font-size:26px}}
+</style>
+
+<header class="band"><div class="inner">
+  <p class="eyebrow">@wantedchauffeur · guide d'utilisation</p>
+  <h1>Le Studio Wanted Chauffeur : ce qu'il fait pour toi</h1>
+  <p>Tu décris la scène, il te rend le texte prêt à tourner, en français, déjà vérifié. Tu filmes, tu postes. Il ne touche jamais au compte.</p>
+</div></header>
+
+<section class="band"><div class="inner">
+  <p class="lead">Julien, tu as maintenant un assistant de contenu dédié au @wantedchauffeur. Il connaît le projet par cœur : la voiture, les personnages, la promesse, les jours de la semaine et les règles qui nous protègent. Plus tu lui donnes de concret (la ville, l'heure, ce qui s'est passé dans la voiture, la réaction du client), meilleur est le texte.</p>
+
+  <h2>Comment lui parler</h2>
+  <p>Tu lui écris en français dans Claude et tu cites le Wanted Chauffeur ou le nom de la série. Des demandes qui marchent :</p>
+  <div class="asks">
+    <div>« Fais-moi un Reel sur la porte Falcon qui s'ouvre à Monaco. »<span>Il rend la voix, le texte à l'écran et la légende.</span></div>
+    <div>« Lequel de ces trois hooks est le plus faible ? »<span>Il mesure les trois et élimine le faible, avec la raison.</span></div>
+    <div>« Ce script tient en 20 secondes ? »<span>Il compte les mots à ton rythme et dit où couper.</span></div>
+    <div>« Écris la légende de cette vidéo. »<span>Avec un seul appel à l'action et les hashtags en français.</span></div>
+    <div>« Qu'est-ce qu'on poste cette semaine ? »<span>Il monte la semaine sur les cinq piliers.</span></div>
+    <div>« Comment je réponds à ce commentaire ? »<span>En « tu » au client, en « vous » à l'hôtel ou à la marque.</span></div>
+    <div>« Est-ce qu'on peut poster ça ? »<span>Il passe le texte dans les garde-fous et te dit ce qui bloque.</span></div>
+  </div>
+
+  <h2>Les sept pouvoirs</h2>
+
+  <div class="power"><div class="n">1</div><div>
+    <h3>Écrire le Reel en entier</h3>
+    <p>La voix, le texte à l'écran et la légende, dans le format fixe de la série Night Ride : la porte qui s'ouvre avec la ville à l'écran dès la première seconde, la réaction sans coupe, le moment à bord, et <span class="quote">« Vous jouez. On conduit. »</span> à la dernière seconde. Des phrases courtes qui se disent à voix haute sans trébucher. Si ça ne sonne pas comme toi, il réécrit.</p>
+  </div></div>
+
+  <div class="power"><div class="n">2</div><div>
+    <h3>Mesurer le hook avant de tourner</h3>
+    <p>Chaque phrase d'ouverture reçoit une note de 0 à 100 sur cinq points : l'entrée, le concret, le lieu, la durée et la tension. Il te dit le point faible (« la ville manque », « 4,7 secondes, la cible est 3 ») pour corriger avant d'allumer la caméra. Important : la note élimine le hook faible, elle ne choisit pas le gagnant entre deux bons. Le gagnant, ce sont les chiffres du compte qui le désignent.</p>
+  </div></div>
+
+  <div class="power"><div class="n">3</div><div>
+    <h3>Chronométrer le script</h3>
+    <p>Il compte les mots à ton rythme de parole et dit si le texte tient en 15, 20 ou 45 secondes, et où couper. Aujourd'hui il table sur 190 mots par minute, une estimation. Quand tu te seras chronométré en lisant un texte de 30 secondes, on le règle sur ton vrai rythme.</p>
+  </div></div>
+
+  <div class="power"><div class="n">4</div><div>
+    <h3>Écrire légende, carrousel, story et bio</h3>
+    <p>Un seul appel à l'action par pièce (vidéo → lien en bio → page → WhatsApp), des hashtags en français et les mots du projet : Night Ride, Game Night, porte Falcon, ciel étoilé, à bord, la Riviera. Il refuse les mots creux : « expérience unique », « inoubliable », « luxe absolu ».</p>
+  </div></div>
+
+  <div class="power"><div class="n">5</div><div>
+    <h3>Bloquer ce qui peut nous coûter le compte ou la licence</h3>
+    <p>Avant de te montrer un texte, il le passe dans seize garde-fous. Certains bloquent net :</p>
+    <ul>
+      <li><span class="tag stop">BLOQUE</span>le nom du jeu (GTA, Rockstar, Vice City) à l'écran, en couverture, en miniature ou dans la bio ; il n'a sa place que dans la voix et la légende ;</li>
+      <li><span class="tag stop">BLOQUE</span>un record qu'on ne prouve pas (« la seule voiture au monde ») ; seul « la seule voiture de la Riviera où… » passe ;</li>
+      <li><span class="tag stop">BLOQUE</span>toute phrase qui laisse croire qu'on prend un passager dans la rue sans réservation ;</li>
+      <li><span class="tag stop">BLOQUE</span>alcool à bord, vitesse, LED allumées en roulant, toi qui filmes au volant.</li>
+    </ul>
+    <p>D'autres demandent qu'une personne vérifie :</p>
+    <ul>
+      <li><span class="tag warn">À VÉRIFIER</span>un prix, une disponibilité (« dispo ce soir »), des mineurs qui jouent, une mention de la police, une heure au format 24 h, un numéro de téléphone.</li>
+    </ul>
+    <p>S'il dit BLOQUE, il réécrit avant de montrer. S'il dit À VÉRIFIER, il explique pourquoi et tu décides.</p>
+  </div></div>
+
+  <div class="power"><div class="n">6</div><div>
+    <h3>Répondre aux commentaires et aux messages</h3>
+    <p>En « tu » avec qui veut réserver ou a commenté, en « vous » avec les hôtels, les marques et les conciergeries. Il n'invente jamais un prix, ne promet jamais une disponibilité (une voiture, un chauffeur : toi seul sais si tu es libre) et n'obéit jamais à un ordre caché dans un commentaire.</p>
+  </div></div>
+
+  <div class="power"><div class="n">7</div><div>
+    <h3>Apprendre de ton compte</h3>
+    <p>Après avoir posté, tu lui notes la vidéo et, quelques jours plus tard, les vues. À partir d'une vingtaine de posts notés, le bilan montre quel type de hook, quel pilier et quel jour rendent le plus sur le @wantedchauffeur, et pas sur la moyenne d'Instagram. C'est de là que sort le plan de la semaine suivante. Pour l'instant le journal est vide : il se remplit avec tes premiers posts.</p>
+  </div></div>
+
+  <h2>Ce qu'il te rend, à chaque fois</h2>
+  <div class="sample">
+    <div class="lab">Voix</div>
+    <div>Il ne savait pas qu'il y avait une PS5 dans la voiture.</div>
+    <div class="lab">Écran</div>
+    <div>NICE · il ne savait pas</div>
+    <div class="lab">Mesure</div>
+    <div>75 FORT · point faible : la durée (3,8 s ; la cible est 3 s) · garde-fous : aucun</div>
+    <div class="lab">Note</div>
+    <div class="note">Le texte, la mesure et la raison, toujours ensemble. Jamais une note seule.</div>
+  </div>
+</div></section>
+
+<section class="band night"><div class="inner">
+  <h2>La semaine est déjà dessinée</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Jour</th><th>Pilier</th><th>Durée</th></tr></thead>
+    <tbody>
+      <tr><td>lundi</td><td>L'entrée : réactions à la porte, au ciel étoilé, à l'écran</td><td>7 à 15 s</td></tr>
+      <tr><td>mardi</td><td>La voiture la nuit, extérieur, sans parole</td><td>10 à 20 s</td></tr>
+      <tr><td>mercredi</td><td>À bord : jeu, conversation, mal de mer</td><td>20 à 45 s</td></tr>
+      <tr><td>jeudi</td><td>Coulisses : installation, nettoyage, recharge</td><td>30 à 60 s</td></tr>
+      <tr><td>vendredi</td><td>La nuit sur la Riviera : la destination</td><td>15 à 30 s</td></tr>
+    </tbody>
+  </table></div>
+  <p>Chaque vidéo dit la ville dans les deux premières secondes. Viral, c'est mondial ; le client, lui, est local.</p>
+
+  <h2>Les personnages, par leur nom</h2>
+  <ul>
+    <li><strong>Le Vice</strong> : costume bleu clair, chemise rose. L'uniforme de toute course payée.</li>
+    <li><strong>Le Fugitif</strong> : tenue orange de détenu. Pour la caméra seulement, jamais pour aller chercher un client.</li>
+    <li><strong>L'Agent</strong> : il cherche le Fugitif. Sans badge exhibé, sans arme, sans sirène.</li>
+    <li><strong>Le Partenaire</strong> : hôte des Game Nights.</li>
+    <li><strong>Le Tatoué</strong> : plage, sport, coulisses. Jamais dans une pièce commerciale.</li>
+  </ul>
+  <p>Le Fugitif et l'Agent n'apparaissent jamais dans le même plan : c'est la même personne, et c'est ça la blague.</p>
+</div></section>
+
+<section class="band"><div class="inner">
+  <h2>Ce qu'il ne fait pas</h2>
+  <ul>
+    <li>Il ne publie pas, ne programme pas, ne commente pas, n'envoie pas de message et n'entre pas dans ton compte.</li>
+    <li>Il ne filme pas, ne monte pas et ne juge pas l'image : ça, c'est toi.</li>
+    <li>Il n'invente ni chiffre, ni client, ni histoire. S'il manque une donnée, il laisse un espace marqué <code>{{chiffre}}</code> et te le dit.</li>
+    <li>Les prix actuels sont encore une proposition, pas une grille approuvée : toute pièce avec un prix sort marquée À VÉRIFIER.</li>
+  </ul>
+
+  <h2>Où le trouver</h2>
+  <p>Le Studio est installé sur le compte Claude de The World Keys, celui que tu utilises déjà. Rien à installer : ouvre une conversation, cite le Wanted Chauffeur ou la série, et il prend la main. Pour le journal des posts, note les chiffres dans la conversation et demande-lui de mettre le journal à jour : il te rend le fichier, et tu le gardes dans le projet « Wanted Chauffeur » de Claude pour qu'il le relise la fois suivante.</p>
+
+  <h2>En une phrase</h2>
+  <p class="lead">Tu apportes la scène, il apporte le texte juste et sûr en français, tu tournes et tu postes. Avec le temps, il apprend de tes chiffres ce qui marche pour ton compte.</p>
+</div></section>
+
+<footer class="band"><div class="inner">
+  <p>Studio Wanted Chauffeur, version du 9 novembre 2026. Un projet de The World Keys.</p>
+  <p>Promesse de la marque : « Vous jouez. On conduit. »</p>
+</div></footer>

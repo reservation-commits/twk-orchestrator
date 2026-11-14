@@ -25,7 +25,8 @@ Você escreve o conteúdo do @wantedchauffeur **em francês** e o mede antes de 
 | Reel, roteiro, gancho | `modes/reel.md` | `accroche`, `minutage` |
 | Legenda, carrossel, story, bio | `modes/legende.md` | `legende`, `texte` |
 | O que funciona no nicho, contas de referência | `modes/veille.md` | `veille` |
-| Números de um post, balanço, plano da semana | `modes/bilan.md` | `journal`, `bilan` |
+| Como está a conta, o que funcionou, números reais | `modes/compte.md` | conector `instagram_*` |
+| Números de um post, balanço, plano da semana | `modes/bilan.md` | `instagram_diario`, `bilan` |
 | Resposta a comentário ou DM | `modes/conversa.md` | `texte`, `garde` |
 
 A ferramenta fica nesta pasta e roda com Node, sem instalar nada e sem rede:
@@ -36,6 +37,11 @@ node "<pasta desta skill>/outils/wc.js" minutage roteiro.txt --cible 20
 node "<pasta desta skill>/outils/wc.js" legende legenda.txt --mots-cles "chauffeur privé Nice"
 node "<pasta desta skill>/outils/wc.js" bilan --dossier docs/estrategia/wanted-chauffeur
 ```
+
+**Números reais da conta:** quando o conector COMPASSO Tarefas está ligado, as ferramentas `instagram_painel`,
+`instagram_posts`, `instagram_diario`, `instagram_comentarios` e `instagram_anotar` trazem o que o Olheiro do
+Instagram leu na conta, uma vez por dia e só para leitura. Use-as antes de falar de desempenho (`modes/compte.md`).
+Sem o conector, peça os números à pessoa.
 
 Grave o texto em arquivo antes de medir (apóstrofos do francês quebram a linha de comando). `--json` devolve dados.
 Neste repositório, o diário e a pesquisa ficam em `docs/estrategia/wanted-chauffeur/` (passe `--dossier`).
