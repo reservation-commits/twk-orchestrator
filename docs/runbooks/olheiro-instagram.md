@@ -114,11 +114,12 @@ Aria só aceita nomes da lista. A Aria tem teto de 12 avisos por pessoa por hora
 
 A Meta aprovou o `twk_team_alert` como **MARKETING**, apesar do pedido em UTILITY. Funciona, mas: custa o preço de
 conversa de marketing, e mensagens de marketing têm um limite por destinatário que a Meta pode aplicar **descartando
-o aviso sem erro** (código 131049 no rastreio de entrega). Para um alerta operacional é risco de silêncio. Por isso
-existe a segunda redação `twk_team_pending_request`
-(`docs/notificacoes/templates-meta-v6b-equipe-fr-utility-2026-11-16.md`): quando ela for aprovada como UTILITY,
-troque `TEAM_ALERT_TEMPLATE=twk_team_pending_request` na Aria e faça Deploy. Nada muda no Olheiro nem na Central.
-Enquanto isso, o `twk_team_alert` serve como ponte.
+o aviso sem erro** (código 131049 no rastreio de entrega). **Decisão do fundador em 16/11: ficar com o
+`twk_team_alert` como está.** A segunda redação `twk_team_pending_request`
+(`docs/notificacoes/templates-meta-v6b-equipe-fr-utility-2026-11-16.md`) fica guardada, não enviada; se um dia um
+aviso for descartado com 131049, ela é o plano B: enviar à Meta e, aprovada como UTILITY, trocar
+`TEAM_ALERT_TEMPLATE` na Aria. O rastreio de entrega (`aria_delivery_status`, destinatário "operador") é onde o
+descarte apareceria; a Sentinela lê essa tabela.
 
 ## Renovar a chave (Caminho A, a cada 60 dias)
 

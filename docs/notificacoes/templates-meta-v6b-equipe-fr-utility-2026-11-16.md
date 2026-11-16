@@ -1,4 +1,4 @@
-# Template de WhatsApp v6b — alerta à equipe em francês, segunda redação (16/11/2026 — **proposta, aguardando o "aprovado" do fundador; nada foi enviado à Meta**)
+# Template de WhatsApp v6b — alerta à equipe em francês, segunda redação (16/11/2026 — **não enviada: o fundador decidiu em 16/11 ficar com o `twk_team_alert` aprovado como MARKETING. Guardada como plano B para o caso de descarte 131049**)
 
 O `twk_team_alert` (v6) foi aprovado pela Meta em 14/11, mas na categoria **MARKETING**, não UTILITY, apesar de o
 pedido ter ido com a categoria travada. Isso tem dois efeitos: cada aviso custa o preço de conversa de marketing
