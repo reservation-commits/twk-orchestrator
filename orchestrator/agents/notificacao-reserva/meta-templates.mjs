@@ -44,6 +44,7 @@ const COMUM = {
   sistema: "Aria (atendimento)", situacao: "Modelo de IA fora do ar. A Aria não responde clientes até voltar.", horario: "05/10 14:55 (Paris)",
   // v6 (14/11/2026): alerta à equipe em francês — só fr, rodar com --lang fr
   sujet: "Instagram @wantedchauffeur", situation: "Il y a une demande de réservation sans réponse sur ce post : https://www.instagram.com/reel/C9xYz12AbCd/", heure: "14/11 7:31 PM (Paris)",
+  canal: "Instagram @wantedchauffeur", detail: "Il y a une demande de réservation sans réponse sur ce post : https://www.instagram.com/reel/C9xYz12AbCd/",
 };
 const AMOSTRA = {
   en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
@@ -79,6 +80,8 @@ const VARIAVEIS = {
   twk_ops_alert: ["sistema", "situacao", "horario"],
   // v6 (14/11/2026): alerta à equipe em francês (Aria v27, alertaEquipe.ts; primeiro uso: aviso do Instagram ao Julien)
   twk_team_alert: ["sujet", "situation", "heure"],
+  // v6b (16/11/2026): segunda redação, para sair como UTILITY (a v6 foi aprovada como MARKETING)
+  twk_team_pending_request: ["canal", "detail", "heure"],
   // v5 (05/11/2026): reserva que já nasce confirmada (confirmação automática, ex.: MONAK) — Aria v25
   twk_venue_confirmed: ["casa", "data", "hora", "pessoas", "cliente"],
 };

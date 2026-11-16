@@ -55,41 +55,70 @@ aprovação. Registre a frase no fim (passo 6).
 ## Aviso ao Julien no WhatsApp (pedido de reserva sem resposta há 30 min)
 
 Decisão do fundador em 14/11. A Central roda uma vigia de comentários a cada 5 minutos. Quando um comentário que
-pede preço, data ou reserva fica 30 minutos sem resposta da conta, a Aria manda ao Julien, pelo template de alerta
-em francês, a frase « Il y a une demande de réservation sans réponse sur ce post : » com o link do post
-(`OLHEIRO_AVISO_IDIOMA=pt` volta à frase em português). Cada pedido gera um
-aviso só. Pedido de mais de 24 h não gera aviso, para que ligar o Olheiro não dispare uma rajada de atrasos antigos.
+pede preço, data ou reserva fica 30 minutos sem resposta da conta, a Aria manda ao Julien, em francês, a frase
+« Il y a une demande de réservation sans réponse sur ce post : » com o link do post. Cada pedido gera um aviso só.
+Pedido de mais de 24 h não gera aviso, para que ligar o Olheiro não dispare uma rajada de atrasos antigos.
 
-1. **Crie um segredo** só para isso, na máquina local:
+**Estado em 16/11:** código commitado nos dois repositórios (raiz e Aria v27); pacote
+`Agente de Suporte e Concierge/aria_agent_whatsapp-2026-11-16-v27.zip` pronto; template `twk_team_alert` (fr)
+**aprovado pela Meta**, porém como MARKETING (ver "Categoria do template", abaixo). Nada disso está no ar ainda.
+
+### Ordem de ligação (faça nesta ordem; cada passo diz como saber que ficou pronto)
+
+1. **Olheiro lendo a conta.** Passos 1 a 5 do Caminho A, acima. Pronto quando `GET /api/instagram` da Central
+   mostra `"username": "wantedchauffeur"`. Sem isso, não há comentário para vigiar.
+2. **Segredo do aviso.** Na máquina local, gere e guarde fora do OneDrive (por exemplo em `~/.twk/aria-equipe.env`):
 
    ```bash
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
    ```
 
-2. **Aria (Easypanel, serviço da Aria):** publique a v27 e acrescente:
+3. **Aria v27 no ar.** No Easypanel, serviço da Aria: suba o zip da v27 e acrescente ao Environment:
 
    ```
-   TEAM_ALERT_SECRET=<o segredo>
-   TEAM_ALERT_WHATSAPP=julien=<número do Julien em +33…>
-   ```
-
-   O aviso vai **em francês**, pelo template `twk_team_alert` (documento
-   `docs/notificacoes/templates-meta-v6-equipe-fr-2026-11-14.md`). Depois de a Meta aprovar, acrescente também:
-
-   ```
+   TEAM_ALERT_SECRET=<o segredo do passo 2>
+   TEAM_ALERT_WHATSAPP=julien=<número do Julien em +33…, sem espaços>
    TEAM_ALERT_TEMPLATE=twk_team_alert
    TEAM_ALERT_LOCALE=fr
    ```
 
-   Sem essas duas linhas, a Aria usa o alerta ao operador, que só existe em português. Pronto quando: o `/health`
-   da Aria mostra `"alertaEquipe": true` e `"alertaEquipePessoas": ["julien"]`.
-3. **Central (Easypanel, serviço da Central):** acrescente `ARIA_TEAM_ALERT_SECRET=<o mesmo segredo>` e faça Deploy.
-   Opcionais: `OLHEIRO_LIMITE_RESERVA_MIN` (padrão 30), `OLHEIRO_VIGIA_MIN` (padrão 5), `OLHEIRO_AVISAR` (padrão
-   julien), `OLHEIRO_ARIA_URL` (padrão: o endereço da Aria que a Regência já usa).
-   Pronto quando: `GET /api/rotinas` mostra `vigia_instagram.aviso_ligado: true`.
+   Deploy. Pronto quando `/health` da Aria mostra a versão `2026-11-14-v27-alerta-equipe-instagram`,
+   `"alertaEquipe": true` e `"alertaEquipePessoas": ["julien"]`. Se `alertaEquipe` vier `false`, falta uma das
+   quatro variáveis ou o número não está em formato internacional.
+4. **Teste do aviso antes de ligar a vigia.** Da máquina local, um pedido de teste direto à Aria (troque o segredo):
+
+   ```bash
+   curl -X POST "https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host/webhook/alerta-equipe" -H "content-type: application/json" -H "x-aria-secret: <o segredo>" -d "{\"destinatario\":\"julien\",\"sistema\":\"Test The World Keys\",\"situacao\":\"Message de test : si tu lis ceci, le canal fonctionne. Rien à faire.\",\"evento\":\"teste-2026-11-16\"}"
+   ```
+
+   Pronto quando a resposta é `{"ok":true,"desfecho":"enviado"}` **e o Julien confirma que recebeu**. Respostas
+   possíveis: `404` = segredo não configurado na Aria; `401` = segredo diferente; `destinatario_desconhecido` =
+   `TEAM_ALERT_WHATSAPP` sem o nome julien; `meta_recusou` = template ou idioma errados na Aria; `ja_enviado` =
+   repetiu o mesmo `evento` em 24 h (troque o texto depois de `teste-`).
+5. **Central com o segredo.** No Easypanel, serviço da Central: `ARIA_TEAM_ALERT_SECRET=<o mesmo segredo>`. Deploy.
+   Pronto quando `GET /api/rotinas` (com `X-Center-Key`) mostra `vigia_instagram.aviso_ligado: true` e, uns minutos
+   depois, `vigia_instagram.ultima.exit: 0`.
+6. **Prova real.** Peça a alguém de confiança para comentar num post recente « C'est combien pour samedi ? » e não
+   responda. Entre 30 e 35 minutos depois, o Julien recebe o aviso com o link do post. Depois responda ao comentário
+   pela conta: a vigia seguinte vê a resposta e o pedido sai da fila.
+7. **Registre a aprovação** em `orchestrator/logs/olheiro-instagram-<data>.jsonl` com a frase e a data.
+
+Opcionais na Central: `OLHEIRO_LIMITE_RESERVA_MIN` (padrão 30), `OLHEIRO_VIGIA_MIN` (padrão 5), `OLHEIRO_AVISAR`
+(padrão julien), `OLHEIRO_AVISO_IDIOMA=pt` (volta à frase em português), `OLHEIRO_ARIA_URL` (padrão: o endereço da
+Aria que a Regência já usa).
 
 O número do Julien fica só no ambiente da Aria. A Central e o Olheiro mandam o nome "julien", nunca o número, e a
 Aria só aceita nomes da lista. A Aria tem teto de 12 avisos por pessoa por hora.
+
+### Categoria do template
+
+A Meta aprovou o `twk_team_alert` como **MARKETING**, apesar do pedido em UTILITY. Funciona, mas: custa o preço de
+conversa de marketing, e mensagens de marketing têm um limite por destinatário que a Meta pode aplicar **descartando
+o aviso sem erro** (código 131049 no rastreio de entrega). Para um alerta operacional é risco de silêncio. Por isso
+existe a segunda redação `twk_team_pending_request`
+(`docs/notificacoes/templates-meta-v6b-equipe-fr-utility-2026-11-16.md`): quando ela for aprovada como UTILITY,
+troque `TEAM_ALERT_TEMPLATE=twk_team_pending_request` na Aria e faça Deploy. Nada muda no Olheiro nem na Central.
+Enquanto isso, o `twk_team_alert` serve como ponte.
 
 ## Renovar a chave (Caminho A, a cada 60 dias)
 

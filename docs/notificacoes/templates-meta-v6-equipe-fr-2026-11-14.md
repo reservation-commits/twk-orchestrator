@@ -1,4 +1,4 @@
-# Template de WhatsApp v6 — alerta à equipe em francês (14/11/2026 — **aprovado pelo fundador ("Sim, envia") e enviado à Meta em 14/11: id 1454597642744983, UTILITY, PENDING**)
+# Template de WhatsApp v6 — alerta à equipe em francês (14/11/2026 — **aprovado pelo fundador ("Sim, envia"), enviado em 14/11 e APROVADO pela Meta em 16/11, id 1454597642744983 — porém na categoria MARKETING, não UTILITY; ver a segunda redação em `templates-meta-v6b-equipe-fr-utility-2026-11-16.md`**)
 
 O fundador pediu em 14/11 que o Julien receba em francês o aviso de pedido de reserva sem resposta no Instagram do
 @wantedchauffeur. O alerta ao operador (`twk_ops_alert`, v4) só existe em português e a Meta não deixa mandar texto
