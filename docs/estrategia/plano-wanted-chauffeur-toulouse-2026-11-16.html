@@ -1,0 +1,260 @@
+<title>Wanted Chauffeur · Toulouse · plano por blocos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: documento longo de operação, lido no celular pelo fundador e no desktop pelo dev.
+   Uma coluna de leitura (~68ch), tabelas largas com rolagem própria, duas cores de pessoa:
+   rosa = Fundador, azul-claro = Dev (as cores dos LEDs das portas). Dark-first: o assunto é a noite. */
+:root{
+  --bg:#0B0D12; --bg2:#12151D; --bg3:#1A1E29;
+  --fg:#ECEAE3; --muted:#9AA0AD; --rule:#262B38;
+  --accent:#8AD8FF; --warm:#FF8CCB; --violet:#B48CFF; --ok:#7FD1A1; --alert:#F08A7E;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F4F3EE; --bg2:#FFFFFF; --bg3:#ECEBE4;
+    --fg:#15181F; --muted:#5B6270; --rule:#DAD8D0;
+    --accent:#0F6FA8; --warm:#B4237A; --violet:#6B3FC4; --ok:#1E7F4C; --alert:#B5392C;
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F4F3EE; --bg2:#FFFFFF; --bg3:#ECEBE4;
+  --fg:#15181F; --muted:#5B6270; --rule:#DAD8D0;
+  --accent:#0F6FA8; --warm:#B4237A; --violet:#6B3FC4; --ok:#1E7F4C; --alert:#B5392C;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.02;margin:0}
+h1{font-size:clamp(44px,9vw,92px);font-weight:900;letter-spacing:-.01em;text-transform:uppercase}
+h2{font-size:clamp(30px,5vw,44px);font-weight:700;text-transform:uppercase;letter-spacing:.01em;margin-top:64px;padding-top:20px;border-top:1px solid var(--rule)}
+h3{font-size:clamp(20px,3vw,26px);font-weight:700;margin-top:32px;color:var(--fg)}
+p,li{max-width:68ch}
+p{margin:12px 0}
+ul,ol{padding-left:22px;margin:10px 0}
+li{margin:5px 0}
+.eyebrow{font-family:var(--body);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.hero{padding-block:40px 0}
+.hero::after{content:"";display:block;height:3px;margin-top:24px;background:linear-gradient(90deg,var(--violet),var(--warm),var(--accent))}
+.hero .lead{font-size:19px;max-width:62ch;color:var(--fg)}
+.meta{display:flex;flex-wrap:wrap;gap:10px 24px;color:var(--muted);font-size:14px;margin-top:16px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:3px;vertical-align:middle}
+.fato{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.sup{background:color-mix(in srgb,var(--warm) 18%,transparent);color:var(--warm)}
+.lac{background:color-mix(in srgb,var(--alert) 18%,transparent);color:var(--alert)}
+.F{color:var(--warm)} .D{color:var(--accent)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:18px 0}
+.card{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;min-width:0}
+.card h4{font-family:var(--display);font-size:22px;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:.02em}
+.card p{font-size:15px;margin:6px 0;color:var(--fg)}
+.card .n{font-family:var(--display);font-size:40px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.callout{border-left:3px solid var(--accent);background:var(--bg2);padding:14px 18px;margin:20px 0;border-radius:0 6px 6px 0}
+.callout.warm{border-left-color:var(--warm)}
+.callout.alert{border-left-color:var(--alert)}
+.callout p{margin:6px 0}
+.tbl{overflow-x:auto;margin:16px 0;border:1px solid var(--rule);border-radius:6px;background:var(--bg2)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--bg3);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td ul{margin:0;padding-left:16px}
+td li{margin:3px 0;max-width:none}
+.dia td:first-child{white-space:nowrap;font-weight:700;font-family:var(--display);font-size:17px;letter-spacing:.02em}
+.dia th.f{color:var(--warm)} .dia th.d{color:var(--accent)}
+.dia td.marco{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+.toc a{font-size:13px;color:var(--fg);text-decoration:none;border:1px solid var(--rule);padding:5px 10px;border-radius:999px;background:var(--bg2)}
+.toc a:hover,.toc a:focus-visible{border-color:var(--accent);outline:none}
+a{color:var(--accent)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;background:var(--bg3);padding:1px 5px;border-radius:3px}
+.ideias{columns:2;column-gap:28px;margin:12px 0}
+.ideias li{break-inside:avoid;max-width:none}
+@media (max-width:640px){.ideias{columns:1}}
+.foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--rule);color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){.toc a{transition:border-color .15s}}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">The World Keys · Toulouse · plano por blocos · versão 3 · 16/11/2026</div>
+  <h1>Wanted<br>Chauffeur</h1>
+  <p class="lead">Um Tesla Model X com PS5 a bordo, em Toulouse, e um objetivo só: <strong>corrida privada reservada todo dia, sem Uber, acima do piso de preço.</strong> As redes trazem o pedido; o concierge do hotel traz o pedido de hoje. Este documento diz o que fazer, em que ordem, quem faz e como se prova que funcionou. O que não está aqui não se faz.</p>
+  <div class="meta">
+    <span><span class="F">■</span> Márlon: conteúdo, prospecção, agenda diária</span>
+    <span><span class="D">■</span> Lucas: página, WhatsApp, rastreamento, planilha</span>
+    <span>Julien: dirige, filma com câmera fixa, responde o WhatsApp</span>
+  </div>
+  <div class="meta"><span class="tag fato">fato</span> verificado · <span class="tag sup">proposta</span> nossa, você decide · <span class="tag lac">lacuna</span> não foi possível verificar</div>
+  <nav class="toc" aria-label="Seções">
+    <a href="#meta">A meta</a><a href="#b0">Bloco 0 · Fundação</a><a href="#b1">Bloco 1 · Conteúdo diário</a><a href="#b2">Bloco 2 · Onda GTA 6</a><a href="#b3">Bloco 3 · Venda direta</a><a href="#b4">Bloco 4 · Rotina</a><a href="#b5">Bloco 5 · Depois</a><a href="#precos">Preços</a><a href="#travas">Travas</a><a href="#decisoes">Decisões</a><a href="#cards">Cards</a>
+  </nav>
+</header>
+
+<section id="meta">
+<h2>A meta e a prova</h2>
+<div class="grid">
+  <div class="card"><h4>Até 05/12</h4><p class="n">1</p><p>corrida paga por dia, em média, na semana.</p></div>
+  <div class="card"><h4>Até 31/12</h4><p class="n">2</p><p>corridas pagas por dia. Nenhuma abaixo do piso.</p></div>
+  <div class="card"><h4>Como se conta</h4><p>Pedido no WhatsApp do Julien com código de referência, etiqueta <strong>Feito</strong>. Sem código, não conta.</p></div>
+  <div class="card"><h4>Toda segunda</h4><p>Três números: vídeos publicados, pedidos por origem, corridas feitas. Em 10 minutos, na planilha.</p></div>
+</div>
+<div class="callout alert">
+  <p><strong>Prova honesta.</strong> <span class="tag lac">lacuna</span> Procurei em 16/11 um chauffeur na França que tenha transformado conta de TikTok em reservas e não achei caso documentado: o que existe documentado são vídeos virais de VTC com milhões de views e nenhum dado de reserva. Por isso o plano roda <strong>dois motores</strong>: as redes (prova em 2 semanas, pelos nossos números) e a venda direta ao concierge (prova em 1 semana, pela primeira corrida). Nada neste documento é prova até a conta publicar e o WhatsApp receber.</p>
+</div>
+</section>
+
+<section id="b0">
+<h2>Bloco 0 · Fundação <span class="eyebrow">16 a 18/11 · bloqueia tudo</span></h2>
+<p>Sem isto, vídeo nenhum vira pedido. Três dias, seis itens, cada um com a prova de pronto.</p>
+<div class="tbl"><table>
+<tr><th>Item</th><th>Quem</th><th>Pronto quando</th></tr>
+<tr><td>Conta @wantedchauffeur no TikTok, Instagram, YouTube e Twitch, mesma foto, mesma frase « Vous jouez. On conduit. », mesmo link</td><td class="F">Márlon</td><td>As quatro abrem com o mesmo nome e o link da bio leva à página</td></tr>
+<tr><td>WhatsApp Business no número do Julien: saudação, 5 produtos no catálogo, respostas rápidas em FR e EN, etiquetas Orçado · Confirmado · Feito · Perdido</td><td class="D">Lucas</td><td>Mensagem de teste recebe a saudação com os preços</td></tr>
+<tr><td>Página <code>/ride</code> com foto do carro no Capitole, 5 produtos de Toulouse com preço, botão « Réserver sur WhatsApp », código de referência com a letra da origem (T · I · Y · W · H hotel · S site)</td><td class="D">Lucas</td><td>Pedido de teste da bio do TikTok chega ao WhatsApp com código WTD-T-xxxx</td></tr>
+<tr><td>Termo de imagem de 1 página (FR e EN) com QR no encosto do banco</td><td class="F">Márlon</td><td>Um passageiro assina no celular em menos de 1 minuto</td></tr>
+<tr><td>Planilha de clientes com 6 colunas: nome · número · hotel ou bairro · origem · produto · data. Só os três têm acesso. Nada no site, nada no banco da TWK</td><td class="D">Lucas</td><td>A primeira linha é o primeiro pedido de teste</td></tr>
+<tr><td>Três modelos de edição no CapCut (abertura 1 s, tarja @wantedchauffeur, música licenciada) entregues ao Julien</td><td class="F">Márlon</td><td>O Julien edita um vídeo sozinho em 10 minutos</td></tr>
+</table></div>
+</section>
+
+<section id="b1">
+<h2>Bloco 1 · Conteúdo diário <span class="eyebrow">de 19/11 em diante · prioridade máxima</span></h2>
+<p><strong>Regra única: um vídeo por dia, 12 segundos, Toulouse na tela nos 2 primeiros segundos, um pedido no fim.</strong> Viral é global, cliente é local: quem vê em Lyon não reserva em Toulouse, por isso a cidade aparece antes do carro.</p>
+<h3>Os cinco formatos que publicamos, e por quê</h3>
+<div class="tbl"><table>
+<tr><th>Formato</th><th>O que aparece</th><th>Por que entra</th></tr>
+<tr><td>A reação</td><td>Passageiro entra, a porta Falcon abre, a tela acende. Sem narração, som ambiente.</td><td>É o formato que mais retém em conteúdo de carro: o rosto conta a história. <span class="tag sup">observação do nicho</span></td></tr>
+<tr><td>POV</td><td>« Tu commandes un chauffeur à Toulouse et il arrive ça. » Câmera no ponto de vista de quem espera.</td><td>Quem vê se põe no lugar do cliente: é o vídeo que gera o « c'est combien ? » nos comentários</td></tr>
+<tr><td>O preço na tela</td><td>« Game Night · 3 h · 6 personnes · 58 € chacun ». Número grande, sem rodeio.</td><td>Transforma curiosidade em pedido: é o único formato cujo comentário já é uma reserva</td></tr>
+<tr><td>O lugar</td><td>Capitole à meia-noite, Pont Neuf, Marché de Noël, Ernest-Wallon em dia de jogo. Carro parado, LEDs acesos.</td><td>Faz o algoritmo entregar a quem está em Toulouse e dá à cidade motivo para compartilhar</td></tr>
+<tr><td>Os bastidores</td><td>Carregar, limpar, montar o PS5, o Julien contando a noite. 30 a 60 s.</td><td>Humaniza e conta para o programa de criadores do TikTok (vídeos acima de 1 minuto)</td></tr>
+</table></div>
+<h3>Semana tipo</h3>
+<p>Segunda reação · terça o lugar · quarta POV · quinta bastidores · sexta o preço · sábado o melhor da semana em 60 s · domingo carrossel de fotos. Horário: 7:00 PM e 11:00 PM na primeira semana; a partir da segunda, só o horário que deu mais pedidos.</p>
+<h3>Três ganchos prontos para Toulouse</h3>
+<div class="callout">
+  <p><strong>FR</strong> « Personne ne te dit qui conduit cette voiture à Toulouse. » · <strong>PT</strong> Ninguém te conta quem dirige este carro em Toulouse. <em>(gancho 80, medido pelo estúdio em 11/11 para Nice; só a cidade mudou)</em></p>
+  <p><strong>FR</strong> « Tu commandes un chauffeur place du Capitole. Il arrive ça. » · <strong>PT</strong> Você pede um chauffeur na praça do Capitole. Chega isto.</p>
+  <p><strong>FR</strong> « Game Night à Toulouse : 3 h, 6 potes, 58 € chacun. » · <strong>PT</strong> Game Night em Toulouse: 3 h, 6 amigos, 58 € cada. <em>(preço é proposta até a sua decisão)</em></p>
+</div>
+<h3>O ciclo de prova, em duas semanas</h3>
+<ol>
+  <li><strong>Semana 1 (19 a 25/11):</strong> 7 vídeos, um de cada formato, nos dois horários. Nenhuma opinião, só números na segunda.</li>
+  <li><strong>Segunda 30/11:</strong> os 2 vídeos com mais pedidos (não mais views) viram o molde da semana. O formato que não trouxe um único « c'est combien ? » sai do calendário.</li>
+  <li><strong>Semana 2 (30/11 a 06/12):</strong> 7 vídeos, 5 no molde, 2 de teste. Repetir até a meta de 1 corrida por dia.</li>
+</ol>
+<p>Ferramenta: o estúdio Wanted Chauffeur no Claude escreve o roteiro em francês, mede o gancho e confere as travas; o Olheiro do Instagram lê os números da conta todo dia quando a chave da Meta entrar. Sem esses dois, a segunda-feira é feita à mão, na planilha.</p>
+</section>
+
+<section id="b2">
+<h2>Bloco 2 · A onda do GTA 6 <span class="eyebrow">19 a 24/11</span></h2>
+<p><span class="tag fato">fato</span> O jogo sai em <strong>19/11</strong>, data que não muda. A nossa primeira Game Night filmada em Toulouse é em <strong>24/11</strong>, cinco dias depois: ainda dentro da onda, e com o carro pronto. O que muda nos textos já escritos: os teasers deixam de dizer « demain soir à minuit » e passam a dizer <strong>« la première Game Night de Toulouse, mardi »</strong>.</p>
+<div class="tbl"><table>
+<tr><th>Dia</th><th>O que sai</th><th>Quem</th></tr>
+<tr><td>19/11</td><td>Vídeo de 10 s: o jogo chegando ao carro (caixa, tela acendendo de relance, sem logo em destaque). Legenda: « Il est arrivé. Première Game Night mardi, à Toulouse. »</td><td class="F">Márlon</td></tr>
+<tr><td>20 a 23/11</td><td>Teasers 1 a 3 já escritos (gancho 80, 85 e 82), com Toulouse no lugar de Nice e a terça no lugar da meia-noite</td><td class="F">Márlon</td></tr>
+<tr><td>23/11</td><td>Ensaio: 30 min no trajeto da terça com PS5, câmeras e internet ligados. Se cair, a terça é gravada, não ao vivo</td><td>Julien + <span class="D">Lucas</span></td></tr>
+<tr><td>24/11</td><td>Primeira Game Night: 4 a 6 convidados com termo assinado, Capitole → Pont Neuf → Saint-Cyprien. Vídeo no ar até o meio-dia de 25/11 com o link da <code>/ride</code> na bio</td><td class="F">Márlon</td></tr>
+</table></div>
+</section>
+
+<section id="b3">
+<h2>Bloco 3 · Venda direta em Toulouse <span class="eyebrow">de 17/11 em diante · a corrida de hoje</span></h2>
+<p><span class="tag fato">fato</span> O chauffeur privado vive do concierge, da empresa e do evento, em qualquer cidade do mundo. Em Toulouse isso tem nome e data:</p>
+<div class="tbl"><table>
+<tr><th>Porta</th><th>O que fazer</th><th>Quando</th><th>Prova</th></tr>
+<tr><td>5 hotéis do centro: La Cour des Consuls, Grand Hôtel de l'Opéra, Grand Balcon, Pullman Centre, Mama Shelter</td><td>Márlon vai pessoalmente, de terno azul-claro, com cartão, QR da <code>/ride</code> e a tabela. Fala de 4 frases ao concierge, abaixo</td><td>17 e 18/11</td><td>Primeiro pedido com código H até 25/11</td></tr>
+<tr><td>Aeromart, feira de fornecedores de aviação no MEETT</td><td>Oferta « Aéroport ↔ MEETT ↔ hôtel », transfer de 80 €, na página e no WhatsApp; mensagem pronta aos 5 hotéis para os hóspedes da feira</td><td>Oferta no ar 24/11; feira 1 a 3/12</td><td>3 transfers vendidos na feira</td></tr>
+<tr><td>Marché de Noël no Capitole, 26/11 a 27/12</td><td>Oferta « Noël Ride »: 1 h pelas luzes, 250 €, vídeo do carro na praça na véspera</td><td>Vídeo 25/11</td><td>1 Noël Ride por fim de semana</td></tr>
+<tr><td>Rugby em casa: Toulouse × Racing 92 em 05/12, Toulouse × Toulon em 26/12</td><td>Oferta « Match Day »: hotel → Ernest-Wallon → jantar, vídeo na véspera</td><td>04/12 e 24/12</td><td>2 corridas por dia de jogo</td></tr>
+</table></div>
+<div class="callout">
+  <p><strong>Fala ao concierge, em francês.</strong> « Bonjour, je suis Márlon, de Wanted Chauffeur. On a une Model X avec chauffeur, basée au centre, pour vos clients qui veulent une voiture pour la soirée ou l'aéroport. Voici la carte avec les prix. Si un client demande, un message sur ce WhatsApp et Julien confirme. »</p>
+  <p><strong>PT</strong> Bom dia, sou o Márlon, da Wanted Chauffeur. Temos um Model X com chauffeur, no centro, para os clientes que querem carro para a noite ou para o aeroporto. Este é o cartão com os preços. Se um cliente pedir, uma mensagem neste WhatsApp e o Julien confirma.</p>
+  <p><span class="tag sup">proposta</span> 10% ao concierge sobre cada corrida que ele mandar, pago no fim do mês. É a prática do setor; sem isso o cartão vai para a gaveta.</p>
+</div>
+</section>
+
+<section id="b4">
+<h2>Bloco 4 · A rotina que segura o plano</h2>
+<div class="grid">
+  <div class="card"><h4>9:00 AM, todo dia</h4><p><span class="F">Márlon</span> manda ao Julien no WhatsApp a agenda do dia: hora, cliente, origem, produto, valor. Dia vazio: a mensagem diz o que filmar e em que porta de hotel ficar.</p></div>
+  <div class="card"><h4>30 minutos</h4><p>Nenhum comentário, DM ou mensagem no WhatsApp fica mais de 30 minutos sem resposta entre 9:00 AM e 11:00 PM. Pedido sem resposta é pedido perdido.</p></div>
+  <div class="card"><h4>Fim de cada corrida</h4><p>Julien marca a etiqueta no WhatsApp; <span class="D">Lucas</span> passa a linha para a planilha no mesmo dia. Cliente que fez uma corrida recebe uma mensagem na semana seguinte.</p></div>
+  <div class="card"><h4>Segunda, 10 minutos</h4><p>Três números na planilha e uma decisão: o que repetir e o que cortar. Sem reunião.</p></div>
+</div>
+</section>
+
+<section id="b5">
+<h2>Bloco 5 · Só depois de 20 vídeos e 10 corridas</h2>
+<p>Lives na Twitch, programas de monetização, parcerias com marcas, patrocínio do carro, série do envelopamento em janeiro. Tudo isso está no plano de 09/11 e continua válido, mas nada entra no calendário antes de a conta ter 20 vídeos publicados e a planilha ter 10 corridas. Antes disso é distração.</p>
+</section>
+
+<section id="precos">
+<h2>Preços de Toulouse <span class="tag sup">proposta</span></h2>
+<p>Em Toulouse o táxi do aeroporto ao centro custa 25 a 40 € e as plataformas de chauffeur começam em 54 € (<span class="tag fato">fato</span>, leitura de 16/11). O nosso piso fica acima de todos e abaixo do que uma noite vale. Por pessoa considera 6 passageiros. Sempre com IVA.</p>
+<div class="tbl"><table>
+<tr><th>Produto</th><th>O que é</th><th>Preço</th><th>Por pessoa</th></tr>
+<tr><td>Transfer</td><td>Aeroporto ↔ centro ou MEETT, até 40 min, PS5 ligado</td><td class="num">80 €</td><td class="num">13 €</td></tr>
+<tr><td>Hora à disposição</td><td>Mínimo 2 h, cidade e arredores</td><td class="num">90 €/h</td><td class="num">15 €/h</td></tr>
+<tr><td>Night Ride</td><td>1 h pela cidade iluminada, até 2 paradas</td><td class="num">250 €</td><td class="num">42 €</td></tr>
+<tr><td>Game Night</td><td>3 h, PS5, 2 controles, bebidas sem álcool, foto na saída</td><td class="num">350 €</td><td class="num">58 €</td></tr>
+<tr><td>Soirée</td><td>Ida, espera 4 h, volta + mesa em casa que confirma pedidos</td><td class="num">390 € + jantar</td><td class="num">65 € + jantar</td></tr>
+</table></div>
+<p>Abaixo do piso a corrida não é aceita. É isso que separa « bien payé » do Uber.</p>
+</section>
+
+<section id="travas">
+<h2>Travas que não se negociam</h2>
+<div class="tbl"><table>
+<tr><th>Trava</th><th>Regra prática</th></tr>
+<tr><td>Carta VTC e empresa</td><td><span class="tag lac">lacuna</span> Sem carta VTC e empresa registrada, nenhuma corrida paga é legal. Confirmar com o Julien antes do primeiro pedido.</td></tr>
+<tr><td>Reserva sempre</td><td>VTC não pega passageiro na rua. Toda corrida nasce de uma mensagem no WhatsApp, mesmo 10 minutos antes.</td></tr>
+<tr><td>Rosto de passageiro</td><td>Só com termo assinado. Quem não assina viaja igual e aparece de costas ou desfocado. Menores nunca aparecem jogando.</td></tr>
+<tr><td>Marca do jogo</td><td>« GTA » só na fala e na legenda. Nunca na tela, na capa, na bio ou no nome.</td></tr>
+<tr><td>Motorista</td><td>Nunca filma, nunca vê a tela, nunca lê chat. Câmeras fixas ligadas antes de partir.</td></tr>
+<tr><td>LEDs</td><td>Acesos só com o carro parado e a porta aberta. Em circulação, apagados.</td></tr>
+<tr><td>Música</td><td>Só biblioteca licenciada ou tema próprio. Música famosa derruba o vídeo e a conta.</td></tr>
+<tr><td>Promessas</td><td>Nunca « disponible ce soir », nunca « premier au monde ». Preço só da tabela aprovada.</td></tr>
+<tr><td>Quem não quer</td><td>Pedido para não ser filmado ou contatado entra na lista de opt-out e vale mais que qualquer meta.</td></tr>
+</table></div>
+</section>
+
+<section id="decisoes">
+<h2>Quatro decisões suas</h2>
+<ol>
+  <li><strong>A tabela de preços de Toulouse</strong> acima. Sem ela, página e vídeos de preço não saem.</li>
+  <li><strong>Carta VTC e empresa do Julien.</strong> Sim ou não. Se não, o plano para na fundação.</li>
+  <li><strong>Comissão de 10% ao concierge.</strong> Sim, outro número, ou nenhuma.</li>
+  <li><strong>O Julien fica em Toulouse até 31/12.</strong> Os blocos 3 e 4 dependem disso.</li>
+</ol>
+</section>
+
+<section id="cards">
+<h2>O que vai para o COMPASSO</h2>
+<p>Dez cards novos e uma passagem nos 40 existentes (Nice vira Toulouse; Promenade des Anglais vira Capitole e Pont Neuf; a Soirée passa a depender de uma casa de Toulouse que confirme pedidos, ainda não verificada no banco).</p>
+<div class="tbl"><table class="dia">
+<tr><th>Data</th><th>Quem</th><th>Card</th></tr>
+<tr><td>17/11</td><td class="F">Márlon</td><td>Mapear os 20 lugares de Toulouse que pedem carro premium e visitar os 5 hotéis do centro</td></tr>
+<tr><td>17/11</td><td class="F">Márlon</td><td>Mandar ao Julien a agenda do dia às 9:00 AM (repete todo dia)</td></tr>
+<tr><td>17/11</td><td class="D">Lucas</td><td>Criar a planilha de clientes e as etiquetas do WhatsApp Business</td></tr>
+<tr><td>18/11</td><td class="F">Márlon</td><td>Entregar ao Julien os 3 modelos de edição no CapCut</td></tr>
+<tr><td>19/11</td><td class="F">Márlon</td><td>Publicar o vídeo da chegada do jogo e começar o calendário de 1 vídeo por dia</td></tr>
+<tr><td>19/11</td><td class="D">Lucas</td><td>Pôr a oferta Aeromart na página e no WhatsApp e preparar a mensagem aos hotéis</td></tr>
+<tr><td>21/11</td><td class="F">Márlon</td><td>Escrever o banco de 20 ideias de vídeo de Toulouse com gancho medido</td></tr>
+<tr><td>25/11</td><td class="F">Márlon</td><td>Lançar a oferta Noël Ride na véspera do Marché de Noël</td></tr>
+<tr><td>30/11</td><td class="F">Márlon</td><td>Primeira segunda de prova: 3 números, 2 moldes, 1 formato cortado (repete toda semana)</td></tr>
+<tr><td>04/12</td><td class="F">Márlon</td><td>Lançar a oferta Match Day na véspera do Toulouse × Racing 92 (repetir em 24/12 para o Toulon)</td></tr>
+</table></div>
+</section>
+
+<footer class="foot">
+  <p>Versão 3, 16/11/2026, substitui o plano de 09/11 (Riviera), que fica no arquivo da Biblioteca. Fontes das datas de Toulouse: Toulouse Tourisme (Marché de Noël 26/11 a 27/12), calendário do Stade Toulousain (05/12 e 26/12), EventsEye (Aeromart 1 a 3/12, sujeito a mudança), Transfeero e Blacklane (preços de transfer). Voz, personagens e travas completas: skill <code>wanted-chauffeur-studio</code>, arquivo <code>voix.md</code>.</p>
+</footer>
+</div>
