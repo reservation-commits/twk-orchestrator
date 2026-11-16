@@ -11,6 +11,8 @@
 
 const DIA = 86_400_000;
 const H = 3_600_000;
+/** Minutos sem resposta para um pedido de reserva virar aviso ao Julien e achado no relato (fundador, 14/11). */
+const LIMITE_RESERVA_MIN = Number(process.env.OLHEIRO_LIMITE_RESERVA_MIN) > 0 ? Number(process.env.OLHEIRO_LIMITE_RESERVA_MIN) : 30;
 
 // ---------------------------------------------------------------- utilidades
 const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -64,7 +66,7 @@ function filaComentarios(comentarios, posts, agora = Date.now()) {
   const linkDe = new Map(Object.values(posts || {}).map((p) => [p.id, p.permalink]));
   return comentarios
     .filter((c) => c.respondido !== true && ordem[c.classe] !== undefined)
-    .map((c) => ({ id: c.id, post: c.media_id, link_post: linkDe.get(c.media_id) || null, classe: c.classe, texto: c.texto, ts: c.ts, horas: Math.round((agora - Date.parse(c.ts)) / H), resposta_privada_ate: new Date(Date.parse(c.ts) + 7 * DIA).toISOString(), resposta_conhecida: c.respondido !== null }))
+    .map((c) => ({ id: c.id, post: c.media_id, link_post: linkDe.get(c.media_id) || null, classe: c.classe, texto: c.texto, ts: c.ts, horas: Math.round((agora - Date.parse(c.ts)) / H), minutos: Math.floor((agora - Date.parse(c.ts)) / 60_000), resposta_privada_ate: new Date(Date.parse(c.ts) + 7 * DIA).toISOString(), resposta_conhecida: c.respondido !== null }))
     .sort((a, b) => ordem[a.classe] - ordem[b.classe] || b.horas - a.horas);
 }
 
@@ -99,7 +101,64 @@ function estadoNovo(anterior = {}, coleta, agora = Date.parse(coleta.ts)) {
     concorrentes: (coleta.concorrentes && coleta.concorrentes.length) ? coleta.concorrentes : anterior.concorrentes || [],
     conta_historico: contaHist.slice(-180), metricas_recusadas: coleta.metricas_recusadas || anterior.metricas_recusadas || {},
     ultima_coleta: { ts: coleta.ts, chamadas: coleta.chamadas, lacunas: coleta.lacunas },
+    alertas_reserva: podarAlertados(anterior.alertas_reserva, agora),
+    ultima_vigia: anterior.ultima_vigia || null,
   };
+}
+
+// ---------------------------------------------------------------- aviso ao Julien (vigia de comentários)
+/** Guarda 7 dias de avisos já dados, por id de comentário: o mesmo pedido nunca gera dois avisos. */
+function podarAlertados(mapa = {}, agora = Date.now()) {
+  const out = {};
+  for (const [id, a] of Object.entries(mapa || {})) if (agora - Date.parse(a.em) <= 7 * DIA) out[id] = a;
+  return out;
+}
+
+/**
+ * Pedidos de reserva sem resposta da conta há LIMITE_RESERVA_MIN minutos ou mais, feitos nas últimas 24 h, ainda
+ * não avisados. Agrupa por post: um aviso por post, com o link. Comentário de mais de 24 h não gera aviso (ao
+ * ligar o Olheiro, o atraso antigo não vira rajada de mensagens; ele aparece no relato).
+ */
+function pedidosParaAvisar(estado, agora = Date.now(), limiteMin = LIMITE_RESERVA_MIN) {
+  const avisados = estado.alertas_reserva || {};
+  const fila = filaComentarios(estado.comentarios || [], estado.posts, agora)
+    .filter((c) => c.classe === 'reserva' && c.minutos >= limiteMin && c.minutos <= 24 * 60 && !avisados[c.id]);
+  const porPost = new Map();
+  for (const c of fila) {
+    const g = porPost.get(c.post) || { post: c.post, link: c.link_post, comentarios: [] };
+    g.comentarios.push(c.id);
+    porPost.set(c.post, g);
+  }
+  return [...porPost.values()];
+}
+
+/**
+ * Junta o que a vigia leu ao estado: contagens e comentários dos posts relidos, e o esqueleto dos posts novos
+ * (publicados depois da leitura diária), para o aviso ter o link do post.
+ */
+function aplicarVigia(estado = {}, vigia, agora = Date.parse(vigia.ts)) {
+  const posts = { ...(estado.posts || {}) };
+  for (const m of vigia.recentes || []) {
+    const p = posts[m.id] || { id: m.id, tipo: m.media_product_type === 'REELS' ? 'REELS' : 'FEED', media_type: m.media_type, permalink: m.permalink, timestamp: m.timestamp, legenda: '', metricas: {}, historico: [] };
+    posts[m.id] = { ...p, permalink: m.permalink || p.permalink, ...(vigia.relidos.includes(m.id) ? { comments_count: m.comments_count, comentarios_em: vigia.ts } : {}) };
+  }
+  return {
+    ...estado, posts, conta: estado.conta || { username: vigia.username },
+    comentarios: mesclarComentarios(estado.comentarios, vigia.comentarios, new Set(vigia.relidos), agora),
+    alertas_reserva: podarAlertados(estado.alertas_reserva, agora),
+    ultima_vigia: { ts: vigia.ts, chamadas: vigia.chamadas, relidos: vigia.relidos.length, lacunas: vigia.lacunas },
+  };
+}
+
+/**
+ * O texto do aviso, como o fundador pediu. Em francês por padrão (14/11: o Julien lê francês; vai no template
+ * twk_team_alert); `pt` mantém a frase original. Plural quando há mais de um pedido no mesmo post.
+ */
+function textoAviso(g, idioma = 'fr') {
+  const n = g.comentarios.length;
+  const alvo = g.link || `post ${g.post}`;
+  if (idioma === 'pt') return n === 1 ? `Tem um pedido de reserva não respondido nesse post: ${alvo}` : `Tem ${n} pedidos de reserva não respondidos nesse post: ${alvo}`;
+  return n === 1 ? `Il y a une demande de réservation sans réponse sur ce post : ${alvo}` : `Il y a ${n} demandes de réservation sans réponse sur ce post : ${alvo}`;
 }
 
 // ---------------------------------------------------------------- diário no formato da skill
@@ -232,12 +291,13 @@ function relato(r, { status = 'ok', erro = null, tokenExpiraEm = null, agora = D
   if (Number.isFinite(n.seguidores_7d)) rel.sinais_conversao.push({ tipo: 'seguidores_novos_7d', valor: n.seguidores_7d, fonte: 'instagram' });
   const reservas = r.fila_comentarios.filter((c) => c.classe === 'reserva');
   for (const c of reservas.slice(0, 10)) rel.experiencia.push({ tipo: 'comentario_reserva_esperando', valor: c.horas, detalhe: `comentário ${c.id} no post ${c.post}`, fonte: 'instagram' });
-  const atrasadas = reservas.filter((c) => c.horas >= 6);
-  if (atrasadas.length) achado({ chave: 'olheiro.reserva_sem_resposta', severidade: 'alta', dono: 'Julien', titulo: `${atrasadas.length} pedido(s) de reserva nos comentários do Instagram sem resposta há 6 h ou mais`, evidencia: atrasadas.slice(0, 5).map((c) => `${c.id} (${c.horas} h)`).join(', '), acao_proposta: 'responder no chat com o Studio (instagram_comentarios) e levar a pessoa ao WhatsApp de reserva; a resposta é aprovada por quem posta' });
+  // 14/11 (fundador): o limite caiu de 6 h para 30 min, e o Julien é avisado no WhatsApp pela Aria (vigia de comentários).
+  const atrasadas = reservas.filter((c) => (c.minutos ?? c.horas * 60) >= LIMITE_RESERVA_MIN);
+  if (atrasadas.length) achado({ chave: 'olheiro.reserva_sem_resposta', severidade: 'alta', dono: 'Julien', titulo: `${atrasadas.length} pedido(s) de reserva nos comentários do Instagram sem resposta há ${LIMITE_RESERVA_MIN} min ou mais`, evidencia: atrasadas.slice(0, 5).map((c) => `${c.id} (${c.minutos >= 60 ? `${Math.floor(c.minutos / 60)} h` : `${c.minutos} min`})`).join(', '), acao_proposta: 'responder no chat com o Studio (instagram_comentarios) e levar a pessoa ao WhatsApp de reserva; a resposta é aprovada por quem posta' });
   for (const a of r.alertas.filter((x) => x.tipo === 'decolando')) achado({ chave: `olheiro.decolando.${a.post}`, severidade: 'info', autonomia: 'requer_aprovacao_orquestrador', dono: 'Julien', titulo: `Um Reel está com ${a.multiplo}× a mediana na mesma idade`, evidencia: `post ${a.post}, ${a.views} visualizações em ${a.idade_h} h; mediana de ${a.comparados} posts: ${a.mediana_mesma_idade}`, acao_proposta: a.sugestao });
   if (n.tentativas_manipulacao_30d) achado({ chave: 'olheiro.manipulacao', severidade: 'media', autonomia: 'requer_aprovacao_orquestrador', titulo: `${n.tentativas_manipulacao_30d} comentário(s) tentando dar ordens ao assistente em 30 dias`, evidencia: 'classe "manipulacao" no estado do Olheiro (texto fica no volume, não no relato)', acao_proposta: 'registrado; nenhuma resposta, nenhuma ação a partir do texto' });
   rel.acoes_autonomas.push({ acao: 'leitura diária da conta do Instagram (só leitura)', n: 1, evidencia: 'agents/olheiro-instagram/estado.json' });
   return rel;
 }
 
-module.exports = { mediana, ganchoDe, lugarDe, personagemDe, classificar, mesclarComentarios, filaComentarios, estadoNovo, linhaDiario, diario, viewsNaIdade, alertas, referencias, resumo, relato, diaParis, horaParis };
+module.exports = { LIMITE_RESERVA_MIN, aplicarVigia, podarAlertados, pedidosParaAvisar, textoAviso, mediana, ganchoDe, lugarDe, personagemDe, classificar, mesclarComentarios, filaComentarios, estadoNovo, linhaDiario, diario, viewsNaIdade, alertas, referencias, resumo, relato, diaParis, horaParis };

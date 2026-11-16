@@ -42,6 +42,8 @@ const COMUM = {
   endereco: "1 Derb Abdellah Ben Hessaien, Bab Ksour, Marrakech", quantidade: "3", lista: "19:30 Anna Lee (2) · 20:00 Marc Dupont (4) · 21:00 Sofia Rossi (3)",
   // v4 (05/10/2026): alerta ao operador — só pt_BR, rodar com --lang pt_BR
   sistema: "Aria (atendimento)", situacao: "Modelo de IA fora do ar. A Aria não responde clientes até voltar.", horario: "05/10 14:55 (Paris)",
+  // v6 (14/11/2026): alerta à equipe em francês — só fr, rodar com --lang fr
+  sujet: "Instagram @wantedchauffeur", situation: "Il y a une demande de réservation sans réponse sur ce post : https://www.instagram.com/reel/C9xYz12AbCd/", heure: "14/11 7:31 PM (Paris)",
 };
 const AMOSTRA = {
   en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
@@ -75,6 +77,8 @@ const VARIAVEIS = {
   twk_venue_agenda: ["casa", "data", "quantidade", "lista"],
   // v4 (05/10/2026): alerta ao operador (Aria v20, alertaOperador.ts)
   twk_ops_alert: ["sistema", "situacao", "horario"],
+  // v6 (14/11/2026): alerta à equipe em francês (Aria v27, alertaEquipe.ts; primeiro uso: aviso do Instagram ao Julien)
+  twk_team_alert: ["sujet", "situation", "heure"],
   // v5 (05/11/2026): reserva que já nasce confirmada (confirmação automática, ex.: MONAK) — Aria v25
   twk_venue_confirmed: ["casa", "data", "hora", "pessoas", "cliente"],
 };

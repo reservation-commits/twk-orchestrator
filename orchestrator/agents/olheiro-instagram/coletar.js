@@ -39,6 +39,59 @@ function precisaMetricas(post, anteriorPost, agora) {
 }
 
 /**
+ * Comentários de um post, sem o nome de quem comentou. O nome é lido só para saber se a resposta veio da própria
+ * conta (`respondido`) e é descartado aqui. Devolve null quando não deu para ler (a lacuna fica registrada).
+ */
+async function lerComentariosDoPost(cli, postId, contaUser, lacunas) {
+  let lista;
+  try {
+    lista = await cli.paginar(`${postId}/comments`, { fields: 'id,text,timestamp,like_count,username,replies{username}' }, 200);
+  } catch (e) {
+    if (e.credencial) throw e;
+    try { lista = await cli.paginar(`${postId}/comments`, { fields: 'id,text,timestamp,like_count' }, 200); lacunas.push('comentários sem a informação de resposta (permissão de comentários ausente?)'); }
+    catch (e2) { if (e2.credencial) throw e2; lacunas.push(`comentários do post ${postId}: ${e2.message}`); return null; }
+  }
+  const out = [];
+  for (const c of lista) {
+    if (c.username && String(c.username).toLowerCase() === contaUser) continue; // a própria conta não é pedido
+    const respostas = (c.replies && c.replies.data) || [];
+    out.push({
+      id: c.id, media_id: postId, texto: String(c.text || '').slice(0, 1000), ts: c.timestamp, curtidas: c.like_count || 0,
+      respondido: c.username === undefined ? null : respostas.some((r) => String(r.username || '').toLowerCase() === contaUser),
+    });
+  }
+  return out;
+}
+
+/**
+ * Vigia de comentários (14/11): rodada curta, a cada poucos minutos. Lê os 25 posts mais recentes e relê os
+ * comentários só de quem mudou de contagem ou ainda tem pedido de reserva sem resposta (para saber se o Julien
+ * já respondeu). Poucas chamadas por rodada: a Meta limita por hora.
+ */
+async function coletarComentarios(cli, anterior = {}, opts = {}) {
+  const agora = opts.agora || Date.now();
+  const lacunas = [];
+  const uid = cli.userId;
+  let username = anterior.conta && anterior.conta.username;
+  if (!username) username = (await cli.get(uid, { fields: 'id,username' })).username;
+  const contaUser = String(username || '').toLowerCase();
+  const recentes = ((await cli.get(`${uid}/media`, { fields: 'id,permalink,timestamp,comments_count,media_type,media_product_type', limit: 25 })).data) || [];
+  const comPendencia = new Set((anterior.comentarios || []).filter((c) => c.classe === 'reserva' && c.respondido !== true && agora - Date.parse(c.ts) <= DIA).map((c) => c.media_id));
+  const relidos = []; const comentarios = [];
+  for (const m of recentes) {
+    if (agora - Date.parse(m.timestamp) > 30 * DIA || !m.comments_count) continue;
+    const ant = (anterior.posts || {})[m.id];
+    const mudou = !ant || ant.comments_count !== m.comments_count;
+    if (!mudou && !comPendencia.has(m.id)) continue;
+    const lidos = await lerComentariosDoPost(cli, m.id, contaUser, lacunas);
+    if (!lidos) continue;
+    relidos.push(m.id);
+    comentarios.push(...lidos);
+  }
+  return { ts: new Date(agora).toISOString(), username, recentes, relidos, comentarios, lacunas, chamadas: cli.chamadas() };
+}
+
+/**
  * @param {ReturnType<import('./api').criarCliente>} cli
  * @param {object} anterior estado.json da rodada anterior (ou {})
  * @param {{ agora?: number, maxPosts?: number, concorrentes?: string[] }} opts
@@ -125,23 +178,9 @@ async function coletar(cli, anterior = {}, opts = {}) {
     const ant = anteriorPosts[p.id];
     if (!p.comments_count || idade > 30 * DIA) continue;
     if (ant && ant.comments_count === p.comments_count && ant.comentarios_em) continue;
-    let lista;
-    try {
-      lista = await cli.paginar(`${p.id}/comments`, { fields: 'id,text,timestamp,like_count,username,replies{username}' }, 200);
-    } catch (e) {
-      if (e.credencial) throw e;
-      try { lista = await cli.paginar(`${p.id}/comments`, { fields: 'id,text,timestamp,like_count' }, 200); lacunas.push('comentários sem a informação de resposta (permissão de comentários ausente?)'); }
-      catch (e2) { if (e2.credencial) throw e2; lacunas.push(`comentários do post ${p.id}: ${e2.message}`); continue; }
-    }
-    for (const c of lista) {
-      const daConta = !!c.username && String(c.username).toLowerCase() === contaUser;
-      if (daConta) continue;
-      const respostas = (c.replies && c.replies.data) || [];
-      comentarios.push({
-        id: c.id, media_id: p.id, texto: String(c.text || '').slice(0, 1000), ts: c.timestamp, curtidas: c.like_count || 0,
-        respondido: c.username === undefined ? null : respostas.some((r) => String(r.username || '').toLowerCase() === contaUser),
-      });
-    }
+    const lidos = await lerComentariosDoPost(cli, p.id, contaUser, lacunas);
+    if (!lidos) continue;
+    comentarios.push(...lidos);
     p.comentarios_em = new Date(agora).toISOString();
     p.comentarios_relidos = true;
   }
@@ -174,4 +213,4 @@ async function coletar(cli, anterior = {}, opts = {}) {
   };
 }
 
-module.exports = { coletar, METRICAS, METRICAS_CONTA, tipoDe, precisaMetricas };
+module.exports = { coletar, coletarComentarios, lerComentariosDoPost, METRICAS, METRICAS_CONTA, tipoDe, precisaMetricas };

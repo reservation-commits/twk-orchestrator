@@ -52,6 +52,45 @@ aprovação. Registre a frase no fim (passo 6).
    ferramentas. Pronto quando: as cinco ferramentas `instagram_*` aparecem.
    Registre a aprovação em `orchestrator/logs/`, com a data e a frase "ligar o Olheiro do Instagram".
 
+## Aviso ao Julien no WhatsApp (pedido de reserva sem resposta há 30 min)
+
+Decisão do fundador em 14/11. A Central roda uma vigia de comentários a cada 5 minutos. Quando um comentário que
+pede preço, data ou reserva fica 30 minutos sem resposta da conta, a Aria manda ao Julien, pelo template de alerta
+em francês, a frase « Il y a une demande de réservation sans réponse sur ce post : » com o link do post
+(`OLHEIRO_AVISO_IDIOMA=pt` volta à frase em português). Cada pedido gera um
+aviso só. Pedido de mais de 24 h não gera aviso, para que ligar o Olheiro não dispare uma rajada de atrasos antigos.
+
+1. **Crie um segredo** só para isso, na máquina local:
+
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+
+2. **Aria (Easypanel, serviço da Aria):** publique a v27 e acrescente:
+
+   ```
+   TEAM_ALERT_SECRET=<o segredo>
+   TEAM_ALERT_WHATSAPP=julien=<número do Julien em +33…>
+   ```
+
+   O aviso vai **em francês**, pelo template `twk_team_alert` (documento
+   `docs/notificacoes/templates-meta-v6-equipe-fr-2026-11-14.md`). Depois de a Meta aprovar, acrescente também:
+
+   ```
+   TEAM_ALERT_TEMPLATE=twk_team_alert
+   TEAM_ALERT_LOCALE=fr
+   ```
+
+   Sem essas duas linhas, a Aria usa o alerta ao operador, que só existe em português. Pronto quando: o `/health`
+   da Aria mostra `"alertaEquipe": true` e `"alertaEquipePessoas": ["julien"]`.
+3. **Central (Easypanel, serviço da Central):** acrescente `ARIA_TEAM_ALERT_SECRET=<o mesmo segredo>` e faça Deploy.
+   Opcionais: `OLHEIRO_LIMITE_RESERVA_MIN` (padrão 30), `OLHEIRO_VIGIA_MIN` (padrão 5), `OLHEIRO_AVISAR` (padrão
+   julien), `OLHEIRO_ARIA_URL` (padrão: o endereço da Aria que a Regência já usa).
+   Pronto quando: `GET /api/rotinas` mostra `vigia_instagram.aviso_ligado: true`.
+
+O número do Julien fica só no ambiente da Aria. A Central e o Olheiro mandam o nome "julien", nunca o número, e a
+Aria só aceita nomes da lista. A Aria tem teto de 12 avisos por pessoa por hora.
+
 ## Renovar a chave (Caminho A, a cada 60 dias)
 
 O relato avisa 10 dias antes. Na máquina local, com a chave atual em `~/.twk/instagram.env` (`IG_ACCESS_TOKEN=…`):
@@ -81,6 +120,9 @@ Troque `IG_ACCESS_TOKEN` e `IG_TOKEN_EXPIRA_EM` no Easypanel e faça Deploy. Se 
 | Lacuna "público … 100 seguidores" | regra da Meta | some sozinha com 100 seguidores |
 | Sentinela: rotina `olheiro-instagram` falhou | erro na rodada | ler `logs/tarefas/olheiro-instagram-<dia>.log` no volume |
 | Ferramentas `instagram_*` dizem "não está ligado" | COMPASSO sem `CENTER_URL` | passo 6 |
+| Lacuna "aviso ao Julien desligado" | falta `ARIA_TEAM_ALERT_SECRET` na Central | seção do aviso, passo 3 |
+| Lacuna "aviso … não saiu (meta_recusou)" | template de alerta não aprovado no idioma configurado | conferir `OPERATOR_ALERT_TEMPLATE` e `OPERATOR_ALERT_LOCALE` na Aria |
+| Ação "vigia … falhou 3 vezes seguidas" | a vigia de comentários está quebrando | ler `logs/tarefas/olheiro-vigia-<dia>.log` no volume |
 
 ## O que este agente nunca faz
 

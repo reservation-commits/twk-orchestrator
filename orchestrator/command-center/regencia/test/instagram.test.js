@@ -56,6 +56,21 @@ test('sem leitura ainda: 404 com explicação, nunca vazio silencioso', async ()
   s2.close();
 });
 
+test('vigia de comentários na Central: roda o Olheiro com --comentarios e grava o resultado', async () => {
+  const st = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-central-vigia-'));
+  const antes = { st: process.env.STATE_DIR, tok: process.env.IG_ACCESS_TOKEN };
+  process.env.STATE_DIR = st; delete process.env.IG_ACCESS_TOKEN;
+  delete require.cache[require.resolve('../../rotinas.js')];
+  const rot = require('../../rotinas.js');
+  const e = await rot.vigiarInstagram();
+  assert.equal(e.exit, 0, 'sem chave a vigia sai 0 (nada a fazer), sem derrubar nada');
+  assert.match(e.ultima_linha, /sem chave do Instagram/);
+  assert.ok(fs.existsSync(path.join(st, 'olheiro-vigia.json')));
+  if (antes.st === undefined) delete process.env.STATE_DIR; else process.env.STATE_DIR = antes.st;
+  if (antes.tok !== undefined) process.env.IG_ACCESS_TOKEN = antes.tok;
+  delete require.cache[require.resolve('../../rotinas.js')];
+});
+
 test('coletor da Regência: sem chave é lacuna declarada; com relato de hoje, repassa o relato', () => {
   const antes = { root: process.env.TWK_STATE_ROOT, tok: process.env.IG_ACCESS_TOKEN };
   process.env.TWK_STATE_ROOT = raiz; delete process.env.IG_ACCESS_TOKEN;

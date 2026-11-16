@@ -23,6 +23,15 @@ function criar({ stateDir, agentsDir }) {
   const dir = () => path.join(stateDir, 'agents', 'olheiro-instagram');
   const lerJson = (f, padrao) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return padrao; } };
   const lerDiario = () => { try { return fs.readFileSync(path.join(dir(), 'journal.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean).map((l) => JSON.parse(l)); } catch { return []; } };
+  /** Grava por arquivo temporário e troca de nome. No Windows a troca pode esbarrar num bloqueio momentâneo
+   *  (antivírus, indexador): tenta de novo e, em último caso, grava direto. */
+  function gravarSeguro(f, conteudo) {
+    const tmp = `${f}.${process.pid}.tmp`;
+    fs.writeFileSync(tmp, conteudo, 'utf8');
+    for (let i = 0; i < 3; i++) { try { fs.renameSync(tmp, f); return; } catch { /* bloqueio momentâneo */ } }
+    fs.writeFileSync(f, conteudo, 'utf8');
+    try { fs.unlinkSync(tmp); } catch { /* fica para trás, inofensivo */ }
+  }
   const semDados = { erro: 'O Olheiro do Instagram ainda não leu a conta (sem chave no Easypanel ou rotina ainda não rodou).', ligado: !!process.env.IG_ACCESS_TOKEN };
 
   function anotar(corpo) {
@@ -45,12 +54,12 @@ function criar({ stateDir, agentsDir }) {
     for (const k of Object.keys(junto)) if (junto[k] === null) delete junto[k];
     todas[id] = junto;
     fs.mkdirSync(dir(), { recursive: true });
-    fs.writeFileSync(`${f}.tmp`, JSON.stringify(todas, null, 1), 'utf8'); fs.renameSync(`${f}.tmp`, f);
+    gravarSeguro(f, JSON.stringify(todas, null, 1));
     // refaz o diário com a anotação, sem esperar a próxima rodada
     try {
       const cerebro = require(path.join(agentsDir, 'olheiro-instagram', 'cerebro.js'));
       const estado = lerJson(path.join(dir(), 'estado.json'), null);
-      if (estado) fs.writeFileSync(path.join(dir(), 'journal.jsonl'), cerebro.diario(estado, todas).map((l) => JSON.stringify(l)).join('\n') + '\n', 'utf8');
+      if (estado) gravarSeguro(path.join(dir(), 'journal.jsonl'), cerebro.diario(estado, todas).map((l) => JSON.stringify(l)).join('\n') + '\n');
     } catch { /* o diário se refaz na próxima rodada */ }
     return { status: 200, ok: true, id, anotacao: junto };
   }
@@ -80,7 +89,8 @@ function criar({ stateDir, agentsDir }) {
       req.on('data', (c) => { body += c; if (body.length > 20_000) req.destroy(); });
       req.on('end', () => {
         let corpo; try { corpo = JSON.parse(body || '{}'); } catch { return json(res, 400, { erro: 'JSON inválido' }); }
-        const r = anotar(corpo);
+        let r;
+        try { r = anotar(corpo); } catch (e) { r = { status: 500, erro: `não consegui gravar a anotação (${String(e && e.message || e).slice(0, 120)})` }; }
         return json(res, r.status, r);
       });
       return true;

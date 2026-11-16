@@ -168,6 +168,7 @@ function saude() {
     ligado: true, hora_paris: HORA, ultima: e.dia, ok: e.ok,
     jobs: e.jobs.map((j) => `${j.job}:${j.ok ? 'ok' : 'FALHOU'}${j.modo ? ':' + j.modo : ''}`),
     guardiao_exportado: e.guardiao_exportado,
+    vigia_instagram: process.env.IG_ACCESS_TOKEN ? { a_cada_min: VIGIA_MIN, aviso_ligado: !!process.env.ARIA_TEAM_ALERT_SECRET, ultima: estadoVigia() } : null,
     // O que falta no ambiente para cada job agir de verdade (nomes de variáveis, nunca valores).
     faltam: [
       ...(process.env.CICLO_APROVACAO ? [] : ['CICLO_APROVACAO (Ciclo do Cliente em ensaio)']),
@@ -194,9 +195,42 @@ function start() {
     }
   }, 5 * 60_000).unref();
   console.log(`[rotinas] ligadas: Guardião (gate), Ciclo do Cliente${process.env.CICLO_APROVACAO ? ' (envio aprovado)' : ' (dry-run)'}, Sentinela e Zelador às ${HORA}h Paris · agentes em ${AGENTS_DIR}`);
+  startVigiaInstagram();
 }
 
-module.exports = { start, executar, estado, saude, enabled, jobs, AGENTS_DIR };
+// ---------------------------------------------------------------- vigia de comentários do Instagram (14/11)
+// Pedido de reserva num post do @wantedchauffeur sem resposta há 30 min → a Aria avisa o Julien no WhatsApp.
+// Uma leitura por dia não chega a 30 min: esta vigia curta roda a cada OLHEIRO_VIGIA_MIN minutos (padrão 5).
+const VIGIA_MIN = Math.max(2, Number(process.env.OLHEIRO_VIGIA_MIN) || 5);
+let vigiando = false;
+function estadoVigia() { try { return JSON.parse(fs.readFileSync(path.join(STATE_DIR, 'olheiro-vigia.json'), 'utf8')); } catch { return null; } }
+async function vigiarInstagram() {
+  if (vigiando || rodando) return null;
+  vigiando = true;
+  try {
+    const logDir = path.join(STATE_DIR, 'logs', 'tarefas');
+    fs.mkdirSync(logDir, { recursive: true });
+    const logFile = path.join(logDir, `olheiro-vigia-${diaCompacto()}.log`);
+    fs.appendFileSync(logFile, `\n=== ${new Date().toISOString()} · vigia de comentários\n`, 'utf8');
+    const r = await rodarUmaVez({ job: 'olheiro-vigia', script: path.join(AGENTS_DIR, 'olheiro-instagram', 'run.js'), args: ['--comentarios'] }, logFile);
+    const antes = estadoVigia() || {};
+    // exit 1 = rodou, mas algum aviso ao Julien não saiu (tenta de novo na próxima); 2+ = a vigia falhou.
+    const falhasSeguidas = r.exit === 0 ? 0 : (antes.falhas_seguidas || 0) + 1;
+    const e = { em: new Date().toISOString(), exit: r.exit, ms: r.ms, falhas_seguidas: falhasSeguidas, ultima_linha: r.saida.split(/\r?\n/).filter(Boolean).slice(-1)[0] || '', log: path.relative(STATE_DIR, logFile) };
+    fs.writeFileSync(path.join(STATE_DIR, 'olheiro-vigia.json'), JSON.stringify(e, null, 1), 'utf8');
+    if (falhasSeguidas === 3 && sentinels) {
+      try { sentinels.upsert(STATE_DIR, { origem: 'vigia', agente: 'olheiro-instagram', regra: 'olheiro_vigia_falhando', severidade: 'alta', titulo: 'Vigia de comentários do Instagram falhou 3 vezes seguidas: avisos de reserva ao Julien podem não estar saindo', detalhe: `${e.ultima_linha} · log: ${e.log}`, evidencia: [{ metrica: 'exit', antes: '', depois: String(r.exit) }] }); } catch { /* fila */ }
+    }
+    return e;
+  } finally { vigiando = false; }
+}
+function startVigiaInstagram() {
+  if (!process.env.IG_ACCESS_TOKEN) { console.log('[rotinas] vigia do Instagram desligada (sem IG_ACCESS_TOKEN)'); return; }
+  setInterval(() => { vigiarInstagram().catch((err) => console.error('[olheiro-vigia]', String(err && err.message || err))); }, VIGIA_MIN * 60_000).unref();
+  console.log(`[rotinas] vigia do Instagram a cada ${VIGIA_MIN} min (aviso ao ${process.env.OLHEIRO_AVISAR || 'julien'} pela Aria${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — DESLIGADO: falta ARIA_TEAM_ALERT_SECRET'})`);
+}
+
+module.exports = { start, executar, estado, saude, enabled, jobs, AGENTS_DIR, vigiarInstagram };
 
 if (require.main === module) {
   // Execução manual (local ou dentro do container): node rotinas.js [--so <job>]
