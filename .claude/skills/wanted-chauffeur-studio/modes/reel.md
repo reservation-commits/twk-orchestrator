@@ -18,7 +18,7 @@ Um Reel desta conta tem **três ganchos que disparam juntos**, e não são a mes
 5. **Roteiro** da opção escolhida pela pessoa (ou das duas melhores, se ela não escolheu). Formato do arquivo:
 
    ```
-   > Nice · 9:00 PM                          ← texto de tela (linha com ">", não conta tempo)
+   > TOULOUSE · 9:00 PM                      ← texto de tela (linha com ">", não conta tempo)
    (1.5s) porte Falcon qui s'ouvre           ← plano sem fala, com a duração entre parênteses
    Il ne savait pas qu'il y avait une PS5.   ← fala
    ```

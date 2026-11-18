@@ -8,7 +8,7 @@ O feed mostra cerca de 125 caracteres e esconde o resto atrás de « … plus »
 2. **Corpo:** curto. O que o vídeo não mostrou: o preço por pessoa, a regra, o bastidor.
 3. **Um pedido só**, ligado ao vídeo. O caminho medido é « lien en bio ». Não some pedidos.
 4. **Hashtags no fim**, até o teto da rede (`donnees/plateformes.json`), com a cidade e o nome da conta.
-5. **Meça:** `node outils/wc.js legende legenda.txt --mots-cles "chauffeur privé Nice,soirée jeux"`.
+5. **Meça:** `node outils/wc.js legende legenda.txt --mots-cles "chauffeur privé Toulouse,soirée jeux"`.
    As palavras de busca são o que alguém digitaria para achar isto: cidade + serviço.
 6. Com `--corriger`, a ferramenta devolve o texto com a tipografia francesa: espaço antes de `?` `!` `;` `:` e sem
    caracteres invisíveis. Entregue essa versão.

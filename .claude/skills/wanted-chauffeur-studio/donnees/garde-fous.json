@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "source": "Travas do plano Wanted Chauffeur de 09/11/2026 (docs/estrategia/plano-night-ride-gta6-2026-11-09.html, seção 6) e doutrina TWK. Onde o plano marca \"a confirmar\", a regra aqui também é só um alerta.",
+  "source": "Travas do plano Wanted Chauffeur de 09/11/2026 (docs/estrategia/plano-night-ride-gta6-2026-11-09.html, seção 6), mantidas no plano v4 Toulouse de 16/11/2026 (docs/estrategia/plano-wanted-chauffeur-toulouse-2026-11-16.html, \"Cinco regras\"), e doutrina TWK. Onde o plano marca \"a confirmar\", a regra aqui também é só um alerta.",
   "note": "Cada regra roda em um ou mais contextos: `ecran` (texto na tela, capa, miniatura), `legende` (legenda), `voix` (fala), `bio`. `motif` é comparado em minúsculas e sem acentos. Níveis: `bloquant` (não publicar assim), `alerte` (precisa de uma pessoa conferir), `rappel` (lembrete de procedimento).",
   "regles": [
     {
@@ -23,7 +23,7 @@
         "bio"
       ],
       "motif": "\\b(premier|premiere|1er|1ere|seule?|unique|meilleure?|n ?° ?1|numero 1)\\b.{0,40}\\b(au monde|du monde|d'europe|en europe|de france|en france|mondiale?)\\b",
-      "message": "Recorde que não provamos. O plano autoriza só o recorte da Riviera: \"la seule voiture de la Riviera où…\"."
+      "message": "Recorde que não provamos. O plano autoriza só o recorte de Toulouse: \"la seule voiture de Toulouse où…\"."
     },
     {
       "id": "disponibilite",
@@ -127,7 +127,7 @@
         "bio"
       ],
       "motif": null,
-      "message": "Preço citado. Confira com a tabela: os valores de 09/11 são PROPOSTA, ainda não aprovada pelo fundador. Sempre TTC e dizendo para quantas pessoas."
+      "message": "Preço citado. Confira com a tabela aprovada pelo fundador em 16/11 (Transfer 80 €, 90 €/h, Night Ride 250 €, Game Night 350 €, Soirée 390 € + jantar); abaixo desses valores a corrida não é aceita. Sempre TTC e dizendo para quantas pessoas."
     },
     {
       "id": "concurrent",
@@ -184,21 +184,19 @@
       "message": "Número de telefone no texto. O caminho medido é o link da bio para a página /ride; número solto perde a origem do pedido."
     }
   ],
-  "prix_proposes": {
-    "note": "Proposta de 09/11/2026, para decisão do fundador. NÃO é tabela aprovada. Por pessoa considera 6 passageiros.",
+  "prix_approuves": {
+    "note": "Tabela aprovada pelo fundador em 16/11/2026 (plano v4 Toulouse). TTC, por carro, até 6 passageiros; por pessoa considera 6. Transfer 80 (13) · Mise à disposition 90/h, mínimo 2 h (15/h) · Night Ride 1 h 250 (42) · Game Night 3 h 350 (58) · Soirée 390 + jantar (65 + jantar). Abaixo desses valores a corrida não é aceita.",
     "valeurs": [
-      150,
-      25,
+      80,
+      13,
+      90,
+      15,
+      250,
+      42,
       350,
       58,
-      490,
-      82,
       390,
-      65,
-      750,
-      125,
-      130,
-      400
+      65
     ]
   }
 }

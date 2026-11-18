@@ -196,6 +196,7 @@ function start() {
   }, 5 * 60_000).unref();
   console.log(`[rotinas] ligadas: Guardião (gate), Ciclo do Cliente${process.env.CICLO_APROVACAO ? ' (envio aprovado)' : ' (dry-run)'}, Sentinela e Zelador às ${HORA}h Paris · agentes em ${AGENTS_DIR}`);
   startVigiaInstagram();
+  startAgendaJulien();
 }
 
 // ---------------------------------------------------------------- vigia de comentários do Instagram (14/11)
@@ -224,13 +225,47 @@ async function vigiarInstagram() {
     return e;
   } finally { vigiando = false; }
 }
+// ---------------------------------------------------------------- agenda do Julien às 9:00 AM (18/11)
+// Lê a planilha de clientes e pede à Aria a agenda do dia no WhatsApp do Julien. Horário próprio (CHAUFFEUR_AGENDA_HORA,
+// padrão 9 Paris), para não esperar o Guardião e o Ciclo terminarem. Ligada só com CHAUFFEUR_AGENDA=on; o script
+// decide o resto (planilha, segredo, 1 envio por dia). Estado em STATE_DIR/agents/wanted-chauffeur/agenda-<dia>.json.
+const AGENDA_HORA = Number(process.env.CHAUFFEUR_AGENDA_HORA || 9);
+let agendando = false;
+function agendaEnviadaHoje() { try { return !!JSON.parse(fs.readFileSync(path.join(STATE_DIR, 'agents', 'wanted-chauffeur', `agenda-${hojeIso()}.json`), 'utf8')).enviado; } catch { return false; } }
+async function agendaJulien() {
+  if (agendando) return null;
+  agendando = true;
+  try {
+    const logDir = path.join(STATE_DIR, 'logs', 'tarefas');
+    fs.mkdirSync(logDir, { recursive: true });
+    const logFile = path.join(logDir, `agenda-julien-${diaCompacto()}.log`);
+    fs.appendFileSync(logFile, `\n=== ${new Date().toISOString()} · agenda do Julien\n`, 'utf8');
+    const r = await rodarUmaVez({ job: 'agenda-julien', script: path.join(AGENTS_DIR, 'wanted-chauffeur', 'agenda-run.js'), args: [] }, logFile);
+    if (r.exit !== 0 && sentinels) {
+      try { sentinels.upsert(STATE_DIR, { origem: 'vigia', agente: 'wanted-chauffeur', regra: 'agenda_julien_falhou', severidade: 'alta', titulo: 'A agenda do dia não chegou ao Julien', detalhe: `${r.saida.split(/\r?\n/).filter(Boolean).slice(-1)[0] || ''} · log: ${path.relative(STATE_DIR, logFile)}`, evidencia: [{ metrica: 'exit', antes: '', depois: String(r.exit) }] }); } catch { /* fila */ }
+    }
+    return r;
+  } finally { agendando = false; }
+}
+function startAgendaJulien() {
+  if (process.env.CHAUFFEUR_AGENDA !== 'on') { console.log('[rotinas] agenda do Julien desligada (CHAUFFEUR_AGENDA=off)'); return; }
+  let tentativas = 0;
+  setInterval(() => {
+    const h = horaParis();
+    if (h !== AGENDA_HORA) { tentativas = 0; return; }
+    if (agendaEnviadaHoje() || tentativas >= 3) return; // 3 tentativas na hora marcada (planilha fora do ar, Aria lenta); depois a Ação na Central avisa
+    tentativas++;
+    agendaJulien().catch((err) => console.error('[agenda-julien]', String(err && err.message || err)));
+  }, 5 * 60_000).unref();
+  console.log(`[rotinas] agenda do Julien às ${AGENDA_HORA}h Paris pela Aria${process.env.CHAUFFEUR_AGENDA_CSV_URL ? '' : ' — SEM PLANILHA: falta CHAUFFEUR_AGENDA_CSV_URL'}${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — SEM SEGREDO: falta ARIA_TEAM_ALERT_SECRET'}`);
+}
 function startVigiaInstagram() {
   if (!process.env.IG_ACCESS_TOKEN) { console.log('[rotinas] vigia do Instagram desligada (sem IG_ACCESS_TOKEN)'); return; }
   setInterval(() => { vigiarInstagram().catch((err) => console.error('[olheiro-vigia]', String(err && err.message || err))); }, VIGIA_MIN * 60_000).unref();
   console.log(`[rotinas] vigia do Instagram a cada ${VIGIA_MIN} min (aviso ao ${process.env.OLHEIRO_AVISAR || 'julien'} pela Aria${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — DESLIGADO: falta ARIA_TEAM_ALERT_SECRET'})`);
 }
 
-module.exports = { start, executar, estado, saude, enabled, jobs, AGENTS_DIR, vigiarInstagram };
+module.exports = { start, executar, estado, saude, enabled, jobs, AGENTS_DIR, vigiarInstagram, agendaJulien };
 
 if (require.main === module) {
   // Execução manual (local ou dentro do container): node rotinas.js [--so <job>]

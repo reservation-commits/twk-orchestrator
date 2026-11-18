@@ -89,3 +89,26 @@ Regra de segurança: o nome tem de ser o da marca ou da razão social, sem "Supp
 
 - Atualizar o rodapé dos e-mails e o botão de opt-in (n8n) para "WhatsApp verificado" só depois que `is_official_business_account = true` for lido pela API — nunca antes.
 - O selo não aumenta limite de envio nem muda preço; isso vem da verificação do negócio (já feita) e da qualidade.
+
+## Estado em 2026-11-16 — caso sem resposta; hipótese do domínio não verificado
+
+Conferido pela API e por e-mail: `oba_status = NOT_STARTED`, selo `false`, nenhuma resposta da Meta ao caso `4757335437829700` em 5 dias (log do dia 16/11).
+
+**Por que o botão está desabilitado (lacuna oficial, hipótese de provedor).** A Meta não publica causa. O provedor Talkpush (artigo de 12/05/2026) cita exatamente a nossa mensagem e lista quatro causas, qualquer uma delas bastando: portfólio não verificado (não é o nosso caso), **domínio do site não verificado no Gerenciador de Negócios**, número novo ou inativo (não é o nosso caso: GREEN, live desde setembro), e sinais de marca fracos (Página do Facebook ativa ligada ao portfólio; nome igual no site, no portfólio e no WhatsApp). Prazo que ele dá para a elegibilidade atualizar depois da correção: 7 a 30 dias. "Não há forçar manual." Fonte: help.talkpush.com/en/articles/13686053.
+
+**O que conferimos em 16/11 (fato):**
+- O token da Aria não tem `business_management`, então domínios e Páginas do portfólio não se leem pela API (erro #200). A leitura é do fundador, em Configurações do negócio → Segurança da marca → Domínios.
+- Rastro público da verificação de domínio: o DNS de `theworldkeys.com` tem TXT do Google (3), da Salesforce (SFMC) e SPF, mas **nenhum `facebook-domain-verification=`**; a home não tem a meta tag `facebook-domain-verification`. O terceiro método (arquivo HTML na raiz) não deixa rastro visível, por isso fica como suposição forte, não fato.
+- O site só aponta para o Instagram `@theworldkeys_com`; nenhuma Página do Facebook ligada no site.
+
+**Caminho proposto (fundador, ~20 min + espera da Meta):**
+1. Gerenciador de Negócios → Configurações do negócio → Segurança da marca → **Domínios** → adicionar `theworldkeys.com` → copiar o registro TXT `facebook-domain-verification=…` → criar no DNS (mesmo painel onde estão os TXT do Google) → clicar em Verificar. Depois, `nslookup -type=TXT theworldkeys.com` tem de mostrar o registro.
+2. Na mesma tela, em **Páginas**, conferir se existe uma Página do Facebook "The World Keys" no portfólio e ligada ao WhatsApp (WhatsApp Manager → número → Perfil). Se não existir, criar com o mesmo nome, foto e site; não precisa publicar conteúdo.
+3. Responder no caso `4757335437829700` que o domínio foi verificado e pedir a reavaliação da elegibilidade (texto abaixo).
+4. Reconferir `node orchestrator/agents/notificacao-reserva/meta-selo-status.mjs` a cada semana, até 30 dias. Quando o botão habilitar ou a API aceitar: `meta-selo-pedido.mjs --apply` com a frase do fundador.
+
+### Resposta ao caso (texto a colar no Business Support Home)
+
+> Follow-up on case 4757335437829700. Since opening the case we have verified our website domain theworldkeys.com in Business Settings → Brand Safety → Domains (DNS TXT) and confirmed the Facebook Page "The World Keys" is linked to the portfolio and to phone number ID 1042654062259988. The portfolio remains business-verified, the display name "The World Keys" is approved and the number's quality rating is GREEN. The "Submit request" button for the Official Business Account is still disabled ("not available for your business at this time") and POST /{phone_number_id}/official_business_account still returns error code 1. Could you please re-check the eligibility of this number and enable the request? Thank you.
+
+(Só enviar depois de os passos 1 e 2 estarem feitos de verdade: nada de afirmar à Meta o que não foi feito.)

@@ -24,6 +24,20 @@
         "orchestrator/tarefas/dev-local.cjs"
       ],
       "port": 8790
+    },
+    {
+      "name": "visuel-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "-y",
+        "http-server",
+        "docs/estrategia/wanted-chauffeur",
+        "-p",
+        "8791",
+        "-c-1",
+        "-s"
+      ],
+      "port": 8791
     }
   ]
 }

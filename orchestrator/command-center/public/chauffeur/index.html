@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pedidos de corrida · Wanted Chauffeur</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23070b10'/><path d='M6 20l3-7h14l3 7v5H6z' fill='none' stroke='%23c9a96e' stroke-width='2'/><circle cx='11' cy='24' r='2' fill='%23c9a96e'/><circle cx='21' cy='24' r='2' fill='%23c9a96e'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="/plataforma/plataforma.css">
+  <link rel="stylesheet" href="/whatsapp/whatsapp.css">
+  <link rel="stylesheet" href="/chauffeur/chauffeur.css">
+</head>
+<body>
+  <div class="gate" id="gate" hidden>
+    <form>
+      <span class="micro gold">The World Keys</span>
+      <h1>PEDIDOS DE CORRIDA</h1>
+      <p class="lede" style="font-size:19px;margin:0 auto">Informe a chave da Central para abrir o painel do Wanted Chauffeur.</p>
+      <input type="password" autocomplete="current-password" placeholder="Chave da Central" aria-label="Chave da Central" required>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <div class="shell" id="app">
+    <aside class="side" aria-label="Seções">
+      <a class="brand" href="#pulso" style="text-decoration:none;color:inherit">
+        <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 21l3.5-8h15L28 21v5H6z"/><circle cx="11.5" cy="25" r="2.2"/><circle cx="22.5" cy="25" r="2.2"/></svg>
+        <span><b>PEDIDOS DE CORRIDA</b><span>Wanted Chauffeur · Toulouse</span></span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Seções">
+        <a href="#pulso" class="on">Pulso</a>
+        <a href="#origem">De onde vêm</a>
+        <a href="#produto">O que pedem</a>
+        <a href="#pedidos">Pedidos</a>
+        <a href="#links">Links por rede</a>
+      </nav>
+      <div class="side-foot">
+        Sem nome e sem telefone: só código, origem, produto e data. A pessoa fica na planilha de clientes, fora daqui.<br>
+        <a href="/">Central de Comando</a> · <a href="/whatsapp">Sala do WhatsApp</a>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="top">
+        <button class="chip menu-btn" id="menu" aria-label="Abrir o menu">Menu</button>
+        <span class="chip live" id="live"><span class="dot"></span><span id="live-t">conectando…</span></span>
+        <span class="micro crumb" id="crumb"></span>
+        <span class="chip tog" id="periodo" data-v="30" title="Janela dos números">30 dias</span>
+        <button class="chip" id="atualizar">Atualizar agora</button>
+        <button class="chip opt" id="tema">Tema claro</button>
+      </div>
+      <main id="conteudo">
+        <section id="pulso" class="sec"><div class="page-head"><h1>Pulso</h1><p class="lede" id="pulso-lede">Lendo os pedidos…</p></div><div id="pulso-body" class="skel"></div></section>
+        <section id="origem" class="sec"><div class="page-head"><h1>De onde vêm</h1><p class="lede">Cada link na bio tem a sua letra (T TikTok, I Instagram, Y YouTube, W Twitch, H hotel, S site). O código do pedido carrega a letra, então dá para saber qual rede traz cliente sem cookie e sem identificar ninguém.</p></div><div id="origem-body" class="skel"></div></section>
+        <section id="produto" class="sec"><div class="page-head"><h1>O que pedem</h1><p class="lede">Os cinco produtos da tabela aprovada em 16/11: Transfer, Mise à disposition, Night Ride, Game Night e Soirée.</p></div><div id="produto-body" class="skel"></div></section>
+        <section id="pedidos" class="sec"><div class="page-head"><h1>Pedidos</h1><p class="lede">Um por linha. O resultado é marcado à mão, pelo código que aparece na conversa do WhatsApp: orçado, confirmado, feito ou perdido. Quem marca: o Márlon, no fim do dia, pela conversa do Julien.</p></div><div id="pedidos-body" class="skel"></div></section>
+        <section id="links" class="sec"><div class="page-head"><h1>Links por rede</h1><p class="lede">Cole cada um na bio da rede certa. O dos hotéis vai no cartão e no QR.</p></div><div id="links-body" class="skel"></div></section>
+        <p class="rodape micro" id="rodape"></p>
+      </main>
+    </div>
+  </div>
+  <script src="/chauffeur/chauffeur.js"></script>
+</body>
+</html>

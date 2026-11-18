@@ -23,6 +23,7 @@ const sentinels = require('./sentinels.js');
 const analyst = require('./analyst.js');
 const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da frota (somente leitura)
 const whatsapp = require('./whatsapp.js'); // Sala do WhatsApp: o canal ao vivo (somente leitura, cache 30 s)
+const chauffeurMod = require('./chauffeur.js'); // Wanted Chauffeur: pedidos de corrida da página /ride (código, origem, produto; nunca nome nem telefone)
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
@@ -54,6 +55,7 @@ const AGENTS = [
   { id: 'guardiao', nome: 'GUARDIÃO', env: 'GUARDIAO', url: '', local: true },
 ];
 const guardiao = require('./guardiao.js');
+const chauffeur = chauffeurMod.criar({ stateDir: STATE_DIR });
 
 // ---------- util ----------
 function timingSafeEq(a, b) {
@@ -357,6 +359,8 @@ const server = http.createServer(async (req, res) => {
     });
   }
   if (u.pathname === '/api/ingest' && req.method === 'POST') return handleIngest(req, res);
+  // Pedido de corrida vindo da página /ride (navegador do cliente): sem chave, com origem permitida e teto por endereço.
+  if (chauffeur.tratarPublico(req, res, u, json)) return;
   if (u.pathname === '/api/inbox/consume' && req.method === 'POST') {
     // O Orquestrador local coleta os pedidos pendentes (Bearer INGEST_TOKEN) e eles saem da fila.
     if (!INGEST_TOKEN) return json(res, 503, { error: 'INGEST_TOKEN ausente' });
@@ -473,6 +477,7 @@ const server = http.createServer(async (req, res) => {
     // Rotinas hospedadas (A1): estado da última rodada e disparo manual (mesma chave da API).
     // Instagram do @wantedchauffeur (Olheiro): leitura e anotações, para o conector do COMPASSO.
     if (instagram.tratar(req, res, u, json)) return;
+    if (chauffeur.tratar(req, res, u, json)) return;
     if (u.pathname === '/api/rotinas' && req.method === 'GET') return json(res, 200, { saude: rotinas.saude(), ultima: rotinas.estado() });
     if (u.pathname === '/api/rotinas/run' && req.method === 'POST') {
       const so = u.searchParams.get('so') || null;
@@ -683,6 +688,7 @@ const server = http.createServer(async (req, res) => {
   // Panorama: /plataforma abre a página da plataforma (não o cockpit, que é o fallback de SPA).
   if (u.pathname === '/plataforma' || u.pathname === '/plataforma/') { req.url = '/plataforma/index.html'; }
   if (u.pathname === '/whatsapp' || u.pathname === '/whatsapp/') { req.url = '/whatsapp/index.html'; }
+  if (u.pathname === '/chauffeur' || u.pathname === '/chauffeur/') { req.url = '/chauffeur/index.html'; }
   serveStatic(req, res);
 });
 

@@ -1,0 +1,2 @@
+nome_da_reserva,whatsapp,hotel_ou_bairro,origem_do_pedido,produto,data,hora,codigo,resultado,observacao
+Exemplo Durand,+33 6 00 00 00 00,Hôtel Exemple (Capitole),cliente antigo,Transfer,2026-11-20,7:00 AM,,confirmado,"linha de exemplo: apagar depois do primeiro cliente de verdade"

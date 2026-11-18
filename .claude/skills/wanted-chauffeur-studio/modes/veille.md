@@ -12,7 +12,7 @@ divididas pela mediana recente da própria conta. Acima de 3× é sinal. Abaixo 
 
 1. **Contas.** Peça ou proponha 6 a 12, e confirme com a pessoa:
    - 4 diretas: chauffeurs, VTC premium e carros de experiência, de preferência na França;
-   - 4 vizinhas: vida noturna e turismo da Riviera, gaming em francês, carros;
+   - 4 vizinhas: vida noturna e saídas em Toulouse, Stade Toulousain, gaming em francês, carros;
    - 2 a 4 muito maiores, só para formato, nunca para tom.
    Prefira contas até 10× o tamanho da nossa: fórmula que funciona com 2 milhões muitas vezes funciona por causa
    dos 2 milhões.

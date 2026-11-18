@@ -34,7 +34,7 @@ está no diário automático: ele contaria duas vezes.
 
 O Olheiro tira da legenda o gancho, a cidade e o personagem quando estão escritos. O **pilar**, o **texto de tela**
 e o personagem que só aparece na imagem ninguém lê sozinho: pergunte e anote com `instagram_anotar`. Sem isso, o
-balanço por pilar fica vazio. Pilares: `entree`, `nuit`, `a-bord`, `coulisses`, `riviera`.
+balanço por pilar fica vazio. Pilares: `entree`, `nuit`, `a-bord`, `coulisses`, `toulouse`.
 
 ## Alertas
 

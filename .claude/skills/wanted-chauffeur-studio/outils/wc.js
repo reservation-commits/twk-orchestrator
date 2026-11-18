@@ -37,7 +37,8 @@ const contem = (n, termo) => new RegExp(`(^|[^a-z0-9])${esc(termo)}($|[^a-z0-9])
 const mediana = (a) => { const s = a.filter((x) => Number.isFinite(x)).sort((x, y) => x - y); if (!s.length) return null; const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 const arred = (n, c = 1) => (n === null || !Number.isFinite(n) ? null : Math.round(n * 10 ** c) / 10 ** c);
 
-const LIEUX = ['promenade des anglais', 'palais des festivals', 'aeroport de nice', 'sophia antipolis', 'juan-les-pins', 'saint-tropez', 'st-tropez', 'cote d\'azur', 'monte-carlo', 'monte carlo', 'villefranche', 'cap-ferrat', 'croisette', 'beaulieu', 'riviera', 'antibes', 'monaco', 'cannes', 'menton', 'nice', 'eze'];
+// Lugares de Toulouse (plano v4, 16/11/2026): minúsculas sem acento, os mais específicos antes dos genéricos.
+const LIEUX = ['place du capitole', 'aeroport de blagnac', 'stade ernest-wallon', 'ernest-wallon', 'quais de la garonne', 'la garonne', 'compans-caffarelli', 'saint-sernin', 'saint-cyprien', 'la daurade', 'les carmes', 'jean-jaures', 'la ville rose', 'pont-neuf', 'matabiau', 'capitole', 'blagnac', 'garonne', 'meett', 'airbus', 'toulouse', 'occitanie'];
 const OBJETS = ['model x', 'ciel etoile', 'playstation', 'whatsapp', 'manettes', 'manette', 'falcon', 'casino', 'tesla', 'leds', 'ps5', 'led'];
 const NOMBRES = ['deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix', 'onze', 'douze', 'quinze', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'cent', 'mille', 'million', 'millions', 'demi', 'moitie', 'double', 'triple', 'minuit', 'midi'];
 const SIGLES = new Set(['PS5', 'LED', 'LEDS', 'VTC', 'TTC', 'FBI', 'POV', 'DM', 'MP', 'TWK', 'USB', 'QR']);
@@ -77,8 +78,8 @@ function travas(texto, contexte = 'legende') {
     if (r.id === 'prix') {
       const precos = [...n.matchAll(/(\d+(?:[.,]\d+)?) ?(?:€|euros?\b|balles\b)/g)].map((m) => Number(m[1].replace(',', '.')));
       if (!precos.length) continue;
-      const fora = precos.filter((p) => !GARDE.prix_proposes.valeurs.includes(p));
-      saida.push({ id: r.id, niveau: r.niveau, message: `${r.message}${fora.length ? ` Fora da proposta: ${fora.join(', ')} €.` : ` Valores citados (${precos.join(', ')} €) batem com a proposta.`}`, extrait: precos.map((p) => `${p} €`).join(', ') });
+      const fora = precos.filter((p) => !GARDE.prix_approuves.valeurs.includes(p));
+      saida.push({ id: r.id, niveau: r.niveau, message: `${r.message}${fora.length ? ` Fora da tabela aprovada: ${fora.join(', ')} €.` : ` Valores citados (${precos.join(', ')} €) batem com a tabela aprovada.`}`, extrait: precos.map((p) => `${p} €`).join(', ') });
       continue;
     }
     const m = new RegExp(r.motif, 'i').exec(n);

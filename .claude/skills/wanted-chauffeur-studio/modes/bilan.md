@@ -16,12 +16,12 @@ Antes do balanço, confira se os posts têm pilar: sem ele, pergunte e anote com
 
 ```bash
 node outils/wc.js journal ajouter --accroche "Il ne savait pas qu'il y avait une PS5 dans la voiture" \
-  --ecran "Nice · il ne savait pas" --format reel --personnage vice --pilier entree --ville Nice \
+  --ecran "TOULOUSE · il ne savait pas" --format reel --personnage vice --pilier entree --ville Toulouse \
   --duree 14 --heure "9:00 PM" --date 2026-11-19
 ```
 
 `--accroche` é a primeira frase, literal. `--personnage`: vice, fugitif, agent, partenaire, tatoue.
-`--pilier`: entree, nuit, a-bord, coulisses, riviera. `--plateforme`: instagram (padrão), tiktok, youtube-shorts.
+`--pilier`: entree, nuit, a-bord, coulisses, toulouse. `--plateforme`: instagram (padrão), tiktok, youtube-shorts.
 A ferramenta devolve o id do post (`P-20261119-01`).
 
 ## Pôr os números (48 horas e 7 dias depois)

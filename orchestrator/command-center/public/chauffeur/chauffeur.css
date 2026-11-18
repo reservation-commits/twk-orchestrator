@@ -1,0 +1,12 @@
+/* Pedidos de corrida — complementa plataforma.css e whatsapp.css (shell, nav, kpis, barras, chips). */
+.ped { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ped th, .ped td { padding: 8px 10px; border-bottom: 1px solid var(--grid); text-align: left; vertical-align: middle; }
+.ped th { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.ped td.cod { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .04em; color: var(--gold-light); }
+.ped select { background: var(--surface); color: var(--ink); border: 1px solid var(--grid); border-radius: 8px; padding: 4px 8px; font: inherit; font-size: 12px; }
+.ped .res-novo { color: var(--muted); } .ped .res-orcado { color: var(--warning); } .ped .res-confirmado, .ped .res-feito { color: var(--wa); } .ped .res-perdido { color: var(--serious); }
+.vazio { color: var(--muted); font-style: italic; padding: 12px 0; }
+.linkrow { display: grid; grid-template-columns: 90px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--grid); font-size: 13px; }
+.linkrow code { font-size: 12px; color: var(--ink-2); word-break: break-all; }
+.linkrow .uso { grid-column: 2; font-size: 12px; color: var(--muted); }
+@media (max-width: 720px) { .linkrow { grid-template-columns: 1fr; } .linkrow .uso { grid-column: 1; } .ped th:nth-child(5), .ped td:nth-child(5) { display: none; } }

@@ -1,5 +1,7 @@
 # Wanted Chauffeur · roteiros dos 3 teasers
 
+> **SUPERADO em 18/11/2026.** O projeto mudou para Toulouse; os roteiros válidos estão em `roteiros-lancement-toulouse-2026-11-18.md`. Este arquivo fica como histórico (versão de Nice).
+
 Rascunho para aprovação do fundador. Escrito em 11/11/2026 pelo estúdio Wanted Chauffeur; nada foi publicado.
 Card do Compasso: T-20261109-0002 (13/11). Filmagem: 14/11 à noite (T-20261109-0005).
 
