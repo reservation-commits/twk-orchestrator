@@ -7,14 +7,14 @@ Tout est brouillon : tu filmes, tu ajustes, tu publies à 7:00 PM. Caméra fixe,
 ---
 
 ## Reel 1 · Pas eux
-*contre-pied · pilier entree · accroche 83/100 (forte) · 8.5 s*
+*contre-pied · pilier entree · accroche 83/100 (forte) · 9 s*
 
 **L'idée.** Le soir où tout le monde joue chez soi, la caméra montre les deux manettes qui attendent sur la banquette, place du Capitole, portes ouvertes.
 
 **Les plans**
 1. (1.5 s) Place du Capitole de nuit, la Model X noire garée, porte Falcon fermée, voiture à l'arrêt.
 2. (2 s) La porte Falcon s'ouvre, LED violet → rose → bleu clair. Toujours à l'arrêt.
-3. (2.5 s) Banquette arrière : deux manettes posées, le ciel étoilé allumé, l'écran éteint reflète le plafond. Personne à bord.
+3. (3 s) Banquette arrière : deux manettes posées, le ciel étoilé allumé, l'écran éteint reflète le plafond. Personne à bord.
 4. (1.5 s) La porte se referme lentement, le Capitole éclairé derrière.
 5. (1 s) Noir, signature.
 
@@ -84,7 +84,7 @@ Lien en bio.
 
 **Texte à l'écran**
 - 0–2 s : TOULOUSE · zoome
-- 6–9 s : tu l'as lu ? dis-le en commentaire
+- 5–7,5 s : tu l'as lu ? écris-le
 - dernière seconde : Vous jouez. On conduit. · @wantedchauffeur
 
 **Voix off**

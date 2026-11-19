@@ -29,6 +29,29 @@ Para o Julien receber o link no WhatsApp: `ESTUDIO_AVISAR=on` + `ARIA_TEAM_ALERT
 
 Ligar o fluxo é decisão do fundador (tabela de escalonamento: novo fluxo em operação). Runbook: `docs/runbooks/estudio-viral.md`.
 
+## O painel `/estudio` na Central (4.11.0)
+
+| Área | O que tem |
+|---|---|
+| Hoje | Os 3 Reels com prévia animada (planos, texto de tela e voz no tempo certo), nota do gancho, estado (a filmar, filmado, publicado, descartado). Bancada por Reel: linha do tempo, edição com medida ao vivo, ganchos alternativos, legenda, lista de filmagem, legendas `.srt` para o CapCut, IA. Story, carrossel, respostas e « a evitar » com botão de copiar. |
+| Laboratório | Um gancho por linha (`fala \| texto de tela`): nota, seis controles, conselhos e travas na hora, sem modelo. As 19 fórmulas da skill. Conferência de legenda. Com a chave da IA: 10 ganchos escritos e medidos para uma ideia. |
+| Radar | Calendário de Toulouse (21 dias) e as novidades da pesquisa na web, com fonte. |
+| Desempenho | Seguidores por dia, do roteiro ao resultado, por fórmula e por pilar, Reel por Reel. Cruza o Reel publicado com o post lido pelo Olheiro, pelo link. |
+| Arquivo | Todos os dias com pacote. |
+| Sistema | O que está ligado, o que falta e a última rodada. |
+
+Peças novas: `timeline.js` (linha do tempo e `.srt`), `estado.js` (estado dos Reels e edições, append-only), `laboratorio.js`
+(medidas da skill para o painel), `ia.js` (ganchos, reescrita de um Reel, juiz do primeiro quadro com visão), `desempenho.js`,
+`dev-seed.js` (dados de ENSAIO, só no `dev-local.cjs`). Na Central: `command-center/estudio.js` e `public/estudio/`.
+
+Regras do painel: a edição só salva se passar pelas travas (422 com o motivo); o Reel anterior fica em `edicoes.jsonl`; gerar de
+novo guarda o pacote anterior em `arquivo/`; a proposta da IA volta como rascunho e nada é salvo sem o clique; a imagem do
+juiz do quadro não é gravada. A página do Julien (`/studio/<dia>?t=`) tem prévia, lista de planos com marcação, teleprompter,
+legenda, `.srt` e os botões « Filmé », « C'est publié » (com o link do post) e « Pas celui-là ». O que ele publica e descarta
+entra no contexto dos próximos pacotes.
+
+Ver localmente: `node orchestrator/command-center/dev-local.cjs` e abrir `http://localhost:8788/estudio`.
+
 ## O que ele não faz
 
 Não publica, não comenta, não responde DM, não agenda. Não inventa número, cliente nem depoimento (`{{chiffre}}`). Não

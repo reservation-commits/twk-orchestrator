@@ -50,8 +50,10 @@ function relato({ dia, status, pacote, verificacao, veille, lacunas, removidos, 
   return rel;
 }
 
-async function rodar({ argv = process.argv.slice(2), env = process.env, llm = null, avisarImpl = null, log = console.log, stateDir = STATE } = {}) {
+async function rodar({ argv = process.argv.slice(2), env = process.env, llm = null, avisarImpl = null, log = console.log, stateDir = STATE, onEtapa = null } = {}) {
   const f = parse(argv);
+  // progresso para o painel: etapa em curso + detalhe curto (nunca o texto do pacote)
+  const etapa = (id, detalhe = '') => { if (onEtapa) { try { onEtapa({ id, detalhe, ts: new Date().toISOString() }); } catch { /* painel fora */ } } };
   const dia = typeof f.dia === 'string' ? f.dia : contexto.diaParis();
   fs.mkdirSync(stateDir, { recursive: true });
   const ctx = contexto.carregar({ dia, stateRoot: env.TWK_STATE_ROOT || null, stateDir });
@@ -68,15 +70,19 @@ async function rodar({ argv = process.argv.slice(2), env = process.env, llm = nu
     if (!llm.disponivel) throw new Error('ANTHROPIC_API_KEY ausente e nenhum --fixture: o Estúdio não tem como escrever o pacote');
     modelo = llm.modelo;
     if (!f['sem-veille']) {
+      etapa('veille', 'pesquisando na web: gaming, formatos da semana, Toulouse');
       try { veille = await veilleMod.pesquisar({ llm, dia, calendario: ctx.calendario }); fs.writeFileSync(path.join(stateDir, `veille-${dia}.json`), JSON.stringify(veille, null, 1)); log(`[estudio] veille: ${veille.novidades.length} novidade(s) com fonte, ${veille.buscas || 0} busca(s)`); }
       catch (e) { lacunas.push(`veille falhou: ${e.message}`); log(`[estudio] veille falhou: ${e.message}`); }
     } else lacunas.push('veille pulada (--sem-veille)');
+    etapa('escrita', veille ? `${veille.novidades.length} novidade(s) com fonte; escrevendo 3 Reels, story, carrossel e respostas` : 'escrevendo 3 Reels, story, carrossel e respostas');
     pacote = await pacoteMod.gerar({ llm, ctx, veille });
     log(`[estudio] pacote escrito pelo modelo (${(pacote.reels || []).length} Reels)`);
   }
 
+  etapa('medida', 'gancho, minutagem, legenda e travas do projeto em cada peça');
   verificacao = pacoteMod.verificar(pacote, wc);
   if (!verificacao.ok && llm && llm.disponivel && typeof f.fixture !== 'string') {
+    etapa('correcao', `${verificacao.bloqueados.length} peça(s) barrada(s): o modelo reescreve só essas`);
     log(`[estudio] ${verificacao.bloqueados.length} peça(s) bloqueada(s): pedindo correção ao modelo`);
     try { pacote = await pacoteMod.gerar({ llm, ctx, veille, correcoes: pacoteMod.textoCorrecoes(pacote, verificacao) }); verificacao = pacoteMod.verificar(pacote, wc); }
     catch (e) { lacunas.push(`correção falhou: ${e.message}`); }
@@ -89,6 +95,7 @@ async function rodar({ argv = process.argv.slice(2), env = process.env, llm = nu
   fs.writeFileSync(path.join(stateDir, `pacote-${dia}.json`), JSON.stringify(saida, null, 1));
   const md = render.markdownFr(pacote, { medidas: verificacao.medidas, problemas: verificacao.problemas, veille });
   fs.writeFileSync(path.join(stateDir, `pacote-${dia}.md`), md);
+  etapa('pronto', `${(pacote.reels || []).length} Reel(s) aprovados${removidos.length ? `, ${removidos.length} removido(s)` : ''}`);
   log(`[estudio] ${status}: ${(pacote.reels || []).length} Reel(s) aprovados${removidos.length ? `, removidos ${removidos.join(', ')}` : ''}; ${verificacao.problemas.filter((p) => p.tipo === 'aviso').length} aviso(s) → ${path.join(stateDir, `pacote-${dia}.md`)}`);
 
   let aviso = null;

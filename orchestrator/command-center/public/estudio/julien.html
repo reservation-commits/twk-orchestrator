@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0b0714">
+  <title>Pack du jour · Wanted Chauffeur</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%238b5cf6'/><stop offset='.5' stop-color='%23ff4fa3'/><stop offset='1' stop-color='%236fd3ff'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='%230b0714'/><path d='M12 9l12 7-12 7z' fill='url(%23g)'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Yellowtail&display=swap">
+  <link rel="stylesheet" href="/estudio/player.css">
+  <link rel="stylesheet" href="/estudio/julien.css">
+</head>
+<body>
+  <header class="tete">
+    <p class="marca"><span>Wanted Chauffeur</span><i>Studio</i></p>
+    <p class="compte" id="compte" hidden></p>
+  </header>
+  <main id="page">
+    <p class="charge">Chargement du pack…</p>
+  </main>
+  <noscript><p style="padding:24px;font-family:system-ui;color:#fff">Cette page a besoin de JavaScript. Ouvre le lien dans Safari ou Chrome.</p></noscript>
+  <div class="prompteur" id="prompteur" hidden>
+    <div class="pr-texte" id="pr-texte"></div>
+    <div class="pr-barre"><button type="button" id="pr-moins" aria-label="Plus lent">−</button><button type="button" id="pr-go">Démarrer</button><button type="button" id="pr-plus" aria-label="Plus vite">+</button><button type="button" id="pr-fermer">Fermer</button></div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/estudio/player.js"></script>
+  <script src="/estudio/julien.js"></script>
+</body>
+</html>

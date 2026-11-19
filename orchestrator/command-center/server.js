@@ -28,7 +28,7 @@ const estudioMod = require('./estudio.js'); // Estúdio Viral: o pacote de conte
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.10.0-estudio-viral-20261119';
+const BUILD = '4.11.0-studio-painel-20261119';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -365,7 +365,7 @@ const server = http.createServer(async (req, res) => {
   // Reserva vinda da página /ride (navegador do cliente): sem chave, com origem permitida, formato estrito e teto por endereço.
   if (chauffeur.tratarPublico(req, res, u, json)) return;
   // Página do Julien com o pacote do dia: link assinado (HMAC do dia), sem chave.
-  if (estudio.tratarPublico(req, res, u)) return;
+  if (estudio.tratarPublico(req, res, u, json)) return;
   if (u.pathname === '/api/inbox/consume' && req.method === 'POST') {
     // O Orquestrador local coleta os pedidos pendentes (Bearer INGEST_TOKEN) e eles saem da fila.
     if (!INGEST_TOKEN) return json(res, 503, { error: 'INGEST_TOKEN ausente' });
@@ -695,6 +695,8 @@ const server = http.createServer(async (req, res) => {
   if (u.pathname === '/plataforma' || u.pathname === '/plataforma/') { req.url = '/plataforma/index.html'; }
   if (u.pathname === '/whatsapp' || u.pathname === '/whatsapp/') { req.url = '/whatsapp/index.html'; }
   if (u.pathname === '/chauffeur' || u.pathname === '/chauffeur/') { req.url = '/chauffeur/index.html'; }
+  // Studio do Wanted Chauffeur: o painel do pacote de conteúdo do dia (a página do Julien é /studio/<dia>?t=, tratada acima).
+  if (u.pathname === '/estudio' || u.pathname === '/estudio/') { req.url = '/estudio/index.html'; }
   // Wanted Chauffeur: a página pública de reserva (theworldkeys.com/ride faz rewrite para cá, ou ride.theworldkeys.com aponta direto).
   if (u.pathname === '/ride' || u.pathname === '/ride/') { req.url = '/ride/index.html'; }
   serveStatic(req, res);

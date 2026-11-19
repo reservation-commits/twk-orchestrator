@@ -1,0 +1,75 @@
+/* Prévia animada de um Reel (animatique): um telefone 9:16 que toca os planos, os textos de tela e as falas no tempo certo.
+   Compartilhada pelo painel /estudio e pela página do Julien. Os cenários são desenho, nunca imagem real. */
+.ph { --ph-violet: #8b5cf6; --ph-rose: #ff4fa3; --ph-ciel: #6fd3ff;
+  position: relative; aspect-ratio: 9 / 16; width: 100%; max-width: 100%; border-radius: 26px; overflow: hidden; background: #000;
+  container-type: inline-size; isolation: isolate; box-shadow: 0 0 0 1px rgba(255,255,255,.09), 0 0 0 7px #0a0612, 0 0 0 8px rgba(255,255,255,.07), 0 24px 60px -18px rgba(139,92,246,.55); user-select: none; }
+.ph-scene { position: absolute; inset: 0; transition: opacity .25s ease; }
+.ph-scene::before, .ph-scene::after { content: ""; position: absolute; inset: 0; }
+
+/* nuit: céu violeta, clarão no horizonte, luzes da cidade desfocadas, chão com reflexo */
+.ph[data-fond="nuit"] .ph-scene { background:
+  radial-gradient(120% 34% at 50% 66%, rgba(255,79,163,.55), rgba(255,79,163,0) 70%),
+  linear-gradient(180deg, #0a0520 0%, #1d0f47 34%, #4a1a7a 58%, #0a0616 66.5%, #05030b 100%); }
+.ph[data-fond="nuit"] .ph-scene::before { background:
+  radial-gradient(5cqw 5cqw at 16% 60%, rgba(255,209,102,.85), transparent 70%), radial-gradient(4cqw 4cqw at 31% 62%, rgba(111,211,255,.7), transparent 70%),
+  radial-gradient(6cqw 6cqw at 72% 59%, rgba(255,209,102,.8), transparent 70%), radial-gradient(3.5cqw 3.5cqw at 86% 62%, rgba(255,79,163,.8), transparent 70%),
+  radial-gradient(3cqw 3cqw at 52% 61%, rgba(255,255,255,.55), transparent 70%); filter: blur(1.2cqw); animation: ph-bokeh 5s ease-in-out infinite alternate; }
+.ph[data-fond="nuit"] .ph-scene::after { top: 66.5%; background:
+  repeating-linear-gradient(180deg, rgba(255,79,163,.16) 0 1px, transparent 1px 3.2cqw), linear-gradient(180deg, rgba(139,92,246,.22), transparent 70%); }
+
+/* led: as três cores das portas varrendo o quadro */
+.ph[data-fond="led"] .ph-scene { background: radial-gradient(80% 60% at 50% 70%, #1a0c36, #05030b 75%); }
+.ph[data-fond="led"] .ph-scene::before { background: linear-gradient(105deg, transparent 18%, var(--ph-violet) 34%, var(--ph-rose) 50%, var(--ph-ciel) 66%, transparent 82%); background-size: 260% 100%; mix-blend-mode: screen; opacity: .85; filter: blur(3cqw); animation: ph-led 2.6s ease-in-out infinite alternate; }
+.ph[data-fond="led"] .ph-scene::after { inset: auto 12% 16% 12%; height: 1.4cqw; border-radius: 2cqw; background: linear-gradient(90deg, var(--ph-violet), var(--ph-rose), var(--ph-ciel)); box-shadow: 0 0 6cqw 1.5cqw rgba(255,79,163,.6); }
+
+/* ciel: o teto estrelado */
+.ph[data-fond="ciel"] .ph-scene { background:
+  radial-gradient(70% 34% at 30% 34%, rgba(139,92,246,.42), transparent 70%), radial-gradient(60% 30% at 74% 58%, rgba(255,79,163,.24), transparent 70%),
+  radial-gradient(90% 60% at 50% 30%, #1d1147, #05030b 82%); }
+.ph[data-fond="ciel"] .ph-scene::before { background-image:
+  radial-gradient(.8cqw .8cqw at 20% 30%, #fff, transparent 62%), radial-gradient(.6cqw .6cqw at 70% 20%, #cfe9ff, transparent 62%), radial-gradient(.9cqw .9cqw at 45% 60%, #fff, transparent 62%),
+  radial-gradient(.55cqw .55cqw at 85% 70%, #ffd9ec, transparent 62%), radial-gradient(.7cqw .7cqw at 10% 80%, #fff, transparent 62%), radial-gradient(.5cqw .5cqw at 60% 85%, #cfe9ff, transparent 62%);
+  background-size: 31cqw 37cqw, 43cqw 29cqw, 23cqw 41cqw, 37cqw 31cqw, 29cqw 47cqw, 19cqw 23cqw; }
+.ph[data-fond="ciel"] .ph-scene::after { background-image: radial-gradient(1.2cqw 1.2cqw at 50% 50%, #fff, transparent 62%), radial-gradient(.9cqw .9cqw at 30% 70%, #6fd3ff, transparent 62%), radial-gradient(1cqw 1cqw at 70% 30%, #ff9cc9, transparent 62%); background-size: 53cqw 61cqw, 47cqw 43cqw, 67cqw 71cqw; filter: drop-shadow(0 0 1.2cqw rgba(255,255,255,.8)); animation: ph-twinkle 2.4s ease-in-out infinite alternate; }
+
+/* interieur: o banco de trás no escuro, com o brilho de uma tela */
+.ph[data-fond="interieur"] .ph-scene { background: radial-gradient(70% 40% at 50% 100%, #24144d, transparent 75%), linear-gradient(180deg, #07040f, #0d0820 60%, #130b2b); }
+.ph[data-fond="interieur"] .ph-scene::before { inset: 46% 18% 30% 18%; border-radius: 3cqw; background: linear-gradient(160deg, rgba(111,211,255,.5), rgba(139,92,246,.35)); filter: blur(.6cqw); box-shadow: 0 0 14cqw 2cqw rgba(111,211,255,.3); animation: ph-screen 3.2s ease-in-out infinite alternate; }
+.ph[data-fond="interieur"] .ph-scene::after { inset: 74% 30% 14% 30%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,79,163,.35), transparent); }
+
+.ph[data-fond="noir"] .ph-scene { background: #000; }
+
+/* granulado leve e vinheta, para ler como vídeo */
+.ph-grain { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.6)); }
+
+.ph-osd { position: absolute; inset: 22% 7% auto 7%; text-align: center; font-family: "Unbounded", system-ui, sans-serif; font-weight: 800; font-size: 8.6cqw; line-height: 1.12; letter-spacing: .01em; color: #fff; text-transform: none;
+  text-shadow: 0 .4cqw 0 rgba(0,0,0,.55), 0 0 5cqw rgba(255,79,163,.55); text-wrap: balance; opacity: 0; transform: translateY(2cqw) scale(.97); transition: opacity .16s ease, transform .2s cubic-bezier(.2,.9,.3,1.3); }
+.ph-osd.on { opacity: 1; transform: none; }
+.ph-osd.sig { top: auto; bottom: 30%; font-size: 6.2cqw; }
+.ph-osd em { display: block; font-style: normal; font-weight: 700; font-size: .62em; margin-top: 1.2cqw; color: #ffd9ec; }
+.ph-osd small { display: block; margin-top: 1.6cqw; font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 500; font-size: 3.6cqw; letter-spacing: .08em; color: var(--ph-ciel); text-shadow: none; }
+
+.ph-sub { position: absolute; inset: auto 7% 15.5% 7%; text-align: center; font-family: "Manrope", system-ui, sans-serif; font-weight: 700; font-size: 4.5cqw; line-height: 1.3; color: #fff; opacity: 0; transition: opacity .15s ease; }
+.ph-sub.on { opacity: 1; }
+.ph-sub span { background: rgba(0,0,0,.72); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: .5cqw 1.6cqw; border-radius: 1cqw; }
+
+.ph-plan { position: absolute; inset: 4.5% 7% auto 7%; display: flex; gap: 2cqw; align-items: baseline; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 3.1cqw; letter-spacing: .06em; color: rgba(255,255,255,.72); text-transform: uppercase; }
+.ph-plan b { color: #fff; font-weight: 600; white-space: nowrap; }
+.ph-plan span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; text-transform: none; letter-spacing: 0; }
+
+.ph-bar { position: absolute; inset: auto 5% 6.5% 5%; display: flex; gap: 1cqw; height: 1.1cqw; }
+.ph-bar i { flex: var(--w, 1) 1 0; background: rgba(255,255,255,.22); border-radius: 1cqw; overflow: hidden; position: relative; }
+.ph-bar i::after { content: ""; position: absolute; inset: 0; width: var(--p, 0%); background: linear-gradient(90deg, var(--ph-violet), var(--ph-rose), var(--ph-ciel)); }
+.ph-time { position: absolute; inset: auto 6% 9.5% auto; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 3.1cqw; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
+
+.ph-play { position: absolute; inset: 0; margin: auto; width: 20cqw; height: 20cqw; border-radius: 50%; border: 0; cursor: pointer; background: rgba(10,6,18,.55); backdrop-filter: blur(6px); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 1px rgba(255,255,255,.25), 0 0 10cqw rgba(255,79,163,.5); transition: opacity .2s ease, transform .2s ease; }
+.ph-play svg { width: 8cqw; height: 8cqw; margin-left: 1cqw; }
+.ph.playing .ph-play { opacity: 0; pointer-events: none; transform: scale(.85); }
+.ph-hit { position: absolute; inset: 0; background: transparent; border: 0; cursor: pointer; }
+.ph-play:focus-visible, .ph-hit:focus-visible { outline: 2px solid var(--ph-ciel); outline-offset: -4px; }
+
+@keyframes ph-led { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+@keyframes ph-twinkle { from { opacity: .25; } to { opacity: 1; } }
+@keyframes ph-bokeh { from { opacity: .7; transform: translateX(-1cqw); } to { opacity: 1; transform: translateX(1cqw); } }
+@keyframes ph-screen { from { opacity: .7; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ph-scene::before, .ph-scene::after { animation: none !important; } .ph-osd { transition: opacity .1s linear; transform: none; } }

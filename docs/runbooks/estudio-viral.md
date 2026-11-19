@@ -29,6 +29,19 @@ CHAUFFEUR_CONFIRMA_URL=https://<central>      (já usado pelo link de confirmar)
 Com isso, a cada rodada o Julien recebe UMA linha: « Le pack vidéo du jour est prêt (3 Reels à filmer) : https://…/studio/2026-11-20?t=… ».
 A página é só leitura, sem script e sem dado de cliente; o token vale só para aquele dia.
 
+## O painel
+
+Abra `https://<central>/estudio` (ou o botão « ▶ Studio » no topo da Central) e informe a chave da Central.
+
+- **Sem a chave da IA** o painel já serve: ler e editar o pacote, medir ganchos e legendas no Laboratório, baixar as legendas
+  `.srt`, marcar o que foi filmado e publicado, ver o desempenho.
+- **Com a chave da IA** (`ANTHROPIC_API_KEY`), o botão « Gerar pacote » roda a pesquisa na web e a escrita (1 a 3 minutos, com
+  as etapas na tela), e a aba IA de cada Reel reescreve o roteiro e julga o primeiro quadro do vídeo.
+- **Para o desempenho ter números**, o Olheiro do Instagram precisa estar ligado e cada Reel publicado precisa do link do post
+  (o Julien cola na página dele, ou você na aba Filmagem).
+
+A área **Sistema** do painel mostra, com os nomes das variáveis, o que falta ligar.
+
 ## 3. Conferir
 
 - `GET /api/estudio/dias` → os dias com pacote.

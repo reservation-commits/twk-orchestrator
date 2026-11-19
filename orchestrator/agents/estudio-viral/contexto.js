@@ -62,7 +62,13 @@ function pacotesRecentes(stateDir, dia, dias = 7) {
   const t0 = Date.parse(`${dia}T12:00:00Z`);
   return fs.readdirSync(stateDir).filter((f) => /^pacote-\d{4}-\d{2}-\d{2}\.json$/.test(f)).map((f) => f.slice(7, 17))
     .filter((d) => { const t = Date.parse(`${d}T12:00:00Z`); return t < t0 && t0 - t <= dias * DIA_MS; }).sort()
-    .map((d) => { const p = lerJson(path.join(stateDir, `pacote-${d}.json`)); return p ? { date: d, idees: (p.reels || []).map((r) => `${r.titre} — ${r.accroche_voix || r.accroche_ecran || ''}`) } : null; }).filter(Boolean);
+    .map((d) => {
+      const p = lerJson(path.join(stateDir, `pacote-${d}.json`)); if (!p) return null;
+      // o que o Julien fez com cada Reel (estado-reels.jsonl): o modelo repete o que ele publica e evita o que ele descarta
+      let est = {}; try { est = require('./estado.js').abrir(stateDir).doDia(d); } catch { /* sem estado ainda */ }
+      const FR = { filme: 'filmé', publie: 'publié', ecarte: 'écarté' };
+      return { date: d, idees: (p.reels || []).map((r) => `${r.titre} — ${r.accroche_voix || r.accroche_ecran || ''}`), choix: (p.reels || []).filter((r) => est[r.id] && FR[est[r.id].status]).map((r) => `« ${r.titre} » ${FR[est[r.id].status]}`) };
+    }).filter(Boolean);
 }
 
 function carregar({ dia = diaParis(), stateRoot = process.env.TWK_STATE_ROOT || null, stateDir = null, skillDir = SKILL_DIR } = {}) {

@@ -20,11 +20,12 @@ function criar(env = process.env, { sdk = carregarSdk(), clientImpl = null } = {
   const effort = String(env.ESTUDIO_EFFORT || 'high');
   let client = clientImpl;
 
-  async function chamar({ system, user, tools = null, maxTokens = 16000, continuacoes = 4 }) {
+  /** `user`: texto ou lista de blocos (imagem + texto, para a visão). `effort`: sobrepõe o padrão nas ferramentas rápidas do painel. */
+  async function chamar({ system, user, tools = null, maxTokens = 16000, continuacoes = 4, effort: esforco = null }) {
     if (!disponivel) throw new Error('ANTHROPIC_API_KEY ausente: o Estúdio não consegue chamar o modelo');
     if (!client) client = new sdk({ apiKey: env.ANTHROPIC_API_KEY });
     const messages = [{ role: 'user', content: user }];
-    const base = { model: modelo, max_tokens: maxTokens, thinking: { type: 'adaptive' }, output_config: { effort }, system, ...(tools ? { tools } : {}) };
+    const base = { model: modelo, max_tokens: maxTokens, thinking: { type: 'adaptive' }, output_config: { effort: esforco || effort }, system, ...(tools ? { tools } : {}) };
     let r = await client.messages.create({ ...base, messages });
     let voltas = 0;
     while (r.stop_reason === 'pause_turn' && voltas < continuacoes) { // a API retoma sozinha ao ver o server_tool_use pendente
