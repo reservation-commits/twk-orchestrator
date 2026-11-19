@@ -2,7 +2,8 @@
 /**
  * Cliente mínimo da API da Anthropic para o Estúdio Viral. Uma função: chamar({ system, user, tools }) → texto.
  * - SDK oficial (@anthropic-ai/sdk), o mesmo da Central (brain.js). Localmente, cai para node_modules da Central.
- * - Modelo: ESTUDIO_MODEL (padrão claude-opus-5-5), thinking adaptativo, effort ESTUDIO_EFFORT (padrão high).
+ * - Modelo: ESTUDIO_MODEL (padrão claude-fable-5-1; família Fable vai pelo caminho beta com fallback do servidor), thinking
+ *   adaptativo, effort ESTUDIO_EFFORT (padrão high).
  * - Ferramentas de servidor (web_search) podem parar em `pause_turn`: reenviamos até 4 vezes, como manda a doc.
  * - `refusal` vira erro (falhar alto), nunca pacote vazio.
  * - A chave só existe no ambiente (ANTHROPIC_API_KEY); nada aqui a lê, grava ou imprime.
@@ -16,7 +17,10 @@ function carregarSdk() {
 
 function criar(env = process.env, { sdk = carregarSdk(), clientImpl = null } = {}) {
   const disponivel = !!(env.ANTHROPIC_API_KEY && (clientImpl || sdk));
-  const modelo = String(env.ESTUDIO_MODEL || 'claude-opus-5-5');
+  // Padrão desde 19/11 (pedido do Márlon): Claude Fable 5.1. ESTUDIO_MODEL troca (ex.: claude-opus-5-5, mais barato).
+  const modelo = String(env.ESTUDIO_MODEL || 'claude-fable-5-1');
+  // Família Fable/Mythos: caminho beta com fallback do lado do servidor (como o cérebro do MAESTRO faz); thinking sempre ligado.
+  const familiaFable = /^claude-(fable|mythos)-/.test(modelo);
   const effort = String(env.ESTUDIO_EFFORT || 'high');
   let client = clientImpl;
 
@@ -26,11 +30,12 @@ function criar(env = process.env, { sdk = carregarSdk(), clientImpl = null } = {
     if (!client) client = new sdk({ apiKey: env.ANTHROPIC_API_KEY });
     const messages = [...historico, { role: 'user', content: user }];
     const base = { model: modelo, max_tokens: maxTokens, thinking: { type: 'adaptive' }, output_config: { effort: esforco || effort }, system: `${system}\n\n${REGRA_JSON}`, ...(tools ? { tools } : {}) };
-    let r = await client.messages.create({ ...base, messages });
+    const criarMsg = (params) => (familiaFable ? client.beta.messages.create({ ...params, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }) : client.messages.create(params));
+    let r = await criarMsg({ ...base, messages });
     let voltas = 0;
     while (r.stop_reason === 'pause_turn' && voltas < continuacoes) { // a API retoma sozinha ao ver o server_tool_use pendente
       voltas += 1;
-      r = await client.messages.create({ ...base, messages: [...messages, { role: 'assistant', content: r.content }] });
+      r = await criarMsg({ ...base, messages: [...messages, { role: 'assistant', content: r.content }] });
     }
     if (r.stop_reason === 'refusal') throw new Error(`modelo recusou (${(r.stop_details && r.stop_details.category) || 'sem categoria'})`);
     const texto = (r.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();

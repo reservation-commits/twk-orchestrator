@@ -11,7 +11,7 @@ Ligar é pôr um fluxo novo em operação: pela constituição, é decisão do f
 ```
 ESTUDIO_VIRAL=on
 ANTHROPIC_API_KEY=<já existe se o cérebro do MAESTRO está ligado>
-ESTUDIO_MODEL=claude-opus-5-5          (opcional; padrão)
+ESTUDIO_MODEL=claude-fable-5-1         (opcional; padrão. claude-opus-5-5 custa cerca de 2,5× menos)
 ESTUDIO_EFFORT=high                    (opcional; padrão)
 ```
 
@@ -51,7 +51,7 @@ A área **Sistema** do painel mostra, com os nomes das variáveis, o que falta l
 
 ## Custo (ordem de grandeza)
 
-2 a 3 chamadas por dia ao modelo (veille com até 8 buscas, pacote, correção). Com `claude-opus-5-5`, algo como 0,30 a 0,80 €
+2 a 3 chamadas por dia ao modelo (veille com até 8 buscas, pacote, correção). Com `claude-fable-5-1` (10 $ / 50 $ por milhão de tokens), algo como 0,80 a 2 €; com `claude-opus-5-5`, 0,30 a 0,80 €
 por dia, dependendo do tamanho da veille. Medido pelo `usage` gravado em `pacote-<dia>.json`.
 
 ## Rodar à mão (sem ligar a rotina)

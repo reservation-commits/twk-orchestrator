@@ -15,7 +15,7 @@ quando o Márlon decidiu que apoiamos o Julien no conteúdo e não só nas ferra
 | Rodada | `run.js` | Junta tudo, grava no volume, relato ao MAESTRO, aviso opcional ao Julien pela Aria (uma linha com o link assinado). |
 | Skill | `sincronizar-skill.js` | Copia a parte usada da skill `.claude/skills/wanted-chauffeur-studio` para `skill/` (o Dockerfile só vê `orchestrator/`). `--verificar` falha se a cópia estiver velha (está na Porta). |
 
-Modelo: `ESTUDIO_MODEL` (padrão `claude-opus-5-5`), thinking adaptativo, `ESTUDIO_EFFORT` (padrão `high`). Uma rodada completa
+Modelo: `ESTUDIO_MODEL` (padrão `claude-fable-5-1`, decisão do Márlon em 19/11; `claude-opus-5-5` é a opção mais barata), thinking adaptativo, `ESTUDIO_EFFORT` (padrão `high`). Uma rodada completa
 faz 2 a 3 chamadas (veille, pacote, correção). A chave vem só do ambiente da Central.
 
 ## Onde roda e como ligar

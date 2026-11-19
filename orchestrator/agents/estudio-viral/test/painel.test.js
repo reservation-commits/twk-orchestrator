@@ -156,3 +156,17 @@ test('JSON inválido do modelo: vírgula sobrando é consertada sem nova chamada
   const teimoso = { chamar: async () => ({ texto: 'pas du json', modelo: 'sim', usage: {} }) };
   await assert.rejects(chamarJsonCom(teimoso, { system: 's', user: 'u' }), /duas tentativas/);
 });
+
+test('modelo padrão é o Fable 5.1 e vai pelo caminho beta com fallback do servidor; o Opus vai pelo caminho normal', async () => {
+  const { criar } = require('../llm.js');
+  const chamadas = [];
+  function Fake() { this.beta = { messages: { create: async (p) => { chamadas.push(['beta', p]); return { stop_reason: 'end_turn', model: p.model, content: [{ type: 'text', text: '{"ok":1}' }], usage: {} }; } } }; this.messages = { create: async (p) => { chamadas.push(['normal', p]); return { stop_reason: 'end_turn', model: p.model, content: [{ type: 'text', text: '{"ok":1}' }], usage: {} }; } }; }
+  const fable = criar({ ANTHROPIC_API_KEY: 'k' }, { sdk: Fake });
+  assert.equal(fable.modelo, 'claude-fable-5-1');
+  await fable.chamar({ system: 's', user: 'u' });
+  assert.equal(chamadas[0][0], 'beta'); assert.deepEqual(chamadas[0][1].betas, ['server-side-fallback-2026-07-01']); assert.equal(chamadas[0][1].fallbacks, 'default');
+  assert.deepEqual(chamadas[0][1].thinking, { type: 'adaptive' }); assert.match(chamadas[0][1].system, /FORMAT JSON/);
+  const opus = criar({ ANTHROPIC_API_KEY: 'k', ESTUDIO_MODEL: 'claude-opus-5-5' }, { sdk: Fake });
+  await opus.chamar({ system: 's', user: 'u' });
+  assert.equal(chamadas[1][0], 'normal'); assert.equal(chamadas[1][1].fallbacks, undefined);
+});
