@@ -68,6 +68,9 @@ function jobs() {
     { job: 'zelador', script: path.join(AGENTS_DIR, 'zelador-privilegios', 'verificar.js'), args: ['--relato'], relato: ['zelador-privilegios', 'zelador-privilegios.json'] },
     // Olheiro do Instagram (14/11): lê a conta do @wantedchauffeur pela API oficial, só leitura. Entra quando a chave
     // existe no ambiente (IG_ACCESS_TOKEN + IG_USER_ID); sem ela não roda, e o coletor da Regência declara a lacuna.
+    // Estúdio Viral (19/11): o pacote de conteúdo do dia (3 Reels medidos) para o Julien. Entra com ESTUDIO_VIRAL=on e a chave da
+    // Anthropic no ambiente; --avisar manda ao Julien UMA linha com o link assinado (exige o segredo da Aria e CHAUFFEUR_CONFIRMA_URL).
+    ...(process.env.ESTUDIO_VIRAL === 'on' && process.env.ANTHROPIC_API_KEY ? [{ job: 'estudio-viral', script: path.join(AGENTS_DIR, 'estudio-viral', 'run.js'), args: ['--relato', ...(process.env.ESTUDIO_AVISAR === 'on' ? ['--avisar'] : [])], relato: ['estudio-viral', 'estudio-viral.json'] }] : []),
     ...(process.env.IG_ACCESS_TOKEN ? [{ job: 'olheiro-instagram', script: path.join(AGENTS_DIR, 'olheiro-instagram', 'run.js'), args: ['--relato'], relato: ['olheiro-instagram', 'olheiro-instagram.json'] }] : []),
   ];
 }

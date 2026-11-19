@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "note": "Limites das redes. Mudam sem aviso: `verifie_le` diz quando alguém conferiu na própria rede. Com `null`, o número veio de memória ou de terceiros e a ferramenta avisa. Se a rede disser outra coisa, a rede tem razão: corrija aqui.",
+  "plateformes": {
+    "instagram": {
+      "legende_max": 2200,
+      "fenetre_visible": 125,
+      "hashtags_max": 5,
+      "bio_max": 150,
+      "verifie_le": null,
+      "source": "Janela de ~125 caracteres e teto de 2.200: conhecimento geral. Teto de 5 hashtags por post desde dez/2025: informado pelo repositório analisado em 09/11/2026, não conferido por nós no Instagram."
+    },
+    "tiktok": {
+      "legende_max": 4000,
+      "fenetre_visible": 100,
+      "hashtags_max": 5,
+      "bio_max": 80,
+      "verifie_le": null,
+      "source": "De memória; conferir no TikTok antes de confiar. O teto de hashtags aqui é escolha nossa de estilo, não regra da rede."
+    },
+    "youtube-shorts": {
+      "legende_max": 100,
+      "fenetre_visible": 60,
+      "hashtags_max": 3,
+      "bio_max": 1000,
+      "verifie_le": null,
+      "source": "Título de até 100 caracteres: conhecimento geral. Os demais são escolhas nossas de estilo; conferir."
+    }
+  }
+}

@@ -7,7 +7,7 @@
   "required": ["agente", "ts", "trace_id", "status", "kpis", "achados", "cobertura"],
   "additionalProperties": false,
   "properties": {
-    "agente": { "type": "string", "enum": ["comercial", "suporte-concierge", "editorial", "financeiro", "dba", "guardiao-reserva", "registro-optout", "central", "orquestrador", "olheiro-instagram"] },
+    "agente": { "type": "string", "enum": ["comercial", "suporte-concierge", "editorial", "financeiro", "dba", "guardiao-reserva", "registro-optout", "central", "orquestrador", "olheiro-instagram", "estudio-viral"] },
     "ts": { "type": "string", "format": "date-time" },
     "trace_id": { "type": "string" },
     "periodo": { "type": "object", "properties": { "de": { "type": "string" }, "ate": { "type": "string" } } },

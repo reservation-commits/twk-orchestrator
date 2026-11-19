@@ -33,6 +33,8 @@ COPY agents/dba-escrita ./agents/dba-escrita
 # Olheiro do Instagram (14/11): leitura diária do @wantedchauffeur pela API da Meta; a chave vem do ambiente.
 COPY agents/olheiro-instagram ./agents/olheiro-instagram
 COPY agents/wanted-chauffeur ./agents/wanted-chauffeur
+# Estúdio Viral (19/11): pacote diário de conteúdo com IA; a cópia da skill (agents/estudio-viral/skill) vai junto.
+COPY agents/estudio-viral ./agents/estudio-viral
 # DURABILIDADE (v4.4): a carga-semente vai para /app/SEED (dentro da imagem),
 # NUNCA para /app/state. O /app/state é o diretório VIVO — deve ser um VOLUME
 # PERSISTENTE montado no EasyPanel, senão as conversas somem a cada deploy.

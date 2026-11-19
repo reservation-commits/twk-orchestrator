@@ -23,11 +23,12 @@ const sentinels = require('./sentinels.js');
 const analyst = require('./analyst.js');
 const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da frota (somente leitura)
 const whatsapp = require('./whatsapp.js'); // Sala do WhatsApp: o canal ao vivo (somente leitura, cache 30 s)
-const chauffeurMod = require('./chauffeur.js'); // Wanted Chauffeur: a página /ride, as reservas (agents/wanted-chauffeur/reservas.js) e o painel /chauffeur
+const chauffeurMod = require('./chauffeur.js');
+const estudioMod = require('./estudio.js'); // Estúdio Viral: o pacote de conteúdo do dia do @wantedchauffeur (página do Julien /studio/<dia>?t=, API /api/estudio) // Wanted Chauffeur: a página /ride, as reservas (agents/wanted-chauffeur/reservas.js) e o painel /chauffeur
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.9.1-wanted-chauffeur-fase2-20261119';
+const BUILD = '4.10.0-estudio-viral-20261119';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -56,6 +57,7 @@ const AGENTS = [
 ];
 const guardiao = require('./guardiao.js');
 const chauffeur = chauffeurMod.criar({ stateDir: STATE_DIR, sentinels });
+const estudio = estudioMod.criar({ stateDir: STATE_DIR });
 
 // ---------- util ----------
 function timingSafeEq(a, b) {
@@ -362,6 +364,8 @@ const server = http.createServer(async (req, res) => {
   if (u.pathname === '/api/ingest' && req.method === 'POST') return handleIngest(req, res);
   // Reserva vinda da página /ride (navegador do cliente): sem chave, com origem permitida, formato estrito e teto por endereço.
   if (chauffeur.tratarPublico(req, res, u, json)) return;
+  // Página do Julien com o pacote do dia: link assinado (HMAC do dia), sem chave.
+  if (estudio.tratarPublico(req, res, u)) return;
   if (u.pathname === '/api/inbox/consume' && req.method === 'POST') {
     // O Orquestrador local coleta os pedidos pendentes (Bearer INGEST_TOKEN) e eles saem da fila.
     if (!INGEST_TOKEN) return json(res, 503, { error: 'INGEST_TOKEN ausente' });
@@ -479,6 +483,7 @@ const server = http.createServer(async (req, res) => {
     // Instagram do @wantedchauffeur (Olheiro): leitura e anotações, para o conector do COMPASSO.
     if (instagram.tratar(req, res, u, json)) return;
     if (chauffeur.tratar(req, res, u, json)) return;
+    if (estudio.tratar(req, res, u, json)) return;
     if (u.pathname === '/api/rotinas' && req.method === 'GET') return json(res, 200, { saude: rotinas.saude(), ultima: rotinas.estado() });
     if (u.pathname === '/api/rotinas/run' && req.method === 'POST') {
       const so = u.searchParams.get('so') || null;

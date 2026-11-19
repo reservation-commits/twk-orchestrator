@@ -1,0 +1,14 @@
+{
+  "nota": "Datas que o Estúdio usa para ancorar o pacote do dia. Rótulos: FATO (plano v4 de 16/11 ou fonte conferida), A CONFIRMAR (achado em pesquisa, conferir na véspera). Fontes nas entradas.",
+  "eventos": [
+    { "de": "2026-11-19", "ate": "2026-11-19", "titre": "Sortie mondiale de GTA 6", "statut": "FATO", "angle": "le jeu arrive dans la voiture, jamais le nom à l'écran", "source": "plano v4 · AFP/Visibrain 19/11: 2,6 millions de messages en 24 h" },
+    { "de": "2026-11-20", "ate": "2026-11-22", "titre": "Marché de Noël de Lalande (maison de quartier, avenue de Fronton)", "statut": "A CONFIRMAR", "angle": "premier marché de l'hiver à Toulouse ; Noël Ride à 250 €", "source": "lebonbon.fr/toulouse, 11/2026" },
+    { "de": "2026-11-24", "ate": "2026-11-24", "titre": "Première Game Night filmée, 9:00 PM", "statut": "FATO", "angle": "vidéo de lancement de la conta", "source": "plano v4" },
+    { "de": "2026-11-26", "ate": "2026-12-27", "titre": "Marché de Noël du Capitole + patinoire place du Capitole", "statut": "FATO", "angle": "Noël Ride : 1 h dans les lumières, 250 €", "source": "toulouse-tourisme.com" },
+    { "de": "2026-11-28", "ate": "2026-11-29", "titre": "Toulouse Game Show (Aussonne, MEETT)", "statut": "A CONFIRMAR", "angle": "le public gaming de Toulouse au même endroit ; transfert MEETT 80 €", "source": "jds.fr agenda 28/11/2026" },
+    { "de": "2026-12-01", "ate": "2026-12-03", "titre": "Aeromart au MEETT", "statut": "FATO", "angle": "transferts aéroport ↔ salon ↔ hôtel, 80 €", "source": "plano v4 (EventsEye)" },
+    { "de": "2026-12-05", "ate": "2026-12-05", "titre": "Stade Toulousain × Racing 92, Ernest-Wallon", "statut": "FATO", "angle": "Match Day : hôtel → stade → dîner, 90 €/h", "source": "plano v4" },
+    { "de": "2026-12-26", "ate": "2026-12-26", "titre": "Stade Toulousain × Toulon, Ernest-Wallon", "statut": "FATO", "angle": "Match Day, 90 €/h", "source": "plano v4" }
+  ],
+  "piliers": { "1": "entree", "2": "nuit", "3": "a-bord", "4": "coulisses", "5": "toulouse", "6": "entree", "0": "a-bord" }
+}

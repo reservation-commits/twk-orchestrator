@@ -29,6 +29,7 @@ Você escreve o conteúdo do @wantedchauffeur **em francês** e o mede antes de 
 | Números de um post, balanço, plano da semana | `modes/bilan.md` | `instagram_diario`, `bilan` |
 | Resposta a comentário ou DM | `modes/conversa.md` | `texte`, `garde` |
 | « idée du jour » (pedido do Julien, em francês) | seção abaixo + `modes/reel.md` | `accroche`, `minutage`, `garde` |
+| O pacote do dia já escrito pelo Estúdio Viral (3 Reels medidos) | `GET /api/estudio/pacote?dia=` na Central (chave) · `orchestrator/agents/estudio-viral/` | mesma medida (`wc.js`), já aplicada |
 
 A ferramenta fica nesta pasta e roda com Node, sem instalar nada e sem rede:
 

@@ -1,0 +1,181 @@
+<title>Seguidores todo dia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: uma coluna de leitura (68ch), blocos por motor, cada um com dono · custo · prova. Sem herói. */
+:root{
+  --bg:#faf8fc; --fg:#1d1a26; --muted:#5e5870; --line:#e3dcef; --card:#ffffff;
+  --accent:#6d3fc4; --accent-2:#d44a93; --accent-3:#2c8fd6; --ok:#1f7a4d; --warn:#b4621a;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#15121c;--fg:#ece7f5;--muted:#a79fbb;--line:#2d2740;--card:#1d1927;--accent:#a98cf0;--accent-2:#f07ab8;--accent-3:#6fb6ee;--ok:#5ccf90;--warn:#f0a35a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15121c;--fg:#ece7f5;--muted:#a79fbb;--line:#2d2740;--card:#1d1927;--accent:#a98cf0;--accent-2:#f07ab8;--accent-3:#6fb6ee;--ok:#5ccf90;--warn:#f0a35a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+main{max-width:68ch;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2rem}
+h2{font-size:1.3rem;margin-top:8px}
+h3{font-size:1.05rem}
+p{margin:0}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{color:var(--muted);font-size:1.05rem}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.meta div{border-top:3px solid var(--accent);padding-top:8px}
+.meta b{display:block;font-family:var(--display);font-size:1.4rem;font-variant-numeric:tabular-nums}
+.meta span{color:var(--muted);font-size:.9rem}
+section{display:grid;gap:12px}
+.motor{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:18px;display:grid;gap:10px}
+.motor .tag{display:flex;flex-wrap:wrap;gap:8px;font-size:.8rem;color:var(--muted)}
+.motor .tag span{border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.motor .tag .julien{border-color:var(--accent-2);color:var(--accent-2)}
+.motor .tag .nos{border-color:var(--accent-3);color:var(--accent-3)}
+.motor .tag .custo{border-color:var(--ok);color:var(--ok)}
+ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.prova{border-left:3px solid var(--ok);padding-left:12px;color:var(--muted);font-size:.95rem}
+.nao{border-left:3px solid var(--warn);padding-left:12px}
+.bolha{background:var(--card);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 14px;max-width:46ch;font-size:.95rem}
+.dia{display:grid;gap:10px}
+.dia .h{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:start}
+.dia .h b{font-variant-numeric:tabular-nums;font-family:var(--display);color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+td:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tab{overflow-x:auto}
+small{color:var(--muted)}
+a{color:var(--accent)}
+</style>
+<main>
+  <header style="display:grid;gap:10px">
+    <p class="eyebrow">Wanted Chauffeur · @wantedchauffeur · Toulouse · 19/11/2026</p>
+    <h1>Seguidores todo dia, sem comprar nenhum</h1>
+    <p class="lead">Seis motores que rodam todo dia. Quatro custam zero. O Julien faz o que é do vídeo e do carro. Márlon e Lucas constroem o resto e medem. Nenhum roteiro, legenda ou ideia de vídeo está aqui: isso continua do Julien.</p>
+  </header>
+
+  <div class="meta">
+    <div><b>+10 / dia</b><span>meta até 05/12 (proposta)</span></div>
+    <div><b>+25 / dia</b><span>meta até 31/12 (proposta)</span></div>
+    <div><b>0 €</b><span>motores 1 a 5</span></div>
+    <div><b>≈ 5 € / dia</b><span>motor 6, opcional, só com prova</span></div>
+  </div>
+  <p class="prova"><b>Como medimos.</b> O Olheiro do Instagram já lê a conta uma vez por dia (seguidores, e quantos seguidores cada Reel trouxe). Ele está construído e desligado: falta a chave da Meta no Easypanel (runbook <code>docs/runbooks/olheiro-instagram.md</code>, 20 minutos). Sem ele, a meta é opinião. Lacuna conhecida: a Meta só mostra idade e cidade do público a partir de 100 seguidores.</p>
+
+  <section>
+    <h2>Um dia do Julien com este plano</h2>
+    <div class="dia">
+      <div class="h"><b>9:00 AM</b><p>A agenda do dia chega no WhatsApp com as corridas e uma linha a mais: <i>« Hier : +12 abonnés. Le Reel qui a ramené le plus : Capitole, 23 abonnés. »</i> Ele sabe o que repetir sem abrir estatística nenhuma.</p></div>
+      <div class="h"><b>7:00 PM</b><p>Publica o Reel do dia. Mesma hora todo dia, Toulouse nos 2 primeiros segundos (regra do plano de 16/11). Quando testa um formato novo, publica como <b>Trial Reel</b>: só quem não segue vê, e o teste não suja a conta.</p></div>
+      <div class="h"><b>7:10 PM</b><p>Quinze minutos no celular: responde todo comentário do dia e deixa um comentário com conteúdo em 10 posts da lista de Toulouse (hotéis, bares, Stade Toulousain, lojas de games, eventos). Quem recebe comentário bom vai ver quem escreveu.</p></div>
+      <div class="h"><b>Na corrida</b><p>O cliente vê o cartão com QR no encosto do banco: <i>« Suis la voiture : @wantedchauffeur »</i>. O cliente de Game Night posta a dele e marca a conta; o Julien aceita o <b>Collab</b> e o vídeo aparece nos dois perfis.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Os seis motores</h2>
+
+    <div class="motor">
+      <h3>1 · O Reel diário chega a quem não segue</h3>
+      <div class="tag"><span class="julien">Julien publica</span><span class="nos">Nós medimos</span><span class="custo">0 €</span></div>
+      <ul>
+        <li>Um Reel por dia, 7:00 PM, Toulouse nos 2 primeiros segundos. O conteúdo é do Julien; aqui só a mecânica.</li>
+        <li>Formato novo entra como <b>Trial Reel</b> (teste só para não seguidores). Trial Reel se compara com Trial Reel, nunca com os Reels normais.</li>
+        <li>O mesmo vídeo vai ao TikTok no mesmo dia, sem marca d’água. Custo zero, segunda porta.</li>
+        <li>Toda segunda: os 3 Reels que mais trouxeram <b>seguidores</b> (não views) ficam fixados no topo do perfil. O formato deles se repete na semana.</li>
+      </ul>
+      <p class="prova">Prova: coluna « abonnés » por Reel no Olheiro. Views sem seguidor e sem pedido não contam.</p>
+    </div>
+
+    <div class="motor">
+      <h3>2 · Quinze minutos de Toulouse por dia</h3>
+      <div class="tag"><span class="julien">Julien comenta</span><span class="nos">Nós fazemos a lista</span><span class="custo">0 €</span></div>
+      <ul>
+        <li>Nós entregamos a lista: 50 contas de Toulouse que o público do carro já segue (os 5 hotéis do plano, bares do Capitole e de Saint-Cyprien, Stade Toulousain, lojas de games, Marché de Noël, MEETT, páginas « Toulouse by night »).</li>
+        <li>O Julien deixa 10 comentários de verdade por dia (uma frase sobre o post, nada de « 🔥 » nem de link) e responde todo comentário recebido no mesmo dia. Resposta rápida a comentário é o que mais sobe a entrega do Reel seguinte.</li>
+        <li>Segue de volta quem é de Toulouse. Nunca seguir em massa, nunca deixar de seguir em massa, nunca robô.</li>
+      </ul>
+      <p class="prova">Prova: « visites du profil » e « abonnés » do dia no Olheiro. Dia sem os 15 minutos é dia marcado na agenda.</p>
+    </div>
+
+    <div class="motor">
+      <h3>3 · Um Collab por semana</h3>
+      <div class="tag"><span class="julien">Julien convida e aceita</span><span class="nos">Nós escrevemos a mensagem</span><span class="custo">0 €</span></div>
+      <ul>
+        <li>Cada Game Night tem 4 a 6 convidados. Um deles posta o vídeo com o Julien como colaborador: o mesmo post aparece nos dois perfis e nos seguidores dos dois.</li>
+        <li>Alvo: contas de Toulouse do tamanho da nossa ou um pouco maiores (bar, loja de games, streamer local, hotel). Conta grande ignora; conta parecida aceita.</li>
+        <li>Nós escrevemos a mensagem de convite em francês, o Márlon aprova, o Julien envia pelo Instagram da marca. Sem prazo de resposta prometido a ninguém.</li>
+      </ul>
+      <p class="prova">Prova: marcações e Collabs da semana (o Olheiro já lê « marcações »). Meta: 1 por semana a partir da Game Night de 24/11.</p>
+    </div>
+
+    <div class="motor">
+      <h3>4 · Quem já encostou no carro vira seguidor</h3>
+      <div class="tag"><span class="nos">Nós fazemos o QR e os cartões</span><span class="julien">Julien põe no carro</span><span class="custo">≈ 20 € de impressão</span></div>
+      <ul>
+        <li>Cartão com QR no encosto dos dois bancos: <i>« Suis la voiture : @wantedchauffeur »</i>. Quem passou 3 horas jogando no banco de trás segue na hora.</li>
+        <li>O mesmo QR no cartão deixado na recepção dos hotéis (já previsto no plano de 16/11).</li>
+        <li>O link do Instagram entra no rodapé da página /ride e na página de confirmação do Julien. Nas mensagens de WhatsApp ao cliente só quando os templates da Meta forem aprovados: mudar template é 1 edição por dia.</li>
+      </ul>
+      <p class="prova">Prova: seguidores novos nos dias com corrida contra dias sem corrida (o Olheiro tem o histórico diário; a agenda tem as corridas).</p>
+    </div>
+
+    <div class="motor">
+      <h3>5 · O perfil aparece na busca</h3>
+      <div class="tag"><span class="nos">Nós propomos os campos</span><span class="julien">Julien aprova e preenche</span><span class="custo">0 €</span></div>
+      <ul>
+        <li>A busca do Instagram hoje lê texto, não só hashtag. O campo <b>Nome</b> (não o @) precisa dizer o que a conta é e onde: « Wanted Chauffeur · Chauffeur privé Toulouse ».</li>
+        <li>Bio com as palavras que alguém digita: Toulouse, chauffeur privé, VTC, Tesla Model X, Night Ride, Game Night. Sem GTA, Rockstar ou Vice City (trava do projeto). Sem « disponible 24h/24 », sem « meilleur de France ».</li>
+        <li>Um só link: a página /ride. Localização « Toulouse » em todo post. Legendas com « Toulouse » escrito, porque a busca lê a legenda.</li>
+      </ul>
+      <p class="prova">Prova: « visites du profil » vindas de busca aparecem no Olheiro. Texto da bio é do Julien; nós conferimos as travas.</p>
+    </div>
+
+    <div class="motor">
+      <h3>6 · Cinco euros por dia no Reel que já provou</h3>
+      <div class="tag"><span class="nos">Nós escolhemos e configuramos</span><span class="julien">Julien aprova o gasto</span><span class="custo">≈ 150 € / mês, opcional</span></div>
+      <ul>
+        <li>Só depois de 7 dias de Olheiro ligado. Só o Reel que mais trouxe seguidores na semana. Nunca o vídeo que « a gente acha » que é bom.</li>
+        <li>Impulsionar pelo próprio Instagram: objetivo « visitas ao perfil », raio de 15 km do Capitole, 18 a 45 anos, 5 € por dia, 7 dias.</li>
+        <li>Se o custo por seguidor novo passar de 1 €, para. Se ficar abaixo de 0,50 €, o fundador decide se dobra.</li>
+      </ul>
+      <p class="prova">Prova: seguidores do dia com impulso contra a mediana dos 14 dias anteriores (o Olheiro já faz essa conta).</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>O que não fazemos</h2>
+    <p class="nao"><b>Comprar seguidores, usar robô de follow/unfollow, « giveaway » de corrida grátis para quem seguir.</b> Seguidor comprado não reserva, derruba a entrega dos Reels para quem é de Toulouse e pode custar a conta. Corrida grátis sorteada atrai quem nunca pagaria 250 €. O que vale é o seguidor de Toulouse que um dia manda « c’est combien ? ».</p>
+  </section>
+
+  <section>
+    <h2>O que construímos e quando</h2>
+    <div class="tab"><table>
+      <tr><th>Ferramenta</th><th>Quem</th><th>Pronto quando</th><th>Data</th></tr>
+      <tr><td>Olheiro ligado (chave da Meta no Easypanel)</td><td>Fundador, pelo runbook</td><td><code>/api/instagram</code> devolve o número de seguidores de hoje</td><td>20/11</td></tr>
+      <tr><td>Linha « Hier : +N abonnés » na agenda das 9:00 AM</td><td>Márlon</td><td>A agenda de amanhã traz o número e o Reel campeão</td><td>21/11</td></tr>
+      <tr><td>Lista das 50 contas de Toulouse</td><td>Márlon</td><td>Arquivo no projeto, com motivo de cada conta, entregue ao Julien</td><td>21/11</td></tr>
+      <tr><td>QR + cartão do encosto e da recepção (arquivo para imprimir)</td><td>Lucas</td><td>PDF em A6, QR lido pelo celular, avatar da marca</td><td>22/11</td></tr>
+      <tr><td>Mensagem de convite ao Collab (FR)</td><td>Márlon escreve, fundador aprova</td><td>Texto aprovado antes da Game Night</td><td>23/11</td></tr>
+      <tr><td>Link do Instagram na /ride e na página de confirmação</td><td>Lucas</td><td>Rodapé com o @ nas duas páginas</td><td>22/11</td></tr>
+      <tr><td>Alerta: 3 dias seguidos abaixo da meta</td><td>Márlon</td><td>Aviso ao Márlon no relato do Olheiro, nunca ao Julien</td><td>26/11</td></tr>
+      <tr><td>Campanha de 5 €/dia (se aprovada)</td><td>Márlon configura</td><td>Primeiro Reel impulsionado com a conta feita</td><td>a partir de 27/11</td></tr>
+    </table></div>
+    <small>Datas são proposta minha. Cada card entra no COMPASSO só depois do seu ok.</small>
+  </section>
+
+  <section>
+    <h2>Toda segunda, quatro números</h2>
+    <p>Os três do plano de 16/11 (vídeos publicados, pedidos por origem, corridas feitas) mais um: <b>seguidores ganhos na semana</b>, com o Reel que mais trouxe. Repetimos o que trouxe seguidor e pedido. Cortamos o que trouxe view e mais nada.</p>
+  </section>
+
+  <section>
+    <h2>O que precisa do fundador</h2>
+    <ul>
+      <li>Ligar o Olheiro pelo runbook (é a aprovação de fluxo novo). Sem isso nada aqui é medido.</li>
+      <li>Dizer sim ou não às metas de +10 e +25 por dia.</li>
+      <li>Decidir se o motor 6 (5 €/dia) entra, e quando.</li>
+      <li>Aprovar a impressão dos cartões (≈ 20 €).</li>
+    </ul>
+    <p class="prova"><b>Fato × suposição.</b> Fato: Reels alcançam não seguidores, Trial Reels existem, Collab mostra o post nos dois perfis, a busca lê texto da bio e da legenda, o Olheiro lê « follows » por Reel. Suposição: as metas de +10 e +25, o custo por seguidor abaixo de 1 €, o efeito do QR no carro. Lacuna: nenhuma conta de chauffeur na França com crescimento documentado que sirva de referência (busca de 16/11 e de hoje).</p>
+  </section>
+</main>

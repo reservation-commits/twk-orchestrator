@@ -29,6 +29,13 @@
       "severidade": "alta",
       "acao": "rotina hospedada do Guardião (portão) falhou — ler o log no volume da Central e disparar POST /api/rotinas/run {\"so\":\"guardiao-gate\"}"
     },
+    { "chave": "estudio_viral",
+      "tipo": "rotina_central",
+      "job": "estudio-viral",
+      "tolerancia_horas": 30,
+      "severidade": "media",
+      "acao": "rotina do Estúdio Viral falhou ou parou — o Julien fica sem o pacote do dia; ler o log no volume da Central (logs/tarefas/estudio-viral-*.log), conferir ESTUDIO_VIRAL=on e ANTHROPIC_API_KEY e disparar POST /api/rotinas/run?so=estudio-viral"
+    },
     { "chave": "olheiro_instagram",
       "tipo": "rotina_central",
       "job": "olheiro-instagram",

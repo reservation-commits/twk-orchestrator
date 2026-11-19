@@ -1,0 +1,244 @@
+{
+  "date": "2026-11-20",
+  "tendance_du_jour": "GTA 6 est sorti hier : 2,6 millions de messages en 24 h, plus que le coup d'envoi du Mondial. Tout Toulouse joue dans son salon ce soir. Nous, on montre la seule banquette de Toulouse où on y joue en roulant. Le Marché de Noël de Lalande ouvre ce soir ; le Toulouse Game Show arrive les 28 et 29 novembre.",
+  "reels": [
+    {
+      "id": "R1",
+      "titre": "Pas eux",
+      "formule": "contre-pied",
+      "pilier": "entree",
+      "idee": "Le soir où tout le monde joue chez soi, la caméra montre les deux manettes qui attendent sur la banquette, place du Capitole, portes ouvertes.",
+      "accroche_voix": "Ce soir, Toulouse joue dans son salon. Sauf ces 2 manettes.",
+      "accroche_ecran": "TOULOUSE · ce soir",
+      "plans": [
+        {
+          "duree_s": 1.5,
+          "description": "Place du Capitole de nuit, la Model X noire garée, porte Falcon fermée, voiture à l'arrêt."
+        },
+        {
+          "duree_s": 2,
+          "description": "La porte Falcon s'ouvre, LED violet → rose → bleu clair. Toujours à l'arrêt."
+        },
+        {
+          "duree_s": 2.5,
+          "description": "Banquette arrière : deux manettes posées, le ciel étoilé allumé, l'écran éteint reflète le plafond. Personne à bord."
+        },
+        {
+          "duree_s": 1.5,
+          "description": "La porte se referme lentement, le Capitole éclairé derrière."
+        },
+        {
+          "duree_s": 1,
+          "description": "Noir, signature."
+        }
+      ],
+      "texte_ecran": [
+        {
+          "quand": "0–2 s",
+          "texte": "TOULOUSE · ce soir"
+        },
+        {
+          "quand": "sur la banquette",
+          "texte": "MARDI · 9:00 PM"
+        },
+        {
+          "quand": "dernière seconde",
+          "texte": "Vous jouez. On conduit. · @wantedchauffeur"
+        }
+      ],
+      "voix_off": [
+        "Ce soir, Toulouse joue dans son salon. Sauf ces 2 manettes.",
+        "Mardi, 9:00 PM : 3 h à bord, 58 € chacun à six.",
+        "Vous jouez. On conduit."
+      ],
+      "legende": "Ce soir, Toulouse joue dans son salon. Sauf ces 2 manettes.\nMardi 9:00 PM, première Game Night : 3 h à bord de la Model X, 2 manettes, ciel étoilé, boissons sans alcool. GTA 6 tourne sur la PS5 de la voiture. 350 € la voiture, 58 € chacun à six.\nLien en bio.",
+      "hashtags": [
+        "#Toulouse",
+        "#WantedChauffeur",
+        "#GameNight",
+        "#GTA6",
+        "#ChauffeurPrivé"
+      ],
+      "pourquoi": "Contre-pied du jour : des millions de gens jouent assis chez eux, l'image montre la banquette vide qui attend. On attend des demandes « c'est combien ? » et des abonnés de Toulouse, pas des vues mondiales.",
+      "tournage": {
+        "voiture_arret": true,
+        "personnes_a_bord": 0,
+        "autorisation_image": false,
+        "camera": "fixe, posée sur trépied devant la portière",
+        "musique": "thème original ou bibliothèque Instagram"
+      }
+    },
+    {
+      "id": "R2",
+      "titre": "C'est combien ?",
+      "formule": "chiffre",
+      "pilier": "nuit",
+      "idee": "Sans voix. La voiture sur le Pont-Neuf, de nuit, et quatre cartons qui répondent à la question que tout le monde pose en commentaire.",
+      "accroche_voix": "",
+      "accroche_ecran": "TOULOUSE · 11:00 PM",
+      "plans": [
+        {
+          "duree_s": 2,
+          "description": "Pont-Neuf de nuit, la Garonne derrière, la Model X garée sur le quai, feux allumés, voiture à l'arrêt."
+        },
+        {
+          "duree_s": 2.5,
+          "description": "Même plan, la porte Falcon s'ouvre, LED. Carton : 3 h · PS5 · 6 amis."
+        },
+        {
+          "duree_s": 2.5,
+          "description": "Intérieur : le ciel étoilé, deux manettes. Carton : 58 € chacun."
+        },
+        {
+          "duree_s": 2.5,
+          "description": "Plan large, la porte se referme. Carton : réservation sur le lien en bio."
+        },
+        {
+          "duree_s": 1,
+          "description": "Noir, signature."
+        }
+      ],
+      "texte_ecran": [
+        {
+          "quand": "0–2 s",
+          "texte": "TOULOUSE · 11:00 PM"
+        },
+        {
+          "quand": "2–4,5 s",
+          "texte": "3 h · PS5 · 6 amis"
+        },
+        {
+          "quand": "4,5–7 s",
+          "texte": "58 € chacun"
+        },
+        {
+          "quand": "7–9,5 s",
+          "texte": "réservation : lien en bio"
+        },
+        {
+          "quand": "dernière seconde",
+          "texte": "Vous jouez. On conduit. · @wantedchauffeur"
+        }
+      ],
+      "voix_off": [],
+      "legende": "Toulouse, 11:00 PM. La question qu'on nous pose le plus : c'est combien ?\nGame Night : 3 h à bord, PS5, 2 manettes, jusqu'à 6 personnes. 350 € la voiture, 58 € chacun à six. Night Ride d'1 h dans la ville : 250 €.\nLien en bio.",
+      "hashtags": [
+        "#Toulouse",
+        "#WantedChauffeur",
+        "#NightRide",
+        "#TeslaModelX",
+        "#PontNeuf"
+      ],
+      "pourquoi": "Formule chiffre, pilier nuit : le Reel sans voix se regarde sans le son, et le prix dit tout de suite évite les commentaires « c'est combien ? » sans réponse. On attend des demandes directes par le lien.",
+      "tournage": {
+        "voiture_arret": true,
+        "personnes_a_bord": 0,
+        "autorisation_image": false,
+        "camera": "fixe, trépied sur le quai ; intérieur avec la caméra fixe de la banquette",
+        "musique": "thème original ou bibliothèque Instagram"
+      }
+    },
+    {
+      "id": "R3",
+      "titre": "Zoome",
+      "formule": "personne-ne-dit",
+      "pilier": "coulisses",
+      "idee": "Le format « zoom in » qui tourne cette semaine : un message minuscule caché dans le ciel étoilé, lisible seulement en zoomant. Le commentaire se remplit de gens qui l'ont lu.",
+      "accroche_voix": "Personne ne lit ce mot dans le ciel étoilé, à Toulouse.",
+      "accroche_ecran": "TOULOUSE · zoome",
+      "plans": [
+        {
+          "duree_s": 2,
+          "description": "Intérieur, voiture à l'arrêt : le ciel étoilé allumé en plan large, LED douces. Caméra fixe de la banquette."
+        },
+        {
+          "duree_s": 3,
+          "description": "Lent travelling avant (caméra sur rail ou zoom numérique au montage) vers un coin du plafond où un petit carton est fixé entre les étoiles."
+        },
+        {
+          "duree_s": 2.5,
+          "description": "Le carton devient lisible : « Mardi · 9:00 PM · Toulouse · 2 manettes »."
+        },
+        {
+          "duree_s": 1.5,
+          "description": "Retour au plan large, la porte Falcon se referme. Signature."
+        }
+      ],
+      "texte_ecran": [
+        {
+          "quand": "0–2 s",
+          "texte": "TOULOUSE · zoome"
+        },
+        {
+          "quand": "6–9 s",
+          "texte": "tu l'as lu ? dis-le en commentaire"
+        },
+        {
+          "quand": "dernière seconde",
+          "texte": "Vous jouez. On conduit. · @wantedchauffeur"
+        }
+      ],
+      "voix_off": [
+        "Personne ne lit ce mot dans le ciel étoilé, à Toulouse.",
+        "Zoome.",
+        "Vous jouez. On conduit."
+      ],
+      "legende": "Personne ne lit ce mot dans le ciel étoilé, à Toulouse. Zoome et écris en commentaire ce que tu as lu.\nIndice : ça se passe mardi, à 9:00 PM, sur la banquette arrière d'une Model X.",
+      "hashtags": [
+        "#Toulouse",
+        "#WantedChauffeur",
+        "#CielÉtoilé",
+        "#GameNight",
+        "#Occitanie"
+      ],
+      "pourquoi": "Formule « personne ne dit » sur le format zoom-in de la semaine : le spectateur s'arrête, zoome et commente, ce qui pousse la distribution à Toulouse. Un seul appel : commenter. On attend des commentaires et des abonnés ; le prix arrive dans les réponses.",
+      "tournage": {
+        "voiture_arret": true,
+        "personnes_a_bord": 0,
+        "autorisation_image": false,
+        "camera": "fixe de la banquette, zoom au montage dans CapCut",
+        "musique": "thème original ou bibliothèque Instagram"
+      }
+    }
+  ],
+  "story": {
+    "texte": "Ce soir tu joues où ? Salon / Banquette arrière de la Model X. Mardi 9:00 PM, Toulouse.",
+    "sticker": "sondage"
+  },
+  "carrousel": {
+    "titre": "Ce que tu trouves sur la banquette arrière",
+    "slides": [
+      "TOULOUSE · à bord d'une Model X",
+      "Une PS5 et deux manettes. Le jeu du moment est dedans.",
+      "Un ciel étoilé au plafond, des LED violet, rose, bleu clair.",
+      "Des boissons sans alcool. Ceinture attachée pour jouer, 18 ans et plus.",
+      "Le chauffeur ne voit jamais l'écran. Il conduit.",
+      "3 h : 350 € la voiture, 58 € chacun à six. Lien en bio."
+    ]
+  },
+  "reponses_commentaires": [
+    {
+      "situation": "« C'est combien ? »",
+      "reponse": "350 € la voiture pour 3 h, 58 € chacun à six. Tu réserves par le lien en bio, on confirme par écrit."
+    },
+    {
+      "situation": "« Vous êtes dispo ce soir ? »",
+      "reponse": "Chaque demande est confirmée par écrit : passe par le lien en bio avec l'heure et le nom de la réservation."
+    },
+    {
+      "situation": "« C'est légal de jouer en voiture ? »",
+      "reponse": "Oui : ceinture attachée, 18 ans et plus, et le chauffeur ne voit jamais l'écran. Il conduit, vous jouez."
+    },
+    {
+      "situation": "« Vous faites aussi juste l'aéroport ? »",
+      "reponse": "Oui, Blagnac ↔ centre : 80 € la voiture. Lien en bio."
+    }
+  ],
+  "a_eviter": [
+    "Le nom du jeu à l'écran, en couverture ou en bio : seulement en légende.",
+    "Une musique connue : thème original ou bibliothèque Instagram, sinon pas de monétisation.",
+    "LED allumées en roulant.",
+    "Promettre « dispo ce soir » ou un délai de réponse."
+  ],
+  "resume_pt": "Pacote de 20/11: três Reels sem passageiro (nada de termo de imagem), filmáveis em 10 minutos no Capitole e no Pont-Neuf. R1 surfa o lançamento do GTA 6 com o contrapé « todo mundo joga em casa; eles não »; R2 responde « c'est combien ? » sem voz, para quem assiste sem som; R3 usa o formato « zoom in » da semana para puxar comentários. Preços só da tabela aprovada; nenhuma promessa de disponibilidade."
+}
