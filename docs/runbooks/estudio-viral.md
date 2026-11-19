@@ -33,6 +33,12 @@ A página é só leitura, sem script e sem dado de cliente; o token vale só par
 
 Abra `https://<central>/estudio` (ou o botão « ▶ Studio » no topo da Central) e informe a chave da Central.
 
+**O caminho mais curto (área Criar):** escolha Post, Carrossel ou Story, escreva a ideia em uma frase, clique em
+« Criar com IA ». Em menos de um minuto a peça aparece desenhada; « Baixar » salva o PNG (1080×1350, ou 1080×1920 na
+story) e « Copiar » pega a legenda com hashtags. Para um Reel, o Studio entrega o roteiro, os textos de tela em PNG
+transparente e o `.srt`; o vídeo é o Julien quem filma. Toda peça passa pelas travas antes de aparecer e fica guardada
+no pacote do dia (área Hoje e página do Julien).
+
 - **Sem a chave da IA** o painel já serve: ler e editar o pacote, medir ganchos e legendas no Laboratório, baixar as legendas
   `.srt`, marcar o que foi filmado e publicado, ver o desempenho.
 - **Com a chave da IA** (`ANTHROPIC_API_KEY`), o botão « Gerar pacote » roda a pesquisa na web e a escrita (1 a 3 minutos, com

@@ -29,10 +29,11 @@ Para o Julien receber o link no WhatsApp: `ESTUDIO_AVISAR=on` + `ARIA_TEAM_ALERT
 
 Ligar o fluxo é decisão do fundador (tabela de escalonamento: novo fluxo em operação). Runbook: `docs/runbooks/estudio-viral.md`.
 
-## O painel `/estudio` na Central (4.11.0)
+## O painel `/estudio` na Central (4.11.0; área Criar em 4.12.0)
 
 | Área | O que tem |
 |---|---|
+| Criar | Briefing (formato: Reel, Post, Carrossel ou Story + direção em uma frase) → a IA cria a peça inteira (`ia.criarPeca`, `pecas.js`), medida pelas travas, salva em `pacote.pecas` do dia. A imagem é desenhada no navegador (`render-canvas.js`, 1080×1350 ou 1080×1920, identidade da marca) e baixada em PNG com a legenda pronta. Reel = roteiro + textos de tela em PNG transparente + `.srt`. Guia « Como usar » no topo de Hoje. |
 | Hoje | Os 3 Reels com prévia animada (planos, texto de tela e voz no tempo certo), nota do gancho, estado (a filmar, filmado, publicado, descartado). Bancada por Reel: linha do tempo, edição com medida ao vivo, ganchos alternativos, legenda, lista de filmagem, legendas `.srt` para o CapCut, IA. Story, carrossel, respostas e « a evitar » com botão de copiar. |
 | Laboratório | Um gancho por linha (`fala \| texto de tela`): nota, seis controles, conselhos e travas na hora, sem modelo. As 19 fórmulas da skill. Conferência de legenda. Com a chave da IA: 10 ganchos escritos e medidos para uma ideia. |
 | Radar | Calendário de Toulouse (21 dias) e as novidades da pesquisa na web, com fonte. |

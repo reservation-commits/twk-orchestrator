@@ -61,18 +61,41 @@
       <div class="volet">${volet(r)}</div>
       <div class="etat">${blocEtat(r)}</div></section>`;
   }
+  // ---- pièces prêtes (créées dans l'area Criar) : images dessinées ici, à télécharger et publier
+  const FMT = { post: 'Post', carrossel: 'Carrousel', story: 'Story', reel: 'Reel' };
+  function cartePiece(x) {
+    const legende = `${x.legende || ''}\n${(x.hashtags || []).join(' ')}`.trim();
+    return `<div class="rep piece-j" data-piece="${esc(x.id)}"><h3>${esc(FMT[x.formato] || x.formato)}${x.formato === 'carrossel' ? ` · ${(x.slides || []).length} images` : ''}</h3><p><b>${esc(x.titre || (x.reel && x.reel.titre) || '')}</b></p>
+      <div class="piece-prev" data-prev="${esc(JSON.stringify({ formato: x.formato, image: x.image, slides: x.slides, reel: x.reel ? { texte_ecran: x.reel.texte_ecran } : null }))}"></div>
+      ${x.sticker ? `<p>Sticker : ${esc(x.sticker)}</p>` : ''}
+      ${x.reel ? `<p class="tournage">${(x.reel.plans || []).map((pl, i) => `${i + 1}. (${sec(pl.duree_s)} s) ${esc(pl.description)}`).join('<br>')}</p>${(x.reel.voix_off || []).filter(Boolean).map((v) => `<p class="voix">« ${esc(v)} »</p>`).join('')}` : ''}
+      <div class="ligne" style="justify-content:flex-start"><button class="btn petit pri" type="button" data-a="dl-piece">${x.formato === 'reel' ? 'Textes d’écran (PNG)' : x.formato === 'carrossel' ? 'Télécharger les images' : 'Télécharger l’image'}</button>${legende ? `<button class="btn petit" type="button" data-copier="${esc(legende)}">Copier la légende</button>` : ''}${x.reel ? `<a class="btn petit" href="${base}/srt/${encodeURIComponent(x.id)}${q}" download>.srt</a>` : ''}</div></div>`;
+  }
+  async function dessinerPieces() {
+    const alvos = $$('.piece-prev'); if (!alvos.length || !window.WCRender) return;
+    await window.WCRender.prontas();
+    for (const el of alvos) { const x = JSON.parse(el.dataset.prev); const cvs = x.formato === 'reel' ? (x.reel.texte_ecran || []).map((t) => window.WCRender.overlay({ texte: t.texte })) : (x.formato === 'carrossel' ? x.slides : [x.image]).map((s, i) => window.WCRender.imagem({ ...s, formato: x.formato, contador: x.formato === 'carrossel' ? `${i + 1}/${x.slides.length}` : '', seed: i + 3 })); el.innerHTML = ''; for (const cv of cvs) { const img = document.createElement('img'); img.src = cv.toDataURL('image/jpeg', .8); img.alt = ''; el.appendChild(img); } }
+  }
+  async function telechargerPiece(id) {
+    const x = (D.pack.pecas || []).find((y) => y.id === id); if (!x || !window.WCRender) return;
+    await window.WCRender.prontas();
+    const cvs = x.formato === 'reel' ? (x.reel.texte_ecran || []).map((t) => window.WCRender.overlay({ texte: t.texte })) : (x.formato === 'carrossel' ? x.slides : [x.image]).map((s, i) => window.WCRender.imagem({ ...s, formato: x.formato, contador: x.formato === 'carrossel' ? `${i + 1}/${x.slides.length}` : '', seed: i + 3 }));
+    for (let i = 0; i < cvs.length; i++) await window.WCRender.baixar(cvs[i], `wanted-chauffeur-${jour}-${id}-${String(i + 1).padStart(2, '0')}.png`);
+    toast(cvs.length === 1 ? 'Image téléchargée' : `${cvs.length} images téléchargées`);
+  }
   function peindre() {
     const p = D.pack;
     $('#page').innerHTML = `<section class="abre"><p class="eyebrow">Pack du jour · @wantedchauffeur</p><h1>${esc(jourLong(p.date))}<br><em>${p.reels.length} Reels à filmer</em></h1>
         ${p.tendance_du_jour ? `<p class="jour">${esc(p.tendance_du_jour)}</p>` : ''}<p class="regle">Tout est brouillon : tu filmes, tu ajustes, tu publies à 7:00 PM. Caméra fixe, « TOULOUSE » dans les 2 premières secondes, LED seulement voiture à l’arrêt.</p></section>
       ${p.reels.map(carteReel).join('')}
+      ${(p.pecas || []).length ? `<section class="piece"><p class="eyebrow">Pièces prêtes à publier</p>${p.pecas.map(cartePiece).join('')}</section>` : ''}
       ${p.story ? `<section class="piece"><p class="eyebrow">Story${p.story.sticker ? ` · sticker ${esc(p.story.sticker)}` : ''}</p><p>${esc(p.story.texte)}</p><button class="btn petit" type="button" data-copier="${esc(p.story.texte)}" style="width:fit-content">Copier</button></section>` : ''}
       ${p.carrousel && (p.carrousel.slides || []).length ? `<section class="piece"><p class="eyebrow">Carrousel · ${esc(p.carrousel.titre)}</p><div class="slides">${p.carrousel.slides.map((s, i) => `<div class="slide"><span>${i + 1}/${p.carrousel.slides.length}</span>${esc(s)}</div>`).join('')}</div><button class="btn petit" type="button" data-copier="${esc(p.carrousel.slides.map((s, i) => `${i + 1}. ${s}`).join('\n'))}" style="width:fit-content">Copier les textes</button></section>` : ''}
       ${(p.reponses_commentaires || []).length ? `<section class="piece"><p class="eyebrow">Réponses aux commentaires</p>${p.reponses_commentaires.map((c) => `<div class="rep"><h3>${esc(c.situation)}</h3><p>${esc(c.reponse)}</p><button class="btn petit" type="button" data-copier="${esc(c.reponse)}" style="width:fit-content">Copier</button></div>`).join('')}</section>` : ''}
       ${(p.a_eviter || []).length ? `<section class="piece"><p class="eyebrow">À éviter aujourd’hui</p><ul class="eviter">${p.a_eviter.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></section>` : ''}
       <p class="pied">Vous jouez. On conduit.</p>`;
     for (const r of p.reels) { const slot = $(`#reel-${CSS.escape(r.id)} .ph-slot`); D.players[r.id] = window.WCPlayer.criar(slot, p.timeline[r.id]); }
-    compte();
+    compte(); dessinerPieces();
   }
   function repeindreReel(id) {
     const r = D.pack.reels.find((x) => x.id === id); const el = $(`#reel-${CSS.escape(id)}`); if (!r || !el) return;
@@ -109,6 +132,7 @@
   document.addEventListener('click', (ev) => {
     const b = ev.target.closest('button'); if (!b) return;
     if (b.dataset.copier !== undefined) return copier(b.dataset.copier);
+    if (b.dataset.a === 'dl-piece') { const pj = b.closest('.piece-j'); b.disabled = true; telechargerPiece(pj.dataset.piece).finally(() => { b.disabled = false; }); return; }
     const carte = b.closest('.reel'); if (!carte) return; const id = carte.dataset.reel; const r = D.pack.reels.find((x) => x.id === id);
     if (b.dataset.onglet) { D.onglet[id] = b.dataset.onglet; return repeindreReel(id); }
     if (b.dataset.etat) return marquer(id, b.dataset.etat);

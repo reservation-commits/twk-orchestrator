@@ -41,4 +41,15 @@ async function semear(stateRoot, { log = () => {} } = {}) {
   return true;
 }
 
-module.exports = { semear };
+/** Modelo SIMULADO para a área Criar no dev-local: responde pelo formato pedido no prompt. Nunca em produção. */
+function llmSimulado() {
+  const pecas = {
+    post: { titre: 'Game Night mardi', image: { fond: 'nuit', titre: 'TOULOUSE · mardi 9:00 PM', sous_titre: '3 h à bord, 2 manettes, 6 amis.', bas: '58 € chacun · lien en bio' }, legende: 'Mardi 9:00 PM, première Game Night à Toulouse : 3 h à bord de la Model X, PS5, 2 manettes, ciel étoilé, boissons sans alcool. 350 € la voiture, 58 € chacun à six.\nLien en bio.', hashtags: ['#Toulouse', '#WantedChauffeur', '#GameNight'], pourquoi: 'Annonce directe avec le prix par personne.', traduction_pt: 'Terça 9:00 PM, primeira Game Night em Toulouse: 3 h a bordo, PS5, 2 controles, teto estrelado. 350 € o carro, 58 € cada um a seis. Link na bio.' },
+    story: { titre: 'Sondage du soir', image: { fond: 'ciel', titre: 'TOULOUSE · ce soir', sous_titre: 'Tu joues où ?', bas: 'réponds au sondage' }, sticker: 'Sondage : Salon / Banquette arrière', legende: '', hashtags: [], pourquoi: 'Le sondage fait répondre.', traduction_pt: 'Enquete: você joga onde hoje? Sala / Banco de trás.' },
+    carrossel: { titre: 'Ce qu’il y a à bord', slides: [{ fond: 'nuit', titre: 'TOULOUSE · à bord', texte: 'Tout ce que tu trouves sur la banquette arrière.' }, { fond: 'interieur', titre: 'Une PS5', texte: 'Deux manettes, le jeu du moment.' }, { fond: 'ciel', titre: 'Un ciel étoilé', texte: 'Au plafond, toute la nuit.' }, { fond: 'led', titre: 'Les LED', texte: 'Violet, rose, bleu clair, voiture à l’arrêt.' }, { fond: 'noir', titre: '58 € chacun', texte: '3 h à six. Lien en bio.' }], legende: 'Tout ce qu’il y a sur la banquette arrière, en 5 images. 350 € la voiture pour 3 h, 58 € chacun à six.\nLien en bio.', hashtags: ['#Toulouse', '#WantedChauffeur', '#GameNight'], pourquoi: 'Un carrousel se garde et se partage.', traduction_pt: 'Tudo o que tem no banco de trás, em 5 imagens.' },
+  };
+  const reel = JSON.parse(fs.readFileSync(path.join(__dirname, 'test', 'fixtures', 'pacote-2026-11-20.json'), 'utf8')).reels[2];
+  return { disponivel: true, modelo: 'simulado-dev', effort: 'high', chamar: async ({ system }) => { await new Promise((ok) => setTimeout(ok, 600)); const f = /un post image/.test(system) ? 'post' : /une story/.test(system) ? 'story' : /un carrousel/.test(system) ? 'carrossel' : 'reel'; return { texto: JSON.stringify(f === 'reel' ? { ...reel, titre: 'Peça simulada' } : pecas[f]), modelo: 'simulado-dev', usage: {} }; } };
+}
+
+module.exports = { semear, llmSimulado };

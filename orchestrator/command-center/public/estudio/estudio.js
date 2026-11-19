@@ -10,7 +10,7 @@
 
   const STATUS = { a_filmer: 'A filmar', filme: 'Filmado', publie: 'Publicado', ecarte: 'Descartado' };
   const PILAR = { entree: 'A entrada', nuit: 'O carro à noite', 'a-bord': 'A bordo', coulisses: 'Bastidores', toulouse: 'A noite em Toulouse' };
-  const TITULOS = { hoje: 'Pacote do dia', lab: 'Laboratório de ganchos', radar: 'Radar', desempenho: 'Desempenho', arquivo: 'Arquivo', sistema: 'Sistema' };
+  const TITULOS = { criar: 'Criar uma peça', hoje: 'Pacote do dia', lab: 'Laboratório de ganchos', radar: 'Radar', desempenho: 'Desempenho', arquivo: 'Arquivo', sistema: 'Sistema' };
   const ETAPAS = [['veille', 'Pesquisa na web'], ['escrita', 'Escrita'], ['medida', 'Medida'], ['correcao', 'Correção'], ['pronto', 'Pronto']];
   const cor = (n) => (n == null ? 'var(--mudo)' : n >= 75 ? 'var(--bom)' : n >= 50 ? 'var(--atencao)' : 'var(--ruim)');
   const veredito = (n) => (n == null ? 'SEM VOZ' : n >= 75 ? 'FORTE' : n >= 50 ? 'CORRETO' : 'FRACO');
@@ -88,21 +88,33 @@
     const r = (location.hash || '#hoje').slice(1); S.rota = TITULOS[r] ? r : 'hoje';
     destruirPlayers(); pintarTopo();
     const v = $('#view'); v.innerHTML = '<div class="skel"></div><div class="skel" style="height:320px"></div>';
-    try { await ({ hoje: vHoje, lab: vLab, radar: vRadar, desempenho: vDesempenho, arquivo: vArquivo, sistema: vSistema })[S.rota](v); }
+    try { await ({ criar: vCriar, hoje: vHoje, lab: vLab, radar: vRadar, desempenho: vDesempenho, arquivo: vArquivo, sistema: vSistema })[S.rota](v); }
     catch (e) { if (e.status !== 401) v.innerHTML = `<div class="vazio"><h3>Não consegui ler esta área</h3><p>${esc(e.message)}</p><button class="btn" type="button" data-a="recarregar">Tentar de novo</button></div>`; }
     pintarTopo(); window.scrollTo(0, 0);
   }
   function destruirPlayers() { for (const p of S.minis) p.destruir(); S.minis = []; if (S.player) { S.player.destruir(); S.player = null; } }
 
   // ------------------------------------------------------------------ HOJE
+  async function vCriar(v) { if (!S.saude) await carregarBase(); window.WCCriar.ligar({ api, S, toast, copiar, cor, textoJulien }); await window.WCCriar.vista(v); }
+  function guiaHtml() {
+    let visto = false; try { visto = localStorage.getItem('wc_guia') === '1'; } catch { /* sem armazenamento */ }
+    return `<details class="guia" ${visto ? '' : 'open'}><summary><b>Como usar o Studio</b><span>em 1 minuto</span></summary><ol>
+      <li><b>Quer algo pronto para postar agora?</b> Vá em <a href="#criar">Criar</a>, escolha Post, Carrossel ou Story, escreva a ideia em uma frase e clique em « Criar com IA ». Baixe a imagem, copie a legenda e poste.</li>
+      <li><b>Quer um Reel?</b> Em Criar, escolha Reel. O Studio escreve o roteiro completo; o vídeo quem filma é o Julien. Copie o roteiro para ele, ou mande o link da página dele (botão « Link do Julien »).</li>
+      <li><b>Pacote do dia.</b> « Gerar pacote » pesquisa o que está acontecendo hoje e escreve 3 Reels. Toque num cartão para abrir a bancada: tocar a prévia, editar o texto, ver a nota do gancho.</li>
+      <li><b>Testar um gancho seu?</b> Laboratório mede na hora, sem gastar IA.</li>
+      <li><b>Marque o que foi publicado</b> (botões no cartão). Com o link do post, Desempenho mostra o que cada peça rendeu.</li></ol>
+      <button class="btn mini" type="button" data-a="guia-ok">Entendi, pode fechar</button></details>`;
+  }
   async function vHoje(v) {
     if (!S.dia) { S.dados = null; v.innerHTML = vazioSemPacote(); return; }
     if (!S.dados || S.dados.dia !== S.dia) { S.dados = await api(`/api/estudio/pacote?dia=${S.dia}`); S.sel = null; S.rascunho = null; S.sujo = false; }
     const p = S.dados.pacote; const ver = p._verificacao || {};
+    if (!(p.reels || []).length && (p.pecas || []).length) { window.WCCriar.ligar({ api, S, toast, copiar, cor, textoJulien }); v.innerHTML = `${guiaHtml()}<section class="abre"><p class="eyebrow">@wantedchauffeur · Toulouse</p><h2>Peças de <em>${esc(diaLongo(S.dia))}</em></h2><p class="pt">Ainda sem pacote de Reels neste dia: só as peças pedidas na área Criar. « Gerar pacote » escreve os 3 Reels.</p></section>${window.WCCriar.pecasHtml(p.pecas, S.dia)}`; window.WCCriar.previas(v); return; }
     if (!(p.reels || []).length) { v.innerHTML = `<div class="vazio"><h3>Nenhum Reel passou pelas travas neste dia</h3><p>O modelo escreveu, a medida barrou tudo. Veja o motivo em Sistema, ou gere de novo.</p></div>`; return; }
     if (!S.sel || !reelDe(S.sel)) S.sel = p.reels[0].id;
     const avisos = (ver.problemas || []).filter((x) => x.tipo === 'aviso').length;
-    v.innerHTML = `
+    v.innerHTML = `${guiaHtml()}
       <section class="abre">
         <p class="eyebrow">@wantedchauffeur · Toulouse · publicar às 7:00 PM</p>
         <h2>Pacote de <em>${esc(diaLongo(S.dia))}</em></h2>
@@ -120,13 +132,15 @@
         <div class="reels" id="reels">${p.reels.map(cartaoReel).join('')}</div></section>
       <section id="bancada"></section>
       <section class="bloco"><header><h2>O resto do pacote</h2><p>Em francês, pronto para copiar.</p></header><div class="pecas">${pecas(p)}</div></section>
+      ${window.WCCriar.pecasHtml(p.pecas, S.dia)}
       ${(p._lacunas || []).length ? `<section class="bloco"><header><h2>O que faltou nesta rodada</h2></header>${p._lacunas.map((l) => `<p class="aviso">${esc(l)}</p>`).join('')}</section>` : ''}`;
+    window.WCCriar.ligar({ api, S, toast, copiar, cor, textoJulien }); window.WCCriar.previas(v);
     p.reels.forEach((r) => { const el = $(`#mini-${r.id}`); if (el) S.minis.push(window.WCPlayer.criar(el, S.dados.timeline[r.id], { rotulos: { tocar: 'Tocar a prévia', plano: 'PLANO' } })); });
     pintarBancada();
   }
   function vazioSemPacote() {
     const ia = S.saude && S.saude.ia_disponivel;
-    return `<div class="vazio"><h3>Ainda não há pacote</h3><p>O Studio escreve três Reels por dia para o Julien filmar: pesquisa o que está acontecendo, escreve em francês e mede cada peça pelas travas do projeto.</p>
+    return `${guiaHtml()}<div class="vazio"><h3>Ainda não há pacote</h3><p>O Studio escreve três Reels por dia para o Julien filmar: pesquisa o que está acontecendo, escreve em francês e mede cada peça pelas travas do projeto.</p>
       ${ia ? '<button class="btn pri" type="button" data-a="gerar">Gerar o primeiro pacote</button>' : '<p class="aviso">A Central está sem a chave da IA (ANTHROPIC_API_KEY). Sem ela o Studio não escreve. O Laboratório de ganchos funciona mesmo assim.</p><a class="btn" href="#sistema">Ver o que falta ligar</a>'}</div>`;
   }
   function cartaoReel(r, i) {
@@ -438,6 +452,7 @@
     if (t.dataset.modelo) { const a = $('#lab-t'); a.value = `${a.value.trim() ? `${a.value.trim()}\n` : ''}${t.dataset.modelo}`; a.scrollIntoView({ behavior: 'smooth', block: 'center' }); a.focus(); return medirLab(); }
     if (t.dataset.dia) { S.dia = t.dataset.dia; S.dados = null; location.hash = '#hoje'; return; }
     const a = t.dataset.a;
+    if (a === 'guia-ok') { try { localStorage.setItem('wc_guia', '1'); } catch { /* sem armazenamento */ } const d = t.closest('details'); if (d) d.open = false; return; }
     if (a === 'recarregar') return rota();
     if (a === 'gerar') return gerar();
     if (a === 'tocar') return S.player && S.player.alternar();

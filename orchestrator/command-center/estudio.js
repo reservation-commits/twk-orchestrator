@@ -17,6 +17,8 @@
  *   POST /api/estudio/ganchos     { ideia, pilier? }                         IA: 10 ganchos medidos e ordenados
  *   POST /api/estudio/reescrever  { dia, reel, instrucao }                   IA: proposta de reescrita (não salva)
  *   POST /api/estudio/quadro      { imagem: dataURL, dia?, reel? }           IA com visão: juiz do primeiro quadro (não grava a imagem)
+ *   POST /api/estudio/criar       { formato: reel|post|carrossel|story, direcao, dia?, pilier? }  IA: peça sob medida, medida, salva em pacote.pecas
+ *   POST /api/estudio/peca/remover { dia, id }
  *
  * Nada aqui publica, comenta ou manda mensagem a cliente. O único envio é o aviso ao Julien, feito pela rotina (run.js --avisar).
  */
@@ -34,6 +36,7 @@ const estadoMod = A('estado.js');
 const labMod = A('laboratorio.js');
 const iaMod = A('ia.js');
 const desempenhoMod = A('desempenho.js');
+const pecasMod = A('pecas.js');
 const llmMod = A('llm.js');
 const sincMod = A('sincronizar-skill.js');
 
@@ -47,7 +50,8 @@ function criar({ stateDir, env = process.env, llm: llmInjetado = null } = {}) {
   let skill = null; let lab = null; let llm = llmInjetado;
   const getSkill = () => { if (!skill) { skill = contexto.carregarSkill(); lab = labMod.criar(skill); } return skill; };
   const getLab = () => { getSkill(); return lab; };
-  const getLlm = () => { if (!llm) llm = llmMod.criar(env); return llm; };
+  // ESTUDIO_LLM_SIMULADO=1 (só fora de produção, posto pelo dev-local): modelo de mentira para ver a área Criar sem chave.
+  const getLlm = () => { if (!llm) llm = env.ESTUDIO_LLM_SIMULADO === '1' && env.NODE_ENV !== 'production' ? A('dev-seed.js').llmSimulado() : llmMod.criar(env); return llm; };
   const ctxDe = (dia) => contexto.carregar({ dia, stateRoot: stateDir, stateDir: dir });
   let prog = { rodando: false, dia: null, inicio: null, fim: null, status: null, erro: null, etapas: [] };
   const marcacoes = new Map(); // dia → instantes das marcações vindas da página do Julien (teto contra laço)
@@ -81,7 +85,8 @@ function criar({ stateDir, env = process.env, llm: llmInjetado = null } = {}) {
     const v = p._verificacao || {}; const med = v.medidas || {};
     const reels = (p.reels || []).map((r) => ({ id: r.id, titre: r.titre, formule: r.formule, pilier: r.pilier, idee: r.idee, plans: r.plans, texte_ecran: r.texte_ecran, voix_off: r.voix_off || [], legende: r.legende, hashtags: r.hashtags || [], pourquoi: r.pourquoi, tournage: r.tournage || {}, accroches_alternatives: r.accroches_alternatives || [],
       note: med[r.id] && med[r.id].accroche ? med[r.id].accroche.note : null, a_verifier: (v.problemas || []).filter((x) => x.reel === r.id && x.tipo === 'aviso').length }));
-    return { date: p.date || dia, tendance_du_jour: p.tendance_du_jour || '', reels, story: p.story || null, carrousel: p.carrousel || null, reponses_commentaires: p.reponses_commentaires || [], a_eviter: p.a_eviter || [], timeline: timelines(p), etat: est.doDia(dia) };
+    const pecas = (p.pecas || []).map((x) => ({ id: x.id, formato: x.formato, titre: x.titre, image: x.image || null, slides: x.slides || null, sticker: x.sticker || null, legende: x.legende || '', hashtags: x.hashtags || [], reel: x.reel ? { ...x.reel, traduction_pt: undefined } : null }));
+    return { date: p.date || dia, tendance_du_jour: p.tendance_du_jour || '', reels, pecas, story: p.story || null, carrousel: p.carrousel || null, reponses_commentaires: p.reponses_commentaires || [], a_eviter: p.a_eviter || [], timeline: timelines(p), etat: est.doDia(dia) };
   }
 
   /** Só os campos editáveis, com teto de tamanho; o resto vem do original. */
@@ -131,6 +136,24 @@ function criar({ stateDir, env = process.env, llm: llmInjetado = null } = {}) {
     if (env.ESTUDIO_AVISAR !== 'on' || !env.ARIA_TEAM_ALERT_SECRET) falta.push('ESTUDIO_AVISAR=on + ARIA_TEAM_ALERT_SECRET (o Julien não recebe o link no WhatsApp)');
     if (!fs.existsSync(path.join(stateDir, 'agents', 'olheiro-instagram', 'resumo.json'))) falta.push('Olheiro do Instagram sem leitura (IG_ACCESS_TOKEN): o pacote não aprende com os números da conta');
     return { modelo: l.modelo, effort: l.effort, ia_disponivel: l.disponivel, rotina_ligada: env.ESTUDIO_VIRAL === 'on', aviso_ligado: env.ESTUDIO_AVISAR === 'on' && !!env.ARIA_TEAM_ALERT_SECRET, link_disponivel: !!runMod.link('2026-01-01', env), olheiro_leu: fs.existsSync(path.join(stateDir, 'agents', 'olheiro-instagram', 'resumo.json')), skill_em_dia: sk.ok, dias: d.length, ultimo: d[0] || null, hoje: contexto.diaParis(), falta, progresso: prog };
+  }
+
+  /** Guarda uma peça sob medida no pacote do dia (cria um pacote mínimo se o dia ainda não tem). Devolve a peça com id. */
+  function guardarPeca(dia, peca, extra = {}) {
+    const p = ler(dia) || { date: dia, tendance_du_jour: '', reels: [], _verificacao: { ok: true, removidos: [], problemas: [], medidas: {} }, _lacunas: ['pacote mínimo criado pela área Criar; a rodada diária não rodou neste dia'], _gerado_em: new Date().toISOString(), _modelo: null };
+    p.pecas = Array.isArray(p.pecas) ? p.pecas : [];
+    const id = `P${String(p.pecas.length + 1).padStart(2, '0')}`;
+    const guardada = { id, criado_em: new Date().toISOString(), ...peca, ...extra };
+    if (guardada.reel) guardada.reel.id = id;
+    p.pecas.push(guardada);
+    gravarSeguro(path.join(dir, `pacote-${dia}.json`), JSON.stringify(p, null, 1));
+    return guardada;
+  }
+  function removerPeca(dia, id) {
+    const p = ler(dia); if (!p || !Array.isArray(p.pecas)) return false;
+    const i = p.pecas.findIndex((x) => x.id === id); if (i < 0) return false;
+    est.registrarEdicao({ dia, reel: id, antes: p.pecas[i], motivo: 'peca_removida' });
+    p.pecas.splice(i, 1); gravarSeguro(path.join(dir, `pacote-${dia}.json`), JSON.stringify(p, null, 1)); return true;
   }
 
   function listarDias() {
@@ -201,7 +224,7 @@ function criar({ stateDir, env = process.env, llm: llmInjetado = null } = {}) {
       if (rota === '/pacote') { const dia = u.searchParams.get('dia') || dias()[0]; const m = dia ? montar(dia) : null; json(res, m ? 200 : 404, m || { error: dia ? `sem pacote para ${dia}` : 'nenhum pacote ainda: gere o primeiro pelo botão ou ligue a rotina (ESTUDIO_VIRAL=on)' }); return true; }
       if (rota === '/radar') { const dia = RE_DIA.test(u.searchParams.get('dia') || '') ? u.searchParams.get('dia') : contexto.diaParis(); const v = veilleDe(dia); json(res, 200, { dia, veille: v, calendario: contexto.calendario(dia), lacuna: v ? null : 'Sem pesquisa na web para este dia: a veille roda junto com a geração do pacote e exige a chave da IA.' }); return true; }
       if (rota === '/link') { const dia = u.searchParams.get('dia') || dias()[0]; json(res, 200, { dia, link: dia ? runMod.link(dia, env) : null, motivo: runMod.link(dia || '2026-01-01', env) ? null : 'sem CHAUFFEUR_CONFIRMA_URL ou segredo (CHAUFFEUR_CONFIRMA_SECRET/CENTER_TOKEN)' }); return true; }
-      if (rota === '/srt') { const p = ler(u.searchParams.get('dia')); const r = p && (p.reels || []).find((x) => x.id === u.searchParams.get('reel')); if (!r) { json(res, 404, { error: 'Reel não encontrado' }); return true; } res.writeHead(200, { 'content-type': 'application/x-subrip; charset=utf-8', 'content-disposition': `attachment; filename="wanted-chauffeur-${u.searchParams.get('dia')}-${r.id}.srt"`, 'cache-control': 'no-store' }); res.end(timelineMod.srt(r)); return true; }
+      if (rota === '/srt') { const p = ler(u.searchParams.get('dia')); const r = p && ((p.reels || []).find((x) => x.id === u.searchParams.get('reel')) || ((p.pecas || []).find((x) => x.id === u.searchParams.get('reel')) || {}).reel); if (!r) { json(res, 404, { error: 'Reel não encontrado' }); return true; } res.writeHead(200, { 'content-type': 'application/x-subrip; charset=utf-8', 'content-disposition': `attachment; filename="wanted-chauffeur-${u.searchParams.get('dia')}-${r.id}.srt"`, 'cache-control': 'no-store' }); res.end(timelineMod.srt(r)); return true; }
       json(res, 404, { error: 'rota desconhecida em /api/estudio' }); return true;
     }
     if (req.method !== 'POST') { json(res, 405, { error: 'método não aceito' }); return true; }
@@ -228,6 +251,17 @@ function criar({ stateDir, env = process.env, llm: llmInjetado = null } = {}) {
         const l = getLlm(); if (!l.disponivel) return json(res, 503, { error: 'ANTHROPIC_API_KEY ausente na Central: esta ferramenta usa o modelo. O laboratório de medida funciona sem ela.' });
         if (rota === '/ganchos') { if (!txt(c.ideia, 600).trim()) return json(res, 400, { error: 'diga a ideia do Reel em uma frase' }); const dia = contexto.diaParis(); return json(res, 200, await iaMod.ganchos({ llm: l, ctx: ctxDe(dia), lab: getLab(), ideia: c.ideia, pilier: c.pilier ? txt(c.pilier, 20) : null })); }
         if (rota === '/reescrever') { const p = ler(c.dia); if (!p) return json(res, 404, { error: `sem pacote para ${c.dia}` }); if (!txt(c.instrucao, 800).trim()) return json(res, 400, { error: 'diga o que mudar' }); const r = await iaMod.reescrever({ llm: l, ctx: ctxDe(c.dia), wc: getSkill().wc, pacote: p, reelId: c.reel, instrucao: c.instrucao }); return json(res, 200, { ...r, timeline: timelineMod.construir(r.reel) }); }
+        if (rota === '/peca/remover') { if (!RE_DIA.test(String(c.dia))) return json(res, 400, { error: 'dia' }); return json(res, removerPeca(c.dia, String(c.id || '')) ? 200 : 404, { ok: true }); }
+        if (rota === '/criar') {
+          const formato = String(c.formato || ''); const direcao = txt(c.direcao, 1200).trim();
+          if (!pecasMod.FORMATOS.includes(formato)) return json(res, 400, { error: `formato: ${pecasMod.FORMATOS.join(', ')}` });
+          if (direcao.length < 8) return json(res, 400, { error: 'diga a direção da peça (uma ou duas frases: a ideia, o clima, o que mostrar)' });
+          const dia = RE_DIA.test(String(c.dia || '')) ? c.dia : contexto.diaParis();
+          const r = await iaMod.criarPeca({ llm: l, ctx: ctxDe(dia), wc: getSkill().wc, formato, direcao, pilier: c.pilier ? txt(c.pilier, 20) : null });
+          if (!r.ok) return json(res, 422, { error: 'as travas do projeto barraram a peça duas vezes; mude a direção', problemas: r.problemas, peca: r.peca });
+          const guardada = guardarPeca(dia, r.peca, { direcao, modelo: r.modelo, problemas: r.problemas, medidas: r.medidas });
+          return json(res, 200, { ok: true, dia, peca: guardada, timeline: guardada.reel ? timelineMod.construir(guardada.reel) : null });
+        }
         if (rota === '/quadro') { const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(String(c.imagem || '')); if (!m) return json(res, 400, { error: 'envie uma imagem JPEG, PNG ou WebP' }); const p = c.dia ? ler(c.dia) : null; const reel = p ? (p.reels || []).find((x) => x.id === c.reel) || null : null; return json(res, 200, await iaMod.quadro({ llm: l, reel, base64: m[2], mediaType: m[1] })); }
         return json(res, 404, { error: 'rota desconhecida em /api/estudio' });
       } catch (e) { return erro(e); }

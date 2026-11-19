@@ -21,6 +21,7 @@ process.env.MAESTRO_TOOLS = 'off';
 // Studio do Wanted Chauffeur: link da página do Julien e dados de ENSAIO (pasta temporária; nunca em produção)
 process.env.CHAUFFEUR_CONFIRMA_URL = `http://localhost:${process.env.PORT}`;
 process.env.CHAUFFEUR_CONFIRMA_SECRET = 'dev-local';
+process.env.ESTUDIO_LLM_SIMULADO = '1'; // a área Criar responde com um modelo de mentira (NODE_ENV=development)
 try { require('../agents/estudio-viral/dev-seed.js').semear(st, { log: console.log }).catch((e) => console.log('[dev-seed] falhou:', e.message)); } catch (e) { console.log('[dev-seed] ausente:', e.message); }
 console.log(`[dev-local] Central em http://localhost:${process.env.PORT} · estado em ${st}`);
 require('./server.js');
