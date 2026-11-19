@@ -131,3 +131,53 @@ test('links por rede: um por letra, com a página da marca', async () => {
   assert.deepEqual(l.j.links.map((x) => x.origem), ['T', 'I', 'Y', 'W', 'H', 'S']);
   assert.equal(l.j.links[0].url, 'https://theworldkeys.com/ride?o=T');
 });
+
+test('Fase 2: o aviso ao Julien leva o link de confirmar; a página /c abre com o token certo, confirma, muda o status e tenta a confirmação ao cliente', async () => {
+  const raiz2 = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-central-chauffeur3-'));
+  const env = { CHAUFFEUR_ORIGINS: 'https://theworldkeys.com', ARIA_TEAM_ALERT_SECRET: 'seg', AGENT_ARIA_URL: 'https://aria.test', CHAUFFEUR_CONFIRMA_SECRET: 's3gredo', CHAUFFEUR_CONFIRMA_URL: 'https://central.test' };
+  const av = [];
+  const ch3 = criar({ stateDir: raiz2, env, fetchImpl: async (url, init) => { av.push({ url, corpo: JSON.parse(init.body) }); return { ok: true, status: 200, json: async () => ({ ok: true, desfecho: 'alerta_equipe_enviado' }) }; }, log: () => {}, sentinels });
+  const srv = http.createServer((req, res) => { const u = new URL(req.url, 'http://x'); if (ch3.tratarPublico(req, res, u, json)) return; json(res, 404, {}); });
+  await new Promise((ok) => srv.listen(0, '127.0.0.1', ok)); const b3 = `http://127.0.0.1:${srv.address().port}`;
+  try {
+    const r = await fetch(b3 + '/api/chauffeur/reserva', { method: 'POST', headers: { 'content-type': 'application/json', origin: 'https://theworldkeys.com' }, body: JSON.stringify({ codigo: 'WTD-H-LNKX', produto: 'transfer', data: '2026-11-25', hora: '7:00 AM', pessoas: 2, nome: 'Paul Durand', whatsapp: '+33611223344', partida: 'Hôtel Capitole', destino: 'Blagnac' }) });
+    assert.equal(r.status, 201);
+    await espera(50);
+    assert.equal(av.length, 1);
+    const link = /https:\/\/central\.test\/c\/WTD-H-LNKX\?t=[A-Za-z0-9_-]{16}/.exec(av[0].corpo.situacao);
+    assert.ok(link, av[0].corpo.situacao);
+    const caminho = link[0].replace('https://central.test', '');
+    assert.equal((await fetch(b3 + '/c/WTD-H-LNKX?t=errado0000000000')).status, 404);
+    assert.equal((await fetch(b3 + '/c/WTD-H-NXPE' + caminho.slice(caminho.indexOf('?')))).status, 404);
+    const pg = await fetch(b3 + caminho);
+    assert.equal(pg.status, 200);
+    const html = await pg.text();
+    assert.ok(html.includes('Paul Durand') && html.includes('Confirmer la course') && !html.includes('+33611223344'));
+    const dec = await fetch(b3 + caminho, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: 'decision=confirmer' });
+    assert.equal(dec.status, 200);
+    const h2 = await dec.text();
+    assert.ok(h2.includes('Course confirmée') && h2.includes("n'est pas partie automatiquement"), 'sem canal da Meta no ambiente: a página avisa que o cliente não recebeu');
+    const s = await ch3.armazem();
+    const f = await s.obter('WTD-H-LNKX');
+    assert.equal(f.status, 'confirmado'); assert.ok(f.avisos.includes('sem_canal'));
+    const de_novo = await fetch(b3 + caminho, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: 'decision=refuser' });
+    assert.ok((await de_novo.text()).includes('a déjà une réponse'));
+    assert.equal((await s.obter('WTD-H-LNKX')).status, 'confirmado');
+    assert.equal(ch3.saude().link_confirmar, 'on');
+  } finally { srv.close(); }
+});
+
+test('Fase 2: marcar confirmado no painel manda a confirmação ao cliente pela Meta quando o canal está ligado', async () => {
+  const raiz3 = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-central-chauffeur4-'));
+  const metaEnvios = [];
+  const ch4 = criar({ stateDir: raiz3, env: { WC_WA_TOKEN: 'tok', WC_WA_PHONE_NUMBER_ID: '123', WC_TEMPLATE_CONFIRMED: 'wc_ride_confirmed', WC_TEMPLATE_REMINDER: 'wc_ride_reminder' }, fetchImpl: async (url, init) => { metaEnvios.push({ url, corpo: JSON.parse(init.body) }); return { ok: true, status: 200, json: async () => ({ messages: [{ id: 'wamid.X' }] }) }; }, log: () => {}, sentinels });
+  const s = await ch4.armazem();
+  const v = require(path.join('..', '..', '..', 'agents', 'wanted-chauffeur', 'reservas.js')).validar({ codigo: 'WTD-S-PANL', produto: 'night', data: '2026-11-26', hora: '10:00 PM', pessoas: 4, nome: 'Ana Souza', whatsapp: '+33600000001', partida: 'Pont Neuf', idioma: 'en' }, { exigirPessoa: true });
+  await s.criar(v.reserva);
+  const r = await ch4.mudarStatus({ codigo: 'WTD-S-PANL', status: 'confirmado', por: 'marlon' });
+  assert.equal(r.status, 200); assert.equal(r.cliente.enviado, true);
+  assert.equal(metaEnvios.length, 1); assert.equal(metaEnvios[0].corpo.template.language.code, 'en');
+  assert.equal((await s.obter('WTD-S-PANL')).avisos.includes('confirmacao_cliente'), true);
+  assert.equal(ch4.saude().cliente, 'on');
+  assert.equal((await ch4.mudarStatus({ codigo: 'WTD-S-PANL', status: 'feito', por: 'marlon' })).cliente, undefined, 'outros status não mandam nada');
+});

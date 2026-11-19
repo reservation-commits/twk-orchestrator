@@ -45,6 +45,8 @@ const COMUM = {
   // v6 (14/11/2026): alerta à equipe em francês — só fr, rodar com --lang fr
   sujet: "Instagram @wantedchauffeur", situation: "Il y a une demande de réservation sans réponse sur ce post : https://www.instagram.com/reel/C9xYz12AbCd/", heure: "14/11 7:31 PM (Paris)",
   canal: "Instagram @wantedchauffeur", detail: "Il y a une demande de réservation sans réponse sur ce post : https://www.instagram.com/reel/C9xYz12AbCd/",
+  // Wanted Chauffeur, cliente (19/11/2026): templates-meta-wc-cliente-2026-11-19.md — só fr e en, rodar com --lang fr,en
+  mission: "Game Night", nom: "Léa Martin", depart: "Place du Capitole", montant: "350 €", ref: "WTD-T-7K2Q", quand: "demain",
 };
 const AMOSTRA = {
   en: { nome: "Anna", casa: "Le Tobsil", data: "Saturday, 3 October 2026", hora: "8:00 PM", pessoas: "2", cliente: "Anna Lee", ...COMUM },
@@ -84,6 +86,9 @@ const VARIAVEIS = {
   twk_team_pending_request: ["canal", "detail", "heure"],
   // v5 (05/11/2026): reserva que já nasce confirmada (confirmação automática, ex.: MONAK) — Aria v25
   twk_venue_confirmed: ["casa", "data", "hora", "pessoas", "cliente"],
+  // Wanted Chauffeur, cliente (19/11/2026): confirmação e lembrete da corrida (Central, agents/wanted-chauffeur/cliente.js)
+  wc_ride_confirmed: ["mission", "data", "hora", "nom", "depart", "montant", "ref"],
+  wc_ride_reminder: ["quand", "mission", "hora", "nom", "depart", "ref"],
 };
 const BOTAO_URL = {
   twk_venue_new_request: { url: "https://theworldkeys.com/r/{{1}}", exemplo: "https://theworldkeys.com/r/6DSPZXQ7" },

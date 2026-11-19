@@ -35,14 +35,25 @@ async function avisarEquipe({ ariaUrl, segredo, para, sistema, situacao, evento,
   return { ok: r.ok && j && j.ok === true, status: r.status, desfecho: (j && (j.desfecho || j.motivo)) || `HTTP ${r.status}` };
 }
 
-/** Em francês, ao Julien: o pedido acabou de chegar; o cliente vai escrever no WhatsApp dele. */
-function textoNovaReserva(r) {
+/** Em francês, ao Julien: o pedido acabou de chegar; o cliente vai escrever no WhatsApp dele. Com `link` (Fase 2), o botão de confirmar. */
+function textoNovaReserva(r, link = null) {
   const produto = PRODUTO_NOME[r.produto] || r.produto;
   const quando = [r.data ? diaLongoFr(r.data) : 'date à préciser', r.hora || ''].filter(Boolean).join(' ');
-  const trajeto = r.partida ? `Départ ${corta(r.partida, 40)}${r.destino ? ' → ' + corta(r.destino, 40) : ''}. ` : '';
+  const trajeto = r.partida ? `Départ ${corta(r.partida, link ? 30 : 40)}${r.destino ? ' → ' + corta(r.destino, link ? 30 : 40) : ''}. ` : '';
   const valor = `${Math.round((r.valor_cent || 0) / 100)} €${r.produto === 'soiree' ? ' + dîner' : ''}`;
-  const base = `Nouvelle demande ${r.codigo} : ${produto}${r.horas ? ' ' + r.horas + ' h' : ''}, ${quando}, ${r.pessoas || '?'} pers., ${valor}. ${trajeto}Au nom de ${corta(r.nome || '(nom manquant)', 40)}. Le client t'écrit sur WhatsApp : réponds avec l'heure, le nom et le montant.`;
-  return umaLinha(base).slice(0, MAX);
+  const cabeca = `Nouvelle demande ${r.codigo} : ${produto}${r.horas ? ' ' + r.horas + ' h' : ''}, ${quando}, ${r.pessoas || '?'} pers., ${valor}. ${trajeto}Au nom de ${corta(r.nome || '(nom manquant)', link ? 30 : 40)}.`;
+  const cauda = link ? ` Confirmer : ${link}` : ' Le client t\'écrit sur WhatsApp : réponds avec l\'heure, le nom et le montant.';
+  const texto = umaLinha(cabeca + cauda);
+  // o link nunca é cortado: se não couber, encurta a cabeça
+  if (texto.length <= MAX || !link) return texto.slice(0, MAX);
+  const sobra = MAX - cauda.length;
+  return umaLinha(cabeca.slice(0, Math.max(40, sobra - 1)) + '…') + cauda;
+}
+
+/** Em francês, ao Julien: a corrida é em 2 horas. */
+function textoLembreteJulien(r) {
+  const produto = PRODUTO_NOME[r.produto] || r.produto;
+  return umaLinha(`Dans 2 h : ${produto} à ${r.hora || '—'}, au nom de ${corta(r.nome || '(nom manquant)', 40)}, départ ${corta(r.partida || '—', 50)}${r.destino ? ' → ' + corta(r.destino, 40) : ''}. ${r.pessoas || '?'} pers., ${Math.round((r.valor_cent || 0) / 100)} €. Réf ${r.codigo}.`).slice(0, MAX);
 }
 
 /** Em português, ao Márlon: pedido parado sem resultado na Central. Aviso interno; nada disso é prometido ao cliente. */
@@ -52,4 +63,4 @@ function textoPendente(r, minutos) {
   return umaLinha(base).slice(0, MAX);
 }
 
-module.exports = { config, avisarEquipe, textoNovaReserva, textoPendente, MAX };
+module.exports = { config, avisarEquipe, textoNovaReserva, textoPendente, textoLembreteJulien, MAX };

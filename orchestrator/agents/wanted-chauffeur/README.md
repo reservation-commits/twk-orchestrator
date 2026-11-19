@@ -17,7 +17,19 @@ Ferramentas (não conteúdo: roteiros, legendas e ideias são do Julien). Escrit
 
 **O que fica guardado:** a reserva inteira, inclusive a pessoa. É dado pessoal no mesmo nível do `nextauth."User"`: acesso mínimo (painel atrás da chave, WhatsApp mascarado na lista), nunca no aviso de WhatsApp, apagado 365 dias depois da corrida. A planilha do Google (seção 2) deixa de ser fonte e vira exportação.
 
-**Status:** `pedido` (chegou) → `orcado` → `confirmado` (o Julien respondeu com hora, nome e valor) → `feito` · `perdido` · `cancelado`. Quem marca: o Márlon, pelo código que aparece na conversa do Julien. Na Fase 2 o Julien marca por um link no próprio aviso.
+**Status:** `pedido` (chegou) → `orcado` → `confirmado` (o Julien respondeu com hora, nome e valor) → `feito` · `perdido` · `cancelado`. Quem marca: o Julien, pelo link no aviso (Fase 2), ou o Márlon no painel, pelo código da conversa.
+
+## 1b. Fase 2 (19/11): o Julien confirma por link e o cliente recebe no WhatsApp
+
+| Peça | Onde | O que faz |
+|---|---|---|
+| Link de confirmar | `confirmar.js` + rota pública `GET/POST /c/<codigo>?t=<token>` em `chauffeur.js` | o aviso de pedido novo leva `https://<central>/c/WTD-…?t=…` (token = HMAC do código com `CHAUFFEUR_CONFIRMA_SECRET`, ou `CENTER_TOKEN`; base em `CHAUFFEUR_CONFIRMA_URL`). Página sem script, em francês, com a ficha e sem o telefone; "Confirmer la course" → `confirmado` por `julien`; "Refuser" → `perdido`. Sem URL ou segredo: o aviso sai sem o link e o painel continua valendo |
+| Mensagens ao cliente | `cliente.js` (Cloud API da Meta direto da Central) | `wc_ride_confirmed` quando o status vira `confirmado` (pelo link ou pelo painel) e `wc_ride_reminder` na véspera às 8:00 PM e 2 h antes; FR ou EN pelo idioma da página; só com `WC_WA_TOKEN`, `WC_WA_PHONE_NUMBER_ID`, `WC_TEMPLATE_CONFIRMED`, `WC_TEMPLATE_REMINDER`; sem WhatsApp ou em `nao_contatar` não sai; cada mensagem uma vez por reserva, tudo registrado como evento (`confirmacao_cliente`, `lembrete_vespera`, `lembrete_2h`, `sem_canal`, `*_falhou`) |
+| Lembrete ao Julien | `vigia-reservas.js` | 2 h antes de cada corrida confirmada, uma linha pela Aria (`lembrete_julien`) |
+| Templates | `docs/notificacoes/templates-meta-wc-cliente-2026-11-19.md` | 2 templates × FR/EN, formato de ficha, UTILITY; `meta-templates.mjs --doc … --lang fr,en` cria depois do "aprovado" do fundador |
+| Testes | `test/fase2.test.js` (4) + 2 em `chauffeur.test.js` | canal, idioma, travas, link, página, lembretes nas janelas certas |
+
+Pedido de hotel (origem H) ainda não recebe cópia: o formulário não pede o contato do hotel.
 
 **Letras de origem:** T TikTok · I Instagram · Y YouTube · W Twitch · H hotel · S site · R direto (sem link).
 Link na bio de cada rede: `https://theworldkeys.com/ride?o=T` (I, Y, W); cartão e QR dos hotéis: `?o=H`; botões do site: `?o=S`.

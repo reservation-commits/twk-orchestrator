@@ -159,6 +159,11 @@ function abrirArquivo({ dir, agora = () => Date.now() }) {
     return ler(arqR).map((r) => apresentar(r, eventosDe(r.codigo, evs)))
       .filter((r) => r.status === 'pedido' && agora() - Date.parse(r.criado_em) >= minutos * 60_000 && !r.avisos.includes('pendente'));
   }
+  /** Reservas num status, com data a partir de `desde` (AAAA-MM-DD, opcional). Para os lembretes. */
+  async function porStatus(status, { desde = null } = {}) {
+    const evs = ler(arqE);
+    return ler(arqR).map((r) => apresentar(r, eventosDe(r.codigo, evs))).filter((r) => r.status === status && (!desde || (r.data && r.data >= desde)));
+  }
   /** Apaga nome, WhatsApp, partida, destino e recado das reservas encerradas (ou com data) há mais de `dias`. */
   async function anonimizar(dias = 365) {
     const limite = agora() - dias * 86_400_000;
@@ -205,7 +210,7 @@ function abrirArquivo({ dir, agora = () => Date.now() }) {
     if (leads.length) { fs.mkdirSync(dir, { recursive: true }); fs.writeFileSync(marca, iso(), 'utf8'); }
     return { importados: n };
   }
-  return { modo: 'arquivo', dir, criar, obter, evento, listar, total, doDia, pendentes, anonimizar, naoContatar, importarLeadsAntigos, arquivos: { reservas: arqR, eventos: arqE, naoContatar: arqN } };
+  return { modo: 'arquivo', dir, criar, obter, evento, listar, total, doDia, pendentes, porStatus, anonimizar, naoContatar, importarLeadsAntigos, arquivos: { reservas: arqR, eventos: arqE, naoContatar: arqN } };
 }
 
 // ------------------------------------------------------------------------------------------------ modo banco
@@ -242,6 +247,11 @@ async function abrirBanco({ url, agora = () => Date.now(), pool: poolDado }) {
   async function total() { const r = await q('select count(*)::int n from public.chauffeur_reservas'); return r.rows[0].n; }
   async function doDia(dia) { const r = await q('select * from public.chauffeur_reservas where data = $1', [dia]); return (await montar(r.rows)).sort((a, b) => minutosDe(a.hora) - minutosDe(b.hora)); }
   async function pendentes(minutos) { const r = await q('select * from public.chauffeur_reservas where criado_em <= now() - ($1 || \' minutes\')::interval order by criado_em', [String(minutos)]); return (await montar(r.rows)).filter((x) => x.status === 'pedido' && !x.avisos.includes('pendente')); }
+  async function porStatus(status, { desde = null } = {}) {
+    const r = await q(`select r.* from public.chauffeur_reservas r where ($2::date is null or r.data >= $2::date)
+      and coalesce((select e.valor from public.chauffeur_reservas_eventos e where e.codigo = r.codigo and e.tipo = 'status' order by em desc limit 1), 'pedido') = $1`, [status, desde]);
+    return montar(r.rows);
+  }
   async function anonimizar(dias = 365) {
     const r = await q(`update public.chauffeur_reservas r set nome = null, whatsapp = null, partida = null, destino = null, recado = null, anonimizado_em = now()
       where anonimizado_em is null and (nome is not null or whatsapp is not null or partida is not null or destino is not null or recado is not null)
@@ -265,7 +275,7 @@ async function abrirBanco({ url, agora = () => Date.now(), pool: poolDado }) {
       return r.rowCount > 0;
     },
   };
-  return { modo: 'banco', criar, obter, evento, listar, total, doDia, pendentes, anonimizar, naoContatar, fechar: () => pool.end() };
+  return { modo: 'banco', criar, obter, evento, listar, total, doDia, pendentes, porStatus, anonimizar, naoContatar, fechar: () => pool.end() };
 }
 
 /**

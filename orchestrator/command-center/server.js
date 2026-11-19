@@ -27,7 +27,7 @@ const chauffeurMod = require('./chauffeur.js'); // Wanted Chauffeur: a página /
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.9.0-wanted-chauffeur-reservas-20261119';
+const BUILD = '4.9.1-wanted-chauffeur-fase2-20261119';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
