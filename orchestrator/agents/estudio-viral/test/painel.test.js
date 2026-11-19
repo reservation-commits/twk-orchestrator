@@ -140,3 +140,19 @@ test('contexto: o que o Julien publicou e descartou entra nos pacotes recentes',
   assert.equal(rec.length, 1);
   assert.deepEqual(rec[0].choix, ['« Pas eux » publié', '« Zoome » écarté']);
 });
+
+test('JSON inválido do modelo: vírgula sobrando é consertada sem nova chamada; guillemet solto leva a UMA nova tentativa com o erro; duas falhas = erro claro', async () => {
+  const { chamarJsonCom, extrairJson } = require('../llm.js');
+  assert.deepEqual(extrairJson('```json\n{"a": [1, 2,], "b": {"c": 1,},}\n```'), { a: [1, 2], b: { c: 1 } });
+  const respostas = ['{"titre": "Il a dit "zoome" et c\'est tout", "n": 1}', '{"titre": "Il a dit « zoome » et c’est tout", "n": 1}'];
+  const chamadas = [];
+  const llm = { chamar: async (o) => { chamadas.push(o); return { texto: respostas[chamadas.length - 1], modelo: 'sim', usage: {}, buscas: 3 }; } };
+  const invalidas = [];
+  const r = await chamarJsonCom(llm, { system: 's', user: 'u', tools: [{ type: 'web_search_20260209' }] }, { aoFalhar: (t, e) => invalidas.push({ t, e: e.message }) });
+  assert.equal(r.json.titre, 'Il a dit « zoome » et c’est tout'); assert.equal(r.tentativas, 2); assert.equal(r.buscas, 3, 'as buscas da primeira chamada ficam no resultado');
+  assert.equal(chamadas.length, 2); assert.equal(chamadas[1].tools, null, 'a segunda chamada não pesquisa de novo');
+  assert.match(chamadas[1].user, /JSON valide/); assert.equal(chamadas[1].historico[1].content, respostas[0]);
+  assert.equal(invalidas.length, 1); assert.match(invalidas[0].e, /JSON/);
+  const teimoso = { chamar: async () => ({ texto: 'pas du json', modelo: 'sim', usage: {} }) };
+  await assert.rejects(chamarJsonCom(teimoso, { system: 's', user: 'u' }), /duas tentativas/);
+});

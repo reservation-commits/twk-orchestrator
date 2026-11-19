@@ -6,7 +6,7 @@
  *   corrigir()  → segunda chamada ao modelo só com o que reprovou
  * Bloqueio (trava `bloquant`, preço fora da tabela, legenda inválida) tira o Reel do pacote; aviso vai junto para o Julien.
  */
-const { extrairJson } = require('./llm.js');
+const { chamarJsonCom } = require('./llm.js');
 
 const CAMPOS_REEL = ['id', 'titre', 'formule', 'pilier', 'idee', 'accroche_voix', 'accroche_ecran', 'plans', 'texte_ecran', 'voix_off', 'legende', 'hashtags', 'pourquoi', 'tournage'];
 
@@ -77,9 +77,9 @@ function userPrompt(ctx, veille, correcoes = null) {
   return partes.join('\n');
 }
 
-async function gerar({ llm, ctx, veille = null, correcoes = null }) {
-  const r = await llm.chamar({ system: systemPrompt(ctx), user: userPrompt(ctx, veille, correcoes), maxTokens: 16000 });
-  const p = extrairJson(r.texto);
+async function gerar({ llm, ctx, veille = null, correcoes = null, aoFalhar = null }) {
+  const r = await chamarJsonCom(llm, { system: systemPrompt(ctx), user: userPrompt(ctx, veille, correcoes), maxTokens: 16000 }, { aoFalhar });
+  const p = r.json;
   p.date = p.date || ctx.dia;
   p._modelo = r.modelo; p._usage = r.usage;
   return p;

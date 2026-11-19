@@ -60,6 +60,11 @@ async function rodar({ argv = process.argv.slice(2), env = process.env, llm = nu
   const wc = ctx.skill.wc;
   const lacunas = []; if (ctx.olheiro.lacuna) lacunas.push(ctx.olheiro.lacuna);
   let veille = null; let pacote = null; let verificacao = null; let removidos = []; let modelo = null; let status = 'ok';
+  // resposta inválida do modelo fica guardada para diagnóstico (texto do modelo, sem dado de cliente)
+  const aoFalhar = (texto, erro) => { try { fs.appendFileSync(path.join(stateDir, `resposta-invalida-${dia}.txt`), `=== ${new Date().toISOString()} · ${erro.message}
+${texto}
+
+`); } catch { /* opcional */ } };
 
   if (typeof f.fixture === 'string') {
     pacote = JSON.parse(fs.readFileSync(path.resolve(f.fixture), 'utf8'));
@@ -71,11 +76,11 @@ async function rodar({ argv = process.argv.slice(2), env = process.env, llm = nu
     modelo = llm.modelo;
     if (!f['sem-veille']) {
       etapa('veille', 'pesquisando na web: gaming, formatos da semana, Toulouse');
-      try { veille = await veilleMod.pesquisar({ llm, dia, calendario: ctx.calendario }); fs.writeFileSync(path.join(stateDir, `veille-${dia}.json`), JSON.stringify(veille, null, 1)); log(`[estudio] veille: ${veille.novidades.length} novidade(s) com fonte, ${veille.buscas || 0} busca(s)`); }
+      try { veille = await veilleMod.pesquisar({ llm, dia, calendario: ctx.calendario, aoFalhar }); fs.writeFileSync(path.join(stateDir, `veille-${dia}.json`), JSON.stringify(veille, null, 1)); log(`[estudio] veille: ${veille.novidades.length} novidade(s) com fonte, ${veille.buscas || 0} busca(s)`); }
       catch (e) { lacunas.push(`veille falhou: ${e.message}`); log(`[estudio] veille falhou: ${e.message}`); }
     } else lacunas.push('veille pulada (--sem-veille)');
     etapa('escrita', veille ? `${veille.novidades.length} novidade(s) com fonte; escrevendo 3 Reels, story, carrossel e respostas` : 'escrevendo 3 Reels, story, carrossel e respostas');
-    pacote = await pacoteMod.gerar({ llm, ctx, veille });
+    pacote = await pacoteMod.gerar({ llm, ctx, veille, aoFalhar });
     log(`[estudio] pacote escrito pelo modelo (${(pacote.reels || []).length} Reels)`);
   }
 
@@ -84,7 +89,7 @@ async function rodar({ argv = process.argv.slice(2), env = process.env, llm = nu
   if (!verificacao.ok && llm && llm.disponivel && typeof f.fixture !== 'string') {
     etapa('correcao', `${verificacao.bloqueados.length} peça(s) barrada(s): o modelo reescreve só essas`);
     log(`[estudio] ${verificacao.bloqueados.length} peça(s) bloqueada(s): pedindo correção ao modelo`);
-    try { pacote = await pacoteMod.gerar({ llm, ctx, veille, correcoes: pacoteMod.textoCorrecoes(pacote, verificacao) }); verificacao = pacoteMod.verificar(pacote, wc); }
+    try { pacote = await pacoteMod.gerar({ llm, ctx, veille, correcoes: pacoteMod.textoCorrecoes(pacote, verificacao), aoFalhar }); verificacao = pacoteMod.verificar(pacote, wc); }
     catch (e) { lacunas.push(`correção falhou: ${e.message}`); }
   }
   if (!verificacao.ok) { const p = pacoteMod.podar(pacote, verificacao); pacote = p.pacote; removidos = p.removidos; }
