@@ -9,7 +9,8 @@
   const headers = () => (S.token ? { 'x-center-key': S.token } : {});
   const dataBr = (iso) => (iso ? new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' }) : '—');
   const quandoBr = (iso) => (iso ? new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }) : '—');
-  const RES = { novo: 'novo', orcado: 'orçado', confirmado: 'confirmado', feito: 'feito', perdido: 'perdido' };
+  const RES = { pedido: 'pedido', orcado: 'orçado', confirmado: 'confirmado', feito: 'feito', perdido: 'perdido', cancelado: 'cancelado' };
+  const eur = (cent) => (Math.round(Number(cent || 0) / 100)).toLocaleString('pt-BR') + ' €';
 
   function barras(obj, total) {
     const ent = Object.entries(obj).sort((a, b) => b[1] - a[1]);
@@ -33,9 +34,9 @@
     $('#pulso-body').className = '';
     $('#pulso-body').innerHTML = `
       <div class="kpis">
-        <div class="kpi"><div class="v">${n(s.total)}</div><div class="l">pedidos</div><div class="s">chegaram ao WhatsApp com código</div></div>
-        <div class="kpi ${cls}"><div class="v">${n(s.viraram_corrida)}</div><div class="l">viraram corrida</div><div class="s">confirmados ou feitos · ${s.taxa_conversao_pct}% dos pedidos</div></div>
-        <div class="kpi"><div class="v">${n(r.novo)}</div><div class="l">sem resultado marcado</div><div class="s">${n(r.orcado)} orçados · ${n(r.perdido)} perdidos</div></div>
+        <div class="kpi"><div class="v">${n(s.total)}</div><div class="l">pedidos</div><div class="s">reservas gravadas pela página /ride</div></div>
+        <div class="kpi ${cls}"><div class="v">${n(s.viraram_corrida)}</div><div class="l">viraram corrida</div><div class="s">confirmados ou feitos · ${s.taxa_conversao_pct}% dos pedidos · ${eur(s.valor_confirmado_cent)}</div></div>
+        <div class="kpi"><div class="v">${n(r.pedido)}</div><div class="l">sem resultado marcado</div><div class="s">${n(r.orcado)} orçados · ${n(r.perdido)} perdidos · ${n(r.cancelado)} cancelados</div></div>
         <div class="kpi"><div class="v">${Object.keys(s.por_origem).length}</div><div class="l">redes trazendo pedido</div><div class="s">${Object.entries(s.por_origem).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${esc(k)} ${n(v)}`).join(' · ') || '—'}</div></div>
       </div>
       ${serieDias(s.por_dia)}
@@ -46,13 +47,16 @@
   function pedidos(s) {
     $('#pedidos-body').className = '';
     if (!s.pedidos.length) { $('#pedidos-body').innerHTML = '<p class="vazio">Nenhum pedido no período.</p>'; return; }
-    const sel = (p) => `<select data-codigo="${esc(p.codigo)}" aria-label="resultado de ${esc(p.codigo)}">${Object.entries(RES).filter(([k]) => k !== 'novo' || p.resultado === 'novo').map(([k, v]) => `<option value="${k}" ${p.resultado === k ? 'selected' : ''}>${v}</option>`).join('')}</select>`;
-    $('#pedidos-body').innerHTML = `<div class="scroll"><table class="ped"><thead><tr><th>Código</th><th>Origem</th><th>Produto</th><th>Para quando</th><th>Pessoas</th><th>Chegou</th><th>Resultado</th></tr></thead><tbody>
-      ${s.pedidos.map((p) => `<tr><td class="cod">${esc(p.codigo)}</td><td>${esc(p.origem_nome)}</td><td>${esc(p.produto_nome)}${p.horas ? ` · ${p.horas} h` : ''}</td><td>${p.data ? dataBr(p.data + 'T12:00:00') : '—'}${p.hora ? ` · ${esc(p.hora)}` : ''}</td><td>${p.pessoas ?? '—'}</td><td>${quandoBr(p.criado_em)}</td><td class="res-${esc(p.resultado)}">${sel(p)}</td></tr>`).join('')}
+    const sel = (p) => `<select data-codigo="${esc(p.codigo)}" aria-label="resultado de ${esc(p.codigo)}">${Object.entries(RES).filter(([k]) => k !== 'pedido' || p.status === 'pedido').map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>`;
+    const aviso = (p) => (p.avisos || []).includes('nova_reserva') ? '<span class="pill ok" title="Julien avisado pela Aria">✓</span>' : (p.avisos || []).includes('nova_reserva_falhou') ? '<span class="pill bad" title="aviso ao Julien falhou">✕</span>' : '';
+    const pessoa = (p) => p.anonimizado_em ? '<i>apagado</i>' : `${esc(p.nome || '—')}${p.whatsapp_mascarado ? `<br><small>${esc(p.whatsapp_mascarado)}</small>` : ''}`;
+    const trajeto = (p) => p.partida ? `${esc(p.partida)}${p.destino ? ` → ${esc(p.destino)}` : ''}${p.recado ? `<br><small title="${esc(p.recado)}">“${esc(p.recado.slice(0, 60))}${p.recado.length > 60 ? '…' : ''}”</small>` : ''}` : '—';
+    $('#pedidos-body').innerHTML = `<div class="scroll"><table class="ped"><thead><tr><th>Código</th><th>Origem</th><th>Produto</th><th>Para quando</th><th>Quem embarca</th><th>Trajeto</th><th>Valor</th><th>Chegou</th><th>Resultado</th></tr></thead><tbody>
+      ${s.pedidos.map((p) => `<tr><td class="cod">${esc(p.codigo)} ${aviso(p)}</td><td>${esc(p.origem_nome)}</td><td>${esc(p.produto_nome)}${p.horas ? ` · ${p.horas} h` : ''}${p.pessoas ? ` · ${p.pessoas} pess.` : ''}${p.imagens === 'ok' ? ' · 📷' : ''}</td><td>${p.data ? dataBr(p.data + 'T12:00:00') : '—'}${p.hora ? ` · ${esc(p.hora)}` : ''}</td><td>${pessoa(p)}</td><td>${trajeto(p)}</td><td>${eur(p.valor_cent)}${p.produto === 'soiree' ? ' + dîner' : ''}</td><td>${quandoBr(p.criado_em)}</td><td class="res-${esc(p.status)}">${sel(p)}</td></tr>`).join('')}
     </tbody></table></div>`;
     document.querySelectorAll('#pedidos-body select').forEach((el) => el.addEventListener('change', async () => {
       const codigo = el.dataset.codigo, resultado = el.value;
-      if (resultado === 'novo') return;
+      if (resultado === 'pedido') return;
       el.disabled = true;
       try {
         const r = await fetch('/api/chauffeur/lead/resultado', { method: 'POST', headers: { 'content-type': 'application/json', ...headers() }, body: JSON.stringify({ codigo, resultado }) });
@@ -71,7 +75,9 @@
   function render(s) {
     $('#live').dataset.s = 'ok'; $('#live-t').textContent = 'ao vivo';
     pulso(s); origem(s); produto(s); pedidos(s); links();
-    $('#rodape').textContent = 'Arquivo chauffeur-leads.jsonl da Central (plano B até a tabela chauffeur_leads existir). Resultados marcados à mão, pelo código.';
+    $('#rodape').textContent = s.modo === 'banco'
+      ? 'Reservas nas tabelas chauffeur_reservas do banco da plataforma. Status marcado à mão, pelo código; ✓ = Julien avisado pela Aria.'
+      : 'Reservas no volume da Central (agents/wanted-chauffeur/reservas.jsonl) até a DDL chauffeur-reservas.sql rodar com a frase do fundador. Status marcado à mão, pelo código; ✓ = Julien avisado pela Aria.';
   }
 
   async function carregar(fresco) {

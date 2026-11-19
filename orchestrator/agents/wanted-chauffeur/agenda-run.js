@@ -1,10 +1,12 @@
 'use strict';
 /**
- * Agenda do Julien às 9:00 AM — a rotina hospedada (Central, rotinas.js) que lê a planilha de clientes, monta a
- * agenda do dia e pede à Aria o aviso no WhatsApp do Julien. Escrita em 18/11/2026. DESLIGADA até a chave entrar.
+ * Agenda do Julien às 9:00 AM — a rotina hospedada (Central, rotinas.js) que lê as reservas, monta a agenda do dia e
+ * pede à Aria o aviso no WhatsApp do Julien. Escrita em 18/11/2026; desde 19/11 lê as RESERVAS da Central (reservas.js,
+ * a mesma pasta de estado) por padrão. DESLIGADA até a chave entrar.
  *
  * Ligar (Easypanel da Central):
  *   CHAUFFEUR_AGENDA=on                      o interruptor
+ *   CHAUFFEUR_AGENDA_FONTE=planilha          (opcional) voltar à aba CSV de 18/11; exige então
  *   CHAUFFEUR_AGENDA_CSV_URL=https://…       a aba "clientes" da planilha publicada como CSV (Arquivo → Compartilhar →
  *                                            Publicar na web → aba clientes → CSV). Qualquer URL que devolva CSV serve.
  *   ARIA_TEAM_ALERT_SECRET=…                 o mesmo TEAM_ALERT_SECRET da Aria (já usado pelo Olheiro); "julien" precisa
@@ -16,11 +18,12 @@
  * agenda:<dia> não repete em 24 h); o telefone do cliente nunca vai no aviso; a planilha é lida, nunca escrita;
  * sem URL, sem segredo ou planilha fora do ar = sai com erro e o log diz o porquê (falhar alto), nada de "ok" vazio.
  *
- * Uso à mão:  node agenda-run.js [--dry-run] [--dia AAAA-MM-DD] [--csv caminho.csv]
+ * Uso à mão:  node agenda-run.js [--dry-run] [--dia AAAA-MM-DD] [--csv caminho.csv]   (--csv força a planilha)
  */
 const fs = require('node:fs');
 const path = require('node:path');
-const { lerCsv, montarCompacta, hojeParis } = require('./agenda-do-dia.js');
+const { lerCsv, montarCompacta, hojeParis, COLUNAS } = require('./agenda-do-dia.js');
+const reservasMod = require('./reservas.js');
 
 const HOSPEDADO = process.env.TWK_STATE_ROOT ? path.resolve(process.env.TWK_STATE_ROOT) : null;
 const STATE = process.env.CHAUFFEUR_STATE_DIR ? path.resolve(process.env.CHAUFFEUR_STATE_DIR) : HOSPEDADO ? path.join(HOSPEDADO, 'agents', 'wanted-chauffeur') : path.join(__dirname, 'state');
@@ -29,6 +32,8 @@ function config(env = process.env) {
   const v = (k) => String(env[k] || '').trim();
   return {
     ligado: v('CHAUFFEUR_AGENDA') === 'on',
+    // Fonte (19/11): "reservas" = o armazém da Central (padrão, mesma pasta de estado); "planilha" = a aba CSV de 18/11.
+    fonte: v('CHAUFFEUR_AGENDA_FONTE') === 'planilha' ? 'planilha' : 'reservas',
     csvUrl: v('CHAUFFEUR_AGENDA_CSV_URL'),
     ariaUrl: (v('AGENT_ARIA_URL') || 'https://theworldkeys-aria-whatsapp-agent.xis4ee.easypanel.host').replace(/\/+$/, ''),
     segredo: v('ARIA_TEAM_ALERT_SECRET'),
@@ -36,6 +41,17 @@ function config(env = process.env) {
     hora: Number(v('CHAUFFEUR_AGENDA_HORA') || 9),
     avisarVazia: v('CHAUFFEUR_AGENDA_VAZIA') === 'on',
   };
+}
+
+/** Reservas da Central → o mesmo formato de linhas da planilha, para a montarCompacta() não mudar. */
+async function lerReservas(cfg, { env, store }) {
+  const s = store || await reservasMod.abrir({ dir: STATE, env, log: () => {} });
+  const todas = await s.listar({ dias: 365 });
+  const linhas = todas.map((r) => ({
+    nome_da_reserva: r.nome || '', whatsapp: r.whatsapp || '', hotel_ou_bairro: r.partida || '', origem_do_pedido: r.origem_nome || '',
+    produto: r.produto_nome || r.produto, data: r.data || '', hora: r.hora || '', codigo: r.codigo, resultado: r.status, observacao: r.horas ? `${r.horas} h` : '',
+  }));
+  return { nomes: COLUNAS.slice(), linhas, modo: s.modo };
 }
 
 async function lerPlanilha(cfg, { fetchImpl, csvLocal }) {
@@ -59,7 +75,7 @@ async function avisar(cfg, dia, situacao, avisarImpl) {
 }
 
 /** Uma rodada. Devolve { codigo, ...detalhes }; codigo 0 = agiu ou nada a fazer, 1 = não conseguiu (o log diz). */
-async function rodar({ argv = [], env = process.env, fetchImpl = globalThis.fetch, avisarImpl = globalThis.fetch, log = console.log } = {}) {
+async function rodar({ argv = [], env = process.env, fetchImpl = globalThis.fetch, avisarImpl = globalThis.fetch, log = console.log, store } = {}) {
   const cfg = config(env);
   const opt = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : undefined; };
   const dryRun = argv.includes('--dry-run');
@@ -72,13 +88,20 @@ async function rodar({ argv = [], env = process.env, fetchImpl = globalThis.fetc
   let anterior = null; try { anterior = JSON.parse(fs.readFileSync(arqEstado, 'utf8')); } catch { /* primeira vez hoje */ }
   if (anterior && anterior.enviado && !dryRun) { log(`[agenda] ${dia}: já enviada às ${anterior.em}; nada a fazer`); return { codigo: 0, repetida: true }; }
 
-  let csv;
-  try { csv = await lerPlanilha(cfg, { fetchImpl, csvLocal: opt('--csv') }); }
-  catch (e) { log(`[agenda] ERRO ao ler a planilha: ${e.message}`); gravar({ enviado: false, erro: `planilha: ${e.message}` }); return { codigo: 1, erro: e.message }; }
+  // Fonte: --csv ou CHAUFFEUR_AGENDA_FONTE=planilha → a aba CSV; senão as reservas da Central.
+  const usaPlanilha = !!opt('--csv') || cfg.fonte === 'planilha';
+  let dados;
+  if (usaPlanilha) {
+    try { dados = lerCsv(await lerPlanilha(cfg, { fetchImpl, csvLocal: opt('--csv') })); }
+    catch (e) { log(`[agenda] ERRO ao ler a planilha: ${e.message}`); gravar({ enviado: false, erro: `planilha: ${e.message}` }); return { codigo: 1, erro: e.message }; }
+  } else {
+    try { dados = await lerReservas(cfg, { env, store }); log(`[agenda] fonte: reservas da Central (${dados.modo}), ${dados.linhas.length} reserva(s) no total`); }
+    catch (e) { log(`[agenda] ERRO ao ler as reservas: ${e.message}`); gravar({ enviado: false, erro: `reservas: ${e.message}` }); return { codigo: 1, erro: e.message }; }
+  }
 
   let r;
-  try { r = montarCompacta(lerCsv(csv), { dia }); }
-  catch (e) { log(`[agenda] ERRO na planilha: ${e.message}`); gravar({ enviado: false, erro: e.message }); return { codigo: 1, erro: e.message }; }
+  try { r = montarCompacta(dados, { dia }); }
+  catch (e) { log(`[agenda] ERRO nos dados: ${e.message}`); gravar({ enviado: false, erro: e.message }); return { codigo: 1, erro: e.message }; }
   for (const a of r.avisos) log(`[agenda] aviso: ${a}`);
   log(`[agenda] ${dia}: ${r.corridas} corrida(s) confirmada(s), ${r.pendentes} por confirmar`);
   log(`[agenda] mensagem (${r.compacta.length} caracteres): ${r.compacta}`);

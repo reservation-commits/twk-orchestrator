@@ -23,11 +23,11 @@ const sentinels = require('./sentinels.js');
 const analyst = require('./analyst.js');
 const plataforma = require('./plataforma.js'); // Panorama: leitura unificada da frota (somente leitura)
 const whatsapp = require('./whatsapp.js'); // Sala do WhatsApp: o canal ao vivo (somente leitura, cache 30 s)
-const chauffeurMod = require('./chauffeur.js'); // Wanted Chauffeur: pedidos de corrida da página /ride (código, origem, produto; nunca nome nem telefone)
+const chauffeurMod = require('./chauffeur.js'); // Wanted Chauffeur: a página /ride, as reservas (agents/wanted-chauffeur/reservas.js) e o painel /chauffeur
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.8.1-compromissos-api-20261103';
+const BUILD = '4.9.0-wanted-chauffeur-reservas-20261119';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -55,7 +55,7 @@ const AGENTS = [
   { id: 'guardiao', nome: 'GUARDIÃO', env: 'GUARDIAO', url: '', local: true },
 ];
 const guardiao = require('./guardiao.js');
-const chauffeur = chauffeurMod.criar({ stateDir: STATE_DIR });
+const chauffeur = chauffeurMod.criar({ stateDir: STATE_DIR, sentinels });
 
 // ---------- util ----------
 function timingSafeEq(a, b) {
@@ -292,7 +292,7 @@ function handleIngest(req, res) {
 }
 
 // ---------- static ----------
-const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.json': 'application/json' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon', '.json': 'application/json' };
 function serveStatic(req, res) {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   if (p === '/') p = '/index.html';
@@ -340,6 +340,7 @@ const server = http.createServer(async (req, res) => {
         return { seed: SEED_DIR ? 'on' : 'off (dev)', conversas_salvas: conversas, aviso: semVolumeProvavel ? undefined : 'monte um VOLUME persistente em /app/state no EasyPanel, senão as conversas somem no redeploy' };
       })(),
       rotinas: rotinas.saude(),
+      wanted_chauffeur: chauffeur.saude(),
       auth: CENTER_TOKEN ? 'token' : (IS_PROD ? 'FAIL-CLOSED (sem token em producao)' : 'dev-aberto'),
       agents_configurados: AGENTS.filter((a) => a.url || (a.local && (healthCache.get(a.id) || {}).configured)).length,
       brain: brain.brainEnabled() ? `on (${brain.MODEL_STANDARD} / complexo: ${brain.MODEL_COMPLEX})` : 'off',
@@ -359,7 +360,7 @@ const server = http.createServer(async (req, res) => {
     });
   }
   if (u.pathname === '/api/ingest' && req.method === 'POST') return handleIngest(req, res);
-  // Pedido de corrida vindo da página /ride (navegador do cliente): sem chave, com origem permitida e teto por endereço.
+  // Reserva vinda da página /ride (navegador do cliente): sem chave, com origem permitida, formato estrito e teto por endereço.
   if (chauffeur.tratarPublico(req, res, u, json)) return;
   if (u.pathname === '/api/inbox/consume' && req.method === 'POST') {
     // O Orquestrador local coleta os pedidos pendentes (Bearer INGEST_TOKEN) e eles saem da fila.
@@ -689,6 +690,8 @@ const server = http.createServer(async (req, res) => {
   if (u.pathname === '/plataforma' || u.pathname === '/plataforma/') { req.url = '/plataforma/index.html'; }
   if (u.pathname === '/whatsapp' || u.pathname === '/whatsapp/') { req.url = '/whatsapp/index.html'; }
   if (u.pathname === '/chauffeur' || u.pathname === '/chauffeur/') { req.url = '/chauffeur/index.html'; }
+  // Wanted Chauffeur: a página pública de reserva (theworldkeys.com/ride faz rewrite para cá, ou ride.theworldkeys.com aponta direto).
+  if (u.pathname === '/ride' || u.pathname === '/ride/') { req.url = '/ride/index.html'; }
   serveStatic(req, res);
 });
 

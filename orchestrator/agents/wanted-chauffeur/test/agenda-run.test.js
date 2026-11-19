@@ -15,7 +15,7 @@ const CSV = `${COLUNAS.join(',')}
 Paul Durand,+33 6 11 22 33 44,Hôtel Capitole,hôtel,Transfer,2026-11-24,7:00 AM,WTD-H-P8QA,confirmado,
 Léa Martin,+33 6 55 66 77 88,Saint-Cyprien,TikTok,Game Night,2026-11-24,9:00 PM,WTD-T-7K2Q,confirmado,
 `;
-const ENV = { CHAUFFEUR_AGENDA: 'on', CHAUFFEUR_AGENDA_CSV_URL: 'https://docs.test/clientes.csv', AGENT_ARIA_URL: 'https://aria.test', ARIA_TEAM_ALERT_SECRET: 'seg' };
+const ENV = { CHAUFFEUR_AGENDA: 'on', CHAUFFEUR_AGENDA_FONTE: 'planilha', CHAUFFEUR_AGENDA_CSV_URL: 'https://docs.test/clientes.csv', AGENT_ARIA_URL: 'https://aria.test', ARIA_TEAM_ALERT_SECRET: 'seg' };
 const planilha = (texto, status = 200) => async () => ({ ok: status === 200, status, text: async () => texto });
 const aria = () => { const pedidos = []; return { pedidos, avisarImpl: async (url, init) => { pedidos.push({ url, segredo: init.headers['x-aria-secret'], corpo: JSON.parse(init.body) }); return { ok: true, status: 200, json: async () => ({ ok: true, desfecho: 'alerta_equipe_enviado' }) }; } }; };
 const limpar = () => { for (const f of fs.readdirSync(dir)) fs.rmSync(path.join(dir, f), { force: true }); };
@@ -67,6 +67,24 @@ test('falha alto: sem URL, planilha fora do ar, HTML em vez de CSV, sem segredo 
 
 test('--dry-run mostra a mensagem e não envia, mesmo desligada', async () => {
   limpar(); const a = aria();
-  const r = await rodar({ argv: ['--dry-run', '--dia', '2026-11-24'], env: { CHAUFFEUR_AGENDA_CSV_URL: 'https://docs.test/c.csv' }, fetchImpl: planilha(CSV), avisarImpl: a.avisarImpl, log: () => {} });
+  const r = await rodar({ argv: ['--dry-run', '--dia', '2026-11-24'], env: { CHAUFFEUR_AGENDA_FONTE: 'planilha', CHAUFFEUR_AGENDA_CSV_URL: 'https://docs.test/c.csv' }, fetchImpl: planilha(CSV), avisarImpl: a.avisarImpl, log: () => {} });
   assert.equal(r.dryRun, true); assert.ok(r.mensagem.startsWith('Agenda du mardi 24 novembre')); assert.equal(a.pedidos.length, 0);
+});
+
+test('fonte padrão (19/11): as reservas da Central, sem planilha; mesma mensagem, só os confirmados do dia', async () => {
+  limpar(); const a = aria();
+  const R = require('../reservas.js');
+  const store = R.abrirArquivo({ dir: fs.mkdtempSync(path.join(os.tmpdir(), 'twk-agenda-reservas-')) });
+  const mk = (o) => R.validar(o, { exigirPessoa: true }).reserva;
+  await store.criar(mk({ codigo: 'WTD-H-P8QA', produto: 'transfer', data: '2026-11-24', hora: '7:00 AM', pessoas: 2, nome: 'Paul Durand', whatsapp: '+33611223344', partida: 'Hôtel Capitole' }));
+  await store.criar(mk({ codigo: 'WTD-T-7K2Q', produto: 'game', data: '2026-11-24', hora: '9:00 PM', pessoas: 6, nome: 'Léa Martin', whatsapp: '+33655667788', partida: 'Saint-Cyprien' }));
+  await store.criar(mk({ codigo: 'WTD-I-NAQ2', produto: 'night', data: '2026-11-24', hora: '10:00 PM', nome: 'Sem Resposta' })); // fica em "pedido": entra como "à confirmer"
+  await store.criar(mk({ codigo: 'WTD-I-QUT3', produto: 'night', data: '2026-11-25', hora: '10:00 PM', nome: 'Outro Dia' }));
+  await store.evento({ codigo: 'WTD-H-P8QA', tipo: 'status', valor: 'confirmado' });
+  await store.evento({ codigo: 'WTD-T-7K2Q', tipo: 'status', valor: 'confirmado' });
+  const env = { CHAUFFEUR_AGENDA: 'on', AGENT_ARIA_URL: 'https://aria.test', ARIA_TEAM_ALERT_SECRET: 'seg' };
+  const r = await rodar({ argv: ['--dia', '2026-11-24'], env, fetchImpl: async () => { throw new Error('não devia ler planilha'); }, avisarImpl: a.avisarImpl, log: () => {}, store });
+  assert.equal(r.codigo, 0); assert.equal(r.enviado, true); assert.equal(r.corridas, 2);
+  assert.equal(a.pedidos[0].corpo.situacao, 'Agenda du mardi 24 novembre : 7:00 AM · Paul Durand · Transfer · Hôtel Capitole · 80 € | 9:00 PM · Léa Martin · Game Night · Saint-Cyprien · 350 € | 1 à confirmer');
+  assert.ok(!a.pedidos[0].corpo.situacao.includes('+33'));
 });

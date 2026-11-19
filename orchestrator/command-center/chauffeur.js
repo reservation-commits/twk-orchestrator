@@ -1,45 +1,52 @@
 'use strict';
 /**
- * Central · Pedidos de corrida do Wanted Chauffeur (leads da página /ride).
+ * Central · Wanted Chauffeur — a página /ride, as reservas e o painel (Fase 1, 19/11/2026).
  *
- * O que guarda de cada pedido: só o código (WTD-<origem>-XXXX), a origem, o produto, a data e a hora pedidas,
- * o número de pessoas e o idioma. NUNCA nome nem telefone: isso vai só na mensagem do WhatsApp, e a planilha de
- * clientes (fora do site e fora do banco) é quem guarda a pessoa. Cards T-20261109-0024, 0027 e 0023 (plano B).
+ * A reserva mora em agents/wanted-chauffeur/reservas.js (arquivo no volume hoje; Postgres quando a DDL rodar).
  *
- *   POST /api/chauffeur/lead            ← a página /ride, antes de abrir o WhatsApp (sendBeacon). SEM chave da Central:
- *                                          a página roda no navegador do cliente. Protegido por origem permitida
- *                                          (CHAUFFEUR_ORIGINS), formato estrito do corpo e teto por endereço.
- *   GET  /api/chauffeur/leads?dias=30   → lista + contagens por origem, produto, dia e resultado (chave da Central)
- *   POST /api/chauffeur/lead/resultado  → { codigo, resultado: orcado|confirmado|feito|perdido, nota? } (chave)
+ *   POST /api/chauffeur/reserva         ← a página /ride, ao clicar em "Préparer le message": a reserva inteira
+ *                                          (código, produto, data, hora, pessoas, partida, destino, NOME de quem embarca,
+ *                                          WhatsApp, recado, caixa de imagens). SEM chave: a página roda no navegador do
+ *                                          cliente. Protegida por origem permitida, formato estrito e teto por endereço.
+ *                                          Grava e avisa o Julien pela Aria (evento reserva:<codigo>), sem bloquear a resposta.
+ *   POST /api/chauffeur/lead            ← compatibilidade com o protótipo de 18/11 (sem pessoa). Mesmas proteções.
+ *   GET  /api/chauffeur/leads?dias=30   → painel: lista com status, contagens por origem, produto, dia e resultado (chave)
+ *   POST /api/chauffeur/lead/resultado  → { codigo, resultado: orcado|confirmado|feito|perdido|cancelado, nota? } (chave)
+ *   GET  /api/chauffeur/reserva/:codigo → uma reserva, com a linha do tempo (chave)
  *   GET  /api/chauffeur/links           → os links por rede, cada um com a sua letra (chave)
  *
- * Arquivos (STATE_DIR): chauffeur-leads.jsonl (append-only, um pedido por linha) e
- * chauffeur-leads-resultados.jsonl (append-only; o último resultado de um código é o que vale).
- * Quando a tabela chauffeur_leads existir (DDL em orchestrator/agents/dba-escrita/exemplos/chauffeur-leads.sql,
- * exige a frase do fundador), estes dois arquivos migram sem perder linha.
+ * A página pública é servida pelo server.js em /ride (public/ride/). Em produção o front de theworldkeys.com faz
+ * rewrite de /ride para a Central, ou ride.theworldkeys.com aponta direto para cá.
  */
 const fs = require('node:fs');
 const path = require('node:path');
 
-const ORIGENS = { T: 'TikTok', I: 'Instagram', Y: 'YouTube', W: 'Twitch', H: 'Hotel', S: 'Site', R: 'Direto' };
-const PRODUTOS = ['transfer', 'mad', 'night', 'game', 'soiree'];
-const PRODUTO_NOME = { transfer: 'Transfer', mad: 'Mise à disposition', night: 'Night Ride', game: 'Game Night', soiree: 'Soirée' };
-const RESULTADOS = ['orcado', 'confirmado', 'feito', 'perdido'];
-const RE_CODIGO = /^WTD-([TIYWHSR])-([ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4})$/;
-const RE_DATA = /^\d{4}-\d{2}-\d{2}$/;
-const RE_HORA = /^(1[0-2]|[1-9]):[0-5][05] (AM|PM)$/; // sempre AM/PM, passos de 5 min (decisão do fundador, 05/11)
+const AGENTS_DIR = process.env.TWK_AGENTS_DIR ? path.resolve(process.env.TWK_AGENTS_DIR) : path.join(__dirname, '..', 'agents');
+const reservasMod = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'reservas.js'));
+const avisar = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'avisar.js'));
+
+const { ORIGENS, PRODUTOS, PRODUTO_NOME, STATUS, RE_CODIGO } = reservasMod;
+const RESULTADOS = STATUS.filter((s) => s !== 'pedido');
 const PAGINA = 'https://theworldkeys.com/ride';
 
-function criar({ stateDir, env = process.env, agora = () => Date.now() }) {
-  const arqLeads = () => path.join(stateDir, 'chauffeur-leads.jsonl');
-  const arqResultados = () => path.join(stateDir, 'chauffeur-leads-resultados.jsonl');
+function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImpl = globalThis.fetch, log = console.log, sentinels = null }) {
+  const dir = path.join(stateDir, 'agents', 'wanted-chauffeur');
   const origensPermitidas = String(env.CHAUFFEUR_ORIGINS || 'https://theworldkeys.com,https://www.theworldkeys.com')
     .split(',').map((s) => s.trim()).filter(Boolean);
   const TETO_POR_IP = Number(env.CHAUFFEUR_TETO_HORA || 30);
   const porIp = new Map(); // ip → [timestamps da última hora]
+  const cfgAviso = avisar.config(env);
 
-  const lerLinhas = (f) => { try { return fs.readFileSync(f, 'utf8').split(/\r?\n/).filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; } };
-  const anexar = (f, obj) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.appendFileSync(f, JSON.stringify(obj) + '\n', 'utf8'); };
+  // O armazém abre uma vez (banco ou arquivo) e as rotas esperam por ele.
+  let store = null;
+  const pronto = reservasMod.abrir({ dir, env, agora, log }).then(async (s) => {
+    store = s;
+    if (s.modo === 'arquivo') {
+      try { const r = await s.importarLeadsAntigos(path.join(stateDir, 'chauffeur-leads.jsonl'), path.join(stateDir, 'chauffeur-leads-resultados.jsonl')); if (r.importados) log(`[chauffeur] ${r.importados} pedido(s) do plano B importados para as reservas`); } catch (e) { log(`[chauffeur] importação do plano B falhou: ${e.message}`); }
+    }
+    return s;
+  });
+  const armazem = () => pronto;
 
   function excedeuTeto(ip) {
     const t = agora(); const lista = (porIp.get(ip) || []).filter((x) => t - x < 3_600_000);
@@ -48,69 +55,66 @@ function criar({ stateDir, env = process.env, agora = () => Date.now() }) {
     return lista.length > TETO_POR_IP;
   }
 
-  /** Valida o corpo vindo da página. Qualquer campo fora da lista é descartado; nome e telefone nunca entram. */
-  function validarLead(corpo) {
-    if (!corpo || typeof corpo !== 'object') return { erro: 'corpo inválido' };
-    const codigo = String(corpo.codigo || '').toUpperCase().trim();
-    const m = RE_CODIGO.exec(codigo);
-    if (!m) return { erro: 'codigo no formato WTD-<T|I|Y|W|H|S|R>-XXXX' };
-    const produto = String(corpo.produto || '').toLowerCase().trim();
-    if (!PRODUTOS.includes(produto)) return { erro: `produto: ${PRODUTOS.join(', ')}` };
-    const data = corpo.data ? String(corpo.data).trim() : null;
-    if (data && !RE_DATA.test(data)) return { erro: 'data AAAA-MM-DD' };
-    const hora = corpo.hora ? String(corpo.hora).trim().toUpperCase() : null;
-    if (hora && !RE_HORA.test(hora)) return { erro: 'hora em AM/PM, passos de 5 min (ex.: 9:00 PM)' };
-    const pessoas = corpo.pessoas == null ? null : Number(corpo.pessoas);
-    if (pessoas != null && !(Number.isInteger(pessoas) && pessoas >= 1 && pessoas <= 6)) return { erro: 'pessoas de 1 a 6' };
-    const horas = corpo.horas == null ? null : Number(corpo.horas);
-    if (horas != null && !(Number.isInteger(horas) && horas >= 2 && horas <= 12)) return { erro: 'horas de 2 a 12' };
-    const idioma = /^(fr|en|pt)$/.test(String(corpo.idioma || '')) ? String(corpo.idioma) : null;
-    const imagens = corpo.imagens === true || corpo.imagens === 'ok' ? 'ok' : 'privadas';
-    return { lead: { codigo, origem: m[1], produto, data, hora, pessoas, horas, idioma, imagens } };
+  function cors(req, res) {
+    const origem = req.headers.origin || '';
+    // Mesma origem (a página servida pela própria Central) não manda Origin em POST simples: aceita quando não há Origin
+    // e o Host bate, ou quando a origem está na lista.
+    if (!origem) return true;
+    if (!origensPermitidas.includes(origem) && !mesmaOrigem(req, origem)) return false;
+    res.setHeader('access-control-allow-origin', origem);
+    res.setHeader('access-control-allow-methods', 'POST, OPTIONS');
+    res.setHeader('access-control-allow-headers', 'content-type');
+    res.setHeader('access-control-max-age', '600');
+    res.setHeader('vary', 'origin');
+    return true;
+  }
+  function mesmaOrigem(req, origem) {
+    try { const h = String(req.headers['x-forwarded-host'] || req.headers.host || ''); return !!h && new URL(origem).host === h; } catch { return false; }
   }
 
-  function gravarLead(lead) {
-    const existentes = lerLinhas(arqLeads());
-    if (existentes.some((l) => l.codigo === lead.codigo)) return { status: 200, ok: true, codigo: lead.codigo, repetido: true };
-    anexar(arqLeads(), { ...lead, criado_em: new Date(agora()).toISOString() });
-    return { status: 201, ok: true, codigo: lead.codigo };
+  const lerCorpo = (req, max) => new Promise((ok) => { let body = ''; req.on('data', (c) => { body += c; if (body.length > max) req.destroy(); }); req.on('end', () => { try { ok(JSON.parse(body)); } catch { ok(null); } }); });
+
+  /** Aviso ao Julien pela Aria; nunca atrasa a resposta à página. Falha vira evento + Ação na Central. */
+  async function avisarNova(reserva) {
+    if (!cfgAviso.novaReserva) return;
+    const s = await armazem();
+    try {
+      const r = await avisar.avisarEquipe({ ...cfgAviso, para: cfgAviso.julien, sistema: 'Wanted Chauffeur · nouvelle demande', situacao: avisar.textoNovaReserva(reserva), evento: `reserva:${reserva.codigo}`, fetchImpl });
+      if (r.ok) { await s.evento({ codigo: reserva.codigo, tipo: 'aviso', valor: 'nova_reserva', nota: r.desfecho, por: 'central' }); log(`[chauffeur] ${reserva.codigo}: Julien avisado (${r.desfecho})`); return; }
+      throw new Error(r.desfecho);
+    } catch (e) {
+      const motivo = String(e && e.message || e).slice(0, 160);
+      log(`[chauffeur] ${reserva.codigo}: aviso ao Julien NÃO saiu (${motivo})`);
+      try { await s.evento({ codigo: reserva.codigo, tipo: 'aviso', valor: 'nova_reserva_falhou', nota: motivo.replace(/\+?\d[\d .-]{7,}\d/g, '…'), por: 'central' }); } catch { /* registro */ }
+      if (sentinels) { try { sentinels.upsert(stateDir, { origem: 'vigia', agente: 'wanted-chauffeur', regra: 'aviso_nova_reserva_falhou', severidade: 'alta', titulo: 'Pedido de corrida chegou e o Julien não foi avisado', detalhe: `${reserva.codigo}: ${motivo}. Conferir ARIA_TEAM_ALERT_SECRET e a lista TEAM_ALERT_TO da Aria.`, evidencia: [{ metrica: 'codigo', antes: '', depois: reserva.codigo }] }); } catch { /* fila */ } }
+    }
   }
 
-  function marcarResultado(corpo) {
-    const codigo = String(corpo && corpo.codigo || '').toUpperCase().trim();
-    if (!RE_CODIGO.test(codigo)) return { status: 400, erro: 'codigo no formato WTD-<letra>-XXXX' };
-    const resultado = String(corpo.resultado || '').toLowerCase();
-    if (!RESULTADOS.includes(resultado)) return { status: 400, erro: `resultado: ${RESULTADOS.join(', ')}` };
-    if (!lerLinhas(arqLeads()).some((l) => l.codigo === codigo)) return { status: 404, erro: `${codigo} não está nos pedidos` };
-    const nota = corpo.nota ? String(corpo.nota).slice(0, 200) : undefined;
-    if (nota && /\+?\d[\d .-]{7,}\d/.test(nota)) return { status: 400, erro: 'a nota não pode ter telefone' };
-    const ev = { codigo, resultado, nota, em: new Date(agora()).toISOString() };
-    anexar(arqResultados(), ev);
-    return { status: 200, ok: true, ...ev };
-  }
-
-  /** Lista e contagens. `dias` conta pela data de criação do pedido. */
-  function painel({ dias = 30 } = {}) {
-    const limite = agora() - Math.max(1, Math.min(365, Number(dias) || 30)) * 86_400_000;
-    const ultimo = new Map();
-    for (const r of lerLinhas(arqResultados())) ultimo.set(r.codigo, r); // o último vale
-    const todos = lerLinhas(arqLeads());
-    const leads = todos.filter((l) => Date.parse(l.criado_em) >= limite).map((l) => ({ ...l, origem_nome: ORIGENS[l.origem] || l.origem, produto_nome: PRODUTO_NOME[l.produto] || l.produto, resultado: (ultimo.get(l.codigo) || {}).resultado || 'novo', resultado_em: (ultimo.get(l.codigo) || {}).em || null }))
-      .sort((a, b) => (a.criado_em < b.criado_em ? 1 : -1));
-    const contar = (chave) => { const c = {}; for (const l of leads) { const k = l[chave] || '—'; c[k] = (c[k] || 0) + 1; } return c; };
-    const porDia = {}; for (const l of leads) { const d = l.criado_em.slice(0, 10); porDia[d] = (porDia[d] || 0) + 1; }
-    const resultados = contar('resultado');
+  /** Lista e contagens para o painel. `dias` conta pela data de criação. */
+  async function painel({ dias = 30 } = {}) {
+    const s = await armazem();
+    const reservas = await s.listar({ dias });
+    const contar = (chave) => { const c = {}; for (const r of reservas) { const k = r[chave] || '—'; c[k] = (c[k] || 0) + 1; } return c; };
+    const porDia = {}; for (const r of reservas) { const d = r.criado_em.slice(0, 10); porDia[d] = (porDia[d] || 0) + 1; }
+    const resultados = contar('status');
     const viraram = (resultados.confirmado || 0) + (resultados.feito || 0);
+    const semAviso = reservas.filter((r) => r.status === 'pedido' && !r.avisos.includes('nova_reserva')).length;
+    const lacunas = [];
+    if (!reservas.length) lacunas.push('Nenhum pedido no período: ou a página /ride ainda não está no ar, ou ninguém pediu.');
+    if (s.aviso) lacunas.push(s.aviso);
+    if (!cfgAviso.segredo) lacunas.push('ARIA_TEAM_ALERT_SECRET ausente na Central: o Julien não recebe o aviso de pedido novo.');
+    if (semAviso) lacunas.push(`${semAviso} pedido(s) sem o aviso ao Julien registrado.`);
     return {
-      gerado_em: new Date(agora()).toISOString(), dias: Number(dias) || 30, total_historico: todos.length,
-      total: leads.length, viraram_corrida: viraram, taxa_conversao_pct: leads.length ? Math.round((viraram / leads.length) * 100) : 0,
+      gerado_em: new Date(agora()).toISOString(), dias: Number(dias) || 30, modo: s.modo, total_historico: await s.total(),
+      total: reservas.length, viraram_corrida: viraram, taxa_conversao_pct: reservas.length ? Math.round((viraram / reservas.length) * 100) : 0,
+      valor_confirmado_cent: reservas.filter((r) => r.status === 'confirmado' || r.status === 'feito').reduce((a, r) => a + (r.valor_cent || 0), 0),
       por_origem: Object.fromEntries(Object.entries(contar('origem')).map(([k, v]) => [ORIGENS[k] || k, v])),
       por_produto: Object.fromEntries(Object.entries(contar('produto')).map(([k, v]) => [PRODUTO_NOME[k] || k, v])),
       por_dia: Object.entries(porDia).sort().map(([dia, n]) => ({ dia, n })),
       por_resultado: resultados,
-      pedidos: leads.slice(0, 500),
-      origens: ORIGENS, resultados_possiveis: RESULTADOS,
-      lacunas: leads.length ? [] : ['Nenhum pedido no período: ou a página /ride ainda não envia à Central, ou ninguém pediu.'],
+      // o painel fica atrás da chave; o WhatsApp vai mascarado e o número inteiro só na ficha da reserva
+      pedidos: reservas.slice(0, 500).map((r) => ({ ...r, whatsapp: undefined })),
+      origens: ORIGENS, resultados_possiveis: RESULTADOS, lacunas,
     };
   }
 
@@ -119,35 +123,26 @@ function criar({ stateDir, env = process.env, agora = () => Date.now() }) {
     return { pagina: base, links: Object.entries(ORIGENS).filter(([k]) => k !== 'R').map(([k, nome]) => ({ origem: k, rede: nome, url: `${base}?o=${k}`, uso: k === 'H' ? 'cartão e QR entregues aos hotéis' : k === 'S' ? 'botões do site theworldkeys.com' : `link na bio do @wantedchauffeur no ${nome}` })) };
   }
 
-  function cors(req, res) {
-    const origem = req.headers.origin || '';
-    if (!origensPermitidas.includes(origem)) return false;
-    res.setHeader('access-control-allow-origin', origem);
-    res.setHeader('access-control-allow-methods', 'POST, OPTIONS');
-    res.setHeader('access-control-allow-headers', 'content-type');
-    res.setHeader('access-control-max-age', '600');
-    res.setHeader('vary', 'origin');
-    return true;
-  }
-
-  /** Rota PÚBLICA (antes da chave): só o POST do lead. Devolve true se tratou. */
+  /** Rotas PÚBLICAS (antes da chave): o POST da reserva e o POST do lead antigo. Devolve true se tratou. */
   function tratarPublico(req, res, u, json) {
-    if (u.pathname !== '/api/chauffeur/lead') return false;
+    const rota = u.pathname === '/api/chauffeur/reserva' ? 'reserva' : u.pathname === '/api/chauffeur/lead' ? 'lead' : null;
+    if (!rota) return false;
     const permitido = cors(req, res);
     if (req.method === 'OPTIONS') { res.writeHead(permitido ? 204 : 403); res.end(); return true; }
     if (req.method !== 'POST') { json(res, 405, { error: 'POST' }); return true; }
-    // sendBeacon manda sem Origin em alguns navegadores antigos? Não: sempre manda Origin em POST cross-site.
-    if (!permitido && origensPermitidas.length) { json(res, 403, { error: 'origem não permitida' }); return true; }
+    if (!permitido) { json(res, 403, { error: 'origem não permitida' }); return true; }
     const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
     if (excedeuTeto(ip)) { json(res, 429, { error: 'muitos pedidos deste endereço; tente mais tarde' }); return true; }
-    let body = '';
-    req.on('data', (c) => { body += c; if (body.length > 2_000) req.destroy(); });
-    req.on('end', () => {
-      let corpo; try { corpo = JSON.parse(body); } catch { return json(res, 400, { error: 'JSON inválido' }); }
-      const v = validarLead(corpo);
+    lerCorpo(req, 4_000).then(async (corpo) => {
+      if (!corpo) return json(res, 400, { error: 'JSON inválido' });
+      const v = reservasMod.validar(corpo, { exigirPessoa: rota === 'reserva' });
       if (v.erro) return json(res, 400, { error: v.erro });
-      const r = gravarLead(v.lead);
-      json(res, r.status, { ok: true, codigo: r.codigo, repetido: !!r.repetido });
+      try {
+        const s = await armazem();
+        const r = await s.criar(v.reserva);
+        json(res, r.status, { ok: true, codigo: r.codigo, repetido: !!r.repetido });
+        if (r.status === 201 && rota === 'reserva') avisarNova(v.reserva).catch(() => {});
+      } catch (e) { log(`[chauffeur] gravação falhou: ${e.message}`); json(res, 500, { error: 'não foi possível gravar a reserva' }); }
     });
     return true;
   }
@@ -155,19 +150,36 @@ function criar({ stateDir, env = process.env, agora = () => Date.now() }) {
   /** Rotas COM chave da Central (o servidor já conferiu). Devolve true se tratou. */
   function tratar(req, res, u, json) {
     if (!u.pathname.startsWith('/api/chauffeur')) return false;
-    if (u.pathname === '/api/chauffeur/leads' && req.method === 'GET') { json(res, 200, painel({ dias: u.searchParams.get('dias') || 30 })); return true; }
-    if (u.pathname === '/api/chauffeur/links' && req.method === 'GET') { json(res, 200, links()); return true; }
-    if (u.pathname === '/api/chauffeur/lead/resultado' && req.method === 'POST') {
-      let body = '';
-      req.on('data', (c) => { body += c; if (body.length > 4_000) req.destroy(); });
-      req.on('end', () => { let corpo; try { corpo = JSON.parse(body); } catch { return json(res, 400, { error: 'JSON inválido' }); } const r = marcarResultado(corpo); json(res, r.status, r); });
-      return true;
-    }
-    json(res, 404, { error: 'rota desconhecida em /api/chauffeur' });
+    (async () => {
+      if (u.pathname === '/api/chauffeur/leads' && req.method === 'GET') return json(res, 200, await painel({ dias: u.searchParams.get('dias') || 30 }));
+      if (u.pathname === '/api/chauffeur/links' && req.method === 'GET') return json(res, 200, links());
+      const m = /^\/api\/chauffeur\/reserva\/([A-Z0-9-]{10,12})$/i.exec(u.pathname);
+      if (m && req.method === 'GET') {
+        const codigo = m[1].toUpperCase();
+        if (!RE_CODIGO.test(codigo)) return json(res, 400, { error: 'codigo no formato WTD-<letra>-XXXX' });
+        const r = await (await armazem()).obter(codigo);
+        return r ? json(res, 200, r) : json(res, 404, { error: `${codigo} não está nas reservas` });
+      }
+      if (u.pathname === '/api/chauffeur/lead/resultado' && req.method === 'POST') {
+        const corpo = await lerCorpo(req, 4_000);
+        if (!corpo) return json(res, 400, { error: 'JSON inválido' });
+        const v = reservasMod.validarEvento({ codigo: corpo.codigo, status: corpo.resultado, nota: corpo.nota, por: corpo.por || 'painel' });
+        if (v.erro) return json(res, 400, { erro: v.erro });
+        if (v.evento.valor === 'pedido') return json(res, 400, { erro: `resultado: ${RESULTADOS.join(', ')}` });
+        const r = await (await armazem()).evento(v.evento);
+        return json(res, r.status, r);
+      }
+      json(res, 404, { error: 'rota desconhecida em /api/chauffeur' });
+    })().catch((e) => { log(`[chauffeur] erro: ${e.message}`); try { json(res, 500, { error: 'erro interno' }); } catch { /* resposta já enviada */ } });
     return true;
   }
 
-  return { tratarPublico, tratar, validarLead, gravarLead, marcarResultado, painel, links, ORIGENS, PRODUTOS, RESULTADOS };
+  /** Para o /health: onde as reservas estão e se o aviso ao Julien pode sair. */
+  function saude() {
+    return { reservas: store ? store.modo + (store.aviso ? ` (${store.aviso})` : '') : 'abrindo', aviso_julien: cfgAviso.segredo ? `on (${cfgAviso.julien})` : 'off (sem ARIA_TEAM_ALERT_SECRET)', pendente_min: cfgAviso.pendenteMin };
+  }
+
+  return { tratarPublico, tratar, painel, links, saude, armazem, avisarNova, ORIGENS, PRODUTOS, RESULTADOS };
 }
 
-module.exports = { criar, ORIGENS, PRODUTOS, RESULTADOS, RE_CODIGO };
+module.exports = { criar, ORIGENS, PRODUTOS, RE_CODIGO };

@@ -38,7 +38,7 @@ const ETAPAS = [
   { chave: "tarefas", nome: "COMPASSO Tarefas — testes (livro, login, planejador, servidor)", dir: "orchestrator/tarefas", cmds: ["node --test test/*.test.js"] },
   { chave: "regencia", nome: "Central — testes (Despacho, Sala do WhatsApp, Instagram, Pedidos de corrida)", dir: "orchestrator/command-center", cmds: ['node --test "regencia/test/*.test.js"'] },
   { chave: "olheiro", nome: "Olheiro do Instagram — testes (API simulada, diário, relato)", dir: "orchestrator/agents/olheiro-instagram", cmds: ['node --test "test/*.test.js"'] },
-  { chave: "chauffeur", nome: "Wanted Chauffeur — agenda do dia (planilha → mensagem)", dir: "orchestrator/agents/wanted-chauffeur", cmds: ['node --test "test/*.test.js"'] },
+  { chave: "chauffeur", nome: "Wanted Chauffeur — reservas, vigia e agenda do dia", dir: "orchestrator/agents/wanted-chauffeur", cmds: ['node --test "test/*.test.js"'] },
   { chave: "evals", nome: "Orquestrador — evals (10 suítes)", dir: ".", cmds: ["node orchestrator/evals/run.js"] },
   { chave: "auditor", nome: "Auditor Interno — travas dos ADRs no código", dir: ".", cmds: ["node orchestrator/auditor/verificar.js"] },
   { chave: "hooks", nome: "Guardrails — hooks (15 casos)", dir: ".", cmds: ['powershell -NoProfile -ExecutionPolicy Bypass -File "orchestrator/tests/test-guards.ps1"'], lento: true },

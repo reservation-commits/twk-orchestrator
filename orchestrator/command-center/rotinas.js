@@ -169,6 +169,8 @@ function saude() {
     jobs: e.jobs.map((j) => `${j.job}:${j.ok ? 'ok' : 'FALHOU'}${j.modo ? ':' + j.modo : ''}`),
     guardiao_exportado: e.guardiao_exportado,
     vigia_instagram: process.env.IG_ACCESS_TOKEN ? { a_cada_min: VIGIA_MIN, aviso_ligado: !!process.env.ARIA_TEAM_ALERT_SECRET, ultima: estadoVigia() } : null,
+    vigia_reservas: process.env.CHAUFFEUR_VIGIA === 'off' ? null : { a_cada_min: 5, pendente_min: Number(process.env.CHAUFFEUR_PENDENTE_MIN || 30), aviso_ligado: !!process.env.ARIA_TEAM_ALERT_SECRET, ultima: estadoVigiaReservas.ultima, falhas_seguidas: estadoVigiaReservas.falhas_seguidas },
+    agenda_julien: process.env.CHAUFFEUR_AGENDA === 'on' ? { hora_paris: AGENDA_HORA, fonte: process.env.CHAUFFEUR_AGENDA_FONTE === 'planilha' ? 'planilha' : 'reservas', enviada_hoje: agendaEnviadaHoje() } : null,
     // O que falta no ambiente para cada job agir de verdade (nomes de variáveis, nunca valores).
     faltam: [
       ...(process.env.CICLO_APROVACAO ? [] : ['CICLO_APROVACAO (Ciclo do Cliente em ensaio)']),
@@ -197,6 +199,43 @@ function start() {
   console.log(`[rotinas] ligadas: Guardião (gate), Ciclo do Cliente${process.env.CICLO_APROVACAO ? ' (envio aprovado)' : ' (dry-run)'}, Sentinela e Zelador às ${HORA}h Paris · agentes em ${AGENTS_DIR}`);
   startVigiaInstagram();
   startAgendaJulien();
+  startVigiaReservas();
+}
+
+// ---------------------------------------------------------------- vigia das reservas do Wanted Chauffeur (19/11)
+// A cada 5 min: reserva parada em `pedido` há 30 min (CHAUFFEUR_PENDENTE_MIN) → um aviso ao Márlon pela Aria; uma vez por
+// dia, anonimiza reservas com mais de 365 dias. Mesmo armazém da Central (agents/wanted-chauffeur/reservas.js).
+// Desliga com CHAUFFEUR_VIGIA=off. Sem ARIA_TEAM_ALERT_SECRET, só anonimiza e o /health diz.
+const estadoVigiaReservas = { anonimizado_em: null, ultima: null, falhas_seguidas: 0 };
+let vigiandoReservas = false;
+let storeReservas = null;
+async function vigiarReservas() {
+  if (vigiandoReservas) return null;
+  vigiandoReservas = true;
+  try {
+    if (!storeReservas) {
+      const reservasMod = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'reservas.js'));
+      storeReservas = await reservasMod.abrir({ dir: path.join(STATE_DIR, 'agents', 'wanted-chauffeur'), log: console.log });
+    }
+    const vigia = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'vigia-reservas.js'));
+    const r = await vigia.rodar({ store: storeReservas, log: console.log, hojeIso, estado: estadoVigiaReservas });
+    estadoVigiaReservas.ultima = { em: new Date().toISOString(), pendentes: r.pendentes, avisados: r.avisados.length, falhas: r.falhas.length, anonimizadas: r.anonimizadas };
+    estadoVigiaReservas.falhas_seguidas = r.falhas.length ? estadoVigiaReservas.falhas_seguidas + 1 : 0;
+    if (r.falhas.length && sentinels && estadoVigiaReservas.falhas_seguidas >= 2) {
+      try { sentinels.upsert(STATE_DIR, { origem: 'vigia', agente: 'wanted-chauffeur', regra: 'aviso_pendente_falhou', severidade: 'alta', titulo: 'Pedido de corrida parado e o aviso ao Márlon não saiu', detalhe: r.falhas.map((f) => `${f.codigo}: ${f.motivo}`).join(' · ').slice(0, 400), evidencia: [{ metrica: 'falhas', antes: '', depois: String(r.falhas.length) }] }); } catch { /* fila */ }
+    }
+    return r;
+  } catch (err) {
+    estadoVigiaReservas.falhas_seguidas++;
+    console.error('[vigia-reservas]', String(err && err.message || err));
+    return null;
+  } finally { vigiandoReservas = false; }
+}
+function startVigiaReservas() {
+  if (process.env.CHAUFFEUR_VIGIA === 'off') { console.log('[rotinas] vigia das reservas desligada (CHAUFFEUR_VIGIA=off)'); return; }
+  setInterval(() => { vigiarReservas().catch((err) => console.error('[vigia-reservas]', String(err && err.message || err))); }, 5 * 60_000).unref();
+  setTimeout(() => { vigiarReservas().catch(() => {}); }, 60_000).unref(); // primeira passada 1 min após subir
+  console.log(`[rotinas] vigia das reservas a cada 5 min (pedido parado ≥ ${process.env.CHAUFFEUR_PENDENTE_MIN || 30} min → aviso ao ${process.env.CHAUFFEUR_PENDENTE_PARA || 'marlon'} pela Aria${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — SEM SEGREDO: falta ARIA_TEAM_ALERT_SECRET'})`);
 }
 
 // ---------------------------------------------------------------- vigia de comentários do Instagram (14/11)
@@ -257,7 +296,8 @@ function startAgendaJulien() {
     tentativas++;
     agendaJulien().catch((err) => console.error('[agenda-julien]', String(err && err.message || err)));
   }, 5 * 60_000).unref();
-  console.log(`[rotinas] agenda do Julien às ${AGENDA_HORA}h Paris pela Aria${process.env.CHAUFFEUR_AGENDA_CSV_URL ? '' : ' — SEM PLANILHA: falta CHAUFFEUR_AGENDA_CSV_URL'}${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — SEM SEGREDO: falta ARIA_TEAM_ALERT_SECRET'}`);
+  const fonte = process.env.CHAUFFEUR_AGENDA_FONTE === 'planilha' ? (process.env.CHAUFFEUR_AGENDA_CSV_URL ? 'planilha' : 'planilha — SEM URL: falta CHAUFFEUR_AGENDA_CSV_URL') : 'reservas da Central';
+  console.log(`[rotinas] agenda do Julien às ${AGENDA_HORA}h Paris pela Aria (fonte: ${fonte})${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — SEM SEGREDO: falta ARIA_TEAM_ALERT_SECRET'}`);
 }
 function startVigiaInstagram() {
   if (!process.env.IG_ACCESS_TOKEN) { console.log('[rotinas] vigia do Instagram desligada (sem IG_ACCESS_TOKEN)'); return; }
@@ -265,7 +305,7 @@ function startVigiaInstagram() {
   console.log(`[rotinas] vigia do Instagram a cada ${VIGIA_MIN} min (aviso ao ${process.env.OLHEIRO_AVISAR || 'julien'} pela Aria${process.env.ARIA_TEAM_ALERT_SECRET ? '' : ' — DESLIGADO: falta ARIA_TEAM_ALERT_SECRET'})`);
 }
 
-module.exports = { start, executar, estado, saude, enabled, jobs, AGENTS_DIR, vigiarInstagram, agendaJulien };
+module.exports = { start, executar, estado, saude, enabled, jobs, AGENTS_DIR, vigiarInstagram, agendaJulien, vigiarReservas };
 
 if (require.main === module) {
   // Execução manual (local ou dentro do container): node rotinas.js [--so <job>]

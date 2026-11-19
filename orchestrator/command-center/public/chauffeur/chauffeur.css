@@ -4,8 +4,13 @@
 .ped th { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 .ped td.cod { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .04em; color: var(--gold-light); }
 .ped select { background: var(--surface); color: var(--ink); border: 1px solid var(--grid); border-radius: 8px; padding: 4px 8px; font: inherit; font-size: 12px; }
-.ped .res-novo { color: var(--muted); } .ped .res-orcado { color: var(--warning); } .ped .res-confirmado, .ped .res-feito { color: var(--wa); } .ped .res-perdido { color: var(--serious); }
+.ped .res-pedido { color: var(--muted); } .ped .res-orcado { color: var(--warning); } .ped .res-confirmado, .ped .res-feito { color: var(--wa); } .ped .res-perdido, .ped .res-cancelado { color: var(--serious); }
+.ped small { color: var(--muted); font-size: 11px; }
+.ped .pill { font-size: 10px; padding: 1px 5px; border-radius: 6px; margin-left: 4px; vertical-align: middle; }
+.ped .pill.ok { color: var(--wa); border: 1px solid var(--wa); } .ped .pill.bad { color: var(--serious); border: 1px solid var(--serious); }
 .vazio { color: var(--muted); font-style: italic; padding: 12px 0; }
+/* as lacunas do pulso são texto corrido; o .nota do Panorama é um grid ícone + texto e espremia as palavras */
+#pulso-body .nota { display: block; margin-top: 10px; font-size: 13px; }
 .linkrow { display: grid; grid-template-columns: 90px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--grid); font-size: 13px; }
 .linkrow code { font-size: 12px; color: var(--ink-2); word-break: break-all; }
 .linkrow .uso { grid-column: 2; font-size: 12px; color: var(--muted); }

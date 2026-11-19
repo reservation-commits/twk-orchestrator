@@ -1,8 +1,14 @@
 # Agenda do Julien às 9:00 AM — como ligar
 
-Rotina hospedada da Central que, todo dia às 9:00 AM (Paris), lê a planilha de clientes do Wanted Chauffeur, monta a
-agenda do dia e pede à Aria o aviso no WhatsApp do Julien. Escrita em 18/11/2026. **Está no código e desligada**: liga
-com uma chave no Easypanel. Não está no COMPASSO (decisão do Márlon, 18/11): é rotina, não card.
+Rotina hospedada da Central que, todo dia às 9:00 AM (Paris), lê as reservas do Wanted Chauffeur, monta a agenda do
+dia e pede à Aria o aviso no WhatsApp do Julien. Escrita em 18/11/2026. **Está no código e desligada**: liga com uma
+chave no Easypanel. Não está no COMPASSO (decisão do Márlon, 18/11): é rotina, não card.
+
+> **Atualização de 19/11 (Fase 1):** a fonte padrão passou a ser **as reservas da Central** (`agents/wanted-chauffeur/reservas.js`,
+> as mesmas da página `/ride` e do painel `/chauffeur`): entram os `confirmado` do dia, e os ainda em `pedido`/`orcado` como
+> "à confirmer". **Não precisa mais de planilha nem de `CHAUFFEUR_AGENDA_CSV_URL`**: basta `CHAUFFEUR_AGENDA=on` e o segredo da
+> Aria. Os passos 1 e 2 abaixo só valem se você quiser voltar à planilha, com `CHAUFFEUR_AGENDA_FONTE=planilha`.
+> Ver `docs/runbooks/wanted-chauffeur-ride.md`.
 
 ## O que ela faz
 

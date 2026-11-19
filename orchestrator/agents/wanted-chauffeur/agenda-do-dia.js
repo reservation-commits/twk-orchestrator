@@ -65,7 +65,7 @@ function montar({ linhas, nomes }, { dia, ideia, hotel }) {
   const doDia = linhas.filter((l) => l.data === dia && /^confirmad/i.test(l.resultado));
   for (const l of doDia) if (!RE_HORA.test(l.hora)) avisos.push(`hora "${l.hora || '(vazia)'}" de ${l.nome_da_reserva || '(sem nome)'} não está em AM/PM; a linha entra por último`);
   doDia.sort((a, b) => minutos(a.hora) - minutos(b.hora));
-  const pendentes = linhas.filter((l) => l.data === dia && !/^confirmad/i.test(l.resultado) && !/^(feito|perdido)/i.test(l.resultado));
+  const pendentes = linhas.filter((l) => l.data === dia && !/^confirmad/i.test(l.resultado) && !/^(feito|perdido|cancelad)/i.test(l.resultado));
   const out = [];
   out.push(`Bonjour Julien, agenda du ${diaLongoFr(dia)} :`);
   if (!doDia.length) {

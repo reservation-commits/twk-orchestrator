@@ -1,42 +1,33 @@
 # Wanted Chauffeur — ferramentas de operação
 
-Ferramentas (não conteúdo: roteiros, legendas e ideias são do Julien). Escritas em 18/11/2026 para os cards do COMPASSO.
+Ferramentas (não conteúdo: roteiros, legendas e ideias são do Julien). Escritas em 18/11/2026 para os cards do COMPASSO; **Fase 1 (19/11): a página /ride servida pela Central, a reserva inteira guardada, o Julien avisado na hora.** Como ligar: `docs/runbooks/wanted-chauffeur-ride.md`.
 
-## 1. Pedidos de corrida na Central (cards T-20261109-0024 · 0027 · 0023 plano B)
+## 1. A página `/ride` e as reservas (Fase 1)
 
 | Peça | Onde | O que faz |
 |---|---|---|
-| Módulo | `orchestrator/command-center/chauffeur.js` | recebe o pedido da página `/ride` (**POST `/api/chauffeur/lead`**, sem chave, só da origem `theworldkeys.com`, teto por endereço), grava em `STATE_DIR/chauffeur-leads.jsonl`; serve o painel (**GET `/api/chauffeur/leads?dias=30`**), os links por rede (**GET `/api/chauffeur/links`**) e o resultado por código (**POST `/api/chauffeur/lead/resultado`**), estes três com a chave da Central |
-| Painel | `https://<central>/chauffeur` (`public/chauffeur/`) | pedidos por origem, por produto, por dia, quantos viraram corrida; cada linha tem o seletor de resultado (orçado · confirmado · feito · perdido); os 6 links com a letra para copiar |
-| Testes | `regencia/test/chauffeur.test.js` | 6 testes: sem PII no arquivo, formato estrito, origem e CORS, teto 429, painel e resultado, links. Na Porta (chave `regencia`) |
-| DDL | `orchestrator/agents/dba-escrita/exemplos/chauffeur-leads.sql` | a tabela `chauffeur_leads` (+ `_resultados`) para quando o fundador der a frase; até lá vale o `.jsonl` |
+| Página pública | `orchestrator/command-center/public/ride/` (`index.html`, `ride.js`, `bd.webp`) | a página de reserva em francês, servida pela Central em `/ride` (sem chave). Lê a origem pelo link (`?o=T`…), monta a mensagem do WhatsApp com a referência `WTD-<letra>-XXXX` e, ao clicar em "Préparer le message", **grava a reserva na Central** antes de abrir o WhatsApp. Se a gravação falhar, o cliente ainda abre o WhatsApp (a referência vai na mensagem). Script externo porque a Central tem CSP `script-src 'self'` |
+| Reservas | `reservas.js` | o único lugar onde a reserva mora: código, origem, produto, data, hora (AM/PM), pessoas, horas, partida, destino, **nome de quem embarca, WhatsApp** (normalizado, `+33…`), recado, caixa de imagens, `valor_cent` (centavos, tabela de 16/11), status por evento (append-only). Dois modos com a mesma interface: **arquivo** (`STATE_DIR/agents/wanted-chauffeur/reservas.jsonl` + `reservas-eventos.jsonl` + `nao-contatar.jsonl`, o modo de hoje) e **banco** (tabelas `chauffeur_reservas`, `_eventos`, `_nao_contatar`; liga com `CHAUFFEUR_RESERVAS_BANCO=on` depois da DDL). `anonimizar(365)` apaga a pessoa 12 meses depois da corrida |
+| Rotas | `orchestrator/command-center/chauffeur.js` | **POST `/api/chauffeur/reserva`** (público: origem permitida, formato estrito, teto por endereço; grava e avisa o Julien), **POST `/api/chauffeur/lead`** (o protótipo de 18/11, sem pessoa), **GET `/api/chauffeur/leads?dias=30`** (painel), **GET `/api/chauffeur/reserva/<codigo>`** (ficha com a linha do tempo), **POST `/api/chauffeur/lead/resultado`** (status), **GET `/api/chauffeur/links`** — os quatro últimos com a chave da Central |
+| Painel | `https://<central>/chauffeur` (`public/chauffeur/`) | pedidos por origem, produto, dia, quantos viraram corrida e o valor confirmado; cada linha: quem embarca, WhatsApp **mascarado**, trajeto, valor, ✓ quando o Julien foi avisado, seletor de status (orçado · confirmado · feito · perdido · cancelado) |
+| Avisos | `avisar.js` | pela Aria (`/webhook/alerta-equipe`, template `twk_team_alert`, 300 caracteres, uma linha): **pedido novo → Julien** (em francês, com o nome de quem embarca, nunca o telefone) e **pedido parado → Márlon** (em português). Só nomes de destinatário; a Aria resolve o número |
+| Vigia | `vigia-reservas.js` (rotinas.js, a cada 5 min) | reserva em `pedido` há ≥ 30 min (`CHAUFFEUR_PENDENTE_MIN`) sem status → um aviso ao Márlon, registrado na reserva para não repetir; uma vez por dia anonimiza as reservas velhas. Falha 2 vezes seguidas → Ação na Central |
+| DDL | `orchestrator/agents/dba-escrita/exemplos/chauffeur-reservas.sql` | as 3 tabelas (CREATE TABLE em `public`: **exige a frase do fundador**, ADR-017). Depois: `migrar.js --apply` passa os `.jsonl` para o banco sem perder linha |
+| Testes | `test/reservas.test.js` (7), `test/agenda-run.test.js` (6), `test/agenda.test.js` (4) e `command-center/regencia/test/chauffeur.test.js` (7) | na Porta, chaves `chauffeur` e `regencia` |
 
-**O que fica guardado:** código `WTD-<letra>-XXXX`, origem, produto, data, hora (AM/PM), pessoas, horas (só mise à disposition), idioma, caixa de imagens. **Nunca** nome, telefone, endereço. O nome vai só na mensagem do WhatsApp; a pessoa fica na planilha.
+**O que fica guardado:** a reserva inteira, inclusive a pessoa. É dado pessoal no mesmo nível do `nextauth."User"`: acesso mínimo (painel atrás da chave, WhatsApp mascarado na lista), nunca no aviso de WhatsApp, apagado 365 dias depois da corrida. A planilha do Google (seção 2) deixa de ser fonte e vira exportação.
+
+**Status:** `pedido` (chegou) → `orcado` → `confirmado` (o Julien respondeu com hora, nome e valor) → `feito` · `perdido` · `cancelado`. Quem marca: o Márlon, pelo código que aparece na conversa do Julien. Na Fase 2 o Julien marca por um link no próprio aviso.
 
 **Letras de origem:** T TikTok · I Instagram · Y YouTube · W Twitch · H hotel · S site · R direto (sem link).
 Link na bio de cada rede: `https://theworldkeys.com/ride?o=T` (I, Y, W); cartão e QR dos hotéis: `?o=H`; botões do site: `?o=S`.
 
-**Para ligar em produção (Lucas):**
-1. Na Central (Easypanel), opcional: `CHAUFFEUR_ORIGINS=https://theworldkeys.com,https://www.theworldkeys.com` (é o padrão), `CHAUFFEUR_TETO_HORA=30`, `CHAUFFEUR_PAGINA=https://theworldkeys.com/ride`.
-2. Na página `/ride`, pôr em `CENTRAL_LEAD` o endereço `https://<central>/api/chauffeur/lead` (o protótipo em `docs/estrategia/wanted-chauffeur/page-ride-prototype-2026-11-17.html` já lê `?o=`, monta o código e envia por `sendBeacon` ao clicar em "Ouvrir WhatsApp" ou "Copier").
-3. Teste: abrir `/ride?o=T`, mandar um pedido de teste; ele aparece em `/chauffeur` com origem TikTok e o código que foi na mensagem.
+## 2. Planilha de clientes (card T-20261116-0013) — agora exportação, não fonte
 
-**Quem marca o resultado:** o Márlon, no fim do dia, pelo código que aparece na conversa do Julien (a combinar; card 0027, etapa 2).
-
-## 2. Planilha de clientes (card T-20261116-0013) — modelos para importar no Google Sheets
-
-`planilha/clientes.csv`, `planilha/nao-contatar.csv`, `planilha/videos.csv`: uma aba cada (Arquivo → Importar → "Inserir nova(s) página(s)"). A linha de exemplo se apaga no primeiro cliente de verdade. Acesso só Márlon, Lucas e Julien. É dado pessoal: **fica na planilha, fora do site e fora do banco da TWK.**
-
-- `clientes`: nome_da_reserva (quem embarca), whatsapp, hotel_ou_bairro, origem_do_pedido, produto, data, hora (AM/PM), codigo (o WTD- da Central), resultado, observacao.
-- `nao-contatar`: quem pediu para não ser filmado ou não receber mensagem, com a data. Quem está aqui nunca recebe mensagem.
-- `videos`: data, rede, tipo, gancho, views em 24 h, comentários, pedidos que trouxe e os códigos. É daqui que saem os 3 números de segunda.
+`planilha/clientes.csv`, `planilha/nao-contatar.csv`, `planilha/videos.csv`: modelos para o Google Sheets (Arquivo → Importar). Desde 19/11 a reserva mora na Central (seção 1); a aba `clientes` só serve se `CHAUFFEUR_AGENDA_FONTE=planilha`. A aba `videos` continua sendo a fonte dos 3 números de segunda (views, comentários, pedidos por código).
 
 ## 3. Agenda do dia às 9:00 AM (card T-20261116-0012)
 
-```
-node orchestrator/agents/wanted-chauffeur/agenda-do-dia.js <clientes.csv> [--dia AAAA-MM-DD] [--ideia "…"] [--hotel "…"]
-```
+`agenda-run.js` roda sozinho na Central às 9:00 AM Paris e manda ao Julien pela Aria; está desligada até `CHAUFFEUR_AGENDA=on`. **Desde 19/11 lê as reservas da Central** (os `confirmado` do dia, em ordem de hora, com o nome de quem embarca e o valor da tabela; os ainda em `pedido`/`orcado` entram como "à confirmer"). Para voltar à planilha: `CHAUFFEUR_AGENDA_FONTE=planilha` + `CHAUFFEUR_AGENDA_CSV_URL`. Como ligar: `docs/runbooks/agenda-julien-9am.md`.
 
-**Rotina hospedada (18/11):** `agenda-run.js` roda sozinho na Central às 9:00 AM Paris e manda ao Julien pela Aria; está desligada até `CHAUFFEUR_AGENDA=on` no Easypanel. Como ligar: `docs/runbooks/agenda-julien-9am.md`. A versão à mão continua valendo:
-
-Lê a exportação CSV da aba `clientes`, pega as linhas do dia com resultado `confirmado`, ordena por hora e imprime a mensagem em francês (hora em AM/PM, nome de quem embarca, trajeto/bairro, origem, valor da tabela de 16/11, código). Dia sem corrida: a ideia do dia e o hotel do cartão (passados na linha de comando; a ideia é do Julien ou do estúdio dele). **Nada é enviado:** copiar e mandar no WhatsApp é passo do Márlon; o telefone do cliente não entra na mensagem. Coluna faltando = erro, não agenda vazia. Testes: `node --test "test/*.test.js"` (Porta, chave `chauffeur`).
+À mão, com um CSV: `node agenda-do-dia.js <clientes.csv> [--dia AAAA-MM-DD] [--ideia "…"] [--hotel "…"]` imprime a mensagem e não envia nada. Testes: `node --test "test/*.test.js"`.
