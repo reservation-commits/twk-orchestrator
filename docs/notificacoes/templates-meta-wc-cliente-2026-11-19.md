@@ -1,4 +1,4 @@
-# Templates de WhatsApp — Wanted Chauffeur, mensagens ao cliente (19/11/2026 — **aguardam o "aprovado" do fundador antes de ir à Meta**)
+# Templates de WhatsApp — Wanted Chauffeur, mensagens ao cliente (19/11/2026 — **aprovado pelo fundador ("Aprovado, enviar") e enviado à Meta em 19/11, FR e EN: 4 criados, PENDING no envio**)
 
 ## Por que existem
 
