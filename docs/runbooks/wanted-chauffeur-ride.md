@@ -65,9 +65,11 @@ Ligar, nesta ordem:
 4. **Teste**: pedido de teste com o seu WhatsApp → abrir o link do aviso → "Confirmer" → a confirmação chega no seu celular;
    no painel a linha ganha J e C. Marcar `cancelado` depois.
 
-Decisão a registrar: o número que manda ao cliente. Hoje o código manda pelo número que estiver em `WC_WA_PHONE_NUMBER_ID`.
-Se for o da TWK (a Aria), o cliente vê "The World Keys" como remetente e o rodapé do template diz "Wanted Chauffeur · The
-World Keys"; se for um número só da marca, ele precisa estar na mesma conta de negócios da Meta, com perfil próprio.
+**Decisão do fundador (20/11/2026): o número da TWK, o mesmo da Aria.** O cliente vê "The World Keys" como remetente e o rodapé
+do template diz "Wanted Chauffeur · The World Keys · Toulouse". Os valores de `WC_WA_TOKEN` e `WC_WA_PHONE_NUMBER_ID` são os mesmos
+`WHATSAPP_ACCESS_TOKEN` e `WHATSAPP_PHONE_NUMBER_ID` do serviço da Aria no Easypanel (copiar de lá; nunca no chat). Templates
+`wc_ride_confirmed` e `wc_ride_reminder` APPROVED em FR e EN em 20/11. Consequência: a resposta do cliente ao template cai na
+conversa da Aria; até ela reconhecer a referência WTD-, trata como mensagem comum.
 
 ## O que ainda não existe
 
