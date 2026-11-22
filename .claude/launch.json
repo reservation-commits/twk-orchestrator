@@ -38,6 +38,14 @@
         "-s"
       ],
       "port": 8791
+    },
+    {
+      "name": "ride-site",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "orchestrator/sites/wanted-chauffeur-ride/servidor-dev.cjs"
+      ],
+      "port": 8792
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "wanted-chauffeur-ride",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Página de reserva do Wanted Chauffeur (theworldkeys.com/ride). HTML, CSS e JavaScript puros, sem build.",
+  "type": "module",
+  "scripts": {
+    "dev": "node servidor-dev.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

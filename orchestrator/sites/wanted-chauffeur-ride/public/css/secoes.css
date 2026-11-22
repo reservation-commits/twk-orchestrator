@@ -1,0 +1,104 @@
+/* Wanted Chauffeur · seções
+   Hero, "como funciona", missões, a bordo, agenda de Toulouse, hotéis, perguntas e rodapé. */
+/* hero */
+.hero{padding-block:44px 56px;border-bottom:4px solid var(--ink)}
+.hero-grid{display:grid;gap:30px;align-items:center}
+.hero-grid>div:first-child{container-type:inline-size;min-width:0}
+@media(min-width:880px){.hero-grid{grid-template-columns:1fr 1fr}}
+.wanted{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg)}
+.wanted .lvl{color:var(--ink);background:var(--aqua);padding:2px 8px;border:2px solid var(--ink);letter-spacing:.14em}
+h1.title{font-family:var(--wordmark);font-weight:400;font-size:clamp(34px,10.3cqw,76px);line-height:.92;text-transform:uppercase;margin-top:14px;
+  background:linear-gradient(180deg,#fff 0%,#ffd7ec 40%,var(--pink) 72%,var(--orange) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(4px 4px 0 var(--ink)) drop-shadow(0 0 18px rgba(255,46,151,.35))}
+.hero .promise{font-family:var(--display);font-size:clamp(22px,3.4vw,34px);text-transform:uppercase;letter-spacing:.02em;margin-top:14px;color:var(--fg)}
+.hero .promise b{color:var(--aqua);font-weight:400}
+.lead{font-size:17px;color:var(--muted);max-width:34em;margin-top:16px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:26px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:22px;font-family:var(--cond);font-size:17px;letter-spacing:.03em;color:var(--muted)}
+.hero-meta b{color:var(--fg);font-weight:700}
+.hero-art{aspect-ratio:4/3;width:100%;max-width:560px;justify-self:center;transform:rotate(1.2deg)}
+.hero-art .art{object-position:50% 47%}
+.hero-art .plate{position:absolute;right:0;top:0;margin:12px;padding:6px 10px;max-width:calc(100% - 24px);background:var(--ink);color:var(--sun);font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.14em;border:2px solid var(--sun);font-variant-numeric:tabular-nums}
+
+/* sections */
+section{padding-block:60px;border-bottom:4px solid var(--ink)}
+.sec-head{display:grid;gap:10px;margin-bottom:28px;max-width:44em}
+.sec-head p{color:var(--muted);font-size:17px}
+
+/* strip of 3 panels (how it works) */
+.strip{display:grid;gap:22px}
+@media(min-width:760px){.strip{grid-template-columns:repeat(3,1fr)}}
+.strip .panel{padding:22px;min-height:190px;display:grid;align-content:start;gap:8px}
+.strip .panel:nth-child(1){transform:rotate(-1deg)}.strip .panel:nth-child(2){transform:rotate(.8deg)}.strip .panel:nth-child(3){transform:rotate(-.6deg)}
+.strip .num{font-family:var(--wordmark);font-size:40px;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(2px 2px 0 var(--ink))}
+.strip p{color:var(--muted);font-size:15px}
+
+/* missions */
+.missions{display:grid;gap:22px}
+@media(min-width:700px){.missions{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.missions{grid-template-columns:repeat(3,1fr)}}
+.mission{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:8px;padding:22px;min-width:0}
+.mission.feat{background:linear-gradient(160deg,rgba(255,46,151,.28),rgba(255,122,47,.12) 60%,var(--panel))}
+.mission .kind{font-family:var(--cond);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua)}
+.mission h3{font-family:var(--display);font-weight:400;font-size:30px;letter-spacing:.01em}
+.mission .desc{color:var(--muted);font-size:15px}
+.mission .bounty{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:8px;font-variant-numeric:tabular-nums}
+.mission .bounty b{font-family:var(--wordmark);font-size:36px;line-height:1;background:var(--grad-v);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(2px 2px 0 var(--ink))}
+.mission .bounty span{font-family:var(--cond);font-size:16px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.mission .pp{font-family:var(--cond);font-size:16px;color:var(--sun);letter-spacing:.03em}
+.mission .pick{margin-top:8px;justify-self:start}
+.mission .tag{position:absolute;top:-3px;right:14px;padding:5px 10px;background:var(--sun);color:var(--ink);font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;border:3px solid var(--ink);border-top:0}
+.note{font-size:13px;color:var(--dim);margin-top:18px}
+
+/* on board : image + list */
+.board-grid{display:grid;gap:26px;align-items:stretch}
+@media(min-width:860px){.board-grid{grid-template-columns:.9fr 1.1fr}}
+.board-art{aspect-ratio:937/1679;width:100%;max-width:460px;justify-self:center;transform:rotate(-1.4deg)}
+.board-art .art{object-fit:contain;object-position:center}
+.loot{display:grid;gap:12px;align-content:center}
+.loot>div{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px 16px;background:var(--panel);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.loot .ic{width:36px;height:36px;display:grid;place-items:center;background:var(--grad);border:2px solid var(--ink);font-family:var(--wordmark);font-size:14px;color:#fff}
+.loot>div>div{min-width:0}
+.loot b{display:block;font-family:var(--cond);font-size:20px;text-transform:uppercase;letter-spacing:.04em}
+.loot span{font-size:14px;color:var(--muted)}
+
+/* map / agenda */
+.map{display:grid;gap:0;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:var(--panel);overflow:hidden}
+.ev{display:grid;grid-template-columns:110px 1fr auto;gap:16px;align-items:center;padding:16px 18px;border-top:3px solid var(--ink);min-width:0;position:relative}
+.ev:first-child{border-top:0}
+.ev::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--grad-v)}
+.ev .d{font-family:var(--display);font-size:24px;line-height:1;color:var(--sun);font-variant-numeric:tabular-nums;text-transform:uppercase}
+.ev .d small{display:block;font-family:var(--cond);font-weight:600;font-size:13px;letter-spacing:.14em;color:var(--dim)}
+.ev b{display:block;font-family:var(--cond);font-size:20px;text-transform:uppercase;letter-spacing:.03em}
+.ev span{font-size:14px;color:var(--muted)}
+.ev .pr{font-family:var(--wordmark);font-size:20px;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--aqua)}
+@media(max-width:560px){.ev{grid-template-columns:84px 1fr}.ev .pr{grid-column:2}}
+
+/* hotels */
+.hotel{display:grid;gap:22px;align-items:center}
+@media(min-width:860px){.hotel{grid-template-columns:1.15fr .85fr}}
+.hotel-art{aspect-ratio:1;width:100%;max-width:440px;justify-self:center;transform:rotate(1.3deg)}
+.hotel-art .art{position:absolute;right:0;bottom:0;width:200%;height:auto;max-width:none;object-fit:unset}
+.hotel ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px;display:grid;gap:8px}
+.hotel-cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;align-items:center}
+
+/* faq */
+details{border-top:3px solid var(--ink);padding:14px 0}
+details:last-of-type{border-bottom:3px solid var(--ink)}
+summary{cursor:pointer;font-family:var(--cond);font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.03em;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--pink);font-family:var(--wordmark);font-size:20px}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:8px;font-size:15px;max-width:62ch}
+
+/* footer */
+footer{padding-block:36px 48px;display:grid;gap:14px;font-size:13px;color:var(--dim)}
+footer .promise{font-family:var(--wordmark);font-size:22px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(2px 2px 0 var(--ink))}
+footer .links{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--cond);font-size:16px;letter-spacing:.05em;text-transform:uppercase}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--fg)}
+@media(prefers-reduced-motion:reduce){.btn,.btn:active{transition:none}}
+
+/* antes eram estilos soltos no HTML (22/11) */
+.mission.secondaire{border-style:dashed}
+.apres-eyebrow{margin-top:10px}
+.note.colle{margin:0}

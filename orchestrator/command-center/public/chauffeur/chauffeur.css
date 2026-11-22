@@ -15,3 +15,11 @@
 .linkrow code { font-size: 12px; color: var(--ink-2); word-break: break-all; }
 .linkrow .uso { grid-column: 2; font-size: 12px; color: var(--muted); }
 @media (max-width: 720px) { .linkrow { grid-template-columns: 1fr; } .linkrow .uso { grid-column: 1; } .ped th:nth-child(5), .ped td:nth-child(5) { display: none; } }
+/* agenda (22/11) */
+.bloq-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px 12px; align-items: end; margin: 0 0 18px; font-size: 13px; }
+.bloq-form label { display: grid; gap: 4px; color: var(--muted); }
+.bloq-form .largo { grid-column: span 2; }
+.bloq-form input { background: var(--surface); color: var(--ink); border: 1px solid var(--grid); border-radius: 8px; padding: 7px 9px; font: inherit; }
+.bloq-form .nota { grid-column: 1 / -1; margin: 0; }
+.ped .livre { color: var(--wa); }
+@media (max-width: 720px) { .bloq-form .largo { grid-column: 1 / -1; } }

@@ -33,6 +33,8 @@ COPY agents/dba-escrita ./agents/dba-escrita
 # Olheiro do Instagram (14/11): leitura diária do @wantedchauffeur pela API da Meta; a chave vem do ambiente.
 COPY agents/olheiro-instagram ./agents/olheiro-instagram
 COPY agents/wanted-chauffeur ./agents/wanted-chauffeur
+# Site /ride do Wanted Chauffeur (22/11): só a pasta public/, a mesma que o dev hospeda em outro lugar se quiser.
+COPY sites/wanted-chauffeur-ride/public ./sites/wanted-chauffeur-ride/public
 # Estúdio Viral (19/11): pacote diário de conteúdo com IA; a cópia da skill (agents/estudio-viral/skill) vai junto.
 COPY agents/estudio-viral ./agents/estudio-viral
 # DURABILIDADE (v4.4): a carga-semente vai para /app/SEED (dentro da imagem),

@@ -1,0 +1,55 @@
+/* Wanted Chauffeur · reserva
+   Formulário, faixa de dias, horários e a prévia do WhatsApp. */
+/* form */
+.book-grid{display:grid;gap:28px}
+@media(min-width:920px){.book-grid{grid-template-columns:1.1fr .9fr;align-items:start}}
+form{display:grid;gap:16px;padding:26px;background:var(--panel);border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink)}
+.row{display:grid;gap:14px}
+@media(min-width:560px){.row.two{grid-template-columns:1fr 1fr}.row.three{grid-template-columns:1fr 1fr 1fr}}
+label{display:grid;gap:6px;font-family:var(--cond);font-size:16px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+label .hint{font-weight:500;text-transform:none;letter-spacing:0;color:var(--dim)}
+input,select,textarea{width:100%;min-width:0;background:var(--bg);color:var(--fg);border:3px solid var(--ink);padding:12px 13px;font:inherit;font-family:var(--body);font-size:16px;text-transform:none;letter-spacing:0}
+input::placeholder,textarea::placeholder{color:var(--dim)}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--pink) 50%),linear-gradient(135deg,var(--pink) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+textarea{min-height:76px;resize:vertical}
+.seg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.seg button{background:var(--bg);border:3px solid var(--ink);color:var(--fg);padding:9px 0;font-family:var(--cond);font-size:18px;font-weight:700;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--grad);color:#fff}
+.consent{display:flex;gap:10px;align-items:flex-start;font-family:var(--body);font-size:13px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.consent input{width:18px;height:18px;margin-top:2px;flex:none}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:14px 16px;background:var(--bg);border:3px dashed var(--line)}
+.total b{font-family:var(--wordmark);font-size:30px;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(2px 2px 0 var(--ink));font-variant-numeric:tabular-nums}
+.total span{font-size:13px;color:var(--muted)}
+.total small{display:block;font-family:var(--cond);font-size:14px;color:var(--sun);letter-spacing:.03em}
+.proto{font-size:12px;color:var(--dim);text-align:center}
+
+/* phone preview */
+.preview{position:sticky;top:90px;display:grid;gap:14px}
+.phone{border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:#0b141a;padding:14px;max-width:100%;transform:rotate(1deg)}
+.phone .top{display:flex;align-items:center;gap:10px;padding:6px 6px 12px;border-bottom:1px solid #1f2c33;color:#e9edef;font-size:14px;font-weight:600;font-family:var(--body)}
+.phone .top i{width:34px;height:34px;border-radius:50%;background:var(--grad);display:inline-block;border:2px solid var(--ink)}
+.phone .top small{display:block;font-weight:400;color:#8696a0;font-size:12px}
+.bubble{margin:14px 0 6px auto;max-width:92%;background:#005c4b;color:#e9edef;border-radius:12px 2px 12px 12px;padding:10px 12px;font-size:14px;white-space:pre-wrap;line-height:1.45;font-family:var(--body)}
+.bubble .t{display:block;text-align:right;font-size:11px;color:#9fd3c3;margin-top:4px}
+.bubble.reply{margin:6px auto 6px 0;background:#202c33;border-radius:2px 12px 12px 12px}
+.bubble.reply .t{color:#8696a0}
+.preview-actions{display:flex;gap:14px;flex-wrap:wrap}
+.ref{font-family:var(--cond);font-weight:700;letter-spacing:.14em;font-variant-numeric:tabular-nums;color:var(--aqua)}
+.toast{font-size:13px;color:var(--ok);min-height:1.2em}
+
+
+/* faixa de dias (22/11): 14 dias a partir de hoje; dia indisponível fica riscado e não clica */
+.jours-bloc{display:grid;gap:6px;min-width:0}
+.jours-bloc .lbl{font-family:var(--cond);font-size:16px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.jours-bloc .lbl .hint{font-weight:500;text-transform:none;letter-spacing:0;color:var(--dim)}
+.jours{display:grid;grid-auto-flow:column;grid-auto-columns:62px;gap:8px;overflow-x:auto;padding:2px 6px 10px 2px;scroll-snap-type:x proximity;scrollbar-width:thin}
+.jours button{scroll-snap-align:start;display:grid;justify-items:center;gap:1px;padding:6px 0;background:var(--bg);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);color:var(--fg);font-family:var(--cond);line-height:1.05;cursor:pointer}
+.jours button small{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.jours button b{font-family:var(--display);font-weight:400;font-size:24px}
+.jours button[aria-pressed="true"]{background:var(--grad);color:#fff}
+.jours button[aria-pressed="true"] small{color:#fff}
+.jours button:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through;box-shadow:none}
+.dispo{display:block;min-height:1.2em;margin-top:-6px;font-size:14px;color:var(--warn)}
+.dispo:empty{display:none}
+#submit:disabled{opacity:.5;cursor:not-allowed}
+.copiavel{user-select:all}

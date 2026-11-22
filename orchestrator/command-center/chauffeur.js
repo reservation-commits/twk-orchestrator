@@ -28,6 +28,7 @@ const AGENTS_DIR = process.env.TWK_AGENTS_DIR ? path.resolve(process.env.TWK_AGE
 const reservasMod = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'reservas.js'));
 const avisar = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'avisar.js'));
 const confirmar = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'confirmar.js')); // Fase 2: link de confirmação do Julien (/c/<codigo>?t=…)
+const agendaMod = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'agenda.js')); // 22/11: datas e horários livres (corridas confirmadas + bloqueios)
 const cliente = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'cliente.js')); // Fase 2: confirmação e lembretes ao cliente pela Meta
 
 const { ORIGENS, PRODUTOS, PRODUTO_NOME, STATUS, RE_CODIGO } = reservasMod;
@@ -67,7 +68,7 @@ function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImp
     if (!origem) return true;
     if (!origensPermitidas.includes(origem) && !mesmaOrigem(req, origem)) return false;
     res.setHeader('access-control-allow-origin', origem);
-    res.setHeader('access-control-allow-methods', 'POST, OPTIONS');
+    res.setHeader('access-control-allow-methods', 'GET, POST, OPTIONS');
     res.setHeader('access-control-allow-headers', 'content-type');
     res.setHeader('access-control-max-age', '600');
     res.setHeader('vary', 'origin');
@@ -104,6 +105,7 @@ function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImp
     if (v.evento.valor === 'pedido') return { status: 400, erro: `resultado: ${RESULTADOS.join(', ')}` };
     const r = await s.evento(v.evento);
     if (r.status !== 200) return r;
+    cacheAgenda.clear(); // confirmar ou cancelar (pelo painel ou pelo link do Julien) muda a agenda pública
     if (v.evento.valor === 'confirmado') {
       const reserva = await s.obter(v.evento.codigo);
       const c = await cliente.enviar({ store: s, reserva, tipo: 'confirmacao_cliente', env, fetchImpl, log });
@@ -175,9 +177,31 @@ function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImp
     return { pagina: base, links: Object.entries(ORIGENS).filter(([k]) => k !== 'R').map(([k, nome]) => ({ origem: k, rede: nome, url: `${base}?o=${k}`, uso: k === 'H' ? 'cartão e QR entregues aos hotéis' : k === 'S' ? 'botões do site theworldkeys.com' : `link na bio do @wantedchauffeur no ${nome}` })) };
   }
 
-  /** Rotas PÚBLICAS (antes da chave): o POST da reserva e o POST do lead antigo. Devolve true se tratou. */
+  /** Consulta pública da agenda (a página pinta dias e horários). Cache de 30 s por faixa; sem nomes, sem motivos. */
+  const cacheAgenda = new Map();
+  async function disponibilidadePublica(de, dias) {
+    const chave = `${de || ''}|${dias || ''}`; const t = agora(); const c = cacheAgenda.get(chave);
+    if (c && t - c.em < 30_000) return c.valor;
+    const valor = await agendaMod.ocupacao({ store: await armazem(), dir, de, dias, agora: t, env });
+    if (cacheAgenda.size > 200) cacheAgenda.clear();
+    cacheAgenda.set(chave, { em: t, valor });
+    return valor;
+  }
+
+  /** Rotas PÚBLICAS (antes da chave): a agenda, o POST da reserva e o POST do lead antigo. Devolve true se tratou. */
   function tratarPublico(req, res, u, json) {
     if (tratarConfirmacao(req, res, u)) return true;
+    if (u.pathname === '/api/chauffeur/disponibilidade') {
+      const permitido = cors(req, res);
+      if (req.method === 'OPTIONS') { res.writeHead(permitido ? 204 : 403); res.end(); return true; }
+      if (req.method !== 'GET') { json(res, 405, { error: 'GET' }); return true; }
+      if (!permitido) { json(res, 403, { error: 'origem não permitida' }); return true; }
+      const de = u.searchParams.get('de'); const dias = u.searchParams.get('dias');
+      if (de && !/^\d{4}-\d{2}-\d{2}$/.test(de)) { json(res, 400, { error: 'de no formato AAAA-MM-DD' }); return true; }
+      disponibilidadePublica(de, dias).then((v) => json(res, 200, v))
+        .catch((e) => { log(`[chauffeur] agenda falhou: ${e.message}`); json(res, 500, { error: 'agenda indisponível' }); });
+      return true;
+    }
     const rota = u.pathname === '/api/chauffeur/reserva' ? 'reserva' : u.pathname === '/api/chauffeur/lead' ? 'lead' : null;
     if (!rota) return false;
     const permitido = cors(req, res);
@@ -192,7 +216,15 @@ function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImp
       if (v.erro) return json(res, 400, { error: v.erro });
       try {
         const s = await armazem();
+        // Conferência da agenda só na rota nova (a página manda data e hora). Erro ao calcular não perde o pedido: registra e grava.
+        if (rota === 'reserva') {
+          let barrado = null;
+          try { barrado = await agendaMod.conferir({ store: s, dir, reserva: v.reserva, agora: agora(), env }); }
+          catch (e) { log(`[chauffeur] conferência da agenda falhou (${e.message}); pedido gravado sem conferir`); }
+          if (barrado) return json(res, 409, { error: barrado.mensagem, motivo: barrado.motivo });
+        }
         const r = await s.criar(v.reserva);
+        if (r.status === 201) cacheAgenda.clear();
         json(res, r.status, { ok: true, codigo: r.codigo, repetido: !!r.repetido });
         if (r.status === 201 && rota === 'reserva') avisarNova(v.reserva).catch(() => {});
       } catch (e) { log(`[chauffeur] gravação falhou: ${e.message}`); json(res, 500, { error: 'não foi possível gravar a reserva' }); }
@@ -206,6 +238,18 @@ function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImp
     (async () => {
       if (u.pathname === '/api/chauffeur/leads' && req.method === 'GET') return json(res, 200, await painel({ dias: u.searchParams.get('dias') || 30 }));
       if (u.pathname === '/api/chauffeur/links' && req.method === 'GET') return json(res, 200, links());
+      // Agenda com detalhe (códigos e motivos) e bloqueios do Julien — só com a chave da Central.
+      if (u.pathname === '/api/chauffeur/agenda' && req.method === 'GET') return json(res, 200, { ...(await agendaMod.ocupacao({ store: await armazem(), dir, de: u.searchParams.get('de'), dias: u.searchParams.get('dias') || 14, agora: agora(), env, interno: true })), bloqueios: agendaMod.lerBloqueios(dir) });
+      if (u.pathname === '/api/chauffeur/bloqueios' && req.method === 'GET') return json(res, 200, { bloqueios: agendaMod.lerBloqueios(dir) });
+      if (u.pathname === '/api/chauffeur/bloqueios' && req.method === 'POST') {
+        const corpo = await lerCorpo(req, 2_000);
+        if (!corpo) return json(res, 400, { error: 'JSON inválido' });
+        const r = agendaMod.adicionarBloqueio(dir, corpo, { agora: agora(), por: corpo.por || 'painel' });
+        if (r.status === 201) cacheAgenda.clear();
+        return json(res, r.status, r.erro ? { error: r.erro } : r.bloqueio);
+      }
+      const mb = /^\/api\/chauffeur\/bloqueios\/(BLQ-[0-9a-f]{8})$/.exec(u.pathname);
+      if (mb && req.method === 'DELETE') { const r = agendaMod.removerBloqueio(dir, mb[1]); if (r.status === 200) cacheAgenda.clear(); return json(res, r.status, r.erro ? { error: r.erro } : r); }
       const m = /^\/api\/chauffeur\/reserva\/([A-Z0-9-]{10,12})$/i.exec(u.pathname);
       if (m && req.method === 'GET') {
         const codigo = m[1].toUpperCase();

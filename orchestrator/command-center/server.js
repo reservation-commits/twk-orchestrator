@@ -28,7 +28,7 @@ const estudioMod = require('./estudio.js'); // Estúdio Viral: o pacote de conte
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.12.0-studio-criar-20261119';
+const BUILD = '4.13.0-ride-site-agenda-20261122';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -295,6 +295,24 @@ function handleIngest(req, res) {
 
 // ---------- static ----------
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon', '.json': 'application/json' };
+// Wanted Chauffeur · o site /ride mora em orchestrator/sites/wanted-chauffeur-ride/public (22/11): a mesma pasta que o dev
+// hospeda. Na imagem ela vai para /app/sites/… (Dockerfile); localmente fica um nível acima desta pasta.
+const RIDE_DIR = (() => {
+  const c = [process.env.WC_SITE_DIR, path.join(__dirname, 'sites', 'wanted-chauffeur-ride', 'public'), path.join(__dirname, '..', 'sites', 'wanted-chauffeur-ride', 'public')].filter(Boolean);
+  return path.resolve(c.find((d) => fs.existsSync(path.join(d, 'index.html'))) || c[c.length - 1]);
+})();
+function serveSiteRide(u, res) {
+  // /ride e /ride/ → index.html; /ride/css/x.css → RIDE_DIR/css/x.css. Nada fora da pasta (../ barrado).
+  const rel = decodeURIComponent(u.pathname.replace(/^\/ride\/?/, '')) || 'index.html';
+  const file = path.resolve(RIDE_DIR, rel);
+  if (!file.startsWith(RIDE_DIR + path.sep) && file !== RIDE_DIR) { res.writeHead(403); return res.end(); }
+  fs.readFile(file, (err, data) => {
+    if (err) { res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' }); return res.end('not found'); }
+    const ext = path.extname(file);
+    res.writeHead(200, { 'content-type': MIME[ext] || 'application/octet-stream', 'cache-control': ext === '.html' ? 'no-cache' : 'public, max-age=300' });
+    res.end(data);
+  });
+}
 function serveStatic(req, res) {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   if (p === '/') p = '/index.html';
@@ -698,7 +716,7 @@ const server = http.createServer(async (req, res) => {
   // Studio do Wanted Chauffeur: o painel do pacote de conteúdo do dia (a página do Julien é /studio/<dia>?t=, tratada acima).
   if (u.pathname === '/estudio' || u.pathname === '/estudio/') { req.url = '/estudio/index.html'; }
   // Wanted Chauffeur: a página pública de reserva (theworldkeys.com/ride faz rewrite para cá, ou ride.theworldkeys.com aponta direto).
-  if (u.pathname === '/ride' || u.pathname === '/ride/') { req.url = '/ride/index.html'; }
+  if (u.pathname === '/ride' || u.pathname.startsWith('/ride/')) return serveSiteRide(u, res);
   serveStatic(req, res);
 });
 

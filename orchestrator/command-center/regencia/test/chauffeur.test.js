@@ -181,3 +181,50 @@ test('Fase 2: marcar confirmado no painel manda a confirmação ao cliente pela 
   assert.equal(ch4.saude().cliente, 'on');
   assert.equal((await ch4.mudarStatus({ codigo: 'WTD-S-PANL', status: 'feito', por: 'marlon' })).cliente, undefined, 'outros status não mandam nada');
 });
+
+test('22/11 agenda: a página consulta a disponibilidade sem chave; o POST barra horário ocupado (409); bloqueios só com chave', async () => {
+  const raiz5 = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-central-chauffeur5-'));
+  const relogio5 = Date.parse('2026-11-22T13:00:00Z');
+  const ch5 = criar({ stateDir: raiz5, env: { CHAUFFEUR_ORIGINS: 'https://theworldkeys.com' }, agora: () => relogio5, fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ ok: true }) }), log: () => {}, sentinels });
+  const srv = http.createServer((req, res) => {
+    const u = new URL(req.url, 'http://x');
+    if (ch5.tratarPublico(req, res, u, json)) return;
+    if (u.pathname.startsWith('/api/')) { if (req.headers['x-center-key'] !== 'chave') return json(res, 401, {}); if (ch5.tratar(req, res, u, json)) return; }
+    json(res, 404, {});
+  });
+  await new Promise((ok) => srv.listen(0, '127.0.0.1', ok)); const b5 = `http://127.0.0.1:${srv.address().port}`;
+  const pg = { origin: 'https://theworldkeys.com', 'content-type': 'application/json' };
+  try {
+    const d = await fetch(b5 + '/api/chauffeur/disponibilidade?de=2026-11-24&dias=2', { headers: { origin: 'https://theworldkeys.com' } });
+    assert.equal(d.status, 200); assert.equal(d.headers.get('access-control-allow-origin'), 'https://theworldkeys.com');
+    const dj = await d.json(); assert.deepEqual(dj.dias.map((x) => x.ocupado), [[], []]);
+    assert.equal((await fetch(b5 + '/api/chauffeur/disponibilidade', { headers: { origin: 'https://evil.example' } })).status, 403);
+    assert.equal((await fetch(b5 + '/api/chauffeur/disponibilidade?de=24/11')).status, 400);
+    // reserva → confirmada → o mesmo horário passa a dar 409, e a agenda pública mostra ocupado (cache limpo)
+    const p1 = await fetch(b5 + '/api/chauffeur/reserva', { method: 'POST', headers: pg, body: JSON.stringify({ codigo: 'WTD-T-AGND', produto: 'game', data: '2026-11-24', hora: '9:00 PM', nome: 'Léa Martin' }) });
+    assert.equal(p1.status, 201);
+    assert.equal((await ch5.mudarStatus({ codigo: 'WTD-T-AGND', status: 'confirmado', por: 'teste' })).status, 200);
+    const p2 = await fetch(b5 + '/api/chauffeur/reserva', { method: 'POST', headers: pg, body: JSON.stringify({ codigo: 'WTD-I-AGN2', produto: 'transfer', data: '2026-11-24', hora: '8:00 PM', nome: 'Paul Durand' }) });
+    assert.equal(p2.status, 409); assert.equal((await p2.json()).motivo, 'ocupado');
+    const p3 = await fetch(b5 + '/api/chauffeur/reserva', { method: 'POST', headers: pg, body: JSON.stringify({ codigo: 'WTD-I-AGN3', produto: 'transfer', data: '2026-11-22', hora: '2:30 PM', nome: 'Paul Durand' }) });
+    assert.equal(p3.status, 409); assert.equal((await p3.json()).motivo, 'antecedencia');
+    const dj2 = await (await fetch(b5 + '/api/chauffeur/disponibilidade?de=2026-11-24&dias=1')).json();
+    assert.deepEqual(dj2.dias[0].ocupado, [[1230, 1440]]); assert.ok(!JSON.stringify(dj2).includes('WTD-'));
+    // a rota antiga (sem pessoa) não é barrada pela agenda
+    assert.equal((await fetch(b5 + '/api/chauffeur/lead', { method: 'POST', headers: pg, body: JSON.stringify({ codigo: 'WTD-I-LEGA', produto: 'transfer', data: '2026-11-24', hora: '8:00 PM' }) })).status, 201);
+    // bloqueios: sem chave não; com chave cria, aparece na agenda interna com motivo, some da pública, e se retira
+    const k = { 'x-center-key': 'chave', 'content-type': 'application/json' };
+    assert.equal((await fetch(b5 + '/api/chauffeur/bloqueios', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).status, 401);
+    const bl = await fetch(b5 + '/api/chauffeur/bloqueios', { method: 'POST', headers: k, body: JSON.stringify({ data: '2026-11-26', motivo: 'garage' }) });
+    assert.equal(bl.status, 201); const blj = await bl.json();
+    assert.equal((await fetch(b5 + '/api/chauffeur/bloqueios', { method: 'POST', headers: k, body: JSON.stringify({ data: 'amanhã' }) })).status, 400);
+    const pub = await (await fetch(b5 + '/api/chauffeur/disponibilidade?de=2026-11-26&dias=1')).json();
+    assert.equal(pub.dias[0].fechado, true); assert.ok(!JSON.stringify(pub).includes('garage'));
+    const int = await (await fetch(b5 + '/api/chauffeur/agenda?de=2026-11-26&dias=1', { headers: k })).json();
+    assert.equal(int.dias[0].detalhes[0].motivo, 'garage'); assert.equal(int.bloqueios.length, 1);
+    const p4 = await fetch(b5 + '/api/chauffeur/reserva', { method: 'POST', headers: pg, body: JSON.stringify({ codigo: 'WTD-I-AGN4', produto: 'night', data: '2026-11-26', hora: '9:00 PM', nome: 'Ana Souza' }) });
+    assert.equal(p4.status, 409); assert.equal((await p4.json()).motivo, 'dia_fechado');
+    assert.equal((await fetch(b5 + `/api/chauffeur/bloqueios/${blj.id}`, { method: 'DELETE', headers: k })).status, 200);
+    assert.equal((await (await fetch(b5 + '/api/chauffeur/disponibilidade?de=2026-11-26&dias=1')).json()).dias[0].fechado, false);
+  } finally { srv.close(); }
+});

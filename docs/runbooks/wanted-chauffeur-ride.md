@@ -17,15 +17,14 @@ Fase 2 (confirmação e lembrete ao cliente por template da Meta) vem depois.
 
 ## Ligar (Lucas + fundador, ~20 minutos)
 
-1. **Deploy da Central** (build 4.9.0): Easypanel, Build Path `/orchestrator`, Dockerfile `command-center/Dockerfile`, Deploy.
-   Conferir em `/health`: `build` começa com `4.9.0` e `wanted_chauffeur.reservas` diz `arquivo`.
-2. **Domínio.** Duas opções; a primeira é a recomendada:
-   - **Rewrite no front** (theworldkeys.com, Next.js): em `next.config.js`, `rewrites()` com duas linhas,
-     `{ source: '/ride', destination: 'https://<central>/ride' }` e `{ source: '/api/chauffeur/:path*', destination: 'https://<central>/api/chauffeur/:path*' }`.
-     A página e a gravação ficam no mesmo domínio; nada de CORS. (Suposição: o front usa `next.config` padrão; conferir.)
-   - **Subdomínio direto**: no Easypanel, adicionar `ride.theworldkeys.com` ao serviço da Central (e o CNAME no DNS).
-     Nesse caso os links da bio apontam para `https://ride.theworldkeys.com/?o=T` e a Central precisa de
-     `CHAUFFEUR_PAGINA=https://ride.theworldkeys.com/` para o painel mostrar os links certos.
+1. **Deploy da Central** (build 4.13.0 ou depois): Easypanel, Build Path `/orchestrator`, Dockerfile `command-center/Dockerfile`, Deploy.
+   Conferir em `/health`: `build` começa com `4.13` e `wanted_chauffeur.reservas` diz `arquivo`.
+2. **Domínio.** Desde 22/11 o site é um projeto próprio em `orchestrator/sites/wanted-chauffeur-ride/`, e o
+   [README dele](../../orchestrator/sites/wanted-chauffeur-ride/README.md) tem as três formas de hospedar. A recomendada:
+   **rewrite no front** (theworldkeys.com, Next.js), com três linhas em `next.config.js`: `/ride`, `/ride/:path*` e
+   `/api/chauffeur/:path*` apontando para a Central. A página mora no caminho `/ride/` (os arquivos são citados como
+   `/ride/css/…`); num subdomínio, ela fica em `https://ride.theworldkeys.com/ride` e a Central precisa de
+   `CHAUFFEUR_PAGINA` com esse endereço para o painel mostrar os links certos.
 3. **Aviso ao Julien** (Aria): `TEAM_ALERT_TO` da Aria com `julien=+33…` e `marlon=+…`; na Central,
    `ARIA_TEAM_ALERT_SECRET=<o TEAM_ALERT_SECRET da Aria>` (se o Olheiro já usa, já está lá). Sem o segredo a reserva
    é gravada do mesmo jeito e o painel mostra a lacuna.

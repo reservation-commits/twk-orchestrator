@@ -73,6 +73,46 @@
       `<p class="nota">A página é ${esc(S.links.pagina)}. Trocar o endereço: variável CHAUFFEUR_PAGINA na Central.</p>`;
     document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => { try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Copiado'; setTimeout(() => { b.textContent = 'Copiar'; }, 1500); } catch { prompt('Copie o link:', b.dataset.copy); } }));
   }
+  // ---------------------------------------------------------------- agenda (22/11): ocupação dos próximos 14 dias e bloqueios
+  const hm = (min) => { const h = Math.floor(min / 60) % 24, m = min % 60; return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`; };
+  const diaFr = (iso) => new Date(iso + 'T12:00:00Z').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'UTC' });
+  function agenda() {
+    const a = S.agenda; const alvo = $('#agenda-body');
+    alvo.className = '';
+    if (!a) { alvo.innerHTML = '<p class="vazio">Agenda indisponível.</p>'; return; }
+    const linhas = a.dias.map((d) => {
+      const faixas = d.fechado ? '<b>indisponível o dia todo</b>' : (d.ocupado.length ? d.ocupado.map(([x, y]) => `${hm(x)}–${y >= 1440 ? 'meia-noite' : hm(y)}`).join(' · ') : '<span class="livre">livre</span>');
+      const det = (d.detalhes || []).map((x) => x.tipo === 'corrida' ? `<span class="pill ok" title="corrida confirmada">${esc(x.codigo)} ${esc(x.hora)}</span>` : `<span class="pill bad" title="${esc(x.motivo || 'bloqueio')}">${x.de ? esc(x.de) + '–' + esc(x.ate) : 'dia'} ${esc(x.motivo || '')}</span>`).join(' ');
+      return `<tr><td>${esc(diaFr(d.data))}</td><td>${faixas}</td><td>${det}</td></tr>`;
+    }).join('');
+    const bloq = (a.bloqueios || []).slice().sort((x, y) => (x.data < y.data ? -1 : 1)).map((b) => `<div class="linkrow"><span class="pill">${esc(b.data)}${b.ate_data && b.ate_data !== b.data ? ' → ' + esc(b.ate_data) : ''}</span><code>${b.de ? esc(b.de) + ' – ' + esc(b.ate) : 'dia inteiro'} · ${esc(b.motivo || 'sem motivo')}</code><button class="chip" data-del="${esc(b.id)}">Retirar</button></div>`).join('');
+    alvo.innerHTML = `<div class="scroll"><table class="ped"><thead><tr><th>Dia</th><th>Ocupado (hora de Paris)</th><th>Por quê</th></tr></thead><tbody>${linhas}</tbody></table></div>
+      <h3 class="micro" style="margin-top:18px">Bloqueios</h3>${bloq || '<p class="vazio">Nenhum bloqueio.</p>'}
+      <p class="nota">Antecedência mínima ${a.antecedencia_min} min · folga ${a.folga_min} min entre corridas · pedidos até ${esc(a.horizonte)}.</p>`;
+    alvo.querySelectorAll('[data-del]').forEach((btn) => btn.addEventListener('click', async () => {
+      if (!confirm('Retirar este bloqueio? O horário volta a aparecer livre na página.')) return;
+      btn.disabled = true;
+      const r = await fetch(`/api/chauffeur/bloqueios/${encodeURIComponent(btn.dataset.del)}`, { method: 'DELETE', headers: headers() });
+      if (!r.ok) alert('Não retirou: ' + ((await r.json().catch(() => ({}))).error || r.status));
+      await carregarAgenda();
+    }));
+  }
+  async function carregarAgenda() {
+    try { const r = await fetch('/api/chauffeur/agenda?dias=14', { headers: headers() }); S.agenda = r.ok ? await r.json() : null; } catch { S.agenda = null; }
+    agenda();
+  }
+  $('#bloq-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target); const corpo = {};
+    for (const [k, v] of f.entries()) if (String(v).trim()) corpo[k] = String(v).trim().toUpperCase().replace(/^(\d{1,2}:\d{2})\s*(AM|PM)$/, '$1 $2');
+    if (corpo.motivo) corpo.motivo = f.get('motivo').trim();
+    const r = await fetch('/api/chauffeur/bloqueios', { method: 'POST', headers: { 'content-type': 'application/json', ...headers() }, body: JSON.stringify(corpo) });
+    const j = await r.json().catch(() => ({}));
+    $('#bloq-msg').textContent = r.ok ? `Bloqueado: ${j.data}${j.de ? ' ' + j.de + '–' + j.ate : ' (dia inteiro)'}.` : `Não bloqueou: ${j.error || r.status}`;
+    if (r.ok) e.target.reset();
+    await carregarAgenda();
+  });
+
   function render(s) {
     $('#live').dataset.s = 'ok'; $('#live-t').textContent = 'ao vivo';
     pulso(s); origem(s); produto(s); pedidos(s); links();
@@ -88,6 +128,7 @@
       if (r.status === 401) return gate(true);
       S.snap = await r.json();
       if (!S.links || fresco) { const l = await fetch('/api/chauffeur/links', { headers: headers() }); if (l.ok) S.links = await l.json(); }
+      if (!S.agenda || fresco) carregarAgenda();
       gate(false); render(S.snap);
     } catch (e) { $('#live').dataset.s = 'erro'; $('#live-t').textContent = 'falha: ' + e.message; }
     finally { S.carregando = false; }

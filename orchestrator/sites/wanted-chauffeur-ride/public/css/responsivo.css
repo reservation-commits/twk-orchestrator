@@ -1,0 +1,38 @@
+/* Wanted Chauffeur · responsivo
+   Ajustes de celular e tablet. Carregado por último para valer sobre os outros. */
+/* celular e tablet */
+@media(max-width:560px){
+  .hero{padding-block:28px 40px}
+  .hero .promise{font-size:clamp(20px,6.5vw,28px)}
+  .lead{font-size:16px}
+  .hero-cta .btn{width:100%}
+  section{padding-block:40px}
+  h2{font-size:clamp(30px,9vw,44px)}
+  .strip .panel{padding:18px;min-height:0}
+  .mission{padding:18px}
+  .mission h3{font-size:26px}
+  .mission .bounty b{font-size:32px}
+  .mission .tag{right:10px;font-size:12px}
+  .panel{box-shadow:5px 5px 0 var(--ink)}
+  form{padding:18px;box-shadow:5px 5px 0 var(--ink)}
+  .seg button{padding:11px 0;font-size:17px}
+  .total{flex-direction:column;align-items:flex-start;gap:4px}
+  .btn-wa{width:100%}
+  .preview{position:static}
+  .phone{transform:none}
+  .preview-actions .btn{flex:1 1 auto}
+  .hotel-cta .btn{width:100%}
+  .loot>div{padding:16px 14px;grid-template-columns:1fr;justify-items:center;text-align:center;gap:10px}
+  .loot b{margin-bottom:6px}
+  summary{font-size:18px}
+  footer .links{gap:8px 14px}
+}
+@media(max-width:380px){
+  .seg{grid-template-columns:repeat(3,1fr)}
+  .btn{font-size:17px}
+}
+@media(min-width:561px) and (max-width:919px){
+  .preview{position:static}
+}
+/* pousos de âncora sob o cabeçalho fixo */
+section,.hero{scroll-margin-top:84px}

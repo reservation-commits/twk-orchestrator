@@ -1,0 +1,58 @@
+/* Wanted Chauffeur · base
+   Cores, fontes, reset, títulos, botões e o quadro de HQ (.panel). Todas as cores estão em :root. */
+/* Layout : une BD. Panneaux à bords noirs épais, légèrement penchés, dégradé Vice City (rose → orange → violet), trame de points, étoiles « wanted ». Une colonne, mission par mission, formulaire = lancer la mission. */
+:root{
+  --bg:#0b0618; --bg-2:#140a2a; --panel:#1b0f36; --ink:#07030f; --line:#2b1a52;
+  --fg:#fff6fb; --muted:#d3bfe6; --dim:#8f78b4;
+  --pink:#ff2e97; --orange:#ff7a2f; --violet:#8d3bff; --aqua:#3fe3e0; --sun:#ffd15c;
+  --ok:#3fe3a0; --warn:#ffd15c;
+  --grad:linear-gradient(90deg,var(--pink),var(--orange));
+  --grad-v:linear-gradient(180deg,var(--pink),var(--orange));
+  --wordmark:"Bowlby One SC","Arial Black",Impact,sans-serif;
+  --display:"Anton",Impact,"Arial Narrow Bold",sans-serif;
+  --cond:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{overflow-x:hidden}
+main,header,footer{overflow-x:clip}
+img{max-width:100%;height:auto}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:
+    radial-gradient(900px 500px at 85% -10%,rgba(255,46,151,.22),transparent 60%),
+    radial-gradient(700px 500px at -10% 40%,rgba(141,59,255,.20),transparent 60%),
+    var(--bg);}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+a{color:var(--aqua)}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(34px,5.4vw,58px);line-height:.95}
+h2 .hi{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{font-family:var(--cond);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.03em}
+p{margin:0}
+.wrap{max-width:1080px;margin:0 auto}
+.eyebrow{font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--aqua)}
+.eyebrow.pink{color:var(--pink)} .eyebrow.sun{color:var(--sun)}
+.stars{font-size:14px;letter-spacing:.12em;color:var(--sun);text-shadow:0 0 10px rgba(255,209,92,.6)}
+
+
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;font-family:var(--cond);font-weight:700;font-size:19px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .08s ease,box-shadow .08s ease;transform:skewX(-6deg)}
+.btn>*{transform:skewX(6deg)}
+.btn:active{transform:skewX(-6deg) translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn-pink{background:var(--grad);color:#fff}
+.btn-ghost{background:var(--panel);color:var(--fg)}
+.btn-wa{background:#25d366;color:#06301a}
+.btn-sm{padding:9px 16px;font-size:16px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+
+/* comic panel */
+.panel{position:relative;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:var(--panel);overflow:hidden}
+.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1.2px);background-size:6px 6px;mix-blend-mode:overlay}
+.art{display:block;width:100%;height:100%;object-fit:cover;max-width:100%}
+.cap{position:absolute;left:0;bottom:0;margin:12px;padding:8px 12px;max-width:calc(100% - 24px);line-height:1.2;background:var(--sun);color:var(--ink);font-family:var(--cond);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg)}
+.cap.top{bottom:auto;top:0}
+.cap.pink{background:var(--pink);color:#fff}
+.cap.aqua{background:var(--aqua)}
