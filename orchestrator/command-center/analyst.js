@@ -13,6 +13,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const metrics = require('./metrics.js');
 const sentinels = require('./sentinels.js');
+const zelador = require('./zelador-acoes.js'); // ADR-021: tema parecido já aberto → atualiza em vez de duplicar
 
 let Anthropic = null;
 try { Anthropic = require('@anthropic-ai/sdk'); } catch { /* deps ausentes: analista off */ }
@@ -140,11 +141,17 @@ async function run(stateDir) {
     }
     const text = response.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n');
     const acoes = parseActions(text);
+    // ADR-021: um tema, uma ação. Se já existe ação aberta parecida do mesmo agente, o achado de hoje ATUALIZA essa ação
+    // (ocorrências +1, detalhe novo) em vez de abrir outra com título ligeiramente diferente.
+    const abertas = sentinels.readActions(stateDir).filter((x) => x.origem === 'analista');
+    let reaproveitadas = 0;
     for (const a of acoes) {
+      const parecida = zelador.temaParecido(a.titulo, a.agente, abertas);
+      if (parecida) reaproveitadas++;
       sentinels.upsert(stateDir, {
         origem: 'analista',
         agente: a.agente,
-        regra: 'analista:' + slug(a.titulo),
+        regra: parecida ? parecida.acao.regra : 'analista:' + slug(a.titulo),
         severidade: a.severidade,
         titulo: a.titulo,
         detalhe: a.diagnostico,
@@ -159,7 +166,7 @@ async function run(stateDir) {
       });
     }
     fs.appendFileSync(runsFile(stateDir), JSON.stringify({
-      at: new Date().toISOString(), model: response.model, status: 'concluido', geradas: acoes.length,
+      at: new Date().toISOString(), model: response.model, status: 'concluido', geradas: acoes.length, reaproveitadas,
       tokens: { input: response.usage.input_tokens, output: response.usage.output_tokens },
     }) + '\n', 'utf8');
     return { ok: true, geradas: acoes.length };

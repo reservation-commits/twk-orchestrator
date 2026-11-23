@@ -28,7 +28,7 @@ const estudioMod = require('./estudio.js'); // Estúdio Viral: o pacote de conte
 
 // Carimbo de build: aparece em /health e no rodapé do painel.
 // Serve para responder, em 1 segundo, "a versão que subi é a que está no ar?".
-const BUILD = '4.13.0-ride-site-agenda-20261122';
+const BUILD = '4.14.0-zelador-acoes-20261123';
 
 const PORT = Number(process.env.PORT || 8787);
 const STATE_DIR = path.resolve(process.env.STATE_DIR || path.join(__dirname, 'state'));
@@ -503,6 +503,21 @@ const server = http.createServer(async (req, res) => {
     if (chauffeur.tratar(req, res, u, json)) return;
     if (estudio.tratar(req, res, u, json)) return;
     if (u.pathname === '/api/rotinas' && req.method === 'GET') return json(res, 200, { saude: rotinas.saude(), ultima: rotinas.estado() });
+    // 23/11: o log de uma rotina sem entrar no container. ?job=retencao&dia=20261123&linhas=120 (dia padrão: hoje).
+    if (u.pathname === '/api/rotinas/log' && req.method === 'GET') {
+      const job = String(u.searchParams.get('job') || ''); const dia = String(u.searchParams.get('dia') || new Date().toISOString().slice(0, 10).replace(/-/g, ''));
+      const linhas = Math.max(10, Math.min(2000, Number(u.searchParams.get('linhas')) || 200));
+      if (!/^[a-z0-9-]{2,40}$/.test(job) || !/^\d{8}$/.test(dia)) return json(res, 400, { error: 'job ([a-z0-9-]) e dia (AAAAMMDD)' });
+      const file = path.join(STATE_DIR, 'logs', 'tarefas', `${job}-${dia}.log`);
+      let texto; try { texto = fs.readFileSync(file, 'utf8'); } catch { return json(res, 404, { error: `sem log de ${job} em ${dia}`, arquivo: path.relative(STATE_DIR, file) }); }
+      const todas = texto.split(/\r?\n/); const cauda = todas.slice(-linhas);
+      return json(res, 200, { job, dia, linhas_total: todas.length, linhas: cauda.length, texto: cauda.join('\n') });
+    }
+    // ADR-021: Zelador de Ações — GET = ensaio (o que fecharia), POST = aplica agora (o mesmo que roda todo dia depois das rotinas).
+    if (u.pathname === '/api/zelador/acoes' && (req.method === 'GET' || req.method === 'POST')) {
+      try { return json(res, 200, require('./zelador-acoes.js').aplicar(STATE_DIR, { ensaio: req.method === 'GET' })); }
+      catch (e) { return json(res, 500, { error: 'zelador: ' + String(e && e.message || e).slice(0, 200) }); }
+    }
     if (u.pathname === '/api/rotinas/run' && req.method === 'POST') {
       const so = u.searchParams.get('so') || null;
       rotinas.executar({ so }).then((e) => json(res, e && e.erro ? 409 : 200, e)).catch((e) => json(res, 500, { error: String(e && e.message || e) }));

@@ -149,7 +149,11 @@ async function executar(opts = {}) {
       }
     }
     const guardiaoExportado = exportarGuardiao();
-    const estado = { dia: hojeIso(), rodou_em: new Date(t0).toISOString(), duracao_s: Math.round((Date.now() - t0) / 1000), ok: resultados.every((r) => r.ok), jobs: resultados, guardiao_exportado: guardiaoExportado };
+    // ADR-021: depois dos jobs, o Zelador de Ações fecha o que já não faz sentido continuar aberto (cartões vencidos,
+    // ações repetidas ou estagnadas). Nunca aprova nada. Falha dele não derruba a rodada: vira linha no estado.
+    let zeladorAcoes = null;
+    if (!opts.so) { try { zeladorAcoes = require('./zelador-acoes.js').aplicar(STATE_DIR); console.log(`[rotinas] zelador de ações: ${zeladorAcoes.aprovacoes_negadas} aprovação(ões) negada(s), ${zeladorAcoes.acoes_descartadas} ação(ões) descartada(s)`); } catch (e) { zeladorAcoes = { erro: String(e && e.message || e).slice(0, 200) }; console.error('[rotinas] zelador de ações falhou:', zeladorAcoes.erro); } }
+    const estado = { dia: hojeIso(), rodou_em: new Date(t0).toISOString(), duracao_s: Math.round((Date.now() - t0) / 1000), ok: resultados.every((r) => r.ok), jobs: resultados, guardiao_exportado: guardiaoExportado, zelador_acoes: zeladorAcoes };
     fs.mkdirSync(STATE_DIR, { recursive: true });
     fs.writeFileSync(path.join(STATE_DIR, 'rotinas.json'), JSON.stringify(estado, null, 1), 'utf8');
     return estado;
@@ -171,6 +175,7 @@ function saude() {
     ligado: true, hora_paris: HORA, ultima: e.dia, ok: e.ok,
     jobs: e.jobs.map((j) => `${j.job}:${j.ok ? 'ok' : 'FALHOU'}${j.modo ? ':' + j.modo : ''}`),
     guardiao_exportado: e.guardiao_exportado,
+    zelador_acoes: (() => { try { const z = require('./zelador-acoes.js').ultimo(STATE_DIR); return z ? { em: z.em, aprovacoes_negadas: z.aprovacoes_negadas, acoes_descartadas: z.acoes_descartadas } : null; } catch { return null; } })(),
     vigia_instagram: process.env.IG_ACCESS_TOKEN ? { a_cada_min: VIGIA_MIN, aviso_ligado: !!process.env.ARIA_TEAM_ALERT_SECRET, ultima: estadoVigia() } : null,
     vigia_reservas: process.env.CHAUFFEUR_VIGIA === 'off' ? null : { a_cada_min: 5, pendente_min: Number(process.env.CHAUFFEUR_PENDENTE_MIN || 30), aviso_ligado: !!process.env.ARIA_TEAM_ALERT_SECRET, ultima: estadoVigiaReservas.ultima, falhas_seguidas: estadoVigiaReservas.falhas_seguidas },
     agenda_julien: process.env.CHAUFFEUR_AGENDA === 'on' ? { hora_paris: AGENDA_HORA, fonte: process.env.CHAUFFEUR_AGENDA_FONTE === 'planilha' ? 'planilha' : 'reservas', enviada_hoje: agendaEnviadaHoje() } : null,

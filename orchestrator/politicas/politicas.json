@@ -1,6 +1,6 @@
 {
   "_doc": "Tabela de escalonamento do CLAUDE.md como código (08/10/2026). Cada política cobre UMA classe de ação. status=ativa é o que já foi aprovado em ADR; status=proposta é o que o fundador ainda não aprovou — o motor NUNCA aplica uma proposta: devolve requer_aprovacao_humana e nomeia a proposta que cobriria. As classes em CLASSES_SEMPRE_HUMANO (em avaliar.js) não aceitam política nenhuma. condicoes: atributo ausente = condição não atendida (falhar alto). orcamento_mensal = execuções por mês civil (Europe/Paris) acima das quais a decisão cai para requer_aprovacao_orquestrador.",
-  "versao": "2026-10-28",
+  "versao": "2026-11-23",
   "politicas": [
     {
       "id": "POL-001",
@@ -262,6 +262,21 @@
       },
       "desfazer": "não há (e-mail enviado); cooldown de 24 h impede repetição; ledger em guardiao-reserva/state/eventos.jsonl",
       "orcamento_mensal": 1000
+    },
+    {
+      "id": "POL-010",
+      "classe": "triagem_central",
+      "status": "ativa",
+      "fundamento": "ADR-021 (2026-11-23) — pedido do fundador no chat de 23/11: \"quero um sistema de solução de problemas autônomo\"",
+      "decisao": "autonomo_com_log",
+      "condicoes": {
+        "nunca_aprova": true,
+        "motivo_gravado": true,
+        "aprovacao_guardiao_com_mesa_passada_ou_lote_mais_de_48h": true,
+        "acao_do_analista_repetida_ou_estagnada": true
+      },
+      "desfazer": "reabrir à mão na Central (status aberta/pendente) ou deixar a vigia/analista reabrir; audit evento zelador_acoes",
+      "orcamento_mensal": 2000
     }
   ]
 }

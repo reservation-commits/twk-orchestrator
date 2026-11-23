@@ -182,9 +182,12 @@ async function enviarCarta(k, caso, carta) {
       }
     } catch (e) {
       falhas++;
-      console.error(`    FALHA em ${rotulo}: ${e.message}`);
+      // stdout, não stderr: é a última linha que a Central mostra em /api/rotinas sem abrir o log (23/11)
+      console.log(`    FALHA em ${rotulo}: ${e.message.slice(0, 400)}`);
       ledger({ rid: k.rid, acao: 'falha', erro: e.message.slice(0, 300) });
       audit({ evento: 'retencao_falha', rid: k.rid, erro: e.message.slice(0, 300) });
+      // o caso guarda o último erro e quantas vezes falhou seguido: o painel e o Zelador enxergam sem o log do container
+      try { Object.assign(caso, { ultimo_erro: e.message.slice(0, 300), ultimo_erro_em: new Date().toISOString(), falhas_seguidas: (caso.falhas_seguidas || 0) + 1 }); gravarCaso(caso); } catch { /* registro */ }
     }
   }
   if (!apply) console.log('\nDRY-RUN — nada enviado, nada alterado. Previews em', path.relative(RAIZ, PREV));
