@@ -33,7 +33,7 @@ Ferramentas (não conteúdo: roteiros, legendas e ideias são do Julien). Escrit
 Pedido de hotel (origem H) ainda não recebe cópia: o formulário não pede o contato do hotel.
 
 **Letras de origem:** T TikTok · I Instagram · Y YouTube · W Twitch · H hotel · S site · R direto (sem link).
-Link na bio de cada rede: `https://theworldkeys.com/ride?o=T` (I, Y, W); cartão e QR dos hotéis: `?o=H`; botões do site: `?o=S`.
+Link na bio de cada rede: `https://ride.theworldkeys.com/?o=T` (I, Y, W); cartão e QR dos hotéis: `?o=H`; botões do site: `?o=S`.
 
 ## 2. Planilha de clientes (card T-20261116-0013) — agora exportação, não fonte
 

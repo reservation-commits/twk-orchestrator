@@ -3,7 +3,7 @@
 /**
  * Servidor de desenvolvimento do site /ride. Sem dependências (Node 18+).
  *
- *   node servidor-dev.cjs                      → http://localhost:8792/ride/ com a API SIMULADA (nada sai, nada grava de verdade)
+ *   node servidor-dev.cjs                      → http://localhost:8792/ (ou /ride/) com a API SIMULADA (nada sai, nada grava de verdade)
  *   CENTRAL_URL=https://<central> node servidor-dev.cjs   → a página fala com a Central de verdade (/api/chauffeur/* repassado)
  *   PORT=9000 node servidor-dev.cjs            → outra porta
  *
@@ -69,9 +69,9 @@ function repassar(req, res, u) {
 http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');
   if (u.pathname.startsWith('/api/chauffeur/')) return CENTRAL ? repassar(req, res, u) : apiSimulada(req, res, u);
-  if (u.pathname === '/' ) { res.writeHead(302, { location: '/ride/' + u.search }); return res.end(); }
-  if (u.pathname !== '/ride' && !u.pathname.startsWith('/ride/')) { res.writeHead(404); return res.end('a página mora em /ride/'); }
-  const rel = decodeURIComponent(u.pathname.replace(/^\/ride\/?/, '')) || 'index.html';
+  // Como em produção (raiz de ride.theworldkeys.com) e também em /ride/ (como a Central serve); /ride sem barra redireciona.
+  if (u.pathname === '/ride') { res.writeHead(301, { location: '/ride/' + u.search }); return res.end(); }
+  const rel = decodeURIComponent(u.pathname.replace(/^\/ride\//, '/').replace(/^\//, '')) || 'index.html';
   const file = path.resolve(PUB, rel);
   if (!file.startsWith(PUB + path.sep)) { res.writeHead(403); return res.end(); }
   fs.readFile(file, (err, data) => {
@@ -79,4 +79,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'content-type': MIME[path.extname(file)] || 'application/octet-stream', 'cache-control': 'no-cache' });
     res.end(data);
   });
-}).listen(PORT, () => console.log(`[ride] http://localhost:${PORT}/ride/  ·  API: ${CENTRAL ? 'Central em ' + CENTRAL : 'SIMULADA (nada sai, nada grava)'}`));
+}).listen(PORT, () => console.log(`[ride] http://localhost:${PORT}/  (também /ride/)  ·  API: ${CENTRAL ? 'Central em ' + CENTRAL : 'SIMULADA (nada sai, nada grava)'}`));

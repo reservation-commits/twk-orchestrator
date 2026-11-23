@@ -129,7 +129,7 @@ test('links por rede: um por letra, com a página da marca', async () => {
   const l = await get('/api/chauffeur/links', k);
   assert.equal(l.status, 200);
   assert.deepEqual(l.j.links.map((x) => x.origem), ['T', 'I', 'Y', 'W', 'H', 'S']);
-  assert.equal(l.j.links[0].url, 'https://theworldkeys.com/ride?o=T');
+  assert.equal(l.j.links[0].url, 'https://ride.theworldkeys.com/?o=T');
 });
 
 test('Fase 2: o aviso ao Julien leva o link de confirmar; a página /c abre com o token certo, confirma, muda o status e tenta a confirmação ao cliente', async () => {

@@ -2,10 +2,11 @@
    É o único arquivo que precisa mudar ao hospedar em outro lugar. */
 export const CONFIG = {
   /* Endereço da Central (API de reservas e de agenda), sem barra no fim.
-     Vazio = o mesmo domínio da página: vale quando a Central serve /ride, ou quando o site principal faz
-     rewrite de /api/chauffeur/* para a Central. Exemplo hospedando à parte: 'https://central.theworldkeys.com'.
-     Nesse caso, o domínio da página precisa estar em CHAUFFEUR_ORIGINS na Central. */
-  api: '',
+     O site vive em ride.theworldkeys.com e a API na Central, então o endereço é absoluto (a Central aceita a origem
+     ride.theworldkeys.com por padrão; outro domínio precisa entrar em CHAUFFEUR_ORIGINS lá).
+     Vazio = mesmo domínio da página (só se o host do site repassar /api/chauffeur/* para a Central). */
+  api: /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://theworldkeys-maestro.xis4ee.easypanel.host',
+  /* ↑ no computador (npm run dev) fica vazio: o servidor-dev responde a API simulada ou repassa à Central (CENTRAL_URL). */
 
   /* WhatsApp que recebe a mensagem pronta: só dígitos, com o código do país. */
   whatsapp: '33781937270',

@@ -33,11 +33,11 @@ const cliente = require(path.join(AGENTS_DIR, 'wanted-chauffeur', 'cliente.js'))
 
 const { ORIGENS, PRODUTOS, PRODUTO_NOME, STATUS, RE_CODIGO } = reservasMod;
 const RESULTADOS = STATUS.filter((s) => s !== 'pedido');
-const PAGINA = 'https://theworldkeys.com/ride';
+const PAGINA = 'https://ride.theworldkeys.com/'; // 23/11: subdomínio hospedado pelo dev junto da plataforma
 
 function criar({ stateDir, env = process.env, agora = () => Date.now(), fetchImpl = globalThis.fetch, log = console.log, sentinels = null }) {
   const dir = path.join(stateDir, 'agents', 'wanted-chauffeur');
-  const origensPermitidas = String(env.CHAUFFEUR_ORIGINS || 'https://theworldkeys.com,https://www.theworldkeys.com')
+  const origensPermitidas = String(env.CHAUFFEUR_ORIGINS || 'https://ride.theworldkeys.com,https://theworldkeys.com,https://www.theworldkeys.com')
     .split(',').map((s) => s.trim()).filter(Boolean);
   const TETO_POR_IP = Number(env.CHAUFFEUR_TETO_HORA || 30);
   const porIp = new Map(); // ip → [timestamps da última hora]

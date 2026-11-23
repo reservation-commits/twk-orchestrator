@@ -35,9 +35,9 @@ wanted-chauffeur-ride/
         └── favicon.svg
 ```
 
-**A página mora no caminho `/ride/`.** Todos os arquivos são citados como `/ride/css/…`, `/ride/js/…`, `/ride/img/…`.
-Assim ela funciona tanto em `theworldkeys.com/ride` quanto em `theworldkeys.com/ride/`. Para mudar o prefixo, troque
-`/ride/` em todo o `index.html` e no `servidor-dev.cjs` (os módulos em `js/` se importam por caminho relativo e não mudam).
+**Caminhos relativos.** Os arquivos são citados como `css/…`, `js/…`, `img/…`, então a página funciona na raiz de
+`ride.theworldkeys.com` (produção) e também em `/ride/` na Central (prévia). A URL precisa terminar em `/` ou ser um arquivo:
+`…/ride` sem barra redireciona para `…/ride/`.
 
 ## Rodar no computador
 
@@ -46,7 +46,7 @@ cd orchestrator/sites/wanted-chauffeur-ride
 npm run dev
 ```
 
-Abre em `http://localhost:8792/ride/` com a **API simulada**: uma corrida confirmada depois de amanhã às 9:00 PM, um dia de
+Abre em `http://localhost:8792/` (também em `/ride/`) com a **API simulada**: uma corrida confirmada depois de amanhã às 9:00 PM, um dia de
 folga daqui a 4 dias, antecedência de 2 h. Nada sai, a reserva fica só na memória e aparece no terminal.
 
 Para falar com a Central de verdade (as reservas ficam gravadas e o Julien é avisado; use com cuidado):
@@ -55,29 +55,28 @@ Para falar com a Central de verdade (as reservas ficam gravadas e o Julien é av
 CENTRAL_URL=https://<endereço da Central> npm run dev
 ```
 
-## Hospedar: três formas
+## Hospedar: `ride.theworldkeys.com` (decisão do fundador, 23/11/2026)
 
-| Forma | O que fazer | Quando usar |
-|---|---|---|
-| **1. A Central serve (já pronto)** | Deploy da Central (build 4.13.0 ou depois). A página fica em `https://<central>/ride`. No site principal (Next.js), três rewrites para a Central: `/ride`, `/ride/:path*` e `/api/chauffeur/:path*` | Recomendada: uma cópia só, deploy junto com a API |
-| **2. Dentro do Next.js** | Copiar `public/` para `public/ride/` do projeto Next. Rewrite `/ride` → `/ride/index.html` e `/api/chauffeur/:path*` → Central | Se o dev preferir o site todo no mesmo deploy |
-| **3. Hospedagem estática à parte** | Publicar `public/` em qualquer host estático, mantendo o caminho `/ride/`. Em `js/config.js`, `api: 'https://<central>'`. Na Central, o domínio da página em `CHAUFFEUR_ORIGINS` | Subdomínio próprio, CDN, testes |
+O site vai junto da plataforma principal, no subdomínio `ride.theworldkeys.com`, hospedado pelo dev. A API continua na Central.
 
-Rewrites da forma 1 no `next.config.js`:
+1. **DNS:** `ride.theworldkeys.com` apontando para onde a plataforma é hospedada (CNAME ou A, conforme o provedor), com HTTPS.
+2. **Publicar a pasta `public/`** na raiz desse subdomínio, tal como está (sem build). `https://ride.theworldkeys.com/` abre o
+   `index.html`; `css/`, `js/` e `img/` ficam ao lado. Num projeto Next.js, basta colocar o conteúdo de `public/` em `public/`
+   do app que atende esse host; em Nginx, Vercel, Netlify ou S3, é uma pasta estática.
+3. **`js/config.js`:** `api` já aponta para a Central (`https://theworldkeys-maestro.xis4ee.easypanel.host`). Se a Central ganhar
+   outro endereço, é só aqui que muda. No computador (`localhost`) o valor fica vazio e o `servidor-dev.cjs` responde.
+4. **Na Central** nada a configurar: `ride.theworldkeys.com` já é origem permitida por padrão (`CHAUFFEUR_ORIGINS`) e os
+   links por rede já saem como `https://ride.theworldkeys.com/?o=T`. O link de confirmar do Julien (`/c/WTD-…`) aponta
+   direto para a Central.
+5. **Conferir:** abrir `https://ride.theworldkeys.com/?o=T`; a faixa de dias aparece (prova de que a API respondeu) e um pedido
+   de teste chega ao painel `/chauffeur` da Central.
 
-```js
-async rewrites() {
-  const CENTRAL = process.env.CENTRAL_URL; // https://<endereço da Central>
-  return [
-    { source: '/ride', destination: `${CENTRAL}/ride` },
-    { source: '/ride/:path*', destination: `${CENTRAL}/ride/:path*` },
-    { source: '/api/chauffeur/:path*', destination: `${CENTRAL}/api/chauffeur/:path*` },
-  ];
-}
-```
+A Central continua servindo a mesma pasta em `https://<central>/ride/`, como prévia e reserva: se o subdomínio cair, a página
+segue acessível por lá.
 
-Nas formas 1 e 2 `config.js` fica com `api: ''` (mesmo domínio). O link de confirmação do Julien (`/c/WTD-…`) aponta
-direto para a Central e não precisa de rewrite.
+Alternativas que o código também aceita, se o dev preferir: servir pelo próprio site principal em `theworldkeys.com/ride/`
+(rewrites `/ride/:path*` e `/api/chauffeur/:path*` para a Central, `api: ''` no `config.js`) ou qualquer outro domínio
+(colocar o domínio em `CHAUFFEUR_ORIGINS` na Central e `CHAUFFEUR_PAGINA` com a URL da página, para os links do painel).
 
 ## O que configurar
 

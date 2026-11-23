@@ -716,7 +716,8 @@ const server = http.createServer(async (req, res) => {
   // Studio do Wanted Chauffeur: o painel do pacote de conteúdo do dia (a página do Julien é /studio/<dia>?t=, tratada acima).
   if (u.pathname === '/estudio' || u.pathname === '/estudio/') { req.url = '/estudio/index.html'; }
   // Wanted Chauffeur: a página pública de reserva (theworldkeys.com/ride faz rewrite para cá, ou ride.theworldkeys.com aponta direto).
-  if (u.pathname === '/ride' || u.pathname.startsWith('/ride/')) return serveSiteRide(u, res);
+  if (u.pathname === '/ride') { res.writeHead(301, { location: '/ride/' + u.search }); return res.end(); } // os caminhos do site são relativos
+  if (u.pathname.startsWith('/ride/')) return serveSiteRide(u, res);
   serveStatic(req, res);
 });
 

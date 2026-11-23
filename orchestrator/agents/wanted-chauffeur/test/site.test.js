@@ -10,9 +10,11 @@ const { PRECO_CENT } = require('../reservas.js');
 const SITE = path.join(__dirname, '..', '..', '..', 'sites', 'wanted-chauffeur-ride', 'public');
 const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8');
 
-test('index.html: todo /ride/… citado existe na pasta; sem script embutido (CSP script-src self); formulário sem dados de exemplo', () => {
-  const refs = [...html.matchAll(/(?:href|src)="\/ride\/([^"]+)"/g)].map((m) => m[1]);
-  assert.ok(refs.length >= 8, 'esperava css, js e imagens com o prefixo /ride/');
+test('index.html: todo arquivo local citado existe, por caminho relativo (raiz de ride.theworldkeys.com ou /ride/ na Central); sem script embutido; sem dados de exemplo', () => {
+  const refs = [...html.matchAll(/(?:href|src)="((?:css|js|img)\/[^"]+)"/g)].map((m) => m[1]);
+  assert.ok(refs.length >= 8, 'esperava css, js e imagens por caminho relativo');
+  assert.ok(!/(?:href|src)="\/(?:ride|css|js|img)\//.test(html), 'caminho absoluto quebra na raiz do subdomínio ou em /ride/');
+  assert.ok(html.includes('href="https://ride.theworldkeys.com/"'), 'canonical no subdomínio');
   for (const r of refs) assert.ok(fs.existsSync(path.join(SITE, r)), `falta public/${r}`);
   assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/.test(html), 'script embutido não roda com a CSP da Central');
   assert.ok(!/\sstyle="[^"]*"/.test(html), 'estilo fica nos arquivos css');
