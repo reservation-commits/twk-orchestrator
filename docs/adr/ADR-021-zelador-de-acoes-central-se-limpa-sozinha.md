@@ -23,7 +23,7 @@ cem repetições. A tese do ADR-019 vale aqui: escalar para humano não é segur
 |---|---|---|
 | A1 | aprovação pendente do Guardião "Degrau 4 — avisar cliente … (mesa em Nh)" cuja mesa já passou | negada, motivo com a data da mesa |
 | A2 | aprovação pendente "Degrau 1 — lote de e-mails" com mais de 48 h | negada: o degrau 1 roda sozinho desde o ADR-019; reenviar duplicaria cobrança |
-| B1 | ação do analista repetida (mesmo agente, mesmo tema, semelhança ≥ 0,45 entre títulos) | descartada; fica a mais recente, e a descartada aponta para ela |
+| B1 | ação do analista repetida (mesmo agente, mesmo tema: Jaccard ≥ 0,45 nos termos do título, ou ≥ 2 termos em comum com Jaccard ≥ 0,12) | descartada; fica a mais recente, e a descartada aponta para ela |
 | B2 | ação do analista sem atualização há 21 dias | descartada; se o problema persistir, o analista reabre com dados novos |
 
 O Zelador **nunca aprova**: aprovar vira envio ou handoff, e isso continua sendo decisão de gente. Ações de vigia (`origem: vigia`) não

@@ -43,7 +43,7 @@ test('ações do analista: mesmo tema no mesmo agente → fica a mais recente; t
   const { decisoes } = Z.planejar({ acoes, aprovacoes: [], agora: AGORA });
   const por = Object.fromEntries(decisoes.map((x) => [x.id, x]));
   assert.equal(por['AC-QUILL-1'].regra, 'B1'); assert.equal(por['AC-QUILL-1'].mantida, 'AC-QUILL-3');
-  assert.ok(['B1', 'B2'].includes(por['AC-QUILL-2'].regra), 'título muito diferente: cai como repetição ou como estagnada, nunca fica'); // régua estrita de propósito: tema vizinho não é o mesmo tema
+  assert.equal(por['AC-QUILL-2'].regra, 'B1', 'Quill + 502 em comum: mesmo tema'); assert.equal(por['AC-QUILL-2'].mantida, 'AC-QUILL-3');
   assert.equal(por['AC-LAT-1'].regra, 'B1'); assert.equal(por['AC-LAT-1'].mantida, 'AC-LAT-2');
   assert.equal(por['AC-CSAT'].regra, 'B2', 'estagnada há 30 dias, sem par');
   assert.equal(por['AC-QUILL-3'], undefined); assert.equal(por['AC-LAT-2'], undefined); assert.equal(por['AC-NOVA'], undefined);
@@ -84,7 +84,10 @@ test('temaParecido: o analista reaproveita a ação aberta do mesmo tema e agent
     acao({ id: 'AC-2', agente: 'financeiro', regra: 'analista:healthscore', titulo: 'Recalibrar healthScore: 90 pontos com 30 dias de receita zero mascara a realidade' }),
   ];
   const p = Z.temaParecido('Restaurar o serviço do Quill: /api/kpis em 502 nos 7 snapshots consecutivos', 'editorial', abertas);
-  assert.ok(p && p.acao.id === 'AC-1' && p.semelhanca >= 0.45, JSON.stringify(p));
+  assert.ok(p && p.acao.id === 'AC-1', JSON.stringify(p));
+  assert.ok(Z.parecidos('Consertar medição de latência da Aria: latenciaFerramentaMs=0 em 4 de 5 dias', 'Corrigir telemetria de latência da Aria que reporta 0ms'), 'latência + Aria');
+  assert.ok(!Z.parecidos('Corrigir fuso da agregação diária do Atlas: o diário inclui dia futuro', 'Reconciliar as 5 reservas pagas do funil com o Atlas, que registra zero cobranças'), 'só Atlas em comum não basta');
+  assert.ok(!Z.parecidos('Investigar colapso de mensagens da Aria: de 21/dia para média de 4/dia', 'Corrigir telemetria de latência da Aria que reporta 0ms'), 'dois problemas diferentes da Aria');
   assert.equal(Z.temaParecido('Restaurar o serviço do Quill: /api/kpis em 502', 'operacao', abertas), null, 'outro agente');
   assert.equal(Z.temaParecido('Conectar leitura de saldo Stripe: saldoDisponivel nulo', 'financeiro', abertas), null, 'outro tema');
   assert.ok(Z.semelhanca('Corrigir fuso da agregação diária do Atlas', 'Corrigir fuso da agregação diária do Atlas: o diário inclui dia futuro') >= 0.45);

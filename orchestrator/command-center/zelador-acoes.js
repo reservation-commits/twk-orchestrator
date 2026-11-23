@@ -26,27 +26,35 @@ const ESTAGNADA_DIAS = Number(process.env.ZELADOR_ESTAGNADA_DIAS || 21);
 const LOTE_HORAS = 48;
 
 // ---------------------------------------------------------------- semelhança de tema
-const PARADAS = new Set(['para', 'com', 'sem', 'dos', 'das', 'por', 'uma', 'que', 'nos', 'nas', 'não', 'nao', 'mais', 'antes', 'depois', 'entre', 'todos', 'todas', 'ainda', 'seguidos', 'consecutivos', 'dias', 'dia', 'hoje', 'the', 'and', 'ate', 'até', 'desde', 'apenas', 'cada', 'qualquer', 'este', 'esta', 'esse', 'essa', 'está', 'esta', 'são', 'sao', 'ser', 'ter', 'foi', 'sem', 'via', 'num', 'numa']);
-/** Palavras-chave do título: minúsculas, sem acento, sem números soltos e sem palavras vazias. */
+const PARADAS = new Set(['para', 'com', 'sem', 'dos', 'das', 'por', 'uma', 'que', 'nos', 'nas', 'não', 'nao', 'mais', 'antes', 'depois', 'entre', 'todos', 'todas', 'ainda', 'seguidos', 'consecutivos', 'dias', 'dia', 'hoje', 'the', 'and', 'ate', 'até', 'desde', 'apenas', 'cada', 'qualquer', 'este', 'esta', 'esse', 'essa', 'está', 'são', 'sao', 'ser', 'ter', 'foi', 'via', 'num', 'numa', 'como', 'onde', 'quando', 'sobre', 'logo', 'muito', 'pouco', 'novo', 'nova', 'zero', 'todo', 'toda', 'mesmo', 'mesma', 'ficou', 'fica', 'está', 'tem', 'não', 'sem']);
+/** Palavras-chave do título: minúsculas, sem acento, sem palavras vazias. Números e códigos ("502", "0ms", "20485") contam: são o que identifica o tema. */
 function termos(titulo) {
   return new Set(String(titulo || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9_]+/g, ' ').split(' ').filter((w) => w.length >= 4 && !PARADAS.has(w) && !/^\d+$/.test(w)));
+    .replace(/[^a-z0-9_]+/g, ' ').split(' ').filter((w) => !PARADAS.has(w) && (w.length >= 4 || (w.length >= 3 && /\d/.test(w)))));
 }
+/** Quantos termos os dois títulos têm em comum. */
+function comuns(a, b) { const ta = termos(a), tb = termos(b); let n = 0; for (const w of ta) if (tb.has(w)) n++; return n; }
+/**
+ * Mesmo tema? Jaccard ≥ 0,45, ou pelo menos dois termos em comum com Jaccard ≥ 0,12 (títulos reescritos pelo modelo
+ * costumam trocar os verbos e manter o núcleo: "latência da Aria", "Quill 502"). Régua única do Zelador e do analista.
+ */
+function parecidos(a, b) { const j = semelhanca(a, b); return j >= 0.45 || (j >= 0.12 && comuns(a, b) >= 2); }
 /** Jaccard entre os termos de dois títulos (0..1). */
 function semelhanca(a, b) {
   const ta = termos(a), tb = termos(b); if (!ta.size || !tb.size) return 0;
   let inter = 0; for (const w of ta) if (tb.has(w)) inter++;
   return inter / (ta.size + tb.size - inter);
 }
-/** A ação aberta mais parecida (mesmo agente) com `titulo`, se a semelhança passar de `minimo`. */
-function temaParecido(titulo, agente, abertas, minimo = 0.45) {
-  let melhor = null, nota = 0;
+/** A ação aberta do mesmo tema e agente com maior semelhança, ou null. */
+function temaParecido(titulo, agente, abertas) {
+  let melhor = null, nota = -1;
   for (const a of abertas) {
     if (a.agente !== agente || (a.status !== 'aberta' && a.status !== 'adiada')) continue;
+    if (!parecidos(titulo, a.titulo)) continue;
     const s = semelhanca(titulo, a.titulo);
     if (s > nota) { nota = s; melhor = a; }
   }
-  return nota >= minimo ? { acao: melhor, semelhanca: Number(nota.toFixed(2)) } : null;
+  return melhor ? { acao: melhor, semelhanca: Number(nota.toFixed(2)) } : null;
 }
 
 // ---------------------------------------------------------------- o plano
@@ -88,7 +96,7 @@ function planejar({ acoes = [], aprovacoes = [], agora = Date.now() }) {
     const ord = [...lista].sort((p, q) => (String(p.atualizado_em) < String(q.atualizado_em) ? 1 : -1)); // mais recente primeiro
     const mantidas = [];
     for (const x of ord) {
-      const dona = mantidas.find((m) => semelhanca(x.titulo, m.titulo) >= 0.45);
+      const dona = mantidas.find((m) => parecidos(x.titulo, m.titulo));
       if (dona) {
         descartadas.add(x.id);
         decisoes.push({ regra: 'B1', alvo: 'acao', id: x.id, decisao: 'descartar', motivo: `Zelador: mesmo tema já aberto em ${dona.id} (${String(dona.atualizado_em).slice(0, 10)}); a leitura mais recente fica, esta é repetição (ADR-021).`, mantida: dona.id });
@@ -136,4 +144,4 @@ function aplicar(stateDir, { agora = Date.now(), ensaio = false } = {}) {
 }
 function ultimo(stateDir) { try { return JSON.parse(fs.readFileSync(estadoFile(stateDir), 'utf8')); } catch { return null; } }
 
-module.exports = { planejar, aplicar, ultimo, temaParecido, semelhanca, termos, ESTAGNADA_DIAS, LOTE_HORAS };
+module.exports = { planejar, aplicar, ultimo, temaParecido, parecidos, semelhanca, termos, ESTAGNADA_DIAS, LOTE_HORAS };
