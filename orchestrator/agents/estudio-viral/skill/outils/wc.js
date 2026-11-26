@@ -82,8 +82,17 @@ function travas(texto, contexte = 'legende') {
       saida.push({ id: r.id, niveau: r.niveau, message: `${r.message}${fora.length ? ` Fora da tabela aprovada: ${fora.join(', ')} €.` : ` Valores citados (${precos.join(', ')} €) batem com a tabela aprovada.`}`, extrait: precos.map((p) => `${p} €`).join(', ') });
       continue;
     }
-    const m = new RegExp(r.motif, 'i').exec(n);
-    if (m) saida.push({ id: r.id, niveau: r.niveau, message: r.message, extrait: m[0].trim() });
+    const re = new RegExp(r.motif, 'i');
+    // `par_phrase`: a regra roda frase por frase, para o motivo não atravessar um ponto; `sauf`: a frase que afirma a regra passa.
+    const frases = r.par_phrase ? n.split(/[.!?;:\n]+/) : [n];
+    const sauf = r.sauf ? new RegExp(r.sauf, 'i') : null;
+    for (const fr of frases) {
+      const m = re.exec(fr);
+      if (!m) continue;
+      if (sauf && sauf.test(fr)) continue;
+      saida.push({ id: r.id, niveau: r.niveau, message: r.message, extrait: m[0].trim() });
+      break;
+    }
   }
   const ordem = { bloquant: 0, alerte: 1, rappel: 2 };
   return saida.sort((a, b) => ordem[a.niveau] - ordem[b.niveau]);

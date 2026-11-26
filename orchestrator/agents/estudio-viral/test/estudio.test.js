@@ -59,6 +59,20 @@ test('resposta a comentário prometendo disponibilidade é barrada; story idem',
   assert.equal(podado.pacote.reponses_commentaires.length, lerFixture().reponses_commentaires.length);
 });
 
+test('carrossel do pacote passa pelas travas de tela: marca do jogo num slide tira o carrossel; slide que afirma a regra das LED fica', () => {
+  const p = lerFixture();
+  p.carrousel.slides.push("On n'allume les LED qu'à l'arrêt, porte ouverte. En roulant, c'est le ciel étoilé.");
+  const antes = pacoteMod.verificar(p, wc);
+  assert.ok(!antes.bloqueados.includes('carrousel'), 'frase que afirma a regra não barra');
+  p.carrousel.slides.push('Slide 7 · GTA 6 tourne à bord');
+  const v = pacoteMod.verificar(p, wc);
+  assert.ok(v.bloqueados.includes('carrousel'));
+  assert.ok(v.problemas.some((x) => x.reel === 'carrousel' && x.tipo === 'bloqueia' && /slide \d+ « Slide 7 · GTA 6/.test(x.detalhe)), 'o detalhe diz qual slide e por quê');
+  const podado = pacoteMod.podar(p, v);
+  assert.equal(podado.pacote.carrousel, null);
+  assert.ok(podado.removidos.includes('carrousel'));
+});
+
 test('render: markdown em francês com assinatura, planos e legenda; HTML sem script', () => {
   const p = lerFixture();
   const md = render.markdownFr(p, { medidas: {}, problemas: [] });

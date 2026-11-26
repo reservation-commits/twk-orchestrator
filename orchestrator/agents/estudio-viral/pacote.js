@@ -150,6 +150,11 @@ function verificar(pacote, wc) {
   for (const r of reels) { const v = verificarReel(r, wc); problemas.push(...v.problemas); medidas[r.id] = v.medidas; }
   for (const resp of pacote.reponses_commentaires || []) for (const g of wc.travas(resp.reponse || '', 'legende')) if (g.niveau === 'bloquant') problemas.push({ reel: 'reponses', tipo: 'bloqueia', detalhe: `resposta « ${(resp.reponse || '').slice(0, 60)} »: ${g.message}` });
   if (pacote.story && pacote.story.texte) for (const g of wc.travas(pacote.story.texte, 'legende')) if (g.niveau === 'bloquant') problemas.push({ reel: 'story', tipo: 'bloqueia', detalhe: `story: ${g.message}` });
+  // carrossel: cada slide é texto de imagem (contexto `ecran`, o mais estrito: a marca do jogo também é barrada aqui)
+  if (pacote.carrousel) {
+    const textos = [['titre', pacote.carrousel.titre], ...((Array.isArray(pacote.carrousel.slides) ? pacote.carrousel.slides : []).map((s, i) => [`slide ${i + 1}`, typeof s === 'string' ? s : `${(s && s.titre) || ''} ${(s && s.texte) || ''}`]))];
+    for (const [onde, t] of textos) if (t) for (const g of wc.travas(t, 'ecran')) { if (g.niveau === 'bloquant') problemas.push({ reel: 'carrousel', tipo: 'bloqueia', detalhe: `carrousel ${onde} « ${String(t).slice(0, 60)} »: ${g.message}` }); else if (g.niveau === 'alerte' && !/batem com a tabela/i.test(g.message)) problemas.push({ reel: 'carrousel', tipo: 'aviso', detalhe: `carrousel ${onde}: ${g.message}` }); }
+  }
   const bloqueados = [...new Set(problemas.filter((p) => p.tipo === 'bloqueia').map((p) => p.reel))];
   return { ok: bloqueados.length === 0, bloqueados, problemas, medidas };
 }
@@ -159,6 +164,7 @@ function podar(pacote, verificacao) {
   const fora = new Set(verificacao.bloqueados);
   const limpo = { ...pacote, reels: (pacote.reels || []).filter((r) => !fora.has(r.id)) };
   if (fora.has('story')) limpo.story = null;
+  if (fora.has('carrousel')) limpo.carrousel = null;
   if (fora.has('reponses')) limpo.reponses_commentaires = (pacote.reponses_commentaires || []).filter((r) => !verificacao.problemas.some((p) => p.reel === 'reponses' && p.detalhe.includes((r.reponse || '').slice(0, 60))));
   return { pacote: limpo, removidos: [...fora] };
 }

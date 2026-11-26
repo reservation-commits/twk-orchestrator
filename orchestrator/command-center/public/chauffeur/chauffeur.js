@@ -15,7 +15,7 @@
   function barras(obj, total) {
     const ent = Object.entries(obj).sort((a, b) => b[1] - a[1]);
     if (!ent.length) return '<p class="vazio">Nenhum pedido no período.</p>';
-    return `<div class="barras">${ent.map(([k, v]) => `<div class="barra ok"><span class="t" title="${esc(k)}">${esc(k)}</span><span class="b"><i style="width:${pct(v, total)}%"></i></span><span class="n">${n(v)} · ${pct(v, total)}%</span></div>`).join('')}</div>`;
+    return `<div class="barras">${ent.map(([k, v]) => `<div class="barra"><span class="t" title="${esc(k)}">${esc(k)}</span><span class="b"><i style="width:${pct(v, total)}%"></i></span><span class="n">${n(v)} · ${pct(v, total)}%</span></div>`).join('')}</div>`;
   }
   function serieDias(por_dia) {
     if (!por_dia.length) return '';
@@ -30,17 +30,17 @@
   function pulso(s) {
     $('#pulso-lede').textContent = `${n(s.total)} pedido(s) em ${s.dias} dias · ${n(s.total_historico)} desde o início · lido em ${quandoBr(s.gerado_em)} (hora de Paris)`;
     const r = s.por_resultado || {};
-    const cls = s.total === 0 ? 'bad' : s.taxa_conversao_pct >= 30 ? 'good' : 'warn';
+    const cls = s.total === 0 ? 'ruim' : s.taxa_conversao_pct >= 30 ? 'bom' : 'atencao';
     $('#pulso-body').className = '';
     $('#pulso-body').innerHTML = `
       <div class="kpis">
-        <div class="kpi"><div class="v">${n(s.total)}</div><div class="l">pedidos</div><div class="s">reservas gravadas pela página /ride</div></div>
-        <div class="kpi ${cls}"><div class="v">${n(s.viraram_corrida)}</div><div class="l">viraram corrida</div><div class="s">confirmados ou feitos · ${s.taxa_conversao_pct}% dos pedidos · ${eur(s.valor_confirmado_cent)}</div></div>
-        <div class="kpi"><div class="v">${n(r.pedido)}</div><div class="l">sem resultado marcado</div><div class="s">${n(r.orcado)} orçados · ${n(r.perdido)} perdidos · ${n(r.cancelado)} cancelados</div></div>
-        <div class="kpi"><div class="v">${Object.keys(s.por_origem).length}</div><div class="l">redes trazendo pedido</div><div class="s">${Object.entries(s.por_origem).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${esc(k)} ${n(v)}`).join(' · ') || '—'}</div></div>
+        <div class="kpi destaque"><b>${n(s.total)}</b><span>pedidos</span><span class="s">reservas gravadas pela página /ride</span></div>
+        <div class="kpi ${cls}"><b>${n(s.viraram_corrida)}</b><span>viraram corrida</span><span class="s">confirmados ou feitos · ${s.taxa_conversao_pct}% dos pedidos · ${eur(s.valor_confirmado_cent)}</span></div>
+        <div class="kpi"><b>${n(r.pedido)}</b><span>sem resultado marcado</span><span class="s">${n(r.orcado)} orçados · ${n(r.perdido)} perdidos · ${n(r.cancelado)} cancelados</span></div>
+        <div class="kpi"><b>${Object.keys(s.por_origem).length}</b><span>redes trazendo pedido</span><span class="s">${Object.entries(s.por_origem).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${esc(k)} ${n(v)}`).join(' · ') || '—'}</span></div>
       </div>
       ${serieDias(s.por_dia)}
-      ${(s.lacunas || []).map((l) => `<p class="nota">${esc(l)}</p>`).join('')}`;
+      ${(s.lacunas || []).map((l) => `<p class="aviso">${esc(l)}</p>`).join('')}`;
   }
   function origem(s) { $('#origem-body').className = ''; $('#origem-body').innerHTML = barras(s.por_origem, s.total); }
   function produto(s) { $('#produto-body').className = ''; $('#produto-body').innerHTML = barras(s.por_produto, s.total); }
@@ -69,8 +69,8 @@
   function links() {
     $('#links-body').className = '';
     if (!S.links) { $('#links-body').innerHTML = '<p class="vazio">Sem links.</p>'; return; }
-    $('#links-body').innerHTML = S.links.links.map((l) => `<div class="linkrow"><span class="pill">${esc(l.origem)} · ${esc(l.rede)}</span><code>${esc(l.url)}</code><button class="chip" data-copy="${esc(l.url)}">Copiar</button><span class="uso">${esc(l.uso)}</span></div>`).join('') +
-      `<p class="nota">A página é ${esc(S.links.pagina)}. Trocar o endereço: variável CHAUFFEUR_PAGINA na Central.</p>`;
+    $('#links-body').innerHTML = S.links.links.map((l) => `<div class="linkrow"><span class="pill">${esc(l.origem)} · ${esc(l.rede)}</span><code>${esc(l.url)}</code><button class="btn mini" type="button" data-copy="${esc(l.url)}">Copiar</button><span class="uso">${esc(l.uso)}</span></div>`).join('') +
+      `<p class="nota" style="margin-top:12px">A página é ${esc(S.links.pagina)}. Trocar o endereço: variável CHAUFFEUR_PAGINA na Central.</p>`;
     document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => { try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Copiado'; setTimeout(() => { b.textContent = 'Copiar'; }, 1500); } catch { prompt('Copie o link:', b.dataset.copy); } }));
   }
   // ---------------------------------------------------------------- agenda (22/11): ocupação dos próximos 14 dias e bloqueios
@@ -85,10 +85,10 @@
       const det = (d.detalhes || []).map((x) => x.tipo === 'corrida' ? `<span class="pill ok" title="corrida confirmada">${esc(x.codigo)} ${esc(x.hora)}</span>` : `<span class="pill bad" title="${esc(x.motivo || 'bloqueio')}">${x.de ? esc(x.de) + '–' + esc(x.ate) : 'dia'} ${esc(x.motivo || '')}</span>`).join(' ');
       return `<tr><td>${esc(diaFr(d.data))}</td><td>${faixas}</td><td>${det}</td></tr>`;
     }).join('');
-    const bloq = (a.bloqueios || []).slice().sort((x, y) => (x.data < y.data ? -1 : 1)).map((b) => `<div class="linkrow"><span class="pill">${esc(b.data)}${b.ate_data && b.ate_data !== b.data ? ' → ' + esc(b.ate_data) : ''}</span><code>${b.de ? esc(b.de) + ' – ' + esc(b.ate) : 'dia inteiro'} · ${esc(b.motivo || 'sem motivo')}</code><button class="chip" data-del="${esc(b.id)}">Retirar</button></div>`).join('');
+    const bloq = (a.bloqueios || []).slice().sort((x, y) => (x.data < y.data ? -1 : 1)).map((b) => `<div class="linkrow"><span class="pill">${esc(b.data)}${b.ate_data && b.ate_data !== b.data ? ' → ' + esc(b.ate_data) : ''}</span><code>${b.de ? esc(b.de) + ' – ' + esc(b.ate) : 'dia inteiro'} · ${esc(b.motivo || 'sem motivo')}</code><button class="btn mini" type="button" data-del="${esc(b.id)}">Retirar</button></div>`).join('');
     alvo.innerHTML = `<div class="scroll"><table class="ped"><thead><tr><th>Dia</th><th>Ocupado (hora de Paris)</th><th>Por quê</th></tr></thead><tbody>${linhas}</tbody></table></div>
-      <h3 class="micro" style="margin-top:18px">Bloqueios</h3>${bloq || '<p class="vazio">Nenhum bloqueio.</p>'}
-      <p class="nota">Antecedência mínima ${a.antecedencia_min} min · folga ${a.folga_min} min entre corridas · pedidos até ${esc(a.horizonte)}.</p>`;
+      <h3 class="eyebrow" style="margin-top:18px">Bloqueios</h3>${bloq || '<p class="vazio">Nenhum bloqueio.</p>'}
+      <p class="nota" style="margin-top:12px">Antecedência mínima ${a.antecedencia_min} min · folga ${a.folga_min} min entre corridas · pedidos até ${esc(a.horizonte)}.</p>`;
     alvo.querySelectorAll('[data-del]').forEach((btn) => btn.addEventListener('click', async () => {
       if (!confirm('Retirar este bloqueio? O horário volta a aparecer livre na página.')) return;
       btn.disabled = true;
@@ -134,16 +134,11 @@
     finally { S.carregando = false; }
   }
   function gate(on) { $('#gate').hidden = !on; $('#app').style.visibility = on ? 'hidden' : 'visible'; }
-  function tema(t) { document.documentElement.dataset.theme = t; $('#tema').textContent = t === 'dark' ? 'Tema claro' : 'Tema escuro'; localStorage.setItem('pn_tema', t); }
-
-  tema(localStorage.getItem('pn_tema') || 'dark');
-  $('#tema').addEventListener('click', () => tema(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
-  $('#atualizar').addEventListener('click', () => carregar(true));
+    $('#atualizar').addEventListener('click', () => carregar(true));
   $('#periodo').addEventListener('click', () => { S.periodo = S.periodo === 30 ? 7 : 30; $('#periodo').textContent = `${S.periodo} dias`; carregar(true); });
-  $('#menu').addEventListener('click', () => { document.body.dataset.menu = document.body.dataset.menu === '1' ? '0' : '1'; });
   $('#gate form').addEventListener('submit', (e) => { e.preventDefault(); S.token = $('#gate input').value.trim(); localStorage.setItem('mc_key', S.token); gate(false); carregar(true); });
-  document.querySelectorAll('#nav a').forEach((a) => a.addEventListener('click', () => { document.querySelectorAll('#nav a').forEach((x) => x.classList.toggle('on', x === a)); document.body.dataset.menu = '0'; }));
-  const obs = new IntersectionObserver((es) => { for (const x of es) if (x.isIntersecting) { $('#crumb').textContent = x.target.querySelector('h1').textContent; document.querySelectorAll('#nav a').forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + x.target.id)); } }, { rootMargin: '-40% 0px -55% 0px' });
+  document.querySelectorAll('#nav a').forEach((a) => a.addEventListener('click', () => { document.querySelectorAll('#nav a').forEach((x) => x.classList.toggle('on', x === a)); }));
+  const obs = new IntersectionObserver((es) => { for (const x of es) if (x.isIntersecting) { $('#topo-t').textContent = x.target.querySelector('h2').textContent; document.querySelectorAll('#nav a').forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + x.target.id)); } }, { rootMargin: '-40% 0px -55% 0px' });
   document.querySelectorAll('.sec').forEach((s) => obs.observe(s));
   carregar(false);
   setInterval(() => { if (!document.hidden) carregar(false); }, 60_000);

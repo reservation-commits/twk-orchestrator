@@ -10,7 +10,7 @@ quando o Márlon decidiu que apoiamos o Julien no conteúdo e não só nas ferra
 |---|---|---|
 | Veille | `veille.js` | O modelo pesquisa na web (ferramenta de servidor `web_search`) o que está acontecendo hoje: GTA 6 e gaming, formatos de Reels da semana, Toulouse. Item sem URL é descartado. |
 | Contexto | `contexto.js` | Lê a voz, as regras e as travas da skill (cópia em `skill/`), os números do Olheiro (se existirem), o calendário de Toulouse (`donnees/calendario.json`) e os pacotes dos últimos 7 dias (para não repetir). |
-| Pacote | `pacote.js` | Pede ao modelo o JSON do pacote; **mede cada peça com o mesmo `wc.js` da skill** (gancho, minutagem por planos, legenda, travas); pede UMA correção ao modelo; o que continua bloqueado sai do pacote. |
+| Pacote | `pacote.js` | Pede ao modelo o JSON do pacote; **mede cada peça com o mesmo `wc.js` da skill** (gancho, minutagem por planos, legenda, travas); pede UMA correção ao modelo; o que continua bloqueado sai do pacote. Desde 26/11 o **carrossel** também é medido, slide a slide, no contexto `ecran` (antes só Reels, story e respostas passavam). |
 | Texto | `render.js` | Markdown em francês « Pour Julien » e HTML sem script (CSP da Central). |
 | Rodada | `run.js` | Junta tudo, grava no volume, relato ao MAESTRO, aviso opcional ao Julien pela Aria (uma linha com o link assinado). |
 | Skill | `sincronizar-skill.js` | Copia a parte usada da skill `.claude/skills/wanted-chauffeur-studio` para `skill/` (o Dockerfile só vê `orchestrator/`). `--verificar` falha se a cópia estiver velha (está na Porta). |

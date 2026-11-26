@@ -136,7 +136,8 @@ test('Fase 2: o aviso ao Julien leva o link de confirmar; a página /c abre com 
   const raiz2 = fs.mkdtempSync(path.join(os.tmpdir(), 'twk-central-chauffeur3-'));
   const env = { CHAUFFEUR_ORIGINS: 'https://theworldkeys.com', ARIA_TEAM_ALERT_SECRET: 'seg', AGENT_ARIA_URL: 'https://aria.test', CHAUFFEUR_CONFIRMA_SECRET: 's3gredo', CHAUFFEUR_CONFIRMA_URL: 'https://central.test' };
   const av = [];
-  const ch3 = criar({ stateDir: raiz2, env, fetchImpl: async (url, init) => { av.push({ url, corpo: JSON.parse(init.body) }); return { ok: true, status: 200, json: async () => ({ ok: true, desfecho: 'alerta_equipe_enviado' }) }; }, log: () => {}, sentinels });
+  // relógio fixo: a reserva do teste é de 25/11/2026 e a agenda recusa data passada (409) quando o teste roda depois disso
+  const ch3 = criar({ stateDir: raiz2, env, agora: () => relogio, fetchImpl: async (url, init) => { av.push({ url, corpo: JSON.parse(init.body) }); return { ok: true, status: 200, json: async () => ({ ok: true, desfecho: 'alerta_equipe_enviado' }) }; }, log: () => {}, sentinels });
   const srv = http.createServer((req, res) => { const u = new URL(req.url, 'http://x'); if (ch3.tratarPublico(req, res, u, json)) return; json(res, 404, {}); });
   await new Promise((ok) => srv.listen(0, '127.0.0.1', ok)); const b3 = `http://127.0.0.1:${srv.address().port}`;
   try {

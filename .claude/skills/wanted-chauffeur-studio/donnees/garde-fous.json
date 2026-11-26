@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "source": "Travas do plano Wanted Chauffeur de 09/11/2026 (docs/estrategia/plano-night-ride-gta6-2026-11-09.html, seção 6), mantidas no plano v4 Toulouse de 16/11/2026 (docs/estrategia/plano-wanted-chauffeur-toulouse-2026-11-16.html, \"Cinco regras\"), e doutrina TWK. Onde o plano marca \"a confirmar\", a regra aqui também é só um alerta.",
-  "note": "Cada regra roda em um ou mais contextos: `ecran` (texto na tela, capa, miniatura), `legende` (legenda), `voix` (fala), `bio`. `motif` é comparado em minúsculas e sem acentos. Níveis: `bloquant` (não publicar assim), `alerte` (precisa de uma pessoa conferir), `rappel` (lembrete de procedimento).",
+  "note": "Cada regra roda em um ou mais contextos: `ecran` (texto na tela, capa, miniatura), `legende` (legenda), `voix` (fala), `bio`. `motif` é comparado em minúsculas e sem acentos. Níveis: `bloquant` (não publicar assim), `alerte` (precisa de uma pessoa conferir), `rappel` (lembrete de procedimento). `par_phrase: true` avalia frase por frase (o motivo não atravessa ponto, ponto e vírgula, dois-pontos nem quebra de linha); `sauf` é um padrão que, presente na mesma frase, cancela a trava: serve para frases que AFIRMAM a regra.",
   "regles": [
     {
       "id": "marque-jeu-ecran",
@@ -93,7 +93,9 @@
         "ecran"
       ],
       "motif": "\\b(led|leds|neons?|lumieres?)\\b.{0,50}\\b(en roulant|sur la route|en conduisant|dans les rues|en circulation|pendant le trajet)\\b|\\b(en roulant|sur la route)\\b.{0,50}\\b(led|leds|neons?)\\b",
-      "message": "LEDs com o carro em circulação. Só acendem com o carro parado e a porta aberta."
+      "message": "LEDs com o carro em circulação. Só acendem com o carro parado e a porta aberta. Frase que afirma a regra (« LED qu'à l'arrêt », « jamais en roulant ») não é barrada.",
+      "par_phrase": true,
+      "sauf": "\\b(a l.arret|arretee?|gare[es]?|stationne[es]?|jamais|seulement|uniquement|ne .{0,20}\\bque\\b|qu.a l.arret|portes? ouvertes?|moteur coupe|eteint[es]?)"
     },
     {
       "id": "vitesse",

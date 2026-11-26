@@ -40,6 +40,9 @@ test('travas: reserva, álcool, LEDs, motorista, hora, preço, concorrente', () 
   assert.ok(ids('Monte direct, sans réservation').includes('sans-reservation'));
   assert.ok(ids('Champagne offert à bord').includes('alcool'));
   assert.ok(ids('Les LEDs allumées en roulant dans Toulouse').includes('leds-en-roulant'));
+  assert.ok(ids('Sur la route, on allume les LED pour les passants').includes('leds-en-roulant'), 'ordem inversa continua barrada');
+  assert.ok(!ids("On n'allume les LED qu'à l'arrêt, porte ouverte. En roulant, c'est le ciel étoilé.", 'ecran').includes('leds-en-roulant'), 'frase que afirma a regra passa; o motivo não atravessa o ponto');
+  assert.ok(!ids('LED jamais en roulant : voiture garée, porte ouverte.').includes('leds-en-roulant'), '« jamais » na mesma frase cancela a trava');
   assert.ok(ids('Julien joue aussi à la manette en conduisant').includes('chauffeur-ecran'));
   assert.ok(ids('Rendez-vous à 21h devant le Casino').includes('heure-24h'));
   assert.ok(!ids('Rendez-vous à 9:00 PM, trois heures à bord').includes('heure-24h'), 'AM/PM e duração passam');
